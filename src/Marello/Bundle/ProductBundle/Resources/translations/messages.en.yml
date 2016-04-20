@@ -11,7 +11,7 @@ marello:
         id.label:                   Id
         type.label:                 Product Type
         stock_level.label:          Total Stock
-
+        channel_prices.label:       Product Channel Prices
         channels.label:             Sales Channels
         inventory_items.label:      Inventory Items
         organization.label:         Organization
@@ -19,12 +19,13 @@ marello:
         prices.label:               Product Prices
 
         variant:
-            label:                  Variant
-            entity_plural_label:    Variants
-            entity_label:           Variant
-            id.label:               Id
-            variant_code.label:     Variant code
-            products.label:         Products
+            label:                    Variant
+            entity_plural_label:      Variants
+            entity_label:             Variant
+            id.label:                 Id
+            variant_code.label:       Variant code
+            products.label:           Products
+            selected_variants.label:  Selected Variants
 
         productstatus:
             entity_label:           Product Status

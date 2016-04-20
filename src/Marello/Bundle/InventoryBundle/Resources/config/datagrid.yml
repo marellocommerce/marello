@@ -4,27 +4,75 @@ datagrid:
             type: orm
             query:
                 select:
-                    - p
-                    - COALESCE(SUM(i.quantity), 0) AS stockLevel
+                    - p.id
+                    - p.name
+                    - p.sku
+                    - p.price
+                    - s.label as status
+                    - p.createdAt
+                    - p.updatedAt
+                    - COALESCE(SUM(i.quantity), 0) AS quantity
+                    - COALESCE(SUM(i.allocatedQuantity), 0) AS allocatedQuantity
+                    - COALESCE(SUM(i.quantity - i.allocatedQuantity), 0) AS virtualQuantity
                 from:
                     - { table: MarelloProductBundle:Product, alias: p }
                 join:
                     left:
+                        - { join: p.status, alias: s }
                         - { join: p.inventoryItems, alias: i }
                 groupBy: p.id
         columns:
             sku:
-                label: marello.product.sku.label
-                data_name: sku
+                label:              marello.product.sku.label
+                frontend_type:      string
             product:
-                label: marello.inventory.inventoryitem.product.label
-                frontend_type: string
-                data_name: name
+                label:              marello.inventory.inventoryitem.product.label
+                frontend_type:      string
+                data_name:          name
             quantity:
-                label: marello.inventory.inventoryitem.quantity.label
-                frontend_type: number
-                data_name: stockLevel
-
+                label:              marello.inventory.inventoryitem.quantity.label
+                frontend_type:      number
+                data_name:          quantity
+            allocatedQuantity:
+                label:              marello.inventory.inventoryitem.allocated_quantity.label
+                frontend_type:      number
+                data_name:          allocatedQuantity
+            virtualQuantity:
+                label:              marello.inventory.inventoryitem.virtual_quantity.label
+                frontend_type:      number
+                data_name:          virtualQuantity
+            status:
+                label:              marello.product.status.label
+                frontend_type:      string
+            createdAt:
+                label:              oro.ui.created_at
+                frontend_type:      datetime
+        filters:
+            columns:
+                sku:
+                    type:             string
+                    data_name:        p.sku
+                product:
+                    type:             string
+                    data_name:        p.name
+                quantity:
+                    type:             number
+                    data_name:        quantity
+                allocatedQuantity:
+                    type:             number
+                    data_name:        allocatedQuantity
+                virtualQuantity:
+                    type:             number
+                    data_name:        virtualQuantity
+                status:
+                    type:             entity
+                    data_name:        s
+                    options:
+                        field_options:
+                            class: Marello\Bundle\ProductBundle\Entity\ProductStatus
+                createdAt:
+                    type:             datetime
+                    data_name:        createdAt
         properties:
             inventory_link:
                 type:       url
@@ -35,25 +83,89 @@ datagrid:
                 type:           navigate
                 icon:           list-alt
                 link:           inventory_link
-                rowAction:      true
+        options:
+            export: true
 
-    marello-inventory-product-item:
+    marello-inventory-log:
         source:
             type: orm
             query:
                 select:
-                    - w
-                    - SUM(i.quantity) AS  stock
+                    - l
+                    - (l.newQuantity - l.oldQuantity) AS changeAmount
+                    - (l.newAllocatedQuantity - l.oldAllocatedQuantity) AS changeAllocatedAmount
                 from:
-                    - { table: MarelloInventoryBundle:InventoryItem, alias: i }
+                    - { table: MarelloInventoryBundle:InventoryLog, alias: l }
                 join:
                     left:
-                        - { join: i.warehouse, alias: w }
-                groupBy: w.id
+                        - { join: l.inventoryItem, alias: i }
+                where:
+                    and:
+                        - IDENTITY(i.product) = :product_id
+            bind_parameters:
+                product_id: productId
         columns:
-            warehouse:
-                label: Warehouse
-                data_name: w
-            stock:
-                label: Stock
-                data_name: stock
+            changeAmount:
+                data_name:      changeAmount
+                label:          marello.inventory.inventorylog.changeAmount.label
+                type:           twig
+                frontend_type:  html
+                template:       MarelloInventoryBundle::Datagrid/InventoryLog/changeAmount.html.twig
+            changeAllocatedAmount:
+                data_name:      changeAllocatedAmount
+                label:          marello.inventory.inventorylog.changeAllocatedAmount.label
+                type:           twig
+                frontend_type:  html
+                template:       MarelloInventoryBundle::Datagrid/InventoryLog/changeAmount.html.twig
+            actionType:
+                label:          marello.inventory.inventorylog.actionType.label
+                type:           translatable
+                domain:         MarelloInventoryLogAction
+                frontend_type:  string
+            order:
+                data_name:      order
+                label:          marello.order.entity_label
+                type:           twig
+                frontend_type:  html
+                template:       MarelloInventoryBundle::Datagrid/InventoryLog/order.html.twig
+            user:
+                label:          marello.inventory.inventorylog.user.label
+                frontend_type:  string
+            createdAt:
+                label:          marello.inventory.inventorylog.createdAt.label
+                frontend_type:  datetime
+        sorters:
+            columns:
+                createdAt:
+                    data_name:  l.createdAt
+                changeAmount:
+                    data_name:  changeAmount
+                changeAllocatedAmount:
+                    data_name:  changeAllocatedAmount
+            default:
+                createdAt:      DESC
+        options:
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+
+    marello-inventory-log-extended:
+        extends: marello-inventory-log
+        filters:
+            columns:
+                changeAmount:
+                    type:             number
+                    data_name:        changeAmount
+                changeAllocatedAmount:
+                    type:             number
+                    data_name:        changeAllocatedAmount
+                actionType:
+                    type:             string
+                    data_name:        l.actionType
+                createdAt:
+                    type:             datetime
+                    data_name:        createdAt
+        options:
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 50

@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\ProductBundle\Tests\Functional\Controller;
 
+use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductData;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ class VariantControllerTest extends WebTestCase
         );
 
         $this->loadFixtures([
-            'Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductData',
+            LoadProductData::class,
         ]);
     }
 
@@ -34,7 +35,6 @@ class VariantControllerTest extends WebTestCase
         );
 
         $response = $this->client->getResponse();
-
         $this->assertHtmlResponseStatusCodeEquals($response, Response::HTTP_OK);
     }
 

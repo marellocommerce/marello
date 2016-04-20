@@ -19,6 +19,22 @@ marello:
             entity_label:               Inventory Item
             entity_plural_label:        Inventory Items
             id.label:                   Id
-            quantity.label:             Quantity
+            quantity.label:             Real Stock
+            allocated_quantity.label:   Allocated Stock
+            virtual_quantity.label:     Virtual Stock
             warehouse.label:            Warehouse
             product.label:              Product
+
+        inventorylog:
+            entity_label:                   Inventory Log
+            entity_plural_label:            Inventory Logs
+            id.label:                       Id
+            changeAmount.label:             Real Stock Change
+            changeAllocatedAmount.label:    Allocated Stock Change
+            actionType.label:               Trigger
+            user.label:                     User
+            inventoryItem.label:            Inventory Item
+            createdAt.label:                Created At
+
+        logaction:
+            manual:                 Manual

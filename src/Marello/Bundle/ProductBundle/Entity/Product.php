@@ -3,14 +3,13 @@
 namespace Marello\Bundle\ProductBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Model\ExtendProduct;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
@@ -35,7 +34,7 @@ use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
  *      }
  * )
  * @ORM\HasLifecycleCallbacks()
- * @Config(
+ * @Oro\Config(
  *  routeName="marello_product_index",
  *  routeView="marello_product_view",
  *  defaultValues={
@@ -61,6 +60,13 @@ class Product extends ExtendProduct implements
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(name="id", type="integer")
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $id;
 
@@ -68,7 +74,7 @@ class Product extends ExtendProduct implements
      * @var string
      *
      * @ORM\Column(name="name", type="string", nullable=false)
-     * @ConfigField(
+     * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
      *              "excluded"=true
@@ -82,10 +88,12 @@ class Product extends ExtendProduct implements
      * @var string
      *
      * @ORM\Column(name="sku", type="string", nullable=false)
-     * @ConfigField(
+     * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "excluded"=true
+     *              "order"=10,
+     *              "header"="SKU",
+     *              "identity"=true,
      *          }
      *      }
      * )
@@ -93,40 +101,66 @@ class Product extends ExtendProduct implements
     protected $sku;
 
     /**
-     * @var double
-     *
-     * @ORM\Column(name="price", type="money", nullable=false)
-     */
-    protected $price;
-
-    /**
      * @var ProductStatus
      *
      * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\ProductStatus")
      * @ORM\JoinColumn(name="product_status", referencedColumnName="name")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=80,
-     *          "short"=true
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
      *      }
-     *  }
      * )
      **/
     protected $status;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $type;
+
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="cost", type="money", nullable=true)
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $cost;
 
     /**
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Oro\ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "excluded"=true
+     *      }
+     *  }
+     * )
      */
     protected $organization;
 
     /**
-     * @var Collection|ProductPrice[]
+     * @var ArrayCollection|ProductPrice[]
      *
      * @ORM\OneToMany(
      *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductPrice",
@@ -139,9 +173,23 @@ class Product extends ExtendProduct implements
     protected $prices;
 
     /**
-     * @var Collection
+     * @var ArrayCollection|ProductChannelPrice[]
      *
+     * @ORM\OneToMany(
+     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductChannelPrice",
+     *     mappedBy="product",
+     *     cascade={"persist"},
+     *     orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $channelPrices;
+
+    /**
+     * @var ArrayCollection
+     * unidirectional many-to-many
      * @ORM\ManyToMany(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
+     * @ORM\JoinTable(name="marello_product_saleschannel")
      */
     protected $channels;
 
@@ -154,7 +202,7 @@ class Product extends ExtendProduct implements
     protected $variant;
 
     /**
-     * @var Collection|InventoryItem[]
+     * @var ArrayCollection|InventoryItem[]
      *
      * @ORM\OneToMany(
      *      targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem",
@@ -171,6 +219,13 @@ class Product extends ExtendProduct implements
      * @var array $data
      *
      * @ORM\Column(name="data", type="json_array", nullable=true)
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $data;
 
@@ -178,10 +233,13 @@ class Product extends ExtendProduct implements
      * @var \DateTime $createdAt
      *
      * @ORM\Column(name="created_at", type="datetime")
-     * @ConfigField(
+     * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
      *              "label"="oro.ui.created_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
      *          }
      *      }
      * )
@@ -192,10 +250,13 @@ class Product extends ExtendProduct implements
      * @var \DateTime $updatedAt
      *
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     * @ConfigField(
+     * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
      *              "label"="oro.ui.updated_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
      *          }
      *      }
      * )
@@ -205,6 +266,7 @@ class Product extends ExtendProduct implements
     public function __construct()
     {
         $this->prices         = new ArrayCollection();
+        $this->channelPrices  = new ArrayCollection();
         $this->channels       = new ArrayCollection();
         $this->inventoryItems = new ArrayCollection();
     }
@@ -258,26 +320,6 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @return float
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
-     * @param float $price
-     *
-     * @return Product
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
      * @return ProductStatus
      */
     public function getStatus()
@@ -298,7 +340,7 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @return Collection
+     * @return ArrayCollection
      */
     public function getPrices()
     {
@@ -339,7 +381,66 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @return Collection
+     * has prices
+     * @return bool
+     */
+    public function hasPrices()
+    {
+        return count($this->prices) > 0;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getChannelPrices()
+    {
+        return $this->channelPrices;
+    }
+
+    /**
+     * Add item
+     *
+     * @param ProductChannelPrice $channelPrice
+     *
+     * @return Product
+     */
+    public function addChannelPrice(ProductChannelPrice $channelPrice)
+    {
+        if (!$this->channelPrices->contains($channelPrice)) {
+            $this->channelPrices->add($channelPrice);
+            $channelPrice->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove item
+     *
+     * @param ProductChannelPrice $channelPrice
+     *
+     * @return Product
+     */
+    public function removeChannelPrice(ProductChannelPrice $channelPrice)
+    {
+        if ($this->channelPrices->contains($channelPrice)) {
+            $this->channelPrices->removeElement($channelPrice);
+        }
+
+        return $this;
+    }
+
+    /**
+     * has channel prices
+     * @return bool
+     */
+    public function hasChannelPrices()
+    {
+        return count($this->channelPrices) > 0;
+    }
+
+    /**
+     * @return ArrayCollection
      */
     public function getChannels()
     {
@@ -380,6 +481,14 @@ class Product extends ExtendProduct implements
         }
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasChannels()
+    {
+        return count($this->channels) > 0;
     }
 
     /**
@@ -501,7 +610,7 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @return Collection|InventoryItem[]
+     * @return ArrayCollection|InventoryItem[]
      */
     public function getInventoryItems()
     {

@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\ProductBundle\Tests\Functional\Controller\Api\Rest;
 
+use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductChannelPricingData;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
@@ -19,7 +20,7 @@ class ProductControllerTest extends WebTestCase
         $this->initClient([], $this->generateWsseAuthHeader());
 
         $this->loadFixtures([
-            'Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductPricingData',
+            LoadProductChannelPricingData::class,
         ]);
     }
 
@@ -50,9 +51,6 @@ class ProductControllerTest extends WebTestCase
 
         $this->assertArrayHasKey('sku', $data);
         $this->assertEquals($product->getSku(), $data['sku']);
-
-        $this->assertArrayHasKey('price', $data);
-        $this->assertEquals($product->getPrice(), $data['price']);
 
         $this->assertArrayHasKey('createdAt', $data);
         $this->assertArrayHasKey('updatedAt', $data);
@@ -117,8 +115,13 @@ class ProductControllerTest extends WebTestCase
         $data = [
             'name'      => 'New Product',
             'sku'       => 'NEW-SKU',
-            'price'     => 200.00,
             'status'    => 'enabled',
+//            'prices'    => [
+//                [
+//                    'currency' => $this->getReference('marello_sales_channel_1')->getCurrency(),
+//                    'value' => 200.00
+//                ]
+//            ],
             'inventory' => [
                 ['quantity' => 10, 'warehouse' => $this->getDefaultWarehouse()->getId()],
             ],
@@ -126,6 +129,7 @@ class ProductControllerTest extends WebTestCase
                 $this->getReference('marello_sales_channel_1')->getId(),
             ],
         ];
+
 
         $this->client->request(
             'POST',
@@ -147,8 +151,16 @@ class ProductControllerTest extends WebTestCase
 
         $this->assertEquals($data['name'], $product->getName());
         $this->assertEquals($data['sku'], $product->getSku());
-        $this->assertEquals($data['price'], $product->getPrice());
         $this->assertEquals($data['status'], $product->getStatus()->getName());
+//        $this->assertCount(1, $product->getPrices());
+//        $this->assertEquals(
+//            reset($data['prices'])['currency'],
+//            $product->getPrices()->first()->getCurrency()
+//        );
+//        $this->assertEquals(
+//            reset($data['prices'])['value'],
+//            $product->getPrices()->first()->getValue()
+//        );
         $this->assertCount(1, $product->getInventoryItems());
         $this->assertEquals(
             reset($data['inventory'])['quantity'],
@@ -160,6 +172,7 @@ class ProductControllerTest extends WebTestCase
         );
         $this->assertCount(1, $product->getChannels());
         $this->assertEquals(reset($data['channels']), $product->getChannels()->first()->getId());
+
     }
 
     /**
@@ -170,8 +183,13 @@ class ProductControllerTest extends WebTestCase
         $data = [
             'name'      => 'New Product',
             'sku'       => 'NEW-SKU',
-            'price'     => 200.00,
             'status'    => 'enabled',
+//            'prices'    => [
+//                [
+//                    'currency' => $this->getReference('marello_sales_channel_1')->getCurrency(),
+//                    'value' => 200.00
+//                ]
+//            ],
             'inventory' => [
                 ['quantity' => 10, 'warehouse' => -5 /* wrong ID */],
             ],
@@ -202,7 +220,10 @@ class ProductControllerTest extends WebTestCase
         $data = [
             'name'      => 'New name of product',
             'sku'       => $product->getSku(),
-            'price'     => $product->getPrice(),
+//            'price'     => $product->getPrice(),
+//            'prices'    => $product->getPrices()->map(function (ProductPrice $price) {
+//                return ['currency' => $price->getCurrency(), 'value' => $price->getValue()];
+//            })->toArray(),
             'status'    => $product->getStatus()->getName(),
             'inventory' => $product->getInventoryItems()->map(function (InventoryItem $item) {
                 return ['quantity' => $item->getQuantity(), 'warehouse' => $item->getWarehouse()->getId()];
@@ -252,7 +273,7 @@ class ProductControllerTest extends WebTestCase
      */
     public function testDeleteNonExistent()
     {
-        $productId = $this->getReference('marello-product-0')->getId() -1;
+        $productId = $this->getReference('marello-product-0')->getId() - 1;
 
         $this->client->request(
             'DELETE',

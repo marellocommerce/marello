@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Functional\Controller;
 
+use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOrderData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,7 +19,7 @@ class OrderControllerTest extends WebTestCase
         );
 
         $this->loadFixtures([
-            'Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOrderData',
+            LoadOrderData::class,
         ]);
     }
 
@@ -67,9 +68,9 @@ class OrderControllerTest extends WebTestCase
         $this->client->request(
             'GET',
             $this->getUrl('marello_order_order_address', [
-                'id' => $this->getReference('marello_order_0')->getBillingAddress()->getId(),
-                'typeId' => 1,
-                '_widgetContainer' => 'block'
+                'id'               => $this->getReference('marello_order_0')->getBillingAddress()->getId(),
+                'typeId'           => 1,
+                '_widgetContainer' => 'block',
             ])
         );
 
@@ -81,17 +82,17 @@ class OrderControllerTest extends WebTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl('marello_order_order_updateaddress', [
-                'id' => $this->getReference('marello_order_0')->getBillingAddress()->getId(),
-                '_widgetContainer' => 'block'
+                'id'               => $this->getReference('marello_order_0')->getBillingAddress()->getId(),
+                '_widgetContainer' => 'block',
             ])
         );
 
-        $result      = $this->client->getResponse();
+        $result = $this->client->getResponse();
         $this->assertResponseStatusCodeEquals($result, Response::HTTP_OK);
 
-        /** @var Form $form */
-        $form                               = $crawler->selectButton('Save')->form();
-        $name                               = 'Han Solo';
+        $form = $crawler->selectButton('Save')->form();
+        $name = 'Han Solo';
+
         $form['marello_address[firstName]'] = $name;
 
         $this->client->followRedirects(true);

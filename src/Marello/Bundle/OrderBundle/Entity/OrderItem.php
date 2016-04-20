@@ -8,20 +8,23 @@ use Doctrine\ORM\Mapping as ORM;
 
 use JMS\Serializer\Annotation as JMS;
 
+use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 use Marello\Bundle\OrderBundle\Model\ExtendOrderItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\InventoryBundle\InventoryAllocation\AllocationTargetInterface;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository")
- * @Oro\Config
+ * @ORM\Entity()
+ * @Oro\Config()
  * @ORM\Table(name="marello_order_order_item")
  * @ORM\HasLifecycleCallbacks()
  * @JMS\ExclusionPolicy("ALL")
  */
-class OrderItem extends ExtendOrderItem
+class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, CurrencyAwareInterface
 {
     /**
      * @var int
@@ -47,14 +50,14 @@ class OrderItem extends ExtendOrderItem
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
     protected $productName;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
+     * @ORM\Column(name="product_sku",type="string", nullable=false)
      */
     protected $productSku;
 
@@ -69,7 +72,7 @@ class OrderItem extends ExtendOrderItem
     /**
      * @var int
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="quantity",type="integer",nullable=false)
      *
      * @JMS\Expose
      */
@@ -78,7 +81,7 @@ class OrderItem extends ExtendOrderItem
     /**
      * @var int
      *
-     * @ORM\Column(type="money")
+     * @ORM\Column(name="price",type="money")
      *
      * @JMS\Expose
      */
@@ -87,16 +90,40 @@ class OrderItem extends ExtendOrderItem
     /**
      * @var int
      *
-     * @ORM\Column(type="money")
+     * @ORM\Column(name="tax",type="money")
      *
      * @JMS\Expose
      */
     protected $tax;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="tax_percent", type="percent", nullable=true)
+     * @JMS\Expose
+     */
+    protected $taxPercent;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="discount_percent", type="percent", nullable=true)
+     * @JMS\Expose
+     */
+    protected $discountPercent;
+
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="discount_amount", type="money", nullable=true)
+     * @JMS\Expose
+     */
+    protected $discountAmount;
+
+    /**
      * @var int
      *
-     * @ORM\Column(type="money")
+     * @ORM\Column(name="total_price",type="money", nullable=false)
      *
      * @JMS\Expose
      */
@@ -110,13 +137,24 @@ class OrderItem extends ExtendOrderItem
     protected $returnItems;
 
     /**
+     * @ORM\OneToMany(
+     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryAllocation",
+     *     mappedBy="targetOrderItem",
+     *     cascade={}
+     * )
+     *
+     * @var InventoryAllocation[]|Collection
+     */
+    protected $inventoryAllocations;
+
+    /**
      * OrderItem constructor.
      */
     public function __construct()
     {
         $this->returnItems = new ArrayCollection();
+        $this->inventoryAllocations = new ArrayCollection();
     }
-
 
     /**
      * @ORM\PrePersist
@@ -277,5 +315,79 @@ class OrderItem extends ExtendOrderItem
     public function getReturnItems()
     {
         return $this->returnItems;
+    }
+
+    /**
+     * @return float
+     */
+    public function getTaxPercent()
+    {
+        return $this->taxPercent;
+    }
+
+    /**
+     * @param float $taxPercent
+     */
+    public function setTaxPercent($taxPercent)
+    {
+        $this->taxPercent = $taxPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPercent()
+    {
+        return $this->discountPercent;
+    }
+
+    /**
+     * @param float $discountPercent
+     */
+    public function setDiscountPercent($discountPercent)
+    {
+        $this->discountPercent = $discountPercent;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountAmount()
+    {
+        return $this->discountAmount;
+    }
+
+    /**
+     * @param float $discountAmount
+     */
+    public function setDiscountAmount($discountAmount)
+    {
+        $this->discountAmount = $discountAmount;
+    }
+
+    /**
+     * Returns name of property, that this entity is mapped to InventoryAllocation under.
+     *
+     * @return string
+     */
+    public static function getAllocationPropertyName()
+    {
+        return 'OrderItem';
+    }
+
+    /**
+     * @return Collection|InventoryAllocation[]
+     */
+    public function getInventoryAllocations()
+    {
+        return $this->inventoryAllocations;
+    }
+
+    /**
+     * Get currency for orderItem from Order
+     */
+    public function getCurrency()
+    {
+        return $this->order->getCurrency();
     }
 }

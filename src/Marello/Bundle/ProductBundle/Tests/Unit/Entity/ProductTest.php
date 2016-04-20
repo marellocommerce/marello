@@ -12,7 +12,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $name         = 'Marello\Bundle\ProductBundle\Entity\Product';
+        $name         = Product::class;
         $this->entity = new $name();
     }
 
@@ -44,10 +44,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $name         = 'New Product';
         $sku          = 'product123';
-        $stockLevel   = 100;
         $createdAt    = new \DateTime('now');
         $updatedAt    = new \DateTime('now');
-        $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [

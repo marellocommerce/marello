@@ -4,12 +4,27 @@ namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Marello\Bundle\NotificationBundle\Email\SendProcessor;
 use Marello\Bundle\OrderBundle\Entity\Order;
+use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 class OrderNumberGeneratorListener
 {
     /** @var Order[] */
     protected $orders = [];
+
+    /** @var ServiceLink */
+    protected $emailSendProcessorLink;
+
+    /**
+     * OrderNumberGeneratorListener constructor.
+     *
+     * @param ServiceLink $emailSendProcessorLink
+     */
+    public function __construct(ServiceLink $emailSendProcessorLink)
+    {
+        $this->emailSendProcessorLink = $emailSendProcessorLink;
+    }
 
     /**
      * Collects all orders scheduled for insertion.
@@ -36,16 +51,32 @@ class OrderNumberGeneratorListener
      */
     public function postFlush(PostFlushEventArgs $args)
     {
+        if (empty($this->orders)) {
+            return;
+        }
+
         $em            = $args->getEntityManager();
         $changedOrders = $this->updateOrderNumbers($this->orders);
 
         /*
          * Empty orders array to indicate that all orders have been process and to prevent loop on flushing.
          */
+        $createdOrders = $this->orders;
         $this->orders = [];
 
         foreach ($changedOrders as $order) {
             $em->persist($order);
+        }
+
+        /** @var SendProcessor $emailSendProcessor */
+        $emailSendProcessor = $this->emailSendProcessorLink->getService();
+
+        foreach ($createdOrders as $order) {
+            $emailSendProcessor->sendNotification(
+                'marello_order_accepted_confirmation',
+                [$order->getBillingAddress()->getEmail()],
+                $order
+            );
         }
 
         if (!empty($changedOrders)) {

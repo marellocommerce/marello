@@ -6,3 +6,27 @@ services:
             - marello_variant_mass_inventory_link
         tags:
             - { name: oro_ui.view_action_provider, group: product }
+
+    marello_inventory.logging.chart_builder:
+        class: Marello\Bundle\InventoryBundle\Logging\ChartBuilder
+        arguments:
+            - @doctrine
+            - @oro_dashboard.datetime.helper
+            - @translator
+
+    marello_inventory.logging.inventory_logger:
+        class: Marello\Bundle\InventoryBundle\Logging\InventoryLogger
+        arguments:
+            - @doctrine
+            - @security.token_storage
+
+    marello_inventory.event_listener.doctrine.inventory_allocation:
+        class: Marello\Bundle\InventoryBundle\EventListener\Doctrine\InventoryAllocationListener
+        tags:
+            - {name: doctrine.event_listener, event: prePersist, method: prePersist }
+            - {name: doctrine.event_listener, event: preRemove, method: preRemove }
+
+    marello_inventory.allocation.allocator:
+        class: Marello\Bundle\InventoryBundle\InventoryAllocation\InventoryAllocator
+        arguments:
+            - @doctrine

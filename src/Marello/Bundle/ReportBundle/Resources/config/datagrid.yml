@@ -7,6 +7,7 @@ datagrid:
             query:
                 select:
                     - channel.name as salesChannelName
+                    - channel.currency
                     - COUNT(o.orderNumber) as totalOrders
                     - SUM(o.grandTotal) as totalRevenue
                 from:
@@ -25,14 +26,17 @@ datagrid:
                 frontend_type: string
             totalRevenue:
                 label: marello.report.datagrid.columns.total_revenue.label
-                frontend_type: currency
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align:            right
         sorters:
             columns:
                 salesChannelName:       { data_name: salesChannelName }
                 totalOrders:            { data_name: totalOrders }
                 totalRevenue:           { data_name: totalRevenue }
             default:
-                totalRevenue: DESC
+                totalRevenue: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         options:
             entityHint: report data
             export: false
@@ -84,7 +88,7 @@ datagrid:
                 status:         { data_name: s.label }
                 price:          { data_name: p.price }
             default:
-                stockLevel:  ASC
+                stockLevel:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
         options:
             entityHint: report data
             export: false
@@ -127,7 +131,7 @@ datagrid:
                     createdAt:             { data_name: createdAt }
                     quantitySold:          { data_name: quantitySold }
                 default:
-                    quantitySold:  DESC
+                    quantitySold:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
             options:
                 entityHint: report data
                 export: false
@@ -175,7 +179,7 @@ datagrid:
                     createdAt:             { data_name: createdAt }
                     quantitySold:          { data_name: quantitySold }
                 default:
-                    quantitySold: ASC
+                    quantitySold: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
             options:
                 entityHint: report data
                 export: false

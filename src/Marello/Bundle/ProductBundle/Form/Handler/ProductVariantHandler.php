@@ -3,12 +3,11 @@
 namespace Marello\Bundle\ProductBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ProductBundle\Entity\Variant;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-
-use Marello\Bundle\ProductBundle\Entity\Variant;
-use Marello\Bundle\ProductBundle\Entity\Product;
 
 class ProductVariantHandler
 {
@@ -32,16 +31,25 @@ class ProductVariantHandler
      */
     protected $parent;
 
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
+
     /**
-     * @param FormInterface $form
-     * @param Request       $request
-     * @param ObjectManager $manager
+     * @param FormInterface            $form
+     * @param Request                  $request
+     * @param ObjectManager            $manager
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(FormInterface $form, Request $request, ObjectManager $manager)
-    {
-        $this->form    = $form;
-        $this->request = $request;
-        $this->manager = $manager;
+    public function __construct(
+        FormInterface $form,
+        Request $request,
+        ObjectManager $manager,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        $this->form            = $form;
+        $this->request         = $request;
+        $this->manager         = $manager;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -61,7 +69,9 @@ class ProductVariantHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-                $this->updateProducts($entity);
+                $addVariants = $this->form->get('addVariants')->getData();
+                $removeVariants = $this->form->get('removeVariants')->getData();
+                $this->onSuccess($entity, $addVariants, $removeVariants);
 
                 return true;
             }
@@ -84,11 +94,43 @@ class ProductVariantHandler
      * "Success" form handler
      *
      * @param Variant $entity
+     * @param array $addVariants
+     * @param array $removeVariants
      */
-    protected function updateProducts(Variant $entity)
+    protected function onSuccess(Variant $entity, array $addVariants, array $removeVariants)
     {
+        $this->addVariants($entity, $addVariants);
+        $this->removeVariants($entity, $removeVariants);
         $this->manager->persist($entity);
         $this->manager->flush();
+    }
+
+    /**
+     * Add channels to product
+     *
+     * @param Variant  $variant
+     * @param Product[] $products
+     */
+    protected function addVariants(Variant $variant, array $products)
+    {
+        /** @var Product $product */
+        foreach ($products as $product) {
+            $variant->addProduct($product);
+        }
+    }
+
+    /**
+     * Remove channels from product
+     *
+     * @param Variant  $variant
+     * @param Product[] $products
+     */
+    protected function removeVariants(Variant $variant, array $products)
+    {
+        /** @var Product $product */
+        foreach ($products as $product) {
+            $variant->removeProduct($product);
+        }
     }
 
     /**
