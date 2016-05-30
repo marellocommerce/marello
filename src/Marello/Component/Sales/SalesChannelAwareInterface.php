@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\SalesBundle\Model;
+namespace Marello\Component\Sales;
 
 use Doctrine\Common\Collections\Collection;
 
@@ -9,24 +9,26 @@ use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 interface SalesChannelAwareInterface
 {
     /**
-     * @param SalesChannel $channel
+     * @param SalesChannelInterface $channel
      *
      * @return $this
      */
-    public function addChannel(SalesChannel $channel);
+    public function addChannel(SalesChannelInterface $channel);
 
     /**
-     * @param SalesChannel $channel
+     * @param SalesChannelInterface $channel
      *
      * @return $this
      */
-    public function removeChannel(SalesChannel $channel);
+    public function removeChannel(SalesChannelInterface $channel);
 
     /**
      * @return Collection|SalesChannel[]
      */
     public function getChannels();
 
-    /** @return bool */
+    /**
+     * @return bool
+     */
     public function hasChannels();
 }

@@ -13,7 +13,7 @@ namespace Marello\Bundle\DataGridBundle\Grid;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Component\Pricing\CurrencyAwareInterface;
 
 class FormatterContextResolver
 {

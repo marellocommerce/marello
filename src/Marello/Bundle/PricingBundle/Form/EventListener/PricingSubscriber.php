@@ -8,8 +8,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
-use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
-use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Component\Pricing\PricingAwareInterface;
+use Marello\Component\Sales\SalesChannelAwareInterface;
 
 class PricingSubscriber implements EventSubscriberInterface
 {

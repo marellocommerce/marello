@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\AddressBundle\Entity\Address;
 use Marello\Bundle\OrderBundle\Model\ExtendOrder;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -459,11 +460,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param SalesChannel $salesChannel
+     * @param SalesChannelInterface $salesChannel
      *
      * @return $this
      */
-    public function setSalesChannel($salesChannel)
+    public function setSalesChannel(SalesChannelInterface $salesChannel)
     {
         $this->salesChannel = $salesChannel;
 

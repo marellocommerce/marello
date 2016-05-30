@@ -6,6 +6,8 @@ use Closure;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
+use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\InventoryLogInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
@@ -36,11 +38,11 @@ class InventoryLogger
      * Creates inventory log with given values, set in $setValues callback.
      * WARNING: Log is not persisted if old and new quantities are equal.
      *
-     * @param InventoryItem $item
-     * @param string        $trigger
-     * @param Closure       $setValues Closure used to set log values. Takes InventoryLog as single parameter.
+     * @param InventoryItemInterface $item
+     * @param string                 $trigger
+     * @param Closure                $setValues Closure used to set log values. Takes InventoryLog as single parameter.
      */
-    public function directLog(InventoryItem $item, $trigger, Closure $setValues)
+    public function directLog(InventoryItemInterface $item, $trigger, Closure $setValues)
     {
         $log = new InventoryLog($item, $trigger);
 
@@ -66,9 +68,9 @@ class InventoryLogger
      * Logs inventory item changes based on computed doctrine change set.
      * Checks if there are any changes for all given items.
      *
-     * @param InventoryItem[]|InventoryItem $items
-     * @param string                        $trigger
-     * @param Closure|null                  $modifyLog
+     * @param InventoryItemInterface[]|InventoryItemInterface $items
+     * @param string                                          $trigger
+     * @param Closure|null                                    $modifyLog
      *
      * @throws \Exception
      */
@@ -119,12 +121,12 @@ class InventoryLogger
     /**
      * Creates inventory log for new inventory item.
      *
-     * @param InventoryItem $inventoryItem
-     * @param string        $trigger
+     * @param InventoryItemInterface $inventoryItem
+     * @param string                 $trigger
      *
      * @return InventoryLog|null Null if item has quantity values of 0.
      */
-    protected function getNewItemLog(InventoryItem $inventoryItem, $trigger)
+    protected function getNewItemLog(InventoryItemInterface $inventoryItem, $trigger)
     {
         if (!$inventoryItem->getQuantity() && !$inventoryItem->getAllocatedQuantity()) {
             return null;
@@ -138,12 +140,12 @@ class InventoryLogger
     /**
      * Creates inventory log for modified inventory item.
      *
-     * @param InventoryItem $item
-     * @param string        $trigger
+     * @param InventoryItemInterface $item
+     * @param string                 $trigger
      *
      * @return InventoryLog|null Null if item quantities were not modified.
      */
-    protected function getModifiedItemLog(InventoryItem $item, $trigger)
+    protected function getModifiedItemLog(InventoryItemInterface $item, $trigger)
     {
         $uow       = $this->manager()->getUnitOfWork();
         $changeSet = $uow->getEntityChangeSet($item);
@@ -199,9 +201,9 @@ class InventoryLogger
     /**
      * Set user as reference on inventory log item
      *
-     * @param InventoryLog $logItem
+     * @param InventoryLogInterface $logItem
      */
-    protected function setUserReference(InventoryLog $logItem)
+    protected function setUserReference(InventoryLogInterface $logItem)
     {
         if (null === $this->storage) {
             return;

@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
-use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
+use Marello\Component\Pricing\PricingAwareInterface;
 
 class LoadProductChannelPricingData extends AbstractFixture implements DependentFixtureInterface
 {

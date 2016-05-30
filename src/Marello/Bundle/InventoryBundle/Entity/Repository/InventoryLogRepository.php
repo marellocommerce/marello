@@ -13,13 +13,13 @@ class InventoryLogRepository extends EntityRepository
      * Returns a sequence of records containing values representing how much were respective quantities changed on each
      * day between given from and to values.
      *
-     * @param Product   $product
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param Product            $product
+     * @param \DateTimeInterface $from
+     * @param \DateTimeInterface $to
      *
      * @return array
      */
-    public function getQuantitiesForProduct(Product $product, \DateTime $from, \DateTime $to)
+    public function getQuantitiesForProduct(Product $product, \DateTimeInterface $from, \DateTimeInterface $to)
     {
         $qb = $this->createQueryBuilder('l');
 
@@ -51,12 +51,12 @@ class InventoryLogRepository extends EntityRepository
      * This is either old value of first record of the day, or new value of last record before the day.
      * In case no record is preset, bot quantities are returned as zeroes.
      *
-     * @param Product   $product
-     * @param \DateTime $at
+     * @param Product            $product
+     * @param \DateTimeInterface $at
      *
      * @return array
      */
-    public function getInitialQuantities(Product $product, \DateTime $at)
+    public function getInitialQuantities(Product $product, \DateTimeInterface $at)
     {
         /*
          * First. Find first record on same day.

@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\SalesChannelInterface;
 
 class ChannelProvider
 {
@@ -33,7 +34,7 @@ class ChannelProvider
         $ids = [];
         $product
             ->getChannels()
-            ->map(function (SalesChannel $channel) use (&$ids) {
+            ->map(function (SalesChannelInterface $channel) use (&$ids) {
                 $ids[] = $channel->getId();
             });
 

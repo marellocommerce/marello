@@ -7,6 +7,8 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 use Marello\Bundle\InventoryBundle\Logging\ChartBuilder;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\InventoryLogInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -36,12 +38,12 @@ class ChartBuilderTest extends WebTestCase
         /** @var Product $product */
         $product = $this->getReference('marello-product-1');
 
-        /** @var InventoryItem $log */
+        /** @var InventoryItemInterface $inventoryItem */
         $inventoryItem = $product
             ->getInventoryItems()
             ->first();
 
-        /** @var InventoryLog $log */
+        /** @var InventoryLogInterface $log */
         $log = $inventoryItem
             ->getInventoryLogs()
             ->first();

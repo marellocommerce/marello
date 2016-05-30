@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Form\Subscriber\InventoryItemCollectionSubscriber;
+use Marello\Component\Inventory\InventoryItemInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
@@ -40,7 +41,7 @@ class InventoryItemCollectionSubscriberTest extends WebTestCase
         $this->assertCount(1, $data, 'There should be one inventory item present (for default WH).');
         $this->assertInstanceOf(Collection::class, $data, 'Data should be Collection.');
 
-        /** @var InventoryItem $item */
+        /** @var InventoryItemInterface $item */
         $item = $data->first();
 
         $this->assertInstanceOf(InventoryItem::class, $item);
@@ -75,7 +76,7 @@ class InventoryItemCollectionSubscriberTest extends WebTestCase
         $this->assertCount(1, $data, 'One inventory item from initial data should be kept.');
         $this->assertInstanceOf(Collection::class, $data, 'Data should be Collection.');
 
-        /** @var InventoryItem $item */
+        /** @var InventoryItemInterface $item */
         $item = $data->first();
 
         $this->assertInstanceOf(InventoryItem::class, $item);

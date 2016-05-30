@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\SalesBundle\Form\Handler;
 
+use Marello\Component\Sales\SalesChannelInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -41,11 +42,11 @@ class SalesChannelHandler
     /**
      * Process form
      *
-     * @param  SalesChannel $entity
+     * @param SalesChannelInterface $entity
      *
      * @return bool True on successful processing, false otherwise
      */
-    public function process(SalesChannel $entity)
+    public function process(SalesChannelInterface $entity)
     {
         $this->form->setData($entity);
 
@@ -86,9 +87,9 @@ class SalesChannelHandler
     /**
      * "Success" form handler
      *
-     * @param SalesChannel $entity
+     * @param SalesChannelInterface $entity
      */
-    protected function onSuccess(SalesChannel $entity)
+    protected function onSuccess(SalesChannelInterface $entity)
     {
         $this->manager->persist($entity);
         $this->manager->flush();

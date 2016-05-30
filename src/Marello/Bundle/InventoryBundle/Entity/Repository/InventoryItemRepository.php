@@ -6,27 +6,29 @@ use Doctrine\ORM\EntityRepository;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\InventoryItemRepositoryInterface;
+use Marello\Component\Inventory\WarehouseInterface;
 
-class InventoryItemRepository extends EntityRepository
+class InventoryItemRepository extends EntityRepository implements InventoryItemRepositoryInterface
 {
     /**
-     * @param Warehouse $warehouse
-     * @param Product   $product
+     * @param WarehouseInterface $warehouse
+     * @param Product            $product
      *
      * @return null|InventoryItem
      */
-    public function findOneByWarehouseAndProduct(Warehouse $warehouse, Product $product)
+    public function findOneByWarehouseAndProduct(WarehouseInterface $warehouse, Product $product)
     {
         return $this->findOneBy(compact('warehouse', 'product'));
     }
 
     /**
-     * @param Warehouse $warehouse
-     * @param Product   $product
+     * @param WarehouseInterface $warehouse
+     * @param Product            $product
      *
      * @return InventoryItem|null
      */
-    public function findOrCreateByWarehouseAndProduct(Warehouse $warehouse, Product $product)
+    public function findOrCreateByWarehouseAndProduct(WarehouseInterface $warehouse, Product $product)
     {
         $inventoryItem = $this->findOneByWarehouseAndProduct($warehouse, $product);
 

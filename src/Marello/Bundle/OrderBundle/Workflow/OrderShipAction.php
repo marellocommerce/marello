@@ -8,6 +8,7 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Inventory\InventoryLogInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
@@ -57,7 +58,7 @@ class OrderShipAction extends OrderTransitionAction
         $this->logger->log(
             $this->changedInventory,
             'order_workflow.shipped',
-            function (InventoryLog $log) use ($order) {
+            function (InventoryLogInterface $log) use ($order) {
                 $log->setOrder($order);
             }
         );

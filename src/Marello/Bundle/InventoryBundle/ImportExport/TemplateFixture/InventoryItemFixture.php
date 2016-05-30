@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\InventoryBundle\ImportExport\TemplateFixture;
 
+use Marello\Component\Inventory\InventoryItemInterface;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
@@ -37,8 +38,8 @@ class InventoryItemFixture extends AbstractTemplateRepository implements Templat
     }
 
     /**
-     * @param string  $key
-     * @param InventoryItem $entity
+     * @param string                 $key
+     * @param InventoryItemInterface $entity
      */
     public function fillEntityData($key, $entity)
     {

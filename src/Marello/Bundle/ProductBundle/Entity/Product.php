@@ -5,6 +5,8 @@ namespace Marello\Bundle\ProductBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
@@ -13,8 +15,8 @@ use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Model\ExtendProduct;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
-use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
+use Marello\Component\Pricing\PricingAwareInterface;
+use Marello\Component\Sales\SalesChannelAwareInterface;
 
 /**
  * Represents a Marello Product
@@ -470,11 +472,11 @@ class Product extends ExtendProduct implements
     /**
      * Add item
      *
-     * @param SalesChannel $channel
+     * @param SalesChannelInterface $channel
      *
      * @return Product
      */
-    public function addChannel(SalesChannel $channel)
+    public function addChannel(SalesChannelInterface $channel)
     {
         if (!$this->channels->contains($channel)) {
             $this->channels->add($channel);
@@ -494,11 +496,11 @@ class Product extends ExtendProduct implements
     /**
      * Remove item
      *
-     * @param SalesChannel $channel
+     * @param SalesChannelInterface $channel
      *
      * @return Product
      */
-    public function removeChannel(SalesChannel $channel)
+    public function removeChannel(SalesChannelInterface $channel)
     {
         if ($this->channels->contains($channel)) {
             $this->channels->removeElement($channel);
@@ -618,11 +620,11 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @param InventoryItem $item
+     * @param InventoryItemInterface $item
      *
      * @return $this
      */
-    public function addInventoryItem(InventoryItem $item)
+    public function addInventoryItem(InventoryItemInterface $item)
     {
         $item->setProduct($this);
         $this->inventoryItems->add($item);
@@ -631,11 +633,11 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @param InventoryItem $item
+     * @param InventoryItemInterface $item
      *
      * @return $this
      */
-    public function removeInventoryItem(InventoryItem $item)
+    public function removeInventoryItem(InventoryItemInterface $item)
     {
         $this->inventoryItems->removeElement($item);
 

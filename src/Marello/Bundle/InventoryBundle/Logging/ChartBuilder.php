@@ -36,13 +36,13 @@ class ChartBuilder
     /**
      * Returns data in format ready for inventory chart.
      *
-     * @param Product   $product
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param Product            $product
+     * @param \DateTimeInterface $from
+     * @param \DateTimeInterface $to
      *
      * @return array
      */
-    public function getChartData(Product $product, \DateTime $from, \DateTime $to)
+    public function getChartData(Product $product, \DateTimeInterface $from, \DateTimeInterface $to)
     {
         $repository = $this->doctrine
             ->getRepository(InventoryLog::class);

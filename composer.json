@@ -11,11 +11,12 @@
     ],
     "autoload": {
         "psr-0": {
-            "Marello\\Bundle": "src/"
+            "Marello\\Bundle": "src/",
+            "Marello\\Component": "src/"
          }
     },
     "repositories": [
-       {
+        {
             "type": "composer",
             "url": "http://packagist.orocrm.com"
         }

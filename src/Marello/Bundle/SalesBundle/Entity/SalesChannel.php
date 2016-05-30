@@ -5,7 +5,7 @@ namespace Marello\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Component\Pricing\CurrencyAwareInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelRepository")

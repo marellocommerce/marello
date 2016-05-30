@@ -4,12 +4,14 @@ namespace Marello\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Inventory\InventoryAllocationInterface;
+use Marello\Component\Inventory\InventoryItemInterface;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="marello_inventory_allocation")
  */
-class InventoryAllocation
+class InventoryAllocation implements InventoryAllocationInterface
 {
     /**
      * @ORM\Id
@@ -46,10 +48,10 @@ class InventoryAllocation
     /**
      * InventoryAllocation constructor.
      *
-     * @param InventoryItem $inventoryItem
-     * @param int           $quantity
+     * @param InventoryItemInterface $inventoryItem
+     * @param int                    $quantity
      */
-    public function __construct(InventoryItem $inventoryItem, $quantity)
+    public function __construct(InventoryItemInterface $inventoryItem, $quantity)
     {
         $this->inventoryItem = $inventoryItem;
         $this->quantity      = $quantity;
@@ -88,11 +90,11 @@ class InventoryAllocation
     }
 
     /**
-     * @param InventoryItem $inventoryItem
+     * @param InventoryItemInterface $inventoryItem
      *
      * @return $this
      */
-    public function setInventoryItem($inventoryItem)
+    public function setInventoryItem(InventoryItemInterface $inventoryItem)
     {
         $this->inventoryItem = $inventoryItem;
 
@@ -116,7 +118,7 @@ class InventoryAllocation
      *
      * @return $this
      */
-    public function setTargetOrderItem($targetOrderItem = null)
+    public function setTargetOrderItem(OrderItem $targetOrderItem = null)
     {
         $this->targetOrderItem = $targetOrderItem;
 

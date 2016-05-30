@@ -5,8 +5,8 @@ namespace Marello\Bundle\PricingBundle\Provider;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Pricing\CurrencyAwareInterface;
 
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 

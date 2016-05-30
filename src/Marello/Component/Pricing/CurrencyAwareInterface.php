@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Model;
+namespace Marello\Component\Pricing;
 
 interface CurrencyAwareInterface
 {

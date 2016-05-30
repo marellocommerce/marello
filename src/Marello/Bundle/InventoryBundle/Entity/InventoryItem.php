@@ -6,6 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Inventory\WarehouseInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
@@ -26,7 +29,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *      }
  * )
  */
-class InventoryItem
+class InventoryItem implements InventoryItemInterface
 {
     const MODIFY_OPERATOR_INCREASE = 'increase';
     const MODIFY_OPERATOR_DECREASE = 'decrease';
@@ -181,11 +184,11 @@ class InventoryItem
     }
 
     /**
-     * @param Warehouse $warehouse
+     * @param WarehouseInterface $warehouse
      *
      * @return $this
      */
-    public function setWarehouse(Warehouse $warehouse = null)
+    public function setWarehouse(WarehouseInterface $warehouse = null)
     {
         $this->warehouse = $warehouse;
 
@@ -233,11 +236,11 @@ class InventoryItem
     }
 
     /**
-     * @param InventoryLog $log
+     * @param InventoryLogInterface $log
      *
      * @return $this
      */
-    public function addInventoryLog(InventoryLog $log)
+    public function addInventoryLog(InventoryLogInterface $log)
     {
         $this->inventoryLogs->add($log);
 
@@ -245,11 +248,11 @@ class InventoryItem
     }
 
     /**
-     * @param InventoryLog $log
+     * @param InventoryLogInterface $log
      *
      * @return $this
      */
-    public function removeInventoryLog(InventoryLog $log)
+    public function removeInventoryLog(InventoryLogInterface $log)
     {
         $this->inventoryLogs->removeElement($log);
 

@@ -6,6 +6,9 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
+use Marello\Component\Inventory\InventoryAllocationInterface;
+use Marello\Component\Inventory\InventoryItemInterface;
 use Oro\Component\PropertyAccess\PropertyAccessor;
 
 class InventoryAllocator
@@ -27,11 +30,11 @@ class InventoryAllocator
      * Allocates inventory to given target.
      * Also modifies inventory item.
      *
-     * @param InventoryItem             $item
+     * @param InventoryItemInterface    $item
      * @param int                       $amount
      * @param AllocationTargetInterface $target Target entity
      */
-    public function allocate(InventoryItem $item, $amount, AllocationTargetInterface $target)
+    public function allocate(InventoryItemInterface $item, $amount, AllocationTargetInterface $target)
     {
         $allocation = new InventoryAllocation($item, $amount);
         $this->setAllocationTarget($allocation, $target);
@@ -43,9 +46,9 @@ class InventoryAllocator
      * Deallocates inventory.
      * Also modifies inventory item.
      *
-     * @param InventoryAllocation $allocation
+     * @param InventoryAllocationInterface $allocation
      */
-    public function deallocate(InventoryAllocation $allocation)
+    public function deallocate(InventoryAllocationInterface $allocation)
     {
         $this->manager()->remove($allocation);
     }
@@ -53,10 +56,10 @@ class InventoryAllocator
     /**
      * Sets allocation target on allocation entity.
      *
-     * @param InventoryAllocation       $allocation
-     * @param AllocationTargetInterface $target
+     * @param InventoryAllocationInterface $allocation
+     * @param AllocationTargetInterface    $target
      */
-    protected function setAllocationTarget(InventoryAllocation $allocation, AllocationTargetInterface $target)
+    protected function setAllocationTarget(InventoryAllocationInterface $allocation, AllocationTargetInterface $target)
     {
         $pa = new PropertyAccessor();
 

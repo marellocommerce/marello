@@ -10,6 +10,7 @@ use Marello\Bundle\InventoryBundle\InventoryAllocation\InventoryAllocator;
 use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Inventory\InventoryLogInterface;
 
 class OrderInventoryAllocationListener
 {
@@ -52,7 +53,7 @@ class OrderInventoryAllocationListener
         $this->logger->log(
             $loggedItems,
             'order_workflow.pending',
-            function (InventoryLog $log) use ($entity) {
+            function (InventoryLogInterface $log) use ($entity) {
                 $log->setOrder($entity);
             }
         );

@@ -3,6 +3,7 @@
 namespace Marello\Bundle\AddressBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Marello\Component\Address\AddressInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 /**
@@ -16,7 +17,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
  *      )
  * })
  */
-class Address extends AbstractAddress
+class Address extends AbstractAddress implements AddressInterface
 {
     /**
      * @var string

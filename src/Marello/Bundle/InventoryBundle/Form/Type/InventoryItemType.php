@@ -3,6 +3,7 @@
 namespace Marello\Bundle\InventoryBundle\Form\Type;
 
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\InventoryItemInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -36,7 +37,7 @@ class InventoryItemType extends AbstractType
             ]);
 
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            /** @var InventoryItem $data */
+            /** @var InventoryItemInterface $data */
             $data = $event->getData();
             $form = $event->getForm();
 

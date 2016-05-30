@@ -10,13 +10,15 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\WarehouseInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadProductData extends AbstractFixture implements DependentFixtureInterface
 {
-    /** @var \Oro\Bundle\OrganizationBundle\Entity\Organization $defaultOrganization  */
+    /** @var Organization $defaultOrganization  */
     protected $defaultOrganization;
 
-    /** @var \Marello\Bundle\InventoryBundle\Entity\Warehouse $defaultWarehouse */
+    /** @var WarehouseInterface $defaultWarehouse */
     protected $defaultWarehouse;
 
     /** @var ObjectManager $manager */

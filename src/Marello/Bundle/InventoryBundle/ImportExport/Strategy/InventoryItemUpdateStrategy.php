@@ -6,6 +6,8 @@ use Doctrine\Common\Util\ClassUtils;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
+use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\InventoryLogInterface;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
@@ -30,11 +32,11 @@ class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * @param object|InventoryItem $entity
-     * @param bool                 $isFullData
-     * @param bool                 $isPersistNew
-     * @param mixed|array|null     $itemData
-     * @param array                $searchContext
+     * @param object|InventoryItemInterface $entity
+     * @param bool                          $isFullData
+     * @param bool                          $isPersistNew
+     * @param mixed|array|null              $itemData
+     * @param array                         $searchContext
      *
      * @return null|object
      */
@@ -80,7 +82,7 @@ class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
             $this->inventoryLogger->directLog(
                 $entity,
                 'import',
-                function (InventoryLog $log) use ($entity) {
+                function (InventoryLogInterface $log) use ($entity) {
                     $log->setOldQuantity(0);
                     $log->setOldAllocatedQuantity(0);
                 }
@@ -166,7 +168,7 @@ class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
             $this->inventoryLogger->directLog(
                 $existingEntity,
                 'import',
-                function (InventoryLog $log) use ($oldQuantity, $oldAllocatedQuantity) {
+                function (InventoryLogInterface $log) use ($oldQuantity, $oldAllocatedQuantity) {
                     $log->setOldQuantity($oldQuantity);
                     $log->setOldAllocatedQuantity($oldAllocatedQuantity);
                 }

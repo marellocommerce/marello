@@ -4,13 +4,15 @@ namespace Marello\Bundle\InventoryBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Component\Inventory\WarehouseInterface;
+use Marello\Component\Inventory\WarehouseRepositoryInterface;
 
-class WarehouseRepository extends EntityRepository
+class WarehouseRepository extends EntityRepository implements WarehouseRepositoryInterface
 {
     /**
      * Finds default warehouse.
      *
-     * @return Warehouse
+     * @return WarehouseInterface
      */
     public function getDefault()
     {

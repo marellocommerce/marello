@@ -1,8 +1,8 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Model;
+namespace Marello\Component\Pricing;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 
@@ -13,7 +13,7 @@ interface PricingAwareInterface
 
     /**
      * Get collection of ProductChannelPrices
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getChannelPrices();
 
@@ -36,7 +36,7 @@ interface PricingAwareInterface
 
     /**
      * Get collection of ProductPrices
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getPrices();
 

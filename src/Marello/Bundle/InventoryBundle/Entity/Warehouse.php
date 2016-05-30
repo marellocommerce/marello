@@ -4,6 +4,8 @@ namespace Marello\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\AddressBundle\Entity\Address;
+use Marello\Component\Address\AddressInterface;
+use Marello\Component\Inventory\WarehouseInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
@@ -24,7 +26,7 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
  *      }
  * )
  */
-class Warehouse
+class Warehouse implements WarehouseInterface
 {
     /**
      * @ORM\Id
@@ -136,7 +138,7 @@ class Warehouse
      *
      * @return $this
      */
-    public function setOwner($owner)
+    public function setOwner(OrganizationInterface $owner)
     {
         $this->owner = $owner;
 
@@ -152,7 +154,7 @@ class Warehouse
     }
 
     /**
-     * @return Address
+     * @return AddressInterface
      */
     public function getAddress()
     {
@@ -160,11 +162,11 @@ class Warehouse
     }
 
     /**
-     * @param Address $address
+     * @param AddressInterface $address
      *
      * @return $this
      */
-    public function setAddress(Address $address)
+    public function setAddress(AddressInterface $address)
     {
         $this->address = $address;
 

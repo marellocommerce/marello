@@ -4,6 +4,8 @@ namespace Marello\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\InventoryLogInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
@@ -13,7 +15,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  * @ORM\Table(name="marello_inventory_log")
  * @ORM\HasLifecycleCallbacks()
  */
-class InventoryLog
+class InventoryLog implements InventoryLogInterface
 {
     /**
      * @ORM\Id
@@ -93,10 +95,10 @@ class InventoryLog
     /**
      * InventoryLog constructor.
      *
-     * @param InventoryItem $inventoryItem
-     * @param string        $trigger
+     * @param InventoryItemInterface $inventoryItem
+     * @param string                 $trigger
      */
-    public function __construct(InventoryItem $inventoryItem, $trigger)
+    public function __construct(InventoryItemInterface $inventoryItem, $trigger)
     {
         $this->inventoryItem = $inventoryItem;
         $this->actionType    = $trigger;
@@ -258,7 +260,7 @@ class InventoryLog
      *
      * @return $this
      */
-    public function setOrder($order)
+    public function setOrder(Order $order)
     {
         $this->order = $order;
 

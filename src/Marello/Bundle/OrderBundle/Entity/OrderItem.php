@@ -14,8 +14,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Marello\Bundle\OrderBundle\Model\ExtendOrderItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
-use Marello\Bundle\InventoryBundle\InventoryAllocation\AllocationTargetInterface;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Component\Pricing\CurrencyAwareInterface;
+use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 
 /**
  * @ORM\Entity()
@@ -147,7 +147,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
      */
     protected $inventoryAllocations;
 
-    /**
+    /**x
      * OrderItem constructor.
      */
     public function __construct()

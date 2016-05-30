@@ -3,8 +3,8 @@
 namespace Marello\Bundle\PricingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Pricing\CurrencyAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**

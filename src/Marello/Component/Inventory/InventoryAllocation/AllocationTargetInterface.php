@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\InventoryAllocation;
+namespace Marello\Component\Inventory\InventoryAllocation;
 
 use Doctrine\Common\Collections\Collection;
 use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
