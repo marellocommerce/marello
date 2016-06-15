@@ -5,28 +5,29 @@ namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\InventoryBundle\InventoryAllocation\InventoryAllocator;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
+use Marello\Component\Inventory\InventoryAllocation\InventoryAllocator;
+use Marello\Component\Inventory\InventoryAllocation\InventoryAllocatorInterface;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Order\OrderItemInterface;
 
 class OrderInventoryAllocationListener
 {
     /** @var InventoryAllocator */
     protected $allocator;
 
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $logger;
 
     /**
      * OrderInventoryAllocationListener constructor.
      *
-     * @param InventoryAllocator $allocator
-     * @param InventoryLogger    $logger
+     * @param InventoryAllocatorInterface $allocator
+     * @param InventoryLoggerInterface    $logger
      */
-    public function __construct(InventoryAllocator $allocator, InventoryLogger $logger)
+    public function __construct(InventoryAllocatorInterface $allocator, InventoryLoggerInterface $logger)
     {
         $this->allocator = $allocator;
         $this->logger    = $logger;
@@ -60,12 +61,12 @@ class OrderInventoryAllocationListener
     }
 
     /**
-     * @param OrderItem     $item
-     * @param EntityManager $em
+     * @param OrderItemInterface $item
+     * @param EntityManager      $em
      *
      * @return InventoryItem
      */
-    protected function getInventoryItemToAllocate(OrderItem $item, EntityManager $em)
+    protected function getInventoryItemToAllocate(OrderItemInterface $item, EntityManager $em)
     {
         $warehouse = $em
             ->getRepository('MarelloInventoryBundle:Warehouse')

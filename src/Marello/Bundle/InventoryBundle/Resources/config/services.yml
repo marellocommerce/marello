@@ -15,7 +15,7 @@ services:
             - @translator
 
     marello_inventory.logging.inventory_logger:
-        class: Marello\Bundle\InventoryBundle\Logging\InventoryLogger
+        class: Marello\Component\Inventory\Logging\InventoryLogger
         arguments:
             - @doctrine
             - @security.token_storage
@@ -27,6 +27,6 @@ services:
             - {name: doctrine.event_listener, event: preRemove, method: preRemove }
 
     marello_inventory.allocation.allocator:
-        class: Marello\Bundle\InventoryBundle\InventoryAllocation\InventoryAllocator
+        class: Marello\Component\Inventory\InventoryAllocation\InventoryAllocator
         arguments:
             - @doctrine

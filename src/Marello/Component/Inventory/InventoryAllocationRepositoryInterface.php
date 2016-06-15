@@ -2,15 +2,15 @@
 
 namespace Marello\Component\Inventory;
 
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\OrderItemInterface;
 
 interface InventoryAllocationRepositoryInterface
 {
     /**
      * @param InventoryItemInterface $inventoryItem
-     * @param OrderItem              $orderItem
+     * @param OrderItemInterface     $orderItem
      *
      * @return null|InventoryAllocationInterface
      */
-    public function findOneByInventoryItemAndOrderItem(InventoryItemInterface $inventoryItem, OrderItem $orderItem);
+    public function findOneByInventoryItemAndOrderItem(InventoryItemInterface $inventoryItem, OrderItemInterface $orderItem);
 }

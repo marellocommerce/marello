@@ -5,6 +5,8 @@ namespace Marello\Bundle\ProductBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\VariantInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
@@ -25,7 +27,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *  }
  * )
  */
-class Variant
+class Variant implements VariantInterface
 {
     /**
      * @var integer
@@ -46,7 +48,7 @@ class Variant
     /**
      * @see \Marello\Bundle\InventoryBundle\Form\Type\ProductInventoryType
      *
-     * @var Collection|Product[] $products
+     * @var Collection|ProductInterface[] $products
      *
      * @ORM\OneToMany(targetEntity="Product", cascade={"persist"}, mappedBy="variant")
      * @ORM\JoinTable(name="marello_product_to_variant")
@@ -114,7 +116,7 @@ class Variant
     }
 
     /**
-     * @return Collection|Product[]
+     * @return Collection|ProductInterface[]
      */
     public function getProducts()
     {
@@ -124,11 +126,11 @@ class Variant
     /**
      * Add item
      *
-     * @param Product $item
+     * @param ProductInterface $item
      *
-     * @return Product
+     * @return VariantInterface
      */
-    public function addProduct(Product $item)
+    public function addProduct(ProductInterface $item)
     {
         if (!$this->products->contains($item)) {
             $this->products->add($item);
@@ -141,11 +143,11 @@ class Variant
     /**
      * Remove item
      *
-     * @param Product $item
+     * @param ProductInterface $item
      *
-     * @return Product
+     * @return VariantInterface
      */
-    public function removeProduct(Product $item)
+    public function removeProduct(ProductInterface $item)
     {
         if ($this->products->contains($item)) {
             $this->products->removeElement($item);
@@ -194,7 +196,7 @@ class Variant
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $this->updatedAt = clone $this->createdAt;
     }
 
@@ -205,6 +207,6 @@ class Variant
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
     }
 }

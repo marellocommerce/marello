@@ -4,6 +4,7 @@ namespace Marello\Bundle\PricingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Product\ProductChannelPriceInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
@@ -31,7 +32,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *  }
  * )
  */
-class ProductChannelPrice extends BasePrice
+class ProductChannelPrice extends BasePrice implements ProductChannelPriceInterface
 {
     /**
      * @var SalesChannel

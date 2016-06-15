@@ -2,7 +2,7 @@
 
 namespace Marello\Component\Inventory;
 
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\OrderInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 interface InventoryLogInterface
@@ -88,14 +88,14 @@ interface InventoryLogInterface
     public function setNewAllocatedQuantity($newAllocatedQuantity);
 
     /**
-     * @return Order
+     * @return OrderInterface
      */
     public function getOrder();
 
     /**
-     * @param Order $order
+     * @param OrderInterface $order
      *
      * @return $this
      */
-    public function setOrder(Order $order);
+    public function setOrder(OrderInterface $order);
 }

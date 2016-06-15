@@ -2,8 +2,7 @@
 
 namespace Marello\Component\Inventory;
 
-
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\OrderItemInterface;
 
 interface InventoryAllocationInterface
 {
@@ -23,7 +22,7 @@ interface InventoryAllocationInterface
     public function getQuantity();
 
     /**
-     * @return OrderItem
+     * @return OrderItemInterface
      */
     public function getTargetOrderItem();
 
@@ -42,9 +41,9 @@ interface InventoryAllocationInterface
     public function setQuantity($quantity);
 
     /**
-     * @param OrderItem $targetOrderItem
+     * @param OrderItemInterface $targetOrderItem
      *
      * @return $this
      */
-    public function setTargetOrderItem(OrderItem $targetOrderItem = null);
+    public function setTargetOrderItem(OrderItemInterface $targetOrderItem = null);
 }

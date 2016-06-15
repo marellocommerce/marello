@@ -3,8 +3,9 @@
 namespace Marello\Bundle\InventoryBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\ProductInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -19,20 +20,20 @@ class ProductInventoryHandler
     /** @var ObjectManager */
     protected $manager;
 
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $inventoryLogger;
 
     /**
-     * @param FormInterface   $form
-     * @param Request         $request
-     * @param ObjectManager   $manager
-     * @param InventoryLogger $inventoryLogger
+     * @param FormInterface            $form
+     * @param Request                  $request
+     * @param ObjectManager            $manager
+     * @param InventoryLoggerInterface $inventoryLogger
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         ObjectManager $manager,
-        InventoryLogger $inventoryLogger
+        InventoryLoggerInterface $inventoryLogger
     ) {
         $this->form            = $form;
         $this->request         = $request;
@@ -43,11 +44,11 @@ class ProductInventoryHandler
     /**
      * Process form
      *
-     * @param  Product $entity
+     * @param  ProductInterface $entity
      *
      * @return bool True on successful processing, false otherwise
      */
-    public function process(Product $entity)
+    public function process(ProductInterface $entity)
     {
         $this->form->setData($entity);
 
@@ -77,9 +78,9 @@ class ProductInventoryHandler
     /**
      * "Success" form handler
      *
-     * @param Product $entity
+     * @param ProductInterface $entity
      */
-    protected function onSuccess(Product $entity)
+    protected function onSuccess(ProductInterface $entity)
     {
         $items = $entity->getInventoryItems()->toArray();
 

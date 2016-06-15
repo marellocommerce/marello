@@ -30,28 +30,28 @@ interface SalesChannelInterface extends CurrencyAwareInterface
     public function __toString();
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTime
      */
     public function getCreatedAt();
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @param \DateTime $createdAt
      *
      * @return $this
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt);
+    public function setCreatedAt($createdAt);
 
     /**
-     * @return \DateTimeInterface
+     * @return \DateTime
      */
     public function getUpdatedAt();
 
     /**
-     * @param \DateTimeInterface $updatedAt
+     * @param \DateTime $updatedAt
      *
      * @return $this
      */
-    public function setUpdatedAt(\DateTimeInterface $updatedAt);
+    public function setUpdatedAt($updatedAt);
 
     /**
      * @return string
@@ -66,24 +66,24 @@ interface SalesChannelInterface extends CurrencyAwareInterface
     public function setChannelType($channelType);
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isActive();
 
     /**
-     * @param boolean $active
+     * @param bool $active
      *
      * @return $this
      */
     public function setActive($active);
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getDefault();
 
     /**
-     * @param boolean $default
+     * @param bool $default
      *
      * @return $this
      */
@@ -95,15 +95,10 @@ interface SalesChannelInterface extends CurrencyAwareInterface
     public function getCode();
 
     /**
-     * @param $code
+     * @param string $code
      * @return $this
      */
     public function setCode($code);
-
-    /**
-     * @return string
-     */
-    public function getCurrency();
 
     /**
      * @param string $currency
@@ -121,5 +116,5 @@ interface SalesChannelInterface extends CurrencyAwareInterface
      *
      * @return $this
      */
-    public function setOwner($owner);
+    public function setOwner(OrganizationInterface $owner);
 }

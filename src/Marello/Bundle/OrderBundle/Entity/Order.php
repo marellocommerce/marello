@@ -8,10 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\AddressBundle\Entity\Address;
 use Marello\Bundle\OrderBundle\Model\ExtendOrder;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Address\AddressInterface;
+use Marello\Component\Order\OrderInterface;
+use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Pricing\PriceInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
@@ -43,7 +48,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  * )
  * @ORM\HasLifecycleCallbacks()
  */
-class Order extends ExtendOrder
+class Order extends ExtendOrder implements OrderInterface
 {
     /**
      * @var int
@@ -245,12 +250,12 @@ class Order extends ExtendOrder
     protected $organization;
 
     /**
-     * @param AbstractAddress|null $billingAddress
-     * @param AbstractAddress|null $shippingAddress
+     * @param AddressInterface|null $billingAddress
+     * @param AddressInterface|null $shippingAddress
      */
     public function __construct(
-        AbstractAddress $billingAddress = null,
-        AbstractAddress $shippingAddress = null
+        AddressInterface $billingAddress = null,
+        AddressInterface $shippingAddress = null
     ) {
         $this->items           = new ArrayCollection();
         $this->billingAddress  = $billingAddress;
@@ -275,7 +280,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getOrderReference()
     {
@@ -283,7 +288,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param int $orderReference
+     * @param string $orderReference
      *
      * @return $this
      */
@@ -295,7 +300,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getSubtotal()
     {
@@ -303,11 +308,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param int $subtotal
+     * @param PriceInterface $subtotal
      *
      * @return $this
      */
-    public function setSubtotal($subtotal)
+    public function setSubtotal(PriceInterface $subtotal)
     {
         $this->subtotal = $subtotal;
 
@@ -315,7 +320,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getTotalTax()
     {
@@ -323,11 +328,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param int $totalTax
+     * @param PriceInterface $totalTax
      *
      * @return $this
      */
-    public function setTotalTax($totalTax)
+    public function setTotalTax(PriceInterface $totalTax)
     {
         $this->totalTax = $totalTax;
 
@@ -335,7 +340,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return int
+     * @return PriceInterface
      */
     public function getGrandTotal()
     {
@@ -343,11 +348,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param int $grandTotal
+     * @param PriceInterface $grandTotal
      *
      * @return $this
      */
-    public function setGrandTotal($grandTotal)
+    public function setGrandTotal(PriceInterface $grandTotal)
     {
         $this->grandTotal = $grandTotal;
 
@@ -355,7 +360,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return AbstractAddress
+     * @return AddressInterface
      */
     public function getShippingAddress()
     {
@@ -363,11 +368,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param AbstractAddress $shippingAddress
+     * @param AddressInterface $shippingAddress
      *
      * @return $this
      */
-    public function setShippingAddress($shippingAddress)
+    public function setShippingAddress(AddressInterface $shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
 
@@ -375,7 +380,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return Address
+     * @return AddressInterface
      */
     public function getBillingAddress()
     {
@@ -383,11 +388,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param Address $billingAddress
+     * @param AddressInterface $billingAddress
      *
      * @return $this
      */
-    public function setBillingAddress($billingAddress)
+    public function setBillingAddress(AddressInterface $billingAddress)
     {
         $this->billingAddress = $billingAddress;
 
@@ -395,7 +400,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return Collection|OrderItem[]
+     * @return Collection|OrderItemInterface[]
      */
     public function getItems()
     {
@@ -403,11 +408,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param OrderItem $item
+     * @param OrderItemInterface $item
      *
      * @return $this
      */
-    public function addItem(OrderItem $item)
+    public function addItem(OrderItemInterface $item)
     {
         $this->items->add($item);
         $item->setOrder($this);
@@ -416,11 +421,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param OrderItem $item
+     * @param OrderItemInterface $item
      *
      * @return $this
      */
-    public function removeItem(OrderItem $item)
+    public function removeItem(OrderItemInterface $item)
     {
         $this->items->removeElement($item);
 
@@ -436,7 +441,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return \Datetime
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -444,7 +449,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return \Datetime
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -452,7 +457,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return SalesChannel
+     * @return SalesChannelInterface
      */
     public function getSalesChannel()
     {
@@ -496,7 +501,7 @@ class Order extends ExtendOrder
      *
      * @return $this
      */
-    public function setWorkflowItem($workflowItem)
+    public function setWorkflowItem(WorkflowItem $workflowItem)
     {
         $this->workflowItem = $workflowItem;
 
@@ -512,11 +517,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param WorkflowItem $workflowStep
+     * @param WorkflowStep $workflowStep
      *
      * @return $this
      */
-    public function setWorkflowStep($workflowStep)
+    public function setWorkflowStep(WorkflowStep $workflowStep)
     {
         $this->workflowStep = $workflowStep;
 
@@ -600,7 +605,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return float
+     * @return PriceInterface
      */
     public function getShippingAmount()
     {
@@ -608,11 +613,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param float $shippingAmount
+     * @param PriceInterface $shippingAmount
      *
      * @return $this
      */
-    public function setShippingAmount($shippingAmount)
+    public function setShippingAmount(PriceInterface $shippingAmount)
     {
         $this->shippingAmount = $shippingAmount;
 
@@ -620,7 +625,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getShippingMethod()
     {
@@ -628,7 +633,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param float $shippingMethod
+     * @param string $shippingMethod
      *
      * @return $this
      */
@@ -648,11 +653,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param float $discountAmount
+     * @param PriceInterface $discountAmount
      *
      * @return $this
      */
-    public function setDiscountAmount($discountAmount)
+    public function setDiscountAmount(PriceInterface $discountAmount)
     {
         $this->discountAmount = $discountAmount;
 
@@ -660,7 +665,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return float
+     * @return PriceInterface
      */
     public function getDiscountPercent()
     {
@@ -708,7 +713,7 @@ class Order extends ExtendOrder
      *
      * @return $this
      */
-    public function setInvoicedAt($invoicedAt)
+    public function setInvoicedAt(\DateTime $invoicedAt)
     {
         $this->invoicedAt = $invoicedAt;
 
@@ -736,7 +741,7 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @return Organization
+     * @return OrganizationInterface
      */
     public function getOrganization()
     {
@@ -744,11 +749,11 @@ class Order extends ExtendOrder
     }
 
     /**
-     * @param Organization $organization
+     * @param OrganizationInterface $organization
      *
      * @return $this
      */
-    public function setOrganization(Organization $organization)
+    public function setOrganization(OrganizationInterface $organization)
     {
         $this->organization = $organization;
 

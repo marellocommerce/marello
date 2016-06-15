@@ -3,9 +3,14 @@
 namespace Marello\Bundle\ProductBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Product\ProductChannelPriceInterface;
+use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\ProductPriceInterface;
+use Marello\Component\Product\VariantInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -14,9 +19,7 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Model\ExtendProduct;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Component\Pricing\PricingAwareInterface;
-use Marello\Component\Sales\SalesChannelAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
  * Represents a Marello Product
@@ -52,9 +55,7 @@ use Marello\Component\Sales\SalesChannelAwareInterface;
  *  }
  * )
  */
-class Product extends ExtendProduct implements
-    SalesChannelAwareInterface,
-    PricingAwareInterface
+class Product extends ExtendProduct implements ProductInterface
 {
     /**
      * @var integer
@@ -292,7 +293,7 @@ class Product extends ExtendProduct implements
     /**
      * @param string $name
      *
-     * @return Product
+     * @return ProductInterface
      */
     public function setName($name)
     {
@@ -312,7 +313,7 @@ class Product extends ExtendProduct implements
     /**
      * @param string $sku
      *
-     * @return Product
+     * @return ProductInterface
      */
     public function setSku($sku)
     {
@@ -332,7 +333,7 @@ class Product extends ExtendProduct implements
     /**
      * @param ProductStatus $status
      *
-     * @return Product
+     * @return ProductInterface
      */
     public function setStatus(ProductStatus $status)
     {
@@ -352,11 +353,11 @@ class Product extends ExtendProduct implements
     /**
      * Add item
      *
-     * @param ProductPrice $price
+     * @param ProductPriceInterface $price
      *
-     * @return Product
+     * @return ProductInterface
      */
-    public function addPrice(ProductPrice $price)
+    public function addPrice(ProductPriceInterface $price)
     {
         if (!$this->prices->contains($price)) {
             $this->prices->add($price);
@@ -369,11 +370,11 @@ class Product extends ExtendProduct implements
     /**
      * Remove item
      *
-     * @param ProductPrice $price
+     * @param ProductPriceInterface $price
      *
-     * @return Product
+     * @return ProductInterface
      */
-    public function removePrice(ProductPrice $price)
+    public function removePrice(ProductPriceInterface $price)
     {
         if ($this->prices->contains($price)) {
             $this->prices->removeElement($price);
@@ -402,11 +403,11 @@ class Product extends ExtendProduct implements
     /**
      * Add item
      *
-     * @param ProductChannelPrice $channelPrice
+     * @param ProductChannelPriceInterface $channelPrice
      *
-     * @return Product
+     * @return ProductInterface
      */
-    public function addChannelPrice(ProductChannelPrice $channelPrice)
+    public function addChannelPrice(ProductChannelPriceInterface $channelPrice)
     {
         if (!$this->channelPrices->contains($channelPrice)) {
             $this->channelPrices->add($channelPrice);
@@ -419,11 +420,11 @@ class Product extends ExtendProduct implements
     /**
      * Remove item
      *
-     * @param ProductChannelPrice $channelPrice
+     * @param ProductChannelPriceInterface $channelPrice
      *
-     * @return Product
+     * @return ProductInterface
      */
-    public function removeChannelPrice(ProductChannelPrice $channelPrice)
+    public function removeChannelPrice(ProductChannelPriceInterface $channelPrice)
     {
         if ($this->channelPrices->contains($channelPrice)) {
             $this->channelPrices->removeElement($channelPrice);
@@ -442,7 +443,7 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getChannels()
     {
@@ -450,7 +451,7 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @return Variant
+     * @return VariantInterface
      */
     public function getVariant()
     {
@@ -458,11 +459,11 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @param Variant $variant
+     * @param VariantInterface $variant
      *
-     * @return Product
+     * @return ProductInterface
      */
-    public function setVariant(Variant $variant = null)
+    public function setVariant(VariantInterface $variant = null)
     {
         $this->variant = $variant;
 
@@ -474,7 +475,7 @@ class Product extends ExtendProduct implements
      *
      * @param SalesChannelInterface $channel
      *
-     * @return Product
+     * @return ProductInterface
      */
     public function addChannel(SalesChannelInterface $channel)
     {
@@ -498,7 +499,7 @@ class Product extends ExtendProduct implements
      *
      * @param SalesChannelInterface $channel
      *
-     * @return Product
+     * @return ProductInterface
      */
     public function removeChannel(SalesChannelInterface $channel)
     {
@@ -518,10 +519,10 @@ class Product extends ExtendProduct implements
     }
 
     /**
-     * @param Organization $organization
-     * @return Product
+     * @param OrganizationInterface $organization
+     * @return ProductInterface
      */
-    public function setOrganization($organization)
+    public function setOrganization(OrganizationInterface $organization)
     {
         $this->organization = $organization;
 
@@ -530,7 +531,7 @@ class Product extends ExtendProduct implements
 
     /**
      * @param array $data
-     * @return Product
+     * @return ProductInterface
      */
     public function setData(array $data)
     {
@@ -558,7 +559,7 @@ class Product extends ExtendProduct implements
     /**
      * @param \DateTime $createdAt
      *
-     * @return Product
+     * @return ProductInterface
      */
     public function setCreatedAt($createdAt)
     {
@@ -578,7 +579,7 @@ class Product extends ExtendProduct implements
     /**
      * @param \DateTime $updatedAt
      *
-     * @return Product
+     * @return ProductInterface
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -622,7 +623,7 @@ class Product extends ExtendProduct implements
     /**
      * @param InventoryItemInterface $item
      *
-     * @return $this
+     * @return ProductInterface
      */
     public function addInventoryItem(InventoryItemInterface $item)
     {
@@ -635,7 +636,7 @@ class Product extends ExtendProduct implements
     /**
      * @param InventoryItemInterface $item
      *
-     * @return $this
+     * @return ProductInterface
      */
     public function removeInventoryItem(InventoryItemInterface $item)
     {

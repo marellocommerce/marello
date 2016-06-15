@@ -5,6 +5,9 @@ namespace Marello\Bundle\OrderBundle\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Address\AddressInterface;
+use Marello\Component\Order\OrderInterface;
+use Marello\Component\Order\OrderItemInterface;
 use Oro\Bundle\SecurityBundle\Annotation as Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -29,11 +32,11 @@ class OrderController extends Controller
      * @Config\Template
      * @Security\AclAncestor("marello_order_view")
      *
-     * @param Order $order
+     * @param OrderInterface $order
      *
      * @return array
      */
-    public function viewAction(Order $order)
+    public function viewAction(OrderInterface $order)
     {
         return ['entity' => $order];
     }
@@ -59,12 +62,12 @@ class OrderController extends Controller
      * @Config\Template
      * @Security\AclAncestor("marello_order_update")
      *
-     * @param Request $request
-     * @param Order   $order
+     * @param Request        $request
+     * @param OrderInterface $order
      *
      * @return array
      */
-    public function updateAction(Request $request, Order $order)
+    public function updateAction(Request $request, OrderInterface $order)
     {
         return $this->update($request, $order);
     }
@@ -72,12 +75,12 @@ class OrderController extends Controller
     /**
      * Handles order updates and creation.
      *
-     * @param Request $request
-     * @param Order   $order
+     * @param Request        $request
+     * @param OrderInterface $order
      *
      * @return array
      */
-    protected function update(Request $request, Order $order = null)
+    protected function update(Request $request, OrderInterface $order = null)
     {
         $formName = $order ? 'marello_order_update' : 'marello_order_order';
 
@@ -103,9 +106,9 @@ class OrderController extends Controller
             /*
              * Remove detached order items.
              */
-            $originalItems->filter(function (OrderItem $originalItem) use ($order) {
+            $originalItems->filter(function (OrderItemInterface $originalItem) use ($order) {
                 return false === $order->getItems()->contains($originalItem);
-            })->map(function (OrderItem $orderItem) use ($manager) {
+            })->map(function (OrderItemInterface $orderItem) use ($manager) {
                 $manager->remove($orderItem);
             });
 
@@ -141,12 +144,12 @@ class OrderController extends Controller
      * @Config\Template
      * @Security\AclAncestor("marello_order_update")
      *
-     * @param Request $request
-     * @param Address $address
+     * @param Request          $request
+     * @param AddressInterface $address
      *
      * @return array
      */
-    public function addressAction(Request $request, Address $address)
+    public function addressAction(Request $request, AddressInterface $address)
     {
         return [
             'orderAddress' => $address,
@@ -161,12 +164,12 @@ class OrderController extends Controller
      * @Config\Template("MarelloOrderBundle:Order:widget/updateAddress.html.twig")
      * @Security\AclAncestor("marello_order_update")
      *
-     * @param Request $request
-     * @param Address $address
+     * @param Request          $request
+     * @param AddressInterface $address
      *
      * @return array
      */
-    public function updateAddressAction(Request $request, Address $address)
+    public function updateAddressAction(Request $request, AddressInterface $address)
     {
         $responseData = array(
             'saved' => false,

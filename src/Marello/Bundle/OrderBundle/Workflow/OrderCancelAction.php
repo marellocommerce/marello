@@ -4,11 +4,10 @@ namespace Marello\Bundle\OrderBundle\Workflow;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Order\OrderInterface;
+use Marello\Component\Order\OrderItemInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
@@ -17,7 +16,7 @@ class OrderCancelAction extends OrderTransitionAction
     /** @var Registry */
     protected $doctrine;
 
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $logger;
 
     /** @var InventoryItem[] */
@@ -28,9 +27,9 @@ class OrderCancelAction extends OrderTransitionAction
      *
      * @param ContextAccessor $contextAccessor
      * @param Registry        $doctrine
-     * @param InventoryLogger $logger
+     * @param InventoryLoggerInterface $logger
      */
-    public function __construct(ContextAccessor $contextAccessor, Registry $doctrine, InventoryLogger $logger)
+    public function __construct(ContextAccessor $contextAccessor, Registry $doctrine, InventoryLoggerInterface $logger)
     {
         parent::__construct($contextAccessor);
 
@@ -43,12 +42,12 @@ class OrderCancelAction extends OrderTransitionAction
      */
     protected function executeAction($context)
     {
-        /** @var Order $order */
+        /** @var OrderInterface $order */
         $order = $context->getEntity();
 
         $this->changedInventory = [];
 
-        $order->getItems()->map(function (OrderItem $orderItem) {
+        $order->getItems()->map(function (OrderItemInterface $orderItem) {
             $this->cancelOrderItem($orderItem);
         });
 
@@ -69,9 +68,9 @@ class OrderCancelAction extends OrderTransitionAction
     /**
      * Deallocates all inventory allocated towards item (items have not been shipped and allocation was released).
      *
-     * @param OrderItem $orderItem
+     * @param OrderItemInterface $orderItem
      */
-    protected function cancelOrderItem(OrderItem $orderItem)
+    protected function cancelOrderItem(OrderItemInterface $orderItem)
     {
         $allocations = $orderItem->getInventoryAllocations();
 

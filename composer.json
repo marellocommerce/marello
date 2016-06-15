@@ -18,9 +18,17 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://packagist.orocrm.com"
+            "url": "https://packagist.orocrm.com"
         }
     ],
+    "replace": {
+        "marellocommerce/address": "self.version",
+        "marellocommerce/inventory": "self.version",
+        "marellocommerce/order": "self.version",
+        "marellocommerce/pricing": "self.version",
+        "marellocommerce/product": "self.version",
+        "marellocommerce/sales": "self.version"
+    },
     "require": {
         "php": ">=5.5.9",
         "oro/platform": "1.8.*"

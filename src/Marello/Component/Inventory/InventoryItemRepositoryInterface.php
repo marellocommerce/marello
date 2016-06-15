@@ -2,23 +2,23 @@
 
 namespace Marello\Component\Inventory;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\ProductInterface;
 
 interface InventoryItemRepositoryInterface
 {
     /**
      * @param WarehouseInterface $warehouse
-     * @param Product            $product
+     * @param ProductInterface   $product
      *
      * @return null|InventoryItemInterface
      */
-    public function findOneByWarehouseAndProduct(WarehouseInterface $warehouse, Product $product);
+    public function findOneByWarehouseAndProduct(WarehouseInterface $warehouse, ProductInterface $product);
 
     /**
      * @param WarehouseInterface $warehouse
-     * @param Product            $product
+     * @param ProductInterface   $product
      *
      * @return InventoryItemInterface|null
      */
-    public function findOrCreateByWarehouseAndProduct(WarehouseInterface $warehouse, Product $product);
+    public function findOrCreateByWarehouseAndProduct(WarehouseInterface $warehouse, ProductInterface $product);
 }

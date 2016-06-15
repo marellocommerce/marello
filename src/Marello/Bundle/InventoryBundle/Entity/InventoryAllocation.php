@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Component\Inventory\InventoryAllocationInterface;
 use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Order\OrderItemInterface;
 
 /**
  * @ORM\Entity
@@ -41,7 +42,7 @@ class InventoryAllocation implements InventoryAllocationInterface
      * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem", cascade={})
      * @ORM\JoinColumn(nullable=true)
      *
-     * @var OrderItem
+     * @var OrderItemInterface
      */
     protected $targetOrderItem = null;
 
@@ -82,7 +83,7 @@ class InventoryAllocation implements InventoryAllocationInterface
     }
 
     /**
-     * @return OrderItem
+     * @return OrderItemInterface
      */
     public function getTargetOrderItem()
     {
@@ -114,11 +115,11 @@ class InventoryAllocation implements InventoryAllocationInterface
     }
 
     /**
-     * @param OrderItem $targetOrderItem
+     * @param OrderItemInterface $targetOrderItem
      *
      * @return $this
      */
-    public function setTargetOrderItem(OrderItem $targetOrderItem = null)
+    public function setTargetOrderItem(OrderItemInterface $targetOrderItem = null)
     {
         $this->targetOrderItem = $targetOrderItem;
 

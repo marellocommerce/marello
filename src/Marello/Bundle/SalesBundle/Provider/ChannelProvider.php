@@ -6,9 +6,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Product\ProductInterface;
+use Marello\Component\Sales\Provider\ChannelProviderInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 
-class ChannelProvider
+class ChannelProvider implements ChannelProviderInterface
 {
     /** @var ObjectManager $manager */
     protected $manager;
@@ -25,11 +27,11 @@ class ChannelProvider
     /**
      * Returns ids of all related sales channels for a product.
      *
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return array $ids
      */
-    public function getSalesChannelsIds(Product $product)
+    public function getSalesChannelsIds(ProductInterface $product)
     {
         $ids = [];
         $product
@@ -44,11 +46,11 @@ class ChannelProvider
     /**
      * Returns ids of all sales channels which are not in related to a product.
      *
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return array $ids
      */
-    public function getExcludedSalesChannelsIds(Product $product)
+    public function getExcludedSalesChannelsIds(ProductInterface $product)
     {
         $relatedIds = $this->getSalesChannelsIds($product);
         $excludedIds = [];

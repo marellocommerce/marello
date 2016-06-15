@@ -1,17 +1,16 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\InventoryAllocation;
+namespace Marello\Component\Inventory\InventoryAllocation;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 use Marello\Component\Inventory\InventoryAllocationInterface;
 use Marello\Component\Inventory\InventoryItemInterface;
 use Oro\Component\PropertyAccess\PropertyAccessor;
 
-class InventoryAllocator
+class InventoryAllocator implements InventoryAllocatorInterface
 {
     /** @var Registry */
     protected $doctrine;

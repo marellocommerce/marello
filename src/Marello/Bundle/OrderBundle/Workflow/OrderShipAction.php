@@ -3,12 +3,11 @@
 namespace Marello\Bundle\OrderBundle\Workflow;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Inventory\InventoryItemInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
@@ -17,20 +16,20 @@ class OrderShipAction extends OrderTransitionAction
     /** @var Registry */
     protected $doctrine;
 
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $logger;
 
-    /** @var InventoryItem[] */
+    /** @var InventoryItemInterface[] */
     protected $changedInventory;
 
     /**
      * OrderShipAction constructor.
      *
-     * @param ContextAccessor $contextAccessor
-     * @param Registry        $doctrine
-     * @param InventoryLogger $logger
+     * @param ContextAccessor          $contextAccessor
+     * @param Registry                 $doctrine
+     * @param InventoryLoggerInterface $logger
      */
-    public function __construct(ContextAccessor $contextAccessor, Registry $doctrine, InventoryLogger $logger)
+    public function __construct(ContextAccessor $contextAccessor, Registry $doctrine, InventoryLoggerInterface $logger)
     {
         parent::__construct($contextAccessor);
 

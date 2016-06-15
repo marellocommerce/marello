@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Component\Inventory\InventoryItemInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Order\OrderInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
@@ -248,7 +249,7 @@ class InventoryLog implements InventoryLogInterface
     }
 
     /**
-     * @return Order
+     * @return OrderInterface
      */
     public function getOrder()
     {
@@ -256,11 +257,11 @@ class InventoryLog implements InventoryLogInterface
     }
 
     /**
-     * @param Order $order
+     * @param OrderInterface $order
      *
      * @return $this
      */
-    public function setOrder(Order $order)
+    public function setOrder(OrderInterface $order)
     {
         $this->order = $order;
 

@@ -3,7 +3,7 @@
 namespace Marello\Bundle\InventoryBundle\EventListener\Doctrine;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
+use Marello\Component\Inventory\InventoryAllocationInterface;
 
 class InventoryAllocationListener
 {
@@ -15,7 +15,7 @@ class InventoryAllocationListener
     {
         $entity = $args->getEntity();
 
-        if (!$entity instanceof InventoryAllocation) {
+        if (!$entity instanceof InventoryAllocationInterface) {
             return;
         }
 
@@ -30,7 +30,7 @@ class InventoryAllocationListener
     {
         $entity = $args->getEntity();
 
-        if (!$entity instanceof InventoryAllocation) {
+        if (!$entity instanceof InventoryAllocationInterface) {
             return;
         }
 

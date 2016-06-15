@@ -3,12 +3,12 @@
 namespace Marello\Component\Inventory\InventoryAllocation;
 
 use Doctrine\Common\Collections\Collection;
-use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
+use Marello\Component\Inventory\InventoryAllocationInterface;
 
 interface AllocationTargetInterface
 {
     /**
-     * @return Collection|InventoryAllocation[]
+     * @return Collection|InventoryAllocationInterface[]
      */
     public function getInventoryAllocations();
 

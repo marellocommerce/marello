@@ -4,7 +4,8 @@ namespace Marello\Bundle\InventoryBundle\Logging;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\InventoryLogRepositoryInterface;
+use Marello\Component\Product\ProductInterface;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -36,14 +37,15 @@ class ChartBuilder
     /**
      * Returns data in format ready for inventory chart.
      *
-     * @param Product            $product
-     * @param \DateTimeInterface $from
-     * @param \DateTimeInterface $to
+     * @param ProductInterface   $product
+     * @param \DateTime $from
+     * @param \DateTime $to
      *
      * @return array
      */
-    public function getChartData(Product $product, \DateTimeInterface $from, \DateTimeInterface $to)
+    public function getChartData(ProductInterface $product, \DateTime $from, \DateTime $to)
     {
+        /** @var InventoryLogRepositoryInterface $repository */
         $repository = $this->doctrine
             ->getRepository(InventoryLog::class);
 

@@ -3,11 +3,9 @@
 namespace Marello\Bundle\InventoryBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
 use Marello\Component\Inventory\InventoryItemInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
@@ -16,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
 {
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $inventoryLogger;
 
     public function __construct(
@@ -24,7 +22,7 @@ class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
         ImportStrategyHelper $strategyHelper,
         FieldHelper $fieldHelper,
         DatabaseHelper $databaseHelper,
-        InventoryLogger $inventoryLogger
+        InventoryLoggerInterface $inventoryLogger
     ) {
         parent::__construct($eventDispatcher, $strategyHelper, $fieldHelper, $databaseHelper);
 
@@ -154,8 +152,8 @@ class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
         $fieldsExcluded = ($this->isFieldExcluded($entityName, $fieldRelationName, $itemData) ||
             $this->isFieldExcluded($entityName, $fieldName, $itemData));
 
-        if ($entity instanceof InventoryItem
-            && $existingEntity instanceof InventoryItem
+        if ($entity instanceof InventoryItemInterface
+            && $existingEntity instanceof InventoryItemInterface
             && !$fieldsExcluded
             && !array_intersect([$fieldRelationName, $fieldName], $excludedFields)
         ) {

@@ -4,6 +4,8 @@ namespace Marello\Bundle\PricingBundle\Form\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use Marello\Component\Product\ProductInterface;
+use Marello\Component\Sales\Provider\ChannelProviderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -28,9 +30,9 @@ class ChannelPricingSubscriber implements EventSubscriberInterface
      * ChannelPricingSubscriber constructor.
      * @param EntityManager $em
      * @param string $interface
-     * @param ChannelProvider $provider
+     * @param ChannelProviderInterface $provider
      */
-    public function __construct(EntityManager $em, $interface, ChannelProvider $provider)
+    public function __construct(EntityManager $em, $interface, ChannelProviderInterface $provider)
     {
         $this->em = $em;
         $this->interface = $interface;
@@ -182,11 +184,11 @@ class ChannelPricingSubscriber implements EventSubscriberInterface
         }
     }
     /**
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return bool
      */
-    protected function isApplicable(Product $product = null)
+    protected function isApplicable(ProductInterface $product = null)
     {
         if (!$product) {
             return false;

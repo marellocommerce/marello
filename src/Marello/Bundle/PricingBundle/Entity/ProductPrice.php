@@ -3,6 +3,8 @@
 namespace Marello\Bundle\PricingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\ProductPriceInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
@@ -29,8 +31,35 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *  }
  * )
  */
-class ProductPrice extends BasePrice
+class ProductPrice extends BasePrice implements ProductPriceInterface
 {
+    /**
+     * @var ProductInterface
+     *
+     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="prices")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     **/
+    protected $product;
+
+    /**
+     * @return ProductInterface
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @return ProductPriceInterface
+     */
+    public function setProduct(ProductInterface $product)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
     /**
      * @ORM\PrePersist
      */

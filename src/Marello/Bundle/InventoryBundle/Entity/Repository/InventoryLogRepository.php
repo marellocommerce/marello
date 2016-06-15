@@ -5,21 +5,23 @@ namespace Marello\Bundle\InventoryBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\InventoryLogRepositoryInterface;
+use Marello\Component\Product\ProductInterface;
 
-class InventoryLogRepository extends EntityRepository
+class InventoryLogRepository extends EntityRepository implements InventoryLogRepositoryInterface
 {
 
     /**
      * Returns a sequence of records containing values representing how much were respective quantities changed on each
      * day between given from and to values.
      *
-     * @param Product            $product
-     * @param \DateTimeInterface $from
-     * @param \DateTimeInterface $to
+     * @param ProductInterface   $product
+     * @param \DateTime $from
+     * @param \DateTime $to
      *
      * @return array
      */
-    public function getQuantitiesForProduct(Product $product, \DateTimeInterface $from, \DateTimeInterface $to)
+    public function getQuantitiesForProduct(ProductInterface $product, \DateTime $from, \DateTime $to)
     {
         $qb = $this->createQueryBuilder('l');
 
@@ -51,12 +53,12 @@ class InventoryLogRepository extends EntityRepository
      * This is either old value of first record of the day, or new value of last record before the day.
      * In case no record is preset, bot quantities are returned as zeroes.
      *
-     * @param Product            $product
-     * @param \DateTimeInterface $at
+     * @param ProductInterface   $product
+     * @param \DateTime $at
      *
      * @return array
      */
-    public function getInitialQuantities(Product $product, \DateTimeInterface $at)
+    public function getInitialQuantities(ProductInterface $product, \DateTime $at)
     {
         /*
          * First. Find first record on same day.

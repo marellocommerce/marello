@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Logging;
+namespace Marello\Component\Inventory\Logging;
 
 use Closure;
 use Doctrine\Bundle\DoctrineBundle\Registry;
@@ -9,13 +9,10 @@ use Doctrine\ORM\UnitOfWork;
 use Marello\Component\Inventory\InventoryItemInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 
-class InventoryLogger
+class InventoryLogger implements InventoryLoggerInterface
 {
-    const MANUAL_TRIGGER = 'manual';
-
     /** @var Registry */
     protected $doctrine;
 
@@ -50,7 +47,7 @@ class InventoryLogger
             $this->setUserReference($log);
         }
 
-        call_user_func($setValues, $log);
+        $setValues($log);
 
         /*
          * If new and old values are the same, do nothing.
@@ -108,7 +105,7 @@ class InventoryLogger
              * If log needs to be modified, do it.
              */
             if ($modifyLog) {
-                call_user_func($modifyLog, $log);
+                $modifyLog($log);
             }
 
             /*

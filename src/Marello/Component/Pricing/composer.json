@@ -1,0 +1,27 @@
+{
+  "name": "marellocommerce/pricing",
+  "description": "Pricing management for Marello ERP",
+  "homepage": "https://github.com/marellocommerce/marello.git",
+  "type": "library",
+  "license": "OSL-3.0",
+  "authors": [
+    {
+      "name": "Madia B.V.",
+      "homepage": "http://www.marello.com"
+    },
+    {
+      "name": "Grégory Planchat",
+      "email": "gregory@luni.fr"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "Marello\\Component\\Pricing": "src/Marello/Component/Pricing"
+    }
+  },
+  "require": {
+    "php": ">=5.5.9"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

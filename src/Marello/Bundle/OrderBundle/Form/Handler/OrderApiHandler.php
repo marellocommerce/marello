@@ -4,6 +4,7 @@ namespace Marello\Bundle\OrderBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\OrderInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\FormAwareInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,11 +52,11 @@ class OrderApiHandler implements FormAwareInterface
     /**
      * Process form
      *
-     * @param  Order $entity
+     * @param  OrderInterface $entity
      *
      * @return bool True on successful processing, false otherwise
      */
-    public function process(Order $entity)
+    public function process(OrderInterface $entity)
     {
         $form = $this->getForm();
 
@@ -77,9 +78,9 @@ class OrderApiHandler implements FormAwareInterface
     /**
      * "Success" form handler
      *
-     * @param Order $entity
+     * @param OrderInterface $entity
      */
-    protected function onSuccess(Order $entity)
+    protected function onSuccess(OrderInterface $entity)
     {
         $this->manager->persist($entity);
         $this->manager->flush();

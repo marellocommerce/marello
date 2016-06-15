@@ -5,6 +5,9 @@ namespace Marello\Bundle\ProductBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+
+use Marello\Component\Product\ProductStatusInterface;
+
 /**
  * Class ProductStatus
  * @package Marello\Bundle\ProductBundle\Entity
@@ -19,7 +22,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *      }
  * )
  */
-class ProductStatus
+class ProductStatus implements ProductStatusInterface
 {
     /**
      * @ORM\Column(name="name", type="string", length=32)

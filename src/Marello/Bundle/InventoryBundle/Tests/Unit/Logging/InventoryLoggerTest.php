@@ -7,7 +7,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
+use Marello\Component\Inventory\Logging\InventoryLogger;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Prophecy\Argument;
@@ -27,7 +28,7 @@ class InventoryLoggerTest extends TestCase
     /** @var \Prophecy\Prophecy\ObjectProphecy */
     protected $storage;
 
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $logger;
 
     /**
