@@ -5,9 +5,9 @@ namespace Marello\Bundle\OrderBundle\Entity\Repository;
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Marello\Component\Order\Entity\Repository\OrderRepositoryInterface;
+use Marello\Component\Order\Entity\Repository\OrderItemRepositoryInterface;
 
-class OrderRepository extends EntityRepository implements OrderRepositoryInterface
+class OrderItemRepository extends EntityRepository implements OrderItemRepositoryInterface
 {
     /**
      * @param \DateTime $start

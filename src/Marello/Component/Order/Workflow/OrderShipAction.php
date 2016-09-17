@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Workflow;
+namespace Marello\Component\Order\Workflow;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Marello\Bundle\OrderBundle\Entity\Order;

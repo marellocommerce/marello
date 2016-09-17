@@ -11,16 +11,20 @@
     },
     {
       "name": "Grégory Planchat",
-      "email": "gregory@luni.fr"
+      "email": "gregory@kiboko.fr"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "Marello\\Component\\Order": "src/Marello/Component/Order"
+    "psr-4": {
+      "Marello\\Component\\Order\\": ""
     }
   },
   "require": {
     "php": ">=5.5.9"
+  },
+  "suggest": {
+    "oro/workflow-bundle": "~1.0@dev",
+    "oro/soap-bundle": "~1.0@dev"
   },
   "minimum-stability": "dev",
   "prefer-stable": true

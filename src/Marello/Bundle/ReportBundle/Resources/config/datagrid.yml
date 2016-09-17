@@ -1,9 +1,9 @@
 datagrid:
     marello_report-orders-revenue_per_sales_channel:
         pageTitle: marello.report.title.revenue_per_sales_channel
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 select:
                     - channel.name as salesChannelName
@@ -43,9 +43,9 @@ datagrid:
 
     marello_report-products-low_stock_products:
         pageTitle: marello.report.title.low_stock_products
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 select:
                     - p.name
@@ -95,9 +95,9 @@ datagrid:
 
     marello_report-orders-best_selling_items:
             pageTitle: marello.report.title.best_selling_items
+            acl_resource: oro_report_view
             source:
                 type: orm
-                acl_resource: oro_report_view
                 query:
                     select:
                         - oi.productName
@@ -143,9 +143,9 @@ datagrid:
 
     marello_report-orders-worst_selling_items:
             pageTitle: marello.report.title.worst_selling_items
+            acl_resource: oro_report_view
             source:
                 type: orm
-                acl_resource: oro_report_view
                 query:
                     select:
                         - oi.productName

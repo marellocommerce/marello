@@ -2,9 +2,11 @@
 
 namespace Marello\Component\Inventory;
 
+use Doctrine\Common\Collections\Selectable;
+use Doctrine\Common\Persistence\ObjectRepository;
 use Marello\Component\Product\ProductInterface;
 
-interface InventoryLogRepositoryInterface
+interface InventoryLogRepositoryInterface extends ObjectRepository, Selectable
 {
     /**
      * Returns a sequence of records containing values representing how much were respective quantities changed on each

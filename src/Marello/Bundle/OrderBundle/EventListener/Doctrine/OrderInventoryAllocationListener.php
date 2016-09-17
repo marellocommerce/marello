@@ -2,35 +2,57 @@
 
 namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Component\Inventory\InventoryAllocation\InventoryAllocator;
 use Marello\Component\Inventory\InventoryAllocation\InventoryAllocatorInterface;
+use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\InventoryItemRepositoryInterface;
 use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Inventory\WarehouseRepositoryInterface;
+use Marello\Component\Order\OrderInterface;
 use Marello\Component\Order\OrderItemInterface;
 
 class OrderInventoryAllocationListener
 {
-    /** @var InventoryAllocator */
+    /**
+     * @var InventoryAllocator
+     */
     protected $allocator;
 
-    /** @var InventoryLoggerInterface */
+    /**
+     * @var InventoryLoggerInterface
+     */
     protected $logger;
+
+    /**
+     * @var WarehouseRepositoryInterface
+     */
+    protected $warehouseRepository;
+
+    /**
+     * @var InventoryItemRepositoryInterface
+     */
+    protected $inventoryItemRepository;
 
     /**
      * OrderInventoryAllocationListener constructor.
      *
-     * @param InventoryAllocatorInterface $allocator
-     * @param InventoryLoggerInterface    $logger
+     * @param InventoryAllocatorInterface      $allocator
+     * @param InventoryLoggerInterface         $logger
+     * @param WarehouseRepositoryInterface     $warehouseRepository
+     * @param InventoryItemRepositoryInterface $inventoryItemRepository
      */
-    public function __construct(InventoryAllocatorInterface $allocator, InventoryLoggerInterface $logger)
-    {
-        $this->allocator = $allocator;
-        $this->logger    = $logger;
+    public function __construct(
+        InventoryAllocatorInterface $allocator,
+        InventoryLoggerInterface $logger,
+        WarehouseRepositoryInterface $warehouseRepository,
+        InventoryItemRepositoryInterface $inventoryItemRepository
+    ) {
+        $this->allocator               = $allocator;
+        $this->logger                  = $logger;
+        $this->warehouseRepository     = $warehouseRepository;
+        $this->inventoryItemRepository = $inventoryItemRepository;
     }
 
     /**
@@ -40,14 +62,14 @@ class OrderInventoryAllocationListener
     {
         $entity = $args->getEntity();
 
-        if (!$entity instanceof Order) {
+        if (!$entity instanceof OrderInterface) {
             return;
         }
 
         $loggedItems = [];
 
         foreach ($entity->getItems() as $item) {
-            $loggedItems[] = $inventoryItem = $this->getInventoryItemToAllocate($item, $args->getEntityManager());
+            $loggedItems[] = $inventoryItem = $this->getInventoryItemToAllocate($item);
             $this->allocator->allocate($inventoryItem, $item->getQuantity(), $item);
         }
 
@@ -62,18 +84,14 @@ class OrderInventoryAllocationListener
 
     /**
      * @param OrderItemInterface $item
-     * @param EntityManager      $em
      *
-     * @return InventoryItem
+     * @return InventoryItemInterface
      */
-    protected function getInventoryItemToAllocate(OrderItemInterface $item, EntityManager $em)
+    protected function getInventoryItemToAllocate(OrderItemInterface $item)
     {
-        $warehouse = $em
-            ->getRepository('MarelloInventoryBundle:Warehouse')
-            ->getDefault();
+        $warehouse = $this->warehouseRepository->getDefault();
 
-        return $em
-            ->getRepository('MarelloInventoryBundle:InventoryItem')
+        return $this->inventoryItemRepository
             ->findOrCreateByWarehouseAndProduct($warehouse, $item->getProduct());
     }
 }

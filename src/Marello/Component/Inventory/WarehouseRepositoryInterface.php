@@ -2,7 +2,6 @@
 
 namespace Marello\Component\Inventory;
 
-
 interface WarehouseRepositoryInterface
 {
     /**

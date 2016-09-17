@@ -53,7 +53,7 @@ class ProductApiEntityManager extends ApiEntityManager
                     ],
                 ],
                 'inventoryItems' => [
-                    'result_name'      => 'inventory',
+                    'property_path'    => 'inventory',
                     'exclusion_policy' => 'all',
                     'fields'           => [
                         'quantity'  => null,

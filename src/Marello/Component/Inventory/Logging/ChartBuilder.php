@@ -3,16 +3,18 @@
 namespace Marello\Bundle\InventoryBundle\Logging;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityManagerInterface;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 use Marello\Component\Inventory\InventoryLogRepositoryInterface;
+use Marello\Component\Inventory\Logging\ChartBuilderInterface;
 use Marello\Component\Product\ProductInterface;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class ChartBuilder
+class ChartBuilder implements ChartBuilderInterface
 {
-    /** @var Registry */
-    protected $doctrine;
+    /** @var InventoryLogRepositoryInterface */
+    protected $inventoryLogRepository;
 
     /** @var DateHelper */
     protected $dateHelper;
@@ -23,15 +25,18 @@ class ChartBuilder
     /**
      * ChartBuilder constructor.
      *
-     * @param Registry            $doctrine
-     * @param DateHelper          $dateHelper
-     * @param TranslatorInterface $translator
+     * @param InventoryLogRepositoryInterface $inventoryLogRepository
+     * @param DateHelper                      $dateHelper
+     * @param TranslatorInterface             $translator
      */
-    public function __construct(Registry $doctrine, DateHelper $dateHelper, TranslatorInterface $translator)
-    {
-        $this->doctrine   = $doctrine;
-        $this->dateHelper = $dateHelper;
-        $this->translator = $translator;
+    public function __construct(
+        InventoryLogRepositoryInterface $inventoryLogRepository,
+        DateHelper $dateHelper,
+        TranslatorInterface $translator
+    ) {
+        $this->inventoryLogRepository = $inventoryLogRepository;
+        $this->dateHelper             = $dateHelper;
+        $this->translator             = $translator;
     }
 
     /**
@@ -45,12 +50,8 @@ class ChartBuilder
      */
     public function getChartData(ProductInterface $product, \DateTime $from, \DateTime $to)
     {
-        /** @var InventoryLogRepositoryInterface $repository */
-        $repository = $this->doctrine
-            ->getRepository(InventoryLog::class);
-
-        $records           = $repository->getQuantitiesForProduct($product, $from, $to);
-        $initialRecord     = $repository->getInitialQuantities($product, $from);
+        $records           = $this->inventoryLogRepository->getQuantitiesForProduct($product, $from, $to);
+        $initialRecord     = $this->inventoryLogRepository->getInitialQuantities($product, $from);
         $quantity          = $initialRecord['quantity'];
         $allocatedQuantity = $initialRecord['allocatedQuantity'];
 

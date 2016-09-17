@@ -11,12 +11,12 @@
     },
     {
       "name": "Grégory Planchat",
-      "email": "gregory@luni.fr"
+      "email": "gregory@kiboko.fr"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "Marello\\Component\\Address": "src/Marello/Component/Address"
+    "psr-4": {
+      "Marello\\Component\\Address\\": ""
     }
   },
   "require": {

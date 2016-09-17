@@ -6,11 +6,14 @@ use Doctrine\Common\Util\ClassUtils;
 use Marello\Component\Inventory\InventoryItemInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
 use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
 {
@@ -22,9 +25,13 @@ class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
         ImportStrategyHelper $strategyHelper,
         FieldHelper $fieldHelper,
         DatabaseHelper $databaseHelper,
+        ChainEntityClassNameProvider $chainEntityClassNameProvider,
+        TranslatorInterface $translator,
+        DoctrineHelper $doctrineHelper,
         InventoryLoggerInterface $inventoryLogger
     ) {
-        parent::__construct($eventDispatcher, $strategyHelper, $fieldHelper, $databaseHelper);
+        parent::__construct($eventDispatcher, $strategyHelper, $fieldHelper, $databaseHelper,
+            $chainEntityClassNameProvider, $translator, $doctrineHelper);
 
         $this->inventoryLogger = $inventoryLogger;
     }

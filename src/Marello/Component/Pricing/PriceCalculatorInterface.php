@@ -2,6 +2,8 @@
 
 namespace Marello\Component\Pricing;
 
+use Brick\Math\BigNumber;
+
 interface PriceCalculatorInterface
 {
     /**

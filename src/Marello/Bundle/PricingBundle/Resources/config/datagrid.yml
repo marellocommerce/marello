@@ -1,8 +1,8 @@
 datagrid:
     marello-productprice-grid:
+        acl_resource: marello_product_view
         source:
             type: orm
-            acl_resource: marello_product_view
             query:
                 select:
                     - productPrice.currency
@@ -35,9 +35,9 @@ datagrid:
                     hide: true
 
     marello-productchannelprice-grid:
+        acl_resource: marello_product_view
         source:
             type: orm
-            acl_resource: marello_product_view
             query:
                 select:
                     - salesChannel.name as channelName

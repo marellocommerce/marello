@@ -1,3 +1,11 @@
+parameters:
+    marello_inventory.warehouse.repository.class:      Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository
+    marello_inventory.inventory_item.repository.class: Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository
+
+    marello_inventory.allocation.allocator.class: Marello\Component\Inventory\InventoryAllocation\InventoryAllocator
+
+    marello_inventory.event_listener.doctrine.inventory_allocation.class: Marello\Bundle\InventoryBundle\EventListener\Doctrine\InventoryAllocationListener
+
 services:
     marello_product.widget_provider.actions.variant_mass_inventory:
         parent: oro_ui.widget_provider.action_button.abstract
@@ -10,23 +18,27 @@ services:
     marello_inventory.logging.chart_builder:
         class: Marello\Bundle\InventoryBundle\Logging\ChartBuilder
         arguments:
-            - @doctrine
+            - @doctrine.orm.entity_manager
             - @oro_dashboard.datetime.helper
             - @translator
 
     marello_inventory.logging.inventory_logger:
         class: Marello\Component\Inventory\Logging\InventoryLogger
         arguments:
-            - @doctrine
+            - @doctrine.orm.entity_manager
             - @security.token_storage
 
     marello_inventory.event_listener.doctrine.inventory_allocation:
-        class: Marello\Bundle\InventoryBundle\EventListener\Doctrine\InventoryAllocationListener
+        class: '%marello_inventory.event_listener.doctrine.inventory_allocation.class%'
         tags:
             - {name: doctrine.event_listener, event: prePersist, method: prePersist }
             - {name: doctrine.event_listener, event: preRemove, method: preRemove }
 
     marello_inventory.allocation.allocator:
         class: Marello\Component\Inventory\InventoryAllocation\InventoryAllocator
-        arguments:
-            - @doctrine
+
+    marello_inventory.warehouse.repository:
+        class: '%marello_inventory.warehouse.repository.class%'
+
+    marello_inventory.inventory_item.repository:
+        class: '%marello_inventory.inventory_item.repository.class%'

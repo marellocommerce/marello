@@ -4,6 +4,7 @@ namespace Marello\Component\Inventory\InventoryAllocation;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 use Marello\Component\Inventory\InventoryAllocationInterface;

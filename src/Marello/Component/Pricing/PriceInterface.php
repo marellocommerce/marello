@@ -2,18 +2,20 @@
 
 namespace Marello\Component\Pricing;
 
+use Brick\Math\BigNumber;
+
 interface PriceInterface extends CurrencyAwareInterface
 {
     /**
-     * @return float
+     * @return BigNumber
      */
     public function getValue();
 
     /**
-     * @param float $value
+     * @param BigNumber $value
      * @return $this
      */
-    public function setValue($value);
+    public function setValue(BigNumber $value);
 
     /**
      * @param string $currency

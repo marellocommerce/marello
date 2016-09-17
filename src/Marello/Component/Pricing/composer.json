@@ -11,12 +11,18 @@
     },
     {
       "name": "Grégory Planchat",
-      "email": "gregory@luni.fr"
+      "email": "gregory@kiboko.fr"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/nicholas-eden/math.git"
     }
   ],
   "autoload": {
-    "psr-0": {
-      "Marello\\Component\\Pricing": "src/Marello/Component/Pricing"
+    "psr-4": {
+      "Marello\\Component\\Pricing\\": ""
     }
   },
   "require": {
