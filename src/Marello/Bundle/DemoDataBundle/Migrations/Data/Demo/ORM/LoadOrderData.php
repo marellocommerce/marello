@@ -10,6 +10,7 @@ use Marello\Bundle\AddressBundle\Entity\Address;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
@@ -152,7 +153,7 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
      *
      * @return Order
      */
-    protected function createOrder($row, Organization $organization)
+    protected function createOrder($row, OrganizationInterface $organization)
     {
         $billing = new Address();
         $billing->setNamePrefix($row['title']);
