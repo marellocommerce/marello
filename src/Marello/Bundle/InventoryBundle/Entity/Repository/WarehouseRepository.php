@@ -3,7 +3,6 @@
 namespace Marello\Bundle\InventoryBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Marello\Component\Inventory\WarehouseInterface;
 use Marello\Component\Inventory\WarehouseRepositoryInterface;
 

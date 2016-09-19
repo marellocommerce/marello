@@ -11,7 +11,8 @@
     },
     {
       "name": "Grégory Planchat",
-      "email": "gregory@kiboko.fr"
+      "email": "gregory@kiboko.fr",
+      "homepage": "http://kiboko.fr"
     }
   ],
   "autoload": {

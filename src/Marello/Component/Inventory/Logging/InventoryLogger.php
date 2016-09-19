@@ -4,6 +4,8 @@ namespace Marello\Component\Inventory\Logging;
 
 use Closure;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
 use Marello\Component\Inventory\InventoryItemInterface;
 use Marello\Component\Inventory\InventoryLogInterface;
@@ -12,8 +14,10 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 
 class InventoryLogger implements InventoryLoggerInterface
 {
-    /** @var EntityManagerInterface */
-    protected $manager;
+    const MANUAL_TRIGGER = 'manual';
+
+    /** @var Registry */
+    protected $doctrine;
 
     /** @var TokenStorageInterface */
     protected $storage;
@@ -21,12 +25,12 @@ class InventoryLogger implements InventoryLoggerInterface
     /**
      * InventoryLogger constructor.
      *
-     * @param EntityManagerInterface $manager
-     * @param TokenStorageInterface  $storage
+     * @param Registry              $doctrine
+     * @param TokenStorageInterface $storage
      */
-    public function __construct(EntityManagerInterface $manager, TokenStorageInterface $storage = null)
+    public function __construct(Registry $doctrine, TokenStorageInterface $storage = null)
     {
-        $this->manager = $manager;
+        $this->doctrine = $doctrine;
         $this->storage  = $storage;
     }
 
@@ -57,7 +61,7 @@ class InventoryLogger implements InventoryLoggerInterface
             return;
         }
 
-        $this->manager->persist($log);
+        $this->manager()->persist($log);
     }
 
     /**
@@ -76,7 +80,7 @@ class InventoryLogger implements InventoryLoggerInterface
             $items = [$items];
         }
 
-        $uow = $this->manager->getUnitOfWork();
+        $uow = $this->manager()->getUnitOfWork();
         $uow->computeChangeSets();
 
         foreach ($items as $item) {
@@ -110,7 +114,7 @@ class InventoryLogger implements InventoryLoggerInterface
             /*
              * Logs are not flushed, they should be part of a transaction logic.
              */
-            $this->manager->persist($log);
+            $this->manager()->persist($log);
         }
     }
 
@@ -143,7 +147,7 @@ class InventoryLogger implements InventoryLoggerInterface
      */
     protected function getModifiedItemLog(InventoryItemInterface $item, $trigger)
     {
-        $uow       = $this->manager->getUnitOfWork();
+        $uow       = $this->manager()->getUnitOfWork();
         $changeSet = $uow->getEntityChangeSet($item);
 
         /*
@@ -209,5 +213,14 @@ class InventoryLogger implements InventoryLoggerInterface
             $user = $this->storage->getToken()->getUser();
             $logItem->setUser($user);
         }
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function manager()
+    {
+        return $this->doctrine
+            ->getManager();
     }
 }

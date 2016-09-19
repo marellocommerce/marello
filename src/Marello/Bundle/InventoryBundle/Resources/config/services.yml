@@ -18,14 +18,14 @@ services:
     marello_inventory.logging.chart_builder:
         class: Marello\Bundle\InventoryBundle\Logging\ChartBuilder
         arguments:
-            - @doctrine.orm.entity_manager
+            - @doctrine
             - @oro_dashboard.datetime.helper
             - @translator
 
     marello_inventory.logging.inventory_logger:
         class: Marello\Component\Inventory\Logging\InventoryLogger
         arguments:
-            - @doctrine.orm.entity_manager
+            - @doctrine
             - @security.token_storage
 
     marello_inventory.event_listener.doctrine.inventory_allocation:

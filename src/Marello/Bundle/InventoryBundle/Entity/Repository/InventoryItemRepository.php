@@ -4,6 +4,7 @@ namespace Marello\Bundle\InventoryBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\InventoryItemInterface;
 use Marello\Component\Inventory\InventoryItemRepositoryInterface;
 use Marello\Component\Inventory\WarehouseInterface;
 use Marello\Component\Product\ProductInterface;
@@ -14,7 +15,7 @@ class InventoryItemRepository extends EntityRepository implements InventoryItemR
      * @param WarehouseInterface $warehouse
      * @param ProductInterface   $product
      *
-     * @return null|InventoryItem
+     * @return null|InventoryItemInterface
      */
     public function findOneByWarehouseAndProduct(WarehouseInterface $warehouse, ProductInterface $product)
     {
@@ -25,7 +26,7 @@ class InventoryItemRepository extends EntityRepository implements InventoryItemR
      * @param WarehouseInterface $warehouse
      * @param ProductInterface   $product
      *
-     * @return InventoryItem|null
+     * @return null|InventoryItemInterface
      */
     public function findOrCreateByWarehouseAndProduct(WarehouseInterface $warehouse, ProductInterface $product)
     {
