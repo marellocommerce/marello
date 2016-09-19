@@ -7,11 +7,6 @@
         {
             "name": "Madia B.V.",
             "homepage": "http://www.marello.com"
-        },
-        {
-            "name": "Grégory Planchat",
-            "email": "gregory@kiboko.fr",
-            "homepage": "http://kiboko.fr"
         }
     ],
     "autoload": {

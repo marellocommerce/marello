@@ -13,6 +13,8 @@ use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Component\Inventory\WarehouseInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
+use Brick\Math\BigDecimal;
+
 class LoadProductData extends AbstractFixture implements DependentFixtureInterface
 {
     /** @var Organization $defaultOrganization  */
@@ -117,9 +119,9 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
             $price = new ProductPrice();
             $price->setCurrency($currency);
             if (count($currencies) > 1 && $currency === 'USD') {
-                $price->setValue(($data['price'] * 1.12));
+                $price->setValue(BigDecimal::of($data['price'])->multipliedBy(1.12));
             } else {
-                $price->setValue($data['price']);
+                $price->setValue(BigDecimal::of($data['price']));
             }
 
             $product->addPrice($price);

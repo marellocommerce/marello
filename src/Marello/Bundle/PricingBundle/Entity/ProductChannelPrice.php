@@ -52,6 +52,26 @@ class ProductChannelPrice extends BasePrice implements ProductChannelPriceInterf
     protected $channel;
 
     /**
+     * @return ProductInterface
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param ProductInterface $product
+     *
+     * @return $this
+     */
+    public function setProduct(ProductInterface $product)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
      * @return SalesChannel
      */
     public function getChannel()
