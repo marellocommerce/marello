@@ -2,6 +2,9 @@ parameters:
     marello_inventory.warehouse.repository.class:      Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository
     marello_inventory.inventory_item.repository.class: Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository
 
+    marello_inventory.warehouse.entity.class:      Marello\Bundle\InventoryBundle\Entity\Warehouse
+    marello_inventory.inventory_item.entity.class: Marello\Bundle\InventoryBundle\Entity\InventoryItem
+
     marello_inventory.allocation.allocator.class: Marello\Component\Inventory\InventoryAllocation\InventoryAllocator
 
     marello_inventory.event_listener.doctrine.inventory_allocation.class: Marello\Bundle\InventoryBundle\EventListener\Doctrine\InventoryAllocationListener
@@ -35,10 +38,18 @@ services:
             - {name: doctrine.event_listener, event: preRemove, method: preRemove }
 
     marello_inventory.allocation.allocator:
-        class: Marello\Component\Inventory\InventoryAllocation\InventoryAllocator
+        class: '%marello_inventory.allocation.allocator.class%'
+        arguments:
+          - @doctrine
 
     marello_inventory.warehouse.repository:
         class: '%marello_inventory.warehouse.repository.class%'
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - '%marello_inventory.warehouse.entity.class%'
 
     marello_inventory.inventory_item.repository:
         class: '%marello_inventory.inventory_item.repository.class%'
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - '%marello_inventory.inventory_item.entity.class%'

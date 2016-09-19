@@ -14,8 +14,6 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
 
 class InventoryLogger implements InventoryLoggerInterface
 {
-    const MANUAL_TRIGGER = 'manual';
-
     /** @var Registry */
     protected $doctrine;
 

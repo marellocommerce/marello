@@ -2,26 +2,25 @@
 
 namespace Marello\Component\Inventory\InventoryAllocation;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 use Marello\Component\Inventory\InventoryAllocationInterface;
 use Marello\Component\Inventory\InventoryItemInterface;
 use Oro\Component\PropertyAccess\PropertyAccessor;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class InventoryAllocator implements InventoryAllocatorInterface
 {
-    /** @var Registry */
+    /** @var RegistryInterface */
     protected $doctrine;
 
     /**
      * InventoryAllocator constructor.
      *
-     * @param Registry $doctrine
+     * @param RegistryInterface $doctrine
      */
-    public function __construct(Registry $doctrine)
+    public function __construct(RegistryInterface $doctrine)
     {
         $this->doctrine = $doctrine;
     }
@@ -71,7 +70,7 @@ class InventoryAllocator implements InventoryAllocatorInterface
     }
 
     /**
-     * @return EntityManager
+     * @return EntityManagerInterface
      */
     protected function manager()
     {

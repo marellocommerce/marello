@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Marello\Component\Inventory\InventoryAllocation\InventoryAllocator;
 use Marello\Component\Inventory\InventoryAllocation\InventoryAllocatorInterface;
@@ -40,19 +41,13 @@ class OrderInventoryAllocationListener
      *
      * @param InventoryAllocatorInterface      $allocator
      * @param InventoryLoggerInterface         $logger
-     * @param WarehouseRepositoryInterface     $warehouseRepository
-     * @param InventoryItemRepositoryInterface $inventoryItemRepository
      */
     public function __construct(
         InventoryAllocatorInterface $allocator,
-        InventoryLoggerInterface $logger,
-        WarehouseRepositoryInterface $warehouseRepository,
-        InventoryItemRepositoryInterface $inventoryItemRepository
+        InventoryLoggerInterface $logger
     ) {
-        $this->allocator               = $allocator;
-        $this->logger                  = $logger;
-        $this->warehouseRepository     = $warehouseRepository;
-        $this->inventoryItemRepository = $inventoryItemRepository;
+        $this->allocator = $allocator;
+        $this->logger    = $logger;
     }
 
     /**
@@ -69,7 +64,7 @@ class OrderInventoryAllocationListener
         $loggedItems = [];
 
         foreach ($entity->getItems() as $item) {
-            $loggedItems[] = $inventoryItem = $this->getInventoryItemToAllocate($item);
+            $loggedItems[] = $inventoryItem = $this->getInventoryItemToAllocate($item, $args->getEntityManager());
             $this->allocator->allocate($inventoryItem, $item->getQuantity(), $item);
         }
 
@@ -83,15 +78,19 @@ class OrderInventoryAllocationListener
     }
 
     /**
-     * @param OrderItemInterface $item
+     * @param OrderItemInterface     $item
+     * @param EntityManagerInterface $em
      *
      * @return InventoryItemInterface
      */
-    protected function getInventoryItemToAllocate(OrderItemInterface $item)
+    protected function getInventoryItemToAllocate(OrderItemInterface $item, EntityManagerInterface $em)
     {
-        $warehouse = $this->warehouseRepository->getDefault();
+        $warehouse = $em
+            ->getRepository('MarelloInventoryBundle:Warehouse')
+            ->getDefault();
 
-        return $this->inventoryItemRepository
+        return $em
+            ->getRepository('MarelloInventoryBundle:InventoryItem')
             ->findOrCreateByWarehouseAndProduct($warehouse, $item->getProduct());
     }
 }

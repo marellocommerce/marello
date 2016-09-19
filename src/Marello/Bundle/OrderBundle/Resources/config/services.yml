@@ -54,7 +54,5 @@ services:
         arguments:
             - @marello_inventory.allocation.allocator
             - @marello_inventory.logging.inventory_logger
-            - @marello_inventory.warehouse.repository
-            - @marello_inventory.inventory_item.repository
         tags:
             - { name: doctrine.event_listener, event: postPersist, method: postPersist }

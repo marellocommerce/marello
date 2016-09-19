@@ -4,8 +4,6 @@ namespace Marello\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-
 class SalesChannelRepository extends EntityRepository
 {
     /**
@@ -14,7 +12,7 @@ class SalesChannelRepository extends EntityRepository
      * @param int $salesChannel
      * @param int $productId
      *
-     * @return ProductChannelPrice[]
+     * @return int
      */
     public function findOneBySalesChannel($salesChannel, $productId)
     {
@@ -33,7 +31,7 @@ class SalesChannelRepository extends EntityRepository
     /**
      * Get excluded sales channel ids
      * @param array $relatedChannelIds
-     * @return array
+     * @return int[]
      */
     public function findExcludedSalesChannelIds(array $relatedChannelIds)
     {

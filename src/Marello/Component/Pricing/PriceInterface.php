@@ -2,20 +2,20 @@
 
 namespace Marello\Component\Pricing;
 
-use Brick\Math\BigNumber;
+use Brick\Math\BigDecimal;
 
 interface PriceInterface extends CurrencyAwareInterface
 {
     /**
-     * @return BigNumber
+     * @return BigDecimal
      */
     public function getValue();
 
     /**
-     * @param BigNumber $value
+     * @param BigDecimal $value
      * @return $this
      */
-    public function setValue(BigNumber $value);
+    public function setValue(BigDecimal $value);
 
     /**
      * @param string $currency

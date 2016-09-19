@@ -1,0 +1,4 @@
+doctrine:
+    dbal:
+        types:
+            money: Marello\Bundle\PricingBundle\ORM\Type\MoneyType

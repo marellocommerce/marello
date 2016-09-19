@@ -5,6 +5,7 @@ namespace Marello\Bundle\PricingBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Component\Product\ProductChannelPriceInterface;
+use Marello\Component\Product\ProductInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
@@ -35,7 +36,15 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 class ProductChannelPrice extends BasePrice implements ProductChannelPriceInterface
 {
     /**
-     * @var SalesChannel
+     * @var ProductInterface
+     *
+     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     */
+    protected $product;
+
+    /**
+     * @var SalesChannelInterface
      *
      * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")

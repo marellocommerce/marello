@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\PricingBundle\Entity;
 
+use Brick\Math\BigDecimal;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Component\Pricing\PriceInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
@@ -21,7 +22,7 @@ class BasePrice implements PriceInterface
     protected $id;
 
     /**
-     * @var float
+     * @var BigDecimal
      *
      * @ORM\Column(name="value", type="money")
      */
@@ -71,7 +72,7 @@ class BasePrice implements PriceInterface
     }
 
     /**
-     * @return float
+     * @return BigDecimal
      */
     public function getValue()
     {
@@ -79,10 +80,10 @@ class BasePrice implements PriceInterface
     }
 
     /**
-     * @param float $value
+     * @param BigDecimal|string $value
      * @return $this
      */
-    public function setValue($value)
+    public function setValue(BigDecimal $value)
     {
         $this->value = $value;
 
