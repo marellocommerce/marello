@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\OrderBundle\Entity;
 
+use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -73,21 +74,21 @@ class Order extends ExtendOrder implements OrderInterface
     protected $orderReference;
 
     /**
-     * @var int
+     * @var BigDecimal
      *
      * @ORM\Column(name="subtotal",type="money")
      */
     protected $subtotal = 0;
 
     /**
-     * @var int
+     * @var BigDecimal
      *
      * @ORM\Column(name="total_tax",type="money")
      */
     protected $totalTax = 0;
 
     /**
-     * @var int
+     * @var BigDecimal
      *
      * @ORM\Column(name="grand_total",type="money")
      */
@@ -119,21 +120,21 @@ class Order extends ExtendOrder implements OrderInterface
     protected $paymentDetails;
 
     /**
-     * @var double
+     * @var BigDecimal
      *
      * @ORM\Column(name="shipping_amount", type="money", nullable=true)
      */
     protected $shippingAmount;
 
     /**
-     * @var float
+     * @var string
      *
      * @ORM\Column(name="shipping_method", type="string", nullable=true)
      */
     protected $shippingMethod;
 
     /**
-     * @var double
+     * @var BigDecimal
      *
      * @ORM\Column(name="discount_amount", type="money", nullable=true)
      */
@@ -299,7 +300,7 @@ class Order extends ExtendOrder implements OrderInterface
     }
 
     /**
-     * @return float
+     * @return BigDecimal
      */
     public function getSubtotal()
     {
@@ -307,11 +308,11 @@ class Order extends ExtendOrder implements OrderInterface
     }
 
     /**
-     * @param PriceInterface $subtotal
+     * @param BigDecimal $subtotal
      *
      * @return $this
      */
-    public function setSubtotal(PriceInterface $subtotal)
+    public function setSubtotal(BigDecimal $subtotal)
     {
         $this->subtotal = $subtotal;
 
@@ -327,11 +328,11 @@ class Order extends ExtendOrder implements OrderInterface
     }
 
     /**
-     * @param PriceInterface $totalTax
+     * @param BigDecimal $totalTax
      *
      * @return $this
      */
-    public function setTotalTax(PriceInterface $totalTax)
+    public function setTotalTax(BigDecimal $totalTax)
     {
         $this->totalTax = $totalTax;
 
@@ -347,11 +348,11 @@ class Order extends ExtendOrder implements OrderInterface
     }
 
     /**
-     * @param PriceInterface $grandTotal
+     * @param BigDecimal $grandTotal
      *
      * @return $this
      */
-    public function setGrandTotal(PriceInterface $grandTotal)
+    public function setGrandTotal(BigDecimal $grandTotal)
     {
         $this->grandTotal = $grandTotal;
 
@@ -612,11 +613,11 @@ class Order extends ExtendOrder implements OrderInterface
     }
 
     /**
-     * @param PriceInterface $shippingAmount
+     * @param BigDecimal $shippingAmount
      *
      * @return $this
      */
-    public function setShippingAmount(PriceInterface $shippingAmount)
+    public function setShippingAmount(BigDecimal $shippingAmount)
     {
         $this->shippingAmount = $shippingAmount;
 
@@ -652,11 +653,11 @@ class Order extends ExtendOrder implements OrderInterface
     }
 
     /**
-     * @param PriceInterface $discountAmount
+     * @param BigDecimal $discountAmount
      *
      * @return $this
      */
-    public function setDiscountAmount(PriceInterface $discountAmount)
+    public function setDiscountAmount(BigDecimal $discountAmount)
     {
         $this->discountAmount = $discountAmount;
 

@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
+use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -133,7 +134,7 @@ class Product extends ExtendProduct implements ProductInterface
     protected $type;
 
     /**
-     * @var double
+     * @var BigDecimal
      *
      * @ORM\Column(name="cost", type="money", nullable=true)
      * @Oro\ConfigField(

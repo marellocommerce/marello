@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\OrderBundle\Entity;
 
+use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,10 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 
 use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
+use Marello\Component\Order\OrderInterface;
+use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Product\ProductInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 use Marello\Bundle\OrderBundle\Model\ExtendOrderItem;
-use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Marello\Component\Pricing\CurrencyAwareInterface;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
@@ -24,7 +27,7 @@ use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
  * @ORM\HasLifecycleCallbacks()
  * @JMS\ExclusionPolicy("ALL")
  */
-class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, CurrencyAwareInterface
+class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, CurrencyAwareInterface, OrderItemInterface
 {
     /**
      * @var int
@@ -62,9 +65,9 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     protected $productSku;
 
     /**
-     * @var Order
+     * @var OrderInterface
      *
-     * @ORM\ManyToOne(targetEntity="Order", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order", inversedBy="items")
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $order;
@@ -79,7 +82,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     protected $quantity;
 
     /**
-     * @var int
+     * @var BigDecimal
      *
      * @ORM\Column(name="price",type="money")
      *
@@ -88,7 +91,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     protected $price;
 
     /**
-     * @var int
+     * @var BigDecimal
      *
      * @ORM\Column(name="tax",type="money")
      *
@@ -113,7 +116,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     protected $discountPercent;
 
     /**
-     * @var double
+     * @var BigDecimal
      *
      * @ORM\Column(name="discount_amount", type="money", nullable=true)
      * @JMS\Expose
@@ -121,7 +124,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     protected $discountAmount;
 
     /**
-     * @var int
+     * @var BigDecimal
      *
      * @ORM\Column(name="total_price",type="money", nullable=false)
      *
@@ -174,7 +177,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @return Order
+     * @return OrderInterface
      */
     public function getOrder()
     {
@@ -182,11 +185,11 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @param Order $order
+     * @param OrderInterface $order
      *
      * @return $this
      */
-    public function setOrder($order = null)
+    public function setOrder(OrderInterface $order = null)
     {
         $this->order = $order;
 
@@ -214,7 +217,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @return int
+     * @return BigDecimal
      */
     public function getPrice()
     {
@@ -222,11 +225,11 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @param int $price
+     * @param BigDecimal $price
      *
      * @return $this
      */
-    public function setPrice($price)
+    public function setPrice(BigDecimal $price)
     {
         $this->price = $price;
 
@@ -234,7 +237,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @return int
+     * @return BigDecimal
      */
     public function getTax()
     {
@@ -242,11 +245,11 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @param int $tax
+     * @param BigDecimal $tax
      *
      * @return $this
      */
-    public function setTax($tax)
+    public function setTax(BigDecimal $tax)
     {
         $this->tax = $tax;
 
@@ -254,7 +257,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @return int
+     * @return BigDecimal
      */
     public function getTotalPrice()
     {
@@ -262,11 +265,11 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @param int $totalPrice
+     * @param BigDecimal $totalPrice
      *
      * @return $this
      */
-    public function setTotalPrice($totalPrice)
+    public function setTotalPrice(BigDecimal $totalPrice)
     {
         $this->totalPrice = $totalPrice;
 
@@ -274,7 +277,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @return Product
+     * @return ProductInterface
      */
     public function getProduct()
     {
@@ -282,11 +285,11 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return $this
      */
-    public function setProduct($product)
+    public function setProduct(ProductInterface $product)
     {
         $this->product = $product;
 
@@ -350,7 +353,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @return float
+     * @return BigDecimal
      */
     public function getDiscountAmount()
     {
@@ -358,9 +361,9 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     }
 
     /**
-     * @param float $discountAmount
+     * @param BigDecimal $discountAmount
      */
-    public function setDiscountAmount($discountAmount)
+    public function setDiscountAmount(BigDecimal $discountAmount)
     {
         $this->discountAmount = $discountAmount;
     }

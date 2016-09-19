@@ -3,9 +3,9 @@
 namespace Marello\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
-use Marello\Component\Pricing\CurrencyAwareInterface;
 
 /**
  * @ORM\Entity(repositoryClass="Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelRepository")
@@ -35,7 +35,7 @@ use Marello\Component\Pricing\CurrencyAwareInterface;
  *  }
  * )
  */
-class SalesChannel implements CurrencyAwareInterface
+class SalesChannel implements SalesChannelInterface
 {
     const DEFAULT_TYPE = 'marello';
 
@@ -343,7 +343,7 @@ class SalesChannel implements CurrencyAwareInterface
      *
      * @return $this
      */
-    public function setOwner($owner)
+    public function setOwner(OrganizationInterface $owner)
     {
         $this->owner = $owner;
 

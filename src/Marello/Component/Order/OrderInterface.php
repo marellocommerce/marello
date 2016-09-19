@@ -2,9 +2,9 @@
 
 namespace Marello\Component\Order;
 
+use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\Collection;
 use Marello\Component\Address\AddressInterface;
-use Marello\Component\Pricing\PriceInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -25,40 +25,40 @@ interface OrderInterface
     public function setOrderReference($orderReference);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getSubtotal();
 
     /**
-     * @param PriceInterface $subtotal
+     * @param BigDecimal $subtotal
      *
      * @return $this
      */
-    public function setSubtotal(PriceInterface $subtotal);
+    public function setSubtotal(BigDecimal $subtotal);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getTotalTax();
 
     /**
-     * @param PriceInterface $totalTax
+     * @param BigDecimal $totalTax
      *
      * @return $this
      */
-    public function setTotalTax(PriceInterface $totalTax);
+    public function setTotalTax(BigDecimal $totalTax);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getGrandTotal();
 
     /**
-     * @param PriceInterface $grandTotal
+     * @param BigDecimal $grandTotal
      *
      * @return $this
      */
-    public function setGrandTotal(PriceInterface $grandTotal);
+    public function setGrandTotal(BigDecimal $grandTotal);
 
     /**
      * @return AddressInterface
@@ -208,16 +208,16 @@ interface OrderInterface
     public function setPaymentDetails($paymentDetails);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getShippingAmount();
 
     /**
-     * @param PriceInterface $shippingAmount
+     * @param BigDecimal $shippingAmount
      *
      * @return $this
      */
-    public function setShippingAmount(PriceInterface $shippingAmount);
+    public function setShippingAmount(BigDecimal $shippingAmount);
 
     /**
      * @return string
@@ -232,16 +232,16 @@ interface OrderInterface
     public function setShippingMethod($shippingMethod);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getDiscountAmount();
 
     /**
-     * @param PriceInterface $discountAmount
+     * @param BigDecimal $discountAmount
      *
      * @return $this
      */
-    public function setDiscountAmount(PriceInterface $discountAmount);
+    public function setDiscountAmount(BigDecimal $discountAmount);
 
     /**
      * @return float

@@ -2,12 +2,12 @@
 
 namespace Marello\Component\Order;
 
+use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\Collection;
 
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Marello\Component\Pricing\CurrencyAwareInterface;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
-use Marello\Component\Pricing\PriceInterface;
 use Marello\Component\Product\ProductInterface;
 
 interface OrderItemInterface extends AllocationTargetInterface, CurrencyAwareInterface
@@ -42,40 +42,40 @@ interface OrderItemInterface extends AllocationTargetInterface, CurrencyAwareInt
     public function setQuantity($quantity);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getPrice();
 
     /**
-     * @param PriceInterface $price
+     * @param BigDecimal $price
      *
      * @return $this
      */
-    public function setPrice(PriceInterface $price);
+    public function setPrice(BigDecimal $price);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getTax();
 
     /**
-     * @param PriceInterface $tax
+     * @param BigDecimal $tax
      *
      * @return $this
      */
-    public function setTax(PriceInterface $tax);
+    public function setTax(BigDecimal $tax);
 
     /**
-     * @return PriceInterface
+     * @return BigDecimal
      */
     public function getTotalPrice();
 
     /**
-     * @param PriceInterface $totalPrice
+     * @param BigDecimal $totalPrice
      *
      * @return $this
      */
-    public function setTotalPrice(PriceInterface $totalPrice);
+    public function setTotalPrice(BigDecimal $totalPrice);
 
     /**
      * @return ProductInterface
@@ -130,7 +130,7 @@ interface OrderItemInterface extends AllocationTargetInterface, CurrencyAwareInt
     public function getDiscountAmount();
 
     /**
-     * @param float $discountAmount
+     * @param BigDecimal $discountAmount
      */
-    public function setDiscountAmount($discountAmount);
+    public function setDiscountAmount(BigDecimal $discountAmount);
 }
