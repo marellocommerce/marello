@@ -6,19 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Marello\Component\Inventory\Model\WarehouseInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Component\Inventory\ORM\Repository\InventoryItemRepository")
- * @ORM\Table(
- *      name="marello_inventory_item",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"product_id", "warehouse_id"})
- *      }
- * )
  * @Oro\Config(
  *      defaultValues={
  *          "security"={
@@ -35,9 +29,6 @@ class InventoryItem implements InventoryItemInterface
     const MODIFY_OPERATOR_DECREASE = 'decrease';
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -51,8 +42,6 @@ class InventoryItem implements InventoryItemInterface
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="inventoryItems")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -67,8 +56,6 @@ class InventoryItem implements InventoryItemInterface
     protected $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Inventory\Entity\Warehouse")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -82,7 +69,6 @@ class InventoryItem implements InventoryItemInterface
     protected $warehouse;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -97,33 +83,17 @@ class InventoryItem implements InventoryItemInterface
     protected $quantity = 0;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     *
      * @var int
      */
     protected $allocatedQuantity = 0;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Component\Inventory\Entity\InventoryLog",
-     *     cascade={"persist", "remove"},
-     *     mappedBy="inventoryItem",
-     *     fetch="EXTRA_LAZY"
-     * )
-     *
-     * @var Collection
+     * @var Collection|InventoryLogInterface[]
      */
     protected $inventoryLogs;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Component\Inventory\Entity\InventoryAllocation",
-     *     cascade={"remove"},
-     *     mappedBy="inventoryItem",
-     *     fetch="LAZY"
-     * )
-     *
-     * @var InventoryAllocation[]|Collection
+     * @var Collection|InventoryAllocation[]
      */
     protected $allocations;
 

@@ -10,8 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Component\Inventory\ORM\Repository\WarehouseRepository")
- * @ORM\Table(name="marello_inventory_warehouse")
  * @Oro\Config(
  *      defaultValues={
  *          "security"={
@@ -29,41 +27,27 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 class Warehouse implements WarehouseInterface
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
-     *
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
-     *
      * @var string
      */
     protected $label;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false, name="is_default")
-     *
      * @var bool
      */
     protected $default;
 
     /**
      * @var OrganizationInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(nullable=false)
      */
     protected $owner;
 
     /**
      * @var Address
-     *
-     * @ORM\OneToOne(targetEntity="Marello\Component\Address\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
      */
     protected $address = null;
 

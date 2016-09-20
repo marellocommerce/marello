@@ -8,40 +8,24 @@ use Marello\Component\Inventory\Model\InventoryAllocationInterface;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Order\OrderItemInterface;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="marello_inventory_allocation")
- */
 class InventoryAllocation implements InventoryAllocationInterface
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
-     *
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Inventory\Entity\InventoryItem", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     *
-     * @var InventoryItem
+     * @var InventoryItemInterface
      */
     protected $inventoryItem;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     *
      * @var int
      */
     protected $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem", cascade={})
-     * @ORM\JoinColumn(nullable=true)
-     *
      * @var OrderItemInterface
      */
     protected $targetOrderItem = null;
@@ -67,7 +51,7 @@ class InventoryAllocation implements InventoryAllocationInterface
     }
 
     /**
-     * @return InventoryItem
+     * @return InventoryItemInterface
      */
     public function getInventoryItem()
     {

@@ -11,84 +11,55 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Represents changes in inventory items over time.
- *
- * @ORM\Entity(repositoryClass="Marello\Component\Inventory\ORM\Repository\InventoryLogRepository")
- * @ORM\Table(name="marello_inventory_log")
- * @ORM\HasLifecycleCallbacks()
  */
 class InventoryLog implements InventoryLogInterface
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
-     *
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     *
      * @var int
      */
     protected $oldQuantity;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     *
      * @var int
      */
     protected $newQuantity;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     *
      * @var int
      */
     protected $oldAllocatedQuantity;
 
     /**
-     * @ORM\Column(type="integer", nullable=false)
-     *
      * @var int
      */
     protected $newAllocatedQuantity;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
-     *
      * @var string
      */
     protected $actionType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(nullable=true)
-     *
      * @var User
      */
     protected $user = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order", cascade={})
-     * @ORM\JoinColumn(nullable=true)
-     *
      * @var Order
      */
     protected $order = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Inventory\Entity\InventoryItem")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     *
-     * @var InventoryItem
+     * @var InventoryItemInterface
      */
     protected $inventoryItem;
 
     /**
-     * @ORM\Column(type="datetime", nullable=false)
-     *
      * @var \DateTime
      */
     protected $createdAt = null;
@@ -108,9 +79,6 @@ class InventoryLog implements InventoryLogInterface
         $this->oldAllocatedQuantity = $this->newAllocatedQuantity = $inventoryItem->getAllocatedQuantity();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
@@ -161,7 +129,7 @@ class InventoryLog implements InventoryLogInterface
     }
 
     /**
-     * @return InventoryItem
+     * @return InventoryItemInterface
      */
     public function getInventoryItem()
     {
