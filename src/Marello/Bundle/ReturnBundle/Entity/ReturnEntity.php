@@ -5,7 +5,7 @@ namespace Marello\Bundle\ReturnBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\Entity\Order;
 use Marello\Bundle\ReturnBundle\Model\ExtendReturnEntity;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -32,7 +32,7 @@ class ReturnEntity extends ExtendReturnEntity
     /**
      * @var Order
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order")
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Order\Entity\Order")
      */
     protected $order;
 

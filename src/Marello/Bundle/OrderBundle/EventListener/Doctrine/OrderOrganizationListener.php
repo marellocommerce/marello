@@ -3,7 +3,7 @@
 namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\Entity\Order;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class OrderOrganizationListener

@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Order\Entity\Repository;
+namespace Marello\Component\Order\Repository;
 
 use DateTime;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;

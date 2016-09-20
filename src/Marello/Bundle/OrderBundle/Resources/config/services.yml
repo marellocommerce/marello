@@ -2,8 +2,8 @@ parameters:
     marello_order.listener.datagrid.order_grid_address_filter_listener.class:         Marello\Bundle\OrderBundle\EventListener\Datagrid\OrderGridAddressFilterListener
     marello_order.listener.doctrine.order_number_generator_listener.class:            Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderNumberGeneratorListener
     marello_order.listener.doctrine.order_organization_listener.class:                Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderOrganizationListener
-    marello_order.manager.order.api.class:                                            Marello\Component\Order\Entity\Manager\OrderApiEntityManager
-    marello_order.provider.order_statistic_provider.class:                            Marello\Bundle\OrderBundle\Provider\OrderDashboardStatisticProvider
+    marello_order.manager.order.api.class:                                            Marello\Component\Order\ORM\EntityManager\OrderApiEntityManager
+    marello_order.provider.order_statistic_provider.class:                            Marello\Component\Order\ORM\Provider\OrderDashboardStatisticProvider
     marello_order.event_listener.doctrine.order_inventory_allocation_listener.class:  Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderInventoryAllocationListener
 
 services:

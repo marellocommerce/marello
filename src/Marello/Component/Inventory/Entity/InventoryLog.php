@@ -3,10 +3,10 @@
 namespace Marello\Component\Inventory\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\Entity\Order;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Model\InventoryLogInterface;
-use Marello\Component\Order\OrderInterface;
+use Marello\Component\Order\Model\OrderInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**

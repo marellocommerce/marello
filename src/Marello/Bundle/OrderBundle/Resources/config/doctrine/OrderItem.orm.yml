@@ -1,7 +1,6 @@
-Marello\Component\Inventory\Entity\InventoryLog:
+Marello\Component\Order\Entity\OrderItem:
     type: entity
-    table: marello_inventory_log
-    repositoryClass: Marello\Component\Inventory\ORM\Repository\InventoryLogRepository
+    table: marello_order_order_item
     id:
         id:
             type: integer
@@ -14,80 +13,115 @@ Marello\Component\Inventory\Entity\InventoryLog:
             generator:
                 strategy: IDENTITY
     fields:
-        oldQuantity:
-            type: integer
-            scale: 0
-            length: null
-            unique: false
-            nullable: false
-            precision: 0
-        newQuantity:
-            type: integer
-            scale: 0
-            length: null
-            unique: false
-            nullable: false
-            precision: 0
-        oldAllocatedQuantity:
-            type: integer
-            scale: 0
-            length: null
-            unique: false
-            nullable: false
-            precision: 0
-        newAllocatedQuantity:
-            type: integer
-            scale: 0
-            length: null
-            unique: false
-            nullable: false
-            precision: 0
-        actionType:
+        productName:
             type: string
             scale: 0
             length: null
             unique: false
             nullable: false
             precision: 0
-        createdAt:
-            type: datetime
+            column: product_name
+        productSku:
+            type: string
             scale: 0
             length: null
             unique: false
             nullable: false
             precision: 0
+            column: product_sku
+        quantity:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        price:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        tax:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        taxPercent:
+            type: percent
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: tax_percent
+        discountPercent:
+            type: percent
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: discount_percent
+        discountAmount:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: discount_amount
+        totalPrice:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: total_price
     manyToOne:
-        user:
-            targetEntity: Oro\Bundle\UserBundle\Entity\User
+        product:
+            targetEntity: Marello\Bundle\ProductBundle\Entity\Product
             cascade: {  }
             fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
-                user_id:
+                product_id:
                     referencedColumnName: id
+                    onDelete: 'SET NULL'
             orphanRemoval: false
         order:
             targetEntity: Marello\Component\Order\Entity\Order
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: null
+            inversedBy: items
             joinColumns:
                 order_id:
                     referencedColumnName: id
-            orphanRemoval: false
-        inventoryItem:
-            targetEntity: Marello\Component\Inventory\Entity\InventoryItem
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                inventoryItem_id:
-                    referencedColumnName: id
                     onDelete: CASCADE
             orphanRemoval: false
+    oneToMany:
+        returnItems:
+            targetEntity: Marello\Bundle\ReturnBundle\Entity\ReturnItem
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: orderItem
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+        inventoryAllocations:
+            targetEntity: Marello\Component\Inventory\Entity\InventoryAllocation
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: targetOrderItem
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
     lifecycleCallbacks:
         prePersist:
             - prePersist

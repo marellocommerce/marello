@@ -3,8 +3,8 @@
 namespace Marello\Component\Order\Workflow;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\Order;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Marello\Component\Inventory\Logging\InventoryLoggerInterface;

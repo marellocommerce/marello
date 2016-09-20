@@ -3,10 +3,10 @@
 namespace Marello\Component\Inventory\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Component\Inventory\Model\InventoryAllocationInterface;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
-use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Order\Model\OrderItemInterface;
 
 class InventoryAllocation implements InventoryAllocationInterface
 {

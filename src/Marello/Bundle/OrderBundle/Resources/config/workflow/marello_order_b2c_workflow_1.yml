@@ -1,7 +1,7 @@
 workflows:
     marello_order_b2c_workflow_1:
         label:        'Order B2C Workflow #1'
-        entity:       Marello\Bundle\OrderBundle\Entity\Order
+        entity:       Marello\Component\Order\Entity\Order
         entity_attribute: order
         start_step:   pending
         attributes:

@@ -6,8 +6,8 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Marello\Component\Inventory\Model\InventoryLogInterface;
-use Marello\Component\Order\OrderInterface;
-use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Order\Model\OrderInterface;
+use Marello\Component\Order\Model\OrderItemInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 

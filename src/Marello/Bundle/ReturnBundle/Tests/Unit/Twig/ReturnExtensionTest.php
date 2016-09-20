@@ -4,7 +4,7 @@ namespace Marello\Bundle\ReturnBundle\Tests\Unit\Twig;
 
 use Marello\Bundle\ReturnBundle\Twig\ReturnExtension;
 use Marello\Bundle\ReturnBundle\Util\ReturnHelper;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\OrderItem;
 
 class ReturnExtensionTest extends \PHPUnit_Framework_TestCase
 {

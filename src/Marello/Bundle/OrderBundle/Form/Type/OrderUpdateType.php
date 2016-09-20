@@ -26,7 +26,7 @@ class OrderUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Marello\Bundle\OrderBundle\Entity\Order',
+            'data_class' => 'Marello\Component\Order\Entity\Order',
         ]);
     }
 

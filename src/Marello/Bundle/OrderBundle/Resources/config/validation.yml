@@ -8,7 +8,7 @@ Marello\Component\Address\Entity\Address:
             - NotBlank: ~
     constraints: ~
 
-Marello\Bundle\OrderBundle\Entity\OrderItem:
+Marello\Component\Order\Entity\OrderItem:
     properties:
         product:
             - NotBlank: ~

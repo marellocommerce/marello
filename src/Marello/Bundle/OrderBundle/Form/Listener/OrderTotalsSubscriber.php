@@ -2,9 +2,9 @@
 
 namespace Marello\Bundle\OrderBundle\Form\Listener;
 
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Order\Entity\Order;
+use Marello\Component\Order\Entity\OrderItem;
+use Marello\Component\Order\Model\OrderItemInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Entity\Repository;
+namespace Marello\Component\Order\ORM\Repository;
 
 use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Marello\Component\Order\Entity\Repository\OrderItemRepositoryInterface;
+use Marello\Component\Order\Repository\OrderRepositoryInterface;
 
-class OrderItemRepository extends EntityRepository implements OrderItemRepositoryInterface
+class OrderRepository extends EntityRepository implements OrderRepositoryInterface
 {
     /**
      * @param \DateTime $start

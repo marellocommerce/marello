@@ -3,8 +3,8 @@
 namespace Marello\Bundle\OrderBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Component\Order\OrderInterface;
+use Marello\Component\Order\Entity\Order;
+use Marello\Component\Order\Model\OrderInterface;
 use Oro\Bundle\SoapBundle\Controller\Api\FormAwareInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

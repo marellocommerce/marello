@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Order\Entity\Manager;
+namespace Marello\Component\Order\ORM\EntityManager;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 

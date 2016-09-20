@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\ReturnBundle\Twig;
 
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Bundle\ReturnBundle\Util\ReturnHelper;
 
 class ReturnExtension extends \Twig_Extension

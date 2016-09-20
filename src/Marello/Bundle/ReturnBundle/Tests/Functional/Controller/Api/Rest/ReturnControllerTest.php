@@ -3,8 +3,8 @@
 namespace Marello\Bundle\ReturnBundle\Tests\Functional\Controller\Api\Rest;
 
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadReturnData;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\Order;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;

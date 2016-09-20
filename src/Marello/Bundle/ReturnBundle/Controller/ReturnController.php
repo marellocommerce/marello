@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\ReturnBundle\Controller;
 
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\Entity\Order;
 use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Oro\Bundle\SecurityBundle\Annotation as Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;

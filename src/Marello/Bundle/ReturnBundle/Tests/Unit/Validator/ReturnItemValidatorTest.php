@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\ReturnBundle\Tests\Unit\Validator;
 
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Marello\Bundle\ReturnBundle\Validator\Constraints\ReturnItemConstraint;
 use Marello\Bundle\ReturnBundle\Validator\ReturnItemValidator;

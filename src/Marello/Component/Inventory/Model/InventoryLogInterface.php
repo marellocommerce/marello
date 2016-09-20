@@ -2,7 +2,7 @@
 
 namespace Marello\Component\Inventory\Model;
 
-use Marello\Component\Order\OrderInterface;
+use Marello\Component\Order\Model\OrderInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 interface InventoryLogInterface

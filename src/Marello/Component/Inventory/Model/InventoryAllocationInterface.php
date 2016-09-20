@@ -2,7 +2,7 @@
 
 namespace Marello\Component\Inventory\Model;
 
-use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Order\Model\OrderItemInterface;
 
 interface InventoryAllocationInterface
 {

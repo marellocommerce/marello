@@ -1,13 +1,13 @@
 <?php
 
-namespace Marello\Component\Order;
+namespace Marello\Component\Order\Model;
 
 use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\Collection;
 
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
-use Marello\Component\Inventory\Model\InventoryAllocation\AllocationTargetInterface;
+use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 use Marello\Component\Product\ProductInterface;
 
 interface OrderItemInterface extends AllocationTargetInterface, CurrencyAwareInterface

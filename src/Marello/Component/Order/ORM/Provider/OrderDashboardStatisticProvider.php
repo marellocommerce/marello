@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Component\Order\ORM\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

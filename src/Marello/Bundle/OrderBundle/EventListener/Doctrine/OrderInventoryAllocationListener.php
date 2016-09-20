@@ -10,8 +10,8 @@ use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Marello\Component\Inventory\Repository\InventoryItemRepositoryInterface;
 use Marello\Component\Inventory\Repository\WarehouseRepositoryInterface;
-use Marello\Component\Order\OrderInterface;
-use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Order\Model\OrderInterface;
+use Marello\Component\Order\Model\OrderItemInterface;
 
 class OrderInventoryAllocationListener
 {

@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\ReturnBundle\Form\Subscriber;
 
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

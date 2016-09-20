@@ -3,7 +3,7 @@
 namespace Marello\Bundle\ReturnBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Bundle\ReturnBundle\Model\ExtendReturnItem;
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
@@ -36,7 +36,7 @@ class ReturnItem extends ExtendReturnItem implements CurrencyAwareInterface
     /**
      * @var OrderItem
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem")
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Order\Entity\OrderItem")
      * @ORM\JoinColumn
      */
     protected $orderItem;

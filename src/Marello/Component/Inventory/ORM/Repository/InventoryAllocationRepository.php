@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Marello\Component\Inventory\Model\InventoryAllocationInterface;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Repository\InventoryAllocationRepositoryInterface;
-use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Order\Model\OrderItemInterface;
 
 class InventoryAllocationRepository extends EntityRepository
     implements InventoryAllocationRepositoryInterface

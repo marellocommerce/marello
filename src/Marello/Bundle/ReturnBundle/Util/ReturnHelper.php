@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\ReturnBundle\Util;
 
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Component\Order\Entity\OrderItem;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 
 class ReturnHelper

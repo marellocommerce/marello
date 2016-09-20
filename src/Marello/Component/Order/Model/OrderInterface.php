@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Order;
+namespace Marello\Component\Order\Model;
 
 use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\Collection;

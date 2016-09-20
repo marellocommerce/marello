@@ -1,16 +1,16 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Entity;
+namespace Marello\Component\Order\Entity;
 
 use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\OrderBundle\Model\ExtendOrder;
+use Marello\Component\Order\Model\ExtendOrder;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Component\Address\Model\AddressInterface;
-use Marello\Component\Order\OrderInterface;
-use Marello\Component\Order\OrderItemInterface;
+use Marello\Component\Order\Model\OrderInterface;
+use Marello\Component\Order\Model\OrderItemInterface;
 use Marello\Component\Pricing\Model\PriceInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
@@ -21,7 +21,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository")
+ * @ORM\Entity(repositoryClass="Marello\Component\Order\ORM\Repository\OrderRepository")
  * @Oro\Config(
  *      defaultValues={
  *          "entity"={

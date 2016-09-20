@@ -34,7 +34,7 @@ Marello\Component\Inventory\Entity\InventoryAllocation:
                     onDelete: CASCADE
             orphanRemoval: false
         targetOrderItem:
-            targetEntity: Marello\Bundle\OrderBundle\Entity\OrderItem
+            targetEntity: Marello\Component\Order\Entity\OrderItem
             cascade: {  }
             fetch: LAZY
             mappedBy: null
