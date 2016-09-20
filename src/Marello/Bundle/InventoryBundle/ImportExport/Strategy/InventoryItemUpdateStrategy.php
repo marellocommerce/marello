@@ -168,7 +168,7 @@ class InventoryItemUpdateStrategy extends ConfigurableAddOrReplaceStrategy
             $oldAllocatedQuantity = $existingEntity->getAllocatedQuantity();
 
             //manually handle quantity update
-            $existingEntity->modifyQuantity($entity->getQuantity());
+            $existingEntity->increaseQuantity($entity->getQuantity());
 
             $this->inventoryLogger->directLog(
                 $existingEntity,

@@ -10,6 +10,7 @@ use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Marello\Component\Inventory\Model\WarehouseInterface;
+use Marello\Component\Product\Model\ProductInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
@@ -134,11 +135,11 @@ class InventoryItem implements InventoryItemInterface
     }
 
     /**
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return $this
      */
-    public function setProduct($product = null)
+    public function setProduct(ProductInterface $product = null)
     {
         $this->product = $product;
 
@@ -188,11 +189,37 @@ class InventoryItem implements InventoryItemInterface
     /**
      * @param int $amount
      *
+     * @deprecated
+     *
      * @return $this
      */
     public function modifyQuantity($amount)
     {
         $this->quantity += $amount;
+
+        return $this;
+    }
+
+    /**
+     * @param int $amount
+     *
+     * @return $this
+     */
+    public function increaseQuantity($amount)
+    {
+        $this->quantity += $amount;
+
+        return $this;
+    }
+
+    /**
+     * @param int $amount
+     *
+     * @return $this
+     */
+    public function decreaseQuantity($amount)
+    {
+        $this->quantity -= $amount;
 
         return $this;
     }

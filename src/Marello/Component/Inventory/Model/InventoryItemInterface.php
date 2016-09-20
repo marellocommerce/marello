@@ -4,6 +4,7 @@ namespace Marello\Component\Inventory\Model;
 
 
 use Doctrine\Common\Collections\Collection;
+use Marello\Component\Product\Model\ProductInterface;
 
 interface InventoryItemInterface
 {
@@ -25,14 +26,14 @@ interface InventoryItemInterface
     public function getProduct();
 
     /**
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return $this
      */
-    public function setProduct($product = null);
+    public function setProduct(ProductInterface $product = null);
 
     /**
-     * @return Warehouse
+     * @return WarehouseInterface
      */
     public function getWarehouse();
 
@@ -58,9 +59,25 @@ interface InventoryItemInterface
     /**
      * @param int $amount
      *
+     * @deprecated
+     *
      * @return $this
      */
     public function modifyQuantity($amount);
+
+    /**
+     * @param int $amount
+     *
+     * @return $this
+     */
+    public function increaseQuantity($amount);
+
+    /**
+     * @param int $amount
+     *
+     * @return $this
+     */
+    public function decreaseQuantity($amount);
 
     /**
      * @return Collection

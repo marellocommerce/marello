@@ -52,12 +52,12 @@ class InventoryItemType extends AbstractType
                 /*
                  * Increase amount if operator is increase.
                  */
-                $data->modifyQuantity($amount);
+                $data->increaseQuantity($amount);
             } elseif (($data->getQuantity() - $amount) >= 0) {
                 /*
                  * Else (operator is decrease) and resulting amount would be still positive... decrease quantity.
                  */
-                $data->modifyQuantity(-$amount);
+                $data->decreaseQuantity($amount);
             } else {
                 /*
                  * If operation would create a negative value. Add form error.

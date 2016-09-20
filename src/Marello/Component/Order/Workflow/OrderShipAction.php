@@ -80,7 +80,7 @@ class OrderShipAction extends OrderTransitionAction
             /*
              * Reduce inventory item real stock by allocated amount.
              */
-            $inventoryItem->modifyQuantity(-$allocation->getQuantity());
+            $inventoryItem->decreaseQuantity($allocation->getQuantity());
 
             /*
              * When allocation is removed, the allocated amount on inventory amount will be automatically decreased.

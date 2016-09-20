@@ -44,7 +44,8 @@
         "hwi/oauth-bundle": "0.3.*"
     },
     "require-dev": {
-        "marellocommerce/marello-application": "^1.0@alpha"
+        "marellocommerce/marello-application": "^1.0@alpha",
+        "phpspec/phpspec": "^3.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
