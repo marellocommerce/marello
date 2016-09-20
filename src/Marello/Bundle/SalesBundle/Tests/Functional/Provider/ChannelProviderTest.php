@@ -5,9 +5,9 @@ namespace Marello\Bundle\SalesBundle\Tests\Provider;
 use Doctrine\ORM\EntityManager;
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductData;
 use Marello\Component\Product\Entity\Product;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Provider\ChannelProvider;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Entity\SalesChannel;
+use Marello\Component\Sales\ORM\Provider\ChannelProvider;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**

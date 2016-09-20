@@ -1,4 +1,4 @@
-Marello\Bundle\SalesBundle\Entity\SalesChannel:
+Marello\Component\Sales\Entity\SalesChannel:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: code

@@ -5,7 +5,7 @@ namespace Marello\Component\Product\Model;
 use Doctrine\Common\Collections\Collection;
 use Marello\Component\Product\Entity\ProductStatus;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
-use Marello\Component\Sales\SalesChannelAwareInterface;
+use Marello\Component\Sales\Model\SalesChannelAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 interface ProductInterface extends

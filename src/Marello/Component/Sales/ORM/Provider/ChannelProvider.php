@@ -1,14 +1,13 @@
 <?php
 
-namespace Marello\Bundle\SalesBundle\Provider;
+namespace Marello\Component\Sales\ORM\Provider;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Marello\Component\Product\Entity\Product;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 use Marello\Component\Product\Model\ProductInterface;
 use Marello\Component\Sales\Provider\ChannelProviderInterface;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 
 class ChannelProvider implements ChannelProviderInterface
 {

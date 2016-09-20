@@ -3,7 +3,7 @@
 namespace Marello\Component\Product\Model;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 interface ProductChannelPriceInterface

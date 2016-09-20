@@ -3,7 +3,7 @@
 namespace Marello\Bundle\ProductBundle\Tests\Unit\Twig;
 
 use Marello\Bundle\ProductBundle\Twig\ProductExtension;
-use Marello\Bundle\SalesBundle\Provider\ChannelProvider;
+use Marello\Component\Sales\ORM\Provider\ChannelProvider;
 use Marello\Component\Product\Entity\Product;
 
 class ProductExtensionTest extends \PHPUnit_Framework_TestCase

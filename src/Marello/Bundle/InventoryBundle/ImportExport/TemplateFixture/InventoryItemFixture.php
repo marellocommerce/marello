@@ -9,7 +9,7 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Product\Entity\Product;
 use Marello\Component\Product\Entity\ProductStatus;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 
 class InventoryItemFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {

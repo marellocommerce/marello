@@ -7,12 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Component\Order\Model\ExtendOrder;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 use Marello\Component\Address\Model\AddressInterface;
 use Marello\Component\Order\Model\OrderInterface;
 use Marello\Component\Order\Model\OrderItemInterface;
 use Marello\Component\Pricing\Model\PriceInterface;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -213,7 +213,7 @@ class Order extends ExtendOrder implements OrderInterface
     /**
      * @var SalesChannel
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Sales\Entity\SalesChannel")
      * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      */
     protected $salesChannel;

@@ -211,7 +211,7 @@ Marello\Component\Order\Entity\Order:
             orphanRemoval: false
     manyToOne:
         salesChannel:
-            targetEntity: Marello\Bundle\SalesBundle\Entity\SalesChannel
+            targetEntity: Marello\Component\Sales\Entity\SalesChannel
             cascade: {  }
             fetch: LAZY
             mappedBy: null

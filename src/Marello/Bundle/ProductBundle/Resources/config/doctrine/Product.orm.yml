@@ -152,7 +152,7 @@ Marello\Component\Product\Entity\Product:
                 id: ASC
     manyToMany:
         channels:
-            targetEntity: Marello\Bundle\SalesBundle\Entity\SalesChannel
+            targetEntity: Marello\Component\Sales\Entity\SalesChannel
             cascade: {  }
             fetch: LAZY
             mappedBy: null

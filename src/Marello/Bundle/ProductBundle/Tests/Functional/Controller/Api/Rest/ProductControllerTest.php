@@ -5,9 +5,9 @@ namespace Marello\Bundle\ProductBundle\Tests\Functional\Controller\Api\Rest;
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductChannelPricingData;
 use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Product\Entity\Product;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 

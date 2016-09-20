@@ -49,7 +49,7 @@ class SalesChannelType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Marello\Bundle\SalesBundle\Entity\SalesChannel'
+            'data_class' => 'Marello\Component\Sales\Entity\SalesChannel'
         ]);
     }
 

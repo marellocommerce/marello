@@ -2,13 +2,13 @@
 
 namespace Marello\Bundle\SalesBundle\Form\Handler;
 
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 
 class SalesChannelHandler
 {

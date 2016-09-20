@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityRepository;
 use Marello\Component\Pricing\Entity\ProductChannelPrice;
 use Marello\Component\Pricing\Entity\ProductPrice;
 use Marello\Component\Product\Entity\Product;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 
-class ChannelPriceProvider
+class ChannelPriceProvider implements ChannelPriceProviderInterface
 {
     const PRICE_IDENTIFIER = 'product-id-';
 

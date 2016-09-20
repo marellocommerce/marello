@@ -5,12 +5,12 @@ namespace Marello\Component\Pricing\ORM\Provider;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 
-class CurrencyProvider
+class CurrencyProvider implements CurrencyProviderInterface
 {
     const CURRENCY_IDENTIFIER = 'currency-';
 

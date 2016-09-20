@@ -1,10 +1,10 @@
 <?php
 
-namespace Marello\Component\Sales;
+namespace Marello\Component\Sales\Model;
 
 use Doctrine\Common\Collections\Collection;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 
 interface SalesChannelAwareInterface
 {

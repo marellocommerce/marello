@@ -12,7 +12,7 @@ use Marello\Component\Product\Model\ProductChannelPriceInterface;
 use Marello\Component\Product\Model\ProductInterface;
 use Marello\Component\Product\Model\ProductPriceInterface;
 use Marello\Component\Product\Model\VariantInterface;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
@@ -192,7 +192,7 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var ArrayCollection
      * unidirectional many-to-many
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
+     * @ORM\ManyToMany(targetEntity="Marello\Component\Sales\Entity\SalesChannel")
      * @ORM\JoinTable(name="marello_product_saleschannel")
      */
     protected $channels;

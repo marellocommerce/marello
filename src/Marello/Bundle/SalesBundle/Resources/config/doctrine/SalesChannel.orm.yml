@@ -1,13 +1,11 @@
-Marello\Component\Pricing\Entity\ProductChannelPrice:
+Marello\Component\Sales\Entity\SalesChannel:
     type: entity
-    table: marello_product_channel_price
-    repositoryClass: Marello\Component\Pricing\ORM\Repository\ProductChannelPriceRepository
+    table: marello_sales_sales_channel
+    repositoryClass: Marello\Component\Sales\ORM\Repository\SalesChannelRepository
     uniqueConstraints:
-        marello_product_channel_price_uidx:
+        marello_sales_sales_channel_codeidx:
             columns:
-                - product_id
-                - channel_id
-                - currency
+                - code
     id:
         id:
             type: integer
@@ -20,8 +18,15 @@ Marello\Component\Pricing\Entity\ProductChannelPrice:
             generator:
                 strategy: IDENTITY
     fields:
-        value:
-            type: money
+        name:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        code:
+            type: string
             scale: 0
             length: null
             unique: false
@@ -30,7 +35,29 @@ Marello\Component\Pricing\Entity\ProductChannelPrice:
         currency:
             type: string
             scale: 0
-            length: 3
+            length: 5
+            unique: false
+            nullable: false
+            precision: 0
+        active:
+            type: boolean
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        default:
+            type: boolean
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: is_default
+        channelType:
+            type: string
+            scale: 0
+            length: null
             unique: false
             nullable: false
             precision: 0
@@ -41,37 +68,23 @@ Marello\Component\Pricing\Entity\ProductChannelPrice:
             unique: false
             nullable: false
             precision: 0
-            column: created_at
         updatedAt:
             type: datetime
             scale: 0
             length: null
             unique: false
-            nullable: true
+            nullable: false
             precision: 0
-            column: updated_at
     manyToOne:
-        product:
-            targetEntity: Marello\Component\Product\Entity\Product
+        owner:
+            targetEntity: Oro\Bundle\OrganizationBundle\Entity\Organization
             cascade: {  }
             fetch: LAZY
             mappedBy: null
             inversedBy: null
             joinColumns:
-                product_id:
+                owner_id:
                     referencedColumnName: id
-                    onDelete: CASCADE
-            orphanRemoval: false
-        channel:
-            targetEntity: Marello\Component\Sales\Entity\SalesChannel
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                channel_id:
-                    referencedColumnName: id
-                    onDelete: CASCADE
             orphanRemoval: false
     lifecycleCallbacks:
         prePersist:

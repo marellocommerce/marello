@@ -1,14 +1,14 @@
 <?php
 
-namespace Marello\Bundle\SalesBundle\Entity;
+namespace Marello\Component\Sales\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelRepository")
+ * @ORM\Entity(repositoryClass="Marello\Component\Sales\ORM\Repository\SalesChannelRepository")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="marello_sales_sales_channel",
  *      uniqueConstraints={

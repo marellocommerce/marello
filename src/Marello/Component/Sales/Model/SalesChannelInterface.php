@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Sales;
+namespace Marello\Component\Sales\Model;
 
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Marello\Bundle\SalesBundle\Entity\Repository;
+namespace Marello\Component\Sales\ORM\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class SalesChannelRepository extends EntityRepository
+class SalesChannelRepository extends EntityRepository implements SalesChannelRepositoryInterface
 {
     /**
      * Return product prices for specified channel and productId

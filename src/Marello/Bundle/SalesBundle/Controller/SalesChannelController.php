@@ -3,7 +3,7 @@
 namespace Marello\Bundle\SalesBundle\Controller;
 
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Oro\Bundle\SecurityBundle\Annotation as Security;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 
 /**
  * @Config\Route("/channel")
@@ -27,7 +27,7 @@ class SalesChannelController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => 'Marello\Bundle\SalesBundle\Entity\SalesChannel',
+            'entity_class' => 'Marello\Component\Sales\Entity\SalesChannel',
         ];
     }
 

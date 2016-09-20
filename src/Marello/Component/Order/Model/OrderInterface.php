@@ -5,7 +5,7 @@ namespace Marello\Component\Order\Model;
 use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\Collection;
 use Marello\Component\Address\Model\AddressInterface;
-use Marello\Component\Sales\SalesChannelInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
