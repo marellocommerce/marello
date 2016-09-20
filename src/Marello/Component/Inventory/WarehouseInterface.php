@@ -2,8 +2,7 @@
 
 namespace Marello\Component\Inventory;
 
-
-use Marello\Component\Address\AddressInterface;
+use Marello\Component\Address\Model\AddressInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 interface WarehouseInterface

@@ -3,8 +3,8 @@
 namespace Marello\Bundle\InventoryBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\AddressBundle\Entity\Address;
-use Marello\Component\Address\AddressInterface;
+use Marello\Component\Address\Entity\Address;
+use Marello\Component\Address\Model\AddressInterface;
 use Marello\Component\Inventory\WarehouseInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
@@ -62,7 +62,7 @@ class Warehouse implements WarehouseInterface
     /**
      * @var Address
      *
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Marello\Component\Address\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected $address = null;

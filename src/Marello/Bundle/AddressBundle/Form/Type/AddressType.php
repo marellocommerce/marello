@@ -32,7 +32,7 @@ class AddressType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Marello\Bundle\AddressBundle\Entity\Address',
+            'data_class' => 'Marello\Component\Address\Entity\Address',
         ]);
     }
 

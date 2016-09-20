@@ -4,16 +4,13 @@ namespace Marello\Bundle\OrderBundle\Controller;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Component\Address\AddressInterface;
+use Marello\Component\Address\Model\AddressInterface;
 use Marello\Component\Order\OrderInterface;
 use Marello\Component\Order\OrderItemInterface;
 use Oro\Bundle\SecurityBundle\Annotation as Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
-use Marello\Bundle\AddressBundle\Entity\Address;
 
 class OrderController extends Controller
 {

@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\OrderBundle\Model\ExtendOrder;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Component\Address\AddressInterface;
+use Marello\Component\Address\Model\AddressInterface;
 use Marello\Component\Order\OrderInterface;
 use Marello\Component\Order\OrderItemInterface;
 use Marello\Component\Pricing\Model\PriceInterface;
@@ -164,14 +164,14 @@ class Order extends ExtendOrder implements OrderInterface
     /**
      * @var AbstractAddress
      *
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Marello\Component\Address\Entity\Address", cascade={"persist", "remove"})
      */
     protected $billingAddress;
 
     /**
      * @var AbstractAddress
      *
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Marello\Component\Address\Entity\Address", cascade={"persist", "remove"})
      */
     protected $shippingAddress;
 

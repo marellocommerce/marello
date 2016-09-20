@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Address;
+namespace Marello\Component\Address\Model;
 
 use Oro\Bundle\FormBundle\Entity\EmptyItem;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
