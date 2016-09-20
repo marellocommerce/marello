@@ -3,7 +3,7 @@
 namespace Marello\Bundle\InventoryBundle\EventListener\Doctrine;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Marello\Component\Inventory\InventoryAllocationInterface;
+use Marello\Component\Inventory\Model\InventoryAllocationInterface;
 
 class InventoryAllocationListener
 {

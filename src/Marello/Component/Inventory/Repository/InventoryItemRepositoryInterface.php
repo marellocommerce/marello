@@ -1,9 +1,11 @@
 <?php
 
-namespace Marello\Component\Inventory;
+namespace Marello\Component\Inventory\Repository;
 
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\WarehouseInterface;
 use Marello\Component\Product\ProductInterface;
 
 interface InventoryItemRepositoryInterface extends ObjectRepository, Selectable

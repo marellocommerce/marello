@@ -3,10 +3,10 @@
 namespace Marello\Bundle\ProductBundle\Tests\Functional\Controller\Api\Rest;
 
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductChannelPricingData;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ class ProductControllerTest extends WebTestCase
     }
 
     /**
-     * @return \Marello\Bundle\InventoryBundle\Entity\Warehouse
+     * @return \Marello\Component\Inventory\Entity\Warehouse
      */
     protected function getDefaultWarehouse()
     {

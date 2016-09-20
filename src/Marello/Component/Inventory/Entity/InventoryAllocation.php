@@ -1,11 +1,11 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Entity;
+namespace Marello\Component\Inventory\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Component\Inventory\InventoryAllocationInterface;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryAllocationInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Order\OrderItemInterface;
 
 /**
@@ -24,7 +24,7 @@ class InventoryAllocation implements InventoryAllocationInterface
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Inventory\Entity\InventoryItem", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @var InventoryItem

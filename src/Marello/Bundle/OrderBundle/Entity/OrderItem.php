@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use JMS\Serializer\Annotation as JMS;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
+use Marello\Component\Inventory\Entity\InventoryAllocation;
 use Marello\Component\Order\OrderInterface;
 use Marello\Component\Order\OrderItemInterface;
 use Marello\Component\Product\ProductInterface;
@@ -18,7 +18,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Marello\Bundle\OrderBundle\Model\ExtendOrderItem;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
-use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
+use Marello\Component\Inventory\Model\InventoryAllocation\AllocationTargetInterface;
 
 /**
  * @ORM\Entity()
@@ -141,7 +141,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryAllocation",
+     *     targetEntity="Marello\Component\Inventory\Entity\InventoryAllocation",
      *     mappedBy="targetOrderItem",
      *     cascade={}
      * )

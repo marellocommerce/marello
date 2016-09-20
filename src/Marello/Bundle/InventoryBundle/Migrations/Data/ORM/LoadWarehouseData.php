@@ -4,7 +4,7 @@ namespace Marello\Bundle\InventoryBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Component\Inventory\Entity\Warehouse;
 
 class LoadWarehouseData implements FixtureInterface
 {

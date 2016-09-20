@@ -3,7 +3,7 @@
 namespace Marello\Component\Inventory\Logging;
 
 use Closure;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 
 interface InventoryLoggerInterface
 {

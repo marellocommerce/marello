@@ -2,8 +2,8 @@
 
 namespace Marello\Bundle\InventoryBundle\Form\Type;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Entity\InventoryItem;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -73,7 +73,7 @@ class InventoryItemType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'         => 'Marello\Bundle\InventoryBundle\Entity\InventoryItem',
+            'data_class'         => 'Marello\Component\Inventory\Entity\InventoryItem',
             'cascade_validation' => true,
         ]);
     }

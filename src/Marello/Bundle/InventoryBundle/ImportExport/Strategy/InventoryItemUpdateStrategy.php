@@ -3,8 +3,8 @@
 namespace Marello\Bundle\InventoryBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
-use Marello\Component\Inventory\InventoryItemInterface;
-use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;

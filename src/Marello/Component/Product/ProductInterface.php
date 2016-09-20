@@ -4,7 +4,7 @@ namespace Marello\Component\Product;
 
 use Doctrine\Common\Collections\Collection;
 use Marello\Bundle\ProductBundle\Entity\ProductStatus;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Sales\SalesChannelAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 

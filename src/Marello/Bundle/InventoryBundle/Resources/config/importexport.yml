@@ -1,7 +1,7 @@
 parameters:
     marello_inventory.importexport.template_fixture.inventory_item.class: Marello\Bundle\InventoryBundle\ImportExport\TemplateFixture\InventoryItemFixture
 
-    marello_inventory.inventoryitem.entity.class: Marello\Bundle\InventoryBundle\Entity\InventoryItem
+    marello_inventory.inventoryitem.entity.class: Marello\Component\Inventory\Entity\InventoryItem
 
 services:
     marello_inventory.importexport.data_converter:

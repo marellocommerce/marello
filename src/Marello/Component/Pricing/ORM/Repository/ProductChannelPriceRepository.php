@@ -5,6 +5,7 @@ namespace Marello\Component\Pricing\ORM\Repository;
 use Doctrine\ORM\EntityRepository;
 
 use Marello\Component\Pricing\Entity\ProductChannelPrice;
+use Marello\Component\Pricing\Repository\ProductChannelPriceRepositoryInterface;
 
 class ProductChannelPriceRepository extends EntityRepository implements ProductChannelPriceRepositoryInterface
 {

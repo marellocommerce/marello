@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Inventory;
+namespace Marello\Component\Inventory\Model;
 
 use Marello\Component\Order\OrderItemInterface;
 

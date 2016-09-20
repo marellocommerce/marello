@@ -1,12 +1,12 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Entity\Repository;
+namespace Marello\Component\Inventory\ORM\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Component\Inventory\InventoryItemInterface;
-use Marello\Component\Inventory\InventoryItemRepositoryInterface;
-use Marello\Component\Inventory\WarehouseInterface;
+use Marello\Component\Inventory\Entity\InventoryItem;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\WarehouseInterface;
+use Marello\Component\Inventory\Repository\InventoryItemRepositoryInterface;
 use Marello\Component\Product\ProductInterface;
 
 class InventoryItemRepository extends EntityRepository implements InventoryItemRepositoryInterface

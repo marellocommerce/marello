@@ -1,0 +1,79 @@
+Marello\Component\Inventory\Entity\InventoryItem:
+    type: entity
+    table: marello_inventory_item
+    repositoryClass: Marello\Component\Inventory\ORM\Repository\InventoryItemRepository
+    uniqueConstraints:
+        -
+            columns:
+                - product_id
+                - warehouse_id
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        quantity:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        allocatedQuantity:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        product:
+            targetEntity: Marello\Bundle\ProductBundle\Entity\Product
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: inventoryItems
+            joinColumns:
+                product_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+            orphanRemoval: false
+        warehouse:
+            targetEntity: Marello\Component\Inventory\Entity\Warehouse
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                warehouse_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+            orphanRemoval: false
+    oneToMany:
+        inventoryLogs:
+            targetEntity: Marello\Component\Inventory\Entity\InventoryLog
+            cascade:
+                - remove
+                - persist
+            fetch: EXTRA_LAZY
+            mappedBy: inventoryItem
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+        allocations:
+            targetEntity: Marello\Component\Inventory\Entity\InventoryAllocation
+            cascade:
+                - remove
+            fetch: LAZY
+            mappedBy: inventoryItem
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    lifecycleCallbacks: {  }

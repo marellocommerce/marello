@@ -1,13 +1,13 @@
 <?php
 
-namespace Marello\Component\Pricing\ORM\Repository;
+namespace Marello\Component\Pricing\Repository;
 
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 use Marello\Component\Product\ProductChannelPriceInterface;
 
-interface ProductChannelPriceRepository extends ObjectRepository, Selectable
+interface ProductChannelPriceRepositoryInterface extends ObjectRepository, Selectable
 {
     /**
      * Return product prices for specified channel and productId

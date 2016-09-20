@@ -4,9 +4,9 @@ namespace Marello\Bundle\InventoryBundle\Tests\Functional\Form\Subscriber;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Form\Subscriber\InventoryItemCollectionSubscriber;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;

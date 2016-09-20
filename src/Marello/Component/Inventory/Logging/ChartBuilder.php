@@ -3,8 +3,8 @@
 namespace Marello\Bundle\InventoryBundle\Logging;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Component\Inventory\InventoryLogRepositoryInterface;
+use Marello\Component\Inventory\Entity\InventoryLog;
+use Marello\Component\Inventory\Repository\InventoryLogRepositoryInterface;
 use Marello\Component\Inventory\Logging\ChartBuilderInterface;
 use Marello\Component\Product\ProductInterface;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;

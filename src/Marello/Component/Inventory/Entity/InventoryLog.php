@@ -1,18 +1,18 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Entity;
+namespace Marello\Component\Inventory\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Component\Inventory\InventoryItemInterface;
-use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Marello\Component\Order\OrderInterface;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Represents changes in inventory items over time.
  *
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLogRepository")
+ * @ORM\Entity(repositoryClass="Marello\Component\Inventory\ORM\Repository\InventoryLogRepository")
  * @ORM\Table(name="marello_inventory_log")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -79,7 +79,7 @@ class InventoryLog implements InventoryLogInterface
     protected $order = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem")
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Inventory\Entity\InventoryItem")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @var InventoryItem

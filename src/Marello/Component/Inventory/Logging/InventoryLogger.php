@@ -7,10 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
-use Marello\Component\Inventory\InventoryItemInterface;
-use Marello\Component\Inventory\InventoryLogInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
+use Marello\Component\Inventory\Entity\InventoryLog;
 
 class InventoryLogger implements InventoryLoggerInterface
 {

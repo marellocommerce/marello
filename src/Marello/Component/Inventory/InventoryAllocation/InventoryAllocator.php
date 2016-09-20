@@ -3,10 +3,9 @@
 namespace Marello\Component\Inventory\InventoryAllocation;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Marello\Bundle\InventoryBundle\Entity\InventoryAllocation;
-use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
-use Marello\Component\Inventory\InventoryAllocationInterface;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Entity\InventoryAllocation;
+use Marello\Component\Inventory\Model\InventoryAllocationInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Oro\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

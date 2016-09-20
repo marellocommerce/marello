@@ -1,9 +1,9 @@
 parameters:
-    marello_inventory.warehouse.repository.class:      Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository
-    marello_inventory.inventory_item.repository.class: Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository
+    marello_inventory.warehouse.repository.class:      Marello\Component\Inventory\ORM\Repository\WarehouseRepository
+    marello_inventory.inventory_item.repository.class: Marello\Component\Inventory\ORM\Repository\InventoryItemRepository
 
-    marello_inventory.warehouse.entity.class:      Marello\Bundle\InventoryBundle\Entity\Warehouse
-    marello_inventory.inventory_item.entity.class: Marello\Bundle\InventoryBundle\Entity\InventoryItem
+    marello_inventory.warehouse.entity.class:      Marello\Component\Inventory\Entity\Warehouse
+    marello_inventory.inventory_item.entity.class: Marello\Component\Inventory\Entity\InventoryItem
 
     marello_inventory.allocation.allocator.class: Marello\Component\Inventory\InventoryAllocation\InventoryAllocator
 

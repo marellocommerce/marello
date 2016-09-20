@@ -1,18 +1,18 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Entity;
+namespace Marello\Component\Inventory\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Component\Inventory\InventoryItemInterface;
-use Marello\Component\Inventory\InventoryLogInterface;
-use Marello\Component\Inventory\WarehouseInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryLogInterface;
+use Marello\Component\Inventory\Model\WarehouseInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository")
+ * @ORM\Entity(repositoryClass="Marello\Component\Inventory\ORM\Repository\InventoryItemRepository")
  * @ORM\Table(
  *      name="marello_inventory_item",
  *      uniqueConstraints={
@@ -67,7 +67,7 @@ class InventoryItem implements InventoryItemInterface
     protected $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Warehouse")
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Inventory\Entity\Warehouse")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
@@ -105,7 +105,7 @@ class InventoryItem implements InventoryItemInterface
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryLog",
+     *     targetEntity="Marello\Component\Inventory\Entity\InventoryLog",
      *     cascade={"persist", "remove"},
      *     mappedBy="inventoryItem",
      *     fetch="EXTRA_LAZY"
@@ -117,7 +117,7 @@ class InventoryItem implements InventoryItemInterface
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryAllocation",
+     *     targetEntity="Marello\Component\Inventory\Entity\InventoryAllocation",
      *     cascade={"remove"},
      *     mappedBy="inventoryItem",
      *     fetch="LAZY"

@@ -1,11 +1,10 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Entity\Repository;
+namespace Marello\Component\Inventory\ORM\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Component\Inventory\InventoryLogRepositoryInterface;
+use Marello\Component\Inventory\Repository\InventoryLogRepositoryInterface;
 use Marello\Component\Product\ProductInterface;
 
 class InventoryLogRepository extends EntityRepository implements InventoryLogRepositoryInterface

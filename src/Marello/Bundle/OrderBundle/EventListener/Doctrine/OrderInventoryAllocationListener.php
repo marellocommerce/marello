@@ -4,20 +4,19 @@ namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Marello\Component\Inventory\InventoryAllocation\InventoryAllocator;
 use Marello\Component\Inventory\InventoryAllocation\InventoryAllocatorInterface;
-use Marello\Component\Inventory\InventoryItemInterface;
-use Marello\Component\Inventory\InventoryItemRepositoryInterface;
 use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
-use Marello\Component\Inventory\InventoryLogInterface;
-use Marello\Component\Inventory\WarehouseRepositoryInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryLogInterface;
+use Marello\Component\Inventory\Repository\InventoryItemRepositoryInterface;
+use Marello\Component\Inventory\Repository\WarehouseRepositoryInterface;
 use Marello\Component\Order\OrderInterface;
 use Marello\Component\Order\OrderItemInterface;
 
 class OrderInventoryAllocationListener
 {
     /**
-     * @var InventoryAllocator
+     * @var InventoryAllocatorInterface
      */
     protected $allocator;
 

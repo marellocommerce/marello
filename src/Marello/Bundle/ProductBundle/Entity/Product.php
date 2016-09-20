@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Product\ProductChannelPriceInterface;
 use Marello\Component\Product\ProductInterface;
 use Marello\Component\Product\ProductPriceInterface;
@@ -16,7 +16,7 @@ use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Pricing\Entity\ProductChannelPrice;
 use Marello\Component\Pricing\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Model\ExtendProduct;
@@ -209,7 +209,7 @@ class Product extends ExtendProduct implements ProductInterface
      * @var ArrayCollection|InventoryItem[]
      *
      * @ORM\OneToMany(
-     *      targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem",
+     *      targetEntity="Marello\Component\Inventory\Entity\InventoryItem",
      *      mappedBy="product",
      *      cascade={"remove", "persist"},
      *      orphanRemoval=true,

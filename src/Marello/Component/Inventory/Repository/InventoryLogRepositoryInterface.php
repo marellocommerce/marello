@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Inventory;
+namespace Marello\Component\Inventory\Repository;
 
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Persistence\ObjectRepository;

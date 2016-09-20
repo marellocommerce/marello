@@ -2,8 +2,8 @@
 
 namespace Marello\Component\Inventory\InventoryAllocation;
 
-use Marello\Component\Inventory\InventoryAllocationInterface;
-use Marello\Component\Inventory\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryAllocationInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 
 interface InventoryAllocatorInterface
 {

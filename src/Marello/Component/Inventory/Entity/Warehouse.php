@@ -1,16 +1,16 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Entity;
+namespace Marello\Component\Inventory\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Component\Address\Entity\Address;
 use Marello\Component\Address\Model\AddressInterface;
-use Marello\Component\Inventory\WarehouseInterface;
+use Marello\Component\Inventory\Model\WarehouseInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository")
+ * @ORM\Entity(repositoryClass="Marello\Component\Inventory\ORM\Repository\WarehouseRepository")
  * @ORM\Table(name="marello_inventory_warehouse")
  * @Oro\Config(
  *      defaultValues={

@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Inventory;
+namespace Marello\Component\Inventory\Model;
 
 use Marello\Component\Address\Model\AddressInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;

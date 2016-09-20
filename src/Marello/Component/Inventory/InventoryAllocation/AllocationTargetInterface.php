@@ -3,7 +3,7 @@
 namespace Marello\Component\Inventory\InventoryAllocation;
 
 use Doctrine\Common\Collections\Collection;
-use Marello\Component\Inventory\InventoryAllocationInterface;
+use Marello\Component\Inventory\Model\InventoryAllocationInterface;
 
 interface AllocationTargetInterface
 {

@@ -15,14 +15,14 @@ class InventoryItemApiType extends AbstractType
         $builder
             ->add('quantity', 'number')
             ->add('warehouse', 'entity', [
-                'class' => 'Marello\Bundle\InventoryBundle\Entity\Warehouse',
+                'class' => 'Marello\Component\Inventory\Entity\Warehouse',
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Marello\Bundle\InventoryBundle\Entity\InventoryItem',
+            'data_class' => 'Marello\Component\Inventory\Entity\InventoryItem',
         ]);
     }
 

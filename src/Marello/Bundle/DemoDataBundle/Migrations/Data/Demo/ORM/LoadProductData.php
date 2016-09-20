@@ -6,11 +6,11 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
+use Marello\Component\Inventory\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryLog;
 use Marello\Component\Pricing\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Component\Inventory\WarehouseInterface;
+use Marello\Component\Inventory\Model\WarehouseInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Brick\Math\BigDecimal;

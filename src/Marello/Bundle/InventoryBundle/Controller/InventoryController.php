@@ -20,7 +20,7 @@ class InventoryController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => 'Marello\Bundle\InventoryBundle\Entity\InventoryItem',
+            'entity_class' => 'Marello\Component\Inventory\Entity\InventoryItem',
         ];
     }
 
