@@ -16,7 +16,7 @@ use Marello\Component\Product\Model\ProductInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 use Marello\Component\Order\Model\ExtendOrderItem;
-use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Component\RMA\Entity\ReturnItem;
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 
@@ -135,7 +135,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     /**
      * @var ReturnItem[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="Marello\Bundle\ReturnBundle\Entity\ReturnItem", mappedBy="orderItem", cascade={})
+     * @ORM\OneToMany(targetEntity="Marello\Component\RMA\Entity\ReturnItem", mappedBy="orderItem", cascade={})
      */
     protected $returnItems;
 

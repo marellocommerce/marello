@@ -1,0 +1,2 @@
+bundles:
+    - { name: Marello\Bundle\RMABundle\MarelloReturnBundle, priority: 40 }

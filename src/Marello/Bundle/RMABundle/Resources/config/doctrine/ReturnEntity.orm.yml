@@ -1,0 +1,86 @@
+Marello\Component\RMA\Entity\ReturnEntity:
+    type: entity
+    table: marello_return_return
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        returnNumber:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        order:
+            targetEntity: Marello\Component\Order\Entity\Order
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                order_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        workflowStep:
+            targetEntity: Oro\Bundle\WorkflowBundle\Entity\WorkflowStep
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                workflow_step_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+    oneToMany:
+        returnItems:
+            targetEntity: Marello\Component\RMA\Entity\ReturnItem
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: return
+            inversedBy: null
+            orphanRemoval: true
+            orderBy: null
+    oneToOne:
+        workflowItem:
+            targetEntity: Oro\Bundle\WorkflowBundle\Entity\WorkflowItem
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                workflow_item_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+    lifecycleCallbacks:
+        prePersist:
+            - prePersist
+        preUpdate:
+            - preUpdate

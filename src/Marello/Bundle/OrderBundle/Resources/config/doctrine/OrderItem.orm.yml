@@ -107,7 +107,7 @@ Marello\Component\Order\Entity\OrderItem:
             orphanRemoval: false
     oneToMany:
         returnItems:
-            targetEntity: Marello\Bundle\ReturnBundle\Entity\ReturnItem
+            targetEntity: Marello\Component\RMA\Entity\ReturnItem
             cascade: {  }
             fetch: LAZY
             mappedBy: orderItem

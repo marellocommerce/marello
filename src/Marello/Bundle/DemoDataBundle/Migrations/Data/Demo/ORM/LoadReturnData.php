@@ -5,9 +5,9 @@ namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Component\Order\Entity\OrderItem;
-use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
-use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Component\Order\Model\OrderItemInterface;
+use Marello\Component\RMA\Entity\ReturnEntity;
+use Marello\Component\RMA\Entity\ReturnItem;
 
 class LoadReturnData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -35,7 +35,7 @@ class LoadReturnData extends AbstractFixture implements DependentFixtureInterfac
 
             $return->setOrder($order);
 
-            $order->getItems()->map(function (OrderItem $item) use ($return) {
+            $order->getItems()->map(function (OrderItemInterface $item) use ($return) {
                 $returnItem = new ReturnItem($item);
                 $returnItem->setQuantity(rand(1, $item->getQuantity()));
 
