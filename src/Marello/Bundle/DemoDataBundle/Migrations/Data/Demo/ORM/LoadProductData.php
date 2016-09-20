@@ -11,13 +11,13 @@ use Marello\Component\Inventory\Entity\InventoryLog;
 use Marello\Component\Pricing\Entity\ProductPrice;
 use Marello\Component\Product\Entity\Product;
 use Marello\Component\Inventory\Model\WarehouseInterface;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 use Brick\Math\BigDecimal;
 
 class LoadProductData extends AbstractFixture implements DependentFixtureInterface
 {
-    /** @var Organization $defaultOrganization  */
+    /** @var OrganizationInterface $defaultOrganization  */
     protected $defaultOrganization;
 
     /** @var WarehouseInterface $defaultWarehouse */

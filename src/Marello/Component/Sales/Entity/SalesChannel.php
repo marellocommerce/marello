@@ -8,16 +8,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Component\Sales\ORM\Repository\SalesChannelRepository")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="marello_sales_sales_channel",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_sales_sales_channel_codeidx",
- *              columns={"code"}
- *          )
- *      }
- * )
  * @Oro\Config(
  *  routeName="marello_sales_saleschannel_index",
  *  routeView="marello_sales_saleschannel_view",
@@ -41,52 +31,36 @@ class SalesChannel implements SalesChannelInterface
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      */
     protected $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", nullable=false)
      */
     protected $code;
 
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=5, nullable=false)
      */
     protected $currency;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=false)
+     * @var bool
      */
     protected $active = true;
 
     /**
-     * @var boolean
-     * mark a channel as a default channel
-     * @ORM\Column(name="is_default", type="boolean", nullable=false)
+     * @var bool
      */
     protected $default = true;
 
     /**
      * @var OrganizationInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(nullable=false)
      */
     protected $owner;
 
@@ -95,36 +69,16 @@ class SalesChannel implements SalesChannelInterface
      * is used to pull data from any other source.
      *
      * @var string
-     *
-     * @ORM\Column(type="string")
      */
     protected $channelType = self::DEFAULT_TYPE;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
      */
     protected $createdAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
      */
     protected $updatedAt;
 
@@ -136,9 +90,6 @@ class SalesChannel implements SalesChannelInterface
         $this->name = $name;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function prePersist()
     {
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -148,9 +99,6 @@ class SalesChannel implements SalesChannelInterface
         $this->setUpdatedAt($now);
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

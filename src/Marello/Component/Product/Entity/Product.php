@@ -14,7 +14,6 @@ use Marello\Component\Product\Model\ProductPriceInterface;
 use Marello\Component\Product\Model\VariantInterface;
 use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Pricing\Entity\ProductChannelPrice;
@@ -25,21 +24,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 /**
  * Represents a Marello Product
  *
- * @ORM\Entity(repositoryClass="Marello\Component\Product\ORM\Repository\ProductRepository")
- * @ORM\Table(
- *      name="marello_product_product",
- *      indexes={
- *          @ORM\Index(name="idx_marello_product_created_at", columns={"created_at"}),
- *          @ORM\Index(name="idx_marello_product_updated_at", columns={"updated_at"})
- *      },
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_product_product_skuidx",
- *              columns={"sku"}
- *          )
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *  routeName="marello_product_index",
  *  routeView="marello_product_view",
@@ -60,10 +44,7 @@ class Product extends ExtendProduct implements ProductInterface
 {
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
+     * 
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -77,7 +58,6 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -91,7 +71,6 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="sku", type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -107,8 +86,6 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var ProductStatus
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Product\Entity\ProductStatus")
-     * @ORM\JoinColumn(name="product_status", referencedColumnName="name")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -122,7 +99,6 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -136,7 +112,6 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var BigDecimal
      *
-     * @ORM\Column(name="cost", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -148,10 +123,8 @@ class Product extends ExtendProduct implements ProductInterface
     protected $cost;
 
     /**
-     * @var Organization
+     * @var OrganizationInterface
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -164,65 +137,35 @@ class Product extends ExtendProduct implements ProductInterface
     protected $organization;
 
     /**
-     * @var ArrayCollection|ProductPrice[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Component\Pricing\Entity\ProductPrice",
-     *     mappedBy="product",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @var Collection|ProductPrice[]
      */
     protected $prices;
 
     /**
-     * @var ArrayCollection|ProductChannelPrice[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Component\Pricing\Entity\ProductChannelPrice",
-     *     mappedBy="product",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @var Collection|ProductChannelPrice[]
      */
     protected $channelPrices;
 
-    /**
-     * @var ArrayCollection
-     * unidirectional many-to-many
-     * @ORM\ManyToMany(targetEntity="Marello\Component\Sales\Entity\SalesChannel")
-     * @ORM\JoinTable(name="marello_product_saleschannel")
+    /**                
+     * Unidirectional many-to-many
+     * 
+     * @var Collection
      */
     protected $channels;
 
     /**
-     * @var Variant
-     *
-     * @ORM\ManyToOne(targetEntity="Variant", inversedBy="products")
-     * @ORM\JoinColumn(name="variant_id", referencedColumnName="id", onDelete="SET NULL")
+     * @var VariantInterface
      */
     protected $variant;
 
     /**
-     * @var ArrayCollection|InventoryItem[]
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="Marello\Component\Inventory\Entity\InventoryItem",
-     *      mappedBy="product",
-     *      cascade={"remove", "persist"},
-     *      orphanRemoval=true,
-     *      fetch="LAZY"
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @var Collection|InventoryItemInterface[]
      */
     protected $inventoryItems;
 
     /**
      * @var array $data
      *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -236,7 +179,6 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="created_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -253,7 +195,6 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var \DateTime $updatedAt
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -394,7 +335,7 @@ class Product extends ExtendProduct implements ProductInterface
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getChannelPrices()
     {
@@ -512,7 +453,7 @@ class Product extends ExtendProduct implements ProductInterface
     }
 
     /**
-     * @return Organization
+     * @return OrganizationInterface
      */
     public function getOrganization()
     {
@@ -589,17 +530,11 @@ class Product extends ExtendProduct implements ProductInterface
         return $this;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
     }
-
-    /**
-     * @ORM\PreUpdate
-     */
+    
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime();

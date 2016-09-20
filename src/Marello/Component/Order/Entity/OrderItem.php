@@ -13,6 +13,7 @@ use Marello\Component\Inventory\Entity\InventoryAllocation;
 use Marello\Component\Order\Model\OrderInterface;
 use Marello\Component\Order\Model\OrderItemInterface;
 use Marello\Component\Product\Model\ProductInterface;
+use Marello\Component\RMA\Model\ReturnItemInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 use Marello\Component\Order\Model\ExtendOrderItem;
@@ -20,62 +21,39 @@ use Marello\Component\RMA\Entity\ReturnItem;
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 
-/**
- * @ORM\Entity()
- * @Oro\Config()
- * @ORM\Table(name="marello_order_order_item")
- * @ORM\HasLifecycleCallbacks()
- * @JMS\ExclusionPolicy("ALL")
- */
 class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, CurrencyAwareInterface, OrderItemInterface
 {
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     *
+     * 
      * @JMS\Expose
      */
     protected $id;
 
     /**
-     * @var Product
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Product\Entity\Product")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     *
+     * @var ProductInterface
+     * 
      * @JMS\Expose
      */
     protected $product;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
     protected $productName;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_sku",type="string", nullable=false)
      */
     protected $productSku;
 
     /**
      * @var OrderInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Order\Entity\Order", inversedBy="items")
-     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $order;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="quantity",type="integer",nullable=false)
      *
      * @JMS\Expose
      */
@@ -84,8 +62,6 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     /**
      * @var BigDecimal
      *
-     * @ORM\Column(name="price",type="money")
-     *
      * @JMS\Expose
      */
     protected $price;
@@ -93,16 +69,13 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     /**
      * @var BigDecimal
      *
-     * @ORM\Column(name="tax",type="money")
-     *
      * @JMS\Expose
      */
     protected $tax;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="tax_percent", type="percent", nullable=true)
+     * 
      * @JMS\Expose
      */
     protected $taxPercent;
@@ -110,7 +83,6 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     /**
      * @var float
      *
-     * @ORM\Column(name="discount_percent", type="percent", nullable=true)
      * @JMS\Expose
      */
     protected $discountPercent;
@@ -118,7 +90,6 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     /**
      * @var BigDecimal
      *
-     * @ORM\Column(name="discount_amount", type="money", nullable=true)
      * @JMS\Expose
      */
     protected $discountAmount;
@@ -126,27 +97,17 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     /**
      * @var BigDecimal
      *
-     * @ORM\Column(name="total_price",type="money", nullable=false)
-     *
      * @JMS\Expose
      */
     protected $totalPrice;
 
     /**
-     * @var ReturnItem[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="Marello\Component\RMA\Entity\ReturnItem", mappedBy="orderItem", cascade={})
+     * @var ReturnItemInterface[]|Collection
      */
     protected $returnItems;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Component\Inventory\Entity\InventoryAllocation",
-     *     mappedBy="targetOrderItem",
-     *     cascade={}
-     * )
-     *
-     * @var InventoryAllocation[]|Collection
+     * @var InventoryAllocationInterface[]|Collection
      */
     protected $inventoryAllocations;
 
@@ -159,9 +120,6 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
         $this->inventoryAllocations = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function prePersist()
     {
         $this->productName = $this->product->getName();

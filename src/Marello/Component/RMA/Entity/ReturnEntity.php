@@ -14,9 +14,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 /**
- * @ORM\Entity()
- * @ORM\Table(name="marello_return_return")
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config()
  */
 class ReturnEntity extends ExtendReturnEntity implements ReturnEntityInterface
@@ -24,60 +21,37 @@ class ReturnEntity extends ExtendReturnEntity implements ReturnEntityInterface
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
      * @var OrderInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Order\Entity\Order")
      */
     protected $order;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", nullable=true)
      */
     protected $returnNumber;
 
     /**
-     * @var Collection|ReturnItem[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Component\RMA\Entity\ReturnItem",
-     *     mappedBy="return",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn
+     * @var Collection|ReturnItemInterface[]
      */
     protected $returnItems;
 
     /**
      * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowItem;
 
     /**
      * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -91,7 +65,6 @@ class ReturnEntity extends ExtendReturnEntity implements ReturnEntityInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -112,17 +85,12 @@ class ReturnEntity extends ExtendReturnEntity implements ReturnEntityInterface
 
     /**
      * Copies product sku and name to attributes within this return item.
-     *
-     * @ORM\PrePersist
      */
     public function prePersist()
     {
         $this->createdAt = $this->updatedAt = new \DateTime();
     }
-
-    /**
-     * @ORM\PreUpdate
-     */
+    
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime();

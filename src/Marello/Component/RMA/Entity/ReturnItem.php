@@ -10,49 +10,33 @@ use Marello\Component\RMA\Model\ReturnItemInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
- * @ORM\Entity()
- * @ORM\Table(name="marello_return_item")
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config()
  */
 class ReturnItem extends ExtendReturnItem implements ReturnItemInterface
 {
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
      * @var ReturnEntityInterface
-     *
-     * @ORM\ManyToOne(targetEntity="ReturnEntity", inversedBy="returnItems")
-     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $return;
 
     /**
      * @var OrderItemInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Order\Entity\OrderItem")
-     * @ORM\JoinColumn
      */
     protected $orderItem;
 
     /**
      * @var int
-     *
-     * @ORM\Column(type="integer")
      */
     protected $quantity;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -66,7 +50,6 @@ class ReturnItem extends ExtendReturnItem implements ReturnItemInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -89,17 +72,12 @@ class ReturnItem extends ExtendReturnItem implements ReturnItemInterface
 
     /**
      * Copies product sku and name to attributes within this return item.
-     *
-     * @ORM\PrePersist
      */
     public function prePersist()
     {
         $this->createdAt = $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime();

@@ -13,15 +13,12 @@ use Marello\Component\Order\Model\OrderInterface;
 use Marello\Component\Order\Model\OrderItemInterface;
 use Marello\Component\Pricing\Model\PriceInterface;
 use Marello\Component\Sales\Model\SalesChannelInterface;
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Component\Order\ORM\Repository\OrderRepository")
  * @Oro\Config(
  *      defaultValues={
  *          "entity"={
@@ -40,145 +37,102 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  *          }
  *      }
  * )
- * @ORM\Table(
- *      name="marello_order_order",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"order_reference", "saleschannel_id"})
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
  */
 class Order extends ExtendOrder implements OrderInterface
 {
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="order_number",type="string", unique=true, nullable=true)
      */
     protected $orderNumber;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="order_reference",type="string", nullable=true)
      */
     protected $orderReference;
 
     /**
      * @var BigDecimal
-     *
-     * @ORM\Column(name="subtotal",type="money")
      */
     protected $subtotal = 0;
 
     /**
      * @var BigDecimal
-     *
-     * @ORM\Column(name="total_tax",type="money")
      */
     protected $totalTax = 0;
 
     /**
      * @var BigDecimal
-     *
-     * @ORM\Column(name="grand_total",type="money")
      */
     protected $grandTotal = 0;
 
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      */
     protected $currency;
 
     /**
      * @var string
-     * @ORM\Column(name="payment_method", type="string", length=255, nullable=true)
      */
     protected $paymentMethod;
 
     /**
      * @var string
-     * @ORM\Column(name="payment_reference", type="string", length=255, nullable=true)
      */
     protected $paymentReference;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="payment_details", type="text", nullable=true)
      */
     protected $paymentDetails;
 
     /**
      * @var BigDecimal
-     *
-     * @ORM\Column(name="shipping_amount", type="money", nullable=true)
      */
     protected $shippingAmount;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="shipping_method", type="string", nullable=true)
      */
     protected $shippingMethod;
 
     /**
      * @var BigDecimal
-     *
-     * @ORM\Column(name="discount_amount", type="money", nullable=true)
      */
     protected $discountAmount;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="discount_percent", type="percent", nullable=true)
      */
     protected $discountPercent;
 
     /**
      * @var string
-     * @ORM\Column(name="coupon_code", type="string", length=255, nullable=true)
      */
     protected $couponCode;
 
     /**
-     * @var Collection|OrderItem[]
-     *
-     * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"persist"}, orphanRemoval=true)
-     * @ORM\OrderBy({"id" = "ASC"})
+     * @var Collection|OrderItemInterface[]
      */
     protected $items;
 
     /**
-     * @var AbstractAddress
-     *
-     * @ORM\OneToOne(targetEntity="Marello\Component\Address\Entity\Address", cascade={"persist", "remove"})
+     * @var AddressInterface
      */
     protected $billingAddress;
 
     /**
-     * @var AbstractAddress
-     *
-     * @ORM\OneToOne(targetEntity="Marello\Component\Address\Entity\Address", cascade={"persist", "remove"})
+     * @var AddressInterface
      */
     protected $shippingAddress;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -192,7 +146,6 @@ class Order extends ExtendOrder implements OrderInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -205,47 +158,31 @@ class Order extends ExtendOrder implements OrderInterface
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="invoiced_at", type="datetime", nullable=true)
      */
     protected $invoicedAt;
 
     /**
-     * @var SalesChannel
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Component\Sales\Entity\SalesChannel")
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
+     * @var SalesChannelInterface
      */
     protected $salesChannel;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="saleschannel_name",type="string", nullable=false)
      */
     protected $salesChannelName;
 
     /**
      * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowItem;
 
     /**
      * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
 
     /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", nullable=false)
+     * @var OrganizationInterface
      */
     protected $organization;
 
@@ -262,17 +199,11 @@ class Order extends ExtendOrder implements OrderInterface
         $this->shippingAddress = $shippingAddress;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function prePersist()
     {
         $this->createdAt        = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

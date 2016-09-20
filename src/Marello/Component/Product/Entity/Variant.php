@@ -12,9 +12,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 /**
  * Represents a Marello Variant Product
  *
- * @ORM\Entity()
- * @ORM\Table(name="marello_product_variant")
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *  routeName="marello_product_index",
  *  routeView="marello_product_view",
@@ -31,17 +28,11 @@ class Variant implements VariantInterface
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="variant_code", type="string", nullable=true, unique=true)
      */
     protected $variantCode;
 
@@ -49,16 +40,12 @@ class Variant implements VariantInterface
      * @see \Marello\Bundle\InventoryBundle\Form\Type\ProductInventoryType
      *
      * @var Collection|ProductInterface[] $products
-     *
-     * @ORM\OneToMany(targetEntity="Product", cascade={"persist"}, mappedBy="variant")
-     * @ORM\JoinTable(name="marello_product_to_variant")
      */
     protected $products;
 
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="created_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -72,7 +59,6 @@ class Variant implements VariantInterface
     /**
      * @var \DateTime $updatedAt
      *
-     * @ORM\Column(name="updated_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -189,22 +175,12 @@ class Variant implements VariantInterface
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * Pre persist event handler
-     *
-     * @ORM\PrePersist
-     */
     public function prePersist()
     {
         $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $this->updatedAt = clone $this->createdAt;
     }
 
-    /**
-     * Pre update event handler
-     *
-     * @ORM\PreUpdate
-     */
     public function preUpdate()
     {
         $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));

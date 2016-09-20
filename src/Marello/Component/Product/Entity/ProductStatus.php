@@ -12,8 +12,6 @@ use Marello\Component\Product\Model\ProductStatusInterface;
  * Class ProductStatus
  * @package Marello\Component\Product\Entity
  *
- * @ORM\Entity
- * @ORM\Table(name="marello_product_product_status")
  * @Oro\Config(
  *      defaultValues={
  *          "grouping"={
@@ -25,8 +23,6 @@ use Marello\Component\Product\Model\ProductStatusInterface;
 class ProductStatus implements ProductStatusInterface
 {
     /**
-     * @ORM\Column(name="name", type="string", length=32)
-     * @ORM\Id
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -38,7 +34,7 @@ class ProductStatus implements ProductStatusInterface
     protected $name;
 
     /**
-     * @ORM\Column(name="label", type="string", length=255, unique=true)
+     * @var string
      */
     protected $label;
 
