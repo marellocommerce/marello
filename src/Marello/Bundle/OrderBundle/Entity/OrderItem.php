@@ -17,7 +17,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 use Marello\Bundle\OrderBundle\Model\ExtendOrderItem;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
-use Marello\Component\Pricing\CurrencyAwareInterface;
+use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
 
 /**

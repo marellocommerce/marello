@@ -2,7 +2,7 @@
 
 namespace Marello\Component\Sales;
 
-use Marello\Component\Pricing\CurrencyAwareInterface;
+use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 interface SalesChannelInterface extends CurrencyAwareInterface

@@ -1,12 +1,12 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Entity\Repository;
+namespace Marello\Component\Pricing\ORM\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
+use Marello\Component\Pricing\Entity\ProductChannelPrice;
 
-class ProductChannelPriceRepository extends EntityRepository
+class ProductChannelPriceRepository extends EntityRepository implements ProductChannelPriceRepositoryInterface
 {
     /**
      * Return product prices for specified channel and productId

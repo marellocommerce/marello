@@ -13,7 +13,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Provider\ChannelProvider;
-use Marello\Component\Pricing\PricingAwareInterface;
+use Marello\Component\Pricing\Model\PricingAwareInterface;
 
 class ChannelPricingSubscriber implements EventSubscriberInterface
 {

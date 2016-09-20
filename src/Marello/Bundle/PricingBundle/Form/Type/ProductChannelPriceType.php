@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\PricingBundle\Form\Type;
 
-use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
+use Marello\Component\Pricing\Entity\ProductChannelPrice;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

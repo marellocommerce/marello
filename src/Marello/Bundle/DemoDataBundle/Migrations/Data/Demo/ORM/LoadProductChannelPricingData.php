@@ -6,8 +6,8 @@ use Brick\Math\BigDecimal;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
-use Marello\Component\Pricing\PricingAwareInterface;
+use Marello\Component\Pricing\Entity\ProductChannelPrice;
+use Marello\Component\Pricing\Model\PricingAwareInterface;
 
 class LoadProductChannelPricingData extends AbstractFixture implements DependentFixtureInterface
 {

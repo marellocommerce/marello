@@ -1,65 +1,36 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Entity;
+namespace Marello\Component\Pricing\Entity;
 
 use Brick\Math\BigDecimal;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Component\Pricing\PriceInterface;
+use Marello\Component\Pricing\Model\PriceInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
-/**
- * @ORM\MappedSuperclass
- */
 class BasePrice implements PriceInterface
 {
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      */
     protected $id;
 
     /**
      * @var BigDecimal
-     *
-     * @ORM\Column(name="value", type="money")
      */
     protected $value;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="currency", type="string", length=3)
      */
     protected $currency;
 
     /**
      * @var \DateTime $createdAt
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
      */
     protected $createdAt;
 
     /**
      * @var \DateTime $updatedAt
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
      */
     protected $updatedAt;
 
@@ -80,7 +51,7 @@ class BasePrice implements PriceInterface
     }
 
     /**
-     * @param BigDecimal|string $value
+     * @param BigDecimal $value
      * @return $this
      */
     public function setValue(BigDecimal $value)

@@ -6,9 +6,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Marello\Bundle\PricingBundle\Entity\ProductPrice;
-use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
-use Marello\Component\Pricing\PricingAwareInterface;
+use Marello\Component\Pricing\Entity\ProductPrice;
+use Marello\Component\Pricing\ORM\Provider\CurrencyProvider;
+use Marello\Component\Pricing\Model\PricingAwareInterface;
 use Marello\Component\Sales\SalesChannelAwareInterface;
 
 class PricingSubscriber implements EventSubscriberInterface

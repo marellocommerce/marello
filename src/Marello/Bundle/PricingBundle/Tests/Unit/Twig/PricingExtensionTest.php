@@ -3,7 +3,7 @@
 namespace Marello\Bundle\PricingBundle\Tests\Unit\Twig;
 
 use Marello\Bundle\PricingBundle\Twig\PricingExtension;
-use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
+use Marello\Component\Pricing\ORM\Provider\CurrencyProvider;
 
 class PricingExtensionTest extends \PHPUnit_Framework_TestCase
 {

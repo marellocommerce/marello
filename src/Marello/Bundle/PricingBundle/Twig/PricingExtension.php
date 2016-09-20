@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\PricingBundle\Twig;
 
-use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
+use Marello\Component\Pricing\ORM\Provider\CurrencyProvider;
 
 class PricingExtension extends \Twig_Extension
 {

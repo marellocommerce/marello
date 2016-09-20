@@ -11,7 +11,7 @@ use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Component\Address\AddressInterface;
 use Marello\Component\Order\OrderInterface;
 use Marello\Component\Order\OrderItemInterface;
-use Marello\Component\Pricing\PriceInterface;
+use Marello\Component\Pricing\Model\PriceInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;

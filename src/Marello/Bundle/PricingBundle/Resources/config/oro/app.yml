@@ -1,4 +1,4 @@
 doctrine:
     dbal:
         types:
-            money: Marello\Bundle\PricingBundle\ORM\Type\MoneyType
+            money: Marello\Component\Pricing\ORM\Type\MoneyType

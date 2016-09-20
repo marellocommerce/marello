@@ -11,7 +11,7 @@
  * Copyright (c) 2004-2015 Fabien Potencier. All right reserved.
  */
 
-namespace Marello\Bundle\PricingBundle\Validator;
+namespace Marello\Component\Pricing\Validator;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\Validator\Constraint;
@@ -20,8 +20,8 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\ConstraintDefinitionException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use Marello\Bundle\PricingBundle\Validator\Constraints\UniqueEntityCollection;
-use Marello\Bundle\PricingBundle\Validator\Exception\InvalidMethodException;
+use Marello\Component\Pricing\Validator\Constraints\UniqueEntityCollection;
+use Marello\Component\Pricing\Validator\Exception\InvalidMethodException;
 
 class UniqueEntityCollectionValidator extends ConstraintValidator
 {

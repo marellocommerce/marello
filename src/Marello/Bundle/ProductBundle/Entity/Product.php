@@ -17,8 +17,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
-use Marello\Bundle\PricingBundle\Entity\ProductPrice;
+use Marello\Component\Pricing\Entity\ProductChannelPrice;
+use Marello\Component\Pricing\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Model\ExtendProduct;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
@@ -167,7 +167,7 @@ class Product extends ExtendProduct implements ProductInterface
      * @var ArrayCollection|ProductPrice[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductPrice",
+     *     targetEntity="Marello\Component\Pricing\Entity\ProductPrice",
      *     mappedBy="product",
      *     cascade={"persist"},
      *     orphanRemoval=true
@@ -180,7 +180,7 @@ class Product extends ExtendProduct implements ProductInterface
      * @var ArrayCollection|ProductChannelPrice[]
      *
      * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductChannelPrice",
+     *     targetEntity="Marello\Component\Pricing\Entity\ProductChannelPrice",
      *     mappedBy="product",
      *     cascade={"persist"},
      *     orphanRemoval=true

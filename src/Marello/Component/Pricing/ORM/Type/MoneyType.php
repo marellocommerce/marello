@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Marello\Bundle\PricingBundle\ORM\Type;
+namespace Marello\Component\Pricing\ORM\Type;
 
 use Oro\DBAL\Types\MoneyType as OroMoneyType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;

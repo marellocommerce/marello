@@ -8,7 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\PricingBundle\Entity\ProductPrice;
+use Marello\Component\Pricing\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Component\Inventory\WarehouseInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;

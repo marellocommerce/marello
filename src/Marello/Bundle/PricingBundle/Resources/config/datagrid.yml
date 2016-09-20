@@ -8,7 +8,7 @@ datagrid:
                     - productPrice.currency
                     - productPrice.value as price
                 from:
-                    - { table: Marello\Bundle\PricingBundle\Entity\ProductPrice, alias: productPrice }
+                    - { table: Marello\Component\Pricing\Entity\ProductPrice, alias: productPrice }
                 where:
                     and:
                         - productPrice.product = :productId
@@ -44,7 +44,7 @@ datagrid:
                     - productChannelPrice.currency
                     - productChannelPrice.value as price
                 from:
-                    - { table: Marello\Bundle\PricingBundle\Entity\ProductChannelPrice, alias: productChannelPrice }
+                    - { table: Marello\Component\Pricing\Entity\ProductChannelPrice, alias: productChannelPrice }
                 join:
                     left:
                         - { join: productChannelPrice.channel, alias: salesChannel }

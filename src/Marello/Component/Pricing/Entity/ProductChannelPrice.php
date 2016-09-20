@@ -1,26 +1,17 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Entity;
+namespace Marello\Component\Pricing\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Product\ProductChannelPriceInterface;
 use Marello\Component\Product\ProductInterface;
-use Marello\Component\Product\ProductPriceInterface;
+use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
  * Represents a Marello ProductPrice
  *
- * @ORM\Entity()
- * @ORM\Table(
- *      name="marello_product_price",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_product_price_uidx",
- *              columns={"product_id", "currency"}
- *          )
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *  defaultValues={
  *      "entity"={"icon"="icon-usd"},
@@ -31,15 +22,17 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *  }
  * )
  */
-class ProductPrice extends BasePrice implements ProductPriceInterface
+class ProductChannelPrice extends BasePrice implements ProductChannelPriceInterface
 {
     /**
      * @var ProductInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="prices")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     **/
+     */
     protected $product;
+
+    /**
+     * @var SalesChannelInterface
+     */
+    protected $channel;
 
     /**
      * @return ProductInterface
@@ -51,7 +44,8 @@ class ProductPrice extends BasePrice implements ProductPriceInterface
 
     /**
      * @param ProductInterface $product
-     * @return ProductPriceInterface
+     *
+     * @return $this
      */
     public function setProduct(ProductInterface $product)
     {
@@ -61,16 +55,30 @@ class ProductPrice extends BasePrice implements ProductPriceInterface
     }
 
     /**
-     * @ORM\PrePersist
+     * @return SalesChannel
      */
+    public function getChannel()
+    {
+        return $this->channel;
+    }
+
+    /**
+     * @param SalesChannelInterface $channel
+     *
+     * @return $this
+     */
+    public function setChannel(SalesChannelInterface $channel)
+    {
+        $this->channel = $channel;
+
+        return $this;
+    }
+
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime();

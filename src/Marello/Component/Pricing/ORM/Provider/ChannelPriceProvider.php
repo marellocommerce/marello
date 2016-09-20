@@ -1,12 +1,12 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Provider;
+namespace Marello\Component\Pricing\ORM\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 
-use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
-use Marello\Bundle\PricingBundle\Entity\ProductPrice;
+use Marello\Component\Pricing\Entity\ProductChannelPrice;
+use Marello\Component\Pricing\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 

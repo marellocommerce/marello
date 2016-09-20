@@ -1,0 +1,67 @@
+Marello\Component\Pricing\Entity\ProductPrice:
+    type: entity
+    table: marello_product_price
+    uniqueConstraints:
+        marello_product_price_uidx:
+            columns:
+                - product_id
+                - currency
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        value:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        currency:
+            type: string
+            scale: 0
+            length: 3
+            unique: false
+            nullable: false
+            precision: 0
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: created_at
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: updated_at
+    manyToOne:
+        product:
+            targetEntity: Marello\Bundle\ProductBundle\Entity\Product
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: prices
+            joinColumns:
+                product_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+            orphanRemoval: false
+    lifecycleCallbacks:
+        prePersist:
+            - prePersist
+        preUpdate:
+            - preUpdate
