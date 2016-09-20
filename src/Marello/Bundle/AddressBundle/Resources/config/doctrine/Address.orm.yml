@@ -1,0 +1,156 @@
+Marello\Component\Address\Entity\Address:
+    type: entity
+    table: marello_address
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        email:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+        phone:
+            type: string
+            scale: 0
+            length: 32
+            unique: false
+            nullable: true
+            precision: 0
+        label:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+        street:
+            type: string
+            scale: 0
+            length: 500
+            unique: false
+            nullable: true
+            precision: 0
+        street2:
+            type: string
+            scale: 0
+            length: 500
+            unique: false
+            nullable: true
+            precision: 0
+        city:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+        postalCode:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: postal_code
+        organization:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+        regionText:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: region_text
+        namePrefix:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: name_prefix
+        firstName:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: first_name
+        middleName:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: middle_name
+        lastName:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: last_name
+        nameSuffix:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: name_suffix
+        created:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        updated:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        country:
+            targetEntity: Oro\Bundle\AddressBundle\Entity\Country
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                country_code:
+                    referencedColumnName: iso2_code
+            orphanRemoval: false
+        region:
+            targetEntity: Oro\Bundle\AddressBundle\Entity\Region
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                region_code:
+                    referencedColumnName: combined_code
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -20,7 +20,7 @@ class ProductApiType extends AbstractType
             ->add('name')
             ->add('sku')
             ->add('status', 'entity', [
-                'class' => 'Marello\Bundle\ProductBundle\Entity\ProductStatus',
+                'class' => 'Marello\Component\Product\Entity\ProductStatus',
             ])
             ->add('prices')
             ->add('channels')
@@ -40,7 +40,7 @@ class ProductApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class'         => 'Marello\Bundle\ProductBundle\Entity\Product',
+                'data_class'         => 'Marello\Component\Product\Entity\Product',
                 'cascade_validation' => true,
                 'csrf_protection'    => false,
             ]

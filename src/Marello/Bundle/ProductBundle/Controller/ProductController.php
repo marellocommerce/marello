@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 
 use Oro\Bundle\SecurityBundle\Annotation as Security;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 
 class ProductController extends Controller
 {

@@ -1,0 +1,75 @@
+Marello\Component\RMA\Entity\ReturnItem:
+    type: entity
+    table: marello_return_item
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        quantity:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        return:
+            targetEntity: Marello\Component\RMA\Entity\ReturnEntity
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: returnItems
+            joinColumns:
+                return_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+            orphanRemoval: false
+        orderItem:
+            targetEntity: Marello\Component\Order\Entity\OrderItem
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                orderItem_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        reason:
+            targetEntity: Extend\Entity\EV_Marello_Return_Reason
+            cascade:
+                - detach
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                reason_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+    lifecycleCallbacks:
+        prePersist:
+            - prePersist
+        preUpdate:
+            - preUpdate

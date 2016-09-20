@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 
 class ProductInventoryType extends AbstractType
 {
@@ -45,7 +45,7 @@ class ProductInventoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'         => 'Marello\Bundle\ProductBundle\Entity\Product',
+            'data_class'         => 'Marello\Component\Product\Entity\Product',
             'cascade_validation' => true,
             'include_variants'   => true,
         ]);

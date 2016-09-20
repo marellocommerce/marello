@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\InventoryBundle\Controller;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Model\ProductInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +19,7 @@ class InventoryController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => 'Marello\Bundle\InventoryBundle\Entity\InventoryItem',
+            'entity_class' => 'Marello\Component\Inventory\Entity\InventoryItem',
         ];
     }
 
@@ -27,11 +27,11 @@ class InventoryController extends Controller
      * @Config\Route("/view/{id}", requirements={"id"="\d+"})
      * @Config\Template
      *
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return array
      */
-    public function viewAction(Product $product)
+    public function viewAction(ProductInterface $product)
     {
         return [
             'entity' => $product,
@@ -42,11 +42,11 @@ class InventoryController extends Controller
      * @Config\Route("/update/{id}", requirements={"id"="\d+"})
      * @Config\Template
      *
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return array|RedirectResponse
      */
-    public function updateAction(Product $product)
+    public function updateAction(ProductInterface $product)
     {
         $handler = $this->get('marello_inventory.form.handler.product_inventory');
 
@@ -74,11 +74,11 @@ class InventoryController extends Controller
      * @Config\Route("/widget/info/{id}", name="marello_inventory_widget_info", requirements={"id"="\d+"})
      * @Config\Template
      *
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return array
      */
-    public function infoAction(Product $product)
+    public function infoAction(ProductInterface $product)
     {
         $item = $product->getInventoryItems()->first();
 

@@ -9,7 +9,7 @@ items:
         acl:        marello_inventory_product_stock_modify
     marello_inventory_log_chart_item:
         action:     MarelloInventoryBundle:InventoryLog:chart
-        applicable: true
+        applicable: 'Empty'
 placeholders:
     marello_inventory_log_chart:
         items:

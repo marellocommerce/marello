@@ -2,11 +2,12 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Brick\Math\BigDecimal;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
-use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
+use Marello\Component\Pricing\Entity\ProductChannelPrice;
+use Marello\Component\Pricing\Model\PricingAwareInterface;
 
 class LoadProductChannelPricingData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -80,7 +81,7 @@ class LoadProductChannelPricingData extends AbstractFixture implements Dependent
         $product->setData($productData);
         $productChannelPrice->setProduct($product);
         $productChannelPrice->setCurrency($channel->getCurrency());
-        $productChannelPrice->setValue((float)$data['price']);
+        $productChannelPrice->setValue(BigDecimal::of($data['price']));
         $productChannelPrice->setChannel($channel);
         $this->manager->persist($product);
         $this->manager->persist($productChannelPrice);

@@ -1,0 +1,306 @@
+<?php
+
+namespace Marello\Component\Inventory\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Marello\Component\Product\Entity\Product;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Inventory\Model\InventoryLogInterface;
+use Marello\Component\Inventory\Model\WarehouseInterface;
+use Marello\Component\Product\Model\ProductInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+
+/**
+ * @Oro\Config(
+ *      defaultValues={
+ *          "security"={
+ *              "type"="ACL",
+ *              "permissions"="VIEW;EDIT",
+ *              "group_name"=""
+ *          }
+ *      }
+ * )
+ */
+class InventoryItem implements InventoryItemInterface
+{
+    const MODIFY_OPERATOR_INCREASE = 'increase';
+    const MODIFY_OPERATOR_DECREASE = 'decrease';
+
+    /**
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     *
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=10,
+     *              "full"=true,
+     *          }
+     *      }
+     * )
+     *
+     * @var Product
+     */
+    protected $product;
+
+    /**
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     *
+     * @var Warehouse
+     */
+    protected $warehouse;
+
+    /**
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=20,
+     *              "header"="Total Stock"
+     *          }
+     *      }
+     * )
+     *
+     * @var int
+     */
+    protected $quantity = 0;
+
+    /**
+     * @var int
+     */
+    protected $allocatedQuantity = 0;
+
+    /**
+     * @var Collection|InventoryLogInterface[]
+     */
+    protected $inventoryLogs;
+
+    /**
+     * @var Collection|InventoryAllocation[]
+     */
+    protected $allocations;
+
+    /**
+     * InventoryItem constructor.
+     */
+    public function __construct()
+    {
+        $this->inventoryLogs = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return InventoryItem
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * @param ProductInterface $product
+     *
+     * @return $this
+     */
+    public function setProduct(ProductInterface $product = null)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * @return Warehouse
+     */
+    public function getWarehouse()
+    {
+        return $this->warehouse;
+    }
+
+    /**
+     * @param WarehouseInterface $warehouse
+     *
+     * @return $this
+     */
+    public function setWarehouse(WarehouseInterface $warehouse = null)
+    {
+        $this->warehouse = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
+    }
+
+    /**
+     * @param int $quantity
+     *
+     * @return $this
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @param int $amount
+     *
+     * @deprecated
+     *
+     * @return $this
+     */
+    public function modifyQuantity($amount)
+    {
+        $this->quantity += $amount;
+
+        return $this;
+    }
+
+    /**
+     * @param int $amount
+     *
+     * @return $this
+     */
+    public function increaseQuantity($amount)
+    {
+        $this->quantity += $amount;
+
+        return $this;
+    }
+
+    /**
+     * @param int $amount
+     *
+     * @return $this
+     */
+    public function decreaseQuantity($amount)
+    {
+        $this->quantity -= $amount;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getInventoryLogs()
+    {
+        return $this->inventoryLogs;
+    }
+
+    /**
+     * @param InventoryLogInterface $log
+     *
+     * @return $this
+     */
+    public function addInventoryLog(InventoryLogInterface $log)
+    {
+        $this->inventoryLogs->add($log);
+
+        return $this;
+    }
+
+    /**
+     * @param InventoryLogInterface $log
+     *
+     * @return $this
+     */
+    public function removeInventoryLog(InventoryLogInterface $log)
+    {
+        $this->inventoryLogs->removeElement($log);
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAllocatedQuantity()
+    {
+        return $this->allocatedQuantity;
+    }
+
+    /**
+     * @param mixed $allocatedQuantity
+     *
+     * @return $this
+     */
+    public function setAllocatedQuantity($allocatedQuantity)
+    {
+        $this->allocatedQuantity = $allocatedQuantity;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $amount
+     *
+     * @return $this
+     */
+    public function modifyAllocatedQuantity($amount)
+    {
+        $this->allocatedQuantity += $amount;
+
+        return $this;
+    }
+
+    /**
+     * @return InventoryAllocation[]|Collection
+     */
+    public function getAllocations()
+    {
+        return $this->allocations;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVirtualQuantity()
+    {
+        return $this->quantity - $this->allocatedQuantity;
+    }
+}

@@ -5,7 +5,7 @@ namespace Marello\Bundle\ProductBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Marello\Bundle\ProductBundle\Entity\ProductStatus;
+use Marello\Component\Product\Entity\ProductStatus;
 
 class LoadProductStatusData extends AbstractFixture
 {

@@ -2,21 +2,21 @@
 
 namespace Marello\Bundle\PricingBundle\Form\EventListener;
 
+use Marello\Component\Pricing\ORM\Provider\CurrencyProviderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Marello\Bundle\PricingBundle\Entity\ProductPrice;
-use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
-use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
-use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Component\Pricing\Entity\ProductPrice;
+use Marello\Component\Pricing\Model\PricingAwareInterface;
+use Marello\Component\Sales\Model\SalesChannelAwareInterface;
 
 class PricingSubscriber implements EventSubscriberInterface
 {
-    /** @var CurrencyProvider $provider */
+    /** @var CurrencyProviderInterface $provider */
     protected $provider;
 
-    public function __construct(CurrencyProvider $provider)
+    public function __construct(CurrencyProviderInterface $provider)
     {
         $this->provider = $provider;
     }

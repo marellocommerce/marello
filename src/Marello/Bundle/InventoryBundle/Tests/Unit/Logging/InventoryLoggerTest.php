@@ -5,9 +5,11 @@ namespace Marello\Bundle\InventoryBundle\Tests\Unit\Logging;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
+use Marello\Component\Inventory\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryLog;
+use Marello\Component\Inventory\Logging\InventoryLogger;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
+use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Prophecy\Argument;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
@@ -26,7 +28,7 @@ class InventoryLoggerTest extends TestCase
     /** @var \Prophecy\Prophecy\ObjectProphecy */
     protected $storage;
 
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $logger;
 
     /**
@@ -82,7 +84,7 @@ class InventoryLoggerTest extends TestCase
         /*
          * Call tested method...
          */
-        $this->logger->directLog(new InventoryItem(), 'test', function (InventoryLog $log) {
+        $this->logger->directLog(new InventoryItem(), 'test', function (InventoryLogInterface $log) {
             $log->setNewQuantity(10); // Set new quantity to 10 (log increase of 10).
         });
     }
@@ -103,7 +105,7 @@ class InventoryLoggerTest extends TestCase
         /*
          * Call tested method...
          */
-        $this->logger->directLog(new InventoryItem(), 'test', function (InventoryLog $log) {
+        $this->logger->directLog(new InventoryItem(), 'test', function (InventoryLogInterface $log) {
             // No change ...
         });
     }

@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\InventoryBundle\Tests\Functional\Entity\Repository;
 
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
+use Marello\Component\Inventory\ORM\Repository\WarehouseRepository;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**

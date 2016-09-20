@@ -1,0 +1,249 @@
+Marello\Component\Order\Entity\Order:
+    type: entity
+    table: marello_order_order
+    repositoryClass: Marello\Component\Order\ORM\Repository\OrderRepository
+    uniqueConstraints:
+        -
+            columns:
+                - order_reference
+                - saleschannel_id
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        orderNumber:
+            type: string
+            scale: 0
+            length: null
+            unique: true
+            nullable: true
+            precision: 0
+            column: order_number
+        orderReference:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: order_reference
+        subtotal:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        totalTax:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: total_tax
+        grandTotal:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: grand_total
+        currency:
+            type: string
+            scale: 0
+            length: 10
+            unique: false
+            nullable: true
+            precision: 0
+        paymentMethod:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: payment_method
+        paymentReference:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: payment_reference
+        paymentDetails:
+            type: text
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: payment_details
+        shippingAmount:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: shipping_amount
+        shippingMethod:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: shipping_method
+        discountAmount:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: discount_amount
+        discountPercent:
+            type: percent
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: discount_percent
+        couponCode:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+            column: coupon_code
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: created_at
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: updated_at
+        invoicedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: invoiced_at
+        salesChannelName:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: saleschannel_name
+    oneToMany:
+        items:
+            targetEntity: Marello\Component\Order\Entity\OrderItem
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: order
+            inversedBy: null
+            orphanRemoval: true
+            orderBy:
+                id: ASC
+    oneToOne:
+        billingAddress:
+            targetEntity: Marello\Component\Address\Entity\Address
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                billingAddress_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        shippingAddress:
+            targetEntity: Marello\Component\Address\Entity\Address
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                shippingAddress_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        workflowItem:
+            targetEntity: Oro\Bundle\WorkflowBundle\Entity\WorkflowItem
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                workflow_item_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+    manyToOne:
+        salesChannel:
+            targetEntity: Marello\Component\Sales\Entity\SalesChannel
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                salesChannel_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+        workflowStep:
+            targetEntity: Oro\Bundle\WorkflowBundle\Entity\WorkflowStep
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                workflow_step_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+        organization:
+            targetEntity: Oro\Bundle\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks:
+        preUpdate:
+            - preUpdate
+        prePersist:
+            - prePersist

@@ -1,4 +1,4 @@
-Marello\Bundle\SalesBundle\Entity\SalesChannel:
+Marello\Component\Sales\Entity\SalesChannel:
     alias:                          marello_saleschannels
     title_fields:                   [name]
     route:

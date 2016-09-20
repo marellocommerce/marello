@@ -4,14 +4,16 @@ namespace Marello\Bundle\PricingBundle\Form\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use Marello\Component\Product\Model\ProductInterface;
+use Marello\Component\Sales\Provider\ChannelProviderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\SalesBundle\Provider\ChannelProvider;
-use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
+use Marello\Component\Product\Entity\Product;
+use Marello\Component\Sales\ORM\Provider\ChannelProvider;
+use Marello\Component\Pricing\Model\PricingAwareInterface;
 
 class ChannelPricingSubscriber implements EventSubscriberInterface
 {
@@ -28,9 +30,9 @@ class ChannelPricingSubscriber implements EventSubscriberInterface
      * ChannelPricingSubscriber constructor.
      * @param EntityManager $em
      * @param string $interface
-     * @param ChannelProvider $provider
+     * @param ChannelProviderInterface $provider
      */
-    public function __construct(EntityManager $em, $interface, ChannelProvider $provider)
+    public function __construct(EntityManager $em, $interface, ChannelProviderInterface $provider)
     {
         $this->em = $em;
         $this->interface = $interface;
@@ -182,11 +184,11 @@ class ChannelPricingSubscriber implements EventSubscriberInterface
         }
     }
     /**
-     * @param Product $product
+     * @param ProductInterface $product
      *
      * @return bool
      */
-    protected function isApplicable(Product $product = null)
+    protected function isApplicable(ProductInterface $product = null)
     {
         if (!$product) {
             return false;

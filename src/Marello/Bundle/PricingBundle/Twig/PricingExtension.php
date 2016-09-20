@@ -2,21 +2,21 @@
 
 namespace Marello\Bundle\PricingBundle\Twig;
 
-use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
+use Marello\Component\Pricing\ORM\Provider\CurrencyProviderInterface;
 
 class PricingExtension extends \Twig_Extension
 {
     const NAME = 'marello_pricing';
 
-    /** @var CurrencyProvider */
+    /** @var CurrencyProviderInterface */
     protected $provider;
 
     /**
      * PricingExtension constructor.
      *
-     * @param CurrencyProvider $provider
+     * @param CurrencyProviderInterface $provider
      */
-    public function __construct(CurrencyProvider $provider)
+    public function __construct(CurrencyProviderInterface $provider)
     {
         $this->provider = $provider;
     }

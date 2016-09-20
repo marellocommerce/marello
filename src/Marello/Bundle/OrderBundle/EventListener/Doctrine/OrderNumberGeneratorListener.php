@@ -5,7 +5,7 @@ namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Marello\Bundle\NotificationBundle\Email\SendProcessor;
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\Entity\Order;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 class OrderNumberGeneratorListener

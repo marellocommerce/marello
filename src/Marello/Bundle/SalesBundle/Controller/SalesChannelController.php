@@ -3,6 +3,7 @@
 namespace Marello\Bundle\SalesBundle\Controller;
 
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Oro\Bundle\SecurityBundle\Annotation as Security;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 
 /**
  * @Config\Route("/channel")
@@ -26,7 +27,7 @@ class SalesChannelController extends Controller
     public function indexAction()
     {
         return [
-            'entity_class' => 'Marello\Bundle\SalesBundle\Entity\SalesChannel',
+            'entity_class' => 'Marello\Component\Sales\Entity\SalesChannel',
         ];
     }
 
@@ -35,11 +36,11 @@ class SalesChannelController extends Controller
      * @Config\Method("DELETE")
      * @Security\AclAncestor("marello_sales_saleschannel_delete")
      *
-     * @param SalesChannel $channel
+     * @param SalesChannelInterface $channel
      *
      * @return RedirectResponse
      */
-    public function deleteAction(SalesChannel $channel)
+    public function deleteAction(SalesChannelInterface $channel)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($channel);
@@ -86,22 +87,22 @@ class SalesChannelController extends Controller
      * @Config\Template
      * @Security\AclAncestor("marello_sales_saleschannel_update")
      *
-     * @param SalesChannel $channel
+     * @param SalesChannelInterface $channel
      *
      * @return array
      */
-    public function updateAction(SalesChannel $channel)
+    public function updateAction(SalesChannelInterface $channel)
     {
         return $this->update($channel);
     }
 
     /**
      * Handles common update and create functionality.
-     * @param SalesChannel $channel
+     * @param SalesChannelInterface $channel
      *
      * @return array
      */
-    protected function update(SalesChannel $channel)
+    protected function update(SalesChannelInterface $channel)
     {
         $handler = $this->get('marello_sales.saleschannel_form.handler');
 

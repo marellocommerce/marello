@@ -1,0 +1,46 @@
+Marello\Component\Inventory\Entity\InventoryAllocation:
+    type: entity
+    table: marello_inventory_allocation
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        quantity:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        inventoryItem:
+            targetEntity: Marello\Component\Inventory\Entity\InventoryItem
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                inventoryItem_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+            orphanRemoval: false
+        targetOrderItem:
+            targetEntity: Marello\Component\Order\Entity\OrderItem
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                targetOrderItem_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

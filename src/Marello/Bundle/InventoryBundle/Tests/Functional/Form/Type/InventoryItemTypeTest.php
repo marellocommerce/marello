@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\InventoryBundle\Tests\Functional\Form\Type;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Form\Type\InventoryItemType;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 

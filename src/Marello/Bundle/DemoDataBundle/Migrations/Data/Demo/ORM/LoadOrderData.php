@@ -2,13 +2,15 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Brick\Math\BigDecimal;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Bundle\AddressBundle\Entity\Address;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Address\Entity\Address;
+use Marello\Component\Order\Entity\Order;
+use Marello\Component\Order\Entity\OrderItem;
+use Marello\Component\Product\Entity\Product;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
@@ -57,14 +59,14 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
                 /*
                  * Compute Order totals.
                  */
-                $total = $tax = $grandTotal = 0;
+                $total = $tax = $grandTotal = BigDecimal::of(0);
                 $order->getItems()->map(function (OrderItem $item) use (&$total, &$tax, &$grandTotal) {
-                    $total += ($item->getQuantity() * $item->getPrice());
-                    $tax += $item->getTax();
-                    $grandTotal += $item->getTotalPrice();
+                    $total->plus(BigDecimal::of($item->getPrice())->multipliedBy($item->getQuantity()));
+                    $tax->plus($item->getTax());
+                    $grandTotal->plus($item->getTotalPrice());
                 });
 
-                $grandTotal += $order->getShippingAmount();
+                $grandTotal->plus($order->getShippingAmount());
 
                 $order
                     ->setSubtotal($total)
@@ -151,7 +153,7 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
      *
      * @return Order
      */
-    protected function createOrder($row, Organization $organization)
+    protected function createOrder($row, OrganizationInterface $organization)
     {
         $billing = new Address();
         $billing->setNamePrefix($row['title']);
@@ -190,7 +192,7 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
         }
 
         $orderEntity->setShippingMethod($row['shipping_method']);
-        $orderEntity->setShippingAmount($row['shipping_amount']);
+        $orderEntity->setShippingAmount(BigDecimal::of($row['shipping_amount']));
 
         $orderEntity->setOrganization($organization);
 
@@ -212,9 +214,9 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
         $itemEntity = new OrderItem();
         $itemEntity->setProduct($product);
         $itemEntity->setQuantity($row['qty']);
-        $itemEntity->setPrice($row['price']);
-        $itemEntity->setTotalPrice($row['total_price']);
-        $itemEntity->setTax($row['tax']);
+        $itemEntity->setPrice(BigDecimal::of($row['price']));
+        $itemEntity->setTotalPrice(BigDecimal::of($row['total_price']));
+        $itemEntity->setTax(BigDecimal::of($row['tax']));
 
         return $itemEntity;
     }

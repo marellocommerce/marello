@@ -1,0 +1,5 @@
+Marello\Component\Pricing\Entity\BasePrice:
+    type: mappedSuperclass
+    table: BasePrice
+    id: {  }
+    lifecycleCallbacks: {  }

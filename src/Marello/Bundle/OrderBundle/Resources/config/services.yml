@@ -1,8 +1,14 @@
 parameters:
-    marello_order.provider.order_statistic_provider.class: Marello\Bundle\OrderBundle\Provider\OrderDashboardStatisticProvider
+    marello_order.listener.datagrid.order_grid_address_filter_listener.class:         Marello\Bundle\OrderBundle\EventListener\Datagrid\OrderGridAddressFilterListener
+    marello_order.listener.doctrine.order_number_generator_listener.class:            Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderNumberGeneratorListener
+    marello_order.listener.doctrine.order_organization_listener.class:                Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderOrganizationListener
+    marello_order.manager.order.api.class:                                            Marello\Component\Order\ORM\EntityManager\OrderApiEntityManager
+    marello_order.provider.order_statistic_provider.class:                            Marello\Component\Order\ORM\Provider\OrderDashboardStatisticProvider
+    marello_order.event_listener.doctrine.order_inventory_allocation_listener.class:  Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderInventoryAllocationListener
+
 services:
     marello_order.listener.datagrid.order_grid_address_filter_listener:
-        class: Marello\Bundle\OrderBundle\EventListener\Datagrid\OrderGridAddressFilterListener
+        class: '%marello_order.listener.datagrid.order_grid_address_filter_listener.class%'
         arguments:
             - @oro_locale.dql.formatter.name
         tags:
@@ -13,29 +19,29 @@ services:
             - { name: oro_service_link, service: marello_notification.email.send_processor }
 
     marello_order.listener.doctrine.order_number_generator_listener:
-        class: Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderNumberGeneratorListener
+        class: '%marello_order.listener.doctrine.order_number_generator_listener.class%'
         arguments:
             - '@marello_order.email_processor_link'
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: postFlush }
 
-    marello_order.listener.doctrine.order_number_generator_listener:
-        class: Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderOrganizationListener
+    marello_order.listener.doctrine.order_organization_listener:
+        class: '%marello_order.listener.doctrine.order_organization_listener.class%'
         arguments:
             - '@security.token_storage'
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
     marello_order.manager.order.api:
-        class: Marello\Bundle\OrderBundle\Entity\Manager\OrderApiEntityManager
+        class: '%marello_order.manager.order.api.class%'
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %marello_order.entity.order.class%
             - @doctrine.orm.entity_manager
 
     marello_order.provider.order_statistic_provider:
-        class: %marello_order.provider.order_statistic_provider.class%
+        class: '%marello_order.provider.order_statistic_provider.class%'
         arguments:
             - @doctrine
             - @oro_locale.formatter.number
@@ -44,7 +50,7 @@ services:
             - @translator.default
 
     marello_order.event_listener.doctrine.order_inventory_allocation_listener:
-        class: Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderInventoryAllocationListener
+        class: '%marello_order.event_listener.doctrine.order_inventory_allocation_listener.class%'
         arguments:
             - @marello_inventory.allocation.allocator
             - @marello_inventory.logging.inventory_logger

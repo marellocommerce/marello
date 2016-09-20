@@ -1,0 +1,21 @@
+Marello\Component\Product\Entity\ProductStatus:
+    type: entity
+    table: marello_product_product_status
+    id:
+        name:
+            type: string
+            scale: 0
+            length: 32
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+    fields:
+        label:
+            type: string
+            scale: 0
+            length: 255
+            unique: true
+            nullable: false
+            precision: 0
+    lifecycleCallbacks: {  }

@@ -3,7 +3,7 @@
 namespace Marello\Bundle\OrderBundle\Tests\Functional\Controller\Api\Rest;
 
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadOrderData;
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\Entity\Order;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 

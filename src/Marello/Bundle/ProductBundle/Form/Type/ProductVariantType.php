@@ -49,7 +49,7 @@ class ProductVariantType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'         => 'Marello\Bundle\ProductBundle\Entity\Variant',
+            'data_class'         => 'Marello\Component\Product\Entity\Variant',
             'intention'          => 'variant',
             'single_form'        => false,
             'cascade_validation' => true,

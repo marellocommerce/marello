@@ -7,12 +7,9 @@ use Marello\Bundle\NotificationBundle\Model\ExtendNotification;
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\NotificationBundle\Processor\EmailNotificationInterface;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
- * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="marello_notification")
  * @Oro\Config(
  *  defaultValues={
  *      "grouping"={"groups"={"activity"}},
@@ -30,60 +27,44 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 class Notification extends ExtendNotification implements EmailNotificationInterface
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     *
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\EmailBundle\Entity\EmailTemplate", cascade={})
-     * @ORM\JoinColumn(nullable=false)
-     *
      * @var EmailTemplate
      */
     protected $template;
 
     /**
-     * @ORM\Column(type="json_array", nullable=false)
-     *
      * @var array
      */
     protected $recipients;
 
     /**
-     * @ORM\Column(type="text")
-     *
      * @var string
      */
     protected $body;
 
     /**
-     * @ORM\Column(type="datetime")
-     *
      * @var \DateTime
      */
     protected $createdAt;
 
     /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @var OrganizationInterface
      */
     protected $organization;
 
     /**
      * Notification constructor.
      *
-     * @param EmailTemplate $template
-     * @param array         $recipients
-     * @param string        $body
-     * @param Organization  $organization
+     * @param EmailTemplate         $template
+     * @param array                 $recipients
+     * @param string                $body
+     * @param OrganizationInterface $organization
      */
-    public function __construct(EmailTemplate $template, array $recipients, $body, Organization $organization)
+    public function __construct(EmailTemplate $template, array $recipients, $body, OrganizationInterface $organization)
     {
         parent::__construct();
 
@@ -93,9 +74,6 @@ class Notification extends ExtendNotification implements EmailNotificationInterf
         $this->body         = $body;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
     public function prePersist()
     {
         $this->createdAt = new \DateTime();
@@ -138,7 +116,7 @@ class Notification extends ExtendNotification implements EmailNotificationInterf
     }
 
     /**
-     * @return Organization
+     * @return OrganizationInterface
      */
     public function getOrganization()
     {

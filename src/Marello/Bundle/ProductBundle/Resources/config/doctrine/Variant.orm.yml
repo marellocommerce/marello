@@ -1,0 +1,54 @@
+Marello\Component\Product\Entity\Variant:
+    type: entity
+    table: marello_product_variant
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        variantCode:
+            type: string
+            scale: 0
+            length: null
+            unique: true
+            nullable: true
+            precision: 0
+            column: variant_code
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: created_at
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: updated_at
+    oneToMany:
+        products:
+            targetEntity: Marello\Component\Product\Entity\Product
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: variant
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    lifecycleCallbacks:
+        prePersist:
+            - prePersist
+        preUpdate:
+            - preUpdate

@@ -6,11 +6,12 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryItem;
 
 class InventoryItemCollectionSubscriber implements EventSubscriberInterface
 {
@@ -69,7 +70,7 @@ class InventoryItemCollectionSubscriber implements EventSubscriberInterface
     {
         $indexed = [];
 
-        /** @var InventoryItem $item */
+        /** @var InventoryItemInterface $item */
         foreach ($items as $item) {
             $indexed[$item->getWarehouse()->getId()] = $item;
         }

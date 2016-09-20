@@ -6,17 +6,21 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLog;
-use Marello\Bundle\PricingBundle\Entity\ProductPrice;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Inventory\Entity\InventoryItem;
+use Marello\Component\Inventory\Entity\InventoryLog;
+use Marello\Component\Pricing\Entity\ProductPrice;
+use Marello\Component\Product\Entity\Product;
+use Marello\Component\Inventory\Model\WarehouseInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+
+use Brick\Math\BigDecimal;
 
 class LoadProductData extends AbstractFixture implements DependentFixtureInterface
 {
-    /** @var \Oro\Bundle\OrganizationBundle\Entity\Organization $defaultOrganization  */
+    /** @var OrganizationInterface $defaultOrganization  */
     protected $defaultOrganization;
 
-    /** @var \Marello\Bundle\InventoryBundle\Entity\Warehouse $defaultWarehouse */
+    /** @var WarehouseInterface $defaultWarehouse */
     protected $defaultWarehouse;
 
     /** @var ObjectManager $manager */
@@ -115,9 +119,9 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
             $price = new ProductPrice();
             $price->setCurrency($currency);
             if (count($currencies) > 1 && $currency === 'USD') {
-                $price->setValue(($data['price'] * 1.12));
+                $price->setValue(BigDecimal::of($data['price'])->multipliedBy(1.12));
             } else {
-                $price->setValue($data['price']);
+                $price->setValue(BigDecimal::of($data['price']));
             }
 
             $product->addPrice($price);

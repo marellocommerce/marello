@@ -10,19 +10,42 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Marello\\Bundle": "src/"
+        "psr-4": {
+            "Marello\\Bundle\\": "src/Marello/Bundle/",
+            "Marello\\Component\\": "src/Marello/Component/"
          }
     },
     "repositories": [
-       {
+        {
             "type": "composer",
-            "url": "http://packagist.orocrm.com"
+            "url": "https://packagist.orocrm.com"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/marellocommerce/marello-application.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/nicholas-eden/math.git"
         }
     ],
+    "replace": {
+        "marellocommerce/address": "self.version",
+        "marellocommerce/inventory": "self.version",
+        "marellocommerce/order": "self.version",
+        "marellocommerce/pricing": "self.version",
+        "marellocommerce/product": "self.version",
+        "marellocommerce/sales": "self.version"
+    },
     "require": {
         "php": ">=5.5.9",
-        "oro/platform": "1.8.*"
+        "oro/platform": "1.9.*",
+        "nicholas-eden/math": "0.6.*",
+        "hwi/oauth-bundle": "0.3.*"
+    },
+    "require-dev": {
+        "marellocommerce/marello-application": "^1.0@alpha",
+        "phpspec/phpspec": "^3.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

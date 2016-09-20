@@ -1,0 +1,32 @@
+{
+  "name": "marellocommerce/order",
+  "description": "Order management for Marello ERP",
+  "homepage": "https://github.com/marellocommerce/marello.git",
+  "type": "library",
+  "license": "OSL-3.0",
+  "authors": [
+    {
+      "name": "Madia B.V.",
+      "homepage": "http://www.marello.com"
+    },
+    {
+      "name": "Grégory Planchat",
+      "email": "gregory@kiboko.fr",
+      "homepage": "http://kiboko.fr"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Marello\\Component\\Order\\": ""
+    }
+  },
+  "require": {
+    "php": ">=5.5.9"
+  },
+  "suggest": {
+    "oro/workflow-bundle": "~1.0@dev",
+    "oro/soap-bundle": "~1.0@dev"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

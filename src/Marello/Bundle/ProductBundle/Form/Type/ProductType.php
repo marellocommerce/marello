@@ -110,7 +110,7 @@ class ProductType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'         => 'Marello\Bundle\ProductBundle\Entity\Product',
+            'data_class'         => 'Marello\Component\Product\Entity\Product',
             'intention'          => 'product',
             'single_form'        => true,
             'cascade_validation' => true,

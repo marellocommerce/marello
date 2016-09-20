@@ -3,7 +3,7 @@
 namespace Marello\Bundle\ProductBundle\Tests\Functional\Controller;
 
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductData;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 

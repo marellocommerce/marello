@@ -1,0 +1,81 @@
+Marello\Bundle\NotificationBundle\Entity\Notification:
+    type: entity
+    table: marello_notification
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        recipients:
+            type: json_array
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        body:
+            type: text
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+    manyToOne:
+        template:
+            targetEntity: Oro\Bundle\EmailBundle\Entity\EmailTemplate
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                template_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Oro\Bundle\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+    manyToMany:
+        order_74f8cb2e:
+            targetEntity: Marello\Component\Order\Entity\Order
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinTable:
+                name: oro_rel_a765ad3234e8bc9caa6a7f
+                joinColumns:
+                    -
+                        name: notification_id
+                        referencedColumnName: id
+                        onDelete: CASCADE
+                inverseJoinColumns:
+                    -
+                        name: order_id
+                        referencedColumnName: id
+                        onDelete: CASCADE
+            orderBy: null
+    lifecycleCallbacks:
+        prePersist:
+            - prePersist

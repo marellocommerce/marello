@@ -1,12 +1,12 @@
 services:
     marello_productprice.pricing.provider.currency_provider:
-        class: Marello\Bundle\PricingBundle\Provider\CurrencyProvider
+        class: Marello\Component\Pricing\ORM\Provider\CurrencyProvider
         arguments:
             - @doctrine
             - @oro_locale.settings
 
     marello_productprice.pricing.provider.channelprice_provider:
-        class: Marello\Bundle\PricingBundle\Provider\ChannelPriceProvider
+        class: Marello\Component\Pricing\ORM\Provider\ChannelPriceProvider
         arguments:
             - @doctrine
             - @translator
@@ -32,7 +32,7 @@ services:
 
 
     marello_productprice.validator.unique.unique_entity_collection:
-        class: Marello\Bundle\PricingBundle\Validator\UniqueEntityCollectionValidator
+        class: Marello\Component\Pricing\Validator\UniqueEntityCollectionValidator
         arguments:
             - @doctrine
         tags:

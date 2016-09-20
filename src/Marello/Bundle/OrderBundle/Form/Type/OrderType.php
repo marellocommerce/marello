@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\OrderBundle\Form\Type;
 
-use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Component\Order\Entity\Order;
 use Marello\Bundle\OrderBundle\Form\Listener\OrderTotalsSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -54,7 +54,7 @@ class OrderType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'Marello\Bundle\OrderBundle\Entity\Order',
+            'data_class' => 'Marello\Component\Order\Entity\Order',
         ]);
     }
 

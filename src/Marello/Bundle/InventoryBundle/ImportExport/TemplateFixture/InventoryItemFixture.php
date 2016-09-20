@@ -2,13 +2,14 @@
 
 namespace Marello\Bundle\InventoryBundle\ImportExport\TemplateFixture;
 
+use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\ProductStatus;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Inventory\Entity\InventoryItem;
+use Marello\Component\Product\Entity\Product;
+use Marello\Component\Product\Entity\ProductStatus;
+use Marello\Component\Sales\Entity\SalesChannel;
 
 class InventoryItemFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -17,7 +18,7 @@ class InventoryItemFixture extends AbstractTemplateRepository implements Templat
      */
     public function getEntityClass()
     {
-        return 'Marello\Bundle\InventoryBundle\Entity\InventoryItem';
+        return 'Marello\Component\Inventory\Entity\InventoryItem';
     }
 
     /**
@@ -37,13 +38,13 @@ class InventoryItemFixture extends AbstractTemplateRepository implements Templat
     }
 
     /**
-     * @param string  $key
-     * @param InventoryItem $entity
+     * @param string                 $key
+     * @param InventoryItemInterface $entity
      */
     public function fillEntityData($key, $entity)
     {
         $warehouseRepo = $this->templateManager
-            ->getEntityRepository('Marello\Bundle\InventoryBundle\Entity\Warehouse');
+            ->getEntityRepository('Marello\Component\Inventory\Entity\Warehouse');
 
         switch ($key) {
             case 'Macbook':

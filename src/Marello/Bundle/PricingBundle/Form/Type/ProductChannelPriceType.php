@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\PricingBundle\Form\Type;
 
+use Marello\Component\Pricing\Entity\ProductChannelPrice;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,7 +35,7 @@ class ProductChannelPriceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'        => 'Marello\Bundle\PricingBundle\Entity\ProductChannelPrice',
+            'data_class'        => ProductChannelPrice::class,
             'intention'         => 'productchannelprice',
             'single_form'       => true,
             'excluded_channels' => []

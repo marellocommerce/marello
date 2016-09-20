@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\SalesBundle\Form\EventListener;
 
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
@@ -10,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Sales\Entity\SalesChannel;
 
 class SalesChannelFormSubscriber implements EventSubscriberInterface
 {
@@ -46,7 +47,7 @@ class SalesChannelFormSubscriber implements EventSubscriberInterface
     public function preSet(FormEvent $event)
     {
         $form = $event->getForm();
-        /** @var SalesChannel $data */
+        /** @var SalesChannelInterface $data */
         $data = $event->getData();
 
         if ($data !== null) {
@@ -72,7 +73,7 @@ class SalesChannelFormSubscriber implements EventSubscriberInterface
     {
         $form = $event->getForm();
 
-        /** @var SalesChannel $originalData */
+        /** @var SalesChannelInterface $originalData */
         $originalData = $form->getData();
         $data         = $event->getData();
 
@@ -84,10 +85,10 @@ class SalesChannelFormSubscriber implements EventSubscriberInterface
     /**
      * Disable fields that are not allowed to be modified since channel has been saved
      *
-     * @param FormInterface     $form
-     * @param SalesChannel       $channel
+     * @param SalesChannelInterface $form
+     * @param SalesChannelInterface $channel
      */
-    protected function disableFields(FormInterface $form, SalesChannel $channel = null)
+    protected function disableFields(SalesChannelInterface $form, SalesChannelInterface $channel = null)
     {
         if (!($channel && $channel->getId())) {
             // do nothing if integration is new

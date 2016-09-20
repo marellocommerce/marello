@@ -1,0 +1,56 @@
+Marello\Component\Inventory\Entity\Warehouse:
+    type: entity
+    table: marello_inventory_warehouse
+    repositoryClass: Marello\Component\Inventory\ORM\Repository\WarehouseRepository
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        label:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        default:
+            type: boolean
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: is_default
+    manyToOne:
+        owner:
+            targetEntity: Oro\Bundle\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                owner_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToOne:
+        address:
+            targetEntity: Marello\Component\Address\Entity\Address
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                address_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

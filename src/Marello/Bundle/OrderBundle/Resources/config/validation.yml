@@ -1,4 +1,4 @@
-Marello\Bundle\AddressBundle\Entity\Address:
+Marello\Component\Address\Entity\Address:
     properties:
         street:
             - NotBlank: ~
@@ -8,7 +8,7 @@ Marello\Bundle\AddressBundle\Entity\Address:
             - NotBlank: ~
     constraints: ~
 
-Marello\Bundle\OrderBundle\Entity\OrderItem:
+Marello\Component\Order\Entity\OrderItem:
     properties:
         product:
             - NotBlank: ~

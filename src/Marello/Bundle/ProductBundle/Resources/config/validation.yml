@@ -1,4 +1,4 @@
-Marello\Bundle\ProductBundle\Entity\Product:
+Marello\Component\Product\Entity\Product:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: sku

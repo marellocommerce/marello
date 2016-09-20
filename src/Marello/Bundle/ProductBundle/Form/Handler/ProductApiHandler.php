@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 
 class ProductApiHandler
 {

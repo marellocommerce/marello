@@ -3,9 +3,9 @@
 namespace Marello\Bundle\ProductBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Marello\Bundle\InventoryBundle\Logging\InventoryLogger;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Inventory\Logging\InventoryLoggerInterface;
+use Marello\Component\Sales\Entity\SalesChannel;
+use Marello\Component\Product\Model\ProductInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -20,20 +20,20 @@ class ProductHandler
     /** @var ObjectManager */
     protected $manager;
 
-    /** @var InventoryLogger */
+    /** @var InventoryLoggerInterface */
     protected $inventoryLogger;
 
     /**
      * @param FormInterface   $form
      * @param Request         $request
      * @param ObjectManager   $manager
-     * @param InventoryLogger $inventoryLogger
+     * @param InventoryLoggerInterface $inventoryLogger
      */
     public function __construct(
         FormInterface $form,
         Request $request,
         ObjectManager $manager,
-        InventoryLogger $inventoryLogger
+        InventoryLoggerInterface $inventoryLogger
     ) {
         $this->form            = $form;
         $this->request         = $request;
@@ -44,11 +44,11 @@ class ProductHandler
     /**
      * Process form
      *
-     * @param  Product $entity
+     * @param  ProductInterface $entity
      *
      * @return bool True on successful processing, false otherwise
      */
-    public function process(Product $entity)
+    public function process(ProductInterface $entity)
     {
         $this->form->setData($entity);
 
@@ -80,11 +80,11 @@ class ProductHandler
     /**
      * "Success" form handler
      *
-     * @param Product $entity
+     * @param ProductInterface $entity
      * @param array $addChannels
      * @param array $removeChannels
      */
-    protected function onSuccess(Product $entity, array $addChannels, array $removeChannels)
+    protected function onSuccess(ProductInterface $entity, array $addChannels, array $removeChannels)
     {
         $this->addChannels($entity, $addChannels);
         $this->removeChannels($entity, $removeChannels);
@@ -97,10 +97,10 @@ class ProductHandler
     /**
      * Add channels to product
      *
-     * @param Product  $product
+     * @param ProductInterface $product
      * @param SalesChannel[] $channels
      */
-    protected function addChannels(Product $product, array $channels)
+    protected function addChannels(ProductInterface $product, array $channels)
     {
         /** @var $channel SalesChannel */
         foreach ($channels as $channel) {
@@ -111,10 +111,10 @@ class ProductHandler
     /**
      * Remove channels from product
      *
-     * @param Product  $product
+     * @param ProductInterface $product
      * @param SalesChannel[] $channels
      */
-    protected function removeChannels(Product $product, array $channels)
+    protected function removeChannels(ProductInterface $product, array $channels)
     {
         /** @var $channels SalesChannel */
         foreach ($channels as $channel) {

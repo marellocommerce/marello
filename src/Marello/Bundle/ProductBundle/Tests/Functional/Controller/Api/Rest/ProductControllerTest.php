@@ -3,9 +3,11 @@
 namespace Marello\Bundle\ProductBundle\Tests\Functional\Controller\Api\Rest;
 
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductChannelPricingData;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Component\Inventory\Entity\InventoryItem;
+use Marello\Component\Product\Entity\Product;
+use Marello\Component\Sales\Entity\SalesChannel;
+use Marello\Component\Inventory\Model\InventoryItemInterface;
+use Marello\Component\Sales\Model\SalesChannelInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,7 +27,7 @@ class ProductControllerTest extends WebTestCase
     }
 
     /**
-     * @return \Marello\Bundle\InventoryBundle\Entity\Warehouse
+     * @return \Marello\Component\Inventory\Entity\Warehouse
      */
     protected function getDefaultWarehouse()
     {
@@ -225,10 +227,10 @@ class ProductControllerTest extends WebTestCase
 //                return ['currency' => $price->getCurrency(), 'value' => $price->getValue()];
 //            })->toArray(),
             'status'    => $product->getStatus()->getName(),
-            'inventory' => $product->getInventoryItems()->map(function (InventoryItem $item) {
+            'inventory' => $product->getInventoryItems()->map(function (InventoryItemInterface $item) {
                 return ['quantity' => $item->getQuantity(), 'warehouse' => $item->getWarehouse()->getId()];
             })->toArray(),
-            'channels'  => $product->getChannels()->map(function (SalesChannel $channel) {
+            'channels'  => $product->getChannels()->map(function (SalesChannelInterface $channel) {
                 return $channel->getId();
             })->toArray(),
         ];
