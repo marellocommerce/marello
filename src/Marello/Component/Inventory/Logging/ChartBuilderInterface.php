@@ -2,7 +2,7 @@
 
 namespace Marello\Component\Inventory\Logging;
 
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 
 interface ChartBuilderInterface
 {

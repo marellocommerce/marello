@@ -11,8 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 
 use Oro\Bundle\SecurityBundle\Annotation as Security;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\Variant;
+use Marello\Component\Product\Entity\Product;
+use Marello\Component\Product\Entity\Variant;
 
 class VariantController extends Controller
 {

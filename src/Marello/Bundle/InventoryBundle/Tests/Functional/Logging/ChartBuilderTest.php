@@ -6,7 +6,7 @@ use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductData;
 use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Inventory\Entity\InventoryLog;
 use Marello\Bundle\InventoryBundle\Logging\ChartBuilder;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Model\InventoryLogInterface;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;

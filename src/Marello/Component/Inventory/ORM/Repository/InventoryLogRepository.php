@@ -5,7 +5,7 @@ namespace Marello\Component\Inventory\ORM\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Marello\Component\Inventory\Repository\InventoryLogRepositoryInterface;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 
 class InventoryLogRepository extends EntityRepository implements InventoryLogRepositoryInterface
 {

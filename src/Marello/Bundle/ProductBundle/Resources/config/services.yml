@@ -1,5 +1,5 @@
 parameters:
-    marello_product.entity.class:                 Marello\Bundle\ProductBundle\Entity\Product
+    marello_product.entity.class:                 Marello\Component\Product\Entity\Product
 
 services:
     # Autocomplete search handler

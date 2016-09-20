@@ -1,12 +1,12 @@
 <?php
 
-namespace Marello\Bundle\ProductBundle\Model;
+namespace Marello\Component\Product\Model;
 
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BaseProduct;
 
 /**
  * Class ExtendProduct
- * @package Marello\Bundle\ProductBundle\Model
+ * @package Marello\Component\Product\Model
  *
  */
 class ExtendProduct extends BaseProduct

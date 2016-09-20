@@ -6,7 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Marello\Component\Inventory\Entity\InventoryLog;
 use Marello\Component\Inventory\Repository\InventoryLogRepositoryInterface;
 use Marello\Component\Inventory\Logging\ChartBuilderInterface;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Symfony\Component\Translation\TranslatorInterface;
 

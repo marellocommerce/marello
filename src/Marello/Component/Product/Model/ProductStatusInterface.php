@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Product;
+namespace Marello\Component\Product\Model;
 
 interface ProductStatusInterface
 {

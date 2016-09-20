@@ -1,8 +1,8 @@
 <?php
 
-namespace Marello\Component\Product;
+namespace Marello\Component\Product\Model;
 
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 
 interface ProductAwareInterface
 {

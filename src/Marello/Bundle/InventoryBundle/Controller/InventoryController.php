@@ -2,8 +2,7 @@
 
 namespace Marello\Bundle\InventoryBundle\Controller;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;

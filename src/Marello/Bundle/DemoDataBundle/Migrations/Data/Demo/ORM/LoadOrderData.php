@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Marello\Component\Address\Entity\Address;
 use Marello\Component\Order\Entity\Order;
 use Marello\Component\Order\Entity\OrderItem;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 

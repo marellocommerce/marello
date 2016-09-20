@@ -1,4 +1,4 @@
-Marello\Bundle\ProductBundle\Entity\Product:
+Marello\Component\Product\Entity\Product:
     alias: marello_product
     label: marello.product.entity_plural_label
     title_fields: [name]

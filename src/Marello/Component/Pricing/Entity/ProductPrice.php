@@ -3,8 +3,8 @@
 namespace Marello\Component\Pricing\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Component\Product\ProductInterface;
-use Marello\Component\Product\ProductPriceInterface;
+use Marello\Component\Product\Model\ProductInterface;
+use Marello\Component\Product\Model\ProductPriceInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**

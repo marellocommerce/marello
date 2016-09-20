@@ -4,7 +4,7 @@ namespace Marello\Bundle\OrderBundle\Tests\Functional\Form\DataTransformer;
 
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductData;
 use Marello\Bundle\OrderBundle\Form\DataTransformer\ProductToSkuTransformer;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**

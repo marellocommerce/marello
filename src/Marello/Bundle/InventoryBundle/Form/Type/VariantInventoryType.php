@@ -32,7 +32,7 @@ class VariantInventoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class'         => 'Marello\Bundle\ProductBundle\Entity\Variant',
+            'data_class'         => 'Marello\Component\Product\Entity\Variant',
             'cascade_validation' => true,
         ]);
     }

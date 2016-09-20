@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\ProductBundle\Tests\Unit\Entity;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {

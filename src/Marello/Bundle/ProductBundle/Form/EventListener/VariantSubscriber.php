@@ -6,7 +6,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
-use Marello\Bundle\ProductBundle\Entity\Variant;
+use Marello\Component\Product\Entity\Variant;
 
 class VariantSubscriber implements EventSubscriberInterface
 {

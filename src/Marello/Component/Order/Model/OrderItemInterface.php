@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 use Marello\Component\Pricing\Model\CurrencyAwareInterface;
 use Marello\Component\Inventory\InventoryAllocation\AllocationTargetInterface;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 
 interface OrderItemInterface extends AllocationTargetInterface, CurrencyAwareInterface
 {

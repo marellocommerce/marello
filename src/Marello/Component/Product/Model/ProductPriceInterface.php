@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Component\Product;
+namespace Marello\Component\Product\Model;
 
 use Marello\Component\Pricing\Model\PriceInterface;
 

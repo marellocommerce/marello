@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\ProductBundle\Entity;
+namespace Marello\Component\Product\Entity;
 
 use Brick\Math\BigDecimal;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,10 +8,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Marello\Component\Inventory\Model\InventoryItemInterface;
-use Marello\Component\Product\ProductChannelPriceInterface;
-use Marello\Component\Product\ProductInterface;
-use Marello\Component\Product\ProductPriceInterface;
-use Marello\Component\Product\VariantInterface;
+use Marello\Component\Product\Model\ProductChannelPriceInterface;
+use Marello\Component\Product\Model\ProductInterface;
+use Marello\Component\Product\Model\ProductPriceInterface;
+use Marello\Component\Product\Model\VariantInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -19,13 +19,13 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Pricing\Entity\ProductChannelPrice;
 use Marello\Component\Pricing\Entity\ProductPrice;
-use Marello\Bundle\ProductBundle\Model\ExtendProduct;
+use Marello\Component\Product\Model\ExtendProduct;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
  * Represents a Marello Product
  *
- * @ORM\Entity(repositoryClass="Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository")
+ * @ORM\Entity(repositoryClass="Marello\Component\Product\ORM\Repository\ProductRepository")
  * @ORM\Table(
  *      name="marello_product_product",
  *      indexes={
@@ -107,7 +107,7 @@ class Product extends ExtendProduct implements ProductInterface
     /**
      * @var ProductStatus
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\ProductStatus")
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Product\Entity\ProductStatus")
      * @ORM\JoinColumn(name="product_status", referencedColumnName="name")
      * @Oro\ConfigField(
      *      defaultValues={

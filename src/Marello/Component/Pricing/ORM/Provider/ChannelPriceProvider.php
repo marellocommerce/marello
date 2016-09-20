@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 use Marello\Component\Pricing\Entity\ProductChannelPrice;
 use Marello\Component\Pricing\Entity\ProductPrice;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 
 class ChannelPriceProvider

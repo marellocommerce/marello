@@ -4,9 +4,9 @@ namespace Marello\Bundle\SalesBundle\Provider;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 use Marello\Component\Sales\Provider\ChannelProviderInterface;
 use Marello\Component\Sales\SalesChannelInterface;
 

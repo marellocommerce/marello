@@ -35,7 +35,7 @@ Marello\Component\Inventory\Entity\InventoryItem:
             precision: 0
     manyToOne:
         product:
-            targetEntity: Marello\Bundle\ProductBundle\Entity\Product
+            targetEntity: Marello\Component\Product\Entity\Product
             cascade: {  }
             fetch: LAZY
             mappedBy: null

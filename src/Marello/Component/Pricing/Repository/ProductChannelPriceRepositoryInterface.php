@@ -5,7 +5,7 @@ namespace Marello\Component\Pricing\Repository;
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Persistence\ObjectRepository;
 
-use Marello\Component\Product\ProductChannelPriceInterface;
+use Marello\Component\Product\Model\ProductChannelPriceInterface;
 
 interface ProductChannelPriceRepositoryInterface extends ObjectRepository, Selectable
 {

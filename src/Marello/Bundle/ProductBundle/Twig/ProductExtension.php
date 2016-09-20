@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\ProductBundle\Twig;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Marello\Bundle\SalesBundle\Provider\ChannelProvider;
 
 class ProductExtension extends \Twig_Extension

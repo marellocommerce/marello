@@ -4,7 +4,7 @@ namespace Marello\Component\Inventory\Repository;
 
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 
 interface InventoryLogRepositoryInterface extends ObjectRepository, Selectable
 {

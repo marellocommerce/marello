@@ -9,7 +9,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Inventory\Entity\InventoryLog;
 use Marello\Component\Pricing\Entity\ProductPrice;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Marello\Component\Inventory\Model\WarehouseInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 

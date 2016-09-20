@@ -12,7 +12,7 @@ use JMS\Serializer\Annotation as JMS;
 use Marello\Component\Inventory\Entity\InventoryAllocation;
 use Marello\Component\Order\Model\OrderInterface;
 use Marello\Component\Order\Model\OrderItemInterface;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 use Marello\Component\Order\Model\ExtendOrderItem;
@@ -43,7 +43,7 @@ class OrderItem extends ExtendOrderItem implements AllocationTargetInterface, Cu
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
+     * @ORM\ManyToOne(targetEntity="Marello\Component\Product\Entity\Product")
      * @ORM\JoinColumn(onDelete="SET NULL")
      *
      * @JMS\Expose

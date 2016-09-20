@@ -1,16 +1,16 @@
 <?php
 
-namespace Marello\Bundle\ProductBundle\Entity;
+namespace Marello\Component\Product\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
-use Marello\Component\Product\ProductStatusInterface;
+use Marello\Component\Product\Model\ProductStatusInterface;
 
 /**
  * Class ProductStatus
- * @package Marello\Bundle\ProductBundle\Entity
+ * @package Marello\Component\Product\Entity
  *
  * @ORM\Entity
  * @ORM\Table(name="marello_product_product_status")

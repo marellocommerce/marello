@@ -4,7 +4,7 @@ namespace Marello\Bundle\ProductBundle\Tests\Functional\Controller\Api\Rest;
 
 use Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadProductChannelPricingData;
 use Marello\Component\Inventory\Entity\InventoryItem;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Sales\SalesChannelInterface;

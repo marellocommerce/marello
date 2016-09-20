@@ -7,7 +7,7 @@ use Marello\Component\Inventory\Entity\InventoryItem;
 use Marello\Component\Inventory\Model\InventoryItemInterface;
 use Marello\Component\Inventory\Model\WarehouseInterface;
 use Marello\Component\Inventory\Repository\InventoryItemRepositoryInterface;
-use Marello\Component\Product\ProductInterface;
+use Marello\Component\Product\Model\ProductInterface;
 
 class InventoryItemRepository extends EntityRepository implements InventoryItemRepositoryInterface
 {

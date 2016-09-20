@@ -69,7 +69,7 @@ datagrid:
                     data_name:        s
                     options:
                         field_options:
-                            class: Marello\Bundle\ProductBundle\Entity\ProductStatus
+                            class: Marello\Component\Product\Entity\ProductStatus
                 createdAt:
                     type:             datetime
                     data_name:        createdAt

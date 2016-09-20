@@ -1,0 +1,178 @@
+Marello\Component\Product\Entity\Product:
+    type: entity
+    table: marello_product_product
+    indexes:
+        idx_marello_product_created_at:
+            columns:
+                - created_at
+        idx_marello_product_updated_at:
+            columns:
+                - updated_at
+    repositoryClass: Marello\Component\Product\ORM\Repository\ProductRepository
+    uniqueConstraints:
+        marello_product_product_skuidx:
+            columns:
+                - sku
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        sku:
+            type: string
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        type:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+        cost:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+        data:
+            type: json_array
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: created_at
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: updated_at
+        price:
+            type: money
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+    manyToOne:
+        status:
+            targetEntity: Marello\Component\Product\Entity\ProductStatus
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                product_status:
+                    referencedColumnName: name
+            orphanRemoval: false
+        organization:
+            targetEntity: Oro\Bundle\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+        variant:
+            targetEntity: Marello\Component\Product\Entity\Variant
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: products
+            joinColumns:
+                variant_id:
+                    referencedColumnName: id
+                    onDelete: 'SET NULL'
+            orphanRemoval: false
+    oneToMany:
+        prices:
+            targetEntity: Marello\Component\Pricing\Entity\ProductPrice
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: product
+            inversedBy: null
+            orphanRemoval: true
+            orderBy:
+                id: ASC
+        channelPrices:
+            targetEntity: Marello\Component\Pricing\Entity\ProductChannelPrice
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: product
+            inversedBy: null
+            orphanRemoval: true
+            orderBy:
+                id: ASC
+        inventoryItems:
+            targetEntity: Marello\Component\Inventory\Entity\InventoryItem
+            cascade:
+                - remove
+                - persist
+            fetch: LAZY
+            mappedBy: product
+            inversedBy: null
+            orphanRemoval: true
+            orderBy:
+                id: ASC
+    manyToMany:
+        channels:
+            targetEntity: Marello\Bundle\SalesBundle\Entity\SalesChannel
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinTable:
+                name: marello_product_saleschannel
+                schema: null
+                joinColumns:
+                    -
+                        name: product_id
+                        referencedColumnName: id
+                        onDelete: CASCADE
+                inverseJoinColumns:
+                    -
+                        name: saleschannel_id
+                        referencedColumnName: id
+                        onDelete: CASCADE
+            orderBy: null
+    lifecycleCallbacks:
+        prePersist:
+            - prePersist
+        preUpdate:
+            - preUpdate

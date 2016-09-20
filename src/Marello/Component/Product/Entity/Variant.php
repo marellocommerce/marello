@@ -1,12 +1,12 @@
 <?php
 
-namespace Marello\Bundle\ProductBundle\Entity;
+namespace Marello\Component\Product\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Component\Product\ProductInterface;
-use Marello\Component\Product\VariantInterface;
+use Marello\Component\Product\Model\ProductInterface;
+use Marello\Component\Product\Model\VariantInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**

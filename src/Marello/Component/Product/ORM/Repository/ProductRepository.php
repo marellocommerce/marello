@@ -1,12 +1,13 @@
 <?php
 
-namespace Marello\Bundle\ProductBundle\Entity\Repository;
+namespace Marello\Component\Product\ORM\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Component\Product\Entity\Product;
+use Marello\Component\Product\Repository\ProductRepositoryInterface;
 
-class ProductRepository extends EntityRepository
+class ProductRepository extends EntityRepository implements ProductRepositoryInterface
 {
     /**
      * Return products for specified price list and product IDs

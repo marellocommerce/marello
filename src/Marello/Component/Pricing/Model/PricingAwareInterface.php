@@ -3,8 +3,8 @@
 namespace Marello\Component\Pricing\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Marello\Component\Product\ProductChannelPriceInterface;
-use Marello\Component\Product\ProductPriceInterface;
+use Marello\Component\Product\Model\ProductChannelPriceInterface;
+use Marello\Component\Product\Model\ProductPriceInterface;
 
 interface PricingAwareInterface
 {
