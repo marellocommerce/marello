@@ -49,7 +49,7 @@ class ProductApiType extends AbstractType
             ->add('channels')
             ->add('inventory', 'collection', [
                 'property_path' => 'inventoryItems',
-                'type'          => new InventoryItemApiType(),
+                'type'          => InventoryItemApiType::NAME,
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'by_reference'  => false,
