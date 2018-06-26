@@ -7,8 +7,9 @@ use Marello\Bundle\InventoryBundle\Form\Type\InventoryItemType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Oro\Bundle\SecurityBundle\Annotation as Security;
 use Symfony\Component\HttpFoundation\Request;
+
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 /**
  * @Config\Route("/item")
