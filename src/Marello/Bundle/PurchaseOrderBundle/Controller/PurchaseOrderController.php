@@ -6,18 +6,18 @@ use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
 use Marello\Bundle\PurchaseOrderBundle\Form\Handler\PurchaseOrderCreateStepOneHandler;
 use Marello\Bundle\PurchaseOrderBundle\Form\Type\PurchaseOrderCreateStepOneType;
 use Marello\Bundle\PurchaseOrderBundle\Form\Type\PurchaseOrderCreateStepTwoType;
-use Oro\Bundle\SecurityBundle\Annotation as Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 class PurchaseOrderController extends Controller
 {
     /**
      * @Config\Route("/")
      * @Config\Template
-     * @Security\AclAncestor("marello_purchase_order_view")
+     * @AclAncestor("marello_purchase_order_view")
      */
     public function indexAction()
     {
@@ -27,7 +27,7 @@ class PurchaseOrderController extends Controller
     /**
      * @Config\Route("/view/{id}", requirements={"id"="\d+"})
      * @Config\Template
-     * @Security\AclAncestor("marello_purchase_order_view")
+     * @AclAncestor("marello_purchase_order_view")
      *
      * @param PurchaseOrder $purchaseOrder
      *
@@ -43,7 +43,7 @@ class PurchaseOrderController extends Controller
     /**
      * @Config\Route("/select-products")
      * @Config\Template
-     * @Security\AclAncestor("marello_purchase_order_create")
+     * @AclAncestor("marello_purchase_order_create")
      */
     public function selectProductsAction()
     {
@@ -53,7 +53,7 @@ class PurchaseOrderController extends Controller
     /**
      * @Config\Route("/create", name="marello_purchaseorder_purchaseorder_create")
      * @Config\Template("MarelloPurchaseOrderBundle:PurchaseOrder:createStepOne.html.twig")
-     * @Security\AclAncestor("marello_purchase_order_create")
+     * @AclAncestor("marello_purchase_order_create")
      *
      * @param Request $request
      *
@@ -66,7 +66,7 @@ class PurchaseOrderController extends Controller
 
     /**
      * @Config\Route("/update/{id}", requirements={"id"="\d+"}, name="marello_purchaseorder_purchaseorder_update")
-     * @Security\AclAncestor("marello_purchase_order_update")
+     * @AclAncestor("marello_purchase_order_update")
      * @Config\Template
      *
      * @param PurchaseOrder $purchaseOrder
@@ -81,7 +81,7 @@ class PurchaseOrderController extends Controller
     /**
      * @Config\Route("/create/step-two", name="marello_purchaseorder_purchaseorder_create_step_two")
      * @Config\Template("MarelloPurchaseOrderBundle:PurchaseOrder:createStepTwo.html.twig")
-     * @Security\AclAncestor("marello_purchase_order_create_step_two")
+     * @AclAncestor("marello_purchase_order_create")
      *
      * @param Request $request
      *
@@ -217,7 +217,7 @@ class PurchaseOrderController extends Controller
      *      requirements={"id"="\d+"},
      *      defaults={"id"=0}
      * )
-     * @Security\AclAncestor("marello_product_view")
+     * @AclAncestor("marello_product_view")
      * @Config\Template()
      */
     public function productsBySupplierAction(PurchaseOrder $purchaseOrder = null)

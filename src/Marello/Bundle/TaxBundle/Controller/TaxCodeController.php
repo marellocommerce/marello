@@ -3,7 +3,8 @@
 namespace Marello\Bundle\TaxBundle\Controller;
 
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
-use Oro\Bundle\SecurityBundle\Annotation as Security;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -17,7 +18,7 @@ class TaxCodeController extends Controller
     /**
      * @Config\Route("/", name="marello_tax_taxcode_index")
      * @Config\Template
-     * @Security\AclAncestor("marello_tax_taxcode_view")
+     * @AclAncestor("marello_tax_taxcode_view")
      */
     public function indexAction()
     {
@@ -27,7 +28,7 @@ class TaxCodeController extends Controller
     /**
      * @Config\Route("/view/{id}", requirements={"id"="\d+"})
      * @Config\Template
-     * @Security\Acl(
+     * @Acl(
      *      id="marello_tax_taxcode_view",
      *      type="entity",
      *      class="MarelloTaxBundle:TaxCode",
@@ -47,7 +48,7 @@ class TaxCodeController extends Controller
      * @Config\Route("/create")
      * @Config\Method({"GET", "POST"})
      * @Config\Template
-     * @Security\Acl(
+     * @Acl(
      *      id="marello_tax_taxcode_create",
      *      type="entity",
      *      class="MarelloTaxBundle:TaxCode",
@@ -65,7 +66,7 @@ class TaxCodeController extends Controller
      * @Config\Route("/update/{id}", requirements={"id"="\d+"})
      * @Config\Method({"GET", "POST"})
      * @Config\Template
-     * @Security\Acl(
+     * @Acl(
      *      id="marello_tax_taxcode_update",
      *      type="entity",
      *      class="MarelloTaxBundle:TaxCode",

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Oro\Bundle\SecurityBundle\Annotation as Security;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
@@ -18,7 +18,7 @@ class SupplierController extends Controller
     /**
      * @Config\Route("/", name="marello_supplier_supplier_index")
      * @Config\Template
-     * @Security\AclAncestor("marello_supplier_view")
+     * @AclAncestor("marello_supplier_view")
      */
     public function indexAction()
     {
@@ -28,7 +28,7 @@ class SupplierController extends Controller
     /**
      * @Config\Route("/view/{id}", requirements={"id"="\d+"})
      * @Config\Template
-     * @Security\AclAncestor("marello_supplier_view")
+     * @AclAncestor("marello_supplier_view")
      *
      * @param Supplier $supplier
      *
@@ -43,7 +43,7 @@ class SupplierController extends Controller
      * @Config\Route("/create")
      * @Config\Method({"GET", "POST"})
      * @Config\Template
-     * @Security\AclAncestor("marello_supplier_create")
+     * @AclAncestor("marello_supplier_create")
      *
      * @param Request $request
      *
@@ -58,7 +58,7 @@ class SupplierController extends Controller
      * @Config\Route("/update/{id}", requirements={"id"="\d+"})
      * @Config\Method({"GET", "POST"})
      * @Config\Template
-     * @Security\AclAncestor("marello_supplier_update")
+     * @AclAncestor("marello_supplier_update")
      *
      * @param Request $request
      * @param Supplier   $supplier
@@ -114,7 +114,7 @@ class SupplierController extends Controller
      * @Config\Route("/widget/address/{id}/{typeId}", requirements={"id"="\d+","typeId"="\d+"})
      * @Config\Method({"GET", "POST"})
      * @Config\Template
-     * @Security\AclAncestor("marello_supplier_update")
+     * @AclAncestor("marello_supplier_update")
      *
      * @param Request $request
      * @param MarelloAddress $address
@@ -132,7 +132,7 @@ class SupplierController extends Controller
      * @Config\Route("/update/address/{id}", requirements={"id"="\d+"})
      * @Config\Method({"GET", "POST"})
      * @Config\Template("MarelloSupplierBundle:Supplier:widget/updateAddress.html.twig")
-     * @Security\AclAncestor("marello_supplier_update")
+     * @AclAncestor("marello_supplier_update")
      *
      * @param Request $request
      * @param MarelloAddress $address
@@ -160,7 +160,7 @@ class SupplierController extends Controller
     /**
      * @Config\Route("/get-supplier-default-data", name="marello_supplier_supplier_get_default_data")
      * @Config\Method({"GET"})
-     * @Security\AclAncestor("marello_supplier_view")
+     * @AclAncestor("marello_supplier_view")
      *
      * {@inheritdoc}
      */

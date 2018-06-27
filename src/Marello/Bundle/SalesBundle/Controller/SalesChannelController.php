@@ -4,7 +4,8 @@ namespace Marello\Bundle\SalesBundle\Controller;
 
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Form\Type\SalesChannelType;
-use Oro\Bundle\SecurityBundle\Annotation as Security;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Config;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,7 +20,7 @@ class SalesChannelController extends Controller
      * @Config\Route("/", name="marello_sales_saleschannel_index")
      * @Config\Method("GET")
      * @Config\Template
-     * @Security\AclAncestor("marello_sales_saleschannel_view")
+     * @AclAncestor("marello_sales_saleschannel_view")
      */
     public function indexAction()
     {
@@ -32,7 +33,7 @@ class SalesChannelController extends Controller
      * @Config\Route("/create")
      * @Config\Method({"GET", "POST"})
      * @Config\Template("MarelloSalesBundle:SalesChannel:update.html.twig")
-     * @Security\AclAncestor("marello_sales_saleschannel_create")
+     * @AclAncestor("marello_saleschannel_create")
      *
      * @param Request $request
      * @return array
@@ -45,7 +46,7 @@ class SalesChannelController extends Controller
     /**
      * @Config\Route("/view/{id}", name="marello_sales_saleschannel_view", requirements={"id"="\d+"})
      * @Config\Template
-     * @Security\Acl(
+     * @Acl(
      *      id="marello_sales_saleschannel_view",
      *      type="entity",
      *      class="MarelloSalesBundle:SalesChannel",
@@ -66,7 +67,7 @@ class SalesChannelController extends Controller
      * @Config\Route("/update/{id}", requirements={"id"="\d+"}, name="marello_sales_saleschannel_update")
      * @Config\Method({"GET", "POST"})
      * @Config\Template
-     * @Security\AclAncestor("marello_sales_saleschannel_update")
+     * @AclAncestor("marello_saleschannel_update")
      *
      * @param Request $request
      * @param SalesChannel $channel
