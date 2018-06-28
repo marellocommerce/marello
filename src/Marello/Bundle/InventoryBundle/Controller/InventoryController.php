@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 
 /**
  * @Config\Route("/item")
@@ -19,7 +20,7 @@ class InventoryController extends Controller
     /**
      * @Config\Route("/", name="marello_inventory_inventory_index")
      * @Config\Template
-     * @Security\AclAncestor("marello_inventory_inventory_view")
+     * @AclAncestor("marello_inventory_inventory_view")
      */
     public function indexAction()
     {
@@ -31,7 +32,7 @@ class InventoryController extends Controller
     /**
      * @Config\Route("/view/{id}", requirements={"id"="\d+"}, name="marello_inventory_inventory_view")
      * @Config\Template
-     * @Security\Acl(
+     * @Acl(
      *      id="marello_inventory_inventory_view",
      *      type="entity",
      *      class="MarelloInventoryBundle:InventoryItem",
@@ -52,7 +53,7 @@ class InventoryController extends Controller
     /**
      * @Config\Route("/update/{id}", requirements={"id"="\d+"}, name="marello_inventory_inventory_update")
      * @Config\Template
-     * @Security\Acl(
+     * @Acl(
      *      id="marello_inventory_inventory_update",
      *      type="entity",
      *      class="MarelloInventoryBundle:InventoryItem",
