@@ -67,13 +67,10 @@ define(function(require) {
 
             this.$salesChannel.change(_.bind(function() {
                 this.setChannelHistory(this._getSalesChannel());
-                if (this.getItems().length === 0 || this._getSalesChannel().length ===0 ) {
-                    return;
-                }
-                mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals']});
             }, this));
 
             this.initChannelHistory();
+            this.initLineItemAdditionalData();
         },
 
         /**
@@ -164,6 +161,17 @@ define(function(require) {
         },
 
         /**
+         * trigger additional data changes when the form is loaded
+         */
+        initLineItemAdditionalData: function() {
+            if (this.getItems().length === 0 || this._getSalesChannel().length === 0 ) {
+                return;
+            }
+            mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals']});
+            mediator.trigger('marello_sales:channel:changed', {to: {id: this._getSalesChannel()}});
+        },
+
+        /**
          * get sales channel value
          * @returns {string}
          * @private
@@ -193,7 +201,7 @@ define(function(require) {
 
             return items;
         },
-        
+
         /**
          * Show loading view
          */

@@ -6,7 +6,13 @@ Marello\Bundle\AddressBundle\Entity\MarelloAddress:
             - NotBlank: ~
         postalCode:
             - NotBlank: ~
-    constraints: ~
+        country:
+            - NotBlank: ~
+        phone:
+            - Length:
+                max: 255
+    constraints:
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: ~
 
 Marello\Bundle\OrderBundle\Entity\OrderItem:
     properties:
@@ -29,4 +35,10 @@ Marello\Bundle\OrderBundle\Entity\Order:
         customer:
             - NotBlank: ~
         salesChannel:
+            - NotBlank: ~
+        billingAddress:
+            - Valid: ~
+            - NotBlank: ~
+        shippingAddress:
+            - Valid: ~
             - NotBlank: ~

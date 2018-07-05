@@ -20,6 +20,7 @@ define(function (require) {
             this.$sourceElement = options._sourceElement;
             this.saveData($(this.options.salesChannelDataContainer).data(this.options.attribute));
             mediator.on('marello_sales:channel:changed', this.onSalesChannelChange, this);
+            // mediator.on('marello_sales:channel:initialize', this.onSalesChannelChange, this);
             Select2AutocompleteChannelAwareComponent.__super__.initialize.call(this, options);
         },
         
@@ -58,6 +59,7 @@ define(function (require) {
             }
 
             mediator.off('marello_sales:channel:changed', this.onSalesChannelChange, this);
+            // mediator.off('marello_sales:channel:initialize', this.onSalesChannelChange, this);
             Select2AutocompleteChannelAwareComponent.__super__.dispose.call(this);
         }
     });
