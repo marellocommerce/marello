@@ -2,67 +2,88 @@
 
 namespace Marello\Bundle\InventoryBundle\Provider;
 
-use Marello\Bundle\InventoryBundle\Entity\VirtualInventoryLevel;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\ProductInterface;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Symfony\Component\Translation\TranslatorInterface;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Marello\Bundle\ProductBundle\Entity\ProductInterface;
+use Marello\Bundle\InventoryBundle\Entity\VirtualInventoryLevel;
 
 class AvailableInventoryProvider
 {
-    /**
-     * @var DoctrineHelper
-     */
+    /** @var DoctrineHelper $doctrineHelper */
     protected $doctrineHelper;
 
-    /**
-     * @param DoctrineHelper $doctrineHelper
-     */
-    public function __construct(DoctrineHelper $doctrineHelper)
-    {
-        $this->doctrineHelper = $doctrineHelper;
-    }
+    /** @var TranslatorInterface $translator */
+    protected $translator;
 
     /**
      * {@inheritdoc}
+     * @param DoctrineHelper $doctrineHelper
+     * @param TranslatorInterface $translator
      */
-    public function getAvailableInventory($productSku, $salesChannelId)
-    {
-        $product = $this->getProduct($productSku);
-        $salesChannel = $this->getSalesChannel($salesChannelId);
-        $salesChannelGroup = $salesChannel->getGroup();
-        $result = $this->getVirtualInventoryLevel($product, $salesChannelGroup);
-
-        return ($result) ? $result : 0;
+    public function __construct(
+        DoctrineHelper $doctrineHelper,
+        TranslatorInterface $translator
+    ){
+        $this->doctrineHelper = $doctrineHelper;
+        $this->translator = $translator;
     }
 
     /**
-     * @param $productSku
+     * Get available inventory for a product in a certain saleschannel
+     * @param $product Product
+     * @param $salesChannel SalesChannel
+     * @return int
+     */
+    public function getAvailableInventory(Product $product, SalesChannel $salesChannel)
+    {
+        $salesChannelGroup = $salesChannel->getGroup();
+        $result = $this->getVirtualInventoryLevel($product, $salesChannelGroup);
+
+        return ($result) ? $result->getInventoryQty() : 0;
+    }
+
+    /**
+     * @param $productIdentifier
+     * @param $requestedQuantities
+     * @param $availableInventory
+     * @return bool
+     */
+    public function isValidRequestedQuantity($productIdentifier, $requestedQuantities, $availableInventory)
+    {
+        $requestedQuantities[$productIdentifier];
+        if (!array_key_exists($productIdentifier, $requestedQuantities)) {
+            return false;
+        }
+
+        return ($requestedQuantities[$productIdentifier] <= (int)$availableInventory);
+    }
+
+    /**
+     * Get products by saleschannel
+     * @param int $channelId
+     * @param array $productIds
      * @return ProductInterface|null
      */
-    protected function getProduct($productSku)
+    public function getProducts($channelId, $productIds)
     {
         return $this->doctrineHelper
             ->getEntityManagerForClass(Product::class)
             ->getRepository(Product::class)
-            ->findOneBySku($productSku);
+            ->findBySalesChannel($channelId, $productIds);
     }
 
     /**
-     * @return SalesChannel|null
+     * Get associated VirtualInventoryLevel
+     * @param Product $product
+     * @param SalesChannelGroup $salesChannelGroup
+     * @return VirtualInventoryLevel
      */
-    protected function getSalesChannel($salesChannelId)
-    {
-        return $this->doctrineHelper
-            ->getEntityManagerForClass(SalesChannel::class)
-            ->getRepository(SalesChannel::class)
-            ->find($salesChannelId);
-    }
-
-    /**
-     * @return VirtualInventoryLevel|null
-     */
-    protected function getVirtualInventoryLevel($product, $salesChannelGroup)
+    protected function getVirtualInventoryLevel(Product $product, SalesChannelGroup $salesChannelGroup)
     {
         return $this->doctrineHelper
             ->getEntityManagerForClass(VirtualInventoryLevel::class)

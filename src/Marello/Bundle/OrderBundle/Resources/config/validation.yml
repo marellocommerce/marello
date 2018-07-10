@@ -28,7 +28,10 @@ Marello\Bundle\OrderBundle\Entity\OrderItem:
             - NotBlank: ~
         rowTotalExclTax:
             - NotBlank: ~
-    constraints: ~
+    constraints:
+        - Marello\Bundle\OrderBundle\Validator\Constraints\AvailableInventory:
+            fields: [quantity, order, product]
+            errorPath: quantity
 
 Marello\Bundle\OrderBundle\Entity\Order:
     properties:
@@ -37,8 +40,8 @@ Marello\Bundle\OrderBundle\Entity\Order:
         salesChannel:
             - NotBlank: ~
         billingAddress:
-            - Valid: ~
-            - NotBlank: ~
+            - NotBlank:
+                message: 'marello.order.address.validation.billing_not_blank'
         shippingAddress:
-            - Valid: ~
-            - NotBlank: ~
+            - NotBlank:
+                message: 'marello.order.address.validation.shipping_not_blank'

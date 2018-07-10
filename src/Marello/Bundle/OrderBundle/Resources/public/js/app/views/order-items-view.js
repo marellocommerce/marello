@@ -67,6 +67,7 @@ define(function(require) {
 
             this.$salesChannel.change(_.bind(function() {
                 this.setChannelHistory(this._getSalesChannel());
+                this.initLineItemAdditionalData();
             }, this));
 
             this.initChannelHistory();
@@ -164,11 +165,14 @@ define(function(require) {
          * trigger additional data changes when the form is loaded
          */
         initLineItemAdditionalData: function() {
+            // for some reason we need to trigger the Billing and Shipping addresses here in order to 'reload' the
+            // customer addresses in the select boxes...
+            mediator.trigger('order:form-changes:trigger', {updateFields: ['billingAddress', 'shippingAddress']});
+
             if (this.getItems().length === 0 || this._getSalesChannel().length === 0 ) {
                 return;
             }
-            mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals']});
-            mediator.trigger('marello_sales:channel:changed', {to: {id: this._getSalesChannel()}});
+            mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals', 'inventory']});
         },
 
         /**
