@@ -167,12 +167,13 @@ define(function(require) {
         initLineItemAdditionalData: function() {
             // for some reason we need to trigger the Billing and Shipping addresses here in order to 'reload' the
             // customer addresses in the select boxes...
-            mediator.trigger('order:form-changes:trigger', {updateFields: ['billingAddress', 'shippingAddress']});
+            mediator.trigger('order:form-changes:trigger', {updateFields: ['billingAddress', 'shippingAddress','totals']});
 
             if (this.getItems().length === 0 || this._getSalesChannel().length === 0 ) {
                 return;
             }
-            mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals', 'inventory']});
+            
+            mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'inventory','totals']});
         },
 
         /**

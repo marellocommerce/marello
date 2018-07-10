@@ -55,7 +55,6 @@ class AvailableInventoryProvider
      */
     public function isValidRequestedQuantity($productIdentifier, $requestedQuantities, $availableInventory)
     {
-        $requestedQuantities[$productIdentifier];
         if (!array_key_exists($productIdentifier, $requestedQuantities)) {
             return false;
         }
