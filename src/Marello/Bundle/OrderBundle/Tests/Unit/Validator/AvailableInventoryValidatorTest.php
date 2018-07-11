@@ -19,7 +19,7 @@ use Marello\Bundle\OrderBundle\Validator\AvailableInventoryValidator;
 use Marello\Bundle\OrderBundle\Validator\Constraints\AvailableInventory;
 use Marello\Bundle\InventoryBundle\Provider\AvailableInventoryProvider;
 
-class Ava extends \PHPUnit_Framework_TestCase
+class AvailableInventoryValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var AvailableInventory $constraint */
     protected $constraint;
