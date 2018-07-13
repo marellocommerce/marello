@@ -3,6 +3,7 @@
 namespace Marello\Bundle\InventoryBundle\Tests\Unit\Provider;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Symfony\Component\Form\FormInterface;
 
@@ -74,15 +75,23 @@ class AvailableInventoryFormProviderTest extends \PHPUnit_Framework_TestCase
         ]);
 
         if ($hasItems) {
+            $products = array_values($submitData['products']);
             $this->inventoryProvider->expects(static::atLeastOnce())
                 ->method('getProducts')
-                ->willReturn([]);
-        }
+                ->willReturn($products);
 
-        if ($isValid) {
-            $this->inventoryProvider->expects(static::atLeastOnce())
-                ->method('getAvailableInventory')
-                ->willReturn($submitData);
+            /** @var \PHPUnit_Framework_MockObject_MockObject $product */
+            foreach ($submitData['products'] as $id => $product) {
+                if ($isValid) {
+                    $this->inventoryProvider->expects(static::atLeastOnce())
+                        ->method('getAvailableInventory')
+                        ->willReturn($submitData['inventory'][$id]);
+                }
+
+                $product->expects(static::atLeastOnce())
+                    ->method('getId')
+                    ->willReturn($id);
+            }
         }
 
         $this->availableInventoryFormProvider->processFormChanges($this->context);
@@ -129,15 +138,16 @@ class AvailableInventoryFormProviderTest extends \PHPUnit_Framework_TestCase
             'formDataIsNotOfTypeOrder' => [
                 'formData' => null,
                 'hasItems' => false,
-                'isValid' => false,
+                'isValid' => true,
                 'submitData' => [],
                 'expectedData' => []
             ],
             'NoValidData' => [
                 'formData' => $this->getOrderMock(),
                 'hasItems' => true,
-                'isValid' => false,
+                'isValid' => true,
                 'submitData' => [
+                    'products' => [],
                     OrderItemFormChangesProvider::ITEMS_FIELD => [
                         []
                     ],
@@ -147,18 +157,28 @@ class AvailableInventoryFormProviderTest extends \PHPUnit_Framework_TestCase
             'notAllProductsValid' => [
                 'formData' => $this->getOrderMock(),
                 'hasItems' => true,
-                'isValid' => false,
+                'isValid' => true,
                 'submitData' => [
+                    'products' => [
+                        1 => $this->createMock(Product::class)
+                    ],
+                    'inventory' => [
+                        1 => 10
+                    ],
                     OrderItemFormChangesProvider::ITEMS_FIELD => [
                         [
-                            AvailableInventoryFormProvider::PRODUCT_FIELD => 1,
+                            AvailableInventoryFormProvider::PRODUCT_FIELD => 1
                         ],
-                        []
+                        [
+                            AvailableInventoryFormProvider::PRODUCT_FIELD => 0
+                        ]
                     ],
                 ],
                 'expectedData' => [
-                    AvailableInventoryFormProvider::INVENTORY_FIELD => [
-                        $this->getIdentifier(1) => ['value' => 0]
+                    OrderItemFormChangesProvider::ITEMS_FIELD => [
+                        AvailableInventoryFormProvider::INVENTORY_FIELD => [
+                            $this->getIdentifier(1) => ['value' => 10]
+                        ]
                     ]
                 ]
             ],
@@ -167,6 +187,14 @@ class AvailableInventoryFormProviderTest extends \PHPUnit_Framework_TestCase
                 'hasItems' => true,
                 'isValid' => true,
                 'submitData' => [
+                    'products' => [
+                        1 => $this->createMock(Product::class),
+                        2 => $this->createMock(Product::class)
+                    ],
+                    'inventory' => [
+                        1 => 10,
+                        2 => 10
+                    ],
                     OrderItemFormChangesProvider::ITEMS_FIELD => [
                         [
                             AvailableInventoryFormProvider::PRODUCT_FIELD => 1
@@ -177,9 +205,11 @@ class AvailableInventoryFormProviderTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'expectedData' => [
-                    AvailableInventoryFormProvider::INVENTORY_FIELD => [
-                        $this->getIdentifier(1) => ['value' => 0],
-                        $this->getIdentifier(2) => ['value' => 0]
+                    OrderItemFormChangesProvider::ITEMS_FIELD => [
+                        AvailableInventoryFormProvider::INVENTORY_FIELD => [
+                            $this->getIdentifier(1) => ['value' => 10],
+                            $this->getIdentifier(2) => ['value' => 10]
+                        ]
                     ]
                 ]
             ]
