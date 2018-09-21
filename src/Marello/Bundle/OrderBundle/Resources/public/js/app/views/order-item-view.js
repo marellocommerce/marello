@@ -69,7 +69,7 @@ define(function(require) {
             if (productId.length === 0) {
                 this.setOrderItemData({});
             } else {
-                mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals']});
+                mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals', 'inventory', 'possible_shipping_methods']});
             }
         },
 
@@ -88,20 +88,23 @@ define(function(require) {
                     this.data = data[identifier] || {};
                     this.options.salable = {value: true, message: ''};
                 }
+
+                mediator.trigger('order:update:line-items', {'elm': this.$el, 'salable': this.options.salable},this);
             } else {
                 this.data = {};
             }
-            mediator.trigger('order:update:line-items', {'elm': this.$el, 'salable': this.options.salable},this);
 
             var $priceValue = parseFloat(this.getPriceValue()).toFixed(2);
             if($priceValue === "NaN" || $priceValue === null) {
                 $priceValue = '';
             }
 
+
             this.fieldsByName.price.val($priceValue);
             this.fieldsByName.taxCode.val(this.getTaxCode());
-            
+
             this.setRowTotals();
+            this.setAvailableInventory();
         },
 
         /**
@@ -126,6 +129,13 @@ define(function(require) {
         },
 
         /**
+         * @returns {Array|Null}
+         */
+        getProductInventory: function() {
+            return !_.isEmpty(this.data['inventory']) ? this.data['inventory'].value : null;
+        },
+
+        /**
          * Set row totals
          */
         setRowTotals: function() {
@@ -144,6 +154,14 @@ define(function(require) {
             }
         },
 
+        setAvailableInventory: function() {
+            if (this.getProductInventory() === null) {
+                return
+            }
+
+            this.fieldsByName.availableInventory.val(this.getProductInventory());
+        },
+
         /**
          * @returns {String|Null}
          * @private
@@ -159,7 +177,7 @@ define(function(require) {
          */
         removeRow: function() {
             OrderItemView.__super__.removeRow.call(this);
-            mediator.trigger('order:form-changes:trigger', {updateFields: ['totals']});
+            mediator.trigger('order:form-changes:trigger', {updateFields: ['totals', 'possible_shipping_methods']});
         },
 
         /**

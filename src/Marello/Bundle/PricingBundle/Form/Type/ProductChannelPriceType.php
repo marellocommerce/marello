@@ -27,7 +27,7 @@ class ProductChannelPriceType extends AbstractType
                 'required' => true
             ])
             ->add('value', OroMoneyType::class, [
-                'required' => true,
+                'required' => false,
                 'label'    => 'marello.pricing.productprice.value.label',
             ]);
     }

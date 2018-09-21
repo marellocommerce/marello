@@ -6,7 +6,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
-use Oro\Bundle\CalendarBundle\Tests\Functional\DataFixtures\LoadOrganizationData;
+use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
@@ -65,8 +66,7 @@ class LoadPurchaseOrderData extends AbstractFixture implements DependentFixtureI
     {
         return [
             LoadProductData::class,
-            LoadSupplierData::class,
-            LoadOrganizationData::class
+            LoadSupplierData::class
         ];
     }
 
@@ -99,10 +99,12 @@ class LoadPurchaseOrderData extends AbstractFixture implements DependentFixtureI
      */
     protected function createPurchaseOrder(array $data)
     {
+        $organization = $this->manager
+            ->getRepository(Organization::class)
+            ->getFirst();
         $purchaseOrder = new PurchaseOrder();
-
         $purchaseOrder
-            ->setOrganization($this->getReference('oro_calendar:organization:foo'))
+            ->setOrganization($organization)
             ->setSupplier($this->getReference($data['supplier']))
             ->setOrderTotal($data['orderTotal'])
         ;
@@ -111,11 +113,13 @@ class LoadPurchaseOrderData extends AbstractFixture implements DependentFixtureI
             $purchaseOrderItem = new PurchaseOrderItem();
             /** @var Product $product */
             $product = $this->getReference($item['product']);
+            /** @var AssembledPriceList $assembledPriceList */
+            $assembledPriceList = $product->getPrices()->first();
             $purchaseOrderItem
                 ->setProduct($product)
                 ->setOrderedAmount($item['orderedAmount'])
                 ->setRowTotal($item['rowTotal'])
-                ->setPurchasePrice($product->getPrices()->first())
+                ->setPurchasePrice($assembledPriceList->getDefaultPrice())
             ;
 
             $purchaseOrder->addItem($purchaseOrderItem);

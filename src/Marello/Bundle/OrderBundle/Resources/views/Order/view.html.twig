@@ -38,7 +38,8 @@
                             <span class="widget-title">{{ 'marello.order.datablock.order_information'|trans }}</span>
                         </div>
                         {{ UI.renderProperty('marello.order.order_number.label'|trans, entity.orderNumber) }}
-                        {{ UI.renderProperty('marello.order.order_date.label'|trans, entity.createdAt|oro_format_datetime) }}
+                        {{ UI.renderProperty('marello.order.create_date.label'|trans, entity.createdAt|oro_format_datetime) }}
+                        {{ UI.renderProperty('marello.order.purchase_date.label'|trans, entity.purchaseDate|oro_format_datetime) }}
 
                         {% set steps = marello_core_get_current_workflow_steps(entity) %}
                         {% for stepLabel, stepName in steps %}
@@ -135,7 +136,7 @@
         <div class="widget-content">
             <div class="row-fluid form-horizontal">
                 <div class="responsive-block">
-                    {{ UI.renderProperty('marello.order.shipping_method.label'|trans, entity.shippingMethod) }}
+                    {{ UI.renderProperty('marello.order.shipping_method.label'|trans, marello_shipping_method_with_type_label(entity.shippingMethod, entity.shippingMethodType)|trans) }}
                     {{ UI.renderProperty('marello.order.shipping_amount_incl_tax.label'|trans, entity.shippingAmountInclTax|oro_format_currency({'currency':entity.currency})) }}
                 </div>
             </div>

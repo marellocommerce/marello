@@ -25,8 +25,9 @@ datagrids:
                 data_name:        salesChannelName
             shippingMethod:
                 label:            marello.order.shipping_method.label
-                frontend_type:    string
-                data_name:        shippingMethod
+                type:             twig
+                frontend_type:    html
+                template:         MarelloOrderBundle:Order/Datagrid/Property:shippingMethod.html.twig
             orderReference:
                 label:            marello.order.order_reference.label
                 frontend_type:    string
@@ -44,6 +45,10 @@ datagrids:
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
+            purchaseDate:
+                frontend_type:    datetime
+                label:            marello.order.purchase_date.label
+                renderable:       false
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -66,6 +71,8 @@ datagrids:
                     data_name: shippingName
                 grandTotal:
                     data_name: o.grandTotal
+                purchaseDate:
+                    data_name: o.purchaseDate
                 createdAt:
                     data_name: o.createdAt
                 updatedAt:
@@ -92,6 +99,10 @@ datagrids:
                 shippingAddress:
                     type: string
                     data_name: shippingName             # This alias is generated using OrderGrdiAddressFilterListener
+                purchaseDate:
+                    type: datetime
+                    data_name: o.purchaseDate
+                    enabled: false
                 createdAt:
                     type: datetime
                     data_name: o.createdAt
@@ -165,6 +176,10 @@ datagrids:
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
                 align:            right
+            purchaseDate:
+                frontend_type:    datetime
+                label:            marello.order.purchase_date.label
+                renderable:       false
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -181,6 +196,8 @@ datagrids:
                     data_name: o.orderReference
                 grandTotal:
                     data_name: o.grandTotal
+                purchaseDate:
+                    data_name: o.purchaseDate
                 createdAt:
                     data_name: o.createdAt
                 updatedAt:
@@ -198,6 +215,10 @@ datagrids:
                 orderReference:
                     type: number
                     data_name: o.orderReference
+                purchaseDate:
+                    type: datetime
+                    data_name: o.purchaseDate
+                    enabled: false
                 createdAt:
                     type: datetime
                     data_name: o.createdAt
@@ -489,3 +510,11 @@ datagrids:
                 type:       navigate
                 link:       update_link
                 icon:       edit
+        options:
+            entityHint: customer
+
+    marello-customer-select-grid:
+        extends: marello-customer
+        properties:
+            id: ~
+        actions: ~

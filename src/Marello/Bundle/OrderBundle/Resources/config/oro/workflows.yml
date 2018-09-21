@@ -159,14 +159,19 @@ workflows:
                 conditions:
                     '@and':
                         - '@not_empty': $order.shippingAddress.country
-                        - '@not_empty': $order.shippingAddress.region
                         - '@not_empty': $order.shippingAddress.postalCode
                         - '@not_empty': $order.shippingAddress.city
                         - '@not_empty': $order.shippingAddress.street
                 post_actions:
+                    - '@call_service_method':
+                        service: marello_order.factory.shipping_context
+                        method: create
+                        method_parameters: [$order]
+                        attribute: $.result.orderShippingContext
                     - @marello_shipment_create:
-                        entity: $order
-                        service: $order.shippingMethod
+                        context: $.result.orderShippingContext
+                        method: $order.shippingMethod
+                        methodType: $order.shippingMethodType
                     - '@extendable':
                        events: [extendable_action.create_packingslip]
                     - @marello_pick_pack_order: ~
@@ -178,7 +183,6 @@ workflows:
                 conditions:
                     '@and':
                         - '@not_empty': $order.shippingAddress.country
-                        - '@not_empty': $order.shippingAddress.region
                         - '@not_empty': $order.shippingAddress.postalCode
                         - '@not_empty': $order.shippingAddress.city
                         - '@not_empty': $order.shippingAddress.street

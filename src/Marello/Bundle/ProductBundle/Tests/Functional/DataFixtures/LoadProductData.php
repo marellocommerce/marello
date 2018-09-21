@@ -6,7 +6,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-
+use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
+use Marello\Bundle\PricingBundle\Entity\PriceType;
+use Marello\Bundle\PricingBundle\Model\PriceTypeInterface;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
@@ -23,6 +25,8 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
     const PRODUCT_2_REF = 'product2';
     const PRODUCT_3_REF = 'product3';
     const PRODUCT_4_REF = 'product4';
+
+    const PRICE_REF_SUFFIX = '-price';
 
     /** @var \Oro\Bundle\OrganizationBundle\Entity\Organization $defaultOrganization  */
     protected $defaultOrganization;
@@ -217,20 +221,29 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
      */
     protected function addDefaultPricesForCurrencies(Product $product, array $currencies, $defaultPrice)
     {
+        $defaultPriceType = $this->manager->getRepository(PriceType::class)->find(PriceTypeInterface::DEFAULT_PRICE);
+
         /**
          * add default prices for all currencies
          */
         foreach ($currencies as $currency) {
             // add prices
             $price = new ProductPrice();
-            $price->setCurrency($currency);
+            $price
+                ->setType($defaultPriceType)
+                ->setCurrency($currency);
             if (count($currencies) > 1 && $currency === 'USD') {
                 $price->setValue(($defaultPrice * 1.12));
             } else {
                 $price->setValue($defaultPrice);
             }
 
-            $product->addPrice($price);
+            $assembledPriceList = new AssembledPriceList();
+            $assembledPriceList
+                ->setCurrency($currency)
+                ->setDefaultPrice($price);
+
+            $product->addPrice($assembledPriceList);
         }
     }
 

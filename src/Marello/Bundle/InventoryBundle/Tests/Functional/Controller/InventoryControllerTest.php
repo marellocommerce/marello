@@ -148,7 +148,7 @@ class InventoryControllerTest extends WebTestCase
                 'inventoryLevels' => [],
                 'desiredInventory' => $inventoryItem->getDesiredInventory(),
                 'purchaseInventory' => $inventoryItem->getPurchaseInventory(),
-                'replenishment' => 'never_out_of_stock',
+                'replenishment' => $inventoryItem->getReplenishment(),
                 '_token' => $token,
             ],
         ];

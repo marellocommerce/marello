@@ -6,19 +6,44 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+use Oro\Bundle\EntityBundle\ORM\Registry;
+
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
 use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
 use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
+use Marello\Bundle\PricingBundle\Entity\PriceType;
+use Marello\Bundle\PricingBundle\Form\Type\AssembledPriceListCollectionType;
+use Marello\Bundle\PricingBundle\Model\PriceTypeInterface;
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 
 class PricingSubscriber implements EventSubscriberInterface
 {
-    /** @var CurrencyProvider $provider */
+    /**
+     * @var CurrencyProvider
+     */
     protected $provider;
 
-    public function __construct(CurrencyProvider $provider)
+    /**
+     * @var Registry
+     */
+    protected $doctrine;
+
+    /**
+     * @var PriceType[]
+     */
+    protected $priceTypes = [];
+
+    /**
+     * @param CurrencyProvider $provider
+     * @param Registry $doctrine
+     */
+    public function __construct(CurrencyProvider $provider, Registry $doctrine)
     {
         $this->provider = $provider;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -28,8 +53,8 @@ class PricingSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::PRE_SET_DATA    => 'addPricingData',
-            FormEvents::POST_SUBMIT     => 'handlePricingData'
+            FormEvents::PRE_SET_DATA    => 'preSetData',
+            FormEvents::POST_SUBMIT     => 'postSubmit'
         ];
     }
 
@@ -37,7 +62,7 @@ class PricingSubscriber implements EventSubscriberInterface
      * Preset data for pricing
      * @param FormEvent $event
      */
-    public function addPricingData(FormEvent $event)
+    public function preSetData(FormEvent $event)
     {
         $entity = $event->getData();
         $form   = $event->getForm();
@@ -48,8 +73,8 @@ class PricingSubscriber implements EventSubscriberInterface
                 $existingCurrencies = [];
                 $entity
                     ->getPrices()
-                    ->map(function (ProductPrice $price) use (&$existingCurrencies) {
-                        $existingCurrencies[] = $price->getCurrency();
+                    ->map(function (AssembledPriceList $price) use (&$existingCurrencies) {
+                        $existingCurrencies[] = $price->getDefaultPrice()->getCurrency();
                     });
 
                 $currencies = array_diff($currencies, $existingCurrencies);
@@ -58,10 +83,15 @@ class PricingSubscriber implements EventSubscriberInterface
             if (!empty($currencies)) {
                 //only add prices for currencies which have not been added yet!
                 foreach ($currencies as $currency) {
-                    $price = new ProductPrice();
-                    $price->setCurrency($currency);
-                    $price->setValue(0);
-                    $entity->addPrice($price);
+                    $defaultPrice = new ProductPrice();
+                    $defaultPrice
+                        ->setCurrency($currency)
+                        ->setValue(0);
+                    $assembledPriceList = new AssembledPriceList();
+                    $assembledPriceList
+                        ->setCurrency($currency)
+                        ->setDefaultPrice($defaultPrice);
+                    $entity->addPrice($assembledPriceList);
                 }
                 $event->setData($entity);
             }
@@ -69,19 +99,43 @@ class PricingSubscriber implements EventSubscriberInterface
 
         $form->add(
             'prices',
-            'marello_product_price_collection'
+            AssembledPriceListCollectionType::class
         );
     }
 
     /**
      * @param FormEvent $event
      */
-    public function handlePricingData(FormEvent $event)
+    public function postSubmit(FormEvent $event)
     {
         /** @var Product $product */
         $product = $event->getData();
         $form = $event->getForm();
+        
+        foreach ($product->getPrices() as $assembledPriceList) {
+            $assembledPriceList->getDefaultPrice()
+                ->setType($this->getPriceType(PriceTypeInterface::DEFAULT_PRICE))
+                ->setCurrency($assembledPriceList->getCurrency());
+            if ($assembledPriceList->getSpecialPrice() !== null &&
+                $assembledPriceList->getSpecialPrice()->getValue() === null) {
+                $assembledPriceList->setSpecialPrice(null);
+            } elseif ($assembledPriceList->getSpecialPrice() !== null) {
+                $assembledPriceList->getSpecialPrice()
+                    ->setType($this->getPriceType(PriceTypeInterface::SPECIAL_PRICE))
+                    ->setCurrency($assembledPriceList->getCurrency());
+            }
+            if ($assembledPriceList->getMsrpPrice() !== null &&
+                $assembledPriceList->getMsrpPrice()->getValue() === null) {
+                $assembledPriceList->setMsrpPrice(null);
+            } elseif ($assembledPriceList->getMsrpPrice() !== null) {
+                $assembledPriceList->getMsrpPrice()
+                    ->setType($this->getPriceType(PriceTypeInterface::MSRP_PRICE))
+                    ->setCurrency($assembledPriceList->getCurrency());
+            }
+        }
+        
         if ($form->has('removeSalesChannels')) {
+            /** @var SalesChannel[] $data */
             $data = $form->get('removeSalesChannels')->getData();
             if (empty($data)) {
                 return;
@@ -106,8 +160,8 @@ class PricingSubscriber implements EventSubscriberInterface
             // get prices which should be removed based on the currencies left
             $product
                 ->getPrices()
-                ->map(function (ProductPrice $price) use (&$currencies, &$removedPrices) {
-                    if (in_array($price->getCurrency(), $currencies)) {
+                ->map(function (AssembledPriceList $price) use (&$currencies, &$removedPrices) {
+                    if (in_array($price->getDefaultPrice()->getCurrency(), $currencies)) {
                         $removedPrices[] = $price;
                     }
                 });
@@ -121,5 +175,21 @@ class PricingSubscriber implements EventSubscriberInterface
         }
 
         $event->setData($product);
+    }
+
+    /**
+     * @param $name
+     * @return PriceType
+     */
+    private function getPriceType($name)
+    {
+        if (!isset($this->priceTypes[$name])) {
+            $this->priceTypes[$name] = $this->doctrine
+                ->getManagerForClass(PriceType::class)
+                ->getRepository(PriceType::class)
+                ->find($name);
+        }
+        
+        return $this->priceTypes[$name];
     }
 }

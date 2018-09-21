@@ -21,7 +21,7 @@ use Oro\Bundle\CurrencyBundle\Entity\PriceAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository")
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -304,7 +304,7 @@ class OrderItem extends ExtendOrderItem implements
     protected $returnItems;
 
     /**
-     * @var Product
+     * @var TaxCode
      *
      * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxCode")
      * @ORM\JoinColumn(name="tax_code_id", referencedColumnName="id", onDelete="SET NULL")
