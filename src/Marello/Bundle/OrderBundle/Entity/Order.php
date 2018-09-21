@@ -481,6 +481,7 @@ class Order extends ExtendOrder implements
 
     /**
      * @ORM\PrePersist
+     * @ORM\PreUpdate
      */
     public function prePersist()
     {
