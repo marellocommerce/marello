@@ -518,3 +518,74 @@ datagrids:
         properties:
             id: ~
         actions: ~
+
+    order-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - o
+                from:
+                    - { table: MarelloOrderBundle:Order, alias: o }
+                join:
+                    left:
+                        billingAddress:
+                            join: o.billingAddress
+                            alias: ba
+                        shippingAddress:
+                            join: o.shippingAddress
+                            alias: sa
+        columns:
+            id:
+                label:            marello.order.id.label
+            orderNumber:
+                label:            marello.order.order_number.label
+                frontend_type:    string
+            orderReference:
+                label:            marello.order.order_reference.label
+                frontend_type:    string
+            grandTotal:
+                label:            marello.order.grand_total.label
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align:            right
+        sorters:
+            columns:
+                orderNumber:
+                    data_name: o.orderNumber
+                orderReference:
+                    data_name: o.orderReference
+            default:
+                orderNumber: "%oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC"
+        filters:
+            columns:
+                orderNumber:
+                    type: string
+                    data_name: o.orderNumber
+                orderReference:
+                    type: string
+                    data_name: o.orderReference
+        properties:
+            view_link:
+                type:   url
+                route:  marello_order_order_view
+                params:
+                    id: id
+        actions:
+            view:
+                type:       navigate
+                link:       view_link
+                icon:       eye
+                rowAction:  true
+        action_configuration: [@marello_order.datagrid.action_permission_provider, "getActionPermissions"]
+
+    order-for-context-grid:
+        extends: order-grid
+        options:
+            entityHint: order
+            entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+            routerEnabled: false

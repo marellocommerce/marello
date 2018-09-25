@@ -49,6 +49,10 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "grid"={
+ *              "default"="order-grid",
+ *              "context"="order-for-context-grid"
  *          }
  *      }
  * )
