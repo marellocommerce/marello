@@ -522,19 +522,7 @@ datagrids:
     order-grid:
         source:
             type: orm
-            query:
-                select:
-                    - o
-                from:
-                    - { table: MarelloOrderBundle:Order, alias: o }
-                join:
-                    left:
-                        billingAddress:
-                            join: o.billingAddress
-                            alias: ba
-                        shippingAddress:
-                            join: o.shippingAddress
-                            alias: sa
+            query: ~
         columns:
             id:
                 label:            marello.order.id.label
