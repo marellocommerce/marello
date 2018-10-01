@@ -136,6 +136,22 @@ class CustomerController extends RestController implements ClassResourceInterfac
     {
         return $this->handleCreateRequest();
     }
+
+    /**
+     * REST PUT
+     *
+     * @param int $id Customer id
+     *
+     * @ApiDoc(
+     *     description="Update Customer via Rest api",
+     *     resource=true
+     * )
+     * @return Response
+     */
+    public function putAction($id)
+    {
+        return $this->handleUpdateRequest($id);
+    }
     
     /**
      * Get entity Manager

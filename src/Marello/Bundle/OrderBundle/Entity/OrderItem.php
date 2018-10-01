@@ -332,6 +332,7 @@ class OrderItem extends ExtendOrderItem implements
 
     /**
      * @ORM\PrePersist
+     * @ORM\PreUpdate
      */
     public function prePersist()
     {
