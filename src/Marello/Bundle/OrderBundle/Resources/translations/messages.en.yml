@@ -97,6 +97,7 @@ marello:
 
             messages:
                 product_not_salable:    Product cannot be sold in the chosen Sales Channel
+                product_duplicated_in_order:    Product is duplicated in the order
 
         # Customer Entity
         customer:
