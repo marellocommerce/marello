@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Functional\Controller\Api\Rest;
 
+use Marello\Bundle\OrderBundle\Entity\Customer;
 use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadCustomerData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -120,6 +121,33 @@ class CustomerControllerTest extends WebTestCase
         $this->assertArrayNotHasKey('customer', $decodedResponse);
         $this->assertArrayHasKey('message', $decodedResponse);
         $this->assertEquals('Customer with email notexisting@customer.com not found', $decodedResponse['message']);
+    }
+
+    /**
+     * * @depends testCreate
+     */
+    public function testUpdateCustomerById()
+    {
+        /** @var Customer $existingCustomer */
+        $existingCustomer = $this->getReference('marello-customer-0');
+
+        $this->client->request(
+            'PUT',
+            $this->getUrl('marello_order_api_put_order', ['id' => $existingCustomer->getId()]),
+            ['email' => 'new@email.com']
+        );
+
+        $response = $this->client->getResponse();
+        $this->assertJsonResponseStatusCodeEquals($response, Response::HTTP_NO_CONTENT);
+
+        // check if order data is updated
+        /** @var Customer $updateCustomer */
+        $updateCustomer = $this->getContainer()
+            ->get('doctrine')
+            ->getRepository('MarelloOrderBundle:Customer')
+            ->find($existingCustomer->getId());
+        
+        $this->assertNotEquals($updateCustomer->getEmail(), $existingCustomer->getEmail());
     }
 
     /**
