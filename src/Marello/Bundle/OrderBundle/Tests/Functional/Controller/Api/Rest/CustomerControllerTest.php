@@ -29,7 +29,6 @@ class CustomerControllerTest extends WebTestCase
      */
     public function testCreate()
     {
-
         $data = [
             'firstName' => 'John',
             'lastName'  => 'Doe',
@@ -43,8 +42,7 @@ class CustomerControllerTest extends WebTestCase
                 'region'     => 'NL-NB',
                 'postalCode' => '5617 BC',
                 'company'    => 'Madia Inc'
-            ],
-//            'organization' => $this->getUser()->getOrganization()->getId()
+            ]
         ];
 
         $this->client->request(
@@ -124,30 +122,49 @@ class CustomerControllerTest extends WebTestCase
     }
 
     /**
-     * * @depends testCreate
+     * {@inheritdoc}
      */
     public function testUpdateCustomerById()
     {
         /** @var Customer $existingCustomer */
         $existingCustomer = $this->getReference('marello-customer-0');
+        $newFirstName = 'new name';
+        $newLastName = 'new last name';
+        $data = [
+            'firstName' => $newFirstName,
+            'lastName'  => $newLastName,
+            'email'     => $existingCustomer->getEmail(),
+            'primaryAddress'   => [
+                'firstName'  => $existingCustomer->getFirstName(),
+                'lastName'   => $existingCustomer->getLastName(),
+                'country'    => $existingCustomer->getPrimaryAddress()->getCountryIso2(),
+                'street'     => $existingCustomer->getPrimaryAddress()->getStreet(),
+                'city'       => $existingCustomer->getPrimaryAddress()->getCity(),
+                'region'     => $existingCustomer->getPrimaryAddress()->getRegion()->getCombinedCode(),
+                'postalCode' => $existingCustomer->getPrimaryAddress()->getPostalCode(),
+                'company'    => $existingCustomer->getPrimaryAddress()->getCompany()
+            ],
+        ];
 
         $this->client->request(
             'PUT',
-            $this->getUrl('marello_order_api_put_order', ['id' => $existingCustomer->getId()]),
-            ['email' => 'new@email.com']
+            $this->getUrl('marello_customer_api_put_customer', ['id' => $existingCustomer->getId()]),
+            $data
         );
 
         $response = $this->client->getResponse();
-        $this->assertJsonResponseStatusCodeEquals($response, Response::HTTP_NO_CONTENT);
+        $this->assertResponseStatusCodeEquals($response, Response::HTTP_NO_CONTENT);
 
-        // check if order data is updated
-        /** @var Customer $updateCustomer */
-        $updateCustomer = $this->getContainer()
+        // check if customer data is updated
+        /** @var Customer $updatedCustomer */
+        $updatedCustomer = $this->getContainer()
             ->get('doctrine')
             ->getRepository('MarelloOrderBundle:Customer')
             ->find($existingCustomer->getId());
-        
-        $this->assertNotEquals($updateCustomer->getEmail(), $existingCustomer->getEmail());
+
+        $this->assertEquals($updatedCustomer->getEmail(), $existingCustomer->getEmail());
+        $this->assertEquals($updatedCustomer->getFirstName(), $newFirstName);
+        $this->assertEquals($updatedCustomer->getLastName(), $newLastName);
     }
 
     /**
