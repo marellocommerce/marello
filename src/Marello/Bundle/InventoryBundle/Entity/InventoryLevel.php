@@ -38,7 +38,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  * )
  * @ORM\HasLifecycleCallbacks()
  */
-class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInterface
+class InventoryLevel extends ExtendInventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInterface
 {
     use AuditableOrganizationAwareTrait;
     
