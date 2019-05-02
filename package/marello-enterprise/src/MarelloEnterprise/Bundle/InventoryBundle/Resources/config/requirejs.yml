@@ -1,3 +1,0 @@
-config:
-    paths:
-        'oro/select2-autocomplete-owner-aware-warehouse-group-component': 'bundles/marelloenterpriseinventory/js/app/components/select2-autocomplete-owner-aware-warehouse-group-component.js'
