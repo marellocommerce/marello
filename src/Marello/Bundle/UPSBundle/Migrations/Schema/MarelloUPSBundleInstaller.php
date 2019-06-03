@@ -85,7 +85,7 @@ class MarelloUPSBundleInstaller implements Installation
         $table->addColumn('description', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('country_code', 'string', ['length' => 2]);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['country_code'], 'IDX_C6DD8778F026BB7C', []);
+        $table->addIndex(['country_code']);
     }
 
     /**
@@ -97,8 +97,8 @@ class MarelloUPSBundleInstaller implements Installation
         $table->addColumn('transport_id', 'integer', []);
         $table->addColumn('ship_service_id', 'integer', []);
         $table->setPrimaryKey(['transport_id', 'ship_service_id']);
-        $table->addIndex(['transport_id'], 'IDX_1554DDE9909C13F', []);
-        $table->addIndex(['ship_service_id'], 'IDX_1554DDE37CA9B1D', []);
+        $table->addIndex(['transport_id']);
+        $table->addIndex(['ship_service_id']);
     }
 
     /**
@@ -110,8 +110,8 @@ class MarelloUPSBundleInstaller implements Installation
         $table->addColumn('transport_id', 'integer', []);
         $table->addColumn('localized_value_id', 'integer', []);
         $table->setPrimaryKey(['transport_id', 'localized_value_id']);
-        $table->addIndex(['transport_id'], 'IDX_1554DDE9909C13D', []);
-        $table->addUniqueIndex(['localized_value_id'], 'UNIQ_1554DDE37CA9B1F', []);
+        $table->addIndex(['transport_id']);
+        $table->addUniqueIndex(['localized_value_id']);
     }
 
     /**
