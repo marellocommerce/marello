@@ -5,6 +5,7 @@ parameters:
     database_name:          marello_application_test
     database_user:          root
     database_password:      ~
+    database_server_version: ~
     database_driver_options: []
 
     mailer_transport:       smtp
@@ -41,3 +42,8 @@ parameters:
                                        # incremental - the next assets version is the previous version is incremented by one (e.g. 'ver1' -> 'ver2' or '1' -> '2')
     message_queue_transport: 'null'
     message_queue_transport_config: ~
+    deployment_type: ~
+
+    # Post processors binary
+    liip_imagine.jpegoptim.binary: null
+    liip_imagine.pngquant.binary: null

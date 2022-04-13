@@ -5,6 +5,9 @@ imports:
 
 parameters:
     doctrine.dbal.connection_factory.class: 'Oro\Component\Testing\Doctrine\PersistentConnectionFactory'
+    message_queue_transport: 'dbal'
+    message_queue_transport_config: {}
+    main_log_channels: []
 
 framework:
     test: ~
@@ -20,17 +23,13 @@ monolog:
             type: fingers_crossed
             action_level: error
             handler: nested
+            excluded_http_codes: [ 404, 405 ]
+            channels: [ "!event" ]
         nested:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-
-services:
-    oro_message_queue.test.message_collector:
-        class: Oro\Bundle\MessageQueueBundle\Test\Functional\MessageCollector
-        decorates: oro_message_queue.client.message_producer
-        arguments:
-            - '@oro_message_queue.test.message_collector.inner'
+            channels: '%main_log_channels%'
 
 swiftmailer:
     logging: true
@@ -54,6 +53,7 @@ twig:
     strict_variables: true
     debug: false
 
-oro_message_queue:
-    transport:
-        dbal: null
+oro_api:
+    settings:
+        web_api:
+            value: true
