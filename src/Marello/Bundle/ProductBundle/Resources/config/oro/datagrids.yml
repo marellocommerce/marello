@@ -546,6 +546,9 @@ datagrids:
             canDropship:
                 label:                marello.supplier.can_dropship.label
                 frontend_type:        boolean
+            leadTime:
+                label:                marello.product.productsupplierrelation.lead_time.label
+                frontend_type:        number
         properties:
             id: ~
         options:

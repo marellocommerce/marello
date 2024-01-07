@@ -136,35 +136,41 @@
 {% endblock %}
 
 {% block marello_product_supplier_relation_form_widget %}
-    <td class="supplier-line-item-supplier">
-        <div class="fields-row">
+    <td>
+        <div class="fields-row product-supplier-relation-item supplier-line-item-supplier">
             {{ form_widget(form.supplier) }}
         </div>
         {{ form_errors(form.supplier) }}
     </td>
-    <td class="supplier-line-item-quantity-of-unit">
-        <div class="fields-row">
+    <td>
+        <div class="fields-row product-supplier-relation-item supplier-line-item-quantity-of-unit">
             {{ form_widget(form.quantityOfUnit) }}
         </div>
         {{ form_errors(form.quantityOfUnit) }}
     </td>
-    <td class="supplier-line-item-cost">
-        <div class="fields-row">
+    <td>
+        <div class="fields-row product-supplier-relation-item supplier-line-item-cost">
             {{ form_widget(form.cost) }}{{ form.vars.currency }}
         </div>
         {{ form_errors(form.cost) }}
     </td>
-    <td class="supplier-line-item-priority">
-        <div class="fields-row">
+    <td>
+        <div class="fields-row product-supplier-relation-item supplier-line-item-priority">
             {{ form_widget(form.priority) }}
         </div>
         {{ form_errors(form.priority) }}
     </td>
-    <td class="supplier-line-item-can-dropship">
-        <div class="fields-row">
+    <td>
+        <div class="fields-row product-supplier-relation-item supplier-line-item-can-dropship">
             {{ form_widget(form.canDropship) }}
         </div>
         {{ form_errors(form.canDropship) }}
+    </td>
+    <td>
+        <div class="fields-row product-supplier-relation-item supplier-line-item-lead-time">
+            {{ form_widget(form.leadTime) }}
+        </div>
+        {{ form_errors(form.leadTime) }}
     </td>
 {% endblock %}
 
@@ -204,6 +210,7 @@
 {% endmacro %}
 
 {% block marello_product_supplier_relation_collection_form_widget %}
+    {% import '@OroUI/macros.html.twig' as UI %}
     {% import _self as fields %}
 
     {% apply spaceless %}
@@ -219,11 +226,27 @@
                 <table class="grid table-hover table table-bordered table-condensed">
                     <thead>
                     <tr>
-                        <th class="supplier-line-item-supplier"><span>{{ 'marello.supplier.entity_label'|trans }}</span></th>
-                        <th class="supplier-line-item-quantity-of-unit"><span>{{ 'marello.supplier.quantity_of_unit.label'|trans }}</span></th>
-                        <th class="supplier-line-item-cost"><span>{{ 'marello.supplier.cost.label'|trans }}</span></th>
-                        <th class="supplier-line-item-priority"><span>{{ 'marello.supplier.priority.label'|trans }}</span></th>
-                        <th class="supplier-line-item-can-dropship"><span>{{ 'marello.supplier.can_dropship.label'|trans }}</span></th>
+                        <th>
+                            <span class="product-supplier-relation-item supplier-line-item-supplier">{{ 'marello.supplier.entity_label'|trans }}</span>
+                        </th>
+                        <th>
+                            <span class="product-supplier-relation-item supplier-line-item-quantity-of-unit">{{ 'marello.supplier.quantity_of_unit.label'|trans }}</span>
+                        </th>
+                        <th>
+                            <span class="product-supplier-relation-item supplier-line-item-cost">{{ 'marello.supplier.cost.label'|trans }}</span>
+                        </th>
+                        <th>
+                            <span class="product-supplier-relation-item supplier-line-item-priority">{{ 'marello.supplier.priority.label'|trans }}</span>
+                        </th>
+                        <th>
+                            <span class="product-supplier-relation-item supplier-line-item-can-dropship">{{ 'marello.supplier.can_dropship.label'|trans }}</span>
+                        </th>
+                        <th>
+                            <span class="product-supplier-relation-item supplier-line-item-lead-time">
+                                {{ 'marello.product.productsupplierrelation.lead_time.label'|trans }}
+                                {{ UI.tooltip('marello.product.productsupplierrelation.lead_time.tooltip') }}
+                            </span>
+                        </th>
                         {% if form.vars.allow_delete %}
                             <th class="supplier-row-item-actions"></th>
                         {% endif %}

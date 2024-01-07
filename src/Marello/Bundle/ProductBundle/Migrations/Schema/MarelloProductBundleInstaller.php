@@ -35,7 +35,7 @@ class MarelloProductBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_14';
+        return 'v1_15';
     }
 
     /**
@@ -196,6 +196,7 @@ class MarelloProductBundleInstaller implements
             ['notnull' => false, 'precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']
         );
         $table->addColumn('can_dropship', 'boolean', []);
+        $table->addColumn('lead_time', 'integer', ['default' => 0]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(
             [

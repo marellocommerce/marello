@@ -62,7 +62,7 @@ class ProductSupplierRelation
     protected $priority;
 
     /**
-     * @var double
+     * @var float
      *
      * @ORM\Column(name="cost", type="money", nullable=true)
      */
@@ -75,159 +75,100 @@ class ProductSupplierRelation
      */
     protected $canDropship;
 
-
     /**
-     * Get id
+     * @var integer
      *
-     * @return integer
+     * @ORM\Column(name="lead_time", type="integer", nullable=true)
      */
-    public function getId()
+    protected $leadTime = 0;
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set product
-     *
-     * @param Product $product
-     *
-     * @return ProductSupplierRelation
-     */
-    public function setProduct(Product $product)
+    public function setProduct(Product $product): self
     {
         $this->product = $product;
 
         return $this;
     }
 
-    /**
-     * Get product
-     *
-     * @return Product
-     */
-    public function getProduct()
+    public function getProduct(): Product
     {
         return $this->product;
     }
 
-    /**
-     * Set supplier
-     *
-     * @param Supplier $supplier
-     *
-     * @return ProductSupplierRelation
-     */
-    public function setSupplier(Supplier $supplier)
+    public function setSupplier(Supplier $supplier): self
     {
         $this->supplier = $supplier;
 
         return $this;
     }
 
-    /**
-     * Get supplier
-     *
-     * @return Supplier
-     */
-    public function getSupplier()
+    public function getSupplier(): Supplier
     {
         return $this->supplier;
     }
 
-    /**
-     * Set quantityOfUnit
-     *
-     * @param integer $quantityOfUnit
-     *
-     * @return ProductSupplierRelation
-     */
-    public function setQuantityOfUnit($quantityOfUnit)
+    public function setQuantityOfUnit(int $quantityOfUnit): self
     {
         $this->quantityOfUnit = $quantityOfUnit;
 
         return $this;
     }
 
-    /**
-     * Get quantityOfUnit
-     *
-     * @return integer
-     */
-    public function getQuantityOfUnit()
+    public function getQuantityOfUnit(): int
     {
         return $this->quantityOfUnit;
     }
 
-    /**
-     * Set priority
-     *
-     * @param integer $priority
-     *
-     * @return ProductSupplierRelation
-     */
-    public function setPriority($priority)
+    public function setPriority(int $priority): self
     {
         $this->priority = $priority;
 
         return $this;
     }
 
-    /**
-     * Get priority
-     *
-     * @return integer
-     */
-    public function getPriority()
+    public function getPriority(): int
     {
         return $this->priority;
     }
 
-    /**
-     * Set cost
-     *
-     * @param double $cost
-     *
-     * @return ProductSupplierRelation
-     */
-    public function setCost($cost)
+    public function setCost(?float $cost = null): self
     {
         $this->cost = $cost;
 
         return $this;
     }
 
-    /**
-     * Get cost
-     *
-     * @return double
-     */
-    public function getCost()
+    public function getCost(): ?float
     {
         return $this->cost;
     }
 
-    /**
-     * Set canDropship
-     *
-     * @param boolean $canDropship
-     *
-     * @return ProductSupplierRelation
-     */
-    public function setCanDropship($canDropship)
+    public function setCanDropship(bool $canDropship): self
     {
         $this->canDropship = $canDropship;
 
         return $this;
     }
 
-    /**
-     * Get canDropship
-     *
-     * @return boolean
-     */
-    public function getCanDropship()
+    public function getCanDropship(): bool
     {
         return $this->canDropship;
+    }
+
+    public function setLeadTime(int $leadTime): self
+    {
+        $this->leadTime = $leadTime;
+
+        return $this;
+    }
+
+    public function getLeadTime(): ?int
+    {
+        return $this->leadTime;
     }
 
     public function __clone()
