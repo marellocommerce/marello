@@ -45,6 +45,7 @@ services:
         class: 'Marello\Bundle\InventoryBundle\EventListener\ExternalWarehouseEventListener'
         arguments:
             - '@oro_entity.doctrine_helper'
+            - '@oro_config.manager'
         tags:
             - { name: kernel.event_listener, event: marello_supplier.supplier_dropship_toggle, method: onSupplierDropshipToggle }
             - { name: kernel.event_listener, event: marello_product.product_dropship_toggle, method: onProductDropshipToggle }
