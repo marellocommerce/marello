@@ -61,11 +61,14 @@ services:
         class: 'Marello\Bundle\InventoryBundle\Twig\WarehouseExtension'
         arguments:
             - '@doctrine'
+            - '@marello_inventory.manager.inventory_manager'
         tags:
             - { name: twig.extension }
 
     marello_inventory.provider.order_warehouse:
         class: 'Marello\Bundle\InventoryBundle\Provider\OrderWarehousesProvider'
+        arguments:
+            - '@Marello\Bundle\InventoryBundle\Strategy\WFA\WFAStrategiesRegistry'
 
     Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository:
         parent: oro_entity.abstract_repository
@@ -256,6 +259,14 @@ services:
         tags:
             - { name: console.command }
 
+    Marello\Bundle\InventoryBundle\Command\InventorySellByDateRecalculateCronCommand:
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@marello_inventory.model.inventory_level_calculator'
+            - '@marello_inventory.manager.inventory_manager'
+        tags:
+            - { name: console.command }
+
     Marello\Bundle\InventoryBundle\Model\Allocation\WarehouseNotifierRegistry: ~
 
     Marello\Bundle\InventoryBundle\Provider\WarehouseNotifierChoicesProvider:
@@ -299,3 +310,11 @@ services:
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel }
+
+    Marello\Bundle\InventoryBundle\EventListener\Datagrid\ExpectedInventoryItemGridListener:
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.marello-inventory-expected-inventory-item-grid, method: onBuildAfter }
+
+    Marello\Bundle\InventoryBundle\EventListener\Datagrid\ExpectedInventoryForAllocationItemsGridListener:
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.marello-allocation-items-grid, method: onBuildBefore }
