@@ -227,7 +227,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *      }
      * )
      *
-     * @var InventoryLevel[]|Collection
+     * @var InventoryBatch[]|Collection
      */
     protected $inventoryBatches;
 
