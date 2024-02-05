@@ -15,6 +15,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+use Oro\Bundle\EntityBundle\EntityProperty\DenormalizedPropertyAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamilyAwareInterface;
 
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
@@ -77,6 +78,7 @@ class Product implements
     PricingAwareInterface,
     OrganizationAwareInterface,
     AttributeFamilyAwareInterface,
+    DenormalizedPropertyAwareInterface,
     ExtendEntityInterface
 {
     use ExtendEntityTrait, EntityCreatedUpdatedAtTrait;
@@ -1506,13 +1508,21 @@ class Product implements
         if (!$this->getDefaultName()) {
             throw new \RuntimeException(sprintf('Product %s has to have a default name', $this->getSku()));
         }
-        $this->denormalizedDefaultName = $this->getDefaultName()->getString();
+        $this->updateDenormalizedProperties();
     }
 
     /**
      * @ORM\PreUpdate
      */
     public function preUpdate()
+    {
+        if (!$this->getDefaultName()) {
+            throw new \RuntimeException(sprintf('Product %s has to have a default name', $this->getSku()));
+        }
+        $this->updateDenormalizedProperties();
+    }
+
+    public function updateDenormalizedProperties(): void
     {
         if (!$this->getDefaultName()) {
             throw new \RuntimeException(sprintf('Product %s has to have a default name', $this->getSku()));
