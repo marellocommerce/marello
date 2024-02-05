@@ -196,7 +196,7 @@ class MarelloProductBundleInstaller implements
             ['notnull' => false, 'precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']
         );
         $table->addColumn('can_dropship', 'boolean', []);
-        $table->addColumn('lead_time', 'integer', ['default' => 0]);
+        $table->addColumn('lead_time', 'integer');
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(
             [

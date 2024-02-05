@@ -76,11 +76,11 @@ class ProductSupplierRelation
     protected $canDropship;
 
     /**
-     * @var integer
+     * @var integer|null
      *
      * @ORM\Column(name="lead_time", type="integer", nullable=true)
      */
-    protected $leadTime = 0;
+    protected $leadTime;
 
     public function getId(): ?int
     {
