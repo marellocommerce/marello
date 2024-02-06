@@ -145,6 +145,20 @@ class InventoryBatch implements
     protected $expirationDate;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="sell_by_date", type="datetime", nullable=true)
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $sellByDate;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="purchase_price", type="money", nullable=true)
@@ -356,6 +370,25 @@ class InventoryBatch implements
     {
         $this->expirationDate = $expirationDate;
         
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSellByDate()
+    {
+        return $this->sellByDate;
+    }
+
+    /**
+     * @param \DateTime $sellByDate
+     * @return InventoryBatch
+     */
+    public function setSellByDate($sellByDate)
+    {
+        $this->sellByDate = $sellByDate;
+
         return $this;
     }
 

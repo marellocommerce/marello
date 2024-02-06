@@ -19,6 +19,8 @@ class Configuration implements ConfigurationInterface
 {
     const SYSTEM_CONFIG_PATH_BALANCE_STRATEGY = 'marello_inventory.balancing_strategy';
     const SYSTEM_CONFIG_PATH_THRESHOLD_PERCENTAGE = 'marello_inventory.balance_threshold_percentage';
+    const SYSTEM_CONFIG_PATH_MANAGED_INVENTORY_FOR_EXTERNAL_WAREHOUSE =
+        'marello_inventory.managed_inventory_for_external_warehouse';
 
     /**
      * {@inheritDoc}
@@ -39,6 +41,9 @@ class Configuration implements ConfigurationInterface
                 ],
                 'inventory_allocation_priority' => [
                     'value' => 0
+                ],
+                'managed_inventory_for_external_warehouse' => [
+                    'value' => false,
                 ]
             ]
         );

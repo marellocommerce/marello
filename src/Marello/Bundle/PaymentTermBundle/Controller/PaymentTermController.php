@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 class PaymentTermController extends AbstractController
 {
@@ -20,6 +21,7 @@ class PaymentTermController extends AbstractController
      *     path="/",
      *     name="marello_paymentterm_paymentterm_index"
      * )
+     * @AclAncestor("marello_paymentterm_paymentterm_view")
      * @Template("@MarelloPaymentTerm/PaymentTerm/index.html.twig")
      */
     public function indexAction()
@@ -34,6 +36,7 @@ class PaymentTermController extends AbstractController
      *     path="/create",
      *     name="marello_paymentterm_paymentterm_create"
      * )
+     * @AclAncestor("marello_paymentterm_paymentterm_create")
      * @Template("@MarelloPaymentTerm/PaymentTerm/update.html.twig")
      *
      * @param Request $request
@@ -52,6 +55,7 @@ class PaymentTermController extends AbstractController
      *     requirements={"id" = "\d+"},
      *     name="marello_paymentterm_paymentterm_update"
      * )
+     * @AclAncestor("marello_paymentterm_paymentterm_update")
      * @Template("@MarelloPaymentTerm/PaymentTerm/update.html.twig")
      *
      * @param PaymentTerm $entity
@@ -96,6 +100,7 @@ class PaymentTermController extends AbstractController
      *     requirements={"id" = "\d+"},
      *     name="marello_paymentterm_paymentterm_view"
      * )
+     * @AclAncestor("marello_paymentterm_paymentterm_view")
      * @Template("@MarelloPaymentTerm/PaymentTerm/view.html.twig")
      */
     public function viewAction(PaymentTerm $entity)
