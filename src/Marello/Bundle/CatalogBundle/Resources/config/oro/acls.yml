@@ -1,0 +1,15 @@
+acls:
+    marello_category_create:
+        type: entity
+        class: MarelloCatalogBundle:Category
+        permission: CREATE
+
+    marello_category_view:
+        type: entity
+        class: MarelloCatalogBundle:Category
+        permission: VIEW
+
+    marello_category_update:
+        type: entity
+        class: MarelloCatalogBundle:Category
+        permission: EDIT
