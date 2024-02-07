@@ -23,6 +23,7 @@ navigation:
                 extras:
                     routes: ['oro_attribute_*']
                     position: 15
+                acl_resource_id: marello_product_view
 
             products_attributes_index:
                 label: 'marello.product.menu.product_attributes.label'
@@ -32,6 +33,7 @@ navigation:
                 extras:
                     routes: ['oro_attribute_*']
                     position: 20
+                acl_resource_id: marello_product_view
 
             shortcut_new_product:
                 label: 'marello.product.menu.shortcut_new_product.label'

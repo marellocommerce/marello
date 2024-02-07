@@ -88,17 +88,19 @@ define(function(require) {
             }
 
             if (data.currency.length !== 0) {
-                this.options.currency = ' ' + data.currency;
+                this.options.currency = '<span>' + data.currency + '</span>';
             }
 
             this.fieldsByName.priority
                 .val(this.options.priority);
 
-            var parent = $(this.fieldsByName.cost).parent();
-            parent.contents().filter(function(){
-                return (this.nodeType == 3);
-            }).remove();
-            parent.append(this.options.currency);
+            var items = [$(this.fieldsByName.cost)];
+            var _self = this;
+            _.each(items, function(item) {
+                var $item = $(item);
+                $item.parent().find('.supplier-line-item-currency span').remove();
+                $item.parent().find('.supplier-line-item-currency').append(_self.options.currency);
+            });
         },
 
         /**

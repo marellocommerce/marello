@@ -223,6 +223,21 @@ class SalesChannel implements
     protected $products;
 
     /**
+     * @var SalesChannel|null
+     *
+     * @ORM\ManyToOne(targetEntity="SalesChannel")
+     * @ORM\JoinColumn(name="associated_sales_channel_id", referencedColumnName="id", nullable=true)
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $associatedSalesChannel;
+
+    /**
      * @param string|null $name
      */
     public function __construct($name = null)
@@ -464,5 +479,17 @@ class SalesChannel implements
     public function getProducts()
     {
         return $this->products;
+    }
+
+    public function getAssociatedSalesChannel(): ?SalesChannel
+    {
+        return $this->associatedSalesChannel;
+    }
+
+    public function setAssociatedSalesChannel(?SalesChannel $associatedSalesChannel = null): self
+    {
+        $this->associatedSalesChannel = $associatedSalesChannel;
+
+        return $this;
     }
 }
