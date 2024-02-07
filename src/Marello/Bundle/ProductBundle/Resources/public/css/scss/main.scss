@@ -41,30 +41,10 @@ div.product-image {
     }
 }
 .product-supplier-relation-item {
-    width: 200px;
     &.supplier-line-item-quantity-of-unit input,
     &.supplier-line-item-cost input,
     &.supplier-line-item-priority input,
     &.supplier-line-item-lead-time input {
-        width: 180px;
-    }
-}
-
-.supplier-line-item-quantity-of-unit,
-.supplier-line-item-cost,
-.supplier-line-item-priority {
-    width: 243px;
-
-    input[type="text"] {
-        width: auto;
-        text-align:left;
-        float: left;
-    }
-}
-.supplier-line-item-currency {
-    padding: 5px;
-
-    span {
-        margin-left:5px;
+        width: 243px;
     }
 }

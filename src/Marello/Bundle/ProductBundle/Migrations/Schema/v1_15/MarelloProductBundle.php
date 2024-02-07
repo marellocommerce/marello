@@ -17,7 +17,7 @@ class MarelloProductBundle implements Migration
     {
         $table = $schema->getTable('marello_product_prod_supp_rel');
         if (!$table->hasColumn('lead_time')) {
-            $table->addColumn('lead_time', 'integer');
+            $table->addColumn('lead_time', 'integer', ['notnull' => false]);
         }
     }
 }
