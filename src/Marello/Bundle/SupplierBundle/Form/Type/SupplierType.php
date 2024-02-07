@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Valid;
@@ -28,9 +30,6 @@ class SupplierType extends AbstractType
         'nameSuffix'
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -78,9 +77,12 @@ class SupplierType extends AbstractType
         $this->removeNonStreetFieldsFromAddress($builder, 'address');
     }
 
-    /**
-     * @param FormEvent $event
-     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['attr']['data-page-component-module'] = 'marellosupplier/js/app/components/supplier-component';
+        $view->vars['attr']['data-page-component-options'] = json_encode(['autoRender' => true]);
+    }
+
     public function preSetDataListener(FormEvent $event)
     {
         /** @var Supplier $supplier */
@@ -92,9 +94,6 @@ class SupplierType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -103,20 +102,12 @@ class SupplierType extends AbstractType
         ]);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return self::BLOCK_PREFIX;
     }
 
-    /**
-     * Remove all non street attributes from address in supplier
-     * @param FormBuilderInterface $builder
-     * @param $childName
-     */
-    protected function removeNonStreetFieldsFromAddress(FormBuilderInterface $builder, $childName)
+    protected function removeNonStreetFieldsFromAddress(FormBuilderInterface $builder, string $childName)
     {
         $address = $builder->get($childName);
         foreach (self::$nonStreetAttributes as $attribute) {
