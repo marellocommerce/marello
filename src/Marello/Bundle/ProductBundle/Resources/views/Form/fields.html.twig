@@ -35,7 +35,7 @@
     <tr data-content="{{ name }}"
         class="marello-line-item"
         data-page-component-module="oroui/js/app/components/view-component"
-        data-page-component-options="{{ {view: 'marelloproduct/js/app/views/product-channel-taxcode-view'}|json_encode }}"
+        data-page-component-options="{{ {view: 'marellolayout/js/app/views/abstract-item-view'}|json_encode }}"
         data-layout="separate">
         {{ form_widget(form) }}
         {% if allow_delete %}
@@ -150,7 +150,7 @@
     </td>
     <td>
         <div class="fields-row product-supplier-relation-item supplier-line-item-cost">
-            {{ form_widget(form.cost) }}{{ form.vars.currency }}
+            {{ form_widget(form.cost) }}<div class="supplier-line-item-currency"><span>{{ form.vars.currency }}</span></div>
         </div>
         {{ form_errors(form.cost) }}
     </td>

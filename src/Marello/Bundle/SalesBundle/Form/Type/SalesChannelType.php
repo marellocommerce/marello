@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SalesChannelType extends AbstractType
@@ -53,6 +55,9 @@ class SalesChannelType extends AbstractType
             ->add('localization', LocalizationSelectType::class, [
                 'required' => false
             ])
+            ->add('associatedSalesChannel', SalesChannelSelectType::class, [
+                'autocomplete_alias' => 'saleschannels_for_pos',
+            ])
             ->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetDataListener']);
     }
 
@@ -77,6 +82,12 @@ class SalesChannelType extends AbstractType
             // disable code field for sc's
             FormUtils::replaceField($form, 'code', ['disabled' => true]);
         }
+    }
+
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['attr']['data-page-component-module'] = 'marellosales/js/app/components/sales-channel-component';
+        $view->vars['attr']['data-page-component-options'] = json_encode(['autoRender' => true]);
     }
 
     /**

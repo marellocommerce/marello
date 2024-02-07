@@ -17,7 +17,7 @@ class MarelloSalesBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_4_1';
+        return 'v1_5';
     }
 
     /**
@@ -90,6 +90,7 @@ class MarelloSalesBundleInstaller implements Installation
         $table->addColumn('localization_id', 'integer', ['notnull' => false]);
         $table->addColumn('group_id', 'integer', ['notnull' => false]);
         $table->addColumn('integration_channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('associated_sales_channel_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['code'], 'marello_sales_sales_channel_codeidx');
         $table->addIndex(['owner_id'], 'idx_37c71d17e3c61f9', []);
@@ -153,6 +154,12 @@ class MarelloSalesBundleInstaller implements Installation
             $schema->getTable('marello_sales_channel_type'),
             ['channel_type'],
             ['name'],
+            ['onDelete' => null, 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_sales_sales_channel'),
+            ['associated_sales_channel_id'],
+            ['id'],
             ['onDelete' => null, 'onUpdate' => null]
         );
     }
