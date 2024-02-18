@@ -239,7 +239,8 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *               "order"=30,
+     *               "full"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true
@@ -404,7 +405,8 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *              "order"=40,
+     *              "full"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true
@@ -545,7 +547,8 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *              "order"=40,
+     *              "full"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true
@@ -601,7 +604,8 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *              "order"=50,
+     *              "full"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true
@@ -642,7 +646,8 @@ class Product implements
      *              "auditable"=false
      *          },
      *          "importexport"={
-     *              "order"=10
+     *              "order"=35,
+     *              "full"=false
      *          }
      *      }
      *  )
@@ -657,6 +662,9 @@ class Product implements
      *      defaultValues={
      *          "entity"={
      *              "label"="oro.ui.created_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
      *          }
      *      }
      * )
@@ -671,6 +679,9 @@ class Product implements
      *      defaultValues={
      *          "entity"={
      *              "label"="oro.ui.updated_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
      *          }
      *      }
      * )

@@ -5,6 +5,21 @@
 {% set gridName  = 'marello-products-grid' %}
 
 {% block navButtons %}
+    <div class="pull-left">
+        {# weedizp change bundle to MarelloImportExport #}
+        {% include '@OroImportExport/ImportExport/buttons.html.twig' with {
+            entity_class: 'Marello\\Bundle\\ProductBundle\\Entity\\Product',
+            exportProcessor: 'marello_product',
+            exportTitle: 'Export',
+            exportTemplateProcessor: 'marello_product',
+            exportTemplateTitle: 'Export Template',
+            importProcessor: 'marello_product',
+            importTitle: 'Import',
+            importValidationLabel: 'Import Validation',
+            datagridName: gridName
+        } %}
+    </div>
+
     {% if is_granted('marello_product_create') %}
         {{ UI.addButton({
             'path': path('marello_product_create'),

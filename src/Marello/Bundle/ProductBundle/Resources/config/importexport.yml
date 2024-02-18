@@ -1,0 +1,49 @@
+services:
+    Marello\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter:
+        parent: oro_importexport.data_converter.configurable
+
+    Marello\Bundle\ProductBundle\ImportExport\EventListener\ProductImportExportSubscriber:
+        tags:
+          - { name: kernel.event_subscriber }
+
+    Marello\Bundle\ProductBundle\ImportExport\Strategy\ProductStrategy:
+        parent: oro_locale.importexport.strategy.localized_fallback_value_aware
+
+    marello_product.importexport.processor.export:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, ['@Marello\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter']]
+        tags:
+            - name: oro_importexport.processor
+              type: export
+              entity: Marello\Bundle\ProductBundle\Entity\Product
+              alias: marello_product
+
+    marello_product.importexport.processor.export_template:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, ['@Marello\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter']]
+        tags:
+            - name: oro_importexport.processor
+              type: export_template
+              entity: Marello\Bundle\ProductBundle\Entity\Product
+              alias: marello_product
+
+    marello_product.importexport.processor.import:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, ['@Marello\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter']]
+            - [setStrategy, ['@Marello\Bundle\ProductBundle\ImportExport\Strategy\ProductStrategy']]
+        tags:
+            - name: oro_importexport.processor
+              type: import
+              entity: Marello\Bundle\ProductBundle\Entity\Product
+              alias: marello_product
+            - name: oro_importexport.processor
+              type: import_validation
+              entity: Marello\Bundle\ProductBundle\Entity\Product
+              alias: marello_product
+
+    Marello\Bundle\ProductBundle\ImportExport\TemplateFixture\ProductFixture:
+        tags:
+            - { name: oro_importexport.template_fixture }

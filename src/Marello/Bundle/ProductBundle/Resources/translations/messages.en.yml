@@ -77,6 +77,20 @@ marello:
                 sku:                SKU already exists, please provide a unique SKU
                 sales_channels:
                     assignment: There was failure during Sales Channels assignment
+            import:
+                error:
+                    status:
+                        invalid: Such Product Status doesn't exist
+                    attribute_family:
+                        required: Attribute Family is required
+                        invalid: Such Attribute Family doesn't exist
+                    tax_code:
+                        required: Tax Code is required
+                        invalid: Such Tax Code doesn't exist
+                    categories:
+                        invalid: Such Category doesn't exist "{{ code }}"
+                    channels:
+                        invalid: Such Sales Channel doesn't exist "{{ code }}"
 
         sections:
             general:                General

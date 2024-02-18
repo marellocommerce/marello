@@ -481,6 +481,16 @@ class SalesChannel implements
         return $this->products;
     }
 
+    public function removeProduct(Product $product)
+    {
+        if ($this->hasProduct($product)) {
+            $product->removeChannel($this);
+            $this->products->removeElement($product);
+        }
+
+        return $this;
+    }
+
     public function getAssociatedSalesChannel(): ?SalesChannel
     {
         return $this->associatedSalesChannel;
