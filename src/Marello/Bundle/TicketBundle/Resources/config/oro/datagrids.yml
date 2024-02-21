@@ -1,0 +1,52 @@
+datagrids:
+    marello-tickets-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - e.id
+#                    - e.customer
+                    - e.first_name
+                    - e.last_name
+                    - e.email
+                    - e.phone
+                    # maybe for related tables it will not work
+#                    - e.owner
+#                    - e.assigned_to
+#                    - e.source
+#                    - e.priority
+#                    - e.category
+#                    - e.subject
+#                    - e.description
+#                    - e.resolution
+                from:
+                    -
+                        table: Marello\Bundle\TicketBundle\Ticket
+                        alias: e
+        columns:
+#            customer:
+#                label: marello.ticket.customer.label
+            first_name:
+                label: marello.ticket.first_name.label
+            last_name:
+                label: marello.ticket.last_name.label
+            email:
+                label: marello.ticket.email.label
+            phone:
+                label: marello.ticket.phone.label
+#            owner:
+#                label: marello.ticket.owner.label
+#            assigned_to:
+#                label: marello.ticket.assigned_to.label
+#            source:
+#                label: marello.ticket.source.label
+#            priority:
+#                label: marello.ticket.priority.label
+#            category:
+#                label: marello.ticket.category.label
+#            subject:
+#                label: marello.ticket.subject.label
+#            description:
+#                label: marello.ticket.description.label
+#            resolution:
+#                label: marello.ticket.resolution.label

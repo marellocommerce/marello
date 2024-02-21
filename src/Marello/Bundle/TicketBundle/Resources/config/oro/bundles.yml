@@ -1,0 +1,2 @@
+bundles:
+  - { name: Marello\Bundle\TicketBundle\MarelloTicketBundle, priority: 255}

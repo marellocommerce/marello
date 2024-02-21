@@ -1,0 +1,22 @@
+marello:
+  ticket:
+    entity_label: 'Ticket'
+    entity_plural_label: 'Tickets'
+    entity_description: 'Customer support request'
+    id.label: 'ID'
+    customer.label: 'Customer'
+    first_name.label: 'First Name'
+    last_name.label: 'Last Name'
+    email.label: 'Email'
+    phone.label: 'Phone Number'
+    owner.label: 'Owner'
+    assigned_to.label: 'Assigned to'
+    source.label: 'Source'
+    priority.label: 'Priority'
+    category.label: 'Category'
+    subject.label: 'Subject'
+    description.label: 'Description'
+    resolution.label: 'Resolution'
+  sections:
+    general: 'Tickets information'
+    marello_tickets_grid: 'Customer support tickets'

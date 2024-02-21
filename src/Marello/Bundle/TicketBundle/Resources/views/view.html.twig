@@ -1,0 +1,59 @@
+{% extends '@OroUI/actions/index.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
+{% set gridName = 'marello-tickets-grid' %}
+{% set pageTitle = 'marello.ticket.entity_plural_label'|trans %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('marello_ticket_index'),
+        'indexLabel':  'marello.ticket.entity_plural_label'|trans,
+        'entityTitle': entity.title,
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'marello-paymentterm-view' %}
+    {% set generalSubblocks = [] %}
+    {% set generalInformation %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    <div class="box-type1">
+                        {{ UI.renderProperty('marello.ticket.id.label'|trans, entity.id) }}
+                        {{ UI.renderProperty('marello.ticket.first_name.label'|trans, entity.firstName) }}
+                        {{ UI.renderProperty('marello.ticket.last_name.label'|trans, entity.lastName) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'marello.sections.general'|trans,
+            'subblocks': [
+            {'data' : [generalInformation]}
+        ]
+        }
+    ] %}
+
+    {% set marelloTicketGrid %}
+        {{ dataGrid.renderGrid('marello-tickets-grid', {namingTypeId: entity.id}) }}
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([{
+        'title': 'marello.sections.marello_tickets_grid'|trans,
+        'subblocks': [{
+            'title': '',
+            'useSpan': false,
+            'data' : [marelloTicketGrid]
+        }]
+    }] ) %}
+
+    {% set id = 'marelloTicketView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

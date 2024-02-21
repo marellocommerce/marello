@@ -1,0 +1,4 @@
+marello_ticket:
+  resource: "@MarelloTicketBundle/Controller/TicketController.php"
+  type: annotation
+  prefix: /marello/ticket
