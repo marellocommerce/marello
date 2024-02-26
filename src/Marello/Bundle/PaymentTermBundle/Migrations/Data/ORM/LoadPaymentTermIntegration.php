@@ -46,13 +46,13 @@ class LoadPaymentTermIntegration extends AbstractFixture implements
         }
 
         $channel = $this->loadIntegration($manager);
-        $paymentRule = $this->createDefaltPaymentRule($manager);
+        $paymentRule = $this->createDefaultPaymentRule($manager);
         $this->addMethodConfigToDefaultPaymentRule($channel, $paymentRule);
 
         $manager->flush();
     }
 
-    private function createDefaltPaymentRule(ObjectManager $manager): PaymentMethodsConfigsRule
+    private function createDefaultPaymentRule(ObjectManager $manager): PaymentMethodsConfigsRule
     {
         $rule = new Rule();
         $rule->setName(self::DEFAULT_RULE_NAME)
