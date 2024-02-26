@@ -267,7 +267,7 @@ class Product implements
      *      }
      * )
      */
-    protected $type;
+    protected $type = self::DEFAULT_PRODUCT_TYPE;
 
     /**
      * @ORM\Column(type="float", nullable=true)

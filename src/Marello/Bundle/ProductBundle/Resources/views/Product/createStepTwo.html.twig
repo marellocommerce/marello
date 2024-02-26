@@ -108,7 +108,7 @@
         <div class="tax-line-items"
              data-page-component-module="oroui/js/app/components/view-component"
              data-page-component-options="{{ {
-                 view: 'marelloproduct/js/app/views/product-channel-taxcodes-view'
+                 view: 'marellolayout/js/app/views/abstract-items-view'
              }|json_encode }}"
              data-layout="separate">
             {{ form_widget(form.salesChannelTaxCodes) }}
@@ -245,7 +245,7 @@
 
     {% set data = {
         'formErrors': form_errors(form) ? form_errors(form) : null,
-        'dataBlocks': dataBlocks,
+        'dataBlocks': dataBlocks
     } %}
 
     {{ parent() }}
