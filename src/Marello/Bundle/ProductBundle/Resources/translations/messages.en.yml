@@ -78,6 +78,10 @@ marello:
                 sales_channels:
                     assignment: There was failure during Sales Channels assignment
             import:
+                tab_label:
+                    product: Product
+                    assembled_price_list: Prices
+                    assembled_channel_price_list: Channel Prices
                 error:
                     status:
                         invalid: Such Product Status doesn't exist
@@ -91,6 +95,21 @@ marello:
                         invalid: Such Category doesn't exist "{{ code }}"
                     channels:
                         invalid: Such Sales Channel doesn't exist "{{ code }}"
+                    product:
+                        required: Product is required
+                        invalid: Such Product doesn't exist
+                    currency:
+                        required: Currency is required
+                    channel:
+                        required: Channel is required
+                        invalid: Such Channel doesn't exist
+                    price:
+                        already_exists: Such Price already exists "{{ type }}"
+            export:
+                template:
+                    product.label: Download Product Import Template
+                    assembled_price_list.label: Download Prices Import Template
+                    assembled_channel_price_list.label: Download Channel Prices Import Template
 
         sections:
             general:                General

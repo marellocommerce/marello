@@ -43,7 +43,7 @@ class ProductPrice extends BasePrice
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true
+     *              "excluded"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true

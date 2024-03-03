@@ -46,7 +46,7 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true,
+     *               "order"=10
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -64,7 +64,8 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true
+     *               "order"=5,
+     *               "full"=false
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -101,7 +102,8 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true
+     *              "order"=10,
+     *              "full"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -123,7 +125,8 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true
+     *              "order"=20,
+     *              "full"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true

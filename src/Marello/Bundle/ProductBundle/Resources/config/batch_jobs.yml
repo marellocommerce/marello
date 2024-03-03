@@ -13,7 +13,6 @@ connector:
                         processor: oro_importexport.processor.import_validation_delegate
                         writer: oro_importexport.writer.doctrine_clear
                     parameters: ~
-
         product_import_from_csv:
             title: "Product Import from CSV"
             type: import
@@ -26,7 +25,6 @@ connector:
                         processor: oro_importexport.processor.import_delegate
                         writer: oro_importexport.writer.entity
                     parameters: ~
-
         product_export_to_csv:
             title: "Product Export to CSV"
             type: export

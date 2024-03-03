@@ -42,6 +42,9 @@ class ProductChannelPrice extends BasePrice
      * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
+     *           "importexport"={
+     *               "excluded"=true
+     *           },
      *          "dataaudit"={
      *              "auditable"=true
      *          }
@@ -57,6 +60,9 @@ class ProductChannelPrice extends BasePrice
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
+     *           "importexport"={
+     *                "excluded"=true
+     *           },
      *          "dataaudit"={
      *              "auditable"=true
      *          }

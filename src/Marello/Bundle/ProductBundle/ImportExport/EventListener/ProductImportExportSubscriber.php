@@ -34,8 +34,9 @@ class ProductImportExportSubscriber implements EventSubscriberInterface
                 $result['categories'][0]['code'] .= ProductStrategy::DELIMITER . $result['categories'][$key]['code'];
                 unset($result['categories'][$key]);
             }
+
+            $event->setResultFieldValue('categories', $result['categories']);
         }
-        $event->setResultFieldValue('categories', $result['categories']);
 
         if (!empty($result['channels'])) {
             foreach ($result['channels'] as $key => $value) {
@@ -46,7 +47,8 @@ class ProductImportExportSubscriber implements EventSubscriberInterface
                 $result['channels'][0]['code'] .= ProductStrategy::DELIMITER . $result['channels'][$key]['code'];
                 unset($result['channels'][$key]);
             }
+
+            $event->setResultFieldValue('channels', $result['channels']);
         }
-        $event->setResultFieldValue('channels', $result['channels']);
     }
 }
