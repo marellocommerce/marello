@@ -47,4 +47,10 @@ div.product-image {
     &.supplier-line-item-lead-time input {
         width: 243px;
     }
+
+    &.supplier-line-item-lead-time {
+        .tooltip-icon {
+            font-size: 11px;
+        }
+    }
 }
