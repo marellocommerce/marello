@@ -59,10 +59,10 @@ class LoadPaymentRuleConfig extends AbstractFixture implements
     private function addMethodConfigToDefaultPaymentRule(ObjectManager $manager, Channel $channel)
     {
         foreach ($this->getPaymentRuleReferences() as $paymentRuleReference) {
-            $methodConfig = new PaymentMethodConfig();
-            $methodConfig->setMethod($this->getIdentifier($channel));
-
-            $paymentRuleReference->addMethodConfig($methodConfig);
+            foreach ($paymentRuleReference->getMethodConfigs() as $methodConfig) {
+                $methodConfig->setMethod($this->getIdentifier($channel));
+                $manager->persist($methodConfig);
+            }
             $manager->persist($paymentRuleReference);
         }
 
