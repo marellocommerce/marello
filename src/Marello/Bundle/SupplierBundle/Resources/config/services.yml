@@ -38,3 +38,7 @@ services:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: preRemove }
+
+    Marello\Bundle\SupplierBundle\Validator\Constraints\SupplierEmailValidator:
+        tags:
+            - { name: validator.constraint_validator }

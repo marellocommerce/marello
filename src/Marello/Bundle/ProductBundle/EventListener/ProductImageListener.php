@@ -34,6 +34,10 @@ class ProductImageListener
         if ($this->configManager->get('marello_product.image_use_external_url')) {
             $entityManager = $args->getEntityManager();
             $unitOfWork = $entityManager->getUnitOfWork();
+            if (!empty($unitOfWork->getScheduledEntityInsertions())) {
+                $records = $this->filterRecords($unitOfWork->getScheduledEntityInsertions());
+                $this->applyCallBackForChangeSet('updateImageFileExternalUrl', $records);
+            }
             if (!empty($unitOfWork->getScheduledEntityUpdates())) {
                 $records = $this->filterRecords($unitOfWork->getScheduledEntityUpdates());
                 $this->applyCallBackForChangeSet('updateImageFileExternalUrl', $records);
