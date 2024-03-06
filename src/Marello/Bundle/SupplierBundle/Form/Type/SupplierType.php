@@ -89,7 +89,7 @@ class SupplierType extends AbstractType
         $supplier = $event->getData();
         $form = $event->getForm();
         if ($supplier->getCode() !== null) {
-            // disable code field for wh's
+            // disable code field for suppliers
             FormUtils::replaceField($form, 'code', ['disabled' => true]);
         }
     }
