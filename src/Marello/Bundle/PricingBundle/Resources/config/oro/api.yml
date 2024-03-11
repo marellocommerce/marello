@@ -24,6 +24,10 @@ api:
         Marello\Bundle\PricingBundle\Entity\AssembledPriceList:
             documentation_resource: '@MarelloPricingBundle/Resources/doc/api/assembledpricelist.md'
             fields:
+                createdAt:
+                    exclude: false
+                updatedAt:
+                    exclude: false
             filters:
                 exclusion_policy: all
                 fields:
@@ -53,6 +57,10 @@ api:
 
         Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList:
             fields:
+                createdAt:
+                    exclude: false
+                updatedAt:
+                    exclude: false
                 saleschannel:
                     property_path: channel
             filters:
