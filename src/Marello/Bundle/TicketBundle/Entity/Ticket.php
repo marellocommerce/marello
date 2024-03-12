@@ -5,6 +5,7 @@ namespace Marello\Bundle\TicketBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -124,14 +125,7 @@ class Ticket implements ExtendEntityInterface
     private $source;
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\TicketBundle\Entity\TicketPriorityType"
-     * )
-     * @ORM\JoinColumn(
-     *     name="priority_id",
-     *     referencedColumnName="id",
-     *     nullable=false
-     * )
+     * @var \Extend\Entity\EV_Marello_Ticket_Priority
      */
     private $priority;
 
@@ -238,5 +232,152 @@ class Ticket implements ExtendEntityInterface
     public function setResolution(string $resolution): void
     {
         $this->resolution = $resolution;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param mixed $firstName
+     */
+    public function setFirstName($firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastName
+     */
+    public function setLastName($lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param mixed $email
+     */
+    public function setEmail($email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param mixed $phone
+     */
+    public function setPhone($phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param mixed $owner
+     */
+    public function setOwner($owner): void
+    {
+        $this->owner = $owner;
+    }
+
+    /**
+     * @return TicketSourceType
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param mixed $source
+     */
+    public function setSource($source): void
+    {
+        $this->source = $source;
+    }
+
+//    /**
+//     * @return TicketPriorityType
+//     */
+//    public function getPriority()
+//    {
+//        return $this->priority;
+//    }
+//
+//    /**
+//     * @param mixed $priority
+//     */
+//    public function setPriority($priority): void
+//    {
+//        $this->priority = $priority;
+//    }
+
+    /**
+     * @return TicketCategoryType
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param mixed $category
+     */
+    public function setCategory($category): void
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * @return \Extend\Entity\EV_Marello_Ticket_Priority
+     */
+    public function getPriority(): ?AbstractEnumValue
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param \Extend\Entity\EV_Marello_Ticket_Priority $priority
+     * @return $this
+     */
+    public function setPriority($priority): self
+    {
+        $this->priority = $priority;
+
+        return $this;
     }
 }

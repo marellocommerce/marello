@@ -4,28 +4,30 @@ datagrids:
             type: orm
             query:
                 select:
-                    - e.id
-#                    - e.customer
-                    - e.first_name
-                    - e.last_name
-                    - e.email
-                    - e.phone
-                    # maybe for related tables it will not work
-#                    - e.owner
-#                    - e.assigned_to
-#                    - e.source
-#                    - e.priority
-#                    - e.category
-#                    - e.subject
-#                    - e.description
-#                    - e.resolution
+                    - t
+                    - CONCAT(tcust.firstName, ' ', tcust.lastName) as customer
+                    - CONCAT(to.firstName, ' ', to.lastName) as owner
+                    - CONCAT(ta.firstName, ' ', ta.lastName) as assigned_to
+                    - ts.source as source
+#                    - tp.priority as priority
+                    - tcat.category as category
                 from:
-                    -
-                        table: Marello\Bundle\TicketBundle\Ticket
-                        alias: e
+                    - { table: MarelloTicketBundle:Ticket, alias: t }
+                join:
+                    left:
+                        - { join: t.customer, alias: tcust }
+                        - { join: t.owner, alias: to }
+                        - { join: t.assignedTo, alias: ta }
+                        - { join: t.source, alias: ts }
+#                        - { join: t.priority, alias: tp }
+                        - { join: t.category, alias: tcat }
         columns:
-#            customer:
-#                label: marello.ticket.customer.label
+            id:
+                label: marello.ticket.id.label
+            subject:
+                label: marello.ticket.subject.label
+            customer:
+                label: marello.ticket.customer.label
             first_name:
                 label: marello.ticket.first_name.label
             last_name:
@@ -34,19 +36,17 @@ datagrids:
                 label: marello.ticket.email.label
             phone:
                 label: marello.ticket.phone.label
-#            owner:
-#                label: marello.ticket.owner.label
-#            assigned_to:
-#                label: marello.ticket.assigned_to.label
-#            source:
-#                label: marello.ticket.source.label
+            owner:
+                label: marello.ticket.owner.label
+            assigned_to:
+                label: marello.ticket.assigned_to.label
+            source:
+                label: marello.ticket.source.label
 #            priority:
 #                label: marello.ticket.priority.label
-#            category:
-#                label: marello.ticket.category.label
-#            subject:
-#                label: marello.ticket.subject.label
-#            description:
-#                label: marello.ticket.description.label
-#            resolution:
-#                label: marello.ticket.resolution.label
+            category:
+                label: marello.ticket.category.label
+            description:
+                label: marello.ticket.description.label
+            resolution:
+                label: marello.ticket.resolution.label

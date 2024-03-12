@@ -17,9 +17,7 @@ class TicketController extends AbstractController
      */
     public function indexAction(): array
     {
-        return [
-            'entity_class' => Ticket::class
-        ];
+        return [ 'entity_class' => 'MarelloTicketBundle::Ticket' ];
     }
 
     /**

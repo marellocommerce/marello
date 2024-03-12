@@ -1,29 +1,36 @@
-{% extends '@OroUI/actions/index.html.twig' %}
+{% extends '@OroUI/actions/view.html.twig' %}
 {% import '@OroUI/macros.html.twig' as UI %}
-{% set gridName = 'marello-tickets-grid' %}
-{% set pageTitle = 'marello.ticket.entity_plural_label'|trans %}
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%id%": entity.id }}) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity':      entity,
         'indexPath':   path('marello_ticket_index'),
         'indexLabel':  'marello.ticket.entity_plural_label'|trans,
-        'entityTitle': entity.title,
+        'entityTitle': entity.subject,
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
 
 {% block content_data %}
-    {% set id = 'marello-paymentterm-view' %}
+    {% set id = 'marello-ticket-view' %}
     {% set generalSubblocks = [] %}
     {% set generalInformation %}
         <div class="widget-content">
             <div class="row-fluid form-horizontal">
                 <div class="responsive-block">
                     <div class="box-type1">
-                        {{ UI.renderProperty('marello.ticket.id.label'|trans, entity.id) }}
+                        {{ UI.renderProperty('marello.ticket.customer.label'|trans, entity.customer) }}
                         {{ UI.renderProperty('marello.ticket.first_name.label'|trans, entity.firstName) }}
                         {{ UI.renderProperty('marello.ticket.last_name.label'|trans, entity.lastName) }}
+                        {{ UI.renderProperty('marello.ticket.email.label'|trans, entity.email) }}
+                        {{ UI.renderProperty('marello.ticket.phone.label'|trans, entity.phone) }}
+                        {{ UI.renderProperty('marello.ticket.owner.label'|trans, entity.owner) }}
+                        {{ UI.renderProperty('marello.ticket.assigned_to.label'|trans, entity.assigned_to) }}
+                        {{ UI.renderProperty('marello.ticket.source.label'|trans, entity.source.source) }}
+                        {{ UI.renderProperty('marello.ticket.priority.label'|trans, entity.priority.priority) }}
                     </div>
                 </div>
             </div>

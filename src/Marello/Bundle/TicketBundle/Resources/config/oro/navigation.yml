@@ -1,12 +1,12 @@
 navigation:
-  menu_config:
-    items:
-      marello_ticket_list:
-        label: marello.ticket.entity_plural_label
-        route: marello_ticket_index
-    tree:
-      application_menu:
-        children:
-          system_tab:
-            children:
-              marello_ticket_list: ~
+    menu_config:
+        items:
+            marello_ticket_list:
+                label: marello.ticket.entity_plural_label
+                route: marello_ticket_index
+        tree:
+            application_menu:
+                children:
+                    system_tab:
+                        children:
+                            marello_ticket_list: ~
