@@ -1,2 +1,9 @@
-imports:
-  - { resource: controllers.yml }
+services:
+    _defaults:
+        public: true
+
+    Marello\Bundle\TicketBundle\Controller\TicketController:
+        calls:
+            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
+        tags:
+          - { name: container.service_subscriber }

@@ -18,5 +18,5 @@ marello:
     description.label: 'Description'
     resolution.label: 'Resolution'
   sections:
-    general: 'Tickets information'
+    general: 'General information'
     marello_tickets_grid: 'Customer support tickets'
