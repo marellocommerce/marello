@@ -29,8 +29,9 @@
                         {{ UI.renderProperty('marello.ticket.phone.label'|trans, entity.phone) }}
                         {{ UI.renderProperty('marello.ticket.owner.label'|trans, entity.owner) }}
                         {{ UI.renderProperty('marello.ticket.assigned_to.label'|trans, entity.assigned_to) }}
-                        {{ UI.renderProperty('marello.ticket.source.label'|trans, entity.source.source) }}
-                        {{ UI.renderProperty('marello.ticket.priority.label'|trans, entity.priority.priority) }}
+                        {{ UI.renderProperty('marello.ticket.source.label'|trans, entity.ticketSource) }}
+                        {{ UI.renderProperty('marello.ticket.priority.label'|trans, entity.ticketPriority) }}
+                        {{ UI.renderProperty('marello.ticket.category.label'|trans, entity.category.getCategory()) }}
                     </div>
                 </div>
             </div>

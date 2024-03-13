@@ -3,6 +3,9 @@
 namespace Marello\Bundle\TicketBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -10,8 +13,13 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class MarelloTicketBundleInstaller implements Installation
+class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAwareInterface
 {
+    /**
+     * @var ExtendExtension
+     */
+    protected $extendExtension;
+
     /**
      * {@inheritdoc}
      */
@@ -26,27 +34,11 @@ class MarelloTicketBundleInstaller implements Installation
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
-        $this->createTicketSourceTypeTable($schema);
         $this->createTicketCategoryTypeTable($schema);
-        $this->createTicketPriorityTypeTable($schema);
         $this->createMarelloTicketTable($schema);
 
         /** Foreign keys generation **/
         $this->addMarelloTicketForeignKeys($schema);
-    }
-
-    /**
-     * Create ticket_source_type table
-     *
-     * @param Schema $schema
-     */
-    protected function createTicketSourceTypeTable(Schema $schema)
-    {
-        $table = $schema->createTable('ticket_source_type');
-        $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('source', 'string', ['length' => 255]);
-        $table->addColumn('serialized_data', 'json', ['notnull' => false]);
-        $table->setPrimaryKey(['id']);
     }
 
     /**
@@ -64,20 +56,6 @@ class MarelloTicketBundleInstaller implements Installation
     }
 
     /**
-     * Create ticket_priority_type table
-     *
-     * @param Schema $schema
-     */
-    protected function createTicketPriorityTypeTable(Schema $schema)
-    {
-        $table = $schema->createTable('ticket_priority_type');
-        $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('priority', 'string', ['length' => 255]);
-        $table->addColumn('serialized_data', 'json', ['notnull' => false]);
-        $table->setPrimaryKey(['id']);
-    }
-
-    /**
      * Create marello_ticket table
      *
      * @param Schema $schema
@@ -89,7 +67,6 @@ class MarelloTicketBundleInstaller implements Installation
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', []);
         $table->addColumn('assigned_to_id', 'integer', ['notnull' => false]);
-        $table->addColumn('source_id', 'integer', []);
         $table->addColumn('category_id', 'integer', []);
         $table->addColumn('subject', 'string', ['length' => 255]);
         $table->addColumn('description', 'string', ['length' => 1000]);
@@ -100,10 +77,31 @@ class MarelloTicketBundleInstaller implements Installation
         $table->addColumn('resolution', 'string', ['notnull' => false, 'length' => 1000]);
         $table->addColumn('serialized_data', 'json', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'idx_5bb311787e3c61f9', []);
-        $table->addIndex(['source_id'], 'idx_5bb31178953c1c61', []);
         $table->addIndex(['assigned_to_id'], 'idx_5bb31178f4bd7827', []);
         $table->addIndex(['category_id'], 'idx_5bb3117812469de2', []);
         $table->addIndex(['customer_id'], 'idx_5bb311789395c3f3', []);
+        $this->extendExtension->addEnumField(
+            $schema,
+            $table,
+            'ticketPriority',
+            'marello_ticket_priority',
+            false,
+            false,
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
+            ]
+        );
+        $this->extendExtension->addEnumField(
+            $schema,
+            $table,
+            'ticketSource',
+            'marello_ticket_source',
+            false,
+            false,
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
+            ]
+        );
         $table->setPrimaryKey(['id']);
     }
 
@@ -134,16 +132,15 @@ class MarelloTicketBundleInstaller implements Installation
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('ticket_source_type'),
-            ['source_id'],
-            ['id'],
-            ['onUpdate' => null, 'onDelete' => null]
-        );
-        $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['assigned_to_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
+    }
+
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
     }
 }

@@ -113,21 +113,14 @@ class Ticket implements ExtendEntityInterface
     private $assignedTo;
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\TicketBundle\Entity\TicketSourceType"
-     * )
-     * @ORM\JoinColumn(
-     *     name="source_id",
-     *     referencedColumnName="id",
-     *     nullable=false
-     * )
-     */
-    private $source;
-
-    /**
      * @var \Extend\Entity\EV_Marello_Ticket_Priority
      */
     private $priority;
+
+    /**
+     * @var \Extend\Entity\EV_Marello_Ticket_Source
+     */
+    private $source;
 
     /**
      * @ORM\ManyToOne(
@@ -315,38 +308,6 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @return TicketSourceType
-     */
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    /**
-     * @param mixed $source
-     */
-    public function setSource($source): void
-    {
-        $this->source = $source;
-    }
-
-//    /**
-//     * @return TicketPriorityType
-//     */
-//    public function getPriority()
-//    {
-//        return $this->priority;
-//    }
-//
-//    /**
-//     * @param mixed $priority
-//     */
-//    public function setPriority($priority): void
-//    {
-//        $this->priority = $priority;
-//    }
-
-    /**
      * @return TicketCategoryType
      */
     public function getCategory()
@@ -362,22 +323,4 @@ class Ticket implements ExtendEntityInterface
         $this->category = $category;
     }
 
-    /**
-     * @return \Extend\Entity\EV_Marello_Ticket_Priority
-     */
-    public function getPriority(): ?AbstractEnumValue
-    {
-        return $this->priority;
-    }
-
-    /**
-     * @param \Extend\Entity\EV_Marello_Ticket_Priority $priority
-     * @return $this
-     */
-    public function setPriority($priority): self
-    {
-        $this->priority = $priority;
-
-        return $this;
-    }
 }
