@@ -10,7 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 /**
  * @inheritDoc
  */
-class MarelloPaymentTermBundleInstaller implements Migration
+class MarelloPaymentTermBundle implements Migration
 {
     /**
      * @inheritDoc

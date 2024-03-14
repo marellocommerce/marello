@@ -10,7 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 /**
  * Update entity config data using callback.
  */
-class UpdateEntityConfigDataQuery extends ParametrizedMigrationQuery
+class UpdateEntityConfigQuery extends ParametrizedMigrationQuery
 {
     /**
      * @var callable
