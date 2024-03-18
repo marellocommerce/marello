@@ -4,3 +4,14 @@ services:
             - '@oro_config.manager'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Oro\Bundle\AttachmentBundle\Entity\File }
+
+    Marello\Bundle\ProductBundle\Api\Processor\HandleLabelForFieldConfig:
+        arguments:
+            - '@oro_entity_config.config_manager'
+        tags:
+            - { name: oro.api.processor, action: get_config, extra: '!identifier_fields_only', priority: -40 }
+
+    Marello\Bundle\ProductBundle\Api\Processor\HandlePropertyLabels:
+        tags:
+            - { name: oro.api.processor, action: get, group: normalize_result, priority: -160 }
+            - { name: oro.api.processor, action: get_list, group: normalize_result, priority: -160 }
