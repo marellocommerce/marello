@@ -2,7 +2,10 @@
 
 namespace Marello\Bundle\InventoryBundle\Provider;
 
+use Doctrine\Common\Collections\Collection;
+
 use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\InventoryBundle\Entity\Allocation;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\WFAStrategiesRegistry;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\QuantityWFAStrategy;
@@ -16,6 +19,11 @@ class OrderWarehousesProvider implements OrderWarehousesProviderInterface
      * @var WFAStrategiesRegistry
      */
     protected $strategiesRegistry;
+
+    /**
+     * @var Collection|OrderItem[]
+     */
+    private $items;
 
     /**
      * @param WFAStrategiesRegistry $strategiesRegistry
@@ -32,12 +40,21 @@ class OrderWarehousesProvider implements OrderWarehousesProviderInterface
     {
         $results = [];
         $strategy = $this->strategiesRegistry->getStrategy(QuantityWFAStrategy::IDENTIFIER);
-        $results = $strategy->getWarehouseResults($order, $allocation, $results);
+        $results = $strategy->getWarehouseResults($order, $allocation, $results, $this->items);
 
         if (count($results) > 0) {
             return $results;
         }
 
         return [];
+    }
+
+    /**
+     * @param $items Collection|OrderItem[]
+     * @return void
+     */
+    public function setOrderItemsForAllocation(Collection $items = null)
+    {
+        $this->items = $items;
     }
 }
