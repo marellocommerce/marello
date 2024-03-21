@@ -159,6 +159,8 @@ class ChannelPricingSubscriber implements EventSubscriberInterface
                 $assembledChannelPriceList->getSpecialPrice()->getValue() === null) {
                 $assembledChannelPriceList->setSpecialPrice(null);
             }
+
+            $assembledChannelPriceList->preUpdateTimestamp();
         }
 
         if ($form->has('removeSalesChannels') && !empty($form->get('removeSalesChannels')->getData())) {

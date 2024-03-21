@@ -33,13 +33,13 @@ class LoadPaymentRule extends AbstractFixture
     {
         foreach ($this->data as $paymentRuleReferenceName => $config) {
             $rule = new Rule();
-            $rule->setName(self::DEFAULT_RULE_NAME)
+            $rule->setName(sprintf('%s %s', self::DEFAULT_RULE_NAME, $config['currency']))
                 ->setEnabled(true)
                 ->setSortOrder($config['sort_order']);
 
             $paymentRuleConfig = new PaymentMethodsConfigsRule();
             $methodConfig = new PaymentMethodConfig();
-            $methodConfig->setMethod(self::DEFAULT_RULE_NAME);
+            $methodConfig->setMethod(sprintf('%s %s', self::DEFAULT_RULE_NAME, $config['currency']));
 
             $paymentRuleConfig->setRule($rule)
                 ->setOrganization($this->getOrganization($manager))

@@ -46,7 +46,7 @@ class MarelloOrderBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v3_1_5';
+        return 'v3_1_6';
     }
 
     /**
