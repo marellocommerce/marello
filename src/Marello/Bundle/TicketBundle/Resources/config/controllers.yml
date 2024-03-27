@@ -1,0 +1,8 @@
+services:
+    Marello\Bundle\TicketBundle\Form\Type\TicketPrioritySelectType:
+        tags:
+            - { name: form.type, alias: marello_ticket_priority_select }
+
+    Marello\Bundle\TicketBundle\Form\Type\TicketSourceSelectType:
+        tags:
+            - { name: form.type, alias: marello_ticket_source_select }

@@ -20,3 +20,5 @@ marello:
   sections:
     general: 'General information'
     marello_tickets_grid: 'Customer support tickets'
+  saved:
+    message: 'Ticket saved'

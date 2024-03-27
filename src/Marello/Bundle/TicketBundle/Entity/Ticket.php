@@ -143,7 +143,7 @@ class Ticket implements ExtendEntityInterface
      * )
      */
 
-    private ?string $subject;
+    private $subject;
 
     /**
      * @ORM\Column(
@@ -163,7 +163,7 @@ class Ticket implements ExtendEntityInterface
      *     nullable=true
      * )
      */
-    private mixed $resolution;
+    private $resolution;
 
     public function getId(): ?int
     {
@@ -175,7 +175,7 @@ class Ticket implements ExtendEntityInterface
         $this->id = $id;
     }
 
-    public function getSubject(): ?string
+    public function getSubject()
     {
         return $this->subject;
     }
@@ -212,17 +212,17 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getResolution(): string
+    public function getResolution()
     {
         return $this->resolution;
     }
 
     /**
-     * @param mixed $resolution
+     * @param string $resolution
      */
-    public function setResolution(string $resolution): void
+    public function setResolution($resolution)
     {
         $this->resolution = $resolution;
     }
@@ -322,5 +322,41 @@ class Ticket implements ExtendEntityInterface
     {
         $this->category = $category;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAssignedTo()
+    {
+        return $this->assignedTo;
+    }
+
+    /**
+     * @param mixed $assignedTo
+     */
+    public function setAssignedTo($assignedTo): void
+    {
+        $this->assignedTo = $assignedTo;
+    }
+//
+//    public function getSource(): \Extend\Entity\EV_Marello_Ticket_Source
+//    {
+//        return $this->source;
+//    }
+//
+//    public function setSource(\Extend\Entity\EV_Marello_Ticket_Source $source): void
+//    {
+//        $this->source = $source;
+//    }
+//
+//    public function getPriority(): \Extend\Entity\EV_Marello_Ticket_Priority
+//    {
+//        return $this->priority;
+//    }
+//
+//    public function setPriority(\Extend\Entity\EV_Marello_Ticket_Priority $priority): void
+//    {
+//        $this->priority = $priority;
+//    }
 
 }
