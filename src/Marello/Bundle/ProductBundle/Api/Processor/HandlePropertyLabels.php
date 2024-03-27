@@ -2,16 +2,21 @@
 
 namespace Marello\Bundle\ProductBundle\Api\Processor;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
 use Oro\Bundle\ApiBundle\Processor\Context;
 use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
 
 class HandlePropertyLabels implements ProcessorInterface
 {
     public const OPERATION_NAME = 'handle_property_labels';
     public const LABEL_CONFIG_FIELD = 'label';
 
+    /**
+     * @param ContextInterface $context
+     * @return void
+     */
     public function process(ContextInterface $context): void
     {
         /** @var Context $context */
@@ -45,6 +50,11 @@ class HandlePropertyLabels implements ProcessorInterface
         $context->setResult($result);
     }
 
+    /**
+     * @param array $data
+     * @param array $labels
+     * @return array
+     */
     protected function updateCollectionData(array $data, array $labels): array
     {
         foreach ($data as &$list) {
@@ -55,6 +65,12 @@ class HandlePropertyLabels implements ProcessorInterface
                         unset($item['attributes'][$key]);
                         $item['attributes'] = array_merge($item['attributes'], $labeledAttribute);
                     }
+
+                    if (array_key_exists($key, $item['relationships'])) {
+                        $labeledAttribute = [$label => $item['relationships'][$key]];
+                        unset($item['relationships'][$key]);
+                        $item['relationships'] = array_merge($item['relationships'], $labeledAttribute);
+                    }
                 }
             }
         }
@@ -62,6 +78,11 @@ class HandlePropertyLabels implements ProcessorInterface
         return $data;
     }
 
+    /**
+     * @param array $data
+     * @param array $labels
+     * @return array
+     */
     protected function updateSingleItemData(array $data, array $labels): array
     {
         foreach ($data as &$item) {

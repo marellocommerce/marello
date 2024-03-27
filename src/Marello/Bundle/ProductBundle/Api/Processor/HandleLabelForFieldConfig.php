@@ -2,11 +2,12 @@
 
 namespace Marello\Bundle\ProductBundle\Api\Processor;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Oro\Bundle\ApiBundle\Processor\GetConfig\ConfigContext;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ApiBundle\Processor\GetConfig\ConfigContext;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
 
 class HandleLabelForFieldConfig implements ProcessorInterface
 {
@@ -14,6 +15,10 @@ class HandleLabelForFieldConfig implements ProcessorInterface
         private ConfigManager $configManager
     ) {}
 
+    /**
+     * @param ContextInterface $context
+     * @return void
+     */
     public function process(ContextInterface $context): void
     {
         /** @var ConfigContext $context */
