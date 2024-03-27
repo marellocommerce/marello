@@ -214,3 +214,11 @@ services:
             - '@oro_security.acl_helper'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
+
+    Marello\Bundle\SalesBundle\Api\Processor\ComputeSalesChannelAddressField:
+        arguments:
+            - '@oro_config.saleschannel'
+            - '@oro_entity.doctrine_helper'
+            - '@marello_pdf.provider.logo_path'
+        tags:
+            - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\SalesBundle\Entity\SalesChannel }
