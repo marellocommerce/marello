@@ -338,25 +338,43 @@ class Ticket implements ExtendEntityInterface
     {
         $this->assignedTo = $assignedTo;
     }
-//
-//    public function getSource(): \Extend\Entity\EV_Marello_Ticket_Source
-//    {
-//        return $this->source;
-//    }
-//
-//    public function setSource(\Extend\Entity\EV_Marello_Ticket_Source $source): void
-//    {
-//        $this->source = $source;
-//    }
-//
-//    public function getPriority(): \Extend\Entity\EV_Marello_Ticket_Priority
-//    {
-//        return $this->priority;
-//    }
-//
-//    public function setPriority(\Extend\Entity\EV_Marello_Ticket_Priority $priority): void
-//    {
-//        $this->priority = $priority;
-//    }
+
+    /**
+     * @return \Extend\Entity\EV_Marello_Ticket_Source
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param string $source
+     * @return $this
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+
+        return $this;
+    }
+
+    /**
+     * @return \Extend\Entity\EV_Marello_Ticket_Priority
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param string $priority
+     * @return $this
+     */
+    public function setPriority($priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
 
 }
