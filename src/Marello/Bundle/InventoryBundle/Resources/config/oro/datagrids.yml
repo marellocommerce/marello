@@ -257,6 +257,10 @@ datagrids:
                     and:
                         - IDENTITY(il.inventoryItem) = :inventoryItemId
                 groupBy: il.id, wh.code, wh.label, wht.label
+                orderBy:
+                    -
+                        column: il.id
+                        dir: ASC
             bind_parameters:
                 inventoryItemId: inventoryItemId
         columns:

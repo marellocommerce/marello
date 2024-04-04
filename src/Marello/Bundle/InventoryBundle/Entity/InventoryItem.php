@@ -70,7 +70,7 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *     cascade={"persist"},
      *     orphanRemoval=true
      * )
-     * @ORM\OrderBy({"createdAt" = "DESC"})
+     * @ORM\OrderBy({"id" = "ASC"})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
