@@ -96,25 +96,22 @@ class LoadProductSupplierData extends AbstractFixture implements
             return;
         }
 
-        $suppliers = $this->manager
+        $supplier = $this->manager
             ->getRepository('MarelloSupplierBundle:Supplier')
-            ->findBy([
-                'name' => $data['supplier']
+            ->findOneBy([
+                'code' => $data['supplier']
             ]);
-        /** @var Supplier $supplier */
-        foreach ($suppliers as $supplier) {
-            $productSupplierRelation = new ProductSupplierRelation();
-            $productSupplierRelation
-                ->setProduct($product)
-                ->setSupplier($supplier)
-                ->setQuantityOfUnit(1)
-                ->setCanDropship($supplier->getCanDropship())
-                ->setPriority(1)
-                ->setCost($this->calculateSupplierCost($product))
-            ;
-            $this->manager->persist($productSupplierRelation);
-            $product->addSupplier($productSupplierRelation);
-        }
+        $productSupplierRelation = new ProductSupplierRelation();
+        $productSupplierRelation
+            ->setProduct($product)
+            ->setSupplier($supplier)
+            ->setQuantityOfUnit(1)
+            ->setCanDropship($supplier->getCanDropship())
+            ->setPriority(1)
+            ->setCost($this->calculateSupplierCost($product))
+        ;
+        $this->manager->persist($productSupplierRelation);
+        $product->addSupplier($productSupplierRelation);
 
         $preferredSupplier = null;
         $preferredPriority = 0;
@@ -133,6 +130,7 @@ class LoadProductSupplierData extends AbstractFixture implements
         if ($preferredSupplier) {
             $product->setPreferredSupplier($preferredSupplier);
         }
+        $this->manager->flush($productSupplierRelation);
     }
 
     /**

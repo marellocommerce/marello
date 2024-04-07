@@ -4,3 +4,4 @@ marello:
             messages:
                 error.unique_name: This supplier name already exists, please enter another name.
                 error.unique_email: This email address already exists, please enter another email address.
+                error.email:  This value is required
