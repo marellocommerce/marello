@@ -25,6 +25,18 @@ api:
             documentation_resource: '@MarelloSalesBundle/Resources/doc/api/saleschannel.md'
             identifier_field_names: [code]
             fields:
+                address:
+                    data_type: string
+                    property_path: _
+                email:
+                    data_type: string
+                    property_path: _
+                phone:
+                    data_type: string
+                    property_path: _
+                logo:
+                    data_type: string
+                    property_path: _
                 createdAt:
                     exclude: true
                 updatedAt:

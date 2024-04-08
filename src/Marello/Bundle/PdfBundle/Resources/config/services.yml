@@ -102,7 +102,6 @@ services:
         class: 'Marello\Bundle\PdfBundle\Request\CompositePdfRequestHandler'
         public: true
 
-
     marello_pdf.configurator.document_configurator:
         class: 'Marello\Bundle\PdfBundle\Form\Configurator\DocumentConfigurator'
         public: true
