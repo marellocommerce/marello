@@ -245,6 +245,7 @@ services:
             - '@oro_config.manager'
         calls:
             - [setAllocationExclusionProvider, ['@Marello\Bundle\InventoryBundle\Provider\AllocationExclusionProvider']]
+            - [setAllocationItemFilterProvider, ['@Marello\Bundle\InventoryBundle\Provider\Allocation\AllocationItemFilterProvider']]
             - [setEventDispatcher, ['@event_dispatcher']]
         tags:
             - { name: marello_inventory_wfa_strategy }
@@ -285,6 +286,8 @@ services:
             - { name: marello_inventory_warehouse_notifier }
 
     Marello\Bundle\InventoryBundle\Provider\AllocationExclusionProvider: ~
+
+    Marello\Bundle\InventoryBundle\Provider\Allocation\AllocationItemFilterProvider: ~
 
     Marello\Bundle\InventoryBundle\Factory\AllocationShippingContextFactory:
         public: true
