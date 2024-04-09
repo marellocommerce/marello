@@ -2,13 +2,15 @@
 
 namespace Marello\Bundle\InventoryBundle\Api\Processor;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use Oro\Component\ChainProcessor\ContextInterface;
+use Oro\Component\ChainProcessor\ProcessorInterface;
+use Oro\Bundle\ApiBundle\Processor\CustomizeFormData\CustomizeFormDataContext;
+
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
 use Marello\Bundle\InventoryBundle\Event\InventoryUpdateEvent;
 use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContextFactory;
-use Oro\Bundle\ApiBundle\Processor\CustomizeFormData\CustomizeFormDataContext;
-use Oro\Component\ChainProcessor\ContextInterface;
-use Oro\Component\ChainProcessor\ProcessorInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CustomizeInventoryLevelFormData implements ProcessorInterface
 {
@@ -58,7 +60,7 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
                 [],
                 $adjustment,
                 0,
-                'api'
+                'api_update'
             );
 
             $this->eventDispatcher->dispatch(
