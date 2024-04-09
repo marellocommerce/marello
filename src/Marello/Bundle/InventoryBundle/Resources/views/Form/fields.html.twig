@@ -24,7 +24,7 @@
                         {{ 'marello.inventory.inventorylevel.form.manage_batches.label'|trans }}
                     </a>
                 </div>
-            {% elseif form.vars.externalWarehouse is same as(false)  %}
+            {% else  %}
                 <div class="marello-line-item-related-field">
                     {{ form_widget(form.adjustmentOperator) }}
                 </div>
