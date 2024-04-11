@@ -1,0 +1,13 @@
+{% extends '@OroSearch/Search/searchResultItem.html.twig' %}
+
+{% set showImage = false %}
+
+{% set recordUrl = indexer_item.recordUrl %}
+{#{% set title = entity ? entity.category : indexer_item.selectedData.name %}#}
+{% set title = entity.category %}
+
+{% set entityType = 'marello.ticket.category.entity_plural_label'|trans %}
+
+{% set entityInfo = [
+    {'title': 'marello.ticket.category.label'|trans, 'value': entity.category},
+] %}

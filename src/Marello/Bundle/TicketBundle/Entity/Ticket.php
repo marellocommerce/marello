@@ -124,7 +124,7 @@ class Ticket implements ExtendEntityInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\TicketBundle\Entity\TicketCategoryType"
+     *     targetEntity="TicketCategory"
      * )
      * @ORM\JoinColumn(
      *     name="category_id",
@@ -308,7 +308,7 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @return TicketCategoryType
+     * @return TicketCategory
      */
     public function getCategory()
     {

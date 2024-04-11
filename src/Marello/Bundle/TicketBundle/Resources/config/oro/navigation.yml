@@ -4,9 +4,14 @@ navigation:
             marello_ticket_list:
                 label: marello.ticket.entity_plural_label
                 route: marello_ticket_index
+            marello_ticket_category_list:
+                label: marello.ticket.category.entity_plural_label
+                route: marello_ticket_category_index
         tree:
             application_menu:
                 children:
                     system_tab:
                         children:
-                            marello_ticket_list: ~
+                            marello_ticket_list:
+                                children:
+                                    marello_ticket_category_list: ~

@@ -2,3 +2,8 @@ marello_ticket:
     resource: "@MarelloTicketBundle/Controller/TicketController.php"
     type: annotation
     prefix: /marello/ticket
+
+marello_ticket_category:
+    resource: "@MarelloTicketBundle/Controller/TicketCategoryController.php"
+    type: annotation
+    prefix: /marello/ticket_category

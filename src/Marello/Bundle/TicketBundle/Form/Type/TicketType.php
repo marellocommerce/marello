@@ -77,7 +77,7 @@ class TicketType extends AbstractType
             // Add category type for form ?
             ->add(
                 'category',
-                TextType::class,
+                TicketCategotySelectType::class,
                 ['label' => 'marello.ticket.category.label', 'required' => true]
             )
             ->add(

@@ -34,7 +34,7 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
-        $this->createTicketCategoryTypeTable($schema);
+        $this->createTicketCategoryTable($schema);
         $this->createMarelloTicketTable($schema);
 
         /** Foreign keys generation **/
@@ -42,13 +42,13 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
     }
 
     /**
-     * Create ticket_category_type table
+     * Create ticket_category table
      *
      * @param Schema $schema
      */
-    protected function createTicketCategoryTypeTable(Schema $schema)
+    protected function createTicketCategoryTable(Schema $schema)
     {
-        $table = $schema->createTable('ticket_category_type');
+        $table = $schema->createTable('ticket_category');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('category', 'string', ['length' => 255]);
         $table->addColumn('serialized_data', 'json', ['notnull' => false]);
@@ -114,7 +114,7 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
     {
         $table = $schema->getTable('marello_ticket');
         $table->addForeignKeyConstraint(
-            $schema->getTable('ticket_category_type'),
+            $schema->getTable('ticket_category'),
             ['category_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => null]

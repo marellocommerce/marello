@@ -25,7 +25,7 @@
     {% endif %}
     {% if entity.id or is_granted('marello_ticket_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'marello_ticket_ticket_update',
+            'route': 'marello_ticket_update',
             'params': {'id': '$id'}
         }) %}
     {% endif %}
@@ -68,7 +68,6 @@
                 form_row(form.assignedTo),
                 form_row(form.source),
                 form_row(form.priority),
-                form_row(form.category),
                 form_row(form.subject),
                 form_row(form.description),
                 form_row(form.resolution)

@@ -8,8 +8,6 @@ datagrids:
                     - CONCAT(tcust.firstName, ' ', tcust.lastName) as customer
                     - CONCAT(to.firstName, ' ', to.lastName) as owner
                     - CONCAT(ta.firstName, ' ', ta.lastName) as assigned_to
-                    - ts.source as source
-#                    - tp.priority as priority
                     - tcat.category as category
                 from:
                     - { table: MarelloTicketBundle:Ticket, alias: t }
@@ -18,8 +16,6 @@ datagrids:
                         - { join: t.customer, alias: tcust }
                         - { join: t.owner, alias: to }
                         - { join: t.assignedTo, alias: ta }
-                        - { join: t.source, alias: ts }
-#                        - { join: t.priority, alias: tp }
                         - { join: t.category, alias: tcat }
         columns:
             id:
@@ -42,11 +38,61 @@ datagrids:
                 label: marello.ticket.assigned_to.label
             source:
                 label: marello.ticket.source.label
-#            priority:
-#                label: marello.ticket.priority.label
+                frontend_type: string
+                data_name: ticketSource
+            priority:
+                label: marello.ticket.priority.label
+                frontend_type: string
+                data_name: ticketPriority
             category:
                 label: marello.ticket.category.label
             description:
                 label: marello.ticket.description.label
             resolution:
                 label: marello.ticket.resolution.label
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: marello_ticket_update
+                params:
+                    - id
+        actions:
+            edit:
+                type: navigate
+                label: Edit
+                link: update_link
+                icon: edit
+
+    marello-ticket-categories-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - c
+                from:
+                    - { table: MarelloTicketBundle:TicketCategory, alias: c }
+        columns:
+            id:
+                label: marello.ticket.category.id.label
+            category:
+                label: marello.ticket.category.label
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: marello_ticket_category_update
+                params:
+                    - id
+        actions:
+            edit:
+                type: navigate
+                label: Edit
+                link: update_link
+                icon: edit
+
+    marello-ticket-category-select-grid:
+        extends: marello-ticket-categories-grid
+        properties:
+            id: ~
+        actions: ~

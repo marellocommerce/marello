@@ -2,53 +2,55 @@
 
 namespace Marello\Bundle\TicketBundle\Controller;
 
-use Marello\Bundle\TicketBundle\Entity\Ticket;
-use Marello\Bundle\TicketBundle\Form\Type\TicketType;
+use Marello\Bundle\TicketBundle\Entity\TicketCategory;
+use Marello\Bundle\TicketBundle\Form\Type\TicketCategoryType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Marello\Bundle\TicketBundle\Entity\Ticket as TicketAlias;
+use Marello\Bundle\TicketBundle\Entity\TicketCategory as CategoryAlias;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class TicketController extends AbstractController
+class TicketCategoryController extends AbstractController
 {
     /**
-     * @Route("/", name="marello_ticket_index")
+     * @Route("/", name="marello_ticket_category_index")
      * @Template
-     * @AclAncestor("marello_ticket_view")
+     * @AclAncestor("marello_ticket_category_view")
+     *
+     * @return array
      */
-    public function indexAction(): array
+    public function indexAction()
     {
-        return [ 'entity_class' => 'MarelloTicketBundle::Ticket' ];
+        return ['entity_class' => TicketCategory::class];
     }
 
     /**
-     * @Route(path="/view/{id}", name="marello_ticket_view", requirements={"id"="\d+"})
+     * @Route(path="/view/{id}", name="marello_ticket_category_view", requirements={"id"="\d+"})
      * @Template
      */
-    public function viewAction(TicketAlias $ticket)
+    public function viewAction(CategoryAlias $category)
     {
         return [
-            'entity' => $ticket
+            'entity' => $category
         ];
     }
 
     /**
      * @Route(
      *     path="/create",
-     *     name="marello_ticket_create",
+     *     name="marello_ticket_category_create",
      *     options={"expose"=true}
      * )
      * @Template
      * @Acl(
-     *       id="marello_ticket_create",
+     *       id="marello_ticket_category_create",
      *       type="entity",
-     *       class="Marello\TicketBundle\Entity\Ticket",
+     *       class="Marello\TicketBundle\Entity\TicketCategory",
      *       permission="CREATE"
      *  )
      */
@@ -58,23 +60,24 @@ class TicketController extends AbstractController
             'marello.saved.message'
         );
 
-        return $this->update(new Ticket(), $request, $createMessage);
+        return $this->update(new TicketCategory(), $request, $createMessage);
     }
-
+//
 //    /**
 //     * @Route(
 //     *     path="/update/{id}",
-//     *     name="marello_ticket_update",
+//     *     name="marello_ticket_category_update",
 //     *     requirements={"id"="\d+"}
 //     * )
-//     * @Template(
-//     *      id="marello_ticket_update",
+//     * @Template
+//     * (
+//     *      id="marello_ticket_category_update",
 //     *      type="entity",
-//     *      class="Marello\TicketBundle\Entity\Ticket",
+//     *      class="Marello\TicketBundle\Entity\TicketCategory",
 //     *      permission="EDIT"
 //     * )
 //     */
-//    public function updateAction(Ticket $entity, Request $request): array|RedirectResponse
+//    public function updateAction(TicketCategory $entity, Request $request): array|RedirectResponse
 //    {
 //        $createMessage = $this->get(TranslatorInterface::class)->trans(
 //            'marello.saved.message'
@@ -82,15 +85,16 @@ class TicketController extends AbstractController
 //
 //        return $this->update($entity, $request, $createMessage);
 //    }
-
+//
     protected function update(
-        Ticket $entity,
-        Request $request,
-        string $message = ''
-    ): array|RedirectResponse {
+        TicketCategory $entity,
+        Request        $request,
+        string         $message = ''
+    ): array|RedirectResponse
+    {
         return $this->get(UpdateHandlerFacade::class)->update(
             $entity,
-            $this->createForm(TicketType::class, $entity),
+            $this->createForm(TicketCategoryType::class, $entity),
             $message,
             $request,
             null
@@ -102,8 +106,8 @@ class TicketController extends AbstractController
         return array_merge(
             parent::getSubscribedServices(),
             [
-                TranslatorInterface::class,
                 UpdateHandlerFacade::class,
+                TranslatorInterface::class,
             ]
         );
     }

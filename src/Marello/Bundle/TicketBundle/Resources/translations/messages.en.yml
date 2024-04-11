@@ -13,7 +13,13 @@ marello:
     assigned_to.label: 'Assigned to'
     source.label: 'Source'
     priority.label: 'Priority'
-    category.label: 'Category'
+    category:
+      label: 'Category'
+      id.label: 'ID'
+      entity_plural_label: 'Categories'
+      form.choose: 'Choose category'
+    ticketcategory:
+      entity_plural_label: 'Categories'
     subject.label: 'Subject'
     description.label: 'Description'
     resolution.label: 'Resolution'

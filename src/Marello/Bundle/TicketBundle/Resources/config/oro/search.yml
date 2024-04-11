@@ -1,0 +1,14 @@
+search:
+    Marello\Bundle\TicketBundle\Entity\TicketCategory:
+        alias: marello_ticket_category
+        search_template: '@MarelloTicket/TicketCategory/searchResult.html.twig'
+        label: marello.ticket.category.entity_plural_label
+        route:
+            name: marello_ticket_category_view
+            parameters:
+                id: id
+        mode: normal
+        fields:
+            -   name: category
+                target_type: text
+                target_fields: [category]

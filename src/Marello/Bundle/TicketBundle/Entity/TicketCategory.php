@@ -10,9 +10,9 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ticket_category_type")
+ * @ORM\Table(name="ticket_category")
  * @Config(
- *     routeName="ticket_category_type_index",
+ *     routeName="ticket_category_index",
  *     defaultValues={
  *           "security"={
  *               "type"="ACL",
@@ -22,7 +22,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *     }
  * )
  */
-class TicketCategoryType implements ExtendEntityInterface
+class TicketCategory implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
@@ -32,37 +32,46 @@ class TicketCategoryType implements ExtendEntityInterface
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *        defaultValues={
-     *            "importexport"={
-     *                "order"=10
-     *            }
-     *        }
-     *   )
+     *
      */
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string",length=255, nullable=false)
-     * @ConfigField(
-     *       defaultValues={
-     *           "importexport"={
-     *               "order"=20
-     *           }
-     *       }
-     *  )
+     * @ORM\Column(
+     *     name="category",
+     *     type="string",
+     *     length=255,
+     *     nullable=false
+     * )
+     *
      */
-    protected $category;
+    protected string $category;
 
-    public function getCategory(): string
+    /**
+     * @return mixed
+     */
+    public function getCategory()
     {
         return $this->category;
     }
 
+    /**
+     * @param mixed $category
+     */
     public function setCategory(string $category): void
     {
         $this->category = $category;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 }
