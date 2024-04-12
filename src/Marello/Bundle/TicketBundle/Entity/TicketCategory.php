@@ -12,7 +12,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  * @ORM\Entity()
  * @ORM\Table(name="ticket_category")
  * @Config(
- *     routeName="ticket_category_index",
+ *     routeName="marello_ticket_category_index",
  *     defaultValues={
  *           "security"={
  *               "type"="ACL",
@@ -37,17 +37,14 @@ class TicketCategory implements ExtendEntityInterface
     protected $id;
 
     /**
-     * @var string
-     *
      * @ORM\Column(
      *     name="category",
      *     type="string",
      *     length=255,
      *     nullable=false
      * )
-     *
      */
-    protected string $category;
+    protected $category;
 
     /**
      * @return mixed
@@ -65,7 +62,10 @@ class TicketCategory implements ExtendEntityInterface
         $this->category = $category;
     }
 
-    public function getId(): int
+    /**
+     * @return integer
+     */
+    public function getId()
     {
         return $this->id;
     }

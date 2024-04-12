@@ -6,7 +6,6 @@ use Marello\Bundle\CustomerBundle\Form\Type\CustomerSelectType;
 use Marello\Bundle\TicketBundle\Entity\Ticket;
 use Marello\Bundle\TicketBundle\Provider\TicketPriorityInterface;
 use Marello\Bundle\TicketBundle\Provider\TicketSourceInterface;
-use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
 use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Symfony\Component\Form\AbstractType;
@@ -74,10 +73,9 @@ class TicketType extends AbstractType
                     'label' => 'marello.ticket.priority.label',
                     'required' => true]
             )
-            // Add category type for form ?
             ->add(
                 'category',
-                TicketCategotySelectType::class,
+                TicketCategorySelectType::class,
                 ['label' => 'marello.ticket.category.label', 'required' => true]
             )
             ->add(
@@ -87,12 +85,12 @@ class TicketType extends AbstractType
             )
             ->add(
                 'description',
-                TextType::class,
+                TextareaType::class,
                 ['label' => 'marello.ticket.description.label', 'required' => true]
             )
             ->add(
                 'resolution',
-                TextType::class,
+                TextareaType::class,
                 [
                     'label' => 'marello.ticket.resolution.label',
                     'required' => false

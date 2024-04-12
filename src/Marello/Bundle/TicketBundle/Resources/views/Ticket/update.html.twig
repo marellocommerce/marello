@@ -1,41 +1,38 @@
 {% extends '@OroUI/actions/update.html.twig' %}
 {% import '@OroUI/macros.html.twig' as UI %}
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+{% set formAction = entity.id ? path('marello_ticket_update', {id: entity.id}) : path('marello_ticket_create') %}
 
-{% oro_title_set({params : {'%title%': entity|oro_format_name|default('N/A'|trans), '%entityName%': 'marello.ticket.entity_label'|trans} }) %}
-
-{# choose the appropriate action depending on whether a task is created or modified #}
-{# this variable needs to be named formAction as this is what the base template expects #}
-{% set formAction = form.vars.value.id ? path('marello_ticket_update', { 'id': form.vars.value.id }) : path('marello_ticket_create')  %}
+{% oro_title_set({params : {"%name%": entity.subject, '%entityName%': 'marello.ticket.entity_label'|trans} }) %}
 
 {% block navButtons %}
     {{ parent() }}
 
     {{ UI.cancelButton(path('marello_ticket_index')) }}
-    {% set html = UI.saveAndCloseButton({
-        'route': 'marello_ticket_view',
-        'params': {'id': '$id'}
-    }) %}
-    {% if is_granted('marello_ticket_create') %}
-        {% set html = html ~ UI.saveAndNewButton({
-            'route': 'marello_ticket_create'
-        }) %}
-    {% endif %}
-    {% if entity.id or is_granted('marello_ticket_update') %}
+    {% if is_granted('marello_ticket_update') %}
+        {% set html = '' %}
+        {% if is_granted('marello_ticket_view') %}
+            {% set html = UI.saveAndCloseButton({
+                'route': 'marello_ticket_view',
+                'params': {'id': '$id'}
+            }) %}
+        {% endif %}
         {% set html = html ~ UI.saveAndStayButton({
             'route': 'marello_ticket_update',
             'params': {'id': '$id'}
         }) %}
+
+        {{ UI.dropdownSaveButton({'html': html}) }}
     {% endif %}
-    {{ UI.dropdownSaveButton({'html': html}) }}
-{% endblock %}
+{% endblock navButtons %}
 
 {% block pageHeader %}
     {% if entity.id %}
         {% set breadcrumbs = {
             'entity':      entity,
             'indexPath':   path('marello_ticket_index'),
-            'indexLabel': 'marello.ticket.entity_label'|trans,
-            'entityTitle': entity|oro_format_name|default('N/A'|trans)
+            'indexLabel': 'marello.ticket.entity_plural_label'|trans,
+            'entityTitle': entity.subject|default('N/A'|trans)
         } %}
         {{ parent() }}
     {% else %}
@@ -45,24 +42,26 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
+    {% set id = 'marello-ticket-category-edit' %}
+
     {% set dataBlocks = [
         {
             'title': 'marello.sections.general'|trans,
             'subblocks': [
-            {
-                'data' : [
-                form_row(form.customer),
-                form_row(form.firstName),
-                form_row(form.lastName),
-                form_row(form.email),
-                form_row(form.phone),
-                form_row(form.owner),
-                form_row(form.assignedTo),
-                form_row(form.source),
-                form_row(form.priority)
+                {
+                    'data' : [
+                    form_row(form.customer),
+                    form_row(form.firstName),
+                    form_row(form.lastName),
+                    form_row(form.email),
+                    form_row(form.phone),
+                    form_row(form.owner),
+                    form_row(form.assignedTo),
+                    form_row(form.source),
+                    form_row(form.priority)
+                ]
+                }
             ]
-            }
-        ]
         },
         {
             'title': 'marello.sections.ticket'|trans,

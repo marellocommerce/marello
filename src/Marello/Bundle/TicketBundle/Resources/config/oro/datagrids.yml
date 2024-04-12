@@ -57,19 +57,30 @@ datagrids:
                 route: marello_ticket_update
                 params:
                     - id
+            view_link:
+                type: url
+                route: marello_ticket_view
+                params:
+                    id: id
         actions:
             edit:
                 type: navigate
                 label: Edit
                 link: update_link
                 icon: edit
+            view:
+                type: navigate
+                link: view_link
+                icon: eye
+                rowAction: true
 
     marello-ticket-categories-grid:
         source:
             type: orm
             query:
                 select:
-                    - c
+                    - c.id
+                    - c.category
                 from:
                     - { table: MarelloTicketBundle:TicketCategory, alias: c }
         columns:
@@ -83,13 +94,23 @@ datagrids:
                 type: url
                 route: marello_ticket_category_update
                 params:
-                    - id
+                    id: id
+            view_link:
+                type: url
+                route: marello_ticket_category_view
+                params:
+                    id: id
         actions:
             edit:
                 type: navigate
                 label: Edit
                 link: update_link
                 icon: edit
+            view:
+                type: navigate
+                link: view_link
+                icon: eye
+                rowAction: true
 
     marello-ticket-category-select-grid:
         extends: marello-ticket-categories-grid

@@ -10,7 +10,7 @@
         'alias': 'marello_ticket'
     } %}
 
-    {% if is_granted('acme_demo_question_create') %}
+    {% if is_granted('marello_ticket_create') %}
         <div class="btn-group">
             {{ UI.addButton({
                 'path': path('marello_ticket_create'),

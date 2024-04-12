@@ -6,7 +6,7 @@ use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TicketCategotySelectType extends AbstractType
+class TicketCategorySelectType extends AbstractType
 {
     const BLOCK_PREFIX = 'marello_ticket_category_select';
 
@@ -19,7 +19,7 @@ class TicketCategotySelectType extends AbstractType
             [
                 'autocomplete_alias' => 'marello_ticket_category',
                 'create_form_route'  => 'marello_ticket_category_create',
-                'grid_name'          => 'marello-ticket_category-select-grid',
+                'grid_name'          => 'marello-ticket-category-select-grid',
                 'create_enabled'     => true,
                 'configs'            => [
                     'placeholder' => 'marello.ticket.category.form.choose',

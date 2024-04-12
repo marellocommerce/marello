@@ -18,13 +18,16 @@ marello:
       id.label: 'ID'
       entity_plural_label: 'Categories'
       form.choose: 'Choose category'
+      saved:
+        message: 'Category saved'
     ticketcategory:
       entity_plural_label: 'Categories'
     subject.label: 'Subject'
     description.label: 'Description'
     resolution.label: 'Resolution'
+    saved:
+      message: 'Ticket saved'
   sections:
     general: 'General information'
+    ticket: 'Ticket'
     marello_tickets_grid: 'Customer support tickets'
-  saved:
-    message: 'Ticket saved'

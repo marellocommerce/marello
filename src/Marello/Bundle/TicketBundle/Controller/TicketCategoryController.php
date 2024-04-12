@@ -50,42 +50,42 @@ class TicketCategoryController extends AbstractController
      * @Acl(
      *       id="marello_ticket_category_create",
      *       type="entity",
-     *       class="Marello\TicketBundle\Entity\TicketCategory",
+     *       class="MarelloTicketBundle:TicketCategory",
      *       permission="CREATE"
      *  )
      */
     public function createAction(Request $request): array|RedirectResponse
     {
         $createMessage = $this->get(TranslatorInterface::class)->trans(
-            'marello.saved.message'
+            'marello.ticket.category.saved.message'
         );
 
         return $this->update(new TicketCategory(), $request, $createMessage);
     }
-//
-//    /**
-//     * @Route(
-//     *     path="/update/{id}",
-//     *     name="marello_ticket_category_update",
-//     *     requirements={"id"="\d+"}
-//     * )
-//     * @Template
-//     * (
-//     *      id="marello_ticket_category_update",
-//     *      type="entity",
-//     *      class="Marello\TicketBundle\Entity\TicketCategory",
-//     *      permission="EDIT"
-//     * )
-//     */
-//    public function updateAction(TicketCategory $entity, Request $request): array|RedirectResponse
-//    {
-//        $createMessage = $this->get(TranslatorInterface::class)->trans(
-//            'marello.saved.message'
-//        );
-//
-//        return $this->update($entity, $request, $createMessage);
-//    }
-//
+
+    /**
+     * @Route(
+     *     path="/update/{id}",
+     *     name="marello_ticket_category_update",
+     *     requirements={"id"="\d+"}
+     * )
+     * @Template
+     * @Acl(
+     *      id="marello_ticket_category_update",
+     *      type="entity",
+     *      class="MarelloTicketBundle:TicketCategory",
+     *      permission="EDIT"
+     * )
+     */
+    public function updateAction(TicketCategory $entity, Request $request): array|RedirectResponse
+    {
+        $createMessage = $this->get(TranslatorInterface::class)->trans(
+            'marello.ticket.category.saved.message'
+        );
+
+        return $this->update($entity, $request, $createMessage);
+    }
+
     protected function update(
         TicketCategory $entity,
         Request        $request,

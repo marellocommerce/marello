@@ -48,40 +48,41 @@ class TicketController extends AbstractController
      * @Acl(
      *       id="marello_ticket_create",
      *       type="entity",
-     *       class="Marello\TicketBundle\Entity\Ticket",
+     *       class="MarelloTicketBundle:Ticket",
      *       permission="CREATE"
      *  )
      */
     public function createAction(Request $request): array|RedirectResponse
     {
         $createMessage = $this->get(TranslatorInterface::class)->trans(
-            'marello.saved.message'
+            'marello.ticket.saved.message'
         );
 
         return $this->update(new Ticket(), $request, $createMessage);
     }
 
-//    /**
-//     * @Route(
-//     *     path="/update/{id}",
-//     *     name="marello_ticket_update",
-//     *     requirements={"id"="\d+"}
-//     * )
-//     * @Template(
-//     *      id="marello_ticket_update",
-//     *      type="entity",
-//     *      class="Marello\TicketBundle\Entity\Ticket",
-//     *      permission="EDIT"
-//     * )
-//     */
-//    public function updateAction(Ticket $entity, Request $request): array|RedirectResponse
-//    {
-//        $createMessage = $this->get(TranslatorInterface::class)->trans(
-//            'marello.saved.message'
-//        );
-//
-//        return $this->update($entity, $request, $createMessage);
-//    }
+    /**
+     * @Route(
+     *     path="/update/{id}",
+     *     name="marello_ticket_update",
+     *     requirements={"id"="\d+"}
+     * )
+     * @Template
+     * @Acl(
+     *      id="marello_ticket_update",
+     *      type="entity",
+     *      class="MarelloTicketBundle:Ticket",
+     *      permission="EDIT"
+     * )
+     */
+    public function updateAction(Ticket $entity, Request $request): array|RedirectResponse
+    {
+        $createMessage = $this->get(TranslatorInterface::class)->trans(
+            'marello.ticket.saved.message'
+        );
+
+        return $this->update($entity, $request, $createMessage);
+    }
 
     protected function update(
         Ticket $entity,

@@ -2,7 +2,7 @@
 {% import '@OroUI/macros.html.twig' as UI %}
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
 
-{#{% oro_title_set({params : {"%id%": entity.id }}) %}#}
+{% oro_title_set({params : {"%id%": entity.id }}) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
