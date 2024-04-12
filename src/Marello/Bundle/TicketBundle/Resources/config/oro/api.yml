@@ -1,0 +1,14 @@
+api:
+    entity_aliases:
+        Marello\Bundle\TicketBundle\Entity\Ticket:
+            alias: marelloticket
+            plural_alias: marellotickets
+        Marello\Bundle\TicketBundle\Entity\TicketCategory:
+            alias: marelloticketcategory
+            plural_alias: marelloticketcategories
+    entities:
+        Marello\Bundle\TicketBundle\Entity\Ticket:
+            exclude: false
+
+        Marello\Bundle\TicketBundle\Entity\TicketCategory:
+            exclude: false
