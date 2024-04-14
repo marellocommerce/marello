@@ -45,7 +45,8 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "order"=10
+     *              "order"=10,
+     *              "identity"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -64,7 +65,8 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
      *      defaultValues={
      *          "importexport"={
      *              "order"=5,
-     *              "full"=false
+     *              "full"=false,
+     *              "identity"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true

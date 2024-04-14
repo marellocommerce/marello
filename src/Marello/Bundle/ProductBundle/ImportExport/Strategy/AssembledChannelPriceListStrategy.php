@@ -6,7 +6,6 @@ use Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList;
 use Marello\Bundle\PricingBundle\Entity\PriceListInterface;
 use Marello\Bundle\PricingBundle\Entity\PriceType;
 use Marello\Bundle\PricingBundle\Model\PriceTypeInterface;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 
 class AssembledChannelPriceListStrategy extends AbstractAssembledPriceListStrategy
 {
@@ -18,13 +17,12 @@ class AssembledChannelPriceListStrategy extends AbstractAssembledPriceListStrate
         array $searchContext = [],
         $entityIsRelation = false
     ) {
-        /** @var AssembledChannelPriceList $entity */
-        $result = $this->processProduct($entity);
-        if (!$result) {
-            return null;
+        $entity = parent::processEntity($entity, $isFullData, $isPersistNew, $itemData, $searchContext);
+        if (!$entity instanceof AssembledChannelPriceList) {
+            return $entity;
         }
 
-        $result = $this->processCurrency($entity);
+        $result = $this->processProduct($entity);
         if (!$result) {
             return null;
         }
@@ -42,24 +40,7 @@ class AssembledChannelPriceListStrategy extends AbstractAssembledPriceListStrate
     protected function processChannel(AssembledChannelPriceList $entity): ?AssembledChannelPriceList
     {
         $channel = $entity->getChannel();
-        if ($channel) {
-            $existingChannel = $this->findEntityByIdentityValues(
-                SalesChannel::class,
-                ['code' => $channel->getCode()]
-            );
-            if ($existingChannel instanceof SalesChannel) {
-                $entity->setChannel($existingChannel);
-            } else {
-                $this->processValidationErrors(
-                    $entity,
-                    [
-                        $this->translator->trans('marello.product.messages.import.error.channel.invalid')
-                    ]
-                );
-
-                return null;
-            }
-        } else {
+        if (!$channel) {
             $this->processValidationErrors(
                 $entity,
                 [
@@ -73,25 +54,17 @@ class AssembledChannelPriceListStrategy extends AbstractAssembledPriceListStrate
         return $entity;
     }
 
-    private function processPrices(AssembledChannelPriceList $entity): ?AssembledChannelPriceList
+    private function processPrices(AssembledChannelPriceList $entity): void
     {
         if ($defaultPrice = $entity->getDefaultPrice()) {
-            $result = $this->processPrice($defaultPrice, $entity, PriceTypeInterface::DEFAULT_PRICE);
-            if (!$result) {
-                return null;
-            }
+            $this->processPrice($defaultPrice, $entity, PriceTypeInterface::DEFAULT_PRICE);
             $defaultPrice->setChannel($entity->getChannel());
         }
 
         if ($specialPrice = $entity->getSpecialPrice()) {
-            $result = $this->processPrice($specialPrice, $entity, PriceTypeInterface::SPECIAL_PRICE);
-            if (!$result) {
-                return null;
-            }
+            $this->processPrice($specialPrice, $entity, PriceTypeInterface::SPECIAL_PRICE);
             $specialPrice->setChannel($entity->getChannel());
         }
-
-        return $entity;
     }
 
     protected function getExistingPriceConditions(PriceListInterface $priceList, PriceType $priceType): array
