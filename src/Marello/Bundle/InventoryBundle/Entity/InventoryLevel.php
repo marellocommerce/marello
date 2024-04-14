@@ -116,7 +116,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *
      * @var int
      */
-    protected $inventory = 0;
+    protected $inventoryQty = 0;
 
     /**
      * @ORM\Column(name="allocated_inventory", type="integer")
@@ -280,7 +280,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      */
     public function setInventoryQty($quantity)
     {
-        $this->inventory = $quantity;
+        $this->inventoryQty = $quantity;
 
         return $this;
     }
@@ -290,7 +290,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      */
     public function getInventoryQty()
     {
-        return $this->inventory;
+        return $this->inventoryQty;
     }
 
     /**
@@ -317,7 +317,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      */
     public function getVirtualInventoryQty()
     {
-        return $this->inventory - $this->allocatedInventory;
+        return $this->inventoryQty - $this->allocatedInventory;
     }
 
     /**
