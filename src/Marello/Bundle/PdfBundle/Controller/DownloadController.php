@@ -17,7 +17,7 @@ class DownloadController extends AbstractController
         return $this->container->get(CompositePdfRequestHandler::class)->handle($request);
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

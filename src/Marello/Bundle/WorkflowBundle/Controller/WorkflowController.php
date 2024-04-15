@@ -29,7 +29,7 @@ class WorkflowController extends AbstractController
         return new Response($content, 200, ['Content-Type' => 'text/x-log']);
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

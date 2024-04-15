@@ -139,7 +139,7 @@ services:
         class: 'Marello\Bundle\SalesBundle\EventListener\Doctrine\SalesChannelGroupListener'
         arguments:
             - '@oro_distribution.handler.application_status'
-            - '@session'
+            - '@request_stack'
             - '@oro_security.acl_helper'
         tags:
             - { name: doctrine.event_listener, event: preRemove, priority: 10 }

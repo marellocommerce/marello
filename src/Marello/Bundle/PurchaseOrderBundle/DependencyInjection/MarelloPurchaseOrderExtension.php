@@ -34,7 +34,7 @@ class MarelloPurchaseOrderExtension extends Extension
     /**
      * {@inheritDoc}
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return self::ALIAS;
     }

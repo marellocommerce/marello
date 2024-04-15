@@ -62,7 +62,7 @@ class BalancedInventoryLevelController extends AbstractController
         return $this->redirectToRoute('marello_inventory_balancedinventorylevel_index');
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

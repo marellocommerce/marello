@@ -65,7 +65,7 @@ class OrderAjaxController extends AbstractController
         return $this->createForm(OrderType::class, $order);
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

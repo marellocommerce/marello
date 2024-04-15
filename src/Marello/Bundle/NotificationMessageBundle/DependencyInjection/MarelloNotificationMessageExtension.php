@@ -21,7 +21,7 @@ class MarelloNotificationMessageExtension extends Extension
         $loader->load('services.yml');
     }
 
-    public function getAlias()
+    public function getAlias(): string
     {
         return self::ALIAS;
     }

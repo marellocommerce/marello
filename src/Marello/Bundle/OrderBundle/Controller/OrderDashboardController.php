@@ -49,7 +49,7 @@ class OrderDashboardController extends AbstractController
         return $widgetAttr;
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
             WidgetConfigs::class,

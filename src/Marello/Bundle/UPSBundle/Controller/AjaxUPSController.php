@@ -114,7 +114,7 @@ class AjaxUPSController extends AbstractController
         return $this->container->get(TranslatorInterface::class)->trans($message, $parameters);
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),
