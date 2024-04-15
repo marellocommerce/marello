@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\InventoryBundle\Api\Processor;
 
+use Marello\Bundle\InventoryBundle\DependencyInjection\Configuration;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oro\Component\ChainProcessor\ContextInterface;
@@ -16,6 +18,7 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
+        protected ConfigManager $configManager,
         protected array $inventoryQtyAdjustmentMap = []
     ) {}
 
@@ -25,6 +28,10 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
         $config = $context->getConfig();
         if (null === $config) {
             // not supported API resource
+            return;
+        }
+
+        if (!$this->configManager->get(Configuration::SYSTEM_CONFIG_PATH_ADJUST_INVENTORY_QTY)) {
             return;
         }
 
