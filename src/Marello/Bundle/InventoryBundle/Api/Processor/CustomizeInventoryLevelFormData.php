@@ -31,10 +31,6 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
             return;
         }
 
-        if (!$this->configManager->get(Configuration::SYSTEM_CONFIG_PATH_ADJUST_INVENTORY_QTY)) {
-            return;
-        }
-
         $inventoryLevel = $context->getForm()->getData();
         if (!$inventoryLevel instanceof InventoryLevel || !$inventoryLevel->getId()) {
             return;
@@ -55,6 +51,10 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
             && array_key_exists($inventoryLevel->getId(), $this->inventoryQtyAdjustmentMap)
         ) {
             $adjustment = $this->inventoryQtyAdjustmentMap[$inventoryLevel->getId()];
+            if (!$this->configManager->get(Configuration::SYSTEM_CONFIG_PATH_ADJUST_INVENTORY_QTY)) {
+                // calculate the difference for the absolute value
+                $adjustment = $adjustment - $inventoryLevel->getInventoryQty();
+            }
             unset($this->inventoryQtyAdjustmentMap[$inventoryLevel->getId()]);
 
             if ($adjustment === 0) {
