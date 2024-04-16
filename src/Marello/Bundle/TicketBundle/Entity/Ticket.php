@@ -204,11 +204,15 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @param mixed $customer
+     * @param Customer $customer
+     *
+     * @return $this
      */
-    public function setCustomer(Customer $customer): void
+    public function setCustomer($customer)
     {
         $this->customer = $customer;
+
+        return $this;
     }
 
     /**

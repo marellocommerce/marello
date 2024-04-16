@@ -22,11 +22,11 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add(
-                'customer',
-                CustomerSelectType::class,
-                ['label' => 'marello.ticket.customer.label', 'required' => false]
-            )
+//            ->add(
+//                'customer',
+//                CustomerSelectType::class,
+//                ['label' => 'marello.ticket.customer.label', 'required' => false]
+//            )
             ->add(
                 'firstName',
                 TextType::class,

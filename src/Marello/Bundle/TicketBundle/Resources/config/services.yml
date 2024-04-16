@@ -21,3 +21,10 @@ services:
             - [ 'category' ]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: marello_ticket_category, acl_resource: marello_category_view }
+
+    marello_ticket.event_listener.on_ticket_create_event_listener:
+        class: 'Marello\Bundle\TicketBundle\EventListener\OnTicketCreateEventListener'
+        arguments:
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
