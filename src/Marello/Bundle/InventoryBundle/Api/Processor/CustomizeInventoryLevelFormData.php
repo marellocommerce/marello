@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\InventoryBundle\Api\Processor;
 
+use Marello\Bundle\InventoryBundle\DependencyInjection\Configuration;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oro\Component\ChainProcessor\ContextInterface;
@@ -16,6 +18,7 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
+        protected ConfigManager $configManager,
         protected array $inventoryQtyAdjustmentMap = []
     ) {}
 
@@ -48,6 +51,10 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
             && array_key_exists($inventoryLevel->getId(), $this->inventoryQtyAdjustmentMap)
         ) {
             $adjustment = $this->inventoryQtyAdjustmentMap[$inventoryLevel->getId()];
+            if (!$this->configManager->get(Configuration::SYSTEM_CONFIG_PATH_ADJUST_INVENTORY_QTY)) {
+                // calculate the difference for the absolute value
+                $adjustment = $adjustment - $inventoryLevel->getInventoryQty();
+            }
             unset($this->inventoryQtyAdjustmentMap[$inventoryLevel->getId()]);
 
             if ($adjustment === 0) {
