@@ -36,6 +36,10 @@ datagrids:
                 label: marello.ticket.owner.label
             assigned_to:
                 label: marello.ticket.assigned_to.label
+            status:
+                label: marello.ticket.status.label
+                frontend_type: string
+                data_name: ticketStatus
             source:
                 label: marello.ticket.source.label
                 frontend_type: string

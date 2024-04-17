@@ -6,3 +6,7 @@ services:
     Marello\Bundle\TicketBundle\Form\Type\TicketSourceSelectType:
         tags:
             - { name: form.type, alias: marello_ticket_source_select }
+
+    Marello\Bundle\TicketBundle\Form\Type\TicketStatusSelectType:
+        tags:
+            - { name: form.type, alias: marello_ticket_status_select }

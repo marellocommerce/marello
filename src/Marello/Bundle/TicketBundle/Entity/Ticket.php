@@ -123,6 +123,11 @@ class Ticket implements ExtendEntityInterface
     private $source;
 
     /**
+     * @var \Extend\Entity\EV_Marello_Ticket_Status
+     */
+    private $status;
+
+    /**
      * @ORM\ManyToOne(
      *     targetEntity="TicketCategory"
      * )
@@ -341,6 +346,25 @@ class Ticket implements ExtendEntityInterface
     public function setAssignedTo($assignedTo): void
     {
         $this->assignedTo = $assignedTo;
+    }
+
+    /**
+     * @return \Extend\Entity\EV_Marello_Ticket_Status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
     }
 
     /**

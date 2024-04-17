@@ -6,6 +6,7 @@ use Marello\Bundle\CustomerBundle\Form\Type\CustomerSelectType;
 use Marello\Bundle\TicketBundle\Entity\Ticket;
 use Marello\Bundle\TicketBundle\Provider\TicketPriorityInterface;
 use Marello\Bundle\TicketBundle\Provider\TicketSourceInterface;
+use Marello\Bundle\TicketBundle\Provider\TicketStatusInterface;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
 use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Symfony\Component\Form\AbstractType;
@@ -63,6 +64,14 @@ class TicketType extends AbstractType
                 [
                     'enum_code' => TicketSourceInterface::TICKET_SOURCE_ENUM_CODE,
                     'label' => 'marello.ticket.source.label',
+                    'required' => true]
+            )
+            ->add(
+                'status',
+                EnumChoiceType::class,
+                [
+                    'enum_code' => TicketStatusInterface::TICKET_STATUS_ENUM_CODE,
+                    'label' => 'marello.ticket.status.label',
                     'required' => true]
             )
             ->add(

@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\TicketBundle\Migrations\Schema\v1_0;
+namespace Marello\Bundle\TicketBundle\Migrations\Schema\v1_1;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -28,19 +28,8 @@ class UpdateTicketTable implements Migration, ExtendExtensionAwareInterface
         $this->extendExtension->addEnumField(
             $schema,
             $table,
-            'ticketPriority',
-            'marello_ticket_priority',
-            false,
-            false,
-            [
-                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
-            ]
-        );
-        $this->extendExtension->addEnumField(
-            $schema,
-            $table,
-            'ticketSource',
-            'marello_ticket_source',
+            'ticketStatus',
+            'marello_ticket_status',
             false,
             false,
             [

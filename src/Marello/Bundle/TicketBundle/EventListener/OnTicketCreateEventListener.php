@@ -88,35 +88,12 @@ class OnTicketCreateEventListener
             ->getRepository(Customer::class);
         $customer = $repo->findOneBy(['email'=> $email]);
 
-//        var_dump($ticket->getCustomer()->getFullName());
-//        var_dump($ticket->getFirstName());
-//        var_dump($ticket->getLastName());
-//        var_dump($ticket->getEmail());
-//        var_dump($ticket->getOwner()->getFirstName());
-//        var_dump($ticket->getSource());
-//        var_dump($ticket->getPriority());
-//        var_dump($ticket->getCategory());
-//        var_dump($ticket->getSubject());
-//        var_dump($ticket->getDescription());
-
         if($customer)
         {
             $ticket = $ticket->setCustomer($customer);
-            var_dump($ticket->getCustomer()->getFullName());
-            var_dump($ticket->getFirstName());
-            var_dump($ticket->getLastName());
-            var_dump($ticket->getEmail());
-            var_dump($ticket->getOwner()->getFirstName());
-            var_dump($ticket->getSource());
-            var_dump($ticket->getPriority());
-            var_dump($ticket->getCategory());
-            var_dump($ticket->getSubject());
-            var_dump($ticket->getDescription());
-
             $this->em->persist($ticket);
-
             $classMeta = $this->em->getClassMetadata(get_class($ticket));
-            $this->unitOfWork->computeChangeSet($classMeta, $ticket);
+            $this->unitOfWork->recomputeSingleEntityChangeSet($classMeta, $ticket);
         }
     }
 }

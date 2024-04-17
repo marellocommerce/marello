@@ -11,6 +11,7 @@ marello:
     phone.label: 'Phone Number'
     owner.label: 'Owner'
     assigned_to.label: 'Assigned to'
+    status.label: 'Status'
     source.label: 'Source'
     priority.label: 'Priority'
     category:
