@@ -129,3 +129,61 @@ datagrids:
         properties:
             id: ~
         actions: ~
+
+    marello-ticket-customer:
+        extended_entity_name: Marello\Bundle\TicketBundle\Entity\Ticket
+        source:
+            type: orm
+            query:
+                select:
+                    - t
+                    - CONCAT(to.firstName, ' ', to.lastName) as owner
+                    - CONCAT(ta.firstName, ' ', ta.lastName) as assigned_to
+                from:
+                    - { table: MarelloTicketBundle:Ticket, alias: t }
+                join:
+                    left:
+                        - { join: t.owner, alias: to }
+                        - { join: t.assignedTo, alias: ta }
+                where:
+                    and:
+                        - t.customer = :customer_id
+            bind_parameters:
+                customer_id: customerId
+        columns:
+            subject:
+                label: marello.ticket.subject.label
+            first_name:
+                label: marello.ticket.first_name.label
+            last_name:
+                label: marello.ticket.last_name.label
+            owner:
+                label: marello.ticket.owner.label
+            assigned_to:
+                label: marello.ticket.assigned_to.label
+            priority:
+                label: marello.ticket.priority.label
+                frontend_type: string
+                data_name: ticketPriority
+            status:
+                label: marello.ticket.status.label
+                frontend_type: string
+                data_name: ticketStatus
+        properties:
+            view_link:
+                type: url
+                route: marello_ticket_view
+                params:
+                    id: id
+        actions:
+            view:
+                type: navigate
+                link: view_link
+                icon: eye
+                rowAction: true
+        options:
+            toolbarOptions:
+                hide: true
+                pageSize:
+                    items: [ 10 ]
+                    default_per_page: 10

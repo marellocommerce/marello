@@ -93,6 +93,10 @@
         {{ dataGrid.renderGrid('marello-refund-customer', {'customerId': entity.id}) }}
     {% endset %}
 
+    {% set ticket %}
+        {{ dataGrid.renderGrid('marello-ticket-customer', {'customerId': entity.id}) }}
+    {% endset %}
+
     {% set additionalData %}
         {{ entityConfig.renderDynamicFields(entity) }}
     {% endset %}
@@ -119,6 +123,13 @@
             'subblocks': [
                 { 'data': [return] }
             ]
+        },
+        {
+            'title': 'marello.ticket.entity_plural_label'|trans,
+            'class': 'active',
+            'subblocks': [
+            { 'data': [ticket] }
+        ]
         },
         {
             'title': 'marello.refund.entity_plural_label'|trans,
