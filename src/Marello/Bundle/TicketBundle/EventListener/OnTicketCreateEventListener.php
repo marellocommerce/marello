@@ -49,6 +49,11 @@ class OnTicketCreateEventListener
             $records = $this->filterRecords($this->unitOfWork->getScheduledEntityInsertions());
             $this->applyCallBackForChangeSet('assignCustomer', $records);
         }
+
+        if(!empty($this->unitOfWork->getScheduledEntityUpdates())) {
+            $records = $this->filterRecords($this->unitOfWork->getScheduledEntityUpdates());
+            $this->applyCallBackForChangeSet('assignCustomer', $records);
+        }
     }
 
     protected function filterRecords(array $records)

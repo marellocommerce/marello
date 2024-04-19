@@ -115,17 +115,17 @@ class Ticket implements ExtendEntityInterface
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Priority
      */
-    private $priority;
+    private $ticketPriority;
 
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Source
      */
-    private $source;
+    private $ticketSource;
 
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Status
      */
-    private $status;
+    private $ticketStatus;
 
     /**
      * @ORM\ManyToOne(
@@ -351,18 +351,18 @@ class Ticket implements ExtendEntityInterface
     /**
      * @return \Extend\Entity\EV_Marello_Ticket_Status
      */
-    public function getStatus()
+    public function getTicketStatus()
     {
-        return $this->status;
+        return $this->ticketStatus;
     }
 
     /**
-     * @param string $status
+     * @param string $ticketStatus
      * @return $this
      */
-    public function setStatus($status)
+    public function setTicketStatus($ticketStatus)
     {
-        $this->status = $status;
+        $this->ticketStatus = $ticketStatus;
 
         return $this;
     }
@@ -370,18 +370,18 @@ class Ticket implements ExtendEntityInterface
     /**
      * @return \Extend\Entity\EV_Marello_Ticket_Source
      */
-    public function getSource()
+    public function getTicketSource()
     {
-        return $this->source;
+        return $this->ticketSource;
     }
 
     /**
-     * @param string $source
+     * @param string $ticketSource
      * @return $this
      */
-    public function setSource($source)
+    public function setTicketSource($ticketSource)
     {
-        $this->source = $source;
+        $this->ticketSource = $ticketSource;
 
         return $this;
     }
@@ -389,18 +389,18 @@ class Ticket implements ExtendEntityInterface
     /**
      * @return \Extend\Entity\EV_Marello_Ticket_Priority
      */
-    public function getPriority()
+    public function getTicketPriority()
     {
-        return $this->priority;
+        return $this->ticketPriority;
     }
 
     /**
-     * @param string $priority
+     * @param string $ticketPriority
      * @return $this
      */
-    public function setPriority($priority)
+    public function setTicketPriority($ticketPriority)
     {
-        $this->priority = $priority;
+        $this->ticketPriority = $ticketPriority;
 
         return $this;
     }

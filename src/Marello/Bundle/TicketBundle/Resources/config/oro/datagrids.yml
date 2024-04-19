@@ -20,40 +20,48 @@ datagrids:
         columns:
             id:
                 label: marello.ticket.id.label
+                renderable: false
             subject:
                 label: marello.ticket.subject.label
             customer:
                 label: marello.ticket.customer.label
+                renderable: false
             first_name:
                 label: marello.ticket.first_name.label
             last_name:
                 label: marello.ticket.last_name.label
             email:
                 label: marello.ticket.email.label
+                renderable: false
             phone:
                 label: marello.ticket.phone.label
+                renderable: false
             owner:
                 label: marello.ticket.owner.label
             assigned_to:
                 label: marello.ticket.assigned_to.label
-            status:
-                label: marello.ticket.status.label
-                frontend_type: string
-                data_name: ticketStatus
             source:
                 label: marello.ticket.source.label
                 frontend_type: string
                 data_name: ticketSource
+                renderable: false
             priority:
                 label: marello.ticket.priority.label
                 frontend_type: string
                 data_name: ticketPriority
+            status:
+                label: marello.ticket.status.label
+                frontend_type: string
+                data_name: ticketStatus
             category:
                 label: marello.ticket.category.label
+                renderable: false
             description:
                 label: marello.ticket.description.label
+                renderable: false
             resolution:
                 label: marello.ticket.resolution.label
+                renderable: false
         properties:
             id: ~
             update_link:

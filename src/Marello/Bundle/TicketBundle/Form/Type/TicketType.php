@@ -2,11 +2,11 @@
 
 namespace Marello\Bundle\TicketBundle\Form\Type;
 
-use Marello\Bundle\CustomerBundle\Form\Type\CustomerSelectType;
 use Marello\Bundle\TicketBundle\Entity\Ticket;
 use Marello\Bundle\TicketBundle\Provider\TicketPriorityInterface;
 use Marello\Bundle\TicketBundle\Provider\TicketSourceInterface;
 use Marello\Bundle\TicketBundle\Provider\TicketStatusInterface;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
 use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Symfony\Component\Form\AbstractType;
@@ -40,7 +40,7 @@ class TicketType extends AbstractType
             )
             ->add(
                 'email',
-                TextType::class,
+                EmailType::class,
                 ['label' => 'marello.ticket.email.label', 'required' => true]
             )
             ->add(
@@ -59,15 +59,7 @@ class TicketType extends AbstractType
                 ['label' => 'marello.ticket.assigned_to.label', 'required' => false]
             )
             ->add(
-                'source',
-                EnumChoiceType::class,
-                [
-                    'enum_code' => TicketSourceInterface::TICKET_SOURCE_ENUM_CODE,
-                    'label' => 'marello.ticket.source.label',
-                    'required' => true]
-            )
-            ->add(
-                'status',
+                'ticketStatus',
                 EnumChoiceType::class,
                 [
                     'enum_code' => TicketStatusInterface::TICKET_STATUS_ENUM_CODE,
@@ -75,7 +67,15 @@ class TicketType extends AbstractType
                     'required' => true]
             )
             ->add(
-                'priority',
+                'ticketSource',
+                EnumChoiceType::class,
+                [
+                    'enum_code' => TicketSourceInterface::TICKET_SOURCE_ENUM_CODE,
+                    'label' => 'marello.ticket.source.label',
+                    'required' => true]
+            )
+            ->add(
+                'ticketPriority',
                 EnumChoiceType::class,
                 [
                     'enum_code' => TicketPriorityInterface::TICKET_PRIORITY_ENUM_CODE,
