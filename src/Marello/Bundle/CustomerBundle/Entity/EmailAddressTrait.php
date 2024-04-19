@@ -2,24 +2,20 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-trait HasEmailAddressTrait
+trait EmailAddressTrait
 {
-
-    /**
-     * @ORM\Column(type="text", nullable=false)
-     *
-     * @var string
-     */
-    protected $email;
+    #[ORM\Column(name: 'email', type: Types::STRING, nullable: false)]
+    protected ?string $email = null;
 
     /**
      * Gets an email address which can be used to send messages
      *
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -29,7 +25,7 @@ trait HasEmailAddressTrait
      *
      * @return string
      */
-    public function getClass()
+    public function getClass(): string
     {
         return Customer::class;
     }
@@ -39,7 +35,7 @@ trait HasEmailAddressTrait
      *
      * @return string[]|null
      */
-    public function getEmailFields()
+    public function getEmailFields(): ?array
     {
         return null;
     }
@@ -49,7 +45,7 @@ trait HasEmailAddressTrait
      *
      * @return $this
      */
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 

@@ -2,141 +2,88 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="marello_customer_customer",
- *       uniqueConstraints={
- *           @ORM\UniqueConstraint(
- *               name="marello_customer_emailorgidx",
- *               columns={"email","organization_id"}
- *           )
- *       }
- * )
- * @Oro\Config(
- *      routeView="marello_customer_view",
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "grid"={
- *              "default"="marello-customer-select-grid"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_customer_customer')]
+#[ORM\UniqueConstraint(name: 'marello_customer_emailorgidx', columns: ['email', 'organization_id'])]
+#[Oro\Config(
+    routeName: 'marello_customer_index',
+    routeView: 'marello_customer_view',
+    routeCreate: 'marello_customer_create',
+    routeUpdate: 'marello_customer_update',
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'grid' => ['default' => 'marello-customer-select-grid']
+    ]
+)]
 class Customer implements
     FullNameInterface,
     EmailHolderInterface,
     EmailOwnerInterface,
+    DatesAwareInterface,
     OrganizationAwareInterface,
     ExtendEntityInterface
 {
-    use HasFullNameTrait, HasEmailAddressTrait;
-    use EntityCreatedUpdatedAtTrait;
+    use FullNameTrait, EmailAddressTrait;
+    use DatesAwareTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true, 'order' => 10]])]
+    protected ?int $id = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="primary_address_id", nullable=true)
-     *
-     * @var MarelloAddress
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $primaryAddress;
+    #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'primary_address_id', referencedColumnName: 'id', nullable: true)]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?MarelloAddress $primaryAddress = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="shipping_address_id", nullable=true)
-     *
-     * @var MarelloAddress
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $shippingAddress;
+    #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id', nullable: true)]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?MarelloAddress $shippingAddress = null;
 
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress",
-     *     mappedBy="customer",
-     *     cascade={"persist"}
-     * )
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
-     * @var Collection|AbstractAddress[]
-     */
-    protected $addresses;
+    #[ORM\OneToMany(mappedBy: ['customer'], targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?Collection $addresses = null;
 
-    /**
-     * @var Company
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Company", inversedBy="customers")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $company;
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: ['customers'])]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['full' => true, 'order' => 45]
+    ])]
+    protected ?Company $company = null;
 
     /**
      * Customer constructor.
@@ -161,7 +108,7 @@ class Customer implements
         $email,
         MarelloAddress $primaryAddress,
         MarelloAddress $shippingAddress = null
-    ) {
+    ): self {
         $customer = new self();
 
         $customer
@@ -183,7 +130,7 @@ class Customer implements
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -191,7 +138,7 @@ class Customer implements
     /**
      * @return Collection|\Oro\Bundle\AddressBundle\Entity\AbstractAddress[]
      */
-    public function getAddresses()
+    public function getAddresses(): Collection
     {
         return $this->addresses;
     }
@@ -201,7 +148,7 @@ class Customer implements
      *
      * @return $this
      */
-    public function addAddress(MarelloAddress $address)
+    public function addAddress(MarelloAddress $address): self
     {
         $this->addresses->add($address->setCustomer($this));
 
@@ -213,7 +160,7 @@ class Customer implements
      *
      * @return $this
      */
-    public function removeAddress(MarelloAddress $address)
+    public function removeAddress(MarelloAddress $address): self
     {
         $this->addresses->removeElement($address->setCustomer(null));
 
@@ -223,7 +170,7 @@ class Customer implements
     /**
      * @return MarelloAddress
      */
-    public function getPrimaryAddress()
+    public function getPrimaryAddress(): ?MarelloAddress
     {
         return $this->primaryAddress;
     }
@@ -233,7 +180,7 @@ class Customer implements
      *
      * @return $this
      */
-    public function setPrimaryAddress(MarelloAddress $primaryAddress)
+    public function setPrimaryAddress(MarelloAddress $primaryAddress = null): self
     {
         $primaryAddress->setCustomer($this);
         $this->primaryAddress = $primaryAddress;
@@ -246,7 +193,7 @@ class Customer implements
      *
      * @return $this
      */
-    public function setShippingAddress(MarelloAddress $shippingAddress)
+    public function setShippingAddress(MarelloAddress $shippingAddress = null): self
     {
         $shippingAddress->setCustomer($this);
         $this->shippingAddress = $shippingAddress;
@@ -257,7 +204,7 @@ class Customer implements
     /**
      * @return MarelloAddress
      */
-    public function getShippingAddress()
+    public function getShippingAddress(): ?MarelloAddress
     {
         return $this->shippingAddress;
     }
@@ -265,7 +212,7 @@ class Customer implements
     /**
      * @return Company
      */
-    public function getCompany()
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
@@ -274,7 +221,7 @@ class Customer implements
      * @param Company $company
      * @return $this
      */
-    public function setCompany(Company $company = null)
+    public function setCompany(Company $company = null): self
     {
         $this->company = $company;
 
@@ -284,7 +231,7 @@ class Customer implements
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getFullName();
     }

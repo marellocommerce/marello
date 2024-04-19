@@ -2,37 +2,25 @@
 
 namespace Marello\Bundle\BankTransferBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\BankTransferBundle\Entity\Repository\BankTransferSettingsRepository")
- */
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+
+use Marello\Bundle\BankTransferBundle\Entity\Repository\BankTransferSettingsRepository;
+
+#[ORM\Entity(BankTransferSettingsRepository::class)]
 class BankTransferSettings extends Transport
 {
-    /**
-     * @var Collection|LocalizedFallbackValue[]
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
-     *      cascade={"ALL"},
-     *      orphanRemoval=true
-     * )
-     * @ORM\JoinTable(
-     *      name="marello_bank_transfer_tr_lbl",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
-     *      }
-     * )
-     */
-    private $labels;
+    #[ORM\ManyToMany(targetEntity: LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
+    #[ORM\JoinTable(name: 'marello_bank_transfer_tr_lbl')]
+    #[ORM\JoinColumn(name: 'transport_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
+    private ?Collection $labels = null;
 
     /**
      * @var ParameterBag
@@ -47,7 +35,7 @@ class BankTransferSettings extends Transport
     /**
      * @return Collection|LocalizedFallbackValue[]
      */
-    public function getLabels()
+    public function getLabels(): ?Collection
     {
         return $this->labels;
     }
@@ -57,7 +45,7 @@ class BankTransferSettings extends Transport
      *
      * @return $this
      */
-    public function addLabel(LocalizedFallbackValue $label)
+    public function addLabel(LocalizedFallbackValue $label): self
     {
         if (!$this->labels->contains($label)) {
             $this->labels->add($label);
@@ -71,7 +59,7 @@ class BankTransferSettings extends Transport
      *
      * @return $this
      */
-    public function removeLabel(LocalizedFallbackValue $label)
+    public function removeLabel(LocalizedFallbackValue $label): self
     {
         if ($this->labels->contains($label)) {
             $this->labels->removeElement($label);
@@ -83,7 +71,7 @@ class BankTransferSettings extends Transport
     /**
      * @return ParameterBag
      */
-    public function getSettingsBag()
+    public function getSettingsBag(): ParameterBag
     {
         if (null === $this->settings) {
             $this->settings = new ParameterBag(
