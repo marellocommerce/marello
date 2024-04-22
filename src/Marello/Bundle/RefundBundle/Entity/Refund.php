@@ -22,9 +22,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="marello_refund")
- * @ORM\HasLifecycleCallbacks
  *
  * @Oro\Config(
  *      routeView="marello_refund_view",
@@ -52,6 +49,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_refund')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Refund implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -65,16 +65,15 @@ class Refund implements
     use ExtendEntityTrait;
         
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
-     * @ORM\Column(name="refund_number", type="string", unique=true, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -82,13 +81,12 @@ class Refund implements
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'refund_number', type: 'string', unique: true, nullable: true)]
     protected $refundNumber;
 
     /**
-     * @ORM\Column(name="refund_amount", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -96,14 +94,13 @@ class Refund implements
      *          }
      *      }
      * )
-     *
      * @var float
      * technically the grandtotal
      */
+    #[ORM\Column(name: 'refund_amount', type: 'money')]
     protected $refundAmount;
 
     /**
-     * @ORM\Column(name="refund_subtotal", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -114,13 +111,12 @@ class Refund implements
      *          }
      *      }
      * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'refund_subtotal', type: 'money')]
     protected $refundSubtotal = 0.00;
 
     /**
-     * @ORM\Column(name="refund_tax_total", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -131,14 +127,12 @@ class Refund implements
      *          }
      *      }
      * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'refund_tax_total', type: 'money')]
     protected $refundTaxTotal = 0.00;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer")
-     * @ORM\JoinColumn(nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -149,10 +143,11 @@ class Refund implements
      *
      * @var Customer
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class)]
     protected $customer;
 
     /**
-     * @ORM\OneToMany(targetEntity="RefundItem", mappedBy="refund", cascade={"persist"}, orphanRemoval=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -160,14 +155,12 @@ class Refund implements
      *          }
      *      }
      * )
-     *
      * @var Collection|RefundItem[]
      */
+    #[ORM\OneToMany(targetEntity: \RefundItem::class, mappedBy: 'refund', cascade: ['persist'], orphanRemoval: true)]
     protected $items;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order")
-     * @ORM\JoinColumn(nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -178,11 +171,12 @@ class Refund implements
      *
      * @var Order
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class)]
     protected $order;
 
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -191,6 +185,7 @@ class Refund implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 10, nullable: true)]
     protected $currency;
 
     /**
@@ -257,9 +252,7 @@ class Refund implements
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $sum = array_reduce($this->getItems()->toArray(), function ($carry, RefundItem $item) {

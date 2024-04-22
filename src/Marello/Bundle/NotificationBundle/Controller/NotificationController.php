@@ -11,16 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class NotificationController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/view/thread/{id}",
-     *     name="marello_notification_thread_view",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template("@MarelloNotification/Notification/Thread/notificationItem.html.twig")
      * @AclAncestor("marello_notification_notification_view")
      * @param Notification $entity
      * @return array
      */
+    #[Route(path: '/view/thread/{id}', name: 'marello_notification_thread_view', requirements: ['id' => '\d+'])]
     public function viewThreadAction(Notification $entity)
     {
         return ['entity' => $entity];

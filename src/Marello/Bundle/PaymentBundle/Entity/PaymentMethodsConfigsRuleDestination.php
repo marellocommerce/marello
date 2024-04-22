@@ -13,13 +13,13 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
- * @ORM\Entity
- * @ORM\Table("marello_payment_mtds_cfgs_rl_d")
- * @ORM\HasLifecycleCallbacks
  * @Config(
  *     mode="hidden",
  * )
  */
+#[ORM\Table('marello_payment_mtds_cfgs_rl_d')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -27,9 +27,6 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
     /**
      * @var integer
      *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -38,16 +35,14 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var PaymentMethodsConfigsRule
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule",
-     *     inversedBy="destinations"
-     * )
-     * @ORM\JoinColumn(name="configs_rule_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -56,26 +51,19 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule::class, inversedBy: 'destinations')]
     protected $methodsConfigsRule;
 
     /**
      * @var Collection|PaymentMethodsConfigsRuleDestinationPostalCode[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestinationPostalCode",
-     *     mappedBy="destination",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestinationPostalCode::class, mappedBy: 'destination', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
     protected $postalCodes;
 
     /**
      * @var Region
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
-     * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -86,12 +74,13 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'region_code', referencedColumnName: 'combined_code')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Region::class)]
     protected $region;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="region_text", type="string", length=255, nullable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -100,13 +89,12 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'region_text', type: 'string', length: 255, nullable: true)]
     protected $regionText;
 
     /**
      * @var Country
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
-     * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -117,6 +105,8 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
     protected $country;
 
     public function __construct()

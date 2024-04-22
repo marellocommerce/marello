@@ -24,7 +24,6 @@ use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
 use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 
 /**
- * @ORM\Entity()
  * @Oro\Config(
  *      defaultValues={
  *          "entity"={
@@ -44,9 +43,10 @@ use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
  *          }
  *      }
  * )
- * @ORM\Table(name="marello_packing_packing_slip")
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_packing_packing_slip')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class PackingSlip implements
     DerivedPropertyAwareInterface,
     OrganizationAwareInterface,
@@ -59,18 +59,15 @@ class PackingSlip implements
     
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
      * @var Collection|PackingSlipItem[]
      *
-     * @ORM\OneToMany(targetEntity="PackingSlipItem", mappedBy="packingSlip", cascade={"persist"}, orphanRemoval=true)
-     * @ORM\OrderBy({"id" = "ASC"})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -79,13 +76,13 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\OneToMany(targetEntity: \PackingSlipItem::class, mappedBy: 'packingSlip', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['id' => 'ASC'])]
     protected $items;
 
     /**
      * @var Order
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order", cascade={"persist"})
-     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -94,13 +91,13 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class, cascade: ['persist'])]
     protected $order;
 
     /**
      * @var AbstractAddress
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -109,13 +106,13 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
     protected $billingAddress;
 
     /**
      * @var AbstractAddress
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -124,11 +121,11 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
     protected $shippingAddress;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer", cascade={"persist"})
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -139,13 +136,13 @@ class PackingSlip implements
      *
      * @var Customer
      */
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class, cascade: ['persist'])]
     protected $customer;
 
     /**
      * @var SalesChannel
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -154,12 +151,13 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
     protected $salesChannel;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="saleschannel_name", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -168,13 +166,12 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'saleschannel_name', type: 'string', nullable: true)]
     protected $salesChannelName;
 
     /**
      * @var Warehouse
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Warehouse")
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -183,10 +180,11 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
     protected $warehouse;
 
     /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -194,13 +192,12 @@ class PackingSlip implements
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected $comment;
 
     /**
-     * @ORM\Column(name="packing_slip_number", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -208,16 +205,14 @@ class PackingSlip implements
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'packing_slip_number', type: 'string', nullable: true)]
     protected $packingSlipNumber;
 
     /**
      * @var Allocation
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Allocation")
-     * @ORM\JoinColumn(name="source_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -226,6 +221,8 @@ class PackingSlip implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Allocation::class)]
     protected $sourceEntity;
 
     public function __construct()

@@ -18,9 +18,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="marello_purchase_order")
  * @Oro\Config(
  *      routeView="marello_purchaseorder_purchaseorder_view",
  *      routeName="marello_purchaseorder_purchaseorder_index",
@@ -41,6 +38,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_purchase_order')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -48,16 +48,15 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
     use ExtendEntityTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @ORM\Column(name="purchase_order_number", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -65,20 +64,14 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'purchase_order_number', type: 'string', nullable: true)]
     protected $purchaseOrderNumber;
 
     /**
      * @var Collection|PurchaseOrderItem[]
      *
-     * @ORM\OneToMany(
-     *     targetEntity="PurchaseOrderItem",
-     *     mappedBy="order",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
      * @Oro\ConfigField(
      *      defaultValues={
      *          "email"={
@@ -90,13 +83,12 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      *      }
      * )
      */
+    #[ORM\OneToMany(targetEntity: \PurchaseOrderItem::class, mappedBy: 'order', cascade: ['persist'], orphanRemoval: true)]
     protected $items;
 
     /**
      * @var Supplier
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SupplierBundle\Entity\Supplier")
-     * @ORM\JoinColumn(name="supplier_id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -105,12 +97,13 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'supplier_id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SupplierBundle\Entity\Supplier::class)]
     protected $supplier;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="due_date", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -119,11 +112,10 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      *      }
      * )
      */
+    #[ORM\Column(name: 'due_date', type: 'datetime', nullable: true)]
     protected $dueDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Warehouse")
-     * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -133,12 +125,13 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      * )
      * @var Warehouse
      */
+    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
     protected $warehouse;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="order_total", type="money", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -147,10 +140,10 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      *      }
      * )
      */
+    #[ORM\Column(name: 'order_total', type: 'money', nullable: false)]
     protected $orderTotal;
 
     /**
-     * @ORM\Column(name="purchase_order_reference", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -158,15 +151,14 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'purchase_order_reference', type: 'string', nullable: true)]
     protected $purchaseOrderReference;
 
     /**
      * @var array $data
      *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -175,6 +167,7 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      *      }
      * )
      */
+    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
     protected $data = [];
 
     /**

@@ -14,7 +14,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -27,15 +26,13 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *          }
  *      }
  * )
- * @ORM\Table(name="marello_invoice_invoice_item")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="invoice_item_type", type="string")
- * @ORM\DiscriminatorMap({
- *     "invoiceitem"="Marello\Bundle\InvoiceBundle\Entity\InvoiceItem",
- *     "creditmemoitem"="Marello\Bundle\InvoiceBundle\Entity\CreditmemoItem"
- * })
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_invoice_invoice_item')]
+#[ORM\Entity]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'invoice_item_type', type: 'string')]
+#[ORM\DiscriminatorMap(['invoiceitem' => 'Marello\Bundle\InvoiceBundle\Entity\InvoiceItem', 'creditmemoitem' => 'Marello\Bundle\InvoiceBundle\Entity\CreditmemoItem'])]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractInvoiceItem implements
     QuantityAwareInterface,
     PriceAwareInterface,
@@ -47,11 +44,10 @@ abstract class AbstractInvoiceItem implements
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
@@ -62,8 +58,6 @@ abstract class AbstractInvoiceItem implements
     /**
      * @var ProductInterface|Product
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -72,19 +66,19 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
     protected $product;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
+    #[ORM\Column(name: 'product_name', type: 'string', nullable: false)]
     protected $productName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="product_sku",type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -93,12 +87,12 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'product_sku', type: 'string', nullable: false)]
     protected $productSku;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="price",type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -107,12 +101,12 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'price', type: 'money')]
     protected $price;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="quantity",type="integer",nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -121,12 +115,12 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity', type: 'integer', nullable: false)]
     protected $quantity;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="tax",type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -135,12 +129,12 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'tax', type: 'money')]
     protected $tax;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="discount_amount", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -149,12 +143,12 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'discount_amount', type: 'money', nullable: true)]
     protected $discountAmount = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="row_total_incl_tax",type="money", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -163,12 +157,12 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'row_total_incl_tax', type: 'money', nullable: false)]
     protected $rowTotalInclTax;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="row_total_excl_tax",type="money", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -177,11 +171,11 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'row_total_excl_tax', type: 'money', nullable: false)]
     protected $rowTotalExclTax;
 
     /**
      * @var string
-     * @ORM\Column(name="product_unit",type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -193,11 +187,10 @@ abstract class AbstractInvoiceItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'product_unit', type: 'string', nullable: true)]
     protected $productUnit;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         // prevent overriding product name if already being set

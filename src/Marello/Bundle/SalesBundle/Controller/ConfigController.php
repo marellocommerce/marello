@@ -18,12 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ConfigController extends AbstractController
 {
     /**
-     * @Route(
-     *      "/saleschannel/{id}/{activeGroup}/{activeSubGroup}",
-     *      name="marello_sales_config_saleschannel",
-     *      requirements={"id"="\d+"},
-     *      defaults={"activeGroup" = null, "activeSubGroup" = null}
-     * )
      * @Template()
      * @AclAncestor("marello_sales_saleschannel_update")
      * @param Request $request
@@ -32,6 +26,7 @@ class ConfigController extends AbstractController
      * @param mixed $activeSubGroup
      * @return array
      */
+    #[Route(path: '/saleschannel/{id}/{activeGroup}/{activeSubGroup}', name: 'marello_sales_config_saleschannel', requirements: ['id' => '\d+'], defaults: ['activeGroup' => null, 'activeSubGroup' => null])]
     public function salesChannelAction(
         Request $request,
         SalesChannel $entity,

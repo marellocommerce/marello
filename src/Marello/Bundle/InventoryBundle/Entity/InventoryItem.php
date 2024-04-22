@@ -15,13 +15,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository")
- * @ORM\Table(
- *      name="marello_inventory_item",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"product_id"})
- *      }
- * )
  * @Oro\Config(
  *      defaultValues={
  *          "entity"={
@@ -42,15 +35,15 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_inventory_item')]
+#[ORM\UniqueConstraint(columns: ['product_id'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository::class)]
 class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
     
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -61,16 +54,12 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryLevel",
-     *     mappedBy="inventoryItem",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -84,11 +73,11 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *
      * @var InventoryLevel[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryLevel::class, mappedBy: 'inventoryItem', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['id' => 'ASC'])]
     protected $inventoryLevels;
 
     /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="inventoryItem")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -103,10 +92,11 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *
      * @var ProductInterface
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'inventoryItem')]
     protected $product;
 
     /**
-     * @ORM\Column(name="desired_inventory", type="integer", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -117,13 +107,12 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'desired_inventory', type: 'integer', nullable: true)]
     protected $desiredInventory = 0;
 
     /**
-     * @ORM\Column(name="purchase_inventory", type="integer", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -134,9 +123,9 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'purchase_inventory', type: 'integer', nullable: true)]
     protected $purchaseInventory = 0;
 
     /**
@@ -155,7 +144,6 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
     protected $replenishment;
 
     /**
-     * @ORM\Column(name="backorder_allowed", type="boolean", nullable=true, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -166,13 +154,12 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'backorder_allowed', type: 'boolean', nullable: true, options: ['default' => false])]
     protected $backorderAllowed;
 
     /**
-     * @ORM\Column(name="max_qty_to_backorder", type="integer", nullable=true, options={"default"=0})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -183,13 +170,12 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var integer
      */
+    #[ORM\Column(name: 'max_qty_to_backorder', type: 'integer', nullable: true, options: ['default' => 0])]
     protected $maxQtyToBackorder;
 
     /**
-     * @ORM\Column(name="can_preorder", type="boolean", nullable=true, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -200,13 +186,12 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'can_preorder', type: 'boolean', nullable: true, options: ['default' => false])]
     protected $canPreorder;
 
     /**
-     * @ORM\Column(name="max_qty_to_preorder", type="integer", nullable=true, options={"default"=0})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -217,15 +202,14 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var integer
      */
+    #[ORM\Column(name: 'max_qty_to_preorder', type: 'integer', nullable: true, options: ['default' => 0])]
     protected $maxQtyToPreorder;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="back_orders_datetime", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -234,12 +218,12 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'back_orders_datetime', type: 'datetime', nullable: true)]
     protected $backOrdersDatetime;
     
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="pre_orders_datetime", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -248,10 +232,10 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'pre_orders_datetime', type: 'datetime', nullable: true)]
     protected $preOrdersDatetime;
 
     /**
-     * @ORM\Column(name="order_on_demand_allowed", type="boolean", nullable=true, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -262,13 +246,12 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'order_on_demand_allowed', type: 'boolean', nullable: true, options: ['default' => false])]
     protected $orderOnDemandAllowed;
 
     /**
-     * @ORM\Column(name="enable_batch_inventory", type="boolean", nullable=true, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -279,9 +262,9 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'enable_batch_inventory', type: 'boolean', nullable: true, options: ['default' => false])]
     protected $enableBatchInventory;
 
     /**

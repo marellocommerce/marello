@@ -18,12 +18,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class PaymentController extends AbstractController
 {
     /**
-     * @Route(path="/", name="marello_payment_index")
      * @Template("@MarelloPayment/Payment/index.html.twig")
      * @AclAncestor("marello_payment_view")
-     *
      * @return array
      */
+    #[Route(path: '/', name: 'marello_payment_index')]
     public function indexAction()
     {
         return [
@@ -32,7 +31,6 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @Route(path="/view/{id}", name="marello_payment_view", requirements={"id"="\d+"})
      * @Template("@MarelloPayment/Payment/view.html.twig")
      * @Acl(
      *      id="marello_payment_view",
@@ -42,9 +40,9 @@ class PaymentController extends AbstractController
      * )
      *
      * @param Payment $payment
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_payment_view', requirements: ['id' => '\d+'])]
     public function viewAction(Payment $payment)
     {
         return [
@@ -53,7 +51,6 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @Route(path="/create", name="marello_payment_create")
      * @Template("@MarelloPayment/Payment/create.html.twig")
      * @Acl(
      *     id="marello_payment_create",
@@ -62,16 +59,15 @@ class PaymentController extends AbstractController
      *     class="MarelloPaymentBundle:Payment"
      * )
      * @param Request $request
-     *
      * @return array
      */
+    #[Route(path: '/create', name: 'marello_payment_create')]
     public function createAction(Request $request)
     {
         return $this->update($request);
     }
 
     /**
-     * @Route(path="/update/{id}", name="marello_payment_update", requirements={"id"="\d+"})
      * @Template("@MarelloPayment/Payment/update.html.twig")
      * @Acl(
      *     id="marello_payment_update",
@@ -81,9 +77,9 @@ class PaymentController extends AbstractController
      * )
      * @param Request $request
      * @param Payment $entity
-     *
      * @return array
      */
+    #[Route(path: '/update/{id}', name: 'marello_payment_update', requirements: ['id' => '\d+'])]
     public function updateAction(Request $request, Payment $entity)
     {
         return $this->update($request, $entity);

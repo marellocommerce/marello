@@ -24,28 +24,28 @@ use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository")
- * @Oro\Config(
- *      defaultValues={
+* @Oro\Config(
+*      defaultValues={
 *           "security"={
 *               "type"="ACL",
 *               "group_name"=""
 *           },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "ownership"={
- *               "owner_type"="USER",
- *               "owner_field_name"="owner",
- *               "owner_column_name"="user_owner_id",
- *               "organization_field_name"="organization",
- *               "organization_column_name"="organization_id"
- *          },
- *      }
- * )
- * @ORM\Table(name="marello_order_order_item")
- * @ORM\HasLifecycleCallbacks()
- */
+*          "dataaudit"={
+*              "auditable"=true
+*          },
+*          "ownership"={
+*               "owner_type"="USER",
+*               "owner_field_name"="owner",
+*               "owner_column_name"="user_owner_id",
+*               "organization_field_name"="organization",
+*               "organization_column_name"="organization_id"
+*          },
+*      }
+* )
+*/
+#[ORM\Table(name: 'marello_order_order_item')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class OrderItem implements
     CurrencyAwareInterface,
     QuantityAwareInterface,
@@ -61,18 +61,15 @@ class OrderItem implements
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var ProductInterface
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @ORM\JoinColumn(onDelete="SET NULL")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -81,19 +78,19 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
     protected $product;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
+    #[ORM\Column(name: 'product_name', type: 'string', nullable: false)]
     protected $productName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="product_sku",type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -102,13 +99,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'product_sku', type: 'string', nullable: false)]
     protected $productSku;
 
     /**
      * @var Order
      *
-     * @ORM\ManyToOne(targetEntity="Order", inversedBy="items")
-     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -120,12 +116,13 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Order::class, inversedBy: 'items')]
     protected $order;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="quantity",type="integer",nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -134,12 +131,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity', type: 'integer', nullable: false)]
     protected $quantity;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="price",type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -148,12 +145,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'price', type: 'money')]
     protected $price;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="original_price_incl_tax",type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -162,12 +159,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'original_price_incl_tax', type: 'money', nullable: true)]
     protected $originalPriceInclTax;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="original_price_excl_tax",type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -176,12 +173,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'original_price_excl_tax', type: 'money', nullable: true)]
     protected $originalPriceExclTax;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="purchase_price_incl",type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -190,12 +187,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'purchase_price_incl', type: 'money', nullable: true)]
     protected $purchasePriceIncl;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="tax",type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -204,12 +201,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'tax', type: 'money')]
     protected $tax;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="tax_percent", type="percent", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -218,12 +215,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'tax_percent', type: 'percent', nullable: true)]
     protected $taxPercent;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="discount_percent", type="percent", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -232,12 +229,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'discount_percent', type: 'percent', nullable: true)]
     protected $discountPercent;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="discount_amount", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -246,12 +243,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'discount_amount', type: 'money', nullable: true)]
     protected $discountAmount;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="row_total_incl_tax",type="money", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -260,12 +257,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'row_total_incl_tax', type: 'money', nullable: false)]
     protected $rowTotalInclTax;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="row_total_excl_tax",type="money", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -274,12 +271,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'row_total_excl_tax', type: 'money', nullable: false)]
     protected $rowTotalExclTax;
     
     /**
      * @var ReturnItem[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="Marello\Bundle\ReturnBundle\Entity\ReturnItem", mappedBy="orderItem", cascade={})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -288,13 +285,12 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ReturnBundle\Entity\ReturnItem::class, mappedBy: 'orderItem', cascade: [])]
     protected $returnItems;
 
     /**
      * @var TaxCode
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxCode")
-     * @ORM\JoinColumn(name="tax_code_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -303,6 +299,8 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxCode::class)]
     protected $taxCode;
     
     /**
@@ -336,7 +334,6 @@ class OrderItem implements
     protected $productUnit;
 
     /**
-     * @ORM\Column(name="allocation_exclusion", type="boolean", nullable=true, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -347,15 +344,14 @@ class OrderItem implements
      *          }
      *      }
      * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'allocation_exclusion', type: 'boolean', nullable: true, options: ['default' => false])]
     protected $allocationExclusion = false;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="item_type",type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -364,6 +360,7 @@ class OrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'item_type', type: 'string', nullable: true)]
     protected $itemType = OrderItemTypeInterface::OI_TYPE_DELIVERY;
 
     /**
@@ -374,9 +371,7 @@ class OrderItem implements
         $this->returnItems = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         if (null === $this->product) {

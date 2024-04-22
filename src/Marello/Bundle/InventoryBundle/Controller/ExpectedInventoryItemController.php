@@ -12,11 +12,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExpectedInventoryItemController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_inventory_expected_inventory_item_view"
-     * )
      * @Template("@MarelloInventory/ExpectedInventoryItem/view.html.twig")
      * @Acl(
      *      id="marello_inventory_inventory_view",
@@ -25,9 +20,9 @@ class ExpectedInventoryItemController extends AbstractController
      *      permission="VIEW"
      * )
      * @param InventoryItem $inventoryItem
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_expected_inventory_item_view')]
     public function viewAction(InventoryItem $inventoryItem)
     {
         return [

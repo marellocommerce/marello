@@ -11,9 +11,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 /**
  * Represents a Marello Variant Product
  *
- * @ORM\Entity()
- * @ORM\Table(name="marello_product_variant")
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *  routeName="marello_product_index",
  *  routeView="marello_product_view",
@@ -29,23 +26,24 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *  }
  * )
  */
+#[ORM\Table(name: 'marello_product_variant')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Variant
 {
     use EntityCreatedUpdatedAtTrait;
     
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="variant_code", type="string", nullable=true, unique=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -54,6 +52,7 @@ class Variant
      *      }
      * )
      */
+    #[ORM\Column(name: 'variant_code', type: 'string', nullable: true, unique: true)]
     protected $variantCode;
 
     /**
@@ -61,8 +60,6 @@ class Variant
      *
      * @var Collection|Product[] $products
      *
-     * @ORM\OneToMany(targetEntity="Product", cascade={"persist"}, mappedBy="variant")
-     * @ORM\JoinTable(name="marello_product_to_variant")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -71,6 +68,8 @@ class Variant
      *      }
      * )
      */
+    #[ORM\JoinTable(name: 'marello_product_to_variant')]
+    #[ORM\OneToMany(targetEntity: \Product::class, cascade: ['persist'], mappedBy: 'variant')]
     protected $products;
 
     /**

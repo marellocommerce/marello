@@ -22,9 +22,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\ReturnBundle\Entity\Repository\ReturnEntityRepository")
- * @ORM\Table(name="marello_return_return")
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *      routeView="marello_return_return_view",
  *      routeName="marello_return_return_index",
@@ -51,6 +48,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_return_return')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\ReturnBundle\Entity\Repository\ReturnEntityRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class ReturnEntity implements
     DerivedPropertyAwareInterface,
     ShippingAwareInterface,
@@ -68,17 +68,15 @@ class ReturnEntity implements
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var Order
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -87,12 +85,12 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class)]
     protected $order;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="return_number", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -101,18 +99,12 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'return_number', type: 'string', nullable: true)]
     protected $returnNumber;
 
     /**
      * @var Collection|ReturnItem[]
      *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ReturnBundle\Entity\ReturnItem",
-     *     mappedBy="return",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn
      * @Oro\ConfigField(
      *      defaultValues={
      *          "email"={
@@ -124,13 +116,13 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\JoinColumn]
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ReturnBundle\Entity\ReturnItem::class, mappedBy: 'return', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected $returnItems;
 
     /**
      * @var SalesChannel
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
-     * @ORM\JoinColumn(name="sales_channel_id", onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -139,12 +131,13 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'sales_channel_id', onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
     protected $salesChannel;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sales_channel_name",type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -153,12 +146,12 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'sales_channel_name', type: 'string', nullable: false)]
     protected $salesChannelName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="return_reference",type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -167,12 +160,12 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'return_reference', type: 'string', nullable: true)]
     protected $returnReference;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="received_at", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -181,12 +174,12 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'received_at', type: 'datetime', nullable: true)]
     protected $receivedAt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="track_trace_code", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -195,6 +188,7 @@ class ReturnEntity implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'track_trace_code', type: 'string', nullable: true)]
     protected $trackTraceCode;
 
     /**

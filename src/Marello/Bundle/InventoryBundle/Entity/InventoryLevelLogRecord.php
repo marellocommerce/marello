@@ -7,8 +7,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\UserBundle\Entity\User;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelLogRecordRepository")
- * @ORM\Table(name="marello_inventory_level_log")
  * @Oro\Config(
  *      defaultValues={
  *          "entity"={
@@ -16,14 +14,13 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          }
  *      }
  * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_inventory_level_log')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelLogRecordRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class InventoryLevelLogRecord
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -34,11 +31,12 @@ class InventoryLevelLogRecord
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryLevel", inversedBy="inventoryLevelLogRecords")
-     * @ORM\JoinColumn(name="inventory_level_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -52,12 +50,11 @@ class InventoryLevelLogRecord
      *
      * @var InventoryLevel
      */
+    #[ORM\JoinColumn(name: 'inventory_level_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryLevel::class, inversedBy: 'inventoryLevelLogRecords')]
     protected $inventoryLevel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem",
-     *     cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="inventory_item_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -71,10 +68,11 @@ class InventoryLevelLogRecord
      *
      * @var InventoryItem
      */
+    #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryItem::class, cascade: ['persist', 'remove'])]
     protected $inventoryItem;
 
     /**
-     * @ORM\Column(name="warehouse_name", type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -82,13 +80,12 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'warehouse_name', type: 'string', nullable: false)]
     protected $warehouseName;
 
     /**
-     * @ORM\Column(name="inventory_alteration", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -96,13 +93,12 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'inventory_alteration', type: 'integer')]
     protected $inventoryAlteration;
 
     /**
-     * @ORM\Column(name="allocated_inventory_alteration", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -110,13 +106,12 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'allocated_inventory_alteration', type: 'integer')]
     protected $allocatedInventoryAlteration;
 
     /**
-     * @ORM\Column(name="change_trigger", type="string")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -124,14 +119,12 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'change_trigger', type: 'string')]
     protected $changeTrigger;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="user_id", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -142,6 +135,8 @@ class InventoryLevelLogRecord
      *
      * @var User
      */
+    #[ORM\JoinColumn(name: 'user_id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\UserBundle\Entity\User::class)]
     protected $user = null;
 
     /**
@@ -154,7 +149,6 @@ class InventoryLevelLogRecord
     protected $subject = null;
 
     /**
-     * @ORM\Column(name="subject_type", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -162,13 +156,12 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'subject_type', type: 'string', nullable: true)]
     protected $subjectType = null;
 
     /**
-     * @ORM\Column(name="subject_id", type="integer", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -176,13 +169,12 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'subject_id', type: 'integer', nullable: true)]
     protected $subjectId = null;
 
     /**
-     * @ORM\Column(name="inventory_batch", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -190,13 +182,12 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'inventory_batch', type: 'string', nullable: true)]
     protected $inventoryBatch;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -207,15 +198,14 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var \DateTime
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
     protected $createdAt;
 
     /**
      * @var \DateTime $updatedAt
      *
-     * @ORM\Column(type="datetime", name="updated_at")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -223,9 +213,9 @@ class InventoryLevelLogRecord
      *          }
      *      }
      * )
-     *
      * @var \DateTime
      */
+    #[ORM\Column(type: 'datetime', name: 'updated_at')]
     protected $updatedAt;
 
     /**
@@ -330,17 +320,13 @@ class InventoryLevelLogRecord
         return $this->subjectId;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdateTimestamp(): void
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersistTimestamp(): void
     {
         $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

@@ -9,9 +9,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -20,11 +18,10 @@ class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
@@ -35,8 +32,6 @@ class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
     /**
      * @var Collection|CreditmemoItem[]
      *
-     * @ORM\OneToMany(targetEntity="CreditmemoItem", mappedBy="invoice", cascade={"persist"}, orphanRemoval=true)
-     * @ORM\OrderBy({"id" = "ASC"})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "email"={
@@ -48,5 +43,7 @@ class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\OneToMany(targetEntity: \CreditmemoItem::class, mappedBy: 'invoice', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['id' => 'ASC'])]
     protected $items;
 }

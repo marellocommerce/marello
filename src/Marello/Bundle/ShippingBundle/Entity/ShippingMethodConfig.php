@@ -27,7 +27,6 @@ class ShippingMethodConfig implements ExtendEntityInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="method", type="string", length=255, nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -36,12 +35,12 @@ class ShippingMethodConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'method', type: 'string', length: 255, nullable: false)]
     protected $method;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="options", type="array")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -50,29 +49,18 @@ class ShippingMethodConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'options', type: 'array')]
     protected $options = [];
 
     /**
      * @var Collection|ShippingMethodTypeConfig[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig",
-     *     mappedBy="methodConfig",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig::class, mappedBy: 'methodConfig', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
     protected $typeConfigs;
 
     /**
      * @var ShippingMethodsConfigsRule
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule",
-     *     inversedBy="methodConfigs"
-     * )
-     * @ORM\JoinColumn(name="rule_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -81,6 +69,8 @@ class ShippingMethodConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
     protected $methodConfigsRule;
 
 

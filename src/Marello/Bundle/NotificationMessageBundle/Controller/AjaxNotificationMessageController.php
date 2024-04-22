@@ -15,18 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class AjaxNotificationMessageController extends AbstractController
 {
     /**
-     * @Route(
-     *      path="/resolve/{id}",
-     *      methods={"POST"},
-     *      name="marello_notificationmessage_resolve",
-     *      requirements={"id"="\d+"}
-     * )
      * @CsrfProtection()
      * @AclAncestor("marello_notificationmessage_update")
      *
      * @param NotificationMessage $entity
      * @return JsonResponse
      */
+    #[Route(path: '/resolve/{id}', methods: ['POST'], name: 'marello_notificationmessage_resolve', requirements: ['id' => '\d+'])]
     public function resolveAction(NotificationMessage $entity)
     {
         try {

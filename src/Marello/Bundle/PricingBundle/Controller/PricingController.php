@@ -12,15 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class PricingController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/get-currency-by-channel",
-     *     methods={"GET"},
-     *     name="marello_pricing_currency_by_channel"
-     * )
      * @AclAncestor("marello_sales_saleschannel_view")
      *
      * {@inheritdoc}
      */
+    #[Route(path: '/get-currency-by-channel', methods: ['GET'], name: 'marello_pricing_currency_by_channel')]
     public function getCurrencyByChannelAction(Request $request)
     {
         return new JsonResponse(

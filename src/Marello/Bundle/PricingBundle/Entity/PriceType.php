@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
- * @ORM\Entity()
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -14,22 +13,21 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *          }
  *      }
  * )
- * @ORM\Table(name="marello_pricing_price_type")
  **/
+#[ORM\Table(name: 'marello_pricing_price_type')]
+#[ORM\Entity]
 class PriceType
 {
     /**
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string')]
     protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -38,6 +36,7 @@ class PriceType
      *      }
      * )
      */
+    #[ORM\Column(type: 'string', nullable: false)]
     protected $label;
 
     /**

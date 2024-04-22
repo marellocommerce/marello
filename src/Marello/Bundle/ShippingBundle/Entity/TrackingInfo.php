@@ -11,17 +11,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 /**
- * @ORM\Entity
- * @ORM\Table(
- *     name="marello_tracking_info",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(
- *             name="marello_tracking_info_shipmentidx",
- *             columns={"shipment_id"}
- *         )
- *     }
- * )
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *  defaultValues={
  *      "security"={
@@ -34,22 +23,25 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
  *  }
  * )
  */
+#[ORM\Table(name: 'marello_tracking_info')]
+#[ORM\UniqueConstraint(name: 'marello_tracking_info_shipmentidx', columns: ['shipment_id'])]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class TrackingInfo implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
     use EntityCreatedUpdatedAtTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @ORM\Column(name="tracking_url", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -59,10 +51,10 @@ class TrackingInfo implements ExtendEntityInterface
      * )
      * @var string
      */
+    #[ORM\Column(name: 'tracking_url', type: 'string', length: 255, nullable: true)]
     protected $trackingUrl;
 
     /**
-     * @ORM\Column(name="track_trace_url", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -72,10 +64,10 @@ class TrackingInfo implements ExtendEntityInterface
      * )
      * @var string
      */
+    #[ORM\Column(name: 'track_trace_url', type: 'string', length: 255, nullable: true)]
     protected $trackTraceUrl;
 
     /**
-     * @ORM\Column(name="tracking_code", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -85,10 +77,10 @@ class TrackingInfo implements ExtendEntityInterface
      * )
      * @var string
      */
+    #[ORM\Column(name: 'tracking_code', type: 'string', length: 255, nullable: true)]
     protected $trackingCode;
 
     /**
-     * @ORM\Column(name="provider", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -98,10 +90,10 @@ class TrackingInfo implements ExtendEntityInterface
      * )
      * @var string
      */
+    #[ORM\Column(name: 'provider', type: 'string', length: 255, nullable: true)]
     protected $provider;
 
     /**
-     * @ORM\Column(name="provider_name", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -111,15 +103,10 @@ class TrackingInfo implements ExtendEntityInterface
      * )
      * @var string
      */
+    #[ORM\Column(name: 'provider_name', type: 'string', length: 255, nullable: true)]
     protected $providerName;
 
     /**
-     * @ORM\OneToOne(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\Shipment",
-     *     inversedBy="trackingInfo",
-     *     cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="shipment_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -129,6 +116,8 @@ class TrackingInfo implements ExtendEntityInterface
      * )
      * @var Shipment
      */
+    #[ORM\JoinColumn(name: 'shipment_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\Shipment::class, inversedBy: 'trackingInfo', cascade: ['persist'])]
     protected $shipment;
 
     /**

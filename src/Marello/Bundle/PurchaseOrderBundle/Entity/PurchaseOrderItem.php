@@ -18,9 +18,6 @@ use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\PurchaseOrderBundle\Entity\Repository\PurchaseOrderItemRepository")
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="marello_purchase_order_item")
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -34,6 +31,9 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_purchase_order_item')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\PurchaseOrderBundle\Entity\Repository\PurchaseOrderItemRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class PurchaseOrderItem implements
     ProductAwareInterface,
     OrganizationAwareInterface
@@ -47,18 +47,17 @@ class PurchaseOrderItem implements
     public const STATUS_CLOSED = 'closed';
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var ProductInterface
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -67,13 +66,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
     protected $product;
 
     /**
      * @var PurchaseOrder
      *
-     * @ORM\ManyToOne(targetEntity="PurchaseOrder", inversedBy="items")
-     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -82,12 +80,13 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \PurchaseOrder::class, inversedBy: 'items')]
     protected $order;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="product_sku", type="string")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -96,12 +95,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'product_sku', type: 'string')]
     protected $productSku;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="product_name", type="string")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -110,12 +109,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'product_name', type: 'string')]
     protected $productName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="supplier", type="string")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -124,12 +123,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'supplier', type: 'string')]
     protected $supplier;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="ordered_amount", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -138,12 +137,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'ordered_amount', type: 'integer')]
     protected $orderedAmount = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="received_amount", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -152,12 +151,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'received_amount', type: 'integer')]
     protected $receivedAmount = 0;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="purchase_price_value", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -166,6 +165,7 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'purchase_price_value', type: 'money')]
     protected $purchasePriceValue;
 
     /**
@@ -176,7 +176,6 @@ class PurchaseOrderItem implements
     /**
      * @var float
      *
-     * @ORM\Column(name="row_total", type="money", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -185,12 +184,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'row_total', type: 'money', nullable: false)]
     protected $rowTotal;
     
     /**
      * @var array $data
      *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "email"={
@@ -202,12 +201,12 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
     protected $data = [];
 
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -216,6 +215,7 @@ class PurchaseOrderItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'status', type: 'string')]
     protected $status = self::STATUS_DRAFT;
 
     /**
@@ -242,10 +242,9 @@ class PurchaseOrderItem implements
     }
 
     /**
-     * @Assert\Callback
-     *
      * @param ExecutionContextInterface $context
      */
+    #[Assert\Callback]
     public function validate(ExecutionContextInterface $context)
     {
         if (($this->receivedAmount < 0) || ($this->receivedAmount > $this->orderedAmount)) {
@@ -406,9 +405,7 @@ class PurchaseOrderItem implements
         return $this;
     }
 
-    /**
-     * @ORM\PostLoad
-     */
+    #[ORM\PostLoad]
     public function loadPurchasePrice()
     {
         $price = new ProductPrice();
@@ -423,10 +420,8 @@ class PurchaseOrderItem implements
         $this->purchasePrice = $price;
     }
 
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function updatePurchasePrice()
     {
         if ($this->purchasePrice) {
@@ -500,10 +495,8 @@ class PurchaseOrderItem implements
         return $this;
     }
 
-    /**
-     * @ORM\PreUpdate
-     * @ORM\PrePersist
-     */
+    #[ORM\PreUpdate]
+    #[ORM\PrePersist]
     public function preSaveSetSupplier()
     {
         $this->setSupplier($this->order->getSupplier()->getName());

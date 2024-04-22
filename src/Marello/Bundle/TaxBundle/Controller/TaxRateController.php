@@ -20,24 +20,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TaxRateController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_tax_taxrate_index"
-     * )
      * @Template
      * @AclAncestor("marello_tax_taxrate_view")
      */
+    #[Route(path: '/', name: 'marello_tax_taxrate_index')]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloTaxBundle:TaxRate'];
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_tax_taxrate_view"
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxrate_view",
@@ -47,20 +39,15 @@ class TaxRateController extends AbstractController
      * )
      *
      * @param TaxRate $taxRate
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_tax_taxrate_view')]
     public function viewAction(TaxRate $taxRate)
     {
         return ['entity' => $taxRate];
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_tax_taxrate_create"
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxrate_create",
@@ -72,18 +59,13 @@ class TaxRateController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_tax_taxrate_create')]
     public function createAction(Request $request)
     {
         return $this->update($request, new TaxRate());
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_tax_taxrate_update"
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxrate_update",
@@ -96,6 +78,7 @@ class TaxRateController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_tax_taxrate_update')]
     public function updateAction(TaxRate $taxRate, Request $request)
     {
         return $this->update($request, $taxRate);

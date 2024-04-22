@@ -13,7 +13,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity()
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -26,9 +25,10 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *          }
  *      }
  * )
- * @ORM\Table(name="marello_packing_pack_slip_item")
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_packing_pack_slip_item')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -37,18 +37,15 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var PackingSlip
      *
-     * @ORM\ManyToOne(targetEntity="PackingSlip", inversedBy="items")
-     * @ORM\JoinColumn(name="packing_slip_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -57,13 +54,13 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'packing_slip_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \PackingSlip::class, inversedBy: 'items')]
     protected $packingSlip;
 
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -72,12 +69,13 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
     protected $product;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="product_sku",type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -86,18 +84,16 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'product_sku', type: 'string', nullable: false)]
     protected $productSku;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
+    #[ORM\Column(name: 'product_name', type: 'string', nullable: false)]
     protected $productName;
 
     /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem")
-     * @ORM\JoinColumn(name="order_item_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -106,12 +102,13 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class)]
     protected $orderItem;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="weight",type="float",nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -120,12 +117,12 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'weight', type: 'float', nullable: false)]
     protected $weight;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="quantity",type="float",nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -134,10 +131,10 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity', type: 'float', nullable: false)]
     protected $quantity;
 
     /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -145,9 +142,9 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected $comment;
 
     /**
@@ -166,7 +163,6 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     protected $status;
 
     /**
-     * @ORM\Column(name="inventory_batches", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -174,9 +170,9 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *          }
      *      }
      * )
-     *
      * @var array
      */
+    #[ORM\Column(name: 'inventory_batches', type: 'json_array', nullable: true)]
     protected $inventoryBatches;
 
     /**
@@ -194,9 +190,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      */
     protected $productUnit;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         // prevent overriding product name if already being set

@@ -13,16 +13,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\TaxBundle\Entity\Repository\TaxJurisdictionRepository")
- * @ORM\Table("marello_tax_tax_jurisdiction",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_tax_jurisdiction_codeidx",
- *              columns={"code"}
- *          )
- *      }
- * )
- * @ORM\HasLifecycleCallbacks
  * @Config(
  *      mode="hidden",
  *      routeName="marello_tax_taxjurisdiction_index",
@@ -39,23 +29,25 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *      }
  * )
  */
+#[ORM\Table('marello_tax_tax_jurisdiction')]
+#[ORM\UniqueConstraint(name: 'marello_tax_jurisdiction_codeidx', columns: ['code'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxJurisdictionRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class TaxJurisdiction implements DatesAwareInterface
 {
     use DatesAwareTrait;
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=255, unique=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -68,12 +60,12 @@ class TaxJurisdiction implements DatesAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'code', type: 'string', length: 255, unique: true)]
     protected $code;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -82,13 +74,12 @@ class TaxJurisdiction implements DatesAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected $description;
 
     /**
      * @var Country
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
-     * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code")
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -97,13 +88,13 @@ class TaxJurisdiction implements DatesAwareInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
     protected $country;
 
     /**
      * @var Region
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
-     * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -112,12 +103,13 @@ class TaxJurisdiction implements DatesAwareInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'region_code', referencedColumnName: 'combined_code')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Region::class)]
     protected $region;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="region_text", type="string", length=255, nullable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -126,17 +118,12 @@ class TaxJurisdiction implements DatesAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'region_text', type: 'string', length: 255, nullable: true)]
     protected $regionText;
 
     /**
      * @var Collection|ZipCode[]
      *
-     * @ORM\OneToMany(
-     *      targetEntity="Marello\Bundle\TaxBundle\Entity\ZipCode",
-     *      mappedBy="taxJurisdiction",
-     *      cascade={"all"},
-     *      orphanRemoval=true
-     * )
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -145,12 +132,12 @@ class TaxJurisdiction implements DatesAwareInterface
      *      }
      * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\TaxBundle\Entity\ZipCode::class, mappedBy: 'taxJurisdiction', cascade: ['all'], orphanRemoval: true)]
     protected $zipCodes;
 
     /**
      * @var array $data
      *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -159,6 +146,7 @@ class TaxJurisdiction implements DatesAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
     protected $data = [];
 
     /**
@@ -379,17 +367,13 @@ class TaxJurisdiction implements DatesAwareInterface
         return (string)$this->code;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdateTimestamp()
     {
         $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersistTimestamp()
     {
         $this->created = $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));

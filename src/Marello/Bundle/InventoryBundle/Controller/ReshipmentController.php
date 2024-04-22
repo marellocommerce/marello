@@ -16,19 +16,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ReshipmentController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/create/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_inventory_reshipment_create"
-     * )
      * @Template("@MarelloInventory/Reshipment/create.html.twig")
      * @AclAncestor("marello_inventory_inventory_view")
      *
      * @param Order $order
      * @param Request $request
-     *
      * @return array|RedirectResponse
      */
+    #[Route(path: '/create/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_reshipment_create')]
     public function createAction(Order $order, Request $request)
     {
         return $this->container->get(UpdateHandlerFacade::class)->update(

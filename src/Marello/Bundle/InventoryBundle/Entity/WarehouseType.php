@@ -10,8 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  * Class WarehouseType
  * @package Marello\Bundle\InventoryBundle\Entity
  *
- * @ORM\Entity
- * @ORM\Table(name="marello_inventory_wh_type")
  * @Oro\Config(
  *      defaultValues={
  *          "grouping"={
@@ -20,11 +18,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_inventory_wh_type')]
+#[ORM\Entity]
 class WarehouseType
 {
     /**
-     * @ORM\Column(name="name", type="string", length=32)
-     * @ORM\Id
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -33,11 +31,11 @@ class WarehouseType
      *      }
      * )
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 32)]
+    #[ORM\Id]
     protected $name;
 
-    /**
-     * @ORM\Column(name="label", type="string", length=255, unique=true)
-     */
+    #[ORM\Column(name: 'label', type: 'string', length: 255, unique: true)]
     protected $label;
 
     /**

@@ -20,24 +20,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TaxCodeController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_tax_taxcode_index"
-     * )
      * @Template
      * @AclAncestor("marello_tax_taxcode_view")
      */
+    #[Route(path: '/', name: 'marello_tax_taxcode_index')]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloTaxBundle:TaxCode'];
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_tax_taxcode_view"
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxcode_view",
@@ -47,20 +39,15 @@ class TaxCodeController extends AbstractController
      * )
      *
      * @param TaxCode $taxCode
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_tax_taxcode_view')]
     public function viewAction(TaxCode $taxCode)
     {
         return ['entity' => $taxCode];
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_tax_taxcode_create"
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxcode_create",
@@ -72,18 +59,13 @@ class TaxCodeController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_tax_taxcode_create')]
     public function createAction(Request $request)
     {
         return $this->update($request, new TaxCode());
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_tax_taxcode_update"
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxcode_update",
@@ -96,6 +78,7 @@ class TaxCodeController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_tax_taxcode_update')]
     public function updateAction(TaxCode $taxCode, Request $request)
     {
         return $this->update($request, $taxCode);

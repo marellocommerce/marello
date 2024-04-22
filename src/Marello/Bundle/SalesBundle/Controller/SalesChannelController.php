@@ -17,14 +17,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class SalesChannelController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     methods={"GET"},
-     *     name="marello_sales_saleschannel_index"
-     * )
      * @Template
      * @AclAncestor("marello_sales_saleschannel_view")
      */
+    #[Route(path: '/', methods: ['GET'], name: 'marello_sales_saleschannel_index')]
     public function indexAction()
     {
         return [
@@ -33,28 +29,19 @@ class SalesChannelController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_sales_saleschannel_create"
-     * )
      * @Template("@MarelloSales/SalesChannel/update.html.twig")
      * @AclAncestor("marello_saleschannel_create")
      *
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_sales_saleschannel_create')]
     public function createAction(Request $request)
     {
         return $this->update(new SalesChannel(), $request);
     }
     
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     name="marello_sales_saleschannel_view",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template
      * @Acl(
      *      id="marello_sales_saleschannel_view",
@@ -66,6 +53,7 @@ class SalesChannelController extends AbstractController
      * @param SalesChannel $salesChannel
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_sales_saleschannel_view', requirements: ['id' => '\d+'])]
     public function viewAction(SalesChannel $salesChannel)
     {
         return [
@@ -74,12 +62,6 @@ class SalesChannelController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_sales_saleschannel_update"
-     * )
      * @Template
      * @AclAncestor("marello_saleschannel_update")
      *
@@ -87,6 +69,7 @@ class SalesChannelController extends AbstractController
      * @param SalesChannel $channel
      * @return array
      */
+    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_sales_saleschannel_update')]
     public function updateAction(SalesChannel $channel, Request $request)
     {
         return $this->update($channel, $request);

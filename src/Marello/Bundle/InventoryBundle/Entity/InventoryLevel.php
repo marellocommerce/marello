@@ -13,12 +13,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelRepository")
- * @ORM\Table(name="marello_inventory_level",
- *       uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"inventory_item_id", "warehouse_id"})
- *      }
- * )
  * @Oro\Config(
  *      defaultValues={
  *          "entity"={
@@ -38,17 +32,17 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *          }
  *      }
  * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_inventory_level')]
+#[ORM\UniqueConstraint(columns: ['inventory_item_id', 'warehouse_id'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInterface, ExtendEntityInterface
 {
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
     
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -59,11 +53,12 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem", inversedBy="inventoryLevels")
-     * @ORM\JoinColumn(name="inventory_item_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -80,11 +75,11 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *
      * @var InventoryItem
      */
+    #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryItem::class, inversedBy: 'inventoryLevels')]
     protected $inventoryItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Warehouse")
-     * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -99,10 +94,11 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *
      * @var Warehouse
      */
+    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
     protected $warehouse;
 
     /**
-     * @ORM\Column(name="inventory", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -113,13 +109,12 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'inventory', type: 'integer')]
     protected $inventoryQty = 0;
 
     /**
-     * @ORM\Column(name="allocated_inventory", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -130,13 +125,12 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'allocated_inventory', type: 'integer')]
     protected $allocatedInventory = 0;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -150,15 +144,14 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *          }
      *      }
      * )
-     *
      * @var \DateTime
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
     protected $createdAt;
 
     /**
      * @var \DateTime $updatedAt
      *
-     * @ORM\Column(type="datetime", name="updated_at")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -170,10 +163,10 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *      }
      * )
      */
+    #[ORM\Column(type: 'datetime', name: 'updated_at')]
     protected $updatedAt;
 
     /**
-     * @ORM\Column(name="managed_inventory", type="boolean", nullable=true, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -184,13 +177,12 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *          }
      *      }
      * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'managed_inventory', type: 'boolean', nullable: true, options: ['default' => false])]
     protected $managedInventory;
 
     /**
-     * @ORM\Column(name="pick_location", type="string", nullable=true, length=100)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -201,20 +193,12 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'pick_location', type: 'string', nullable: true, length: 100)]
     protected $pickLocation;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryBatch",
-     *     mappedBy="inventoryLevel",
-     *     cascade={"persist"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"createdAt" = "DESC"})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -229,16 +213,14 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      *
      * @var InventoryBatch[]|Collection
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryBatch::class, mappedBy: 'inventoryLevel', cascade: ['persist'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
     protected $inventoryBatches;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="InventoryLevelLogRecord",
-     *     mappedBy="inventoryLevel"
-     * )
-     *
      * @var Collection|InventoryLevelLogRecord[]
      */
+    #[ORM\OneToMany(targetEntity: \InventoryLevelLogRecord::class, mappedBy: 'inventoryLevel')]
     protected $inventoryLevelLogRecords;
     
     public function __construct()
@@ -339,17 +321,13 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
         return $this->warehouse;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdateTimestamp()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersistTimestamp()
     {
         $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

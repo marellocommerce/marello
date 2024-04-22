@@ -7,79 +7,62 @@ use Marello\Bundle\SupplierBundle\Entity\Supplier;
 
 /**
  * ProductSupplierRelation
- *
- * @ORM\Table(
- *     name="marello_product_prod_supp_rel",
- *     uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_product_prod_supp_rel_uidx",
- *              columns={"product_id", "supplier_id", "quantity_of_unit"}
- *          )
- *      }
- * )
- * @ORM\Entity(repositoryClass="Marello\Bundle\ProductBundle\Entity\Repository\ProductSupplierRelationRepository")
  */
+#[ORM\Table(name: 'marello_product_prod_supp_rel')]
+#[ORM\UniqueConstraint(name: 'marello_product_prod_supp_rel_uidx', columns: ['product_id', 'supplier_id', 'quantity_of_unit'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\ProductBundle\Entity\Repository\ProductSupplierRelationRepository::class)]
 class ProductSupplierRelation
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var Product
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="suppliers",
-     *      cascade={"persist"})
-     * @ORM\JoinColumn(name="product_id", nullable=false, onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'product_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'suppliers', cascade: ['persist'])]
     protected $product;
 
     /**
      * @var Supplier
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SupplierBundle\Entity\Supplier", cascade={"persist"})
-     * @ORM\JoinColumn(name="supplier_id", nullable=false, onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'supplier_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SupplierBundle\Entity\Supplier::class, cascade: ['persist'])]
     protected $supplier;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="quantity_of_unit", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'quantity_of_unit', type: 'integer', nullable: false)]
     protected $quantityOfUnit;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="priority", type="integer")
      */
+    #[ORM\Column(name: 'priority', type: 'integer')]
     protected $priority;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="cost", type="money", nullable=true)
      */
+    #[ORM\Column(name: 'cost', type: 'money', nullable: true)]
     protected $cost;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="can_dropship", type="boolean", nullable=false)
      */
+    #[ORM\Column(name: 'can_dropship', type: 'boolean', nullable: false)]
     protected $canDropship;
 
     /**
      * @var integer|null
-     *
-     * @ORM\Column(name="lead_time", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'lead_time', type: 'integer', nullable: true)]
     protected $leadTime;
 
     public function getId(): ?int

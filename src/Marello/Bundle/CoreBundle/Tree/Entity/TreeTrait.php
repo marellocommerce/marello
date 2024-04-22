@@ -11,32 +11,32 @@ trait TreeTrait
      * @var integer
      *
      * @Gedmo\TreeLeft
-     * @ORM\Column(name="tree_left", type="integer")
      */
+    #[ORM\Column(name: 'tree_left', type: 'integer')]
     protected $left;
 
     /**
      * @var integer
      *
      * @Gedmo\TreeLevel
-     * @ORM\Column(name="tree_level", type="integer")
      */
+    #[ORM\Column(name: 'tree_level', type: 'integer')]
     protected $level;
 
     /**
      * @var integer
      *
      * @Gedmo\TreeRight
-     * @ORM\Column(name="tree_right", type="integer")
      */
+    #[ORM\Column(name: 'tree_right', type: 'integer')]
     protected $right;
 
     /**
      * @var integer
      *
      * @Gedmo\TreeRoot
-     * @ORM\Column(name="tree_root", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'tree_root', type: 'integer', nullable: true)]
     protected $root;
 
     /**

@@ -12,35 +12,31 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\WebhookBundle\Entity\Repository\WebhookRepository")
- * @ORM\Table(
- *     name="marello_webhook",
- *     indexes={
- *         @ORM\Index(name="idx_marello_webhook_created_at", columns={"created_at"}),
- *         @ORM\Index(name="idx_marello_webhook_updated_at", columns={"updated_at"})
- *     }
- * )
- * @ORM\HasLifecycleCallbacks
- * @Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-briefcase"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
+* @Config(
+*      defaultValues={
+*          "entity"={
+*              "icon"="fa-briefcase"
+*          },
+*          "dataaudit"={
+*              "auditable"=true
+*          },
 *           "ownership"={
 *               "owner_type"="ORGANIZATION",
 *               "owner_field_name"="organization",
 *               "owner_column_name"="organization_id"
 *           },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          }
- *      }
- * )
- */
+*          "security"={
+*              "type"="ACL",
+*              "group_name"=""
+*          }
+*      }
+* )
+*/
+#[ORM\Table(name: 'marello_webhook')]
+#[ORM\Index(name: 'idx_marello_webhook_created_at', columns: ['created_at'])]
+#[ORM\Index(name: 'idx_marello_webhook_updated_at', columns: ['updated_at'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\WebhookBundle\Entity\Repository\WebhookRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -50,9 +46,6 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @var int
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -61,12 +54,14 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="string")
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -75,12 +70,12 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(type: 'string')]
     protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="event", type="string", length=255, nullable=true)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -92,12 +87,12 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'event', type: 'string', length: 255, nullable: true)]
     protected $event;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="callback_url",type="string")
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -106,12 +101,12 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'callback_url', type: 'string')]
     protected $callbackUrl;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="secret",type="string")
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -120,12 +115,12 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'secret', type: 'string')]
     protected $secret;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled",type="boolean")
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -134,6 +129,7 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'enabled', type: 'boolean')]
     protected $enabled;
 
     /**

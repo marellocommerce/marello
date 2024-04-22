@@ -17,8 +17,6 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 /**
  * Supplier
  *
- * @ORM\Entity(repositoryClass="Marello\Bundle\SupplierBundle\Entity\Repository\SupplierRepository")
- * @ORM\Table(name="marello_supplier_supplier")
  * @Oro\Config(
  *      routeName="marello_supplier_supplier_index",
  *      routeView="marello_supplier_supplier_view",
@@ -37,8 +35,10 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
  *          }
  *      }
  * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_supplier_supplier')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\SupplierBundle\Entity\Repository\SupplierRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait, AuditableOrganizationAwareTrait;
@@ -49,17 +49,15 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true, nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -68,13 +66,12 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 255, unique: true, nullable: false)]
     protected $name;
     
     /**
      * @var MarelloAddress
      *
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -83,12 +80,13 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist', 'remove'])]
     protected $address = null;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, unique=true, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -97,12 +95,12 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\Column(name: 'email', type: 'string', length: 255, unique: true, nullable: true)]
     protected $email;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="priority", type="integer", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -111,12 +109,12 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\Column(name: 'priority', type: 'integer', nullable: false)]
     protected $priority;
     
     /**
      * @var boolean
      *
-     * @ORM\Column(name="can_dropship", type="boolean", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -125,12 +123,12 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\Column(name: 'can_dropship', type: 'boolean', nullable: false)]
     protected $canDropship = true;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_active", type="boolean", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -139,11 +137,11 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\Column(name: 'is_active', type: 'boolean', nullable: false)]
     protected $isActive = true;
     
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=3, nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -152,11 +150,11 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
     protected $currency;
 
     /**
      * @var string
-     * @ORM\Column(name="po_send_by", type="string", length=30, nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -165,13 +163,13 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      *      }
      * )
      */
+    #[ORM\Column(name: 'po_send_by', type: 'string', length: 30, nullable: false)]
     protected $poSendBy;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="code", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'code', type: 'string', nullable: true)]
     protected $code;
 
     /**

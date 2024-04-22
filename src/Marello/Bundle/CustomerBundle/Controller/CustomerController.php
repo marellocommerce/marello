@@ -17,26 +17,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class CustomerController extends AbstractController
 {
     /**
-     * @Route(path="/", name="marello_customer_index")
      * @Template
      * @AclAncestor("marello_customer_view")
-     *
      * @return array
      */
+    #[Route(path: '/', name: 'marello_customer_index')]
     public function indexAction()
     {
         return ['entity_class' => Customer::class];
     }
 
     /**
-     * @Route(path="/view/{id}", requirements={"id"="\d+"}, name="marello_customer_view")
      * @Template
      * @AclAncestor("marello_customer_view")
      *
      * @param Customer $customer
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_customer_view')]
     public function viewAction(Customer $customer)
     {
         $entityClass = $this->container->get(EntityRoutingHelper::class)->resolveEntityClass('marellocustomers');
@@ -52,35 +50,24 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_customer_create"
-     * )
      * @Template("@MarelloCustomer/Customer/update.html.twig")
      * @AclAncestor("marello_customer_create")
-     *
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_customer_create')]
     public function createAction(Request $request)
     {
         return $this->update($request);
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_customer_update"
-     * )
      * @Template
      * @AclAncestor("marello_customer_update")
      *
      * @param Customer $customer
-     *
      * @return array
      */
+    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_customer_update')]
     public function updateAction(Request $request, Customer $customer)
     {
         return $this->update($request, $customer);

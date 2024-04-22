@@ -9,13 +9,13 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="marello_pmnt_mtdscfgsrl_dst_pc")
- * @ORM\HasLifecycleCallbacks
  * @Config(
  *     mode="hidden",
  * )
  */
+#[ORM\Table(name: 'marello_pmnt_mtdscfgsrl_dst_pc')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class PaymentMethodsConfigsRuleDestinationPostalCode implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -23,9 +23,6 @@ class PaymentMethodsConfigsRuleDestinationPostalCode implements ExtendEntityInte
     /**
      * @var integer
      *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -34,12 +31,14 @@ class PaymentMethodsConfigsRuleDestinationPostalCode implements ExtendEntityInte
      *      }
      * )
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(type="text", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -52,16 +51,12 @@ class PaymentMethodsConfigsRuleDestinationPostalCode implements ExtendEntityInte
      *      }
      * )
      */
+    #[ORM\Column(type: 'text', nullable: false)]
     protected $name;
 
     /**
      * @var PaymentMethodsConfigsRuleDestination
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination",
-     *     inversedBy="postalCodes"
-     * )
-     * @ORM\JoinColumn(name="destination_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -70,6 +65,8 @@ class PaymentMethodsConfigsRuleDestinationPostalCode implements ExtendEntityInte
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'destination_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination::class, inversedBy: 'postalCodes')]
     protected $destination;
 
     /**

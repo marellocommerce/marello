@@ -13,27 +13,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository"))
- * @ORM\Table(name="marello_inventory_wh_chg_link")
- * @ORM\HasLifecycleCallbacks()
- * @Oro\Config(
- *  defaultValues={
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "ownership"={
- *          "owner_type"="ORGANIZATION",
- *          "owner_field_name"="organization",
- *          "owner_column_name"="organization_id"
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      }
- *  }
- * )
- */
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository::class)] // @ORM\Table(name="marello_inventory_wh_chg_link")
 class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -42,17 +22,15 @@ class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEnt
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_system", type="boolean", nullable=false, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -61,13 +39,12 @@ class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEnt
      *      }
      * )
      */
+    #[ORM\Column(name: 'is_system', type: 'boolean', nullable: false, options: ['default' => false])]
     protected $system = false;
 
     /**
      * @var WarehouseGroup
      *
-     * @ORM\OneToOne(targetEntity="WarehouseGroup", inversedBy="warehouseChannelGroupLink")
-     * @ORM\JoinColumn(name="warehouse_group_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -76,16 +53,13 @@ class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEnt
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'warehouse_group_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \WarehouseGroup::class, inversedBy: 'warehouseChannelGroupLink')]
     protected $warehouseGroup;
 
     /**
      * @var SalesChannelGroup[]
      *
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannelGroup", fetch="EAGER")
-     * @ORM\JoinTable(name="marello_inventory_lnk_join_chg",
-     *      joinColumns={@ORM\JoinColumn(name="link_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="channel_group_id", referencedColumnName="id", unique=true)}
-     *      )
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -94,6 +68,10 @@ class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEnt
      *      }
      * )
      */
+    #[ORM\JoinTable(name: 'marello_inventory_lnk_join_chg')]
+    #[ORM\JoinColumn(name: 'link_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'channel_group_id', referencedColumnName: 'id', unique: true)]
+    #[ORM\ManyToMany(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannelGroup::class, fetch: 'EAGER')]
     protected $salesChannelGroups;
 
     public function __construct()

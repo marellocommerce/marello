@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class WebhookNotificationSettings extends Transport
 {
     /**

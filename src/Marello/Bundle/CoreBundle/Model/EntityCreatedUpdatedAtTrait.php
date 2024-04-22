@@ -16,7 +16,6 @@ trait EntityCreatedUpdatedAtTrait
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -27,6 +26,7 @@ trait EntityCreatedUpdatedAtTrait
      */
     #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
     #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.updated_at']])]
+    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
     protected ?\DateTimeInterface $updatedAt = null;
 
     /**

@@ -7,10 +7,8 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
-/**
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 class BasePrice implements CurrencyAwareInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -18,17 +16,15 @@ class BasePrice implements CurrencyAwareInterface
 
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="value", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -37,12 +33,12 @@ class BasePrice implements CurrencyAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'value', type: 'money')]
     protected $value;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="currency", type="string", length=3)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -54,13 +50,12 @@ class BasePrice implements CurrencyAwareInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 3)]
     protected $currency;
 
     /**
      * @var PriceType
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\PricingBundle\Entity\PriceType")
-     * @ORM\JoinColumn(name="type", referencedColumnName="name", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -69,6 +64,8 @@ class BasePrice implements CurrencyAwareInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'type', referencedColumnName: 'name', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\PriceType::class)]
     protected $type;
 
     /**

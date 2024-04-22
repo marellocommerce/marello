@@ -17,9 +17,6 @@ use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\ReturnBundle\Entity\Repository\ReturnItemRepository")
- * @ORM\Table(name="marello_return_item")
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -33,6 +30,9 @@ use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_return_item')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\ReturnBundle\Entity\Repository\ReturnItemRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class ReturnItem implements
     CurrencyAwareInterface,
     InventoryItemAwareInterface,
@@ -45,18 +45,15 @@ class ReturnItem implements
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var ReturnEntity
      *
-     * @ORM\ManyToOne(targetEntity="ReturnEntity", inversedBy="returnItems")
-     * @ORM\JoinColumn(name="return_id", onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -65,13 +62,13 @@ class ReturnItem implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'return_id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \ReturnEntity::class, inversedBy: 'returnItems')]
     protected $return;
 
     /**
      * @var OrderItem
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem", inversedBy="returnItems")
-     * @ORM\JoinColumn(name="order_item_id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -80,12 +77,13 @@ class ReturnItem implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'order_item_id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class, inversedBy: 'returnItems')]
     protected $orderItem;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="quantity", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -94,6 +92,7 @@ class ReturnItem implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity', type: 'integer')]
     protected $quantity;
 
     /**

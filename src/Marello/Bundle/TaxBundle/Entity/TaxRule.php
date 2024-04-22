@@ -9,8 +9,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 /**
  * TaxRule
  *
- * @ORM\Entity(repositoryClass="Marello\Bundle\TaxBundle\Entity\Repository\TaxRuleRepository")
- * @ORM\Table(name="marello_tax_tax_rule")
  * @Oro\Config(
  *      routeName="marello_tax_taxrule_index",
  *      routeView="marello_tax_taxrule_view",
@@ -25,26 +23,25 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *          }
  *      }
  * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_tax_tax_rule')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxRuleRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class TaxRule
 {
     use EntityCreatedUpdatedAtTrait;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var TaxCode
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxCode")
-     * @ORM\JoinColumn(name="tax_code_id", referencedColumnName="id", onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -53,13 +50,13 @@ class TaxRule
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxCode::class)]
     protected $taxCode;
 
     /**
      * @var TaxRate
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxRate")
-     * @ORM\JoinColumn(name="tax_rate_id", referencedColumnName="id", onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -68,13 +65,13 @@ class TaxRule
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'tax_rate_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxRate::class)]
     protected $taxRate;
 
     /**
      * @var TaxJurisdiction
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxJurisdiction")
-     * @ORM\JoinColumn(name="tax_jurisdiction_id", referencedColumnName="id", onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -83,12 +80,13 @@ class TaxRule
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'tax_jurisdiction_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxJurisdiction::class)]
     protected $taxJurisdiction;
 
     /**
      * @var array $data
      *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -97,6 +95,7 @@ class TaxRule
      *      }
      * )
      */
+    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
     protected $data = [];
 
     /**

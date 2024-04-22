@@ -24,60 +24,42 @@ use Marello\Bundle\SupplierBundle\Provider\SupplierProvider;
 class SupplierController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_supplier_supplier_index"
-     * )
      * @Template
      * @AclAncestor("marello_supplier_view")
      */
+    #[Route(path: '/', name: 'marello_supplier_supplier_index')]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloSupplierBundle:Supplier'];
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_supplier_supplier_view"
-     * )
      * @Template
      * @AclAncestor("marello_supplier_view")
      *
      * @param Supplier $supplier
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_supplier_supplier_view')]
     public function viewAction(Supplier $supplier)
     {
         return ['entity' => $supplier];
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_supplier_supplier_create"
-     * )
      * @Template
      * @AclAncestor("marello_supplier_create")
      *
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_supplier_supplier_create')]
     public function createAction(Request $request)
     {
         return $this->update(new Supplier(), $request);
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_supplier_supplier_update"
-     * )
      * @Template
      * @AclAncestor("marello_supplier_update")
      *
@@ -85,6 +67,7 @@ class SupplierController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_supplier_supplier_update')]
     public function updateAction(Supplier $supplier, Request $request)
     {
         return $this->update($supplier, $request);
@@ -108,19 +91,13 @@ class SupplierController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/widget/address/{id}/{typeId}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+","typeId"="\d+"},
-     *     name="marello_supplier_supplier_address"
-     * )
      * @Template("@MarelloSupplier/Supplier/widget/address.html.twig")
      * @AclAncestor("marello_supplier_update")
      *
      * @param MarelloAddress $address
-     *
      * @return array
      */
+    #[Route(path: '/widget/address/{id}/{typeId}', methods: ['GET', 'POST'], requirements: ['id' => '\d+', 'typeId' => '\d+'], name: 'marello_supplier_supplier_address')]
     public function addressAction(MarelloAddress $address)
     {
         return [
@@ -129,20 +106,14 @@ class SupplierController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/update/address/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_supplier_supplier_updateaddress"
-     * )
      * @Template("@MarelloSupplier/Supplier/widget/updateAddress.html.twig")
      * @AclAncestor("marello_supplier_update")
      *
      * @param Request $request
      * @param MarelloAddress $address
-     *
      * @return array
      */
+    #[Route(path: '/update/address/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_supplier_supplier_updateaddress')]
     public function updateAddressAction(Request $request, MarelloAddress $address)
     {
         $responseData = array(
@@ -162,15 +133,11 @@ class SupplierController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/get-supplier-default-data",
-     *     methods={"GET"},
-     *     name="marello_supplier_supplier_get_default_data"
-     * )
      * @AclAncestor("marello_supplier_view")
      *
      * {@inheritdoc}
      */
+    #[Route(path: '/get-supplier-default-data', methods: ['GET'], name: 'marello_supplier_supplier_get_default_data')]
     public function getSupplierDefaultDataAction(Request $request)
     {
         return new JsonResponse(

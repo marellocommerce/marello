@@ -17,15 +17,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class SalesChannelGroupController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_sales_saleschannelgroup_index"
-     * )
      * @Template
      * @AclAncestor("marello_sales_saleschannelgroup_view")
-     *
      * @return array
      */
+    #[Route(path: '/', name: 'marello_sales_saleschannelgroup_index')]
     public function indexAction()
     {
         return [
@@ -34,10 +30,6 @@ class SalesChannelGroupController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     name="marello_sales_saleschannelgroup_create"
-     * )
      * @Template("@MarelloSales/SalesChannelGroup/update.html.twig")
      * @Acl(
      *     id="marello_sales_saleschannelgroup_create",
@@ -49,17 +41,13 @@ class SalesChannelGroupController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', name: 'marello_sales_saleschannelgroup_create')]
     public function createAction(Request $request)
     {
         return $this->update(new SalesChannelGroup(), $request);
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     name="marello_sales_saleschannelgroup_view",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template
      * @Acl(
      *      id="marello_sales_saleschannelgroup_view",
@@ -69,9 +57,9 @@ class SalesChannelGroupController extends AbstractController
      * )
      *
      * @param SalesChannelGroup $salesChannelGroup
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_sales_saleschannelgroup_view', requirements: ['id' => '\d+'])]
     public function viewAction(SalesChannelGroup $salesChannelGroup)
     {
         return [
@@ -80,11 +68,6 @@ class SalesChannelGroupController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     name="marello_sales_saleschannelgroup_update",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template
      * @Acl(
      *     id="marello_sales_saleschannelgroup_update",
@@ -94,9 +77,9 @@ class SalesChannelGroupController extends AbstractController
      * )
      * @param Request $request
      * @param SalesChannelGroup $entity
-     *
      * @return array
      */
+    #[Route(path: '/update/{id}', name: 'marello_sales_saleschannelgroup_update', requirements: ['id' => '\d+'])]
     public function updateAction(Request $request, SalesChannelGroup $entity)
     {
         if ($entity->isSystem()) {

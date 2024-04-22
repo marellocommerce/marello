@@ -16,15 +16,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class BalancedInventoryLevelController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_inventory_balancedinventorylevel_index"
-     * )
      * @AclAncestor("marello_inventory_inventory_view")
      * @Template("@MarelloInventory/BalancedInventoryLevel/index.html.twig")
-     *
      * @return array
      */
+    #[Route(path: '/', name: 'marello_inventory_balancedinventorylevel_index')]
     public function indexAction()
     {
         return [
@@ -33,10 +29,6 @@ class BalancedInventoryLevelController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/recalculate",
-     *     name="marello_inventory_balancedinventorylevel_recalculate"
-     * )
      * @Acl(
      *      id="marello_inventory_inventory_recalculate_update",
      *      type="entity",
@@ -45,6 +37,7 @@ class BalancedInventoryLevelController extends AbstractController
      * )
      * @param Request $request
      */
+    #[Route(path: '/recalculate', name: 'marello_inventory_balancedinventorylevel_recalculate')]
     public function recalculateAction(Request $request)
     {
         $messageProducer = $this->container->get(MessageProducerInterface::class);

@@ -13,8 +13,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
- * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -22,8 +20,10 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *          }
  *      }
  * )
- * @ORM\Table(name="marello_assembled_price_list")
  */
+#[ORM\Table(name: 'marello_assembled_price_list')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -31,17 +31,15 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
 
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="currency", type="string", length=3)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -53,13 +51,12 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 3)]
     protected $currency;
 
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="prices")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -71,17 +68,13 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'prices')]
     protected $product;
 
     /**
      * @var ProductPrice
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductPrice",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="default_price_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -93,17 +86,13 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'default_price_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\ProductPrice::class, cascade: ['persist'], orphanRemoval: true)]
     protected $defaultPrice;
 
     /**
      * @var ProductPrice
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductPrice",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="special_price_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -115,17 +104,13 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'special_price_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\ProductPrice::class, cascade: ['persist'], orphanRemoval: true)]
     protected $specialPrice;
 
     /**
      * @var ProductPrice
      *
-     * @ORM\OneToOne(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductPrice",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="msrp_price_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -137,6 +122,8 @@ class AssembledPriceList implements PriceListInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'msrp_price_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\ProductPrice::class, cascade: ['persist'], orphanRemoval: true)]
     protected $msrpPrice;
 
     /**

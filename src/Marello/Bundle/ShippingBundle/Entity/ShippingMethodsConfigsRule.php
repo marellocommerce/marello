@@ -14,10 +14,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository")
- * @ORM\Table(
- *     name="marello_ship_method_conf_rule"
- * )
  * @Config(
  *      routeName="marello_shipping_methods_configs_rule_index",
  *      routeView="marello_shipping_methods_configs_rule_view",
@@ -39,6 +35,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_ship_method_conf_rule')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository::class)]
 class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -46,9 +44,6 @@ class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInte
     /**
      * @var int
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -57,13 +52,14 @@ class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInte
      *      }
      * )
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var RuleInterface
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\RuleBundle\Entity\Rule", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="rule_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -75,38 +71,25 @@ class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInte
      *      }
      *  )
      */
+    #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\RuleBundle\Entity\Rule::class, cascade: ['persist', 'remove'])]
     private $rule;
 
     /**
      * @var Collection|ShippingMethodConfig[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig",
-     *     mappedBy="methodConfigsRule",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig::class, mappedBy: 'methodConfigsRule', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
     private $methodConfigs;
 
     /**
      * @var Collection|ShippingMethodsConfigsRuleDestination[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRuleDestination",
-     *     mappedBy="methodConfigsRule",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRuleDestination::class, mappedBy: 'methodConfigsRule', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
     private $destinations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="currency", type="string", length=3, nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -118,14 +101,14 @@ class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInte
      *      }
      *  )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
     private $currency;
 
     /**
      * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
     private $organization;
 
     /**

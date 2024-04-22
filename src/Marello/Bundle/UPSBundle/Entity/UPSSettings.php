@@ -10,9 +10,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class UPSSettings extends Transport
 {
     const PICKUP_TYPE_REGULAR_DAILY = '01';
@@ -29,112 +27,81 @@ class UPSSettings extends Transport
 
     /**
      * @var bool
-     *
-     * @ORM\Column(name="ups_test_mode", type="boolean", nullable=false, options={"default"=false})
      */
+    #[ORM\Column(name: 'ups_test_mode', type: 'boolean', nullable: false, options: ['default' => false])]
     protected $upsTestMode = false;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ups_api_user", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: 'ups_api_user', type: 'string', length: 255, nullable: false)]
     protected $upsApiUser;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ups_api_password", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: 'ups_api_password', type: 'string', length: 255, nullable: false)]
     protected $upsApiPassword;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ups_api_key", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: 'ups_api_key', type: 'string', length: 255, nullable: false)]
     protected $upsApiKey;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ups_shipping_account_number", type="string", length=100, nullable=false)
      */
+    #[ORM\Column(name: 'ups_shipping_account_number', type: 'string', length: 100, nullable: false)]
     protected $upsShippingAccountNumber;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ups_shipping_account_name", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: 'ups_shipping_account_name', type: 'string', length: 255, nullable: false)]
     protected $upsShippingAccountName;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ups_pickup_type", type="string", length=2, nullable=false)
      */
+    #[ORM\Column(name: 'ups_pickup_type', type: 'string', length: 2, nullable: false)]
     protected $upsPickupType;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ups_unit_of_weight", type="string", length=3, nullable=false)
      */
+    #[ORM\Column(name: 'ups_unit_of_weight', type: 'string', length: 3, nullable: false)]
     protected $upsUnitOfWeight;
 
     /**
      * @var Country
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
-     * @ORM\JoinColumn(name="ups_country_code", referencedColumnName="iso2_code")
      */
+    #[ORM\JoinColumn(name: 'ups_country_code', referencedColumnName: 'iso2_code')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
     protected $upsCountry;
 
     /**
      * @var Collection|ShippingService[]
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="ShippingService",
-     *     fetch="EAGER"
-     * )
-     * @ORM\JoinTable(
-     *      name="marello_ups_transport_ship_srv",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="ship_service_id", referencedColumnName="id", onDelete="CASCADE")
-     *      }
-     * )
      */
+    #[ORM\JoinTable(name: 'marello_ups_transport_ship_srv')]
+    #[ORM\JoinColumn(name: 'transport_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'ship_service_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: \ShippingService::class, fetch: 'EAGER')]
     protected $applicableShippingServices;
 
     /**
      * @var Collection|LocalizedFallbackValue[]
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
-     *      cascade={"ALL"},
-     *      orphanRemoval=true
-     * )
-     * @ORM\JoinTable(
-     *      name="marello_ups_transport_label",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
-     *      }
-     * )
      */
+    #[ORM\JoinTable(name: 'marello_ups_transport_label')]
+    #[ORM\JoinColumn(name: 'transport_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', onDelete: 'CASCADE', unique: true)]
+    #[ORM\ManyToMany(targetEntity: \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
     protected $labels;
 
     /**
      * @var \DateTime $invalidateCacheAt
-     *
-     * @ORM\Column(name="ups_invalidate_cache_at", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'ups_invalidate_cache_at', type: 'datetime', nullable: true)]
     protected $upsInvalidateCacheAt;
 
     /**

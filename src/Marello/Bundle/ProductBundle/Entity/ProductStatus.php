@@ -10,8 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  * Class ProductStatus
  * @package Marello\Bundle\ProductBundle\Entity
  *
- * @ORM\Entity
- * @ORM\Table(name="marello_product_product_status")
  * @Oro\Config(
  *      defaultValues={
  *          "grouping"={
@@ -20,14 +18,14 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_product_product_status')]
+#[ORM\Entity]
 class ProductStatus
 {
     const ENABLED = 'enabled';
     const DISABLED = 'disabled';
     
     /**
-     * @ORM\Column(name="name", type="string", length=32)
-     * @ORM\Id
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -36,11 +34,11 @@ class ProductStatus
      *      }
      * )
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 32)]
+    #[ORM\Id]
     protected $name;
 
-    /**
-     * @ORM\Column(name="label", type="string", length=255, unique=true)
-     */
+    #[ORM\Column(name: 'label', type: 'string', length: 255, unique: true)]
     protected $label;
 
     /**

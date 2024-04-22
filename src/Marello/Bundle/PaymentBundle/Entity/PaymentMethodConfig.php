@@ -9,10 +9,10 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodConfigRepository")
- * @ORM\Table(name="marello_payment_method_config")
  * @Config()
  */
+#[ORM\Table(name: 'marello_payment_method_config')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodConfigRepository::class)]
 class PaymentMethodConfig implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -20,9 +20,6 @@ class PaymentMethodConfig implements ExtendEntityInterface
     /**
      * @var integer
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -31,16 +28,14 @@ class PaymentMethodConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var PaymentMethodsConfigsRule
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule",
-     *     inversedBy="methodConfigs"
-     * )
-     * @ORM\JoinColumn(name="configs_rule_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -49,12 +44,13 @@ class PaymentMethodConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
     protected $methodsConfigsRule;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="method", type="string", length=255, nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -63,12 +59,12 @@ class PaymentMethodConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'method', type: 'string', length: 255, nullable: false)]
     protected $method;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="options", type="array", nullable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -77,6 +73,7 @@ class PaymentMethodConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'options', type: 'array', nullable: true)]
     protected $options = [];
 
     /**

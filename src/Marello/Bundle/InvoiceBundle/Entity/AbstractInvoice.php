@@ -24,14 +24,6 @@ use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InvoiceBundle\Entity\Repository\AbstractInvoiceRepository")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({
- *     "invoice"="Marello\Bundle\InvoiceBundle\Entity\Invoice",
- *     "creditmemo"="Marello\Bundle\InvoiceBundle\Entity\Creditmemo"
- * })
- * @ORM\Table(name="marello_invoice_invoice")
  * @Oro\Config(
  *      routeView="marello_invoice_invoice_view",
  *      routeName="marello_invoice_invoice_index",
@@ -53,8 +45,13 @@ use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
  *          }
  *      }
  * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_invoice_invoice')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InvoiceBundle\Entity\Repository\AbstractInvoiceRepository::class)]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap(['invoice' => 'Marello\Bundle\InvoiceBundle\Entity\Invoice', 'creditmemo' => 'Marello\Bundle\InvoiceBundle\Entity\Creditmemo'])]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractInvoice implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -68,16 +65,14 @@ abstract class AbstractInvoice implements
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
      * @var string
-     * @ORM\Column(name="invoice_type", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -89,12 +84,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'invoice_type', type: 'string', nullable: true)]
     protected $invoiceType;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="invoice_number", type="string", unique=true, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -103,13 +98,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'invoice_number', type: 'string', unique: true, nullable: true)]
     protected $invoiceNumber;
 
     /**
      * @var MarelloAddress
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -118,13 +112,13 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
     protected $billingAddress;
 
     /**
      * @var MarelloAddress
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -133,12 +127,13 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
     protected $shippingAddress;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="invoiced_at", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -147,12 +142,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'invoiced_at', type: 'datetime', nullable: true)]
     protected $invoicedAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="invoice_due_date", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -161,11 +156,11 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'invoice_due_date', type: 'datetime', nullable: true)]
     protected $invoiceDueDate;
 
     /**
      * @var string
-     * @ORM\Column(name="payment_method", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -174,12 +169,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'payment_method', type: 'string', length: 255, nullable: true)]
     protected $paymentMethod;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="shipping_method", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -188,20 +183,18 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'shipping_method', type: 'string', nullable: true)]
     protected $shippingMethod;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="shipping_method_type", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'shipping_method_type', type: 'string', length: 255, nullable: true)]
     protected $shippingMethodType;
 
     /**
      * @var Order
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order")
-     * @ORM\JoinColumn(onDelete="cascade", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -213,11 +206,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'cascade', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class)]
     protected $order;
 
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -226,11 +220,11 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 10, nullable: true)]
     protected $currency;
 
     /**
      * @var string
-     * @ORM\Column(name="status", type="string", length=10, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -239,13 +233,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'status', type: 'string', length: 10, nullable: true)]
     protected $status;
 
     /**
      * @var Customer
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer", cascade={"persist"})
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -254,13 +247,13 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class, cascade: ['persist'])]
     protected $customer;
 
     /**
      * @var SalesChannel
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -272,12 +265,13 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
     protected $salesChannel;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="saleschannel_name", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -286,6 +280,7 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'saleschannel_name', type: 'string', nullable: true)]
     protected $salesChannelName;
 
     /**
@@ -296,14 +291,6 @@ abstract class AbstractInvoice implements
     /**
      * @var Collection|Payment[]
      *
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\PaymentBundle\Entity\Payment", cascade={"persist"})
-     * @ORM\JoinTable(name="marello_invoice_payments",
-     *      joinColumns={@ORM\JoinColumn(name="invoice_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="payment_id", referencedColumnName="id", unique=true, onDelete="CASCADE")
-     *      }
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "email"={
@@ -315,12 +302,16 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\JoinTable(name: 'marello_invoice_payments')]
+    #[ORM\JoinColumn(name: 'invoice_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'payment_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\Payment::class, cascade: ['persist'])]
+    #[ORM\OrderBy(['id' => 'ASC'])]
     protected $payments;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="subtotal", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -329,12 +320,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'subtotal', type: 'money')]
     protected $subtotal = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="total_tax", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -343,12 +334,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'total_tax', type: 'money')]
     protected $totalTax = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="grand_total", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -357,12 +348,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'grand_total', type: 'money')]
     protected $grandTotal = 0;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="shipping_amount_incl_tax", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -371,12 +362,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'shipping_amount_incl_tax', type: 'money', nullable: true)]
     protected $shippingAmountInclTax;
 
     /**
      * @var double
      *
-     * @ORM\Column(name="shipping_amount_excl_tax", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -385,12 +376,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'shipping_amount_excl_tax', type: 'money', nullable: true)]
     protected $shippingAmountExclTax;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="total_due", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -399,12 +390,12 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'total_due', type: 'money', nullable: true)]
     protected $totalDue = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="total_paid", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -413,6 +404,7 @@ abstract class AbstractInvoice implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'total_paid', type: 'money', nullable: true)]
     protected $totalPaid = 0;
 
     /**

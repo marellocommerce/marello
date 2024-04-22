@@ -18,18 +18,13 @@ class RefundAjaxController extends AbstractController
 {
 
     /**
-     * @Route(
-     *     path="/form-changes/{id}",
-     *     methods={"POST"},
-     *     name="marello_refund_form_changes",
-     *     defaults={"id" = 0}
-     * )
      * @AclAncestor("marello_refund_update")
      *
      * @param Request $request
      * @param Refund|null $order
      * @return JsonResponse
      */
+    #[Route(path: '/form-changes/{id}', methods: ['POST'], name: 'marello_refund_form_changes', defaults: ['id' => 0])]
     public function formChangesAction(Request $request, Refund $refund = null)
     {
         if (!$refund) {
@@ -59,18 +54,13 @@ class RefundAjaxController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/form-create/{id}",
-     *     methods={"POST"},
-     *     name="marello_refund_form_create",
-     *     defaults={"id" = 0}
-     * )
      * @AclAncestor("marello_refund_create")
      *
      * @param Request $request
      * @param Order|null $order
      * @return JsonResponse
      */
+    #[Route(path: '/form-create/{id}', methods: ['POST'], name: 'marello_refund_form_create', defaults: ['id' => 0])]
     public function formCreateAction(Request $request, Order $order = null)
     {
         $refund = Refund::fromOrder($order);

@@ -10,16 +10,6 @@ use Marello\Bundle\ProductBundle\Entity\Product;
 /**
  * Represents a Marello ProductPrice
  *
- * @ORM\Entity(repositoryClass="Marello\Bundle\PricingBundle\Entity\Repository\ProductChannelPriceRepository")
- * @ORM\Table(
- *      name="marello_product_channel_price",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_product_channel_price_uidx",
- *              columns={"product_id", "channel_id", "currency", "type"}
- *          )
- *      }
- * )
  * @Oro\Config(
  *  defaultValues={
  *      "entity"={"icon"="fa-usd"},
@@ -33,13 +23,14 @@ use Marello\Bundle\ProductBundle\Entity\Product;
  *  }
  * )
  */
+#[ORM\Table(name: 'marello_product_channel_price')]
+#[ORM\UniqueConstraint(name: 'marello_product_channel_price_uidx', columns: ['product_id', 'channel_id', 'currency', 'type'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\PricingBundle\Entity\Repository\ProductChannelPriceRepository::class)]
 class ProductChannelPrice extends BasePrice
 {
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="channelPrices")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -48,13 +39,13 @@ class ProductChannelPrice extends BasePrice
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'channelPrices')]
     protected $product;
 
     /**
      * @var SalesChannel
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -63,6 +54,8 @@ class ProductChannelPrice extends BasePrice
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
     protected $channel;
 
     /**

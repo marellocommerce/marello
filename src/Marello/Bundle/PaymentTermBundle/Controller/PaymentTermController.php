@@ -17,13 +17,10 @@ class PaymentTermController extends AbstractController
     /**
      * @return array
      *
-     * @Route(
-     *     path="/",
-     *     name="marello_paymentterm_paymentterm_index"
-     * )
      * @AclAncestor("marello_paymentterm_paymentterm_view")
      * @Template("@MarelloPaymentTerm/PaymentTerm/index.html.twig")
      */
+    #[Route(path: '/', name: 'marello_paymentterm_paymentterm_index')]
     public function indexAction()
     {
         return [
@@ -32,16 +29,13 @@ class PaymentTermController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     name="marello_paymentterm_paymentterm_create"
-     * )
      * @AclAncestor("marello_paymentterm_paymentterm_create")
      * @Template("@MarelloPaymentTerm/PaymentTerm/update.html.twig")
      *
      * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
+    #[Route(path: '/create', name: 'marello_paymentterm_paymentterm_create')]
     public function createAction(Request $request)
     {
         $entity = new PaymentTerm();
@@ -50,11 +44,6 @@ class PaymentTermController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     requirements={"id" = "\d+"},
-     *     name="marello_paymentterm_paymentterm_update"
-     * )
      * @AclAncestor("marello_paymentterm_paymentterm_update")
      * @Template("@MarelloPaymentTerm/PaymentTerm/update.html.twig")
      *
@@ -62,6 +51,7 @@ class PaymentTermController extends AbstractController
      * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
+    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_paymentterm_paymentterm_update')]
     public function updateAction(PaymentTerm $entity, Request $request)
     {
         return $this->update($entity, $request);
@@ -95,14 +85,10 @@ class PaymentTermController extends AbstractController
      * @param PaymentTerm $entity
      * @return array
      *
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id" = "\d+"},
-     *     name="marello_paymentterm_paymentterm_view"
-     * )
      * @AclAncestor("marello_paymentterm_paymentterm_view")
      * @Template("@MarelloPaymentTerm/PaymentTerm/view.html.twig")
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_paymentterm_paymentterm_view')]
     public function viewAction(PaymentTerm $entity)
     {
         return [

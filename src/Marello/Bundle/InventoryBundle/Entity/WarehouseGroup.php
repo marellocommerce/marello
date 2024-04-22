@@ -13,9 +13,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseGroupRepository")
- * @ORM\Table(name="marello_inventory_wh_group")
- * @ORM\HasLifecycleCallbacks()
  * @Oro\Config(
  *  defaultValues={
  *       "security"={
@@ -33,6 +30,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *  }
  * )
  */
+#[ORM\Table(name: 'marello_inventory_wh_group')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseGroupRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class WarehouseGroup implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -41,17 +41,15 @@ class WarehouseGroup implements OrganizationAwareInterface, ExtendEntityInterfac
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -64,12 +62,12 @@ class WarehouseGroup implements OrganizationAwareInterface, ExtendEntityInterfac
      *      }
      * )
      */
+    #[ORM\Column(name: 'name', type: 'string', length: 255)]
     protected $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -81,12 +79,12 @@ class WarehouseGroup implements OrganizationAwareInterface, ExtendEntityInterfac
      *      }
      * )
      */
+    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
     protected $description;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="is_system", type="boolean", nullable=false, options={"default"=false})
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -98,12 +96,12 @@ class WarehouseGroup implements OrganizationAwareInterface, ExtendEntityInterfac
      *      }
      *  )
      */
+    #[ORM\Column(name: 'is_system', type: 'boolean', nullable: false, options: ['default' => false])]
     protected $system = false;
 
     /**
      * @var Warehouse[]
      *
-     * @ORM\OneToMany(targetEntity="Warehouse", mappedBy="group", cascade={"persist"}, fetch="EAGER")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -112,12 +110,12 @@ class WarehouseGroup implements OrganizationAwareInterface, ExtendEntityInterfac
      *      }
      *  )
      */
+    #[ORM\OneToMany(targetEntity: \Warehouse::class, mappedBy: 'group', cascade: ['persist'], fetch: 'EAGER')]
     protected $warehouses;
 
     /**
      * @var WarehouseChannelGroupLink
      *
-     * @ORM\OneToOne(targetEntity="WarehouseChannelGroupLink", mappedBy="warehouseGroup")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -126,6 +124,7 @@ class WarehouseGroup implements OrganizationAwareInterface, ExtendEntityInterfac
      *      }
      *  )
      */
+    #[ORM\OneToOne(targetEntity: \WarehouseChannelGroupLink::class, mappedBy: 'warehouseGroup')]
     protected $warehouseChannelGroupLink;
 
     public function __construct()

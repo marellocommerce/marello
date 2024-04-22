@@ -14,9 +14,6 @@ use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="marello_refund_item")
- * @ORM\HasLifecycleCallbacks
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -30,22 +27,24 @@ use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_refund_item')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @ORM\Column(name="name", type="string")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -53,13 +52,12 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'name', type: 'string')]
     protected $name;
 
     /**
-     * @ORM\Column(name="quantity", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -67,13 +65,12 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'quantity', type: 'integer')]
     protected $quantity = 1;
 
     /**
-     * @ORM\Column(name="base_amount", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -81,13 +78,12 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'base_amount', type: 'money')]
     protected $baseAmount = 0;
 
     /**
-     * @ORM\Column(name="refund_amount", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -95,13 +91,12 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'refund_amount', type: 'money')]
     protected $refundAmount = 0;
 
     /**
-     * @ORM\Column(name="tax_total", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -109,13 +104,12 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'tax_total', type: 'money')]
     protected $taxTotal = 0;
 
     /**
-     * @ORM\Column(name="subtotal", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -123,16 +117,14 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *          }
      *      }
      * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'subtotal', type: 'money')]
     protected $subTotal = 0;
 
     /**
      * @var TaxCode
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxCode")
-     * @ORM\JoinColumn(name="tax_code_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -142,11 +134,11 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      * )
      *
      */
+    #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxCode::class)]
     protected $taxCode;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Refund", inversedBy="items")
-     * @ORM\JoinColumn(name="refund_id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -157,11 +149,11 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *
      * @var Refund
      */
+    #[ORM\JoinColumn(name: 'refund_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Refund::class, inversedBy: 'items')]
     protected $refund;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem")
-     * @ORM\JoinColumn(name="order_item_id", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -172,6 +164,8 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *
      * @var OrderItem
      */
+    #[ORM\JoinColumn(name: 'order_item_id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class)]
     protected $orderItem;
 
     /**

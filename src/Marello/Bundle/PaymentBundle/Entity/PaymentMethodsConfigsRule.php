@@ -16,8 +16,6 @@ use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository")
- * @ORM\Table(name="marello_payment_mtds_cfgs_rl")
  * @Config(
  *      routeName="marello_payment_methods_configs_rule_index",
  *      routeView="marello_payment_methods_configs_rule_view",
@@ -39,6 +37,8 @@ use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_payment_mtds_cfgs_rl')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository::class)]
 class PaymentMethodsConfigsRule implements
     RuleOwnerInterface,
     OrganizationAwareInterface,
@@ -49,9 +49,6 @@ class PaymentMethodsConfigsRule implements
     /**
      * @var integer
      *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -60,29 +57,20 @@ class PaymentMethodsConfigsRule implements
      *      }
      * )
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var Collection|PaymentMethodConfig[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig",
-     *     mappedBy="methodsConfigsRule",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig::class, mappedBy: 'methodsConfigsRule', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
     protected $methodConfigs;
 
     /**
      * @var RuleInterface
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\RuleBundle\Entity\Rule",
-     *     cascade={"persist", "remove"}
-     * )
-     * @ORM\JoinColumn(name="rule_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -91,25 +79,19 @@ class PaymentMethodsConfigsRule implements
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\RuleBundle\Entity\Rule::class, cascade: ['persist', 'remove'])]
     protected $rule;
 
     /**
      * @var Collection|PaymentMethodsConfigsRuleDestination[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination",
-     *     mappedBy="methodsConfigsRule",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination::class, mappedBy: 'methodsConfigsRule', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
     protected $destinations;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="currency", type="string", length=3, nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -121,14 +103,14 @@ class PaymentMethodsConfigsRule implements
      *      }
      *  )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
     protected $currency;
 
     /**
      * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
     protected $organization;
 
     public function __construct()

@@ -8,27 +8,22 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @ORM\Entity
- */
+#[ORM\Entity]
 class CreditmemoItem extends AbstractInvoiceItem implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var Creditmemo
      *
-     * @ORM\ManyToOne(targetEntity="Creditmemo", inversedBy="items")
-     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -40,5 +35,7 @@ class CreditmemoItem extends AbstractInvoiceItem implements ExtendEntityInterfac
      *      }
      * )
      */
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Creditmemo::class, inversedBy: 'items')]
     protected $invoice;
 }

@@ -9,9 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DownloadController extends AbstractController
 {
-    /**
-     * @Route(path="/{entity}/{id}", name="marello_pdf_download", requirements={"id"="\d+"})
-     */
+    #[Route(path: '/{entity}/{id}', name: 'marello_pdf_download', requirements: ['id' => '\d+'])]
     public function downloadAction(Request $request)
     {
         return $this->container->get(CompositePdfRequestHandler::class)->handle($request);

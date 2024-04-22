@@ -9,33 +9,18 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-/**
- * @ORM\Entity(
- *     repositoryClass="Marello\Bundle\PaymentTermBundle\Entity\Repository\MarelloPaymentTermSettingsRepository"
- * )
- */
+#[ORM\Entity(repositoryClass: \Marello\Bundle\PaymentTermBundle\Entity\Repository\MarelloPaymentTermSettingsRepository::class)]
 class MarelloPaymentTermSettings extends Transport
 {
     const SETTINGS_FIELD_LABELS = 'labels';
 
     /**
      * @var Collection|LocalizedFallbackValue[]
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
-     *      cascade={"ALL"},
-     *      orphanRemoval=true
-     * )
-     * @ORM\JoinTable(
-     *      name="marello_payment_term_trans_lbl",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="transport_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
-     *      }
-     * )
      */
+    #[ORM\JoinTable(name: 'marello_payment_term_trans_lbl')]
+    #[ORM\JoinColumn(name: 'transport_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', onDelete: 'CASCADE', unique: true)]
+    #[ORM\ManyToMany(targetEntity: \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
     private $labels;
 
     /**

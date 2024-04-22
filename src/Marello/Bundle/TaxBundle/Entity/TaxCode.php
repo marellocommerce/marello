@@ -10,15 +10,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 /**
  * TaxCode
  *
- * @ORM\Entity(repositoryClass="Marello\Bundle\TaxBundle\Entity\Repository\TaxCodeRepository")
- * @ORM\Table(name="marello_tax_tax_code",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_tax_code_codeidx",
- *              columns={"code"}
- *          )
- *      }
- * )
  * @Oro\Config(
  *      routeName="marello_tax_taxcode_index",
  *      routeView="marello_tax_taxcode_view",
@@ -34,23 +25,24 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_tax_tax_code')]
+#[ORM\UniqueConstraint(name: 'marello_tax_code_codeidx', columns: ['code'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxCodeRepository::class)]
 class TaxCode implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=255, unique=true, nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -62,12 +54,12 @@ class TaxCode implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'code', type: 'string', length: 255, unique: true, nullable: false)]
     protected $code;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -76,12 +68,12 @@ class TaxCode implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true)]
     protected $description;
 
     /**
      * @var array $data
      *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -90,6 +82,7 @@ class TaxCode implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
     protected $data = [];
 
     /**

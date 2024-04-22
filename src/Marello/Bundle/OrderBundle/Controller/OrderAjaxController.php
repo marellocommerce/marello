@@ -16,18 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrderAjaxController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/form-changes/{id}",
-     *     methods={"POST"},
-     *     name="marello_order_form_changes",
-     *     defaults={"id" = 0}
-     * )
      * @AclAncestor("marello_order_create")
      *
      * @param Request $request
      * @param Order|null $order
      * @return JsonResponse
      */
+    #[Route(path: '/form-changes/{id}', methods: ['POST'], name: 'marello_order_form_changes', defaults: ['id' => 0])]
     public function formChangesAction(Request $request, Order $order = null)
     {
         if (!$order) {

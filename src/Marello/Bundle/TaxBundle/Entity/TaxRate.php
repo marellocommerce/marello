@@ -8,15 +8,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 /**
  * TaxRate
  *
- * @ORM\Entity(repositoryClass="Marello\Bundle\TaxBundle\Entity\Repository\TaxRateRepository")
- * @ORM\Table(name="marello_tax_tax_rate",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_tax_rate_codeidx",
- *              columns={"code"}
- *          )
- *      }
- * )
  * @Oro\Config(
  *      routeName="marello_tax_taxrate_index",
  *      routeView="marello_tax_taxrate_view",
@@ -32,21 +23,22 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_tax_tax_rate')]
+#[ORM\UniqueConstraint(name: 'marello_tax_rate_codeidx', columns: ['code'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxRateRepository::class)]
 class TaxRate
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=32, unique=true, nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -55,12 +47,12 @@ class TaxRate
      *      }
      * )
      */
+    #[ORM\Column(name: 'code', type: 'string', length: 32, unique: true, nullable: false)]
     protected $code;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="rate", type="percent", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -69,12 +61,12 @@ class TaxRate
      *      }
      * )
      */
+    #[ORM\Column(name: 'rate', type: 'percent', nullable: false)]
     protected $rate;
 
     /**
      * @var array $data
      *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -83,6 +75,7 @@ class TaxRate
      *      }
      * )
      */
+    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
     protected $data = [];
 
     /**

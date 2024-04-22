@@ -21,15 +21,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TaxJurisdictionController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_tax_taxjurisdiction_index"
-     * )
      * @Template
      * @AclAncestor("marello_tax_taxjurisdiction_view")
-     *
      * @return array
      */
+    #[Route(path: '/', name: 'marello_tax_taxjurisdiction_index')]
     public function indexAction()
     {
         return [
@@ -38,11 +34,6 @@ class TaxJurisdictionController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     name="marello_tax_taxjurisdiction_view",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxjurisdiction_view",
@@ -54,6 +45,7 @@ class TaxJurisdictionController extends AbstractController
      * @param TaxJurisdiction $taxJurisdiction
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_tax_taxjurisdiction_view', requirements: ['id' => '\d+'])]
     public function viewAction(TaxJurisdiction $taxJurisdiction)
     {
         return [
@@ -62,10 +54,6 @@ class TaxJurisdictionController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     name="marello_tax_taxjurisdiction_create"
-     * )
      * @Template("@MarelloTax/TaxJurisdiction/update.html.twig")
      * @Acl(
      *      id="marello_tax_taxjurisdiction_create",
@@ -77,17 +65,13 @@ class TaxJurisdictionController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', name: 'marello_tax_taxjurisdiction_create')]
     public function createAction(Request $request)
     {
         return $this->update(new TaxJurisdiction(), $request);
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     name="marello_tax_taxjurisdiction_update",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template
      * @Acl(
      *      id="marello_tax_taxjurisdiction_update",
@@ -100,6 +84,7 @@ class TaxJurisdictionController extends AbstractController
      * @param TaxJurisdiction $taxJurisdiction
      * @return array
      */
+    #[Route(path: '/update/{id}', name: 'marello_tax_taxjurisdiction_update', requirements: ['id' => '\d+'])]
     public function updateAction(Request $request, TaxJurisdiction $taxJurisdiction)
     {
         return $this->update($taxJurisdiction, $request);

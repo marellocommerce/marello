@@ -13,7 +13,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
 use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
 
 /**
- * @ORM\Entity()
  * @Oro\Config(
  *      defaultValues={
  *          "entity"={
@@ -33,14 +32,11 @@ use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
  *          }
  *      }
  * )
- * @ORM\Table(name="marello_inventory_batch",
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="UNIQ_380BD44456B7924",
- *            columns={"batch_number", "inventory_level_id"})
- *    }
- * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_inventory_batch')]
+#[ORM\UniqueConstraint(name: 'UNIQ_380BD44456B7924', columns: ['batch_number', 'inventory_level_id'])]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class InventoryBatch implements
     DerivedPropertyAwareInterface,
     OrganizationAwareInterface,
@@ -52,17 +48,15 @@ class InventoryBatch implements
     
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="batch_number", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -71,12 +65,12 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'batch_number', type: 'string', nullable: true)]
     protected $batchNumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="batch_reference", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -85,13 +79,13 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'batch_reference', type: 'string', nullable: true)]
     protected $batchReference;
 
 
     /**
      * @var string
      *
-     * @ORM\Column(name="purchase_reference", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -100,12 +94,12 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'purchase_reference', type: 'string', nullable: true)]
     protected $purchaseReference;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="quantity", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -114,12 +108,12 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity', type: 'integer')]
     protected $quantity = 0;
     
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="delivery_date", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -128,12 +122,12 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'delivery_date', type: 'datetime', nullable: true)]
     protected $deliveryDate;
     
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expiration_date", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -142,12 +136,12 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'expiration_date', type: 'datetime', nullable: true)]
     protected $expirationDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sell_by_date", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -156,12 +150,12 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'sell_by_date', type: 'datetime', nullable: true)]
     protected $sellByDate;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="purchase_price", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -170,12 +164,12 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'purchase_price', type: 'money', nullable: true)]
     protected $purchasePrice;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="total_price", type="money", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -184,12 +178,10 @@ class InventoryBatch implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'total_price', type: 'money', nullable: true)]
     protected $totalPrice;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryLevel",
-     *     inversedBy="inventoryBatches", cascade={"persist"})
-     * @ORM\JoinColumn(name="inventory_level_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -206,11 +198,12 @@ class InventoryBatch implements
      *
      * @var InventoryLevel
      */
+    #[ORM\JoinColumn(name: 'inventory_level_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryLevel::class, inversedBy: 'inventoryBatches', cascade: ['persist'])]
     protected $inventoryLevel;
 
 
     /**
-     * @ORM\Column(name="order_on_demand_ref", type="string", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -218,9 +211,9 @@ class InventoryBatch implements
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'order_on_demand_ref', type: 'string', nullable: true)]
     protected $orderOnDemandRef;
 
     public function __clone()

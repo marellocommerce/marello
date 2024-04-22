@@ -16,9 +16,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
- * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="marello_notification")
  * @Oro\Config(
  *  defaultValues={
  *      "grouping"={
@@ -35,46 +32,46 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  *  }
  * )
  */
+#[ORM\Table(name: 'marello_notification')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Notification implements ActivityInterface, ExtendEntityInterface
 {
     use ExtendActivity;
     use ExtendEntityTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\EmailBundle\Entity\EmailTemplate", cascade={})
-     * @ORM\JoinColumn(nullable=false)
      *
      * @var EmailTemplate
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\EmailBundle\Entity\EmailTemplate::class, cascade: [])]
     protected $template;
 
     /**
-     * @ORM\Column(type="json_array", nullable=false)
-     *
      * @var array
      */
+    #[ORM\Column(type: 'json_array', nullable: false)]
     protected $recipients;
 
     /**
-     * @ORM\Column(type="text")
-     *
      * @var string
      */
+    #[ORM\Column(type: 'text')]
     protected $body;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -83,26 +80,23 @@ class Notification implements ActivityInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
     protected $createdAt;
 
     /**
      * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
     protected $organization;
 
     /**
      * @var Collection|File
-     *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\AttachmentBundle\Entity\Attachment", cascade={"all"})
-     * @ORM\JoinTable(
-     *     name="marello_notification_attach",
-     *     joinColumns={@ORM\JoinColumn(name="notification_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="attachment_id", referencedColumnName="id")}
-     * )
      */
+    #[ORM\JoinTable(name: 'marello_notification_attach')]
+    #[ORM\JoinColumn(name: 'notification_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'attachment_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Oro\Bundle\AttachmentBundle\Entity\Attachment::class, cascade: ['all'])]
     protected $attachments;
 
     /**
@@ -122,9 +116,7 @@ class Notification implements ActivityInterface, ExtendEntityInterface
         $this->attachments  = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));

@@ -9,25 +9,22 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
- * @ORM\Table(name="marello_ship_method_type_conf")
- * @ORM\Entity(repositoryClass="Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodTypeConfigRepository")
  * @Config
  */
+#[ORM\Table(name: 'marello_ship_method_type_conf')]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodTypeConfigRepository::class)]
 class ShippingMethodTypeConfig implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255, nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -36,12 +33,12 @@ class ShippingMethodTypeConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'type', type: 'string', length: 255, nullable: false)]
     protected $type;
 
     /**
      * @var array
      *
-     * @ORM\Column(name="options", type="array")
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -50,12 +47,12 @@ class ShippingMethodTypeConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'options', type: 'array')]
     protected $options = [];
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="boolean", nullable=false, options={"default"=false})
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -64,16 +61,12 @@ class ShippingMethodTypeConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(name: 'enabled', type: 'boolean', nullable: false, options: ['default' => false])]
     protected $enabled = false;
 
     /**
      * @var ShippingMethodConfig
      *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig",
-     *     inversedBy="typeConfigs"
-     * )
-     * @ORM\JoinColumn(name="method_config_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -82,6 +75,8 @@ class ShippingMethodTypeConfig implements ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'method_config_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig::class, inversedBy: 'typeConfigs')]
     protected $methodConfig;
 
     /**

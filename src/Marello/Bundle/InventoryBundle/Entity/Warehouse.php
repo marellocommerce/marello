@@ -11,12 +11,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository")
- * @ORM\Table(name="marello_inventory_warehouse",
- *       uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"code"})
- *      }
- * )
  * @Oro\Config(
  *      defaultValues={
  *          "security"={
@@ -34,23 +28,24 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
  *      }
  * )
  */
+#[ORM\Table(name: 'marello_inventory_warehouse')]
+#[ORM\UniqueConstraint(columns: ['code'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository::class)]
 class Warehouse implements EmailHolderInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
-     * @ORM\Column(type="string", name="label", nullable=false)
      *
      * @var string
-     *
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -59,13 +54,12 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(type: 'string', name: 'label', nullable: false)]
     protected $label;
 
     /**
-     * @ORM\Column(type="string", name="code", nullable=false)
      *
      * @var string
-     *
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -74,10 +68,10 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\Column(type: 'string', name: 'code', nullable: false)]
     protected $code;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false, name="is_default")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -90,13 +84,12 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      * )
      * @var bool
      */
+    #[ORM\Column(type: 'boolean', nullable: false, name: 'is_default')]
     protected $default;
 
     /**
      * @var OrganizationInterface
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -108,13 +101,13 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
     protected $owner;
 
     /**
      * @var MarelloAddress
      *
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -127,13 +120,13 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist', 'remove'])]
     protected $address = null;
 
     /**
      * @var WarehouseType
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\WarehouseType")
-     * @ORM\JoinColumn(name="warehouse_type", referencedColumnName="name")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -146,11 +139,11 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'warehouse_type', referencedColumnName: 'name')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\WarehouseType::class)]
     protected $warehouseType;
     
     /**
-     * @ORM\ManyToOne(targetEntity="WarehouseGroup", inversedBy="warehouses")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -163,41 +156,39 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \WarehouseGroup::class, inversedBy: 'warehouses')]
     protected $group;
     
     /**
-     * @ORM\Column(type="string", nullable=true)
-     *
      * @var string
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $email;
 
     /**
-     * @ORM\Column(name="notifier", type="string", nullable=true)
-     *
      * @var string
      */
+    #[ORM\Column(name: 'notifier', type: 'string', nullable: true)]
     protected $notifier;
 
     /**
-     * @ORM\Column(name="sort_order_ood_loc", type="integer", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-                "entity"={
-     *               "label"="marello.inventory.warehouse.sort_order_ood_loc.label"
-     *           },
-     *      }
-     * )
-     *
-     * @var int
-     */
+    * @Oro\ConfigField(
+    *      defaultValues={
+    *          "dataaudit"={
+    *              "auditable"=true
+    *          },
+               "entity"={
+    *               "label"="marello.inventory.warehouse.sort_order_ood_loc.label"
+    *           },
+    *      }
+    * )
+    * @var int
+    */
+    #[ORM\Column(name: 'sort_order_ood_loc', type: 'integer', nullable: true)]
     protected $sortOrderOodLoc;
 
     /**
-     * @ORM\Column(name="order_on_demand_location", type="boolean", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -205,9 +196,9 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      *          }
      *      }
      * )
-     *
      * @var bool
      */
+    #[ORM\Column(name: 'order_on_demand_location', type: 'boolean', nullable: true)]
     protected $orderOnDemandLocation;
 
     /**

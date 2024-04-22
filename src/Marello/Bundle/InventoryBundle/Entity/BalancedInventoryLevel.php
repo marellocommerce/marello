@@ -12,12 +12,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\BalancedInventoryRepository")
- * @ORM\Table(name="marello_blncd_inventory_level",
- *       uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"product_id", "channel_group_id"})
- *      }
- * )
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -37,17 +31,17 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *          }
  *      }
  * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_blncd_inventory_level')]
+#[ORM\UniqueConstraint(columns: ['product_id', 'channel_group_id'])]
+#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\BalancedInventoryRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInventoryLevelInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -58,11 +52,12 @@ class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInve
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(name: 'id', type: 'integer')]
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -76,11 +71,11 @@ class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInve
      *
      * @var ProductInterface
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
     protected $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannelGroup")
-     * @ORM\JoinColumn(name="channel_group_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -94,10 +89,11 @@ class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInve
      *
      * @var SalesChannelGroup
      */
+    #[ORM\JoinColumn(name: 'channel_group_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannelGroup::class)]
     protected $salesChannelGroup;
 
     /**
-     * @ORM\Column(name="inventory_qty", type="integer", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -108,13 +104,12 @@ class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInve
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'inventory_qty', type: 'integer', nullable: false)]
     protected $inventory;
 
     /**
-     * @ORM\Column(name="blncd_inventory_qty", type="integer", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -125,14 +120,13 @@ class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInve
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'blncd_inventory_qty', type: 'integer', nullable: false)]
     protected $balancedInventory;
 
 
     /**
-     * @ORM\Column(name="reserved_inventory_qty", type="integer", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -143,9 +137,9 @@ class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInve
      *          }
      *      }
      * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'reserved_inventory_qty', type: 'integer', nullable: true)]
     protected $reservedInventory;
 
     /**

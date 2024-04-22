@@ -10,12 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class WorkflowController extends AbstractController
 {
-    /**
-     * @Route(
-     *     "/mass-action-log/{hash}.log",
-     *     name="marello_workflow_mass_action_log"
-     * )
-     */
+    #[Route(path: '/mass-action-log/{hash}.log', name: 'marello_workflow_mass_action_log')]
     public function massActionLogAction(string $hash)
     {
         /** @var Filesystem $filesystem */

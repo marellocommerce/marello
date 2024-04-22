@@ -18,15 +18,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class CompanyController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_customer_company_index"
-     * )
      * @Template
      * @AclAncestor("marello_customer_company_view")
-     *
      * @return array
      */
+    #[Route(path: '/', name: 'marello_customer_company_index')]
     public function indexAction()
     {
         return [
@@ -35,11 +31,6 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     name="marello_customer_company_view",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template
      * @Acl(
      *      id="marello_customer_company_view",
@@ -51,6 +42,7 @@ class CompanyController extends AbstractController
      * @param Company $company
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_customer_company_view', requirements: ['id' => '\d+'])]
     public function viewAction(Company $company)
     {
         return [
@@ -60,10 +52,6 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     name="marello_customer_company_create"
-     * )
      * @Template("@MarelloCustomer/Company/update.html.twig")
      * @Acl(
      *      id="marello_customer_company_create",
@@ -75,17 +63,13 @@ class CompanyController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', name: 'marello_customer_company_create')]
     public function createAction(Request $request)
     {
         return $this->update(new Company(), $request);
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     name="marello_customer_company_update",
-     *     requirements={"id"="\d+"}
-     * )
      * @Template
      * @Acl(
      *      id="marello_customer_company_update",
@@ -98,6 +82,7 @@ class CompanyController extends AbstractController
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/update/{id}', name: 'marello_customer_company_update', requirements: ['id' => '\d+'])]
     public function updateAction(Company $company, Request $request)
     {
         return $this->update($company, $request);

@@ -12,7 +12,6 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity()
  * @Oro\Config(
  *      defaultValues={
  *          "security"={
@@ -29,11 +28,10 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *          }
  *      }
  * )
- * @ORM\Table(
- *      name="marello_payment_payment"
- * )
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_payment_payment')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Payment implements
     OrganizationAwareInterface,
     ExtendEntityInterface
@@ -44,11 +42,10 @@ class Payment implements
     
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
@@ -59,7 +56,6 @@ class Payment implements
     /**
      * @var int
      *
-     * @ORM\Column(name="total_paid", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -68,11 +64,11 @@ class Payment implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'total_paid', type: 'money')]
     protected $totalPaid = 0;
 
     /**
      * @var string
-     * @ORM\Column(name="payment_method", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -81,12 +77,12 @@ class Payment implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'payment_method', type: 'string', length: 255, nullable: true)]
     protected $paymentMethod;
 
     /**
      * @var array $paymentMethodOptions
      *
-     * @ORM\Column(name="payment_method_options", type="json_array", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -95,11 +91,11 @@ class Payment implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'payment_method_options', type: 'json_array', nullable: true)]
     protected $paymentMethodOptions;
 
     /**
      * @var string
-     * @ORM\Column(name="payment_reference", type="string", length=255, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -108,12 +104,12 @@ class Payment implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'payment_reference', type: 'string', length: 255, nullable: true)]
     protected $paymentReference;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="payment_details", type="text", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -122,12 +118,12 @@ class Payment implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'payment_details', type: 'text', nullable: true)]
     protected $paymentDetails;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="payment_date", type="datetime", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -136,11 +132,11 @@ class Payment implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'payment_date', type: 'datetime', nullable: true)]
     protected $paymentDate;
 
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -149,6 +145,7 @@ class Payment implements
      *      }
      * )
      */
+    #[ORM\Column(name: 'currency', type: 'string', length: 10, nullable: true)]
     protected $currency;
 
     /**

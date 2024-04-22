@@ -16,7 +16,6 @@ use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 /**
- * @ORM\Entity()
  * @Oro\Config(
  *      defaultValues={
  *          "dataaudit"={
@@ -29,9 +28,10 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
  *          }
  *      }
  * )
- * @ORM\Table(name="marello_inventory_alloc_item")
- * @ORM\HasLifecycleCallbacks()
  */
+#[ORM\Table(name: 'marello_inventory_alloc_item')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -40,18 +40,15 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var Allocation
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Allocation", inversedBy="items")
-     * @ORM\JoinColumn(name="allocation_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -60,13 +57,13 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'allocation_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Allocation::class, inversedBy: 'items')]
     protected $allocation;
 
     /**
      * @var Product
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -75,12 +72,13 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
     protected $product;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="product_sku",type="string", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -89,18 +87,16 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'product_sku', type: 'string', nullable: false)]
     protected $productSku;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
+    #[ORM\Column(name: 'product_name', type: 'string', nullable: false)]
     protected $productName;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem")
-     * @ORM\JoinColumn(name="order_item_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -109,12 +105,13 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class)]
     protected $orderItem;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="quantity",type="float",nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -123,12 +120,12 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity', type: 'float', nullable: false)]
     protected $quantity;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="total_quantity", type="float", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -137,12 +134,12 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'total_quantity', type: 'float', nullable: true)]
     protected $totalQuantity;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="quantity_confirmed",type="float",nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -151,12 +148,12 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity_confirmed', type: 'float', nullable: true)]
     protected $quantityConfirmed;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="quantity_rejected",type="float",nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -165,10 +162,10 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\Column(name: 'quantity_rejected', type: 'float', nullable: true)]
     protected $quantityRejected;
 
     /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -176,16 +173,14 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *          }
      *      }
      * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
     protected $comment;
 
     /**
      * @var Warehouse
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Warehouse")
-     * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -194,11 +189,11 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
      *      }
      * )
      */
+    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
     protected $warehouse;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         // prevent overriding product name if already being set
