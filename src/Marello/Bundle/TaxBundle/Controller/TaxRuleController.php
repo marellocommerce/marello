@@ -19,18 +19,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TaxRuleController extends AbstractController
 {
-    /**
-     * @Template
-     * @AclAncestor("marello_tax_taxrule_view")
-     */
     #[Route(path: '/', name: 'marello_tax_taxrule_index')]
+    #[Template]
+    #[AclAncestor('marello_tax_taxrule_view')]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloTaxBundle:TaxRule'];
     }
 
     /**
-     * @Template
      * @Acl(
      *      id="marello_tax_taxrule_view",
      *      type="entity",
@@ -42,13 +39,13 @@ class TaxRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_tax_taxrule_view')]
+    #[Template]
     public function viewAction(TaxRule $taxRule)
     {
         return ['entity' => $taxRule];
     }
 
     /**
-     * @Template
      * @Acl(
      *      id="marello_tax_taxrule_create",
      *      type="entity",
@@ -60,13 +57,13 @@ class TaxRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_tax_taxrule_create')]
+    #[Template]
     public function createAction(Request $request)
     {
         return $this->update($request, new TaxRule());
     }
 
     /**
-     * @Template
      * @Acl(
      *      id="marello_tax_taxrule_update",
      *      type="entity",
@@ -79,6 +76,7 @@ class TaxRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_tax_taxrule_update')]
+    #[Template]
     public function updateAction(TaxRule $taxRule, Request $request)
     {
         return $this->update($request, $taxRule);

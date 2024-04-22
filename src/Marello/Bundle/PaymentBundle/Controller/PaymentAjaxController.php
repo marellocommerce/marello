@@ -16,13 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaymentAjaxController extends AbstractController
 {
     /**
-     * @AclAncestor("marello_payment_create")
      *
      * @param Request $request
      * @param Payment|null $payment
      * @return JsonResponse
      */
     #[Route(path: '/form-changes/{id}', methods: ['POST'], name: 'marello_payment_form_changes', defaults: ['id' => 0])]
+    #[AclAncestor('marello_payment_create')]
     public function formChangesAction(Request $request, Payment $payment = null)
     {
         if (!$payment) {

@@ -9,11 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IntegrationStatusController extends AbstractController
 {
-    /**
-     * @AclAncestor("oro_integration_view")
-     * @Template()
-     */
     #[Route(path: '/status', name: 'marello_healthcheck_integration_statuses_index')]
+    #[AclAncestor('oro_integration_view')]
+    #[Template]
     public function indexAction()
     {
         return [];

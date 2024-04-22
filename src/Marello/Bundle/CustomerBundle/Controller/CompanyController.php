@@ -18,11 +18,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class CompanyController extends AbstractController
 {
     /**
-     * @Template
-     * @AclAncestor("marello_customer_company_view")
      * @return array
      */
     #[Route(path: '/', name: 'marello_customer_company_index')]
+    #[Template]
+    #[AclAncestor('marello_customer_company_view')]
     public function indexAction()
     {
         return [
@@ -31,7 +31,6 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Template
      * @Acl(
      *      id="marello_customer_company_view",
      *      type="entity",
@@ -43,6 +42,7 @@ class CompanyController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_customer_company_view', requirements: ['id' => '\d+'])]
+    #[Template]
     public function viewAction(Company $company)
     {
         return [
@@ -52,7 +52,6 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloCustomer/Company/update.html.twig")
      * @Acl(
      *      id="marello_customer_company_create",
      *      type="entity",
@@ -64,13 +63,13 @@ class CompanyController extends AbstractController
      * @return array
      */
     #[Route(path: '/create', name: 'marello_customer_company_create')]
+    #[Template('@MarelloCustomer/Company/update.html.twig')]
     public function createAction(Request $request)
     {
         return $this->update(new Company(), $request);
     }
 
     /**
-     * @Template
      * @Acl(
      *      id="marello_customer_company_update",
      *      type="entity",
@@ -83,6 +82,7 @@ class CompanyController extends AbstractController
      * @return array
      */
     #[Route(path: '/update/{id}', name: 'marello_customer_company_update', requirements: ['id' => '\d+'])]
+    #[Template]
     public function updateAction(Company $company, Request $request)
     {
         return $this->update($company, $request);

@@ -16,11 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SalesChannelController extends AbstractController
 {
-    /**
-     * @Template
-     * @AclAncestor("marello_sales_saleschannel_view")
-     */
     #[Route(path: '/', methods: ['GET'], name: 'marello_sales_saleschannel_index')]
+    #[Template]
+    #[AclAncestor('marello_sales_saleschannel_view')]
     public function indexAction()
     {
         return [
@@ -29,20 +27,18 @@ class SalesChannelController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloSales/SalesChannel/update.html.twig")
-     * @AclAncestor("marello_saleschannel_create")
-     *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_sales_saleschannel_create')]
+    #[Template('@MarelloSales/SalesChannel/update.html.twig')]
+    #[AclAncestor('marello_saleschannel_create')]
     public function createAction(Request $request)
     {
         return $this->update(new SalesChannel(), $request);
     }
     
     /**
-     * @Template
      * @Acl(
      *      id="marello_sales_saleschannel_view",
      *      type="entity",
@@ -54,6 +50,7 @@ class SalesChannelController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_sales_saleschannel_view', requirements: ['id' => '\d+'])]
+    #[Template]
     public function viewAction(SalesChannel $salesChannel)
     {
         return [
@@ -62,14 +59,14 @@ class SalesChannelController extends AbstractController
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_saleschannel_update")
      *
      * @param Request $request
      * @param SalesChannel $channel
      * @return array
      */
     #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_sales_saleschannel_update')]
+    #[Template]
+    #[AclAncestor('marello_saleschannel_update')]
     public function updateAction(SalesChannel $channel, Request $request)
     {
         return $this->update($channel, $request);

@@ -16,11 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class InventoryItemController extends AbstractController
 {
-    /**
-     * @Template("@MarelloInventory/Inventory/index.html.twig")
-     * @AclAncestor("marello_inventory_inventory_view")
-     */
     #[Route(path: '/', name: 'marello_inventory_inventory_index')]
+    #[Template('@MarelloInventory/Inventory/index.html.twig')]
+    #[AclAncestor('marello_inventory_inventory_view')]
     public function indexAction()
     {
         return [
@@ -29,7 +27,6 @@ class InventoryItemController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloInventory/Inventory/view.html.twig")
      * @Acl(
      *      id="marello_inventory_inventory_view",
      *      type="entity",
@@ -40,6 +37,7 @@ class InventoryItemController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventory_view')]
+    #[Template('@MarelloInventory/Inventory/view.html.twig')]
     public function viewAction(InventoryItem $inventoryItem)
     {
         return [
@@ -49,7 +47,6 @@ class InventoryItemController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloInventory/Inventory/update.html.twig")
      * @Acl(
      *      id="marello_inventory_inventory_update",
      *      type="entity",
@@ -61,6 +58,7 @@ class InventoryItemController extends AbstractController
      * @return array|RedirectResponse
      */
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventory_update')]
+    #[Template('@MarelloInventory/Inventory/update.html.twig')]
     public function updateAction(InventoryItem $inventoryItem, Request $request)
     {
         $result = $this->container->get(UpdateHandlerFacade::class)->update(
@@ -74,12 +72,12 @@ class InventoryItemController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloInventory/Inventory/widget/info.html.twig")
      *
      * @param InventoryItem $inventoryItem
      * @return array
      */
     #[Route(path: '/widget/info/{id}', name: 'marello_inventory_widget_info', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloInventory/Inventory/widget/info.html.twig')]
     public function infoAction(InventoryItem $inventoryItem)
     {
         return [
@@ -90,12 +88,12 @@ class InventoryItemController extends AbstractController
 
     /**
      * @deprecated datagrid is now rendered inside view instead of separate widget
-     * @Template("@MarelloInventory/Inventory/widget/datagrid.html.twig")
      *
      * @param InventoryItem $inventoryItem
      * @return array
      */
     #[Route(path: '/widget/datagrid/{id}', name: 'marello_inventory_widget_datagrid', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloInventory/Inventory/widget/datagrid.html.twig')]
     public function datagridAction(InventoryItem $inventoryItem)
     {
         return [

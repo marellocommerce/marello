@@ -16,11 +16,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class BalancedInventoryLevelController extends AbstractController
 {
     /**
-     * @AclAncestor("marello_inventory_inventory_view")
-     * @Template("@MarelloInventory/BalancedInventoryLevel/index.html.twig")
      * @return array
      */
     #[Route(path: '/', name: 'marello_inventory_balancedinventorylevel_index')]
+    #[AclAncestor('marello_inventory_inventory_view')]
+    #[Template('@MarelloInventory/BalancedInventoryLevel/index.html.twig')]
     public function indexAction()
     {
         return [

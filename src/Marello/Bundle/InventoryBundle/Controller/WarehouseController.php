@@ -17,13 +17,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class WarehouseController extends AbstractController
 {
     /**
-     * @Template("@MarelloInventory/Warehouse/updateDefault.html.twig")
-     * @AclAncestor("marello_inventory_warehouse_update")
-     *
      * @param Request $request
      * @return array|RedirectResponse
      */
     #[Route(path: '/update-default', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_inventory_warehouse_updatedefault')]
+    #[Template('@MarelloInventory/Warehouse/updateDefault.html.twig')]
+    #[AclAncestor('marello_inventory_warehouse_update')]
     public function updateDefaultAction(Request $request)
     {
         $aclHelper = $this->container->get(AclHelper::class);

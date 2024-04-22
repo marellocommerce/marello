@@ -19,11 +19,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ShippingMethodsConfigsRuleController extends AbstractController
 {
     /**
-     * @Template
-     * @AclAncestor("marello_shipping_methods_configs_rule_view")
      * @return array
      */
     #[Route(path: '/', name: 'marello_shipping_methods_configs_rule_index')]
+    #[Template]
+    #[AclAncestor('marello_shipping_methods_configs_rule_view')]
     public function indexAction()
     {
         return [
@@ -32,7 +32,6 @@ class ShippingMethodsConfigsRuleController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloShipping/ShippingMethodsConfigsRule/update.html.twig")
      * @Acl(
      *     id="marello_shipping_methods_configs_rule_create",
      *     type="entity",
@@ -44,13 +43,13 @@ class ShippingMethodsConfigsRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/create', name: 'marello_shipping_methods_configs_rule_create')]
+    #[Template('@MarelloShipping/ShippingMethodsConfigsRule/update.html.twig')]
     public function createAction(Request $request)
     {
         return $this->update(new ShippingMethodsConfigsRule(), $request);
     }
 
     /**
-     * @Template
      * @Acl(
      *      id="marello_shipping_methods_configs_rule_view",
      *      type="entity",
@@ -62,6 +61,7 @@ class ShippingMethodsConfigsRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_shipping_methods_configs_rule_view', requirements: ['id' => '\d+'])]
+    #[Template]
     public function viewAction(ShippingMethodsConfigsRule $shippingRule)
     {
         return [
@@ -70,7 +70,6 @@ class ShippingMethodsConfigsRuleController extends AbstractController
     }
 
     /**
-     * @Template
      * @Acl(
      *     id="marello_shipping_methods_configs_rule_update",
      *     type="entity",
@@ -82,6 +81,7 @@ class ShippingMethodsConfigsRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/update/{id}', name: 'marello_shipping_methods_configs_rule_update', requirements: ['id' => '\d+'])]
+    #[Template]
     public function updateAction(Request $request, ShippingMethodsConfigsRule $entity)
     {
         return $this->update($entity, $request);

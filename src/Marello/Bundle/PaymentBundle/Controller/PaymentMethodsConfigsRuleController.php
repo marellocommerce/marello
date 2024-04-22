@@ -23,11 +23,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class PaymentMethodsConfigsRuleController extends AbstractController
 {
     /**
-     * @Template("@MarelloPayment/PaymentMethodsConfigsRule/index.html.twig")
-     * @AclAncestor("marello_payment_methods_configs_rule_view")
      * @return array
      */
     #[Route(path: '/', name: 'marello_payment_methods_configs_rule_index')]
+    #[Template('@MarelloPayment/PaymentMethodsConfigsRule/index.html.twig')]
+    #[AclAncestor('marello_payment_methods_configs_rule_view')]
     public function indexAction()
     {
         return [
@@ -36,7 +36,6 @@ class PaymentMethodsConfigsRuleController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig")
      * @Acl(
      *     id="marello_payment_methods_configs_rule_create",
      *     type="entity",
@@ -48,13 +47,13 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/create', name: 'marello_payment_methods_configs_rule_create')]
+    #[Template('@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig')]
     public function createAction(Request $request)
     {
         return $this->update(new PaymentMethodsConfigsRule(), $request);
     }
 
     /**
-     * @Template("@MarelloPayment/PaymentMethodsConfigsRule/view.html.twig")
      * @Acl(
      *      id="marello_payment_methods_configs_rule_view",
      *      type="entity",
@@ -66,6 +65,7 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_payment_methods_configs_rule_view', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloPayment/PaymentMethodsConfigsRule/view.html.twig')]
     public function viewAction(PaymentMethodsConfigsRule $paymentMethodsConfigsRule)
     {
         return [
@@ -74,7 +74,6 @@ class PaymentMethodsConfigsRuleController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig")
      * @Acl(
      *     id="marello_payment_methods_configs_rule_update",
      *     type="entity",
@@ -86,6 +85,7 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      * @return array
      */
     #[Route(path: '/update/{id}', name: 'marello_payment_methods_configs_rule_update', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig')]
     public function updateAction(Request $request, PaymentMethodsConfigsRule $entity)
     {
         return $this->update($entity, $request);

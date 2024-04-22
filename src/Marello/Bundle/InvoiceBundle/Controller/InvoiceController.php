@@ -10,24 +10,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class InvoiceController extends AbstractController
 {
-    /**
-     * @Template
-     * @AclAncestor("marello_invoice_view")
-     */
     #[Route(path: '/', name: 'marello_invoice_invoice_index')]
+    #[Template]
+    #[AclAncestor('marello_invoice_view')]
     public function indexAction()
     {
         return ['entity_class' => AbstractInvoice::class];
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_invoice_view")
-     *
      * @param AbstractInvoice $invoice
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_invoice_invoice_view')]
+    #[Template]
+    #[AclAncestor('marello_invoice_view')]
     public function viewAction(AbstractInvoice $invoice)
     {
         return ['entity' => $invoice];

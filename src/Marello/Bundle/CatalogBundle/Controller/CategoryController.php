@@ -14,38 +14,35 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CategoryController extends AbstractController
 {
-    /**
-     * @AclAncestor("marello_category_view")
-     * @Template
-     */
     #[Route(path: '/', name: 'marello_category_index')]
+    #[AclAncestor('marello_category_view')]
+    #[Template]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloCatalogBundle:Category'];
     }
 
     /**
-     * @AclAncestor("marello_category_create")
-     * @Template("@MarelloCatalog/Category/update.html.twig")
-     *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', name: 'marello_category_create')]
+    #[AclAncestor('marello_category_create')]
+    #[Template('@MarelloCatalog/Category/update.html.twig')]
     public function createAction(Request $request)
     {
         return $this->update(new Category(), $request);
     }
 
     /**
-     * @AclAncestor("marello_category_update")
-     * @Template("@MarelloCatalog/Category/update.html.twig")
      *
      * @param Category $category
      * @param Request $request
      * @return array
      */
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_category_update')]
+    #[AclAncestor('marello_category_update')]
+    #[Template('@MarelloCatalog/Category/update.html.twig')]
     public function updateAction(Category $category, Request $request)
     {
         return $this->update($category, $request);
@@ -76,13 +73,12 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @AclAncestor("marello_category_view")
-     * @Template("@MarelloCatalog/Category/view.html.twig")
-     *
      * @param Category $category
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_category_view')]
+    #[AclAncestor('marello_category_view')]
+    #[Template('@MarelloCatalog/Category/view.html.twig')]
     public function viewAction(Category $category)
     {
         return [

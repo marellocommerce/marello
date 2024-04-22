@@ -10,24 +10,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PackingSlipController extends AbstractController
 {
-    /**
-     * @Template("@MarelloPacking/PackingSlip/index.html.twig")
-     * @AclAncestor("marello_packing_slip_view")
-     */
     #[Route(path: '/', name: 'marello_packing_packingslip_index')]
+    #[Template('@MarelloPacking/PackingSlip/index.html.twig')]
+    #[AclAncestor('marello_packing_slip_view')]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloPackingBundle:PackingSlip'];
     }
 
     /**
-     * @Template("@MarelloPacking/PackingSlip/view.html.twig")
-     * @AclAncestor("marello_packing_slip_view")
-     *
      * @param PackingSlip $packingSlip
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_packing_packingslip_view')]
+    #[Template('@MarelloPacking/PackingSlip/view.html.twig')]
+    #[AclAncestor('marello_packing_slip_view')]
     public function viewAction(PackingSlip $packingSlip)
     {
         return ['entity' => $packingSlip];

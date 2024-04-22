@@ -16,11 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RefundController extends AbstractController
 {
-    /**
-     * @Template
-     * @AclAncestor("marello_refund_view")
-     */
     #[Route(path: '/', name: 'marello_refund_index')]
+    #[Template]
+    #[AclAncestor('marello_refund_view')]
     public function indexAction()
     {
         return [
@@ -29,27 +27,26 @@ class RefundController extends AbstractController
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_refund_view")
-     *
      * @param Refund $entity
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_refund_view')]
+    #[Template]
+    #[AclAncestor('marello_refund_view')]
     public function viewAction(Refund $entity)
     {
         return compact('entity');
     }
 
     /**
-     * @Template("@MarelloRefund/Refund/create.html.twig")
-     * @AclAncestor("marello_refund_create")
      *
      * @param Request $request
      * @param Order   $order
      * @return array
      */
     #[Route(path: '/create/{id}', name: 'marello_refund_create')]
+    #[Template('@MarelloRefund/Refund/create.html.twig')]
+    #[AclAncestor('marello_refund_create')]
     public function createAction(Request $request, Order $order)
     {
         $entity = Refund::fromOrder($order);
@@ -59,14 +56,14 @@ class RefundController extends AbstractController
 
 
     /**
-     * @Template
-     * @AclAncestor("marello_refund_update")
      *
      * @param Request $request
      * @param Refund  $refund
      * @return array
      */
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_refund_update')]
+    #[Template]
+    #[AclAncestor('marello_refund_update')]
     public function updateAction(Request $request, Refund $refund = null)
     {
         return $this->update($request, $refund);

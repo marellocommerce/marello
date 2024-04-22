@@ -21,11 +21,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AjaxUPSController extends AbstractController
 {
     /**
-     * @ParamConverter("country", options={"id" = "code"})
      * @param Country $country
      * @return JsonResponse
      */
     #[Route(path: '/get-shipping-services-by-country/{code}', methods: ['GET'], name: 'marello_ups_country_shipping_services', requirements: ['code' => '^[A-Z]{2}$'])]
+    #[ParamConverter('country', options: ['id' => 'code'])]
     public function getShippingServicesByCountryAction(Country $country)
     {
         /** @var ShippingServiceRepository $repository */
@@ -41,13 +41,13 @@ class AjaxUPSController extends AbstractController
     }
 
     /**
-     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
      *
      * @param Request      $request
      * @param Channel|null $channel
      * @return JsonResponse
      */
     #[Route(path: '/validate-connection/{channelId}/', methods: ['POST'], name: 'marello_ups_validate_connection')]
+    #[ParamConverter('channel', class: 'OroIntegrationBundle:Channel', options: ['id' => 'channelId'])]
     public function validateConnectionAction(Request $request, Channel $channel = null)
     {
         if (!$channel) {

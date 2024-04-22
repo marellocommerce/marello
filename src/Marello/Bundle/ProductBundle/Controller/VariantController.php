@@ -22,22 +22,20 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class VariantController extends AbstractController
 {
     /**
-     * @AclAncestor("marello_product_create_variant")
-     * @Template("@MarelloProduct/Variant/update.html.twig")
      *
      * @param Product $product
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create/parent/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_product_create_variant')]
+    #[AclAncestor('marello_product_create_variant')]
+    #[Template('@MarelloProduct/Variant/update.html.twig')]
     public function createVariantAction(Product $product, Request $request)
     {
         return $this->updateVariant($product, new Variant(), $request);
     }
 
     /**
-     * @AclAncestor("marello_product_add_variant")
-     * @Template("@MarelloProduct/Variant/update.html.twig")
      *
      * @param Request $request
      * @param Variant $variant
@@ -45,6 +43,8 @@ class VariantController extends AbstractController
      * @throws NotFoundHttpException
      */
     #[Route(path: '/add/{id}/parent/{parentId}', requirements: ['id' => '\d+', 'parentId' => '\d+'], name: 'marello_product_add_variant')]
+    #[AclAncestor('marello_product_add_variant')]
+    #[Template('@MarelloProduct/Variant/update.html.twig')]
     public function updateVariantAction(Request $request, Variant $variant)
     {
         $entityClass = $request->get('entityClass');
@@ -103,13 +103,13 @@ class VariantController extends AbstractController
     /**
      * @deprecated rendering of widget is obsolete and done directly in product template.
      * See MarelloProduct/Product/view.html.twig#121
-     * @AclAncestor("marello_product_view")
-     * @Template
      *
      * @param Product $product
      * @return array
      */
     #[Route(path: '/widget/info/{id}', name: 'marello_product_variant_widget_info', requirements: ['id' => '\d+'])]
+    #[AclAncestor('marello_product_view')]
+    #[Template]
     public function infoAction(Product $product)
     {
         return [

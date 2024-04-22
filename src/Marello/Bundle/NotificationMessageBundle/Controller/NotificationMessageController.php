@@ -18,11 +18,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class NotificationMessageController extends AbstractController
 {
     /**
-     * @Template("@MarelloNotificationMessage/NotificationMessage/index.html.twig")
-     * @AclAncestor("marello_notificationmessage_view")
      * @return array
      */
     #[Route(path: '/', name: 'marello_notificationmessage_index')]
+    #[Template('@MarelloNotificationMessage/NotificationMessage/index.html.twig')]
+    #[AclAncestor('marello_notificationmessage_view')]
     public function indexAction(): array
     {
         return [
@@ -31,21 +31,19 @@ class NotificationMessageController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloNotificationMessage/NotificationMessage/view.html.twig")
-     * @AclAncestor("marello_notificationmessage_view")
      * @param NotificationMessage $entity
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_notificationmessage_view', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloNotificationMessage/NotificationMessage/view.html.twig')]
+    #[AclAncestor('marello_notificationmessage_view')]
     public function viewAction(NotificationMessage $entity): array
     {
         return ['entity' => $entity];
     }
 
-    /**
-     * @AclAncestor("marello_notificationmessage_view")
-     */
     #[Route(path: '/widget/sidebar-notification-messages/{perPage}', name: 'marello_notificationmessage_widget_sidebar_notification_messages', defaults: ['perPage' => 10], requirements: ['perPage' => '\d+'])]
+    #[AclAncestor('marello_notificationmessage_view')]
     public function notificationMessagesWidgetAction(Request $request, int $perPage): Response
     {
         /** @var NotificationMessageRepository $repository */

@@ -22,51 +22,47 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderController extends AbstractController
 {
-    /**
-     * @Template
-     * @AclAncestor("marello_order_view")
-     */
     #[Route(path: '/', name: 'marello_order_order_index')]
+    #[Template]
+    #[AclAncestor('marello_order_view')]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloOrderBundle:Order'];
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_order_view")
-     *
      * @param Order $order
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_order_order_view')]
+    #[Template]
+    #[AclAncestor('marello_order_view')]
     public function viewAction(Order $order)
     {
         return ['entity' => $order];
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_order_create")
-     *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_order_order_create')]
+    #[Template]
+    #[AclAncestor('marello_order_create')]
     public function createAction(Request $request)
     {
         return $this->update($request);
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_order_update")
      *
      * @param Request $request
      * @param Order   $order
      * @return array
      */
     #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_order_order_update')]
+    #[Template]
+    #[AclAncestor('marello_order_update')]
     public function updateAction(Request $request, Order $order)
     {
         return $this->update($request, $order);
@@ -125,14 +121,14 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloOrder/Order/widget/address.html.twig")
-     * @AclAncestor("marello_order_view")
      *
      * @param Request $request
      * @param MarelloAddress $address
      * @return array
      */
     #[Route(path: '/widget/address/{id}/{typeId}', methods: ['GET', 'POST'], requirements: ['id' => '\d+', 'typeId' => '\d+'], name: 'marello_order_order_address')]
+    #[Template('@MarelloOrder/Order/widget/address.html.twig')]
+    #[AclAncestor('marello_order_view')]
     public function addressAction(Request $request, MarelloAddress $address)
     {
         return [
@@ -142,14 +138,14 @@ class OrderController extends AbstractController
     }
     
     /**
-     * @Template("@MarelloOrder/Order/widget/updateAddress.html.twig")
-     * @AclAncestor("marello_order_update")
      *
      * @param Request $request
      * @param MarelloAddress $address
      * @return array
      */
     #[Route(path: '/update/address/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_order_order_updateaddress')]
+    #[Template('@MarelloOrder/Order/widget/updateAddress.html.twig')]
+    #[AclAncestor('marello_order_update')]
     public function updateAddressAction(Request $request, MarelloAddress $address)
     {
         $responseData = array(
@@ -169,11 +165,11 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @AclAncestor("marello_product_view")
-     * @Template("@MarelloOrder/Order/widget/productsByChannel.html.twig")
      * @return array
      */
     #[Route(path: '/widget/products', name: 'marello_order_widget_products_by_channel', requirements: ['id' => '\d+'], defaults: ['id' => 0])]
+    #[AclAncestor('marello_product_view')]
+    #[Template('@MarelloOrder/Order/widget/productsByChannel.html.twig')]
     public function productsByChannelAction(Request $request)
     {
         $channel = $this->container->get(ManagerRegistry::class)

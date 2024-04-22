@@ -18,11 +18,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class PaymentController extends AbstractController
 {
     /**
-     * @Template("@MarelloPayment/Payment/index.html.twig")
-     * @AclAncestor("marello_payment_view")
      * @return array
      */
     #[Route(path: '/', name: 'marello_payment_index')]
+    #[Template('@MarelloPayment/Payment/index.html.twig')]
+    #[AclAncestor('marello_payment_view')]
     public function indexAction()
     {
         return [
@@ -31,7 +31,6 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloPayment/Payment/view.html.twig")
      * @Acl(
      *      id="marello_payment_view",
      *      type="entity",
@@ -43,6 +42,7 @@ class PaymentController extends AbstractController
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_payment_view', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloPayment/Payment/view.html.twig')]
     public function viewAction(Payment $payment)
     {
         return [
@@ -51,7 +51,6 @@ class PaymentController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloPayment/Payment/create.html.twig")
      * @Acl(
      *     id="marello_payment_create",
      *     type="entity",
@@ -62,13 +61,13 @@ class PaymentController extends AbstractController
      * @return array
      */
     #[Route(path: '/create', name: 'marello_payment_create')]
+    #[Template('@MarelloPayment/Payment/create.html.twig')]
     public function createAction(Request $request)
     {
         return $this->update($request);
     }
 
     /**
-     * @Template("@MarelloPayment/Payment/update.html.twig")
      * @Acl(
      *     id="marello_payment_update",
      *     type="entity",
@@ -80,6 +79,7 @@ class PaymentController extends AbstractController
      * @return array
      */
     #[Route(path: '/update/{id}', name: 'marello_payment_update', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloPayment/Payment/update.html.twig')]
     public function updateAction(Request $request, Payment $entity)
     {
         return $this->update($request, $entity);

@@ -12,14 +12,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ReportController extends AbstractController
 {
     /**
-     * @Template
-     * @AclAncestor("oro_report_view")
      *
      * @param string $reportGroupName
      * @param string $reportName
      * @return array
      */
     #[Route(path: '/static/{reportGroupName}/{reportName}/{_format}', name: 'marello_report_index', requirements: ['reportGroupName' => '\w+', 'reportName' => '\w+', '_format' => 'html|json'], defaults: ['_format' => 'html'])]
+    #[Template]
+    #[AclAncestor('oro_report_view')]
     public function indexAction($reportGroupName, $reportName)
     {
         $gridName  = implode('-', ['marello_report', $reportGroupName, $reportName]);

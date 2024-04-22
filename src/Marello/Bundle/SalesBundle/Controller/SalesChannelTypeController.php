@@ -56,12 +56,12 @@ class SalesChannelTypeController extends AbstractController
     }
 
     /**
-     * @Template("@MarelloSales/SalesChannelType/create.html.twig")
      *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_sales_saleschanneltype_create')]
+    #[Template('@MarelloSales/SalesChannelType/create.html.twig')]
     public function createAction(Request $request)
     {
         $entity = new SalesChannelType();

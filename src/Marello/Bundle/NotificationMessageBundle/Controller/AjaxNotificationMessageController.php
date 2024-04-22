@@ -16,12 +16,12 @@ class AjaxNotificationMessageController extends AbstractController
 {
     /**
      * @CsrfProtection()
-     * @AclAncestor("marello_notificationmessage_update")
      *
      * @param NotificationMessage $entity
      * @return JsonResponse
      */
     #[Route(path: '/resolve/{id}', methods: ['POST'], name: 'marello_notificationmessage_resolve', requirements: ['id' => '\d+'])]
+    #[AclAncestor('marello_notificationmessage_update')]
     public function resolveAction(NotificationMessage $entity)
     {
         try {

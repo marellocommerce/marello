@@ -17,25 +17,23 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ReturnController extends AbstractController
 {
-    /**
-     * @Template
-     * @AclAncestor("marello_return_view")
-     */
     #[Route(path: '/', name: 'marello_return_return_index')]
+    #[Template]
+    #[AclAncestor('marello_return_view')]
     public function indexAction()
     {
         return ['entity_class' => 'MarelloReturnBundle:ReturnEntity'];
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_return_create")
      *
      * @param Order   $order
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create/{id}', requirements: ['id' => '\d+'], name: 'marello_return_return_create')]
+    #[Template]
+    #[AclAncestor('marello_return_create')]
     public function createAction(Order $order, Request $request)
     {
         $return = new ReturnEntity();
@@ -65,27 +63,26 @@ class ReturnController extends AbstractController
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_return_view")
-     *
      * @param ReturnEntity $return
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_return_return_view')]
+    #[Template]
+    #[AclAncestor('marello_return_view')]
     public function viewAction(ReturnEntity $return)
     {
         return ['entity' => $return];
     }
 
     /**
-     * @Template
-     * @AclAncestor("marello_return_update")
      *
      * @param ReturnEntity $return
      * @param Request      $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_return_return_update')]
+    #[Template]
+    #[AclAncestor('marello_return_update')]
     public function updateAction(ReturnEntity $return, Request $request)
     {
         $form = $this->createForm(ReturnUpdateType::class, $return);

@@ -27,24 +27,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PurchaseOrderController extends AbstractController
 {
-    /**
-     * @Config\Template("@MarelloPurchaseOrder/PurchaseOrder/index.html.twig")
-     * @AclAncestor("marello_purchase_order_view")
-     */
     #[Route(path: '/', name: 'marello_purchaseorder_purchaseorder_index')]
+    #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/index.html.twig')]
+    #[AclAncestor('marello_purchase_order_view')]
     public function indexAction()
     {
         return ['entity_class' => PurchaseOrder::class];
     }
 
     /**
-     * @Config\Template("@MarelloPurchaseOrder/PurchaseOrder/view.html.twig")
-     * @AclAncestor("marello_purchase_order_view")
-     *
      * @param PurchaseOrder $purchaseOrder
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_purchaseorder_purchaseorder_view')]
+    #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/view.html.twig')]
+    #[AclAncestor('marello_purchase_order_view')]
     public function viewAction(PurchaseOrder $purchaseOrder)
     {
         return [
@@ -52,50 +49,45 @@ class PurchaseOrderController extends AbstractController
         ];
     }
 
-    /**
-     * @Config\Template
-     * @AclAncestor("marello_purchase_order_create")
-     */
     #[Route(path: '/select-products', name: 'marello_purchaseorder_purchaseorder_selectproducts')]
+    #[Config\Template]
+    #[AclAncestor('marello_purchase_order_create')]
     public function selectProductsAction()
     {
         return [];
     }
 
     /**
-     * @Config\Template("@MarelloPurchaseOrder/PurchaseOrder/createStepOne.html.twig")
-     * @AclAncestor("marello_purchase_order_create")
-     *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', name: 'marello_purchaseorder_purchaseorder_create')]
+    #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/createStepOne.html.twig')]
+    #[AclAncestor('marello_purchase_order_create')]
     public function createAction(Request $request)
     {
         return $this->createStepOne($request);
     }
 
     /**
-     * @AclAncestor("marello_purchase_order_update")
-     * @Config\Template("@MarelloPurchaseOrder/PurchaseOrder/update.html.twig")
-     *
      * @param PurchaseOrder $purchaseOrder
      * @return array
      */
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_purchaseorder_purchaseorder_update')]
+    #[AclAncestor('marello_purchase_order_update')]
+    #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/update.html.twig')]
     public function updateAction(PurchaseOrder $purchaseOrder)
     {
         return $this->update($purchaseOrder);
     }
 
     /**
-     * @Config\Template("@MarelloPurchaseOrder/PurchaseOrder/createStepTwo.html.twig")
-     * @AclAncestor("marello_purchase_order_create")
-     *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create/step-two', name: 'marello_purchaseorder_purchaseorder_create_step_two')]
+    #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/createStepTwo.html.twig')]
+    #[AclAncestor('marello_purchase_order_create')]
     public function createStepTwoAction(Request $request)
     {
         return $this->createStepTwo($request, new PurchaseOrder());
@@ -201,11 +193,11 @@ class PurchaseOrderController extends AbstractController
 
     /**
      * @param PurchaseOrder|null $purchaseOrder
-     * @AclAncestor("marello_product_view")
-     * @Config\Template("@MarelloPurchaseOrder/PurchaseOrder/widget/productsBySupplier.html.twig")
      * @return array
      */
     #[Route(path: '/widget/products/{id}', name: 'marello_purchase_order_widget_products_by_supplier', requirements: ['id' => '\d+'], defaults: ['id' => 0])]
+    #[AclAncestor('marello_product_view')]
+    #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/widget/productsBySupplier.html.twig')]
     public function productsBySupplierAction(PurchaseOrder $purchaseOrder = null)
     {
         $supplier = $this->container->get(ManagerRegistry::class)
@@ -221,15 +213,14 @@ class PurchaseOrderController extends AbstractController
     }
 
     /**
-     * @Config\ParamConverter("product", options={"mapping": {"productId" : "id"}})
-     * @Config\ParamConverter("supplier", options={"mapping": {"supplierId"   : "id"}})
-     * @AclAncestor("marello_product_view")
-     *
      * @param Product $product
      * @param Supplier $supplier
      * @return JsonResponse
      */
     #[Route(path: '/supplier-product-price/{productId}/{supplierId}', methods: ['GET'], name: 'marello_purchase_order_supplier_product_price')]
+    #[Config\ParamConverter('product', options: ['mapping' => ['productId' => 'id']])]
+    #[Config\ParamConverter('supplier', options: ['mapping' => ['supplierId' => 'id']])]
+    #[AclAncestor('marello_product_view')]
     public function getSupplierProductPriceAction(Product $product, Supplier $supplier)
     {
         foreach ($product->getSuppliers() as $productSupplierRelation) {
@@ -243,11 +234,11 @@ class PurchaseOrderController extends AbstractController
     }
 
     /**
-     * @AclAncestor("marello_product_view")
-     * @Config\Template("@MarelloPurchaseOrder/PurchaseOrder/widget/purchaseOrderCandidatesGrid.html.twig")
      * @return array
      */
     #[Route(path: '/widget/purchase-order-candidates-grid', name: 'marello_purchase_order_widget_purchase_order_candidates_grid')]
+    #[AclAncestor('marello_product_view')]
+    #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/widget/purchaseOrderCandidatesGrid.html.twig')]
     public function purchaseOrderCandidatesGridAction()
     {
         return [];
