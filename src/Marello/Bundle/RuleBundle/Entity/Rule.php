@@ -86,7 +86,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -94,7 +94,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -103,7 +103,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -113,7 +113,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -123,7 +123,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
 
@@ -133,7 +133,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return int
      */
-    public function getSortOrder()
+    public function getSortOrder(): int
     {
         return $this->sortOrder;
     }
@@ -142,7 +142,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      * @param int $sortOrder
      * @return $this
      */
-    public function setSortOrder($sortOrder)
+    public function setSortOrder(int $sortOrder): self
     {
         $this->sortOrder = $sortOrder;
 
@@ -152,7 +152,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return bool
      */
-    public function isStopProcessing()
+    public function isStopProcessing(): bool
     {
         return $this->stopProcessing;
     }
@@ -161,7 +161,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      * @param bool $stopProcessing
      * @return $this
      */
-    public function setStopProcessing($stopProcessing)
+    public function setStopProcessing(bool $stopProcessing): self
     {
         $this->stopProcessing = $stopProcessing;
 
@@ -171,7 +171,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getExpression()
+    public function getExpression(): string
     {
         return $this->expression;
     }
@@ -180,7 +180,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      * @param string $expression
      * @return $this
      */
-    public function setExpression($expression)
+    public function setExpression(string $expression): self
     {
         $this->expression = $expression;
 
@@ -188,12 +188,12 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     }
     
     /**
-     * @param bool $isSystem
+     * @param bool $system
      * @return $this
      */
-    public function setSystem($isSystem)
+    public function setSystem(bool $system): self
     {
-        $this->system = $isSystem;
+        $this->system = $system;
 
         return $this;
     }
@@ -201,7 +201,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return bool
      */
-    public function isSystem()
+    public function isSystem(): bool
     {
         return $this->system;
     }
@@ -209,7 +209,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->name;
     }

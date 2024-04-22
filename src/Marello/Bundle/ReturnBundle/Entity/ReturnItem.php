@@ -119,7 +119,7 @@ class ReturnItem implements
     /**
      * @return InventoryItem|null
      */
-    public function getInventoryItem()
+    public function getInventoryItem(): InventoryItem
     {
         return $this->getOrderItem()->getInventoryItem();
     }
