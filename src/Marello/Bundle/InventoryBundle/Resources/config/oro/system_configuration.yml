@@ -24,6 +24,11 @@ system_configuration:
             icon: fa-industry
         inventory_external_warehouse_general:
             title: marello.inventory.system_configuration.groups.inventory.external_warehouse.general.label
+        inventory_api:
+            title: marello.inventory.system_configuration.groups.inventory.api.title
+            icon: fa-wrench
+        inventory_api_general:
+            title: marello.inventory.system_configuration.groups.inventory.api.general.label
 
     fields:
         marello_inventory.balance_threshold_percentage:
@@ -65,6 +70,13 @@ system_configuration:
                 constraints:
                     - NotBlank: ~
 
+        marello_inventory.adjust_inventory_qty:
+            data_type: boolean
+            type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
+            options:
+                label: marello.inventory.system_configuration.fields.adjust_inventory_qty.label
+                tooltip: marello.inventory.system_configuration.fields.tooltip.adjust_inventory_qty
+
     tree:
         system_configuration:
             marello:
@@ -89,3 +101,8 @@ system_configuration:
                                     inventory_external_warehouse_general:
                                         children:
                                             - marello_inventory.managed_inventory_for_external_warehouse
+                            inventory_api:
+                                children:
+                                    inventory_api_general:
+                                        children:
+                                            - marello_inventory.adjust_inventory_qty
