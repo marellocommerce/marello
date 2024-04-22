@@ -1087,6 +1087,11 @@ class Product implements
 
     public function clearChannels(): self
     {
+        /** @var SalesChannel $channel */
+        foreach ($this->channels as $channel) {
+            $channel->removeProduct($this);
+        }
+
         $this->channels->clear();
         $this->channelsCodes = '';
 
