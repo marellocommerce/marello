@@ -3,7 +3,7 @@
 namespace Marello\Bundle\InvoiceBundle\Controller;
 
 use Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;

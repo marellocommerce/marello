@@ -2,31 +2,23 @@
 
 namespace Marello\Bundle\CoreBundle\Model;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 
 trait EntityCreatedUpdatedAtTrait
 {
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
-    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.created_at']])]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.created_at']])]
     protected ?\DateTimeInterface $createdAt = null;
 
     /**
      * @var \DateTime
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
-    #[ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.updated_at']])]
-    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.updated_at']])]
     protected ?\DateTimeInterface $updatedAt = null;
 
     /**

@@ -4,6 +4,7 @@ namespace Marello\Bundle\PurchaseOrderBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
@@ -11,36 +12,16 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @Oro\Config(
- *      routeView="marello_purchaseorder_purchaseorder_view",
- *      routeName="marello_purchaseorder_purchaseorder_index",
- *      routeCreate="marello_purchaseorder_purchaseorder_create",
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_purchase_order')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(routeView: 'marello_purchaseorder_purchaseorder_view', routeName: 'marello_purchaseorder_purchaseorder_index', routeCreate: 'marello_purchaseorder_purchaseorder_create', defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true]])]
 class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -52,122 +33,66 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'purchase_order_number', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'purchase_order_number', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $purchaseOrderNumber;
 
     /**
      * @var Collection|PurchaseOrderItem[]
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\OneToMany(targetEntity: \PurchaseOrderItem::class, mappedBy: 'order', cascade: ['persist'], orphanRemoval: true)]
+    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
     protected $items;
 
     /**
      * @var Supplier
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'supplier_id', onDelete: 'CASCADE', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SupplierBundle\Entity\Supplier::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $supplier;
 
     /**
      * @var \DateTime
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'due_date', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'due_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $dueDate;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var Warehouse
      */
     #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $warehouse;
 
     /**
      * @var float
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'order_total', type: 'money', nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderTotal;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'purchase_order_reference', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'purchase_order_reference', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $purchaseOrderReference;
 
     /**
      * @var array $data
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $data = [];
 
     /**

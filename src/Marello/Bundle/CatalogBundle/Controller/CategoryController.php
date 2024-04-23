@@ -4,7 +4,7 @@ namespace Marello\Bundle\CatalogBundle\Controller;
 
 use Marello\Bundle\CatalogBundle\Entity\Category;
 use Marello\Bundle\CatalogBundle\Form\Handler\CategoryHandler;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

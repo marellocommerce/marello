@@ -9,7 +9,7 @@ datagrids:
                     - p.term
                     - p
                 from:
-                    - { table: 'MarelloPaymentTermBundle:PaymentTerm', alias: p }
+                    - { table: Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm, alias: p }
         columns:
             label:
                 label: marello.paymentterm.labels.label

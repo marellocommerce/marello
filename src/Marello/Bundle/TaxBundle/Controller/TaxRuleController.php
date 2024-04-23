@@ -4,8 +4,8 @@ namespace Marello\Bundle\TaxBundle\Controller;
 
 use Marello\Bundle\TaxBundle\Entity\TaxRule;
 use Marello\Bundle\TaxBundle\Form\Handler\TaxRuleHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,48 +28,32 @@ class TaxRuleController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxrule_view",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxRule",
-     *      permission="VIEW"
-     * )
      *
      * @param TaxRule $taxRule
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_tax_taxrule_view')]
     #[Template]
+    #[Acl(id: 'marello_tax_taxrule_view', type: 'entity', class: 'MarelloTaxBundle:TaxRule', permission: 'VIEW')]
     public function viewAction(TaxRule $taxRule)
     {
         return ['entity' => $taxRule];
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxrule_create",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxRule",
-     *      permission="CREATE"
-     * )
      *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_tax_taxrule_create')]
     #[Template]
+    #[Acl(id: 'marello_tax_taxrule_create', type: 'entity', class: 'MarelloTaxBundle:TaxRule', permission: 'CREATE')]
     public function createAction(Request $request)
     {
         return $this->update($request, new TaxRule());
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxrule_update",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxRule",
-     *      permission="EDIT"
-     * )
      *
      * @param TaxRule $taxRule
      * @param Request $request
@@ -77,6 +61,7 @@ class TaxRuleController extends AbstractController
      */
     #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_tax_taxrule_update')]
     #[Template]
+    #[Acl(id: 'marello_tax_taxrule_update', type: 'entity', class: 'MarelloTaxBundle:TaxRule', permission: 'EDIT')]
     public function updateAction(TaxRule $taxRule, Request $request)
     {
         return $this->update($request, $taxRule);

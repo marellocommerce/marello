@@ -5,8 +5,8 @@ namespace Marello\Bundle\TaxBundle\Controller;
 use Marello\Bundle\TaxBundle\Entity\TaxJurisdiction;
 use Marello\Bundle\TaxBundle\Form\Type\TaxJurisdictionType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -34,18 +34,13 @@ class TaxJurisdictionController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxjurisdiction_view",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxJurisdiction",
-     *      permission="VIEW"
-     * )
      *
      * @param TaxJurisdiction $taxJurisdiction
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_tax_taxjurisdiction_view', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_tax_taxjurisdiction_view', type: 'entity', class: 'MarelloTaxBundle:TaxJurisdiction', permission: 'VIEW')]
     public function viewAction(TaxJurisdiction $taxJurisdiction)
     {
         return [
@@ -54,30 +49,19 @@ class TaxJurisdictionController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxjurisdiction_create",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxJurisdiction",
-     *      permission="CREATE"
-     * )
      *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', name: 'marello_tax_taxjurisdiction_create')]
     #[Template('@MarelloTax/TaxJurisdiction/update.html.twig')]
+    #[Acl(id: 'marello_tax_taxjurisdiction_create', type: 'entity', class: 'MarelloTaxBundle:TaxJurisdiction', permission: 'CREATE')]
     public function createAction(Request $request)
     {
         return $this->update(new TaxJurisdiction(), $request);
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxjurisdiction_update",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxJurisdiction",
-     *      permission="EDIT"
-     * )
      *
      * @param Request $request
      * @param TaxJurisdiction $taxJurisdiction
@@ -85,6 +69,7 @@ class TaxJurisdictionController extends AbstractController
      */
     #[Route(path: '/update/{id}', name: 'marello_tax_taxjurisdiction_update', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_tax_taxjurisdiction_update', type: 'entity', class: 'MarelloTaxBundle:TaxJurisdiction', permission: 'EDIT')]
     public function updateAction(Request $request, TaxJurisdiction $taxJurisdiction)
     {
         return $this->update($taxJurisdiction, $request);

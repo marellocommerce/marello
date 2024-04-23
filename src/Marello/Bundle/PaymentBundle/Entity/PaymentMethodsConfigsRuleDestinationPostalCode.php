@@ -2,71 +2,42 @@
 
 namespace Marello\Bundle\PaymentBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @Config(
- *     mode="hidden",
- * )
- */
 #[ORM\Table(name: 'marello_pmnt_mtdscfgsrl_dst_pc')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(mode: 'hidden')]
 class PaymentMethodsConfigsRuleDestinationPostalCode implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
      * @var integer
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true,
-     *              "order"=10
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(type: 'text', nullable: false)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]])]
     protected $name;
 
     /**
      * @var PaymentMethodsConfigsRuleDestination
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'destination_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination::class, inversedBy: 'postalCodes')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $destination;
 
     /**

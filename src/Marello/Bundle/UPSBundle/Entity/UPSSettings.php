@@ -4,6 +4,7 @@ namespace Marello\Bundle\UPSBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
@@ -28,49 +29,49 @@ class UPSSettings extends Transport
     /**
      * @var bool
      */
-    #[ORM\Column(name: 'ups_test_mode', type: 'boolean', nullable: false, options: ['default' => false])]
+    #[ORM\Column(name: 'ups_test_mode', type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
     protected $upsTestMode = false;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'ups_api_user', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'ups_api_user', type: Types::STRING, length: 255, nullable: false)]
     protected $upsApiUser;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'ups_api_password', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'ups_api_password', type: Types::STRING, length: 255, nullable: false)]
     protected $upsApiPassword;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'ups_api_key', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'ups_api_key', type: Types::STRING, length: 255, nullable: false)]
     protected $upsApiKey;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'ups_shipping_account_number', type: 'string', length: 100, nullable: false)]
+    #[ORM\Column(name: 'ups_shipping_account_number', type: Types::STRING, length: 100, nullable: false)]
     protected $upsShippingAccountNumber;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'ups_shipping_account_name', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'ups_shipping_account_name', type: Types::STRING, length: 255, nullable: false)]
     protected $upsShippingAccountName;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'ups_pickup_type', type: 'string', length: 2, nullable: false)]
+    #[ORM\Column(name: 'ups_pickup_type', type: Types::STRING, length: 2, nullable: false)]
     protected $upsPickupType;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'ups_unit_of_weight', type: 'string', length: 3, nullable: false)]
+    #[ORM\Column(name: 'ups_unit_of_weight', type: Types::STRING, length: 3, nullable: false)]
     protected $upsUnitOfWeight;
 
     /**
@@ -101,7 +102,7 @@ class UPSSettings extends Transport
     /**
      * @var \DateTime $invalidateCacheAt
      */
-    #[ORM\Column(name: 'ups_invalidate_cache_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'ups_invalidate_cache_at', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected $upsInvalidateCacheAt;
 
     /**

@@ -2,12 +2,13 @@
 
 namespace Marello\Bundle\PackingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
@@ -23,30 +24,10 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
 use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 
-/**
- * @Oro\Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-list-alt"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_packing_packing_slip')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-list-alt'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true]])]
 class PackingSlip implements
     DerivedPropertyAwareInterface,
     OrganizationAwareInterface,
@@ -61,168 +42,93 @@ class PackingSlip implements
      * @var int
      */
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
      * @var Collection|PackingSlipItem[]
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\OneToMany(targetEntity: \PackingSlipItem::class, mappedBy: 'packingSlip', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $items;
 
     /**
      * @var Order
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $order;
 
     /**
      * @var AbstractAddress
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $billingAddress;
 
     /**
      * @var AbstractAddress
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAddress;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var Customer
      */
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $customer;
 
     /**
      * @var SalesChannel
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannel;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'saleschannel_name', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'saleschannel_name', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannelName;
 
     /**
      * @var Warehouse
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $warehouse;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'comment', type: 'text', nullable: true)]
+    #[ORM\Column(name: 'comment', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $comment;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'packing_slip_number', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'packing_slip_number', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $packingSlipNumber;
 
     /**
      * @var Allocation
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'source_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Allocation::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false]])]
     protected $sourceEntity;
 
     public function __construct()

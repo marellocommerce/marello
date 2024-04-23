@@ -2,36 +2,20 @@
 
 namespace Marello\Bundle\PaymentBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @Oro\Config(
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_payment_payment')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true]])]
 class Payment implements
     OrganizationAwareInterface,
     ExtendEntityInterface
@@ -44,8 +28,8 @@ class Payment implements
      * @var int
      */
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
@@ -55,112 +39,57 @@ class Payment implements
 
     /**
      * @var int
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'total_paid', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalPaid = 0;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'payment_method', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'payment_method', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentMethod;
 
     /**
      * @var array $paymentMethodOptions
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'payment_method_options', type: 'json_array', nullable: true)]
+    #[ORM\Column(name: 'payment_method_options', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentMethodOptions;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'payment_reference', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'payment_reference', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentReference;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'payment_details', type: 'text', nullable: true)]
+    #[ORM\Column(name: 'payment_details', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentDetails;
 
     /**
      * @var \DateTime
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'payment_date', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'payment_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentDate;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'currency', type: 'string', length: 10, nullable: true)]
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 10, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $currency;
 
     /**
      * @var \Extend\Entity\EV_Marello_Payment_Status
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $status;
 
     public function __clone()

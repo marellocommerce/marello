@@ -16,7 +16,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelGroupRepository;
 
 #[ORM\Entity(SalesChannelGroupRepository::class), ORM\HasLifecycleCallbacks]
@@ -75,7 +74,7 @@ class SalesChannelGroup implements DatesAwareInterface, OrganizationAwareInterfa
     )]
     protected ?bool $system = false;
 
-    #[ORM\OneToMany(mappedBy: ['group'], targetEntity: SalesChannel::class, cascade: ['persist'], fetch: 'EAGER')]
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: SalesChannel::class, cascade: ['persist'], fetch: 'EAGER')]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],

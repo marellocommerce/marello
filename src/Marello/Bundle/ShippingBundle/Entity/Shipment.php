@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\ShippingBundle\Entity;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -12,7 +13,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_shipment')]

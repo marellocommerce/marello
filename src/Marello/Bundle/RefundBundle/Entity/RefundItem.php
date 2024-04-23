@@ -2,9 +2,10 @@
 
 namespace Marello\Bundle\RefundBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
@@ -13,23 +14,10 @@ use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
 
-/**
- * @Oro\Config(
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_refund_item')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id']])]
 class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -40,132 +28,76 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'name', type: 'string')]
+    #[ORM\Column(name: 'name', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $name;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var int
      */
-    #[ORM\Column(name: 'quantity', type: 'integer')]
+    #[ORM\Column(name: 'quantity', type: Types::INTEGER)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $quantity = 1;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var float
      */
     #[ORM\Column(name: 'base_amount', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $baseAmount = 0;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var float
      */
     #[ORM\Column(name: 'refund_amount', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $refundAmount = 0;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var float
      */
     #[ORM\Column(name: 'tax_total', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $taxTotal = 0;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var float
      */
     #[ORM\Column(name: 'subtotal', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $subTotal = 0;
 
     /**
      * @var TaxCode
      *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      *
      */
     #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxCode::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $taxCode;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var Refund
      */
     #[ORM\JoinColumn(name: 'refund_id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Refund::class, inversedBy: 'items')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $refund;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var OrderItem
      */
     #[ORM\JoinColumn(name: 'order_item_id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderItem;
 
     /**

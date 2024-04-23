@@ -2,11 +2,12 @@
 
 namespace Marello\Bundle\SupplierBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
@@ -16,29 +17,11 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 /**
  * Supplier
- *
- * @Oro\Config(
- *      routeName="marello_supplier_supplier_index",
- *      routeView="marello_supplier_supplier_view",
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
  */
 #[ORM\Table(name: 'marello_supplier_supplier')]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\SupplierBundle\Entity\Repository\SupplierRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(routeName: 'marello_supplier_supplier_index', routeView: 'marello_supplier_supplier_view', defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true]])]
 class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait, AuditableOrganizationAwareTrait;
@@ -50,126 +33,72 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
     /**
      * @var integer
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'name', type: 'string', length: 255, unique: true, nullable: false)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, unique: true, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $name;
     
     /**
      * @var MarelloAddress
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[ORM\OneToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $address = null;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'email', type: 'string', length: 255, unique: true, nullable: true)]
+    #[ORM\Column(name: 'email', type: Types::STRING, length: 255, unique: true, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $email;
 
     /**
      * @var integer
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'priority', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'priority', type: Types::INTEGER, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $priority;
     
     /**
      * @var boolean
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'can_dropship', type: 'boolean', nullable: false)]
+    #[ORM\Column(name: 'can_dropship', type: Types::BOOLEAN, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $canDropship = true;
 
     /**
      * @var boolean
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'is_active', type: 'boolean', nullable: false)]
+    #[ORM\Column(name: 'is_active', type: Types::BOOLEAN, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $isActive = true;
     
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 3, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $currency;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'po_send_by', type: 'string', length: 30, nullable: false)]
+    #[ORM\Column(name: 'po_send_by', type: Types::STRING, length: 30, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $poSendBy;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'code', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'code', type: Types::STRING, nullable: true)]
     protected $code;
 
     /**

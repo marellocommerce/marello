@@ -2,8 +2,12 @@
 
 namespace Marello\Bundle\ShipmentBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
+use Marello\Bundle\ShippingBundle\Entity\Shipment;
 
 class UpdateCurrentShipmentsWithOrganization extends AbstractFixture
 {
@@ -26,10 +30,10 @@ class UpdateCurrentShipmentsWithOrganization extends AbstractFixture
      */
     public function updateCurrentShipments()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
 
         $shipments = $this->manager
-            ->getRepository('MarelloShippingBundle:Shipment')
+            ->getRepository(Shipment::class)
             ->findBy(['organization' => null]);
         foreach ($shipments as $shipment) {
             $shipment->setOrganization($organization);

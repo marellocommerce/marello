@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -67,7 +68,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 40]])]
     protected ?PaymentTerm $paymentTerm = null;
 
-    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: ['children'])]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true],
@@ -75,7 +76,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     ])]
     protected ?Company $parent = null;
 
-    #[ORM\OneToMany(mappedBy: ['parent'], targetEntity: Company::class)]
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Company::class)]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true],
         'importexport' => ['excluded' => true]
@@ -95,7 +96,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     )]
     protected ?Collection $addresses = null;
 
-    #[ORM\OneToMany(mappedBy: ['company'], targetEntity: Customer::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Customer::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true],
         'importexport' => ['excluded' => true]

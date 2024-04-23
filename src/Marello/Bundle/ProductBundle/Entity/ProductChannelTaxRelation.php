@@ -2,9 +2,10 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
@@ -12,19 +13,18 @@ use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
 
 /**
  * TaxCode
- *
- * @Oro\Config()
  */
 #[ORM\Table(name: 'marello_prod_prod_chan_tax_rel')]
 #[ORM\UniqueConstraint(name: 'marello_prod_prod_chan_tax_rel_uidx', columns: ['product_id', 'sales_channel_id', 'tax_code_id'])]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\ProductBundle\Entity\Repository\ProductChannelTaxRelationRepository::class)]
+#[Oro\Config]
 class ProductChannelTaxRelation implements SalesChannelAwareInterface
 {
     /**
      * @var integer
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 

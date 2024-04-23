@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
 
@@ -16,8 +17,8 @@ class ProductSupplierRelation
     /**
      * @var integer
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
@@ -38,13 +39,13 @@ class ProductSupplierRelation
     /**
      * @var integer
      */
-    #[ORM\Column(name: 'quantity_of_unit', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'quantity_of_unit', type: Types::INTEGER, nullable: false)]
     protected $quantityOfUnit;
 
     /**
      * @var integer
      */
-    #[ORM\Column(name: 'priority', type: 'integer')]
+    #[ORM\Column(name: 'priority', type: Types::INTEGER)]
     protected $priority;
 
     /**
@@ -56,13 +57,13 @@ class ProductSupplierRelation
     /**
      * @var boolean
      */
-    #[ORM\Column(name: 'can_dropship', type: 'boolean', nullable: false)]
+    #[ORM\Column(name: 'can_dropship', type: Types::BOOLEAN, nullable: false)]
     protected $canDropship;
 
     /**
      * @var integer|null
      */
-    #[ORM\Column(name: 'lead_time', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'lead_time', type: Types::INTEGER, nullable: true)]
     protected $leadTime;
 
     public function getId(): ?int

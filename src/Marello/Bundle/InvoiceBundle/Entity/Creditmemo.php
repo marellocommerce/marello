@@ -2,10 +2,11 @@
 
 namespace Marello\Bundle\InvoiceBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -20,8 +21,8 @@ class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
      * @var int
      */
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
@@ -31,19 +32,9 @@ class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
 
     /**
      * @var Collection|CreditmemoItem[]
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\OneToMany(targetEntity: \CreditmemoItem::class, mappedBy: 'invoice', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
     protected $items;
 }

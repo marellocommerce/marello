@@ -4,8 +4,8 @@ namespace Marello\Bundle\TaxBundle\Controller;
 
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\TaxBundle\Form\Handler\TaxCodeHandler;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,48 +28,32 @@ class TaxCodeController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxcode_view",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxCode",
-     *      permission="VIEW"
-     * )
      *
      * @param TaxCode $taxCode
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_tax_taxcode_view')]
     #[Template]
+    #[Acl(id: 'marello_tax_taxcode_view', type: 'entity', class: 'MarelloTaxBundle:TaxCode', permission: 'VIEW')]
     public function viewAction(TaxCode $taxCode)
     {
         return ['entity' => $taxCode];
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxcode_create",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxCode",
-     *      permission="CREATE"
-     * )
      *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_tax_taxcode_create')]
     #[Template]
+    #[Acl(id: 'marello_tax_taxcode_create', type: 'entity', class: 'MarelloTaxBundle:TaxCode', permission: 'CREATE')]
     public function createAction(Request $request)
     {
         return $this->update($request, new TaxCode());
     }
 
     /**
-     * @Acl(
-     *      id="marello_tax_taxcode_update",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxCode",
-     *      permission="EDIT"
-     * )
      *
      * @param TaxCode $taxCode
      * @param Request $request
@@ -77,6 +61,7 @@ class TaxCodeController extends AbstractController
      */
     #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_tax_taxcode_update')]
     #[Template]
+    #[Acl(id: 'marello_tax_taxcode_update', type: 'entity', class: 'MarelloTaxBundle:TaxCode', permission: 'EDIT')]
     public function updateAction(TaxCode $taxCode, Request $request)
     {
         return $this->update($request, $taxCode);

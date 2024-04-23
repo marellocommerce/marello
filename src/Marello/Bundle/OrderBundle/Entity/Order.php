@@ -2,13 +2,14 @@
 
 namespace Marello\Bundle\OrderBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\CurrencyBundle\Entity\Price;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
@@ -27,39 +28,11 @@ use Marello\Bundle\PricingBundle\Subtotal\Model\LineItemsAwareInterface;
 use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 use Oro\Bundle\UserBundle\Entity\Ownership\AuditableUserAwareTrait;
 
-/**
- * @Oro\Config(
- *      routeView="marello_order_order_view",
- *      routeName="marello_order_order_index",
- *      routeCreate="marello_order_order_create",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-shopping-cart"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id",
- *              "organization_field_name"="organization",
- *              "organization_column_name"="organization_id"
- *          },
- *          "grid"={
- *              "default"="marello-order-select-grid"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_order_order')]
 #[ORM\UniqueConstraint(columns: ['order_reference', 'saleschannel_id'])]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(routeView: 'marello_order_order_view', routeName: 'marello_order_order_index', routeCreate: 'marello_order_order_create', defaultValues: ['entity' => ['icon' => 'fa-shopping-cart'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'USER', 'owner_field_name' => 'owner', 'owner_column_name' => 'user_owner_id', 'organization_field_name' => 'organization', 'organization_column_name' => 'organization_id'], 'grid' => ['default' => 'marello-order-select-grid'], 'dataaudit' => ['auditable' => true]])]
 class Order implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -80,105 +53,57 @@ class Order implements
      * @var int
      */
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(type: 'integer')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'order_number', type: 'string', unique: true, nullable: true)]
+    #[ORM\Column(name: 'order_number', type: Types::STRING, unique: true, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderNumber;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'order_reference', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'order_reference', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderReference;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'invoice_reference', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'invoice_reference', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $invoiceReference;
 
     /**
      * @var int
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'subtotal', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $subtotal = 0;
 
     /**
      * @var int
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'total_tax', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalTax = 0;
 
     /**
      * @var int
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'grand_total', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $grandTotal = 0;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'currency', type: 'string', length: 10, nullable: true)]
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 10, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $currency;
 
     /**
@@ -186,102 +111,61 @@ class Order implements
      *
      * @var string
      */
-    #[ORM\Column(name: 'locale_id', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'locale_id', type: Types::STRING, length: 255, nullable: true)]
     protected $localeId;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'payment_method', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'payment_method', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentMethod;
 
     /**
      * @var array $paymentMethodOptions
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'payment_method_options', type: 'json_array', nullable: true)]
+    #[ORM\Column(name: 'payment_method_options', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentMethodOptions = [];
 
     /**
      * @var double
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'shipping_amount_incl_tax', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAmountInclTax;
 
     /**
      * @var double
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'shipping_amount_excl_tax', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAmountExclTax;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'shipping_method', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'shipping_method', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingMethod;
     
     /**
      * @var string
      */
-    #[ORM\Column(name: 'shipping_method_type', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'shipping_method_type', type: Types::STRING, length: 255, nullable: true)]
     protected $shippingMethodType;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'shipping_method_reference', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'shipping_method_reference', type: Types::STRING, length: 255, nullable: true)]
     protected $shippingMethodReference;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'shipping_method_details', type: 'text', nullable: true)]
+    #[ORM\Column(name: 'shipping_method_details', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false]])]
     protected $shippingMethodDetails;
 
     /**
@@ -298,240 +182,118 @@ class Order implements
     
     /**
      * @var double
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'discount_amount', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $discountAmount;
 
     /**
      * @var float
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'discount_percent', type: 'percent', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $discountPercent;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'coupon_code', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'coupon_code', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $couponCode;
 
     /**
      * @var Collection|OrderItem[]
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\OneToMany(targetEntity: \OrderItem::class, mappedBy: 'order', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
     protected $items;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var Customer
      */
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $customer;
 
     /**
      * @var MarelloAddress
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $billingAddress;
 
     /**
      * @var MarelloAddress
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $shippingAddress;
 
     /**
      * @var \DateTime
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'invoiced_at', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'invoiced_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $invoicedAt;
 
     /**
      * @var SalesChannel
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannel;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'saleschannel_name', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'saleschannel_name', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannelName;
 
     /**
      * @var \DateTime
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'purchase_date', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'purchase_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $purchaseDate;
 
     /**
      * @var array $data
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $data = [];
 
     /**
      * @var \DateTime
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'delivery_date', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: 'delivery_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $deliveryDate;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'order_note', type: 'text', nullable: true)]
+    #[ORM\Column(name: 'order_note', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderNote;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'po_number', type: 'string', nullable: true, length: 255)]
+    #[ORM\Column(name: 'po_number', type: Types::STRING, nullable: true, length: 255)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $poNumber;
 
     /**
      * @var \Extend\Entity\EV_Marello_Order_Status
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderStatus;
 
     /**

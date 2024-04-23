@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\RuleBundle\Entity;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 

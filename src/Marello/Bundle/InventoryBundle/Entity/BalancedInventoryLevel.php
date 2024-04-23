@@ -2,144 +2,71 @@
 
 namespace Marello\Bundle\InventoryBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\InventoryBundle\Model\BalancedInventoryLevelInterface;
 use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @Oro\Config(
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=false
- *          },
- *          "entity"={
- *              "icon"="fa-list-alt"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_blncd_inventory_level')]
 #[ORM\UniqueConstraint(columns: ['product_id', 'channel_group_id'])]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\BalancedInventoryRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => false], 'entity' => ['icon' => 'fa-list-alt'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id']])]
 class BalancedInventoryLevel implements OrganizationAwareInterface, BalancedInventoryLevelInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.product.entity_label"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var ProductInterface
      */
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.product.entity_label'], 'dataaudit' => ['auditable' => false]])]
     protected $product;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.sales.saleschannelgroup.entity_label"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var SalesChannelGroup
      */
     #[ORM\JoinColumn(name: 'channel_group_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannelGroup::class)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.sales.saleschannelgroup.entity_label'], 'dataaudit' => ['auditable' => false]])]
     protected $salesChannelGroup;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.inventory.balancedinventorylevel.inventory.label"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
      * @var int
      */
-    #[ORM\Column(name: 'inventory_qty', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'inventory_qty', type: Types::INTEGER, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.balancedinventorylevel.inventory.label'], 'dataaudit' => ['auditable' => false]])]
     protected $inventory;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.inventory.balancedinventorylevel.balanced_inventory_qty.label"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
      * @var int
      */
-    #[ORM\Column(name: 'blncd_inventory_qty', type: 'integer', nullable: false)]
+    #[ORM\Column(name: 'blncd_inventory_qty', type: Types::INTEGER, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.balancedinventorylevel.balanced_inventory_qty.label'], 'dataaudit' => ['auditable' => false]])]
     protected $balancedInventory;
 
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.inventory.balancedinventorylevel.reserved_inventory_qty.label"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
      * @var int
      */
-    #[ORM\Column(name: 'reserved_inventory_qty', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'reserved_inventory_qty', type: Types::INTEGER, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.balancedinventorylevel.reserved_inventory_qty.label'], 'dataaudit' => ['auditable' => false]])]
     protected $reservedInventory;
 
     /**

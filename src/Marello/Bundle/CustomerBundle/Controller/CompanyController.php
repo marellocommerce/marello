@@ -5,8 +5,8 @@ namespace Marello\Bundle\CustomerBundle\Controller;
 use Marello\Bundle\CustomerBundle\Entity\Company;
 use Marello\Bundle\CustomerBundle\Form\Handler\CompanyHandler;
 use Marello\Bundle\CustomerBundle\JsTree\CompanyTreeHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,18 +31,13 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_customer_company_view",
-     *      type="entity",
-     *      class="MarelloCustomerBundle:Company",
-     *      permission="VIEW"
-     * )
      *
      * @param Company $company
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_customer_company_view', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_customer_company_view', type: 'entity', class: 'MarelloCustomerBundle:Company', permission: 'VIEW')]
     public function viewAction(Company $company)
     {
         return [
@@ -52,30 +47,19 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_customer_company_create",
-     *      type="entity",
-     *      class="MarelloCustomerBundle:Company",
-     *      permission="CREATE"
-     * )
      *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', name: 'marello_customer_company_create')]
     #[Template('@MarelloCustomer/Company/update.html.twig')]
+    #[Acl(id: 'marello_customer_company_create', type: 'entity', class: 'MarelloCustomerBundle:Company', permission: 'CREATE')]
     public function createAction(Request $request)
     {
         return $this->update(new Company(), $request);
     }
 
     /**
-     * @Acl(
-     *      id="marello_customer_company_update",
-     *      type="entity",
-     *      class="MarelloCustomerBundle:Company",
-     *      permission="EDIT"
-     * )
      *
      * @param Company $company
      * @param Request $request
@@ -83,6 +67,7 @@ class CompanyController extends AbstractController
      */
     #[Route(path: '/update/{id}', name: 'marello_customer_company_update', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_customer_company_update', type: 'entity', class: 'MarelloCustomerBundle:Company', permission: 'EDIT')]
     public function updateAction(Company $company, Request $request)
     {
         return $this->update($company, $request);

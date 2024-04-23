@@ -2,32 +2,19 @@
 
 namespace Marello\Bundle\TaxBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * TaxCode
- *
- * @Oro\Config(
- *      routeName="marello_tax_taxcode_index",
- *      routeView="marello_tax_taxcode_view",
- *      routeUpdate="marello_tax_taxcode_update",
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *             "type"="ACL",
- *             "group_name"=""
- *         }
- *      }
- * )
  */
 #[ORM\Table(name: 'marello_tax_tax_code')]
 #[ORM\UniqueConstraint(name: 'marello_tax_code_codeidx', columns: ['code'])]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxCodeRepository::class)]
+#[Oro\Config(routeName: 'marello_tax_taxcode_index', routeView: 'marello_tax_taxcode_view', routeUpdate: 'marello_tax_taxcode_update', defaultValues: ['dataaudit' => ['auditable' => true], 'security' => ['type' => 'ACL', 'group_name' => '']])]
 class TaxCode implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -35,54 +22,30 @@ class TaxCode implements ExtendEntityInterface
     /**
      * @var integer
      */
-    #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'code', type: 'string', length: 255, unique: true, nullable: false)]
+    #[ORM\Column(name: 'code', type: Types::STRING, length: 255, unique: true, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true]])]
     protected $code;
 
     /**
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'description', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $description;
 
     /**
      * @var array $data
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $data = [];
 
     /**

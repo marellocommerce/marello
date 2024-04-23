@@ -7,36 +7,16 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 
-/**
-* @Config(
-*      defaultValues={
-*          "entity"={
-*              "icon"="fa-briefcase"
-*          },
-*          "dataaudit"={
-*              "auditable"=true
-*          },
-*           "ownership"={
-*               "owner_type"="ORGANIZATION",
-*               "owner_field_name"="organization",
-*               "owner_column_name"="organization_id"
-*           },
-*          "security"={
-*              "type"="ACL",
-*              "group_name"=""
-*          }
-*      }
-* )
-*/
 #[ORM\Table(name: 'marello_webhook')]
 #[ORM\Index(name: 'idx_marello_webhook_created_at', columns: ['created_at'])]
 #[ORM\Index(name: 'idx_marello_webhook_updated_at', columns: ['updated_at'])]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\WebhookBundle\Entity\Repository\WebhookRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-briefcase'], 'dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'security' => ['type' => 'ACL', 'group_name' => '']])]
 class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -45,91 +25,46 @@ class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
 
     /**
      * @var int
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(name: 'name', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $name;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'event', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'event', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $event;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'callback_url', type: 'string')]
+    #[ORM\Column(name: 'callback_url', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $callbackUrl;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'secret', type: 'string')]
+    #[ORM\Column(name: 'secret', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $secret;
 
     /**
      * @var bool
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'enabled', type: 'boolean')]
+    #[ORM\Column(name: 'enabled', type: Types::BOOLEAN)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $enabled;
 
     /**

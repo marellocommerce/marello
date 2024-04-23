@@ -5,8 +5,8 @@ namespace Marello\Bundle\SalesBundle\Controller;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Form\Type\SalesChannelType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -39,18 +39,13 @@ class SalesChannelController extends AbstractController
     }
     
     /**
-     * @Acl(
-     *      id="marello_sales_saleschannel_view",
-     *      type="entity",
-     *      class="MarelloSalesBundle:SalesChannel",
-     *      permission="VIEW"
-     * )
      *
      * @param SalesChannel $salesChannel
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_sales_saleschannel_view', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_sales_saleschannel_view', type: 'entity', class: 'MarelloSalesBundle:SalesChannel', permission: 'VIEW')]
     public function viewAction(SalesChannel $salesChannel)
     {
         return [

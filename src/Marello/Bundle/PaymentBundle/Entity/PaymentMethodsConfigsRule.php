@@ -4,9 +4,9 @@ namespace Marello\Bundle\PaymentBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -15,30 +15,9 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
 
-/**
- * @Config(
- *      routeName="marello_payment_methods_configs_rule_index",
- *      routeView="marello_payment_methods_configs_rule_view",
- *      routeCreate="marello_payment_methods_configs_rule_create",
- *      routeUpdate="marello_payment_methods_configs_rule_update",
- *      defaultValues={
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_payment_mtds_cfgs_rl')]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository::class)]
+#[Oro\Config(routeName: 'marello_payment_methods_configs_rule_index', routeView: 'marello_payment_methods_configs_rule_view', routeCreate: 'marello_payment_methods_configs_rule_create', routeUpdate: 'marello_payment_methods_configs_rule_update', defaultValues: ['ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true], 'security' => ['type' => 'ACL', 'group_name' => '']])]
 class PaymentMethodsConfigsRule implements
     RuleOwnerInterface,
     OrganizationAwareInterface,
@@ -48,18 +27,11 @@ class PaymentMethodsConfigsRule implements
 
     /**
      * @var integer
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
@@ -70,17 +42,10 @@ class PaymentMethodsConfigsRule implements
 
     /**
      * @var RuleInterface
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\RuleBundle\Entity\Rule::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $rule;
 
     /**
@@ -91,19 +56,9 @@ class PaymentMethodsConfigsRule implements
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=10
-     *          }
-     *      }
-     *  )
      */
-    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 3, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 10]])]
     protected $currency;
 
     /**

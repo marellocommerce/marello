@@ -2,78 +2,48 @@
 
 namespace Marello\Bundle\PaymentBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @Config()
- */
 #[ORM\Table(name: 'marello_payment_method_config')]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodConfigRepository::class)]
+#[Oro\Config]
 class PaymentMethodConfig implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
      * @var integer
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
      * @var PaymentMethodsConfigsRule
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodsConfigsRule;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=10
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'method', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'method', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 10]])]
     protected $method;
 
     /**
      * @var array
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=20
-     *          }
-     *      }
-     * )
      */
     #[ORM\Column(name: 'options', type: 'array', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 20]])]
     protected $options = [];
 
     /**

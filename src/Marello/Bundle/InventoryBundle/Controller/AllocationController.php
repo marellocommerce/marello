@@ -3,7 +3,7 @@
 namespace Marello\Bundle\InventoryBundle\Controller;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

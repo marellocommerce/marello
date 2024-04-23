@@ -4,6 +4,7 @@ namespace Marello\Bundle\ShippingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,32 +25,12 @@ class ShippingMethodConfig implements ExtendEntityInterface
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=10
-     *          }
-     *      }
-     * )
-     */
-    #[ORM\Column(name: 'method', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'method', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 10]])]
     protected $method;
 
-    /**
-     * @var array
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=0
-     *          }
-     *      }
-     * )
-     */
     #[ORM\Column(name: 'options', type: 'array')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
     protected $options = [];
 
     /**
@@ -58,19 +39,9 @@ class ShippingMethodConfig implements ExtendEntityInterface
     #[ORM\OneToMany(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig::class, mappedBy: 'methodConfig', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
     protected $typeConfigs;
 
-    /**
-     * @var ShippingMethodsConfigsRule
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
     #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodConfigsRule;
 
 

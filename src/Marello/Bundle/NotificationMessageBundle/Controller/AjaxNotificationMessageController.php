@@ -6,8 +6,8 @@ use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
 use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageResolvedInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,13 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class AjaxNotificationMessageController extends AbstractController
 {
     /**
-     * @CsrfProtection()
      *
      * @param NotificationMessage $entity
      * @return JsonResponse
      */
     #[Route(path: '/resolve/{id}', methods: ['POST'], name: 'marello_notificationmessage_resolve', requirements: ['id' => '\d+'])]
     #[AclAncestor('marello_notificationmessage_update')]
+    #[CsrfProtection]
     public function resolveAction(NotificationMessage $entity)
     {
         try {

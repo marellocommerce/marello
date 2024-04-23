@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -71,13 +72,13 @@ class Customer implements
     ])]
     protected ?MarelloAddress $shippingAddress = null;
 
-    #[ORM\OneToMany(mappedBy: ['customer'], targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'customer', targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true]
     ])]
     protected ?Collection $addresses = null;
 
-    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: ['customers'])]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'customers')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true],

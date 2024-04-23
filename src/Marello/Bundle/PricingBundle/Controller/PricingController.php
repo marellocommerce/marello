@@ -3,7 +3,7 @@
 namespace Marello\Bundle\PricingBundle\Controller;
 
 use Marello\Bundle\PricingBundle\Provider\CurrencyProvider;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

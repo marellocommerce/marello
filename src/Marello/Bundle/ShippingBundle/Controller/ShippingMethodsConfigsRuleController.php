@@ -3,8 +3,8 @@
 namespace Marello\Bundle\ShippingBundle\Controller;
 
 use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionDispatcher;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
 use Marello\Bundle\ShippingBundle\Form\Handler\ShippingMethodsConfigsRuleHandler;
 use Marello\Bundle\ShippingBundle\Form\Type\ShippingMethodsConfigsRuleType;
@@ -32,36 +32,26 @@ class ShippingMethodsConfigsRuleController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *     id="marello_shipping_methods_configs_rule_create",
-     *     type="entity",
-     *     permission="CREATE",
-     *     class="MarelloShippingBundle:ShippingMethodsConfigsRule"
-     * )
      *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', name: 'marello_shipping_methods_configs_rule_create')]
     #[Template('@MarelloShipping/ShippingMethodsConfigsRule/update.html.twig')]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_create', type: 'entity', permission: 'CREATE', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule')]
     public function createAction(Request $request)
     {
         return $this->update(new ShippingMethodsConfigsRule(), $request);
     }
 
     /**
-     * @Acl(
-     *      id="marello_shipping_methods_configs_rule_view",
-     *      type="entity",
-     *      class="MarelloShippingBundle:ShippingMethodsConfigsRule",
-     *      permission="VIEW"
-     * )
      *
      * @param ShippingMethodsConfigsRule $shippingRule
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_shipping_methods_configs_rule_view', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_view', type: 'entity', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule', permission: 'VIEW')]
     public function viewAction(ShippingMethodsConfigsRule $shippingRule)
     {
         return [
@@ -70,18 +60,13 @@ class ShippingMethodsConfigsRuleController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *     id="marello_shipping_methods_configs_rule_update",
-     *     type="entity",
-     *     permission="EDIT",
-     *     class="MarelloShippingBundle:ShippingMethodsConfigsRule"
-     * )
      * @param Request $request
      * @param ShippingMethodsConfigsRule $entity
      * @return array
      */
     #[Route(path: '/update/{id}', name: 'marello_shipping_methods_configs_rule_update', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule')]
     public function updateAction(Request $request, ShippingMethodsConfigsRule $entity)
     {
         return $this->update($entity, $request);
@@ -117,18 +102,13 @@ class ShippingMethodsConfigsRuleController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *     id="marello_shipping_methods_configs_rule_update",
-     *     type="entity",
-     *     permission="EDIT",
-     *     class="MarelloShippingBundle:ShippingMethodsConfigsRule"
-     * )
      * @param string $gridName
      * @param string $actionName
      * @param Request $request
      * @return JsonResponse
      */
     #[Route(path: '/{gridName}/massAction/{actionName}', name: 'marello_status_shipping_rule_massaction')]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule')]
     public function markMassAction($gridName, $actionName, Request $request)
     {
         /** @var MassActionDispatcher $massActionDispatcher */

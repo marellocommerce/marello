@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\SalesBundle\Entity;
 
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +19,7 @@ use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelTypeRepository;
 #[Oro\Config(
     defaultValues: [
         'grouping' => [
-            'groups' => 'dictionary'
+            'groups' => ['dictionary']
         ]
     ]
 )]
@@ -26,7 +27,6 @@ class SalesChannelType
 {
     #[ORM\Id]
     #[ORM\Column(name: 'name', type: Types::STRING, length: 64)]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
     protected ?string $name = null;
 
@@ -62,7 +62,7 @@ class SalesChannelType
      *
      * @return string
      */
-    public function getName(): self
+    public function getName(): string
     {
         return $this->name;
     }

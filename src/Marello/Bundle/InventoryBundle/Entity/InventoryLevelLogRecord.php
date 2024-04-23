@@ -2,141 +2,76 @@
 
 namespace Marello\Bundle\InventoryBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\UserBundle\Entity\User;
 
-/**
- * @Oro\Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-list-alt"
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_inventory_level_log')]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelLogRecordRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-list-alt']])]
 class InventoryLevelLogRecord
 {
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
     #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.inventory.inventorylevel.entity_label"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var InventoryLevel
      */
     #[ORM\JoinColumn(name: 'inventory_level_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryLevel::class, inversedBy: 'inventoryLevelLogRecords')]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.inventorylevel.entity_label'], 'importexport' => ['excluded' => true]])]
     protected $inventoryLevel;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.inventory.inventoryitem.entity_label"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var InventoryItem
      */
     #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryItem::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.inventoryitem.entity_label'], 'importexport' => ['excluded' => true]])]
     protected $inventoryItem;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'warehouse_name', type: 'string', nullable: false)]
+    #[ORM\Column(name: 'warehouse_name', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $warehouseName;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      * @var int
      */
-    #[ORM\Column(name: 'inventory_alteration', type: 'integer')]
+    #[ORM\Column(name: 'inventory_alteration', type: Types::INTEGER)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $inventoryAlteration;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      * @var int
      */
-    #[ORM\Column(name: 'allocated_inventory_alteration', type: 'integer')]
+    #[ORM\Column(name: 'allocated_inventory_alteration', type: Types::INTEGER)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $allocatedInventoryAlteration;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'change_trigger', type: 'string')]
+    #[ORM\Column(name: 'change_trigger', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $changeTrigger;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var User
      */
     #[ORM\JoinColumn(name: 'user_id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Oro\Bundle\UserBundle\Entity\User::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $user = null;
 
     /**
@@ -149,73 +84,40 @@ class InventoryLevelLogRecord
     protected $subject = null;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'subject_type', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'subject_type', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $subjectType = null;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      * @var int
      */
-    #[ORM\Column(name: 'subject_id', type: 'integer', nullable: true)]
+    #[ORM\Column(name: 'subject_id', type: Types::INTEGER, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $subjectId = null;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
-    #[ORM\Column(name: 'inventory_batch', type: 'string', nullable: true)]
+    #[ORM\Column(name: 'inventory_batch', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $inventoryBatch;
 
     /**
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      * @var \DateTime
      */
-    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.created_at'], 'importexport' => ['excluded' => true]])]
     protected $createdAt;
 
     /**
      * @var \DateTime $updatedAt
      *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
      * @var \DateTime
      */
-    #[ORM\Column(type: 'datetime', name: 'updated_at')]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, name: 'updated_at')]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.updated_at']])]
     protected $updatedAt;
 
     /**

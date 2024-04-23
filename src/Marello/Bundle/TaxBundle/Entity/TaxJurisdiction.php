@@ -4,35 +4,19 @@ namespace Marello\Bundle\TaxBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 
-/**
- * @Config(
- *      mode="hidden",
- *      routeName="marello_tax_taxjurisdiction_index",
- *      routeView="marello_tax_taxjurisdiction_view",
- *      routeUpdate="marello_tax_taxjurisdiction_update",
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *             "type"="ACL",
- *             "group_name"=""
- *         }
- *      }
- * )
- */
 #[ORM\Table('marello_tax_tax_jurisdiction')]
 #[ORM\UniqueConstraint(name: 'marello_tax_jurisdiction_codeidx', columns: ['code'])]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxJurisdictionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(mode: 'hidden', routeName: 'marello_tax_taxjurisdiction_index', routeView: 'marello_tax_taxjurisdiction_view', routeUpdate: 'marello_tax_taxjurisdiction_update', defaultValues: ['dataaudit' => ['auditable' => true], 'security' => ['type' => 'ACL', 'group_name' => '']])]
 class TaxJurisdiction implements DatesAwareInterface
 {
     use DatesAwareTrait;
@@ -41,112 +25,59 @@ class TaxJurisdiction implements DatesAwareInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=10,
-     *              "identity"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'code', type: 'string', length: 255, unique: true)]
+    #[ORM\Column(name: 'code', type: Types::STRING, length: 255, unique: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 10, 'identity' => true], 'dataaudit' => ['auditable' => true]])]
     protected $code;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'description', type: 'text', nullable: true)]
+    #[ORM\Column(name: 'description', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $description;
 
     /**
      * @var Country
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code')]
     #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $country;
 
     /**
      * @var Region
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'region_code', referencedColumnName: 'combined_code')]
     #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Region::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $region;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'region_text', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'region_text', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $regionText;
 
     /**
      * @var Collection|ZipCode[]
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\OneToMany(targetEntity: \Marello\Bundle\TaxBundle\Entity\ZipCode::class, mappedBy: 'taxJurisdiction', cascade: ['all'], orphanRemoval: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $zipCodes;
 
     /**
      * @var array $data
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'data', type: 'json_array', nullable: true)]
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $data = [];
 
     /**

@@ -4,75 +4,37 @@ namespace Marello\Bundle\ShippingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-/**
- * @Config(
- *      routeName="marello_shipping_methods_configs_rule_index",
- *      routeView="marello_shipping_methods_configs_rule_view",
- *      routeCreate="marello_shipping_methods_configs_rule_create",
- *      routeUpdate="marello_shipping_methods_configs_rule_update",
- *      defaultValues={
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          }
- *      }
- * )
- */
 #[ORM\Table(name: 'marello_ship_method_conf_rule')]
 #[ORM\Entity(repositoryClass: \Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository::class)]
+#[Oro\Config(routeName: 'marello_shipping_methods_configs_rule_index', routeView: 'marello_shipping_methods_configs_rule_view', routeCreate: 'marello_shipping_methods_configs_rule_create', routeUpdate: 'marello_shipping_methods_configs_rule_update', defaultValues: ['ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true], 'security' => ['type' => 'ACL', 'group_name' => '']])]
 class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
      * @var int
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     private $id;
 
     /**
      * @var RuleInterface
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=10
-     *          }
-     *      }
-     *  )
      */
     #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\RuleBundle\Entity\Rule::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 10]])]
     private $rule;
 
     /**
@@ -89,19 +51,9 @@ class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInte
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=20
-     *          }
-     *      }
-     *  )
      */
-    #[ORM\Column(name: 'currency', type: 'string', length: 3, nullable: false)]
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 3, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 20]])]
     private $currency;
 
     /**

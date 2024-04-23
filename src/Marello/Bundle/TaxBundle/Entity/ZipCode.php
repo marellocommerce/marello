@@ -2,17 +2,17 @@
 
 namespace Marello\Bundle\TaxBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
-/**
- * @Config(mode="hidden")
- */
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+
 #[ORM\Table('marello_tax_zip_code')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(mode: 'hidden')]
 class ZipCode implements DatesAwareInterface
 {
     use DatesAwareTrait;
@@ -21,26 +21,26 @@ class ZipCode implements DatesAwareInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'zip_code', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'zip_code', type: Types::STRING, length: 255, nullable: true)]
     protected $zipCode;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'zip_range_start', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'zip_range_start', type: Types::STRING, length: 255, nullable: true)]
     protected $zipRangeStart;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'zip_range_end', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'zip_range_end', type: Types::STRING, length: 255, nullable: true)]
     protected $zipRangeEnd;
 
     /**

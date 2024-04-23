@@ -5,7 +5,6 @@ namespace Marello\Bundle\AddressBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -45,7 +44,7 @@ class MarelloAddress extends AbstractAddress implements ExtendEntityInterface
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected ?string $company = null;
 
-    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'], inversedBy: ['addresses'])]
+    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'], inversedBy: 'addresses')]
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected ?Customer $customer = null;

@@ -4,8 +4,8 @@ namespace Marello\Bundle\WebhookBundle\Controller;
 
 use Marello\Bundle\WebhookBundle\Entity\Webhook;
 use Marello\Bundle\WebhookBundle\Form\Type\WebhookType;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
 use Oro\Bundle\UIBundle\Route\Router;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -53,11 +53,9 @@ class WebhookController extends AbstractController
         return $this->update($request, $webhook);
     }
 
-    /**
-     * @CsrfProtection()
-     */
     #[Route(path: '/delete/{id}', requirements: ['id' => '\d+'], name: 'marello_webhook_delete', methods: ['DELETE'])]
     #[AclAncestor('marello_webhook_delete')]
+    #[CsrfProtection]
     public function deleteAction(Webhook $webhook): JsonResponse
     {
         $translator = $this->container->get(TranslatorInterface::class);

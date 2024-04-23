@@ -8,8 +8,8 @@ use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -27,17 +27,12 @@ class InventoryItemController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_inventory_inventory_view",
-     *      type="entity",
-     *      class="MarelloInventoryBundle:InventoryItem",
-     *      permission="VIEW"
-     * )
      * @param InventoryItem $inventoryItem
      * @return array
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventory_view')]
     #[Template('@MarelloInventory/Inventory/view.html.twig')]
+    #[Acl(id: 'marello_inventory_inventory_view', type: 'entity', class: 'MarelloInventoryBundle:InventoryItem', permission: 'VIEW')]
     public function viewAction(InventoryItem $inventoryItem)
     {
         return [
@@ -47,18 +42,13 @@ class InventoryItemController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *      id="marello_inventory_inventory_update",
-     *      type="entity",
-     *      class="MarelloInventoryBundle:InventoryItem",
-     *      permission="EDIT"
-     * )
      * @param InventoryItem $inventoryItem
      * @param Request $request
      * @return array|RedirectResponse
      */
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventory_update')]
     #[Template('@MarelloInventory/Inventory/update.html.twig')]
+    #[Acl(id: 'marello_inventory_inventory_update', type: 'entity', class: 'MarelloInventoryBundle:InventoryItem', permission: 'EDIT')]
     public function updateAction(InventoryItem $inventoryItem, Request $request)
     {
         $result = $this->container->get(UpdateHandlerFacade::class)->update(

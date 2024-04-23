@@ -4,37 +4,22 @@ namespace Marello\Bundle\NotificationBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
 use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-/**
- * @Oro\Config(
- *  defaultValues={
- *      "grouping"={
- *          "groups"={"activity"}
- *      },
- *      "ownership"={
- *              "organization_field_name"="organization",
- *              "organization_column_name"="organization_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *  }
- * )
- */
 #[ORM\Table(name: 'marello_notification')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['grouping' => ['groups' => ['activity']], 'ownership' => ['organization_field_name' => 'organization', 'organization_column_name' => 'organization_id'], 'security' => ['type' => 'ACL', 'group_name' => '']])]
 class Notification implements ActivityInterface, ExtendEntityInterface
 {
     use ExtendActivity;
@@ -45,8 +30,8 @@ class Notification implements ActivityInterface, ExtendEntityInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
@@ -60,27 +45,20 @@ class Notification implements ActivityInterface, ExtendEntityInterface
     /**
      * @var array
      */
-    #[ORM\Column(type: 'json_array', nullable: false)]
+    #[ORM\Column(name: 'recipients', type: Types::JSON, nullable: false)]
     protected $recipients;
 
     /**
      * @var string
      */
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(name: 'body', type: Types::TEXT)]
     protected $body;
 
     /**
      * @var \DateTime
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'created_at', type: 'datetime')]
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'oro.ui.created_at']])]
     protected $createdAt;
 
     /**

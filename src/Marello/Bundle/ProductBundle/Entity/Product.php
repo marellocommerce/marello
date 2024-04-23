@@ -3,6 +3,7 @@
 namespace Marello\Bundle\ProductBundle\Entity;
 
 use Cassandra\Varint;
+
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -181,7 +182,7 @@ class Product implements
     )]
     protected ?int $warranty = null;
 
-    #[ORM\OneToMany(mappedBy: ['product'], targetEntity: AssembledPriceList::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: AssembledPriceList::class, cascade: ['persist'], orphanRemoval: true)]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
@@ -192,7 +193,7 @@ class Product implements
     )]
     protected ?Collection $prices = null;
 
-    #[ORM\OneToMany(mappedBy: ['product'], targetEntity: AssembledChannelPriceList::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: AssembledChannelPriceList::class, cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(
         defaultValues: [
@@ -253,7 +254,7 @@ class Product implements
     )]
     protected ?array $data = [];
 
-    #[ORM\OneToMany(mappedBy: ['product'], targetEntity: ProductSupplierRelation::class, cascade: ['remove', 'persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductSupplierRelation::class, cascade: ['remove', 'persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(
         defaultValues: [
@@ -287,7 +288,7 @@ class Product implements
     )]
     protected ?TaxCode $taxCode = null;
 
-    #[ORM\OneToMany(mappedBy: ['product'], targetEntity: ProductChannelTaxRelation::class, cascade: ['remove', 'persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductChannelTaxRelation::class, cascade: ['remove', 'persist'], orphanRemoval: true)]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],

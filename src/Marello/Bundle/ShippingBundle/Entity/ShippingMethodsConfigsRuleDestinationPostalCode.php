@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\ShippingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table('marello_ship_method_post_code')]
@@ -12,14 +13,14 @@ class ShippingMethodsConfigsRuleDestinationPostalCode
      * @var integer
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
     private $name;
 
     /**

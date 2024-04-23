@@ -4,36 +4,25 @@ namespace Marello\Bundle\ShippingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 
-/**
- * @Config(
- *     mode="hidden",
- * )
- */
 #[ORM\Table('marello_shipping_rule_dest')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
+#[Oro\Config(mode: 'hidden')]
 class ShippingMethodsConfigsRuleDestination
 {
     /**
      * @var integer
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\Id]
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
@@ -44,65 +33,33 @@ class ShippingMethodsConfigsRuleDestination
 
     /**
      * @var Region
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=20,
-     *              "short"=true,
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'region_code', referencedColumnName: 'combined_code')]
     #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Region::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 20, 'short' => true, 'identity' => true]])]
     protected $region;
 
     /**
      * @var string
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=30
-     *          }
-     *      }
-     * )
      */
-    #[ORM\Column(name: 'region_text', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'region_text', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 30]])]
     protected $regionText;
 
     /**
      * @var Country
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=40,
-     *              "short"=true,
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 40, 'short' => true, 'identity' => true]])]
     protected $country;
 
     /**
      * @var ShippingMethodsConfigsRule
-     *
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
     #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule::class, inversedBy: 'destinations')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodConfigsRule;
 
 

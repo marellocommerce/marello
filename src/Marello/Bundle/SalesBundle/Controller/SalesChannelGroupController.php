@@ -5,8 +5,8 @@ namespace Marello\Bundle\SalesBundle\Controller;
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 use Marello\Bundle\SalesBundle\Form\Type\SalesChannelGroupType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,36 +30,26 @@ class SalesChannelGroupController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *     id="marello_sales_saleschannelgroup_create",
-     *     type="entity",
-     *     permission="CREATE",
-     *     class="MarelloSalesBundle:SalesChannelGroup"
-     * )
      *
      * @param Request $request
      * @return array
      */
     #[Route(path: '/create', name: 'marello_sales_saleschannelgroup_create')]
     #[Template('@MarelloSales/SalesChannelGroup/update.html.twig')]
+    #[Acl(id: 'marello_sales_saleschannelgroup_create', type: 'entity', permission: 'CREATE', class: 'MarelloSalesBundle:SalesChannelGroup')]
     public function createAction(Request $request)
     {
         return $this->update(new SalesChannelGroup(), $request);
     }
 
     /**
-     * @Acl(
-     *      id="marello_sales_saleschannelgroup_view",
-     *      type="entity",
-     *      class="MarelloSalesBundle:SalesChannelGroup",
-     *      permission="VIEW"
-     * )
      *
      * @param SalesChannelGroup $salesChannelGroup
      * @return array
      */
     #[Route(path: '/view/{id}', name: 'marello_sales_saleschannelgroup_view', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_sales_saleschannelgroup_view', type: 'entity', class: 'MarelloSalesBundle:SalesChannelGroup', permission: 'VIEW')]
     public function viewAction(SalesChannelGroup $salesChannelGroup)
     {
         return [
@@ -68,18 +58,13 @@ class SalesChannelGroupController extends AbstractController
     }
 
     /**
-     * @Acl(
-     *     id="marello_sales_saleschannelgroup_update",
-     *     type="entity",
-     *     permission="EDIT",
-     *     class="MarelloSalesBundle:SalesChannelGroup"
-     * )
      * @param Request $request
      * @param SalesChannelGroup $entity
      * @return array
      */
     #[Route(path: '/update/{id}', name: 'marello_sales_saleschannelgroup_update', requirements: ['id' => '\d+'])]
     #[Template]
+    #[Acl(id: 'marello_sales_saleschannelgroup_update', type: 'entity', permission: 'EDIT', class: 'MarelloSalesBundle:SalesChannelGroup')]
     public function updateAction(Request $request, SalesChannelGroup $entity)
     {
         if ($entity->isSystem()) {
