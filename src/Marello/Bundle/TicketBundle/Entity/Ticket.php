@@ -3,11 +3,13 @@
 namespace Marello\Bundle\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 
 /**
  * @ORM\Entity()
@@ -22,9 +24,13 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
  *            }
  *      }
  *  )
+ * @ORM\HasLifecycleCallbacks()
  */
-class Ticket implements ExtendEntityInterface
+class Ticket implements
+    ExtendEntityInterface,
+    FullNameInterface
 {
+    use EntityCreatedUpdatedAtTrait;
     use ExtendEntityTrait;
     /**
      * @var integer
@@ -49,6 +55,16 @@ class Ticket implements ExtendEntityInterface
 
     /**
      * @ORM\Column(
+     *     name="name_prefix",
+     *     type="string",
+     *     length=255,
+     *     nullable=true
+     * )
+     */
+    private $namePrefix;
+
+    /**
+     * @ORM\Column(
      *     name="firstName",
      *     type="string",
      *     length=255,
@@ -59,6 +75,16 @@ class Ticket implements ExtendEntityInterface
 
     /**
      * @ORM\Column(
+     *     name="middle_name",
+     *     type="string",
+     *     length=255,
+     *     nullable=true
+     * )
+     */
+    private $middleName;
+
+    /**
+     * @ORM\Column(
      *     name="lastName",
      *     type="string",
      *     length=255,
@@ -66,6 +92,16 @@ class Ticket implements ExtendEntityInterface
      * )
      */
     private $lastName;
+
+    /**
+     * @ORM\Column(
+     *     name="name_suffix",
+     *     type="string",
+     *     length=255,
+     *     nullable=true
+     * )
+     */
+    private $nameSuffix;
 
     /**
      * @ORM\Column(
@@ -237,7 +273,7 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getFirstName()
     {
@@ -245,7 +281,7 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @param mixed $firstName
+     * @param string $firstName
      */
     public function setFirstName($firstName): void
     {
@@ -253,7 +289,7 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getLastName()
     {
@@ -261,7 +297,7 @@ class Ticket implements ExtendEntityInterface
     }
 
     /**
-     * @param mixed $lastName
+     * @param string $lastName
      */
     public function setLastName($lastName): void
     {
@@ -405,4 +441,69 @@ class Ticket implements ExtendEntityInterface
         return $this;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getMiddleName()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * Set middle name
+     *
+     * @param string $middleName
+     *
+     * @return Ticket
+     */
+    public function setMiddleName($middleName)
+    {
+        $this->middleName = $middleName;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNamePrefix()
+    {
+        return $this->namePrefix;
+    }
+
+    /**
+     * Set name prefix
+     *
+     * @param string $namePrefix
+     *
+     * @return Ticket
+     */
+    public function setNamePrefix($namePrefix)
+    {
+        $this->namePrefix = $namePrefix;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNameSuffix()
+    {
+        return $this->nameSuffix;
+    }
+
+    /**
+     * Set name suffix
+     *
+     * @param string $nameSuffix
+     *
+     * @return Ticket
+     */
+    public function setNameSuffix($nameSuffix)
+    {
+        $this->nameSuffix = $nameSuffix;
+
+        return $this;
+    }
 }

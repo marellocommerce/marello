@@ -26,10 +26,19 @@ datagrids:
             customer:
                 label: marello.ticket.customer.label
                 renderable: false
+            name_prefix:
+                label: marello.ticket.name_prefix.label
+                renderable: false
             first_name:
                 label: marello.ticket.first_name.label
+            middle_name:
+                label: marello.ticket.middle_name.label
+                renderable: false
             last_name:
                 label: marello.ticket.last_name.label
+            name_suffix:
+                label: marello.ticket.name_suffix.label
+                renderable: false
             email:
                 label: marello.ticket.email.label
                 renderable: false
@@ -62,6 +71,12 @@ datagrids:
             resolution:
                 label: marello.ticket.resolution.label
                 renderable: false
+            createdAt:
+                label: oro.ui.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: oro.ui.updated_at
+                frontend_type: datetime
         properties:
             id: ~
             update_link:
@@ -85,6 +100,24 @@ datagrids:
                 link: view_link
                 icon: eye
                 rowAction: true
+        filters:
+            columns:
+                createdAt:
+                    type: datetime
+                    data_name: t.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: t.updatedAt
+        sorters:
+            columns:
+                status:
+                    data_name: t.ticketStatus
+                createdAt:
+                    data_name: t.createdAt
+                updatedAt:
+                    data_name: t.updatedAt
+            default:
+                createdAt: 'DESC'
 
     marello-ticket-categories-grid:
         source:
