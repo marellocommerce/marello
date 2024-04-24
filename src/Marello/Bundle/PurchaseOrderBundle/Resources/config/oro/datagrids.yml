@@ -8,7 +8,7 @@ datagrids:
                     - sup.name as supplier
                     - sup.currency as currency
                 from:
-                    - { table: MarelloPurchaseOrderBundle:PurchaseOrder, alias: po }
+                    - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder, alias: po }
                 join:
                     left:
                         - { join: po.supplier, alias: sup }
@@ -96,7 +96,7 @@ datagrids:
                     - poi
                     - product.manufacturingCode
                 from:
-                    - { table: MarelloPurchaseOrderBundle:PurchaseOrderItem, alias: poi }
+                    - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem, alias: poi }
                 join:
                     left:
                         - { join: poi.product, alias: product }
@@ -152,7 +152,7 @@ datagrids:
                         THEN true ELSE false
                       END) as hasProduct
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.inventoryItem, alias: i }
@@ -282,7 +282,7 @@ datagrids:
                     - COALESCE(SUM(l.inventory - l.allocatedInventory), 0) AS virtualInventory
                     - (i.desiredInventory - COALESCE(SUM(l.inventory - l.allocatedInventory), 0)) AS orderAmount
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.inventoryItem, alias: i }

@@ -6,7 +6,7 @@ datagrids:
                 select:
                     - s
                 from:
-                    - { table: MarelloSupplierBundle:Supplier, alias: s }
+                    - { table: Marello\Bundle\SupplierBundle\Entity\Supplier, alias: s }
         columns:
             name:
                 label:            marello.supplier.name.label
@@ -112,7 +112,7 @@ datagrids:
                     - psr.cost
                     - supplier.currency
                 from:
-                    - { table: MarelloProductBundle:ProductSupplierRelation, alias: psr }
+                    - { table: Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation, alias: psr }
                 join:
                     inner:
                         - { join: psr.product, alias: p }

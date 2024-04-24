@@ -6,17 +6,18 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadOrderData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -260,7 +261,7 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
     {
         /** @var Product $product */
         $product = $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findOneBy(['sku' => $row['sku']]);
 
         $itemEntity = new OrderItem();

@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Oro\Bundle\BatchBundle\Tests\Unit\Fixtures\Entity\Organization;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 use Oro\Bundle\TestFrameworkBundle\Test\DataFixtures\InitialFixtureInterface;
 use Oro\Bundle\LocaleBundle\Tests\Functional\DataFixtures\LoadLocalizationData;
@@ -18,6 +19,7 @@ use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Marello\Bundle\PricingBundle\Entity\PriceType;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
+use Marello\Bundle\ProductBundle\Entity\ProductStatus;
 use Marello\Bundle\PricingBundle\Model\PriceTypeInterface;
 use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
 use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
@@ -199,7 +201,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
     {
         $this->manager = $manager;
         $organizations = $this->manager
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->findAll();
 
         if (is_array($organizations) && count($organizations) > 0) {
@@ -239,7 +241,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
         $product->setWeight($data['weight']);
 
         $status = $this->manager
-            ->getRepository('MarelloProductBundle:ProductStatus')
+            ->getRepository(ProductStatus::class)
             ->findOneByName($data['status']);
         $product->setStatus($status);
 

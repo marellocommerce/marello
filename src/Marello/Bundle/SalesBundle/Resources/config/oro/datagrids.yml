@@ -7,7 +7,7 @@ datagrids:
                 select:
                     - sc
                 from:
-                    - { table: MarelloSalesBundle:SalesChannel, alias: sc }
+                    - { table: Marello\Bundle\SalesBundle\Entity\SalesChannel, alias: sc }
         columns:
             name:
                 label:                marello.sales.saleschannel.name.label
@@ -89,7 +89,7 @@ datagrids:
                     - sct.name as id
                     - sct.label as label
                 from:
-                    - { table: MarelloSalesBundle:SalesChannelType, alias: sct }
+                    - { table: Marello\Bundle\SalesBundle\Entity\SalesChannelType, alias: sct }
         columns:
             id:
                 label:                marello.sales.saleschanneltype.name.label
@@ -111,7 +111,7 @@ datagrids:
                 select:
                     - scg
                 from:
-                    - { table: MarelloSalesBundle:SalesChannelGroup, alias: scg }
+                    - { table: Marello\Bundle\SalesBundle\Entity\SalesChannelGroup, alias: scg }
                 where:
                     and:
                         - scg.system != true
@@ -190,7 +190,7 @@ datagrids:
                     - sc
                     - (CASE WHEN (sc.id IN (:data_in)) AND sc.id NOT IN (:data_not_in) THEN true ELSE false END) as hasChannel
                 from:
-                    - { table: MarelloSalesBundle:SalesChannel, alias: sc }
+                    - { table: Marello\Bundle\SalesBundle\Entity\SalesChannel, alias: sc }
         columns:
             hasChannel:
                 label:         'Select'
@@ -274,7 +274,7 @@ datagrids:
                     - p.sku
                     - p.type
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 where:
                     and:
                         - p.id IN(:productIds)

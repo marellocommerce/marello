@@ -8,7 +8,7 @@ datagrids:
                     - ps.salesChannelName as salesChannel
                     - o.orderNumber
                 from:
-                    - { table: MarelloPackingBundle:PackingSlip, alias: ps }
+                    - { table: Marello\Bundle\PackingBundle\Entity\PackingSlip, alias: ps }
                 join:
                     left:
                         - { join: ps.order, alias: o }
@@ -117,7 +117,7 @@ datagrids:
                 select:
                     - psi
                 from:
-                    - { table: MarelloPackingBundle:PackingSlipItem, alias: psi }
+                    - { table: Marello\Bundle\PackingBundle\Entity\PackingSlipItem, alias: psi }
                 join:
                     left:
                         - { join: psi.packingSlip, alias: ps }

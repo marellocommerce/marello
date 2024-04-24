@@ -2,20 +2,23 @@
 
 namespace Marello\Bundle\PaymentBundle\Controller;
 
-use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
-use Marello\Bundle\PaymentBundle\Form\Handler\PaymentMethodsConfigsRuleHandler;
-use Marello\Bundle\PaymentBundle\Form\Type\PaymentMethodsConfigsRuleType;
-use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionDispatcher;
-use Oro\Bundle\SecurityBundle\Attribute\Acl;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
-use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionDispatcher;
+
+use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
+use Marello\Bundle\PaymentBundle\Form\Type\PaymentMethodsConfigsRuleType;
+use Marello\Bundle\PaymentBundle\Form\Handler\PaymentMethodsConfigsRuleHandler;
 
 /**
  * Payment Methods Configs Rule Controller
@@ -42,7 +45,7 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/create', name: 'marello_payment_methods_configs_rule_create')]
     #[Template('@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig')]
-    #[Acl(id: 'marello_payment_methods_configs_rule_create', type: 'entity', permission: 'CREATE', class: 'MarelloPaymentBundle:PaymentMethodsConfigsRule')]
+    #[Acl(id: 'marello_payment_methods_configs_rule_create', type: 'entity', permission: 'CREATE', class: PaymentMethodsConfigsRule::class)]
     public function createAction(Request $request)
     {
         return $this->update(new PaymentMethodsConfigsRule(), $request);
@@ -55,7 +58,7 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/view/{id}', name: 'marello_payment_methods_configs_rule_view', requirements: ['id' => '\d+'])]
     #[Template('@MarelloPayment/PaymentMethodsConfigsRule/view.html.twig')]
-    #[Acl(id: 'marello_payment_methods_configs_rule_view', type: 'entity', class: 'MarelloPaymentBundle:PaymentMethodsConfigsRule', permission: 'VIEW')]
+    #[Acl(id: 'marello_payment_methods_configs_rule_view', type: 'entity', class: PaymentMethodsConfigsRule::class, permission: 'VIEW')]
     public function viewAction(PaymentMethodsConfigsRule $paymentMethodsConfigsRule)
     {
         return [
@@ -70,7 +73,7 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/update/{id}', name: 'marello_payment_methods_configs_rule_update', requirements: ['id' => '\d+'])]
     #[Template('@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig')]
-    #[Acl(id: 'marello_payment_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: 'MarelloPaymentBundle:PaymentMethodsConfigsRule')]
+    #[Acl(id: 'marello_payment_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: PaymentMethodsConfigsRule::class)]
     public function updateAction(Request $request, PaymentMethodsConfigsRule $entity)
     {
         return $this->update($entity, $request);
@@ -116,7 +119,7 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/{gridName}/massAction/{actionName}', name: 'marello_payment_methods_configs_massaction')]
     #[CsrfProtection]
-    #[Acl(id: 'marello_payment_methods_configs_update', type: 'entity', permission: 'EDIT', class: 'MarelloPaymentBundle:PaymentMethodsConfigsRule')]
+    #[Acl(id: 'marello_payment_methods_configs_update', type: 'entity', permission: 'EDIT', class: PaymentMethodsConfigsRule::class)]
     public function markMassAction($gridName, $actionName, Request $request)
     {
         /** @var MassActionDispatcher $massActionDispatcher */

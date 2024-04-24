@@ -2,15 +2,18 @@
 
 namespace Marello\Bundle\CatalogBundle\Controller;
 
-use Marello\Bundle\CatalogBundle\Entity\Category;
-use Marello\Bundle\CatalogBundle\Form\Handler\CategoryHandler;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+
+use Marello\Bundle\CatalogBundle\Entity\Category;
+use Marello\Bundle\CatalogBundle\Form\Handler\CategoryHandler;
 
 class CategoryController extends AbstractController
 {
@@ -19,7 +22,7 @@ class CategoryController extends AbstractController
     #[Template]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloCatalogBundle:Category'];
+        return ['entity_class' => Category::class];
     }
 
     /**

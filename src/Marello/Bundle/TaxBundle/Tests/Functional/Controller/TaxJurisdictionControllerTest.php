@@ -2,11 +2,13 @@
 
 namespace Marello\Bundle\TaxBundle\Tests\Functional\Controller;
 
-use Marello\Bundle\TaxBundle\Entity\TaxJurisdiction;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
-use Symfony\Component\DomCrawler\Form;
+
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use Marello\Bundle\TaxBundle\Entity\TaxJurisdiction;
 
 class TaxJurisdictionControllerTest extends WebTestCase
 {
@@ -77,8 +79,8 @@ class TaxJurisdictionControllerTest extends WebTestCase
 
         /** @var TaxJurisdiction $taxJurisdiction */
         $taxJurisdiction = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloTaxBundle:TaxJurisdiction')
-            ->getRepository('MarelloTaxBundle:TaxJurisdiction')
+            ->getManagerForClass(TaxJurisdiction::class)
+            ->getRepository(TaxJurisdiction::class)
             ->findOneBy(['code' => self::CODE]);
         $this->assertNotEmpty($taxJurisdiction);
 

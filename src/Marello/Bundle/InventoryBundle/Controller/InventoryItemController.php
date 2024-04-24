@@ -2,17 +2,20 @@
 
 namespace Marello\Bundle\InventoryBundle\Controller;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Form\Type\InventoryItemType;
-use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Bundle\SecurityBundle\Attribute\Acl;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\InventoryBundle\Form\Type\InventoryItemType;
 
 class InventoryItemController extends AbstractController
 {
@@ -32,7 +35,7 @@ class InventoryItemController extends AbstractController
      */
     #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventory_view')]
     #[Template('@MarelloInventory/Inventory/view.html.twig')]
-    #[Acl(id: 'marello_inventory_inventory_view', type: 'entity', class: 'MarelloInventoryBundle:InventoryItem', permission: 'VIEW')]
+    #[Acl(id: 'marello_inventory_inventory_view', type: 'entity', class: InventoryItem::class, permission: 'VIEW')]
     public function viewAction(InventoryItem $inventoryItem)
     {
         return [
@@ -48,7 +51,7 @@ class InventoryItemController extends AbstractController
      */
     #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventory_update')]
     #[Template('@MarelloInventory/Inventory/update.html.twig')]
-    #[Acl(id: 'marello_inventory_inventory_update', type: 'entity', class: 'MarelloInventoryBundle:InventoryItem', permission: 'EDIT')]
+    #[Acl(id: 'marello_inventory_inventory_update', type: 'entity', class: InventoryItem::class, permission: 'EDIT')]
     public function updateAction(InventoryItem $inventoryItem, Request $request)
     {
         $result = $this->container->get(UpdateHandlerFacade::class)->update(

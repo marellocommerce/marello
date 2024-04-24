@@ -2,9 +2,12 @@
 
 namespace Marello\Bundle\CatalogBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Oro\Bundle\BatchBundle\Tests\Unit\Fixtures\Entity\Organization;
+
 use Marello\Bundle\CatalogBundle\Entity\Category;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
@@ -58,7 +61,7 @@ class LoadCategoryData extends AbstractFixture implements DependentFixtureInterf
     {
         $this->manager = $manager;
         $organizations = $this->manager
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->findAll();
 
         if (is_array($organizations) && count($organizations) > 0) {

@@ -6,7 +6,7 @@ datagrids:
                 select:
                     - t
                 from:
-                    - { table: MarelloTaxBundle:TaxCode, alias: t }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxCode, alias: t }
         columns:
             code:
                 label:            marello.tax.taxcode.code.label
@@ -52,7 +52,7 @@ datagrids:
                 select:
                     - t
                 from:
-                    - { table: MarelloTaxBundle:TaxRate, alias: t }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxRate, alias: t }
         columns:
             code:
                 label:            marello.tax.taxrate.code.label
@@ -169,7 +169,7 @@ datagrids:
                     - jurisdiction.createdAt
                     - jurisdiction.updatedAt
                 from:
-                    - { table: MarelloTaxBundle:TaxJurisdiction, alias: jurisdiction }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxJurisdiction, alias: jurisdiction }
         columns:
             code:
                 label: marello.tax.taxjurisdiction.code.label

@@ -7,9 +7,9 @@ datagrids:
                 select:
                     - r
                     - COALESCE(SUM(ri.quantity), 0) AS returnItemCount
-                    - (SELECT SUM(oi.quantity) FROM MarelloOrderBundle:OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
+                    - (SELECT SUM(oi.quantity) FROM Marello\Bundle\OrderBundle\Entity\OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
                 from:
-                    - { table: MarelloReturnBundle:ReturnEntity, alias: r }
+                    - { table: Marello\Bundle\ReturnBundle\Entity\ReturnEntity, alias: r }
                 join:
                     left:
                         - { join: r.returnItems, alias: ri }
@@ -116,9 +116,9 @@ datagrids:
                 select:
                     - r
                     - COALESCE(SUM(ri.quantity), 0) AS returnItemCount
-                    - (SELECT SUM(oi.quantity) FROM MarelloOrderBundle:OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
+                    - (SELECT SUM(oi.quantity) FROM Marello\Bundle\OrderBundle\Entity\OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
                 from:
-                    - { table: MarelloReturnBundle:ReturnEntity, alias: r }
+                    - { table: Marello\Bundle\ReturnBundle\Entity\ReturnEntity, alias: r }
                 join:
                     left:
                         - { join: r.returnItems, alias: ri }

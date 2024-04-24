@@ -2,16 +2,19 @@
 
 namespace Marello\Bundle\InventoryBundle\Controller;
 
-use Marello\Bundle\InventoryBundle\Async\Topic\ResolveRebalanceAllInventoryTopic;
-use Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel;
-use Oro\Bundle\SecurityBundle\Attribute\Acl;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+
+use Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel;
+use Marello\Bundle\InventoryBundle\Async\Topic\ResolveRebalanceAllInventoryTopic;
 
 class BalancedInventoryLevelController extends AbstractController
 {
@@ -32,7 +35,7 @@ class BalancedInventoryLevelController extends AbstractController
      * @param Request $request
      */
     #[Route(path: '/recalculate', name: 'marello_inventory_balancedinventorylevel_recalculate')]
-    #[Acl(id: 'marello_inventory_inventory_recalculate_update', type: 'entity', class: 'MarelloInventoryBundle:BalancedInventoryLevel', permission: 'EDIT')]
+    #[Acl(id: 'marello_inventory_inventory_recalculate_update', type: 'entity', class: BalancedInventoryLevel::class, permission: 'EDIT')]
     public function recalculateAction(Request $request)
     {
         $messageProducer = $this->container->get(MessageProducerInterface::class);

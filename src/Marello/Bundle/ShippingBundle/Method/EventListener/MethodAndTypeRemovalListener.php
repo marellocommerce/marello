@@ -2,13 +2,16 @@
 
 namespace Marello\Bundle\ShippingBundle\Method\EventListener;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodConfigRepository;
-use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository;
-use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodTypeConfigRepository;
-use Marello\Bundle\ShippingBundle\Method\Event\MethodRemovalEvent;
-use Marello\Bundle\ShippingBundle\Method\Event\MethodTypeRemovalEvent;
 use Psr\Log\LoggerInterface;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
+use Marello\Bundle\ShippingBundle\Method\Event\MethodRemovalEvent;
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
+use Marello\Bundle\ShippingBundle\Method\Event\MethodTypeRemovalEvent;
+use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodConfigRepository;
+use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodTypeConfigRepository;
+use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository;
 
 class MethodAndTypeRemovalListener
 {
@@ -101,7 +104,7 @@ class MethodAndTypeRemovalListener
      */
     private function getEntityManager()
     {
-        return $this->doctrineHelper->getEntityManagerForClass('MarelloShippingBundle:ShippingMethodsConfigsRule');
+        return $this->doctrineHelper->getEntityManagerForClass(ShippingMethodsConfigsRule::class);
     }
 
     /**
@@ -126,6 +129,6 @@ class MethodAndTypeRemovalListener
      */
     private function getShippingMethodsConfigsRuleRepository()
     {
-        return $this->doctrineHelper->getEntityRepository('MarelloShippingBundle:ShippingMethodsConfigsRule');
+        return $this->doctrineHelper->getEntityRepository(ShippingMethodsConfigsRule::class);
     }
 }

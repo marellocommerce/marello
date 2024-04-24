@@ -4,7 +4,6 @@ namespace Marello\Bundle\SupplierBundle\Controller;
 
 use Doctrine\Persistence\ManagerRegistry;
 
-use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +13,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Marello\Bundle\AddressBundle\Form\Type\AddressType;
@@ -28,7 +28,7 @@ class SupplierController extends AbstractController
     #[AclAncestor('marello_supplier_view')]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloSupplierBundle:Supplier'];
+        return ['entity_class' => Supplier::class];
     }
 
     /**
@@ -128,7 +128,7 @@ class SupplierController extends AbstractController
     }
 
     #[Route(path: '/get-supplier-default-data', methods: ['GET'], name: 'marello_supplier_supplier_get_default_data')]
-    #[AclAncestor('marello_supplier_view')] // {@inheritdoc}
+    #[AclAncestor('marello_supplier_view')]
     public function getSupplierDefaultDataAction(Request $request)
     {
         return new JsonResponse(

@@ -3,15 +3,18 @@
 namespace Marello\Bundle\ShippingBundle\Tests\Functional\Controller;
 
 use Doctrine\Persistence\ObjectManager;
+
+use Symfony\Component\DomCrawler\Form;
+
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\TranslationBundle\Translation\Translator;
+
 use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
 use Marello\Bundle\ShippingBundle\Method\ShippingMethodProviderInterface;
-use Marello\Bundle\ShippingBundle\Tests\Functional\DataFixtures\LoadShippingMethodsConfigsRulesWithConfigs;
 use Marello\Bundle\ShippingBundle\Tests\Functional\DataFixtures\LoadUserData;
 use Marello\Bundle\ShippingBundle\Tests\Functional\Helper\ManualShippingIntegrationTrait;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\TranslationBundle\Translation\Translator;
-use Symfony\Component\DomCrawler\Form;
+use Marello\Bundle\ShippingBundle\Tests\Functional\DataFixtures\LoadShippingMethodsConfigsRulesWithConfigs;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -317,7 +320,7 @@ class ShippingMethodsConfigsRuleControllerTest extends WebTestCase
 
         static::assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
         $shippingRule = $this->getEntityManager()->find(
-            'MarelloShippingBundle:ShippingMethodsConfigsRule',
+            ShippingMethodsConfigsRule::class,
             $shippingRule->getId()
         );
         static::assertCount(0, $shippingRule->getDestinations());
@@ -480,7 +483,7 @@ class ShippingMethodsConfigsRuleControllerTest extends WebTestCase
     {
         return static::getContainer()
             ->get('doctrine')
-            ->getManagerForClass('MarelloShippingBundle:ShippingMethodsConfigsRule');
+            ->getManagerForClass(ShippingMethodsConfigsRule::class);
     }
 
     /**
@@ -498,7 +501,7 @@ class ShippingMethodsConfigsRuleControllerTest extends WebTestCase
 
         return $this
             ->getEntityManager()
-            ->getRepository('MarelloShippingBundle:ShippingMethodsConfigsRule')
+            ->getRepository(ShippingMethodsConfigsRule::class)
             ->findOneBy(['rule' => $rule]);
     }
 
@@ -510,7 +513,7 @@ class ShippingMethodsConfigsRuleControllerTest extends WebTestCase
     protected function getShippingMethodsConfigsRuleById($id)
     {
         return $this->getEntityManager()
-            ->getRepository('MarelloShippingBundle:ShippingMethodsConfigsRule')
+            ->getRepository(ShippingMethodsConfigsRule::class)
             ->find($id);
     }
 }

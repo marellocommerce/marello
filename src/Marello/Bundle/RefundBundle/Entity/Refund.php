@@ -2,26 +2,27 @@
 
 namespace Marello\Bundle\RefundBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
-use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
-use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
-use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
+use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
+use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 
 #[ORM\Table(name: 'marello_refund')]
 #[ORM\Entity]

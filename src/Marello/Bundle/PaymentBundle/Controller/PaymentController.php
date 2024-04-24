@@ -2,18 +2,21 @@
 
 namespace Marello\Bundle\PaymentBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+
 use Marello\Bundle\PaymentBundle\Entity\Payment;
 use Marello\Bundle\PaymentBundle\Form\Handler\PaymentCreateHandler;
 use Marello\Bundle\PaymentBundle\Form\Handler\PaymentUpdateHandler;
-use Oro\Bundle\SecurityBundle\Attribute\Acl;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Bundle\UIBundle\Route\Router;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PaymentController extends AbstractController
 {
@@ -37,7 +40,7 @@ class PaymentController extends AbstractController
      */
     #[Route(path: '/view/{id}', name: 'marello_payment_view', requirements: ['id' => '\d+'])]
     #[Template('@MarelloPayment/Payment/view.html.twig')]
-    #[Acl(id: 'marello_payment_view', type: 'entity', class: 'MarelloPaymentBundle:Payment', permission: 'VIEW')]
+    #[Acl(id: 'marello_payment_view', type: 'entity', class: Payment::class, permission: 'VIEW')]
     public function viewAction(Payment $payment)
     {
         return [
@@ -51,7 +54,7 @@ class PaymentController extends AbstractController
      */
     #[Route(path: '/create', name: 'marello_payment_create')]
     #[Template('@MarelloPayment/Payment/create.html.twig')]
-    #[Acl(id: 'marello_payment_create', type: 'entity', permission: 'CREATE', class: 'MarelloPaymentBundle:Payment')]
+    #[Acl(id: 'marello_payment_create', type: 'entity', permission: 'CREATE', class: Payment::class)]
     public function createAction(Request $request)
     {
         return $this->update($request);
@@ -64,7 +67,7 @@ class PaymentController extends AbstractController
      */
     #[Route(path: '/update/{id}', name: 'marello_payment_update', requirements: ['id' => '\d+'])]
     #[Template('@MarelloPayment/Payment/update.html.twig')]
-    #[Acl(id: 'marello_payment_update', type: 'entity', permission: 'EDIT', class: 'MarelloPaymentBundle:Payment')]
+    #[Acl(id: 'marello_payment_update', type: 'entity', permission: 'EDIT', class: Payment::class)]
     public function updateAction(Request $request, Payment $entity)
     {
         return $this->update($request, $entity);

@@ -6,7 +6,7 @@ datagrids:
                 select:
                     - c
                 from:
-                    - { table: MarelloCatalogBundle:Category, alias: c }
+                    - { table: Marello\Bundle\CatalogBundle\Entity\Category, alias: c }
         columns:
             name:
                 label:              marello.catalog.category.name.label
@@ -66,7 +66,7 @@ datagrids:
                     - product.createdAt
                     - product.updatedAt
                 from:
-                    - { table: MarelloProductBundle:Product, alias: product }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: product }
         columns:
             sku:
                 label:              marello.product.sku.label

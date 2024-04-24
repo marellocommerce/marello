@@ -2,27 +2,29 @@
 
 namespace Marello\Bundle\ProductBundle\Controller;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Form\Handler\ProductCreateStepOneHandler;
-use Marello\Bundle\ProductBundle\Form\Handler\ProductHandler;
-use Marello\Bundle\ProductBundle\Form\Handler\ProductsSalesChannelsAssignHandler;
-use Marello\Bundle\ProductBundle\Form\Type\ProductStepOneType;
-use Marello\Bundle\ProductBundle\Form\Type\ProductType;
-use Marello\Bundle\ProductBundle\Provider\ActionGroupRegistryProvider;
-use Marello\Bundle\ProductBundle\Provider\ProductTypesProvider;
-use Oro\Bundle\ActionBundle\Model\ActionData;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
-use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\ActionBundle\Model\ActionData;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ProductBundle\Form\Type\ProductType;
+use Marello\Bundle\ProductBundle\Form\Handler\ProductHandler;
+use Marello\Bundle\ProductBundle\Form\Type\ProductStepOneType;
+use Marello\Bundle\ProductBundle\Provider\ProductTypesProvider;
+use Marello\Bundle\ProductBundle\Provider\ActionGroupRegistryProvider;
+use Marello\Bundle\ProductBundle\Form\Handler\ProductCreateStepOneHandler;
+use Marello\Bundle\ProductBundle\Form\Handler\ProductsSalesChannelsAssignHandler;
 
 class ProductController extends AbstractController
 {
@@ -33,7 +35,7 @@ class ProductController extends AbstractController
     #[Template]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloProductBundle:Product'];
+        return ['entity_class' => Product::class];
     }
 
     /**
@@ -79,9 +81,6 @@ class ProductController extends AbstractController
     }
 
     /**
-     *
-     *
-     *
      * @param Request $request
      * @return array|RedirectResponse
      */

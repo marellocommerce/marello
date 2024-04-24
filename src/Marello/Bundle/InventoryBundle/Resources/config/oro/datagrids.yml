@@ -16,7 +16,7 @@ datagrids:
                     - i.canPreorder as canPreorder
                     - i.orderOnDemandAllowed as orderOnDemandAllowed
                 from:
-                    - { table: MarelloInventoryBundle:InventoryItem, alias: i }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryItem, alias: i }
                 join:
                     left:
                         - { join: i.product, alias: p }
@@ -313,7 +313,7 @@ datagrids:
                     - p.sku as productSku
                     - scg.name as salesChannelGroupName
                 from:
-                    - { table: MarelloInventoryBundle:BalancedInventoryLevel, alias: balancedInventoryLevel }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel, alias: balancedInventoryLevel }
                 join:
                     left:
                         - { join: balancedInventoryLevel.product, alias: p }
@@ -673,7 +673,7 @@ datagrids:
                     - po.dueDate
                     - w.label
                 from:
-                    - { table: MarelloPurchaseOrderBundle:PurchaseOrderItem, alias: poi }
+                    - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem, alias: poi }
                 join:
                     inner:
                         - { join: poi.order, alias: po }

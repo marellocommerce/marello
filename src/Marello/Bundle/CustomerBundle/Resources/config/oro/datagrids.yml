@@ -145,7 +145,7 @@ datagrids:
                     - company.name
                     - parent.name as parent_name
                 from:
-                    - { table: MarelloCustomerBundle:Company, alias: company }
+                    - { table: Marello\Bundle\CustomerBundle\Entity\Company, alias: company }
                 join:
                     left:
                         - { join: company.parent, alias: parent }

@@ -2,14 +2,16 @@
 
 namespace Marello\Bundle\SalesBundle\Tests\Functional\Controller;
 
+use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpFoundation\Response;
+
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\ActionBundle\Tests\Functional\OperationAwareTestTrait;
+
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 use Marello\Bundle\SalesBundle\Form\Type\SalesChannelGroupType;
 use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
-use Oro\Bundle\ActionBundle\Tests\Functional\OperationAwareTestTrait;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\HttpFoundation\Response;
 
 class SalesChannelGroupControllerTest extends WebTestCase
 {
@@ -74,8 +76,8 @@ class SalesChannelGroupControllerTest extends WebTestCase
 
         /** @var SalesChannelGroup $salesChannelGroup */
         $salesChannelGroup = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloSalesBundle:SalesChannelGroup')
-            ->getRepository('MarelloSalesBundle:SalesChannelGroup')
+            ->getManagerForClass(SalesChannelGroup::class)
+            ->getRepository(SalesChannelGroup::class)
             ->findOneBy(['name' => self::NAME]);
         $this->assertNotEmpty($salesChannelGroup);
 

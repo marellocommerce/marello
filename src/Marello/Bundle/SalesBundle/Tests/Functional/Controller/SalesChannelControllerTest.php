@@ -2,15 +2,16 @@
 
 namespace Marello\Bundle\SalesBundle\Tests\Functional\Controller;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Form\Type\SalesChannelType;
-use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
-use Oro\Bundle\ActionBundle\Tests\Functional\OperationAwareTestTrait;
-use Oro\Bundle\LocaleBundle\Entity\Localization;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
 
+use Oro\Bundle\LocaleBundle\Entity\Localization;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\ActionBundle\Tests\Functional\OperationAwareTestTrait;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Form\Type\SalesChannelType;
+use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
 class SalesChannelControllerTest extends WebTestCase
 {
     use OperationAwareTestTrait;
@@ -88,8 +89,8 @@ class SalesChannelControllerTest extends WebTestCase
 
         /** @var SalesChannel $salesChannel */
         $salesChannel = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloSalesBundle:SalesChannel')
-            ->getRepository('MarelloSalesBundle:SalesChannel')
+            ->getManagerForClass(SalesChannel::class)
+            ->getRepository(SalesChannel::class)
             ->findOneBy(['code' => self::CODE]);
         $this->assertNotEmpty($salesChannel);
 

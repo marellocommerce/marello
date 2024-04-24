@@ -15,7 +15,7 @@ datagrids:
                     - IDENTITY(na.source) as source
                     - na
                 from:
-                    - { table: MarelloNotificationMessageBundle:NotificationMessage, alias: na }
+                    - { table: Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage, alias: na }
                 join:
                     inner:
                         - { join: na.alertType, alias: at }

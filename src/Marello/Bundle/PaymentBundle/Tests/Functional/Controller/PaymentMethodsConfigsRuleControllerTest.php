@@ -3,15 +3,18 @@
 namespace Marello\Bundle\PaymentBundle\Tests\Functional\Controller;
 
 use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\PaymentBundle\Tests\Functional\Helper\PaymentTermIntegrationTrait;
-use Marello\Bundle\RuleBundle\Entity\RuleInterface;
-use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
-use Marello\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
-use Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures\LoadPaymentMethodsConfigsRulesWithConfigs;
-use Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures\LoadUserData;
+
+use Symfony\Component\DomCrawler\Form;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\TranslationBundle\Translation\Translator;
-use Symfony\Component\DomCrawler\Form;
+
+use Marello\Bundle\RuleBundle\Entity\RuleInterface;
+use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
+use Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures\LoadUserData;
+use Marello\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
+use Marello\Bundle\PaymentBundle\Tests\Functional\Helper\PaymentTermIntegrationTrait;
+use Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures\LoadPaymentMethodsConfigsRulesWithConfigs;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -290,7 +293,7 @@ class PaymentMethodsConfigsRuleControllerTest extends WebTestCase
 
         static::assertHtmlResponseStatusCodeEquals($this->client->getResponse(), 200);
         $paymentRule = $this->getEntityManager()->find(
-            'MarelloPaymentBundle:PaymentMethodsConfigsRule',
+            PaymentMethodsConfigsRule::class,
             $paymentRule->getId()
         );
         static::assertCount(0, $paymentRule->getDestinations());
@@ -451,7 +454,7 @@ class PaymentMethodsConfigsRuleControllerTest extends WebTestCase
     {
         return static::getContainer()
             ->get('doctrine')
-            ->getManagerForClass('MarelloPaymentBundle:PaymentMethodsConfigsRule');
+            ->getManagerForClass(PaymentMethodsConfigsRule::class);
     }
 
     /**
@@ -469,7 +472,7 @@ class PaymentMethodsConfigsRuleControllerTest extends WebTestCase
 
         return $this
             ->getEntityManager()
-            ->getRepository('MarelloPaymentBundle:PaymentMethodsConfigsRule')
+            ->getRepository(PaymentMethodsConfigsRule::class)
             ->findOneBy(['rule' => $rule]);
     }
 
@@ -481,7 +484,7 @@ class PaymentMethodsConfigsRuleControllerTest extends WebTestCase
     protected function getPaymentMethodsConfigsRuleById($id)
     {
         return $this->getEntityManager()
-            ->getRepository('MarelloPaymentBundle:PaymentMethodsConfigsRule')
+            ->getRepository(PaymentMethodsConfigsRule::class)
             ->find($id);
     }
 }

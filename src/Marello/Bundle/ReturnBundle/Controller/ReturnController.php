@@ -3,17 +3,21 @@
 namespace Marello\Bundle\ReturnBundle\Controller;
 
 use Doctrine\Persistence\ManagerRegistry;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Marello\Bundle\ReturnBundle\Form\Type\ReturnType;
 use Marello\Bundle\ReturnBundle\Form\Type\ReturnUpdateType;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Bundle\UIBundle\Route\Router;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ReturnController extends AbstractController
 {
@@ -22,7 +26,7 @@ class ReturnController extends AbstractController
     #[AclAncestor('marello_return_view')]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloReturnBundle:ReturnEntity'];
+        return ['entity_class' => ReturnEntity::class];
     }
 
     /**

@@ -2,23 +2,27 @@
 
 namespace Marello\Bundle\OrderBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\AddressBundle\Form\Type\AddressType;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\OrderBundle\Form\Type\OrderType;
-use Marello\Bundle\OrderBundle\Form\Type\OrderUpdateType;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Oro\Bundle\CurrencyBundle\Utils\CurrencyNameHelper;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Bundle\UIBundle\Route\Router;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\CurrencyBundle\Utils\CurrencyNameHelper;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\OrderBundle\Form\Type\OrderType;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\AddressBundle\Form\Type\AddressType;
+use Marello\Bundle\OrderBundle\Form\Type\OrderUpdateType;
 
 class OrderController extends AbstractController
 {
@@ -27,7 +31,7 @@ class OrderController extends AbstractController
     #[AclAncestor('marello_order_view')]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloOrderBundle:Order'];
+        return ['entity_class' => Order::class];
     }
 
     /**

@@ -2,10 +2,12 @@
 
 namespace Marello\Bundle\OrderBundle\Provider;
 
-use Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository;
 
 class OrderDashboardStatisticProvider
 {
@@ -23,7 +25,7 @@ class OrderDashboardStatisticProvider
      */
     public function getTotalRevenueValues($dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'MarelloOrderBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Order::class, 'createdAt');
 
         return $this->orderRepository->getTotalRevenueValue(
             $this->aclHelper,
@@ -40,7 +42,7 @@ class OrderDashboardStatisticProvider
      */
     public function getTotalOrdersNumberValues($dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'MarelloOrderBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Order::class, 'createdAt');
         return $this->orderRepository->getTotalOrdersNumberValue(
             $this->aclHelper,
             $start,
@@ -56,7 +58,7 @@ class OrderDashboardStatisticProvider
      */
     public function getAverageOrderValues($dateRange, WidgetOptionBag $widgetOptions)
     {
-        list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'MarelloOrderBundle:Order', 'createdAt');
+        list($start, $end) = $this->dateHelper->getPeriod($dateRange, Order::class, 'createdAt');
 
         return $this->orderRepository->getAverageOrderValue(
             $this->aclHelper,

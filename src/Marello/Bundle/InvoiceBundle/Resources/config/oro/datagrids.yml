@@ -8,7 +8,7 @@ datagrids:
                     - i.salesChannelName as salesChannel
                     - o.orderNumber as orderNumber
                 from:
-                    - { table: MarelloInvoiceBundle:AbstractInvoice, alias: i }
+                    - { table: Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice, alias: i }
                 join:
                     left:
                         - { join: i.billingAddress, alias: ba }
@@ -152,7 +152,7 @@ datagrids:
                     - product.sku as productSku
                     - product.denormalizedDefaultName as productName
                 from:
-                    - { table: MarelloInvoiceBundle:InvoiceItem, alias: i}
+                    - { table: Marello\Bundle\InvoiceBundle\Entity\InvoiceItem, alias: i}
                 join:
                     left:
                         - { join: i.invoice, alias: inv }
@@ -214,7 +214,7 @@ datagrids:
                     - product.sku as productSku
                     - product.denormalizedDefaultName as productName
                 from:
-                    - { table: MarelloInvoiceBundle:CreditmemoItem, alias: i}
+                    - { table: Marello\Bundle\InvoiceBundle\Entity\CreditmemoItem, alias: i}
                 join:
                     left:
                         - { join: i.invoice, alias: inv }

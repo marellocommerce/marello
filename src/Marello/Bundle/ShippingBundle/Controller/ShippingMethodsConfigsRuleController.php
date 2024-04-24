@@ -2,19 +2,22 @@
 
 namespace Marello\Bundle\ShippingBundle\Controller;
 
-use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionDispatcher;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionDispatcher;
+
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
-use Marello\Bundle\ShippingBundle\Form\Handler\ShippingMethodsConfigsRuleHandler;
 use Marello\Bundle\ShippingBundle\Form\Type\ShippingMethodsConfigsRuleType;
-use Oro\Bundle\UIBundle\Route\Router;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Marello\Bundle\ShippingBundle\Form\Handler\ShippingMethodsConfigsRuleHandler;
 
 class ShippingMethodsConfigsRuleController extends AbstractController
 {
@@ -38,7 +41,7 @@ class ShippingMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/create', name: 'marello_shipping_methods_configs_rule_create')]
     #[Template('@MarelloShipping/ShippingMethodsConfigsRule/update.html.twig')]
-    #[Acl(id: 'marello_shipping_methods_configs_rule_create', type: 'entity', permission: 'CREATE', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule')]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_create', type: 'entity', permission: 'CREATE', class: ShippingMethodsConfigsRule::class)]
     public function createAction(Request $request)
     {
         return $this->update(new ShippingMethodsConfigsRule(), $request);
@@ -51,7 +54,7 @@ class ShippingMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/view/{id}', name: 'marello_shipping_methods_configs_rule_view', requirements: ['id' => '\d+'])]
     #[Template]
-    #[Acl(id: 'marello_shipping_methods_configs_rule_view', type: 'entity', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule', permission: 'VIEW')]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_view', type: 'entity', class: ShippingMethodsConfigsRule::class, permission: 'VIEW')]
     public function viewAction(ShippingMethodsConfigsRule $shippingRule)
     {
         return [
@@ -66,7 +69,7 @@ class ShippingMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/update/{id}', name: 'marello_shipping_methods_configs_rule_update', requirements: ['id' => '\d+'])]
     #[Template]
-    #[Acl(id: 'marello_shipping_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule')]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: ShippingMethodsConfigsRule::class)]
     public function updateAction(Request $request, ShippingMethodsConfigsRule $entity)
     {
         return $this->update($entity, $request);
@@ -108,7 +111,7 @@ class ShippingMethodsConfigsRuleController extends AbstractController
      * @return JsonResponse
      */
     #[Route(path: '/{gridName}/massAction/{actionName}', name: 'marello_status_shipping_rule_massaction')]
-    #[Acl(id: 'marello_shipping_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: 'MarelloShippingBundle:ShippingMethodsConfigsRule')]
+    #[Acl(id: 'marello_shipping_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: ShippingMethodsConfigsRule::class)]
     public function markMassAction($gridName, $actionName, Request $request)
     {
         /** @var MassActionDispatcher $massActionDispatcher */

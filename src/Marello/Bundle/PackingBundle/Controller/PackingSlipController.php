@@ -2,11 +2,14 @@
 
 namespace Marello\Bundle\PackingBundle\Controller;
 
-use Marello\Bundle\PackingBundle\Entity\PackingSlip;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+
+use Marello\Bundle\PackingBundle\Entity\PackingSlip;
 
 class PackingSlipController extends AbstractController
 {
@@ -15,7 +18,7 @@ class PackingSlipController extends AbstractController
     #[AclAncestor('marello_packing_slip_view')]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloPackingBundle:PackingSlip'];
+        return ['entity_class' => PackingSlip::class];
     }
 
     /**

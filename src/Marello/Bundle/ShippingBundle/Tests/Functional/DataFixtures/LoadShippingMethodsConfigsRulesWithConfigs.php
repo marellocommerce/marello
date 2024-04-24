@@ -2,24 +2,27 @@
 
 namespace Marello\Bundle\ShippingBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
-use Oro\Bundle\AddressBundle\Entity\Country;
+
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Marello\Bundle\ManualShippingBundle\Tests\Functional\DataFixtures\LoadManualShippingIntegration;
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\RuleBundle\Entity\Rule;
 use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRuleDestination;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRuleDestinationPostalCode;
-use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
 use Marello\Bundle\ShippingBundle\Tests\Functional\Helper\ManualShippingIntegrationTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Yaml\Yaml;
+use Marello\Bundle\ManualShippingBundle\Tests\Functional\DataFixtures\LoadManualShippingIntegration;
 
 class LoadShippingMethodsConfigsRulesWithConfigs extends AbstractFixture implements
     DependentFixtureInterface,
@@ -217,7 +220,7 @@ class LoadShippingMethodsConfigsRulesWithConfigs extends AbstractFixture impleme
     private function getOrganization()
     {
         return $this->container->get('doctrine')
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->getFirst();
     }
 }

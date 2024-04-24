@@ -2,16 +2,19 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\BatchBundle\Tests\Unit\Fixtures\Entity\Organization;
 
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadSalesChannelGroupData extends AbstractFixture implements
     DependentFixtureInterface,
@@ -112,7 +115,7 @@ class LoadSalesChannelGroupData extends AbstractFixture implements
      */
     protected function loadSalesChannelGroups()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
 
         foreach ($this->data as $values) {
             $group = new SalesChannelGroup();

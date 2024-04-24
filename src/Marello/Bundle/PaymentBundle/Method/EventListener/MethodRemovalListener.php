@@ -2,11 +2,14 @@
 
 namespace Marello\Bundle\PaymentBundle\Method\EventListener;
 
+use Psr\Log\LoggerInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
+use Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig;
+use Marello\Bundle\PaymentBundle\Method\Event\MethodRemovalEvent;
+use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
 use Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodConfigRepository;
 use Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository;
-use Marello\Bundle\PaymentBundle\Method\Event\MethodRemovalEvent;
-use Psr\Log\LoggerInterface;
 
 class MethodRemovalListener
 {
@@ -56,7 +59,7 @@ class MethodRemovalListener
      */
     private function getEntityManager()
     {
-        return $this->doctrineHelper->getEntityManagerForClass('MarelloPaymentBundle:PaymentMethodsConfigsRule');
+        return $this->doctrineHelper->getEntityManagerForClass(PaymentMethodsConfigsRule::class);
     }
 
     /**
@@ -64,7 +67,7 @@ class MethodRemovalListener
      */
     private function getPaymentMethodConfigRepository()
     {
-        return $this->doctrineHelper->getEntityRepository('MarelloPaymentBundle:PaymentMethodConfig');
+        return $this->doctrineHelper->getEntityRepository(PaymentMethodConfig::class);
     }
 
     /**
@@ -72,6 +75,6 @@ class MethodRemovalListener
      */
     private function getPaymentMethodsConfigsRuleRepository()
     {
-        return $this->doctrineHelper->getEntityRepository('MarelloPaymentBundle:PaymentMethodsConfigsRule');
+        return $this->doctrineHelper->getEntityRepository(PaymentMethodsConfigsRule::class);
     }
 }

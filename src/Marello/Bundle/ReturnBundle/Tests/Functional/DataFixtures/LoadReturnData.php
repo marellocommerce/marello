@@ -2,15 +2,16 @@
 
 namespace Marello\Bundle\ReturnBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadOrderData;
 use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
 
@@ -25,7 +26,7 @@ class LoadReturnData extends AbstractFixture implements DependentFixtureInterfac
 
     public function load(ObjectManager $manager)
     {
-        $orders = $manager->getRepository('MarelloOrderBundle:Order')->findAll();
+        $orders = $manager->getRepository(Order::class)->findAll();
         $channel = $this->getReference(LoadSalesData::CHANNEL_1_REF);
         $reasonClass = ExtendHelper::buildEnumValueClassName('marello_return_reason');
         $reasons = $manager->getRepository($reasonClass)->findAll();
