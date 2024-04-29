@@ -79,7 +79,7 @@ class Customer implements
     protected ?Collection $addresses = null;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'customers')]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true],
         'importexport' => ['full' => true, 'order' => 45]
@@ -145,7 +145,7 @@ class Customer implements
      *
      * @return integer
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

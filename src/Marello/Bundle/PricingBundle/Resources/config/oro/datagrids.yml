@@ -12,7 +12,7 @@ datagrids:
                     - sp.endDate as specialPriceEnd
                     - mp.value as msrpPrice
                 from:
-                    - { table: MarelloPricingBundle:AssembledPriceList, alias: apl }
+                    - { table: Marello\Bundle\PricingBundle\Entity\AssembledPriceList, alias: apl }
                 join:
                     left:
                         - { join: apl.defaultPrice, alias: dp }
@@ -72,7 +72,7 @@ datagrids:
                     - sp.startDate as specialPriceStart
                     - sp.endDate as specialPriceEnd
                 from:
-                    - { table: MarelloPricingBundle:AssembledChannelPriceList, alias: acpl }
+                    - { table: Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList, alias: acpl }
                 join:
                     left:
                         - { join: acpl.defaultPrice, alias: dp }

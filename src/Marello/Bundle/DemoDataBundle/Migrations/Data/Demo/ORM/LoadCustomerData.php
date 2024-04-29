@@ -82,7 +82,7 @@ class LoadCustomerData extends AbstractFixture
         $primaryAddress->setCity($row['city']);
         /** @var Country $country */
         $country = $this->manager
-            ->getRepository('OroAddressBundle:Country')
+            ->getRepository(Country::class)
             ->findOneBy([
                 'name' => $row['country']
             ]);
@@ -92,7 +92,7 @@ class LoadCustomerData extends AbstractFixture
         $state  = sprintf('%%%s%%', $row['state']);
         /** @var Region $region */
         $region = $this->manager
-            ->getRepository('OroAddressBundle:Region')
+            ->getRepository(Region::class)
             ->createQueryBuilder('r')
             ->where('r.name LIKE :state')
             ->andWhere('r.country = :country')

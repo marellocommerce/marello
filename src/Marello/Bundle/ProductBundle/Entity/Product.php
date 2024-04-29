@@ -380,7 +380,7 @@ class Product implements
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -829,7 +829,7 @@ class Product implements
     /**
      * @return integer
      */
-    public function getWarranty(): int
+    public function getWarranty(): ?int
     {
         return $this->warranty;
     }

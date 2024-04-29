@@ -7,7 +7,7 @@ interface RuleInterface
     /**
      * @return int
      */
-    public function getId(): int;
+    public function getId(): ?int;
 
     /**
      * @return string
@@ -58,16 +58,16 @@ interface RuleInterface
     public function setStopProcessing(bool $stopProcessing): self;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpression(): string;
+    public function getExpression(): ?string;
 
     /**
-     * @param string $expression
+     * @param string|null $expression
      *
      * @return $this
      */
-    public function setExpression(string $expression): self;
+    public function setExpression(string $expression = null): self;
 
     /**
      * @return bool

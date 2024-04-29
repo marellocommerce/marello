@@ -176,15 +176,18 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
             return:
                 type:       navigate
+                label:      marello.return.grid.action.return
                 link:       return_link
                 icon:       undo
             refund:
                 type:       navigate
+                label:      marello.refund.grid.action.refund
                 link:       refund_link
                 icon:       eur
         action_configuration: ['@marello_order.datagrid.action_permission_provider', 'getActionPermissions']
@@ -299,15 +302,18 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
             return:
                 type:       navigate
+                label:      marello.return.grid.action.return
                 link:       return_link
                 icon:       undo
             refund:
                 type:       navigate
+                label:      marello.refund.grid.action.refund
                 link:       refund_link
                 icon:       eur
         action_configuration: ['@marello_order.datagrid.action_permission_provider', 'getActionPermissions']

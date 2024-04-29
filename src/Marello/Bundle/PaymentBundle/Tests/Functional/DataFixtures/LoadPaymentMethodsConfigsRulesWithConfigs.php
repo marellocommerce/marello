@@ -132,7 +132,7 @@ class LoadPaymentMethodsConfigsRulesWithConfigs extends AbstractFixture implemen
         foreach ($data['destinations'] as $destination) {
             /** @var Country $country */
             $country = $manager
-                ->getRepository('OroAddressBundle:Country')
+                ->getRepository(Country::class)
                 ->findOneBy(['iso2Code' => $destination['country']]);
 
             $paymentRuleDestination = new PaymentMethodsConfigsRuleDestination();
@@ -143,7 +143,7 @@ class LoadPaymentMethodsConfigsRulesWithConfigs extends AbstractFixture implemen
             if (array_key_exists('region', $destination)) {
                 /** @var Region $region */
                 $region = $manager
-                    ->getRepository('OroAddressBundle:Region')
+                    ->getRepository(Region::class)
                     ->findOneBy(['combinedCode' => $destination['country'].'-'.$destination['region']]);
                 $paymentRuleDestination->setRegion($region);
             }

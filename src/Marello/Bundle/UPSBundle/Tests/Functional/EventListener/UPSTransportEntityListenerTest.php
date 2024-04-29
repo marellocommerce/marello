@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\UPSBundle\Tests\Functional\EventListener;
 
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -34,12 +36,12 @@ class UPSTransportEntityListenerTest extends WebTestCase
         $toBeDeletedService = $applShipServices->first();
 
         $configuredMethods = $em
-            ->getRepository('MarelloShippingBundle:ShippingMethodConfig')
+            ->getRepository(ShippingMethodConfig::class)
             ->findBy([
                 'method' => UPSShippingMethod::IDENTIFIER . '_' . $upsChannel->getId()]);
 
         $typesBefore = $em
-            ->getRepository('MarelloShippingBundle:ShippingMethodTypeConfig')
+            ->getRepository(ShippingMethodTypeConfig::class)
             ->findBy(['methodConfig' => $configuredMethods, 'type' => $toBeDeletedService->getCode()]);
 
         static::assertNotEmpty($typesBefore);
@@ -49,7 +51,7 @@ class UPSTransportEntityListenerTest extends WebTestCase
         $em->flush();
 
         $typesAfter = $em
-            ->getRepository('MarelloShippingBundle:ShippingMethodTypeConfig')
+            ->getRepository(ShippingMethodTypeConfig::class)
             ->findBy(['methodConfig' => $configuredMethods, 'type' => $toBeDeletedService->getCode()]);
 
         static::assertEmpty($typesAfter);

@@ -5,6 +5,8 @@ namespace Marello\Bundle\AddressBundle\Tests\Functional\Api\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 
 class LoadAddressData extends AbstractFixture
 {
@@ -79,11 +81,11 @@ class LoadAddressData extends AbstractFixture
         $address->setCity($data['city']);
         $address->setCountry(
             $this->manager
-                ->getRepository('OroAddressBundle:Country')->find($data['country'])
+                ->getRepository(Country::class)->find($data['country'])
         );
         $address->setRegion(
             $this->manager
-                ->getRepository('OroAddressBundle:Region')
+                ->getRepository(Region::class)
                 ->findOneBy(['combinedCode' => $data['country'] . '-' . $data['region']])
         );
         $address->setPhone($data['phone']);

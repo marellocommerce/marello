@@ -2,12 +2,13 @@
 
 namespace Marello\Bundle\PaymentBundle\Method\Provider\Integration;
 
-use Marello\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
-use Marello\Bundle\PaymentBundle\Method\Factory\IntegrationPaymentMethodFactoryInterface;
-use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+
+use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Marello\Bundle\PaymentBundle\Method\Provider\PaymentMethodProviderInterface;
+use Marello\Bundle\PaymentBundle\Method\Factory\IntegrationPaymentMethodFactoryInterface;
 
 class ChannelPaymentMethodProvider implements PaymentMethodProviderInterface
 {
@@ -112,7 +113,7 @@ class ChannelPaymentMethodProvider implements PaymentMethodProviderInterface
      */
     private function getRepository()
     {
-        return $this->doctrineHelper->getEntityRepository('OroIntegrationBundle:Channel');
+        return $this->doctrineHelper->getEntityRepository(Channel::class);
     }
 
     private function loadChannels()

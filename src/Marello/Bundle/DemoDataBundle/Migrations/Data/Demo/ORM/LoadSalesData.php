@@ -125,7 +125,7 @@ class LoadSalesData extends AbstractFixture implements DependentFixtureInterface
                 ->setChannelType($this->findTypeByName($values['type']))
                 ->setCode($values['code'])
                 ->setCurrency($values['currency'])
-                ->setOwner($organization)
+                ->setOrganization($organization)
                 ->setGroup($defaultSystemGroup);
             
             $this->manager->persist($channel);

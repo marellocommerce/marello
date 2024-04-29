@@ -87,7 +87,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -170,18 +170,18 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     }
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpression(): string
+    public function getExpression(): ?string
     {
         return $this->expression;
     }
 
     /**
-     * @param string $expression
+     * @param string|null $expression
      * @return $this
      */
-    public function setExpression(string $expression): self
+    public function setExpression(string $expression = null): self
     {
         $this->expression = $expression;
 

@@ -8,7 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\LocaleBundle\Entity\Localization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Oro\Bundle\BatchBundle\Tests\Unit\Fixtures\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 use Oro\Bundle\TestFrameworkBundle\Test\DataFixtures\InitialFixtureInterface;
 use Oro\Bundle\LocaleBundle\Tests\Functional\DataFixtures\LoadLocalizationData;

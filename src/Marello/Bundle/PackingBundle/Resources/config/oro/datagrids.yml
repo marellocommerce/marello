@@ -95,6 +95,7 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true

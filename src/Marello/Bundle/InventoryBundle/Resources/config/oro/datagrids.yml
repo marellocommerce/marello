@@ -150,7 +150,7 @@ datagrids:
                     - (lr.inventoryAlteration) AS inventoryDiff
                     - (lr.allocatedInventoryAlteration) AS allocatedInventoryDiff
                 from:
-                    - { table: MarelloInventoryBundle:InventoryLevelLogRecord, alias: lr }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryLevelLogRecord, alias: lr }
                 join:
                     left:
                         - { join: lr.inventoryLevel, alias: il }
@@ -248,7 +248,7 @@ datagrids:
                     - COALESCE(il.allocatedInventory, 0) AS allocatedInventoryQty
                     - COALESCE(il.inventoryQty - il.allocatedInventory, 0) AS virtualInventoryQty
                 from:
-                    - { table: MarelloInventoryBundle:InventoryLevel, alias: il }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryLevel, alias: il }
                 join:
                     left:
                         - { join: il.warehouse, alias: wh }
@@ -407,7 +407,7 @@ datagrids:
                 select:
                     - ib
                 from:
-                    - { table: MarelloInventoryBundle:InventoryBatch, alias: ib }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryBatch, alias: ib }
                 where:
                     and:
                         - IDENTITY(ib.inventoryLevel) = :inventoryLevelId
@@ -455,7 +455,7 @@ datagrids:
                     - IDENTITY(allocation.state) as allocationStateId
                     - IDENTITY(allocation.status) as allocationStatusId
                 from:
-                    - { table: MarelloInventoryBundle:Allocation, alias: allocation }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\Allocation, alias: allocation }
                 join:
                     left:
                         - { join: allocation.parent, alias: parent }
@@ -611,7 +611,7 @@ datagrids:
                     - allocationItem
                     - wh.label as warehouse
                 from:
-                    - { table: MarelloInventoryBundle:AllocationItem, alias: allocationItem }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\AllocationItem, alias: allocationItem }
                 join:
                     left:
                         - { join: allocationItem.orderItem, alias: orderItem }

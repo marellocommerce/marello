@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\ShippingBundle\Method\EventListener;
 
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
 use Psr\Log\LoggerInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -112,7 +114,7 @@ class MethodAndTypeRemovalListener
      */
     private function getShippingMethodConfigRepository()
     {
-        return $this->doctrineHelper->getEntityRepository('MarelloShippingBundle:ShippingMethodConfig');
+        return $this->doctrineHelper->getEntityRepository(ShippingMethodConfig::class);
     }
 
     /**
@@ -120,7 +122,7 @@ class MethodAndTypeRemovalListener
      */
     private function getShippingMethodTypeConfigRepository()
     {
-        return $this->doctrineHelper->getEntityRepository('MarelloShippingBundle:ShippingMethodTypeConfig');
+        return $this->doctrineHelper->getEntityRepository(ShippingMethodTypeConfig::class);
     }
 
 

@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\BatchBundle\Tests\Unit\Fixtures\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;

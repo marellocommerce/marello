@@ -26,7 +26,8 @@ class ShippingServiceRepositoryTest extends WebTestCase
         ]);
 
         $this->repository = static::getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloUPSBundle:ShippingService')->getRepository('MarelloUPSBundle:ShippingService');
+            ->getManagerForClass(ShippingService::class)
+            ->getRepository(ShippingService::class);
     }
 
     /**
@@ -94,7 +95,7 @@ class ShippingServiceRepositoryTest extends WebTestCase
     protected function findCountry($isoCode)
     {
         return static::getContainer()->get('doctrine')
-            ->getManagerForClass('OroAddressBundle:Country')
-            ->find('OroAddressBundle:Country', $isoCode);
+            ->getManagerForClass(Country::class)
+            ->find(Country::class, $isoCode);
     }
 }

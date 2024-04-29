@@ -123,7 +123,7 @@ datagrids:
                     - trackingInfo.trackingCode
                     - trackingInfo.trackTraceUrl
                 from:
-                    - { table: MarelloShippingBundle:Shipment, alias: shipment }
+                    - { table: Marello\Bundle\ShippingBundle\Entity\Shipment, alias: shipment }
                 join:
                     left:
                         - { join: shipment.trackingInfo, alias: trackingInfo }

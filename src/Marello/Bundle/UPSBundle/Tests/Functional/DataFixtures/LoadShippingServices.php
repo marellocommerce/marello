@@ -33,7 +33,7 @@ class LoadShippingServices extends AbstractFixture implements DependentFixtureIn
                 ->setDescription($data['description']);
 
             $country = $manager
-                ->getRepository('OroAddressBundle:Country')
+                ->getRepository(Country::class)
                 ->findOneBy(['iso2Code' => $data['country']]);
 
             $entity->setCountry($country);

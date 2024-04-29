@@ -1,7 +1,7 @@
 placeholders:
     items:
         marello_inventory_log_chart_item:
-            action:     MarelloInventoryBundle:InventoryLog:chart
+            action:     Marello\Bundle\InventoryBundle\Entity\InventoryLog:chart
             applicable: true
         marello_inventory_expected_expired_totals:
             template: '@@MarelloInventory/InventoryItem/inventoryLevelsTotals.html.twig'

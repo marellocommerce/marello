@@ -18,9 +18,13 @@ operations:
                 parameters_mapping:
                     data: $.data
             - '@call_service_method':
-                attribute: $.flashBag
-                service: session
-                method: getFlashBag
+                attribute: $.session
+                service: request_stack
+                method: getSession
+            - '@call_method':
+                  attribute: $.flashBag
+                  object: $.session
+                  method: getFlashBag
             - '@call_method':
                 attribute: $.hasSuccessMessage
                 object: $.flashBag

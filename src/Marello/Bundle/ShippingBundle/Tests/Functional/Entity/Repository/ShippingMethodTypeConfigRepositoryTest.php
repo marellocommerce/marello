@@ -26,7 +26,7 @@ class ShippingMethodTypeConfigRepositoryTest extends WebTestCase
         ]);
 
         $this->repository = static::getContainer()->get('doctrine')
-            ->getRepository('MarelloShippingBundle:ShippingMethodTypeConfig');
+            ->getRepository(ShippingMethodTypeConfig::class);
     }
 
     public function testFindShippingMethodTypeConfigConfigsByMethodAndType()

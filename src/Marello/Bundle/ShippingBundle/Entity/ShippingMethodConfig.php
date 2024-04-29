@@ -16,6 +16,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 #[ORM\Entity(ShippingMethodConfigRepository::class)]
 #[ORM\Table(name: 'marello_ship_method_config')]
+#[Oro\Config()]
 class ShippingMethodConfig implements ExtendEntityInterface
 {
     use ExtendEntityTrait;

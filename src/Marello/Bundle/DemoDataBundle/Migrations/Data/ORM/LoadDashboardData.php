@@ -5,6 +5,7 @@ namespace Marello\Bundle\DemoDataBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
+use Oro\Bundle\DashboardBundle\Entity\Widget;
 use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\AbstractDashboardFixture;
 
 class LoadDashboardData extends AbstractDashboardFixture implements DependentFixtureInterface
@@ -64,7 +65,7 @@ class LoadDashboardData extends AbstractDashboardFixture implements DependentFix
      */
     protected function getWidgets()
     {
-        return $this->manager->getRepository('OroDashboardBundle:Widget')
+        return $this->manager->getRepository(Widget::class)
             ->createQueryBuilder('wdt')
             ->where("wdt.name IN(:widgets)")
             ->setParameter('widgets', array_keys($this->widgets))

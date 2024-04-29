@@ -6,7 +6,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Oro\Bundle\BatchBundle\Tests\Unit\Fixtures\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\CatalogBundle\Entity\Category;
 use Marello\Bundle\ProductBundle\Entity\Product;

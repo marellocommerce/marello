@@ -3,20 +3,25 @@
 namespace Marello\Bundle\UPSBundle\Controller;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\UPSBundle\Connection\Validator\UpsConnectionValidator;
+
+use Marello\Bundle\UPSBundle\Entity\ShippingService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Marello\Bundle\UPSBundle\Connection\Validator\Result\Factory\UpsConnectionValidatorResultFactory;
-use Marello\Bundle\UPSBundle\Connection\Validator\Result\UpsConnectionValidatorResultInterface;
-use Marello\Bundle\UPSBundle\Entity\Repository\ShippingServiceRepository;
-use Marello\Bundle\UPSBundle\Entity\UPSSettings;
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\Translation\TranslatorInterface;
+
+use Marello\Bundle\UPSBundle\Entity\UPSSettings;
+use Marello\Bundle\UPSBundle\Connection\Validator\UpsConnectionValidator;
+use Marello\Bundle\UPSBundle\Entity\Repository\ShippingServiceRepository;
+use Marello\Bundle\UPSBundle\Connection\Validator\Result\UpsConnectionValidatorResultInterface;
+use Marello\Bundle\UPSBundle\Connection\Validator\Result\Factory\UpsConnectionValidatorResultFactory;
 
 class AjaxUPSController extends AbstractController
 {
@@ -30,8 +35,8 @@ class AjaxUPSController extends AbstractController
     {
         /** @var ShippingServiceRepository $repository */
         $repository = $this->container->get(ManagerRegistry::class)
-            ->getManagerForClass('MarelloUPSBundle:ShippingService')
-            ->getRepository('MarelloUPSBundle:ShippingService');
+            ->getManagerForClass(ShippingService::class)
+            ->getRepository(ShippingService::class);
         $services = $repository->getShippingServicesByCountry($country);
         $result = [];
         foreach ($services as $service) {
@@ -47,7 +52,7 @@ class AjaxUPSController extends AbstractController
      * @return JsonResponse
      */
     #[Route(path: '/validate-connection/{channelId}/', methods: ['POST'], name: 'marello_ups_validate_connection')]
-    #[ParamConverter('channel', class: 'OroIntegrationBundle:Channel', options: ['id' => 'channelId'])]
+    #[ParamConverter('channel', class: Channel::class, options: ['id' => 'channelId'])]
     public function validateConnectionAction(Request $request, Channel $channel = null)
     {
         if (!$channel) {

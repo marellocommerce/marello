@@ -98,6 +98,7 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
@@ -200,6 +201,7 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
@@ -219,7 +221,7 @@ datagrids:
                 select:
                     - ri
                 from:
-                    - { table: MarelloReturnBundle:ReturnItem, alias: ri }
+                    - { table: Marello\Bundle\ReturnBundle\Entity\ReturnItem, alias: ri }
                 join:
                     left:
                         - { join: ri.orderItem, alias: oi }
@@ -271,7 +273,7 @@ datagrids:
                 select:
                     - s
                 from:
-                    - { table: MarelloShippingBundle:Shipment, alias: s }
+                    - { table: Marello\Bundle\ShippingBundle\Entity\Shipment, alias: s }
                 join:
                     left:
                         - { join: s.trackingInfo, alias: ti }

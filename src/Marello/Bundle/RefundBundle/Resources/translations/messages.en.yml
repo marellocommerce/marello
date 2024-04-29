@@ -22,6 +22,8 @@ marello:
         order.label:            Order
         order.grand_total.label: Order Grand Total
         organization.label:     Organization
+        grid:
+            action.refund:       Refund
 
         refunditem:
             entity_label:           Refund Item

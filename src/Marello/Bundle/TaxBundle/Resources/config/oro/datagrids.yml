@@ -39,6 +39,7 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 icon:           eye
                 rowAction:      true
@@ -87,6 +88,7 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 icon:           eye
                 rowAction:      true
@@ -103,7 +105,7 @@ datagrids:
                     - tr.rate as rate
                     - tj.code as jurisdiction
                 from:
-                    - { table: MarelloTaxBundle:TaxRule, alias: t }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxRule, alias: t }
                 join:
                     left:
                         - { join: t.taxCode, alias: tc }
@@ -151,6 +153,7 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 icon:           eye
                 rowAction:      true

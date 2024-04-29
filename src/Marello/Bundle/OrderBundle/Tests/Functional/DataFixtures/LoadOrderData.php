@@ -6,6 +6,8 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -258,11 +260,11 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
         $address->setCity($row['city']);
         $address->setCountry(
             $this->manager
-                ->getRepository('OroAddressBundle:Country')->find($row['country'])
+                ->getRepository(Country::class)->find($row['country'])
         );
         $address->setRegion(
             $this->manager
-                ->getRepository('OroAddressBundle:Region')
+                ->getRepository(Region::class)
                 ->findOneBy(['combinedCode' => $row['country'] . '-' . $row['state']])
         );
         $address->setPhone($row['telephone_number']);

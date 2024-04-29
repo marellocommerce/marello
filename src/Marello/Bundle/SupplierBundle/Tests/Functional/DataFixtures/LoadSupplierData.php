@@ -6,6 +6,8 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadSupplierData extends AbstractFixture
@@ -107,11 +109,11 @@ class LoadSupplierData extends AbstractFixture
             $address->setPostalCode($values['address']['zipcode']);
             $address->setCountry(
                 $this->manager
-                    ->getRepository('OroAddressBundle:Country')->find($values['address']['country'])
+                    ->getRepository(Country::class)->find($values['address']['country'])
             );
             $address->setRegion(
                 $this->manager
-                    ->getRepository('OroAddressBundle:Region')
+                    ->getRepository(Region::class)
                     ->findOneBy(['combinedCode' => $values['address']['country'] . '-' . $values['address']['state']])
             );
 

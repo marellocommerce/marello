@@ -103,7 +103,7 @@ class Shipment implements DatesAwareInterface, OrganizationAwareInterface, Exten
     /**
      * @return mixed
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

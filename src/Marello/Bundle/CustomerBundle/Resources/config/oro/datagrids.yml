@@ -7,7 +7,7 @@ datagrids:
                     - c.id
                     - c
                 from:
-                    - { table: MarelloCustomerBundle:Customer, alias: c }
+                    - { table: Marello\Bundle\CustomerBundle\Entity\Customer, alias: c }
         columns:
             id:
                 label: marello.customer.id.label
@@ -94,11 +94,13 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
             update:
                 type:       navigate
+                label:      oro.grid.action.update
                 link:       update_link
                 icon:       edit
         options:

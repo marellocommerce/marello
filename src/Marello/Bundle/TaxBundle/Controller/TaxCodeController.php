@@ -35,7 +35,7 @@ class TaxCodeController extends AbstractController
      * @param TaxCode $taxCode
      * @return array
      */
-    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_tax_taxcode_view')]
+    #[Route(path: '/view/{id}', name: 'marello_tax_taxcode_view', requirements: ['id' => '\d+'])]
     #[Template]
     #[Acl(id: 'marello_tax_taxcode_view', type: 'entity', class: TaxCode::class, permission: 'VIEW')]
     public function viewAction(TaxCode $taxCode)
@@ -48,7 +48,7 @@ class TaxCodeController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_tax_taxcode_create')]
+    #[Route(path: '/create', name: 'marello_tax_taxcode_create', methods: ['GET', 'POST'])]
     #[Template]
     #[Acl(id: 'marello_tax_taxcode_create', type: 'entity', class: TaxCode::class, permission: 'CREATE')]
     public function createAction(Request $request)
@@ -62,7 +62,7 @@ class TaxCodeController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_tax_taxcode_update')]
+    #[Route(path: '/update/{id}', name: 'marello_tax_taxcode_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[Template]
     #[Acl(id: 'marello_tax_taxcode_update', type: 'entity', class: TaxCode::class, permission: 'EDIT')]
     public function updateAction(TaxCode $taxCode, Request $request)

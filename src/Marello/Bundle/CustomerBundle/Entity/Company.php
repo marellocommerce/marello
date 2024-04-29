@@ -144,7 +144,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -164,7 +164,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     /**
      * @return string
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }

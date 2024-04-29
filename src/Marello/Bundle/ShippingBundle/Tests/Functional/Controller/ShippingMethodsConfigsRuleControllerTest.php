@@ -4,6 +4,7 @@ namespace Marello\Bundle\ShippingBundle\Tests\Functional\Controller;
 
 use Doctrine\Persistence\ObjectManager;
 
+use Marello\Bundle\RuleBundle\Entity\Rule;
 use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -496,7 +497,7 @@ class ShippingMethodsConfigsRuleControllerTest extends WebTestCase
         /** @var RuleInterface $rule */
         $rule = $this
             ->getEntityManager()
-            ->getRepository('MarelloRuleBundle:Rule')
+            ->getRepository(Rule::class)
             ->findOneBy(['name' => $name]);
 
         return $this
