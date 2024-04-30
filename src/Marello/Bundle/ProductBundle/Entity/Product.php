@@ -497,7 +497,7 @@ class Product implements
     /**
      * @return ProductStatus
      */
-    public function getStatus(): ProductStatus
+    public function getStatus(): ?ProductStatus
     {
         return $this->status;
     }
@@ -1114,7 +1114,7 @@ class Product implements
     /**
      * @return AttributeFamily
      */
-    public function getAttributeFamily(): AttributeFamily
+    public function getAttributeFamily(): ?AttributeFamily
     {
         return $this->attributeFamily;
     }
