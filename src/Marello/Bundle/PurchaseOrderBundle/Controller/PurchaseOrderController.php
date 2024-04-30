@@ -99,7 +99,8 @@ class PurchaseOrderController extends AbstractController
      */
     protected function createStepOne(Request $request)
     {
-        $form = $this->createForm(PurchaseOrderCreateStepOneType::class, new PurchaseOrder());
+        $purchaseOrder = new PurchaseOrder();
+        $form = $this->createForm(PurchaseOrderCreateStepOneType::class, $purchaseOrder);
         $handler = new PurchaseOrderCreateStepOneHandler($form, $request);
         $queryParams = $request->query->all();
 
@@ -107,7 +108,11 @@ class PurchaseOrderController extends AbstractController
             return $this->forward(__CLASS__ . '::createStepTwoAction', [], $queryParams);
         }
 
-        return ['form' => $form->createView()];
+        return [
+            'form' => $form->createView(),
+            'entity' => $purchaseOrder,
+            'isWidgetContext' => (bool)$request->get('_wid', false)
+        ];
     }
 
     /**
@@ -134,6 +139,7 @@ class PurchaseOrderController extends AbstractController
             return [
                 'form' => $form->createView(),
                 'entity' => $purchaseOrder,
+                'isWidgetContext' => (bool)$request->get('_wid', false),
                 'queryParams' => $queryParams
             ];
         }
@@ -146,6 +152,7 @@ class PurchaseOrderController extends AbstractController
                 'success',
                 $this->container->get(TranslatorInterface::class)->trans('marello.purchaseorder.messages.purchaseorder.saved')
             );
+
             return $this->container->get(Router::class)->redirect($purchaseOrder);
         }
 
