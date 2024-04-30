@@ -93,8 +93,8 @@ datagrids:
             bind_parameters:
                 -
                     name: isActive
-                    default: 0
-                    type: integer
+                    default: false
+                    type: boolean
 
     marello-supplier-extended-no-actions-grid:
         extends: marello-supplier-extended-grid

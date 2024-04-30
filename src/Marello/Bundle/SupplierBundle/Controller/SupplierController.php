@@ -81,7 +81,7 @@ class SupplierController extends AbstractController
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $supplier,
             $this->createForm(SupplierType::class, $supplier),
-            $this->get(TranslatorInterface::class)->trans('marello.supplier.messages.success.supplier.saved'),
+            $this->container->get(TranslatorInterface::class)->trans('marello.supplier.messages.success.supplier.saved'),
             $request
         );
     }
