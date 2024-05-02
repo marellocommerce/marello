@@ -15,44 +15,14 @@ use Oro\Bundle\EmailBundle\Model\EmailTemplate as EmailTemplateModel;
 
 class EmailTemplateManager
 {
-    /** @var DoctrineHelper */
-    protected $doctrineHelper;
-
-    /** @var  ConfigManager */
-    protected $configManager;
-
-    /** @var  EntityLocalizationProviderInterface */
-    protected $entityLocalizationProvider;
-
-    /** @var EmailTemplateContentProvider $emailTemplateContentProvider */
-    protected $emailTemplateContentProvider;
-
     /**
      * @param DoctrineHelper $doctrineHelper
      * @param ConfigManager $configManager
      */
     public function __construct(
-        DoctrineHelper $doctrineHelper,
-        ConfigManager $configManager
+        protected DoctrineHelper $doctrineHelper,
+        protected ConfigManager $configManager
     ) {
-        $this->doctrineHelper = $doctrineHelper;
-        $this->configManager = $configManager;
-    }
-
-    /**
-     * @param EntityLocalizationProviderInterface $entityLocalizationProvider
-     */
-    public function setEntityLocalizationProvider(EntityLocalizationProviderInterface $entityLocalizationProvider)
-    {
-        $this->entityLocalizationProvider = $entityLocalizationProvider;
-    }
-
-    /**
-     * @param EmailTemplateContentProvider $emailTemplateContentProvider
-     */
-    public function setEmailTemplateContentProvider(EmailTemplateContentProvider $emailTemplateContentProvider)
-    {
-        $this->emailTemplateContentProvider = $emailTemplateContentProvider;
     }
 
     /**
@@ -125,11 +95,6 @@ class EmailTemplateManager
      */
     public function getLocalizedModel(EmailTemplate $template, $entity)
     {
-        if ($entity instanceof LocalizationAwareInterface) {
-            $localization = $this->entityLocalizationProvider->getLocalization($entity);
-            return $this->emailTemplateContentProvider->getLocalizedModel($template, $localization);
-        }
-
         return null;
     }
 }
