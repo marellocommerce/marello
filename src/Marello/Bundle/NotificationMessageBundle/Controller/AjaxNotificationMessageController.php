@@ -2,15 +2,19 @@
 
 namespace Marello\Bundle\NotificationMessageBundle\Controller;
 
-use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
-use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageResolvedInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+
+use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
+use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageResolvedInterface;
 
 class AjaxNotificationMessageController extends AbstractController
 {
@@ -25,16 +29,16 @@ class AjaxNotificationMessageController extends AbstractController
     public function resolveAction(NotificationMessage $entity)
     {
         try {
-            $entityManager = $this->container->get('doctrine')->getManagerForClass(NotificationMessage::class);
+            $em = $this->container->get(ManagerRegistry::class)->getManagerForClass(NotificationMessage::class);
             $className = ExtendHelper::buildEnumValueClassName(
                 NotificationMessageResolvedInterface::NOTIFICATION_MESSAGE_RESOLVED_ENUM_CODE
             );
             /** @var EnumValueRepository $enumRepo */
-            $enumRepo = $entityManager->getRepository($className);
+            $enumRepo = $em->getRepository($className);
             $resolvedYes = $enumRepo->find(NotificationMessageResolvedInterface::NOTIFICATION_MESSAGE_RESOLVED_YES);
             $entity->setResolved($resolvedYes);
 
-            $entityManager->flush();
+            $em->flush();
         } catch (\Throwable $exception) {
             return new JsonResponse(
                 [
@@ -45,5 +49,18 @@ class AjaxNotificationMessageController extends AbstractController
         }
 
         return new JsonResponse(['successful' => true]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function getSubscribedServices(): array
+    {
+        return array_merge(
+            parent::getSubscribedServices(),
+            [
+                ManagerRegistry::class
+            ]
+        );
     }
 }
