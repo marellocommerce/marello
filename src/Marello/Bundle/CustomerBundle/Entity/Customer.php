@@ -141,8 +141,8 @@ class Customer implements
     /**
      * @var CustomerGroup
      *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\CustomerGroup")
-     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\CustomerGroup", inversedBy="customers")
+     * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={

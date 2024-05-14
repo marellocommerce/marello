@@ -372,18 +372,17 @@ datagrids:
                 icon: edit
 
     marello-customer-group-customer:
-        extends: marello-customer
+        extends: marello-customer-select-grid
         source:
             query:
-                select:
-                    - c.customer_group
-                from:
-                    - { table: MarelloCustomerBundle:Customer, alias: c }
+                join:
+                    left:
+                        - { join: c.customerGroup, alias: cg }
                 where:
                     and:
-                        - c.customer_group = :customer_group_id
+                        - c.customerGroup = :customerGroupId
             bind_parameters:
-                customer_group_id: customer_groupId
+                - customerGroupId
 
     marello-customer-group-customers-extend-grid:
         extends: marello-customer

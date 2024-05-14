@@ -36,7 +36,7 @@
     {% endset %}
 
     {% set customer %}
-        {{ dataGrid.renderGrid('marello-customer-group-customer', {'customer_groupId': entity.id}) }}
+        {{ dataGrid.renderGrid('marello-customer-group-customer', {'customerGroupId': entity.id}) }}
     {% endset %}
 
     {% set dataBlocks = [
@@ -47,7 +47,7 @@
         ]
         },
         {
-            'title': 'marello.customer_group.entity_plural_label'|trans,
+            'title': 'marello.customer.entity_plural_label'|trans,
             'class': 'active',
             'subblocks': [
             { 'data': [customer] }
