@@ -15,3 +15,10 @@ services:
             - ['setContainer', ['@Psr\Container\ContainerInterface']]
         tags:
             - { name: container.service_subscriber }
+
+    Marello\Bundle\CustomerBundle\Controller\CustomerGroupController:
+        calls:
+            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
+        tags:
+            - { name: container.service_subscriber }
+            - { name: container.service_subscriber, id: marello_customer_group.form.handler, key: Marello\Bundle\CustomerBundle\Form\Handler\CustomerGroupHandler }

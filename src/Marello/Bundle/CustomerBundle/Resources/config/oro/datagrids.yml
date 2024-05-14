@@ -307,3 +307,141 @@ datagrids:
                 selectors:
                     included: '#appendCustomers'
                     excluded: '#removeCustomers'
+
+    marello-customer-group:
+        source:
+            type: orm
+            query:
+                select:
+                    - cg
+                from:
+                    - { table: MarelloCustomerBundle:CustomerGroup, alias: cg }
+        columns:
+            id:
+                label: marello.customer_group.id.label
+                renderable: false
+            name:
+                label: marello.customer_group.name.label
+            createdAt:
+                label: oro.ui.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: oro.ui.updated_at
+                frontend_type: datetime
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: cg.name
+                createdAt:
+                    type: datetime
+                    data_name: cg.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: cg.updatedAt
+        sorters:
+            columns:
+                name:
+                    data_name: cg.name
+                createdAt:
+                    data_name: cg.createdAt
+                updatedAt:
+                    data_name: cg.updatedAt
+            default:
+                createdAt: 'DESC'
+        properties:
+            view_link:
+                type: url
+                route: marello_customer_group_view
+                params:
+                    id: id
+            update_link:
+                type: url
+                route: marello_customer_group_update
+                params:
+                    id: id
+        actions:
+            view:
+                type: navigate
+                link: view_link
+                icon: eye
+                rowAction: true
+            update:
+                type: navigate
+                link: update_link
+                icon: edit
+
+    marello-customer-group-customer:
+        extends: marello-customer
+        source:
+            query:
+                select:
+                    - c.customer_group
+                from:
+                    - { table: MarelloCustomerBundle:Customer, alias: c }
+                where:
+                    and:
+                        - c.customer_group = :customer_group_id
+            bind_parameters:
+                customer_group_id: customer_groupId
+
+    marello-customer-group-customers-extend-grid:
+        extends: marello-customer
+        source:
+            query:
+                select:
+                    - >
+                        (
+                            CASE WHEN (:customer_group_id IS NOT NULL) THEN
+                                CASE WHEN
+                                    c MEMBER OF customerGroup.customers
+                                    OR c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
+                                THEN true ELSE false END
+                            ELSE
+                                CASE WHEN c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
+                                THEN true ELSE false END
+                            END
+                        ) as belongsToCustomerGroup
+                where:
+                    or:
+                        - c.customerGroup IS NULL
+                        - c.customerGroup = :customer_group_id
+                join:
+                    left:
+                        -   join: 'Marello\Bundle\CustomerBundle\Entity\CustomerGroup'
+                            alias: customerGroup
+                            conditionType: WITH
+                            condition: 'customerGroup = :customer_group_id'
+            bind_parameters:
+                -   name: customer_group_id
+                    default: null
+                    type: integer
+        columns:
+            belongsToCustomerGroup:
+                label: marello.customer_group.entity_label
+                editable: true
+                frontend_type: boolean
+                add_before: true
+        properties:
+            id: ~
+        actions: ~
+        sorters:
+            columns:
+                belongsToCustomerGroup:
+                    data_name: belongsToCustomerGroup
+            default:
+                belongsToCustomerGroup: 'DESC'
+        filters:
+            columns:
+                belongsToCustomerGroup:
+                    type: boolean
+                    data_name: belongsToCustomerGroup
+        options:
+            entityHint: 'Customer group customers'
+            entity_pagination: true
+            rowSelection:
+                dataField: id
+                columnName: belongsToCustomerGroup
+                selectors:
+                    included: '#appendCustomers'
+                    excluded: '#removeCustomers'

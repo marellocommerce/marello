@@ -139,6 +139,24 @@ class Customer implements
     protected $company;
 
     /**
+     * @var CustomerGroup
+     *
+     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\CustomerGroup")
+     * @ORM\JoinColumn(onDelete="SET NULL")
+     * @Oro\ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $customerGroup;
+
+    /**
      * Customer constructor.
      */
     public function __construct()
@@ -287,5 +305,24 @@ class Customer implements
     public function __toString()
     {
         return $this->getFullName();
+    }
+
+    /**
+     * @return CustomerGroup
+     */
+    public function getCustomerGroup()
+    {
+        return $this->customerGroup;
+    }
+
+    /**
+     * @param CustomerGroup $customerGroup
+     * @return $this
+     */
+    public function setCustomerGroup($customerGroup = null)
+    {
+        $this->customerGroup = $customerGroup;
+
+        return $this;
     }
 }

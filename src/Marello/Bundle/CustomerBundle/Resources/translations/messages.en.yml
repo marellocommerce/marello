@@ -60,3 +60,10 @@ marello:
 
         navigation:
             customers.label:        'Customers'
+
+    customer_group:
+        entity_label: 'Customer group'
+        entity_plural_label: 'Customer groups'
+        id.label: 'Id'
+        name.label: 'Group name'
+        saved.message: 'Customer group saved'

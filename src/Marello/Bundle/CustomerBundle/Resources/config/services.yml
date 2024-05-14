@@ -152,3 +152,24 @@ services:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: validator.constraint_validator, alias: marello_customer.company_number_validator }
+
+    marello_customer_group.form:
+        class: 'Symfony\Component\Form\Form'
+        factory: [ '@form.factory', 'create' ]
+        arguments:
+            - 'Marello\Bundle\CustomerBundle\Form\Type\CustomerGroupType'
+
+    marello_customer_group.form.handler:
+        class: 'Marello\Bundle\CustomerBundle\Form\Handler\CustomerGroupHandler'
+        public: true
+        arguments:
+            - '@marello_customer_group.form'
+            - '@request_stack'
+            - '@doctrine.orm.entity_manager'
+
+    marello_customer.listener.datagrid.customer_group_customers_column_listener:
+        class: 'Marello\Bundle\CustomerBundle\EventListener\Datagrid\CustomerGroupCustomersColumnListener'
+        arguments:
+            - '@marello_datagrid.datagridhelper'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.marello-customer-group-customers-extend-grid, method: buildBefore }
