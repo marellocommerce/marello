@@ -2,7 +2,7 @@
 {% import '@OroUI/macros.html.twig' as UI %}
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
 
-{% oro_title_set({params : {"%name%": entity.category, '%entityName%': 'marello.ticket.category.label'|trans} }) %}
+{% oro_title_set({params : {"%name%": entity.name, '%entityName%': 'marello.ticket.category.label'|trans} }) %}
 
 {% set formAction = entity.id ? path('marello_ticket_category_update', {id: entity.id}) : path('marello_ticket_category_create') %}
 
@@ -33,11 +33,11 @@
             'entity':      entity,
             'indexPath':   path('marello_ticket_category_index'),
             'indexLabel': 'marello.ticket.category.entity_plural_label'|trans,
-            'entityTitle': entity.category|default('N/A'|trans)
+            'entityTitle': entity.name|default('N/A'|trans)
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'marello.ticket.category.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'marello.ticket.category.label'|trans}) %}
         {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
@@ -51,7 +51,7 @@
         'subblocks': [{
             'title': '',
             'data': [
-                form_row(form.category)
+                form_row(form.name)
             ]
         }]}
     ] %}

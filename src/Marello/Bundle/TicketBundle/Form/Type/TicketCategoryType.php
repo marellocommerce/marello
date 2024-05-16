@@ -17,9 +17,9 @@ class TicketCategoryType extends AbstractType
     {
         $builder
             ->add(
-                'category',
+                'name',
                 TextType::class,
-                [ 'label' => 'marello.ticket.category.label', 'required' => true ]
+                [ 'label' => 'marello.ticket.category.name', 'required' => true ]
             );
     }
 

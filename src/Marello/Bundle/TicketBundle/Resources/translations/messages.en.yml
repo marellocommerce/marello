@@ -19,6 +19,7 @@ marello:
     priority.label: 'Priority'
     category:
       label: 'Category'
+      name: 'Name'
       id.label: 'ID'
       entity_plural_label: 'Categories'
       form.choose: 'Choose category'

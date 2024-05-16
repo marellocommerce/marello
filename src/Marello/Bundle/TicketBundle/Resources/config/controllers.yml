@@ -1,12 +1,12 @@
 services:
-    Marello\Bundle\TicketBundle\Form\Type\TicketPrioritySelectType:
-        tags:
-            - { name: form.type, alias: marello_ticket_priority_select }
-
-    Marello\Bundle\TicketBundle\Form\Type\TicketSourceSelectType:
-        tags:
-            - { name: form.type, alias: marello_ticket_source_select }
-
-    Marello\Bundle\TicketBundle\Form\Type\TicketStatusSelectType:
-        tags:
-            - { name: form.type, alias: marello_ticket_status_select }
+#    Marello\Bundle\TicketBundle\Controller\TicketController:
+#        calls:
+#            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
+#        tags:
+#            - { name: container.service_subscriber }
+#
+#    Marello\Bundle\TicketBundle\Controller\TicketCategoryController:
+#        calls:
+#            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
+#        tags:
+#            - { name: container.service_subscriber }

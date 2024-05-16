@@ -4,12 +4,21 @@
 
 {% oro_title_set({params : {"%id%": entity.id }}) %}
 
+{% block navButtons %}
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('marello_ticket_category_update', { id: entity.id }),
+            'entity_label': 'marello.ticket.category.label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity':      entity,
         'indexPath':   path('marello_ticket_category_index'),
         'indexLabel':  'marello.ticket.category.entity_plural_label'|trans,
-        'entityTitle': entity.category,
+        'entityTitle': entity.name,
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -23,8 +32,7 @@
             <div class="row-fluid form-horizontal">
                 <div class="responsive-block">
                     <div class="box-type1">
-                        {{ UI.renderProperty('marello.ticket.category.id.label'|trans, entity.id) }}
-                        {{ UI.renderProperty('marello.ticket.category.label'|trans, entity.category) }}
+                        {{ UI.renderProperty('marello.ticket.category.name'|trans, entity.name) }}
                     </div>
                 </div>
             </div>
@@ -40,8 +48,8 @@
         }
     ] %}
 
-    {% set marelloTicketGrid %}
-        {{ dataGrid.renderGrid('marello-ticket-categories-grid', {namingTypeId: entity.id}) }}
+    {% set tickets %}
+        {{ dataGrid.renderGrid('marello-category-tickets-grid', {'categoryId': entity.id}) }}
     {% endset %}
 
     {% set dataBlocks = dataBlocks|merge([{
@@ -49,7 +57,7 @@
         'subblocks': [{
             'title': '',
             'useSpan': false,
-            'data' : [marelloTicketCategoriesGrid]
+            'data' : [tickets]
         }]
     }] ) %}
 

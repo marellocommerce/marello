@@ -10,6 +10,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
@@ -19,8 +20,7 @@ use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
  *      defaultValues={
  *            "security"={
  *                "type"="ACL",
- *                "group_name"="",
- *                "category"="account_management"
+ *                "group_name"=""
  *            }
  *      }
  *  )
@@ -150,6 +150,7 @@ class Ticket implements
 
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Priority
+     * @Assert\NotNull
      */
     private $ticketPriority;
 
@@ -160,6 +161,7 @@ class Ticket implements
 
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Status
+     * @Assert\NotNull
      */
     private $ticketStatus;
 

@@ -9,6 +9,6 @@ search:
                 id: id
         mode: normal
         fields:
-            -   name: category
+            -   name: name
                 target_type: text
-                target_fields: [category]
+                target_fields: [name]

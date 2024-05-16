@@ -6,4 +6,4 @@ marello_ticket:
 marello_ticket_category:
     resource: "@MarelloTicketBundle/Controller/TicketCategoryController.php"
     type: annotation
-    prefix: /marello/ticket_category
+    prefix: /marello/ticket-category

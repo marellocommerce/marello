@@ -9,6 +9,8 @@ api:
     entities:
         Marello\Bundle\TicketBundle\Entity\Ticket:
             exclude: false
+            fields:
+
 
         Marello\Bundle\TicketBundle\Entity\TicketCategory:
             exclude: false

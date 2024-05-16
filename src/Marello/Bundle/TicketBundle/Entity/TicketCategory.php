@@ -10,14 +10,13 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ticket_category")
+ * @ORM\Table(name="marello_ticket_category")
  * @Config(
  *     routeName="marello_ticket_category_index",
  *     defaultValues={
  *           "security"={
  *               "type"="ACL",
- *               "group_name"="",
- *               "category"="account_management"
+ *               "group_name"=""
  *           }
  *     }
  * )
@@ -38,28 +37,28 @@ class TicketCategory implements ExtendEntityInterface
 
     /**
      * @ORM\Column(
-     *     name="category",
+     *     name="name",
      *     type="string",
      *     length=255,
      *     nullable=false
      * )
      */
-    protected $category;
+    protected $name;
 
     /**
      * @return mixed
      */
-    public function getCategory()
+    public function getName()
     {
-        return $this->category;
+        return $this->name;
     }
 
     /**
-     * @param mixed $category
+     * @param mixed $name
      */
-    public function setCategory(string $category): void
+    public function setName(string $name): void
     {
-        $this->category = $category;
+        $this->name = $name;
     }
 
     /**

@@ -46,7 +46,7 @@ class TicketCategoryController extends AbstractController
      *     name="marello_ticket_category_create",
      *     options={"expose"=true}
      * )
-     * @Template
+     * @Template("@MarelloTicket/TicketCategory/update.html.twig")
      * @Acl(
      *       id="marello_ticket_category_create",
      *       type="entity",

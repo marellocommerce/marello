@@ -1,43 +1,26 @@
 <?php
 
-namespace Marello\Bundle\TicketBundle\Migrations\Schema;
+namespace Marello\Bundle\TicketBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassLength)
- */
-class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAwareInterface
+class MarelloTicketBundle implements Migration, ExtendExtensionAwareInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getMigrationVersion()
-    {
-        return 'v1_0';
-    }
-
     /**
      * @var ExtendExtension
      */
     protected $extendExtension;
 
-    /**
-     * {@inheritdoc}
-     */
     public function up(Schema $schema, QueryBag $queries)
     {
-        /** Tables generation **/
         $this->createTicketCategoryTable($schema);
         $this->createMarelloTicketTable($schema);
 
-        /** Foreign keys generation **/
         $this->addMarelloTicketForeignKeys($schema);
     }
 

@@ -18,7 +18,7 @@ services:
         parent: oro_form.autocomplete.search_handler
         arguments:
             - 'Marello\Bundle\TicketBundle\Entity\TicketCategory'
-            - [ 'category' ]
+            - [ 'name' ]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: marello_ticket_category, acl_resource: marello_category_view }
 

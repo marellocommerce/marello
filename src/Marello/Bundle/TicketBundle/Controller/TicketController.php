@@ -44,7 +44,7 @@ class TicketController extends AbstractController
      *     name="marello_ticket_create",
      *     options={"expose"=true}
      * )
-     * @Template
+     * @Template("@MarelloTicket/Ticket/update.html.twig")
      * @Acl(
      *       id="marello_ticket_create",
      *       type="entity",
