@@ -40,6 +40,10 @@ class CustomerType extends AbstractType
             ->add('email', EmailType::class, [
                 'required'    => true
             ])
+            ->add('customerGroup', CustomerGroupSelectType::class, [
+                'required' => false,
+                'create_enabled' => false,
+            ])
             ->add('primaryAddress', AddressType::class, [
                 'required' => false,
             ])

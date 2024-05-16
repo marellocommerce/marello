@@ -15,6 +15,7 @@ marello:
         middle_name.label:                'Middle Name'
         last_name.label:                  'Last Name'
         name_suffix.label:                'Name Suffix'
+        name.label:                       'Name'
         company.label:                    'Company'
         phone.label:                      'Phone'
         label:                            'Customer'
@@ -61,9 +62,16 @@ marello:
         navigation:
             customers.label:        'Customers'
 
+        customergroup:
+            entity_label: 'Customer group'
+            entity_plural_label: 'Customer groups'
+
     customer_group:
         entity_label: 'Customer group'
         entity_plural_label: 'Customer groups'
+        group.label: 'Group'
         id.label: 'Id'
         name.label: 'Group name'
         saved.message: 'Customer group saved'
+        hasGroup.label: 'Has Group'
+        form.choose: 'Choose a group...'

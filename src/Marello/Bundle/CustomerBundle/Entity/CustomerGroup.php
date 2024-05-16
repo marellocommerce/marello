@@ -82,14 +82,14 @@ class CustomerGroup implements ExtendEntityInterface
         $this->customers = new ArrayCollection();
     }
 
-    public function getId(): int
+    /**
+     * Get entity unique id
+     *
+     * @return integer
+     */
+    public function getId()
     {
         return $this->id;
-    }
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**

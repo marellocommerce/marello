@@ -10,18 +10,14 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class MarelloCustomerBundle implements Migration
 {
     const MARELLO_CUSTOMER_GROUP_TABLE = 'marello_customer_group';
-//    const MARELLO_CUSTOMER_JOIN_CUSTOMER_GROUP_TABLE = 'marello_customer_join_customer_group';
-//    const MARELLO_COMPANY_JOIN_CUSTOMER_GROUP_TABLE = 'marello_customer_join_customer_group';
 
     /**
      * @inheritDoc
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->addMarelloCustomerForeignKeys($schema);
         $this->createMarelloCustomerGroupTable($schema);
-//        $this->addMarelloCustomerGroupForeignKeys($schema);
-//        $this->addMarelloCompanyForeignKeys($schema);
+        $this->addMarelloCustomerForeignKeys($schema);
     }
 
     /**
@@ -35,8 +31,6 @@ class MarelloCustomerBundle implements Migration
 
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['length' => 255]);
-        $table->addColumn('customer_id', 'integer', ['notnull' => false]);
-//        $table->addColumn('company_id', 'integer', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
@@ -47,20 +41,10 @@ class MarelloCustomerBundle implements Migration
 
         $table->addColumn('customer_group_id', 'integer', ['notnull' => false]);
         $table->addForeignKeyConstraint(
-            $table,
+            $schema->getTable(self::MARELLO_CUSTOMER_GROUP_TABLE),
             ['customer_group_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
-
-//    protected function addMarelloCompanyForeignKeys(Schema $schema) {
-//        $table = $schema->getTable(MarelloCustomerBundleInstaller::MARELLO_COMPANY_TABLE);
-//        $table->addForeignKeyConstraint(
-//            $table,
-//            ['customer_group_id'],
-//            ['id'],
-//            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-//        );
-//    }
 }

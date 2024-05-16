@@ -173,3 +173,12 @@ services:
             - '@marello_datagrid.datagridhelper'
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.marello-customer-group-customers-extend-grid, method: buildBefore }
+
+    marello_customer.form.autocomplete.customer_group.search_handler:
+        public: false
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - 'Marello\Bundle\CustomerBundle\Entity\CustomerGroup'
+            - [ 'name' ]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: marello_customer_group, acl_resource: marello_customer_group_view }

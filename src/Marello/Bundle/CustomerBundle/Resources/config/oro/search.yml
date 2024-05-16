@@ -45,3 +45,16 @@ search:
                 name:                   name
                 target_type:            text
                 target_fields:          [name]
+
+    Marello\Bundle\CustomerBundle\Entity\CustomerGroup:
+        alias: marello_customer_group
+        label: marello.customer_group.entity_plural_label
+        route:
+            name: marello_customer_group_view
+            parameters:
+                id: id
+        search_template: '@MarelloCustomer/CustomerGroup/searchResult.html.twig'
+        fields:
+            -   name: name
+                target_type: text
+                target_fields: [ name ]
