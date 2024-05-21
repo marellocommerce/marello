@@ -9,7 +9,10 @@ marello:
         sku.label:                  SKU
         weight.label:               Weight (in Kg)
         warranty.label:             Product Warranty
-        status.label:               Status
+        status:
+            label:                  Status
+            enabled:                Enabled
+            disabled:               Disabled
         data.label:                 Data
         type.label:                 Product Type
         preferred_supplier.label:   Preferred Supplier
