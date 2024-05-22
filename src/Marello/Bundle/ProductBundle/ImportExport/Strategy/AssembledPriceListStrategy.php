@@ -17,49 +17,34 @@ class AssembledPriceListStrategy extends AbstractAssembledPriceListStrategy
         array $searchContext = [],
         $entityIsRelation = false
     ) {
-        /** @var AssembledPriceList $entity */
+        $entity = parent::processEntity($entity, $isFullData, $isPersistNew, $itemData, $searchContext);
+        if (!$entity instanceof AssembledPriceList) {
+            return $entity;
+        }
+
         $result = $this->processProduct($entity);
         if (!$result) {
             return null;
         }
 
-        $result = $this->processCurrency($entity);
-        if (!$result) {
-            return null;
-        }
-
-        $result = $this->processPrices($entity);
-        if (!$result) {
-            return null;
-        }
+        $this->processPrices($entity);
 
         return $entity;
     }
 
-    private function processPrices(AssembledPriceList $entity): ?AssembledPriceList
+    private function processPrices(AssembledPriceList $entity): void
     {
         if ($defaultPrice = $entity->getDefaultPrice()) {
-            $result = $this->processPrice($defaultPrice, $entity, PriceTypeInterface::DEFAULT_PRICE);
-            if (!$result) {
-                return null;
-            }
+            $this->processPrice($defaultPrice, $entity, PriceTypeInterface::DEFAULT_PRICE);
         }
 
         if ($specialPrice = $entity->getSpecialPrice()) {
-            $result = $this->processPrice($specialPrice, $entity, PriceTypeInterface::SPECIAL_PRICE);
-            if (!$result) {
-                return null;
-            }
+            $this->processPrice($specialPrice, $entity, PriceTypeInterface::SPECIAL_PRICE);
         }
 
         if ($msrpPrice = $entity->getMsrpPrice()) {
-            $result = $this->processPrice($msrpPrice, $entity, PriceTypeInterface::MSRP_PRICE);
-            if (!$result) {
-                return null;
-            }
+            $this->processPrice($msrpPrice, $entity, PriceTypeInterface::MSRP_PRICE);
         }
-
-        return $entity;
     }
 
     protected function getExistingPriceConditions(PriceListInterface $priceList, PriceType $priceType): array

@@ -6,7 +6,7 @@ use Marello\Bundle\PricingBundle\Entity\PriceListInterface;
 use Marello\Bundle\PricingBundle\Entity\PriceType;
 use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\PricingBundle\Model\PriceTypeInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 
 abstract class AbstractAssembledPriceListStrategy extends ConfigurableAddOrReplaceStrategy
@@ -14,24 +14,7 @@ abstract class AbstractAssembledPriceListStrategy extends ConfigurableAddOrRepla
     protected function processProduct(PriceListInterface $entity): ?PriceListInterface
     {
         $product = $entity->getProduct();
-        if ($product) {
-            $existingProduct = $this->findEntityByIdentityValues(
-                Product::class,
-                ['sku' => $product->getSku()]
-            );
-            if ($existingProduct instanceof Product) {
-                $entity->setProduct($existingProduct);
-            } else {
-                $this->processValidationErrors(
-                    $entity,
-                    [
-                        $this->translator->trans('marello.product.messages.import.error.product.invalid')
-                    ]
-                );
-
-                return null;
-            }
-        } else {
+        if (!$product) {
             $this->processValidationErrors(
                 $entity,
                 [
@@ -45,52 +28,34 @@ abstract class AbstractAssembledPriceListStrategy extends ConfigurableAddOrRepla
         return $entity;
     }
 
-    protected function processCurrency(PriceListInterface $entity): ?PriceListInterface
-    {
-        $currency = $entity->getCurrency();
-        if (!$currency) {
-            $this->processValidationErrors(
-                $entity,
-                [
-                    $this->translator->trans('marello.product.messages.import.error.currency.required')
-                ]
-            );
-
-            return null;
-        }
-
-        return $entity;
-    }
-
     protected function processPrice(
         ProductPrice|ProductChannelPrice $price,
         PriceListInterface $priceList,
         string $priceTypeName
-    ): ProductPrice|ProductChannelPrice|null {
+    ): ProductPrice|ProductChannelPrice {
         /** @var PriceType $priceType */
-        $priceType = $this->findEntityByIdentityValues(
-            PriceType::class,
-            ['name' => $priceTypeName]
-        );
-        if ($this->findEntityByIdentityValues(
+        $priceType = $this->findEntityByIdentityValues(PriceType::class, ['name' => $priceTypeName]);
+        /** @var ProductPrice|ProductChannelPrice $existingPrice */
+        $existingPrice = $this->findEntityByIdentityValues(
             get_class($price),
             $this->getExistingPriceConditions($priceList, $priceType)
-        )) {
-            $this->processValidationErrors(
-                $priceList,
-                [
-                    $this->translator->trans(
-                        'marello.product.messages.import.error.price.already_exists',
-                        ['type' => $priceTypeName]
-                    )
-                ]
-            );
+        );
+        if ($existingPrice) {
+            $existingPrice->setValue($price->getValue());
+            if ($priceTypeName === PriceTypeInterface::SPECIAL_PRICE) {
+                $existingPrice->setStartDate($price->getStartDate());
+                $existingPrice->setEndDate($price->getEndDate());
+            }
+            $setter = match ($priceTypeName) {
+                PriceTypeInterface::SPECIAL_PRICE => 'setSpecialPrice',
+                PriceTypeInterface::MSRP_PRICE => 'setMsrpPrice',
+                default => 'setDefaultPrice',
+            };
+            $priceList->$setter($existingPrice);
 
-            return null;
+            return $existingPrice;
         }
 
-        $price->setProduct($priceList->getProduct());
-        $price->setCurrency($priceList->getCurrency());
         $price->setType($priceType);
 
         return $price;

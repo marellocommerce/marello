@@ -90,24 +90,18 @@ marello:
                         invalid: Such Product Status doesn't exist
                     attribute_family:
                         required: Attribute Family is required
-                        invalid: Such Attribute Family doesn't exist
                     tax_code:
                         required: Tax Code is required
-                        invalid: Such Tax Code doesn't exist
                     categories:
                         invalid: Such Category doesn't exist "{{ code }}"
                     channels:
                         invalid: Such Sales Channel doesn't exist "{{ code }}"
                     product:
                         required: Product is required
-                        invalid: Such Product doesn't exist
                     currency:
                         required: Currency is required
                     channel:
                         required: Channel is required
-                        invalid: Such Channel doesn't exist
-                    price:
-                        already_exists: Such Price already exists "{{ type }}"
             export:
                 template:
                     product.label: Download Product Import Template

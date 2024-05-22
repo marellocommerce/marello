@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\ProductBundle\Migrations\Schema\v1_14_1;
+namespace Marello\Bundle\ProductBundle\Migrations\Schema\v1_15;
 
 use Doctrine\DBAL\Schema\Schema;
 use Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList;
@@ -10,8 +10,8 @@ use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
 use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class UpdateImportExportConfigs implements Migration
 {
@@ -86,6 +86,10 @@ class UpdateImportExportConfigs implements Migration
         $this->updateField($queries, ProductPrice::class, 'currency', 'excluded', true);
         $this->updateField($queries, ProductPrice::class, 'currency', 'identity', false);
         $this->updateField($queries, ProductPrice::class, 'type', 'excluded', true);
+        $this->updateField($queries, ProductPrice::class, 'startDate', 'excluded', false);
+        $this->updateField($queries, ProductPrice::class, 'startDate', 'identity', false);
+        $this->updateField($queries, ProductPrice::class, 'endDate', 'excluded', false);
+        $this->updateField($queries, ProductPrice::class, 'endDate', 'identity', false);
     }
 
     private function updateProductChannelPriceEntity(QueryBag $queries): void
@@ -96,6 +100,10 @@ class UpdateImportExportConfigs implements Migration
         $this->updateField($queries, ProductChannelPrice::class, 'currency', 'excluded', true);
         $this->updateField($queries, ProductChannelPrice::class, 'currency', 'identity', false);
         $this->updateField($queries, ProductChannelPrice::class, 'type', 'excluded', true);
+        $this->updateField($queries, ProductChannelPrice::class, 'startDate', 'excluded', false);
+        $this->updateField($queries, ProductChannelPrice::class, 'startDate', 'identity', false);
+        $this->updateField($queries, ProductChannelPrice::class, 'endDate', 'excluded', false);
+        $this->updateField($queries, ProductChannelPrice::class, 'endDate', 'identity', false);
     }
 
     private function updatePriceTypeEntity(QueryBag $queries): void

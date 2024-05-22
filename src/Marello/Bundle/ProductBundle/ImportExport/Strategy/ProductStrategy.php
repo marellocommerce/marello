@@ -5,30 +5,26 @@ namespace Marello\Bundle\ProductBundle\ImportExport\Strategy;
 use Marello\Bundle\CatalogBundle\Entity\Category;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\TaxBundle\Entity\TaxCode;
-use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 use Oro\Bundle\LocaleBundle\ImportExport\Strategy\LocalizedFallbackValueAwareStrategy;
 
 class ProductStrategy extends LocalizedFallbackValueAwareStrategy
 {
     public const DELIMITER = ', ';
 
-    protected function processEntity(
+    protected function importEntityFields(
         $entity,
-        $isFullData = false,
-        $isPersistNew = false,
-        $itemData = null,
-        array $searchContext = [],
-        $entityIsRelation = false
+        $existingEntity,
+        $isFullData,
+        $entityIsRelation,
+        $itemData
     ) {
-        /** @var Product $entity */
-        $entity->setType(Product::DEFAULT_PRODUCT_TYPE);
-        $this->entityOwnershipAssociationsSetter->setOwnershipAssociations($entity);
-        $result = $this->processStatus($entity);
-        if (!$result) {
-            return null;
+        $entity = parent::importEntityFields($entity, $existingEntity, $isFullData, $entityIsRelation, $itemData);
+        if (!$entity instanceof Product) {
+            return $entity;
         }
 
+        /** @var Product $entity */
+        $entity->setType(Product::DEFAULT_PRODUCT_TYPE);
         $result = $this->processAttributeFamily($entity);
         if (!$result) {
             return null;
@@ -39,12 +35,12 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
             return null;
         }
 
-        $result = $this->processCategories($entity);
+        $result = $this->processCategories($entity, $itemData);
         if (!$result) {
             return null;
         }
 
-        $result = $this->processChannels($entity);
+        $result = $this->processChannels($entity, $itemData);
         if (!$result) {
             return null;
         }
@@ -52,49 +48,19 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
         return $result;
     }
 
-    private function processStatus(Product $entity): ?Product
+    protected function getObjectValue($entity, $fieldName)
     {
-        $status = $entity->getStatus();
-        if ($status) {
-            $existingStatus = $this->findExistingEntity($status);
-            if ($existingStatus) {
-                $entity->setStatus($existingStatus);
-            } else {
-                $this->processValidationErrors(
-                    $entity,
-                    [
-                        $this->translator->trans('marello.product.messages.import.error.status.invalid')
-                    ]
-                );
-
-                return null;
-            }
+        if ($entity instanceof Product && \in_array($fieldName, ['channels', 'categories'], true)) {
+            return null;
         }
 
-        return $entity;
+        return parent::getObjectValue($entity, $fieldName);
     }
 
     private function processAttributeFamily(Product $entity): ?Product
     {
         $attributeFamily = $entity->getAttributeFamily();
-        if ($attributeFamily) {
-            $existingAttributeFamily = $this->findEntityByIdentityValues(
-                AttributeFamily::class,
-                ['code' => $attributeFamily->getCode()]
-            );
-            if ($existingAttributeFamily instanceof AttributeFamily) {
-                $entity->setAttributeFamily($existingAttributeFamily);
-            } else {
-                $this->processValidationErrors(
-                    $entity,
-                    [
-                        $this->translator->trans('marello.product.messages.import.error.attribute_family.invalid')
-                    ]
-                );
-
-                return null;
-            }
-        } else {
+        if (!$attributeFamily) {
             $this->processValidationErrors(
                 $entity,
                 [
@@ -111,24 +77,7 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
     private function processTaxCode(Product $entity): ?Product
     {
         $taxCode = $entity->getTaxCode();
-        if ($taxCode) {
-            $existingTaxCode = $this->findEntityByIdentityValues(
-                TaxCode::class,
-                ['code' => $taxCode->getCode()]
-            );
-            if ($existingTaxCode instanceof TaxCode) {
-                $entity->setTaxCode($existingTaxCode);
-            } else {
-                $this->processValidationErrors(
-                    $entity,
-                    [
-                        $this->translator->trans('marello.product.messages.import.error.tax_code.invalid')
-                    ]
-                );
-
-                return null;
-            }
-        } else {
+        if (!$taxCode) {
             $this->processValidationErrors(
                 $entity,
                 [
@@ -142,84 +91,75 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
         return $entity;
     }
 
-    private function processCategories(Product $entity): ?Product
+    private function processCategories(Product $entity, array $itemData): ?Product
     {
-        /** @var Category $category */
-        $category = $entity->getCategories()->first();
-        if ($category) {
-            $entity->removeCategory($category);
-            $codes = explode(self::DELIMITER, $category->getCode());
-            foreach ($codes as $code) {
-                $existingCategory = $this->findEntityByIdentityValues(
-                    Category::class,
-                    ['code' => $code]
+        $entity->clearCategories();
+        if (empty($itemData['categories'][0]['code'])) {
+            return $entity;
+        }
+
+        $codes = explode(self::DELIMITER, $itemData['categories'][0]['code']);
+        foreach ($codes as $code) {
+            $code = trim($code);
+            $existingCategory = $this->findEntityByIdentityValues(
+                Category::class,
+                ['code' => $code]
+            );
+
+            if ($existingCategory instanceof Category) {
+                $entity->addCategory($existingCategory);
+            } else {
+                $entity->clearCategories();
+                $this->processValidationErrors(
+                    $entity,
+                    [
+                        $this->translator->trans(
+                            'marello.product.messages.import.error.categories.invalid',
+                            ['code' => $code]
+                        )
+                    ]
                 );
 
-                if ($existingCategory instanceof Category) {
-                    $entity->addCategory($existingCategory);
-                } else {
-                    $this->clearFilledCollections($entity);
-                    $this->processValidationErrors(
-                        $entity,
-                        [
-                            $this->translator->trans(
-                                'marello.product.messages.import.error.categories.invalid',
-                                ['code' => $code]
-                            )
-                        ]
-                    );
-
-                    return null;
-                }
+                return null;
             }
         }
 
         return $entity;
     }
 
-    private function processChannels(Product $entity): ?Product
+    private function processChannels(Product $entity, array $itemData): ?Product
     {
-        /** @var SalesChannel $channel */
-        $channel = $entity->getChannels()->first();
-        if ($channel) {
-            $entity->removeChannel($channel);
-            $codes = explode(self::DELIMITER, $channel->getCode());
-            foreach ($codes as $code) {
-                $existingChannel = $this->findEntityByIdentityValues(
-                    SalesChannel::class,
-                    ['code' => $code]
+        $entity->clearChannels();
+        if (empty($itemData['channels'][0]['code'])) {
+            return $entity;
+        }
+
+        $codes = explode(self::DELIMITER, $itemData['channels'][0]['code']);
+        foreach ($codes as $code) {
+            $code = trim($code);
+            $existingChannel = $this->findEntityByIdentityValues(
+                SalesChannel::class,
+                ['code' => $code]
+            );
+
+            if ($existingChannel instanceof SalesChannel) {
+                $entity->addChannel($existingChannel);
+            } else {
+                $entity->clearChannels();
+                $this->processValidationErrors(
+                    $entity,
+                    [
+                        $this->translator->trans(
+                            'marello.product.messages.import.error.channels.invalid',
+                            ['code' => $code]
+                        )
+                    ]
                 );
 
-                if ($existingChannel instanceof SalesChannel) {
-                    $entity->addChannel($existingChannel);
-                } else {
-                    $this->clearFilledCollections($entity);
-                    $this->processValidationErrors(
-                        $entity,
-                        [
-                            $this->translator->trans(
-                                'marello.product.messages.import.error.channels.invalid',
-                                ['code' => $code]
-                            )
-                        ]
-                    );
-
-                    return null;
-                }
+                return null;
             }
         }
 
         return $entity;
-    }
-
-    private function clearFilledCollections(Product $product): void
-    {
-        // Clear categories/channels collections to avoid cascade persist error if we get an error
-        foreach ($product->getCategories() as $category) {
-            $category->removeProduct($product);
-        }
-        foreach ($product->getChannels() as $channel) {
-            $channel->removeProduct($product);
-        }
     }
 }

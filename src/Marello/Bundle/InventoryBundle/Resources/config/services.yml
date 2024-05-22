@@ -314,6 +314,14 @@ services:
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel }
 
+    Marello\Bundle\InventoryBundle\Api\Processor\CustomizeInventoryLevelFormData:
+        arguments:
+            - '@event_dispatcher'
+            - '@oro_config.manager'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_submit, class: Marello\Bundle\InventoryBundle\Entity\InventoryLevel }
+            - { name: oro.api.processor, action: customize_form_data, event: submit, class: Marello\Bundle\InventoryBundle\Entity\InventoryLevel }
+
     Marello\Bundle\InventoryBundle\EventListener\Datagrid\ExpectedInventoryItemGridListener:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.marello-inventory-expected-inventory-item-grid, method: onBuildAfter }

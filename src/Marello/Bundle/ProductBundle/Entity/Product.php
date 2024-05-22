@@ -1009,6 +1009,7 @@ class Product implements
     {
         if (!$this->channels->contains($channel)) {
             $this->channels->add($channel);
+            $channel->addProduct($this);
             $this->addChannelCode($channel->getCode());
         }
 
@@ -1080,6 +1081,19 @@ class Product implements
             $channelsCodes = array_diff($channelsCodes, [$channel->getCode()]);
             $this->channelsCodes = sprintf('|%s|', implode('|', $channelsCodes));
         }
+
+        return $this;
+    }
+
+    public function clearChannels(): self
+    {
+        /** @var SalesChannel $channel */
+        foreach ($this->channels as $channel) {
+            $channel->removeProduct($this);
+        }
+
+        $this->channels->clear();
+        $this->channelsCodes = '';
 
         return $this;
     }
@@ -1394,9 +1408,7 @@ class Product implements
     {
         if (!$this->hasCategory($category)) {
             $this->categories->add($category);
-            if (!$category->hasProduct($this)) {
-                $category->addProduct($this);
-            }
+            $category->addProduct($this);
             $this->addCategoryCode($category->getCode());
         }
 
@@ -1461,6 +1473,14 @@ class Product implements
     public function hasCategory(Category $category)
     {
         return $this->categories->contains($category);
+    }
+
+    public function clearCategories(): self
+    {
+        $this->categories->clear();
+        $this->categoriesCodes = '';
+
+        return $this;
     }
 
     /**

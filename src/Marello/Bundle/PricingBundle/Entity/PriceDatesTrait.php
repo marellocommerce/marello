@@ -14,7 +14,7 @@ trait PriceDatesTrait
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true,
+     *              "excluded"=false,
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -31,7 +31,7 @@ trait PriceDatesTrait
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true,
+     *              "excluded"=false,
      *          },
      *          "dataaudit"={
      *              "auditable"=true
