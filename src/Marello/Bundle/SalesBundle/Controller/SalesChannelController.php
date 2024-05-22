@@ -2,13 +2,17 @@
 
 namespace Marello\Bundle\SalesBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelRepository;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Form\Type\SalesChannelType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +20,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SalesChannelController extends AbstractController
 {
+    private $salesChannelRepository;
+    private $aclHelper;
+
+    public function __construct(SalesChannelRepository $salesChannelRepository, AclHelper $aclHelper)
+    {
+        $this->salesChannelRepository = $salesChannelRepository;
+        $this->aclHelper = $aclHelper;
+    }
+
     /**
      * @Route(
      *     path="/",
@@ -106,6 +119,34 @@ class SalesChannelController extends AbstractController
             $request,
             'marello_sales.saleschannel_form.handler'
         );
+    }
+
+    /**
+     * @Route(
+     *      path="/widget/sales-channels",
+     *      name="marello_order_statistics_widget_channels_by_currency",
+     *      requirements={"id"="\d+"},
+     *      defaults={"id"=0}
+     * )
+     * @AclAncestor("marello_sales_channel_view")
+     * @Template("@MarelloSalesChannel/SalesChannel/widget/channelByCurrency.html.twig")
+     * @return array
+     */
+    public function channelByCurrencyAction(Request $request)
+    {
+        $currency = $request->query->get('currency');
+
+        $salesChannels = $this->salesChannelRepository->getActiveChannelsByCurrency($currency, $this->aclHelper);
+
+        $response = [];
+        foreach ($salesChannels as $salesChannel) {
+            $response[] = [
+                'id' => $salesChannel->getId(),
+                'name' => $salesChannel->getName(),
+            ];
+        }
+
+        return new JsonResponse($response);
     }
 
     public static function getSubscribedServices()

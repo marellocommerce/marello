@@ -1,0 +1,33 @@
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+{% import '@OroUI/macros.html.twig' as UI %}
+
+<div class="widget-content grid-widget-content">
+    {% set gridName = 'marello-sales-channel-currency-aware-selection-grid' %}
+
+    {% set params = {
+        'currency': currency,
+    } %}
+
+    {% block content %}
+        {{ dataGrid.renderGrid(gridName, params) }}
+        <input type="hidden" name="appendProducts" id="appendSalesChannels" value="{{ app.request.get('added') }}" />
+        <input type="hidden" name="removeProducts" id="removeSalesChannels" value="{{ app.request.get('removed') }}" />
+    {% endblock %}
+
+    <div {{ UI.renderPageComponentAttributes({
+        module: 'marellosales/js/app/components/currency-sales-channel-component',
+        options: {
+            wid: app.request.get('_wid'),
+            gridName: gridName,
+            addedVal: '#appendSalesChannels',
+            removedVal: '#removeSalesChannels',
+            columnName: 'channelSelected',
+            currency: currency
+        }
+    }) }}></div>
+
+    <div class="widget-actions">
+        <button type="reset" class="btn">{{ 'Cancel'|trans }}</button>
+        <button type="button" class="btn btn-primary" data-action-name="select">{{ 'Select'|trans }}</button>
+    </div>
+</div>
