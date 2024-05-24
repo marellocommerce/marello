@@ -54,3 +54,23 @@ services:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
+
+    Marello\Bundle\WorkflowBundle\Api\Processor\HandleWorkflowTransit:
+        arguments:
+            - '@doctrine'
+            - '@oro_workflow.manager'
+            - '@Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry'
+        tags:
+            - { name: oro.api.processor, action: create, group: save_data, requestType: json_api&rest, class: Marello\Bundle\WorkflowBundle\Api\Model\WorkflowTransit }
+
+    marello_pos.api.login.normalize:
+        class: Oro\Bundle\ApiBundle\Processor\Shared\NormalizeEntity
+        arguments:
+            - '@oro_api.object_normalizer'
+        tags:
+            - { name: oro.api.processor, action: create, group: normalize_data, requestType: json_api&rest, class: Marello\Bundle\WorkflowBundle\Api\Model\WorkflowTransit }
+
+    marello_pos.api.login.set_http_ok_response_status_code:
+        class: Oro\Bundle\ApiBundle\Processor\Shared\SetHttpResponseStatusCode
+        tags:
+            - { name: oro.api.processor, action: create, group: normalize_result, requestType: json_api&rest, class: Marello\Bundle\WorkflowBundle\Api\Model\WorkflowTransit, priority: 10 }
