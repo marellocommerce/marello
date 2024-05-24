@@ -71,6 +71,13 @@ class Customer implements
     protected $id;
 
     /**
+     * @ORM\Column(name="customer_number", type="string", nullable=true)
+     *
+     * @var string
+     */
+    protected $customerNumber;
+
+    /**
      * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
      * @ORM\JoinColumn(name="primary_address_id", nullable=true)
      *
@@ -186,6 +193,18 @@ class Customer implements
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getCustomerNumber(): ?string
+    {
+        return $this->customerNumber;
+    }
+
+    public function setCustomerNumber(string $customerNumber): self
+    {
+        $this->customerNumber = $customerNumber;
+
+        return $this;
     }
 
     /**
