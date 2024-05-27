@@ -33,7 +33,6 @@ class WidgetCurrencySelectType extends AbstractType
     {
         $resolver->setDefaults([
             'configs'            => [
-//                'template' => '@MarelloSales/SalesChannel/widget/currencySelect.html.twig',
                 'component' => 'currency-select-component',
             ],
         ]);

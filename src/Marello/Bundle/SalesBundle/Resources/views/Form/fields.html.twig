@@ -9,33 +9,3 @@
         {{ form_widget(form) }}
     </div>
 {% endblock %}
-
-{% block marello_sales_currency_aware_select %}
-    <div class="widget-content grid-widget-content" data-page-component-module="marellosales/js/app/components/select2-autocomplete-currency-aware-component">
-        {{ hello }}
-        {% set gridName = 'marello-sales-channel-currency-aware-selection-grid' %}
-
-        {% set params = {
-            'currency': currency,
-        } %}
-
-        {% block content %}
-            {{ dataGrid.renderGrid(gridName, params) }}
-        {% endblock %}
-
-        <div {{ UI.renderPageComponentAttributes({
-            module: 'marellosales/js/app/components/select2-autocomplete-currency-aware-component',
-            options: {
-                wid: app.request.get('_wid'),
-                gridName: gridName,
-                columnName: 'channelSelected',
-                currency: currency
-            }
-        }) }}></div>
-
-        <div class="widget-actions">
-            <button type="reset" class="btn">{{ 'Cancel'|trans }}</button>
-            <button type="button" class="btn btn-primary" data-action-name="select">{{ 'Select'|trans }}</button>
-        </div>
-    </div>
-{% endblock %}
