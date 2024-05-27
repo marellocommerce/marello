@@ -1,10 +1,14 @@
 aliases:
     oro/select2-autocomplete-system-group-sales-channels-component$: marellosales/js/app/components/select2-autocomplete-system-group-sales-channels-component
+    oro/select2-autocomplete-currency-aware-component$: marellosales/js/app/components/select2-autocomplete-currency-aware-component
 dynamic-imports:
     marellosales:
         - marellosales/js/app/components/sales-channel-select-component
         - marellosales/js/app/components/sales-channel-component
         - marellosales/js/app/components/select2-autocomplete-system-group-sales-channels-component
         - marellosales/js/app/components/currency-select-component
+        - marellosales/js/app/components/select-create-inline-type-component
+        - marellosales/js/app/components/select2-autocomplete-currency-aware-component
     commons:
         - oro/select2-autocomplete-system-group-sales-channels-component
+        - oro/select2-autocomplete-currency-aware-component

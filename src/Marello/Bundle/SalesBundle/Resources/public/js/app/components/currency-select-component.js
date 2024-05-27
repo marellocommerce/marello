@@ -13,7 +13,9 @@ define(function(require) {
          * @property {Object}
          */
         options: {
-            currencySelect: 'input[name$="[currency]"]'
+            currencySelect: 'select[name$="[currency]"]',
+            selectedCurrency: 'option[selected="selected"]',
+            attribute: 'currency'
         },
 
         /**
@@ -25,22 +27,28 @@ define(function(require) {
          * @inheritDoc
          */
         initialize: function(options) {
-            console.log("Currency component init");
             this.options = _.defaults(options || {}, this.options);
             this.$el = options._sourceElement;
 
-            this.$currencySelect = this.$el.find(this.options.currencySelect);
-            this.$el.on('change', this.options.currencySelect, _.bind(this.triggerChangeEvent, this));
+            this.$currencySelect = this.$el.find(this.options.selectedCurrency);
+
+            this.options.attribute = this.$el.find(this.options.selectedCurrency.valueOf()).val();
+
+            this.$el.on('change', this.$currencySelect.selected, _.bind(this.triggerChangeEvent, this));
         },
 
         /**
-         * Trigger add event
+         * Trigger changed event
          *
          * @param {Object} data
          */
         triggerChangeEvent: function(data) {
+            this.options.attribute = this.$el.find(this.options.selectedCurrency.valueOf()).val();
+            console.log(this.options.attribute);
+            console.log(data);
+
             mediator.trigger('marello_sales:currency:changed', data);
-            console.log("Currency changed");
+            console.log('Currency changed');
         },
 
         dispose: function() {

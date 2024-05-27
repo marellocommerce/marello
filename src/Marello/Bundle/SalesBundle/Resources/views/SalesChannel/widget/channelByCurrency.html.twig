@@ -1,7 +1,8 @@
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
 {% import '@OroUI/macros.html.twig' as UI %}
 
-<div class="widget-content grid-widget-content">
+<div class="widget-content grid-widget-content" data-page-component-module="marellosales/js/app/components/select2-autocomplete-currency-aware-component">
+    {{ hello }}
     {% set gridName = 'marello-sales-channel-currency-aware-selection-grid' %}
 
     {% set params = {
@@ -10,8 +11,6 @@
 
     {% block content %}
         {{ dataGrid.renderGrid(gridName, params) }}
-        <input type="hidden" name="appendProducts" id="appendSalesChannels" value="{{ app.request.get('added') }}" />
-        <input type="hidden" name="removeProducts" id="removeSalesChannels" value="{{ app.request.get('removed') }}" />
     {% endblock %}
 
     <div {{ UI.renderPageComponentAttributes({
@@ -19,8 +18,6 @@
         options: {
             wid: app.request.get('_wid'),
             gridName: gridName,
-            addedVal: '#appendSalesChannels',
-            removedVal: '#removeSalesChannels',
             columnName: 'channelSelected',
             currency: currency
         }

@@ -9,7 +9,7 @@ define(function (require) {
          * @property {Object}
          */
         options: {
-            salesChannelDataContainer: '.marello-currency-select-container',
+            currencyDataContainer: '.marello-currency-select-container',
             attribute: 'currency'
         },
 
@@ -17,8 +17,11 @@ define(function (require) {
          * @inheritDoc
          */
         initialize: function(options) {
+            console.log('SC select init');
+            this.options = $.extend(true, {}, this.options, options);
+
             this.$sourceElement = options._sourceElement;
-            this.saveData($(this.options.salesChannelDataContainer).data(this.options.attribute));
+            this.saveData($(this.options.currencyDataContainer).data(this.options.attribute));
             mediator.on('marello_sales:currency:changed', this.onCurrencyChange, this);
             Select2AutocompleteCurrencyAwareComponent.__super__.initialize.call(this, options);
         },
@@ -29,6 +32,7 @@ define(function (require) {
         },
 
         onCurrencyChange: function(e) {
+            console.log('Received currency change event', e);
             if (e.to !== undefined) {
                 this.saveData(e.to);
             }
