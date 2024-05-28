@@ -3,28 +3,14 @@
 namespace Marello\Bundle\ProductBundle\Entity\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 
 class ProductRepository extends ServiceEntityRepository
 {
-    const PGSQL_DRIVER = 'pdo_pgsql';
-    const MYSQL_DRIVER = 'pdo_mysql';
-
-    /**
-     * @var string
-     */
-    private $databaseDriver;
-
-    /**
-     * @param string $databaseDriver
-     */
-    public function setDatabaseDriver($databaseDriver)
-    {
-        $this->databaseDriver = $databaseDriver;
-    }
-
     public function findByChannel(SalesChannel $salesChannel, AclHelper $aclHelper): array
     {
         $qb = $this->createQueryBuilder('product');
@@ -146,14 +132,9 @@ class ProductRepository extends ServiceEntityRepository
 
     public function findByDataKey(string $key, AclHelper $aclHelper): array
     {
-        if ($this->databaseDriver === self::PGSQL_DRIVER) {
-            $formattedDataField = 'CAST(p.data as TEXT)';
-        } else {
-            $formattedDataField = 'p.data';
-        }
         $qb = $this->createQueryBuilder('p');
         $qb
-            ->where(sprintf('%s LIKE :key', $formattedDataField))
+            ->where('CAST(p.data as TEXT) LIKE :key')
             ->setParameter('key', '%' . $key . '%');
 
         return $aclHelper->apply($qb->getQuery())->getResult();

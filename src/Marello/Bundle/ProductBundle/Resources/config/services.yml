@@ -135,8 +135,6 @@ services:
         parent: oro_entity.abstract_repository
         arguments:
             - 'Marello\Bundle\ProductBundle\Entity\Product'
-        calls:
-            - [setDatabaseDriver, ['%database_driver%']]
         tags:
             - { name: doctrine.repository_service }
 
