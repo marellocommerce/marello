@@ -1,5 +1,3 @@
-/*jslint nomen:true*/
-/*global define*/
 define(function(require) {
     'use strict';
 
@@ -14,7 +12,6 @@ define(function(require) {
          */
         options: {
             currencySelect: 'select[name$="[currency]"]',
-            selectedCurrency: 'option[selected="selected"]',
             attribute: 'currency'
         },
 
@@ -29,12 +26,10 @@ define(function(require) {
         initialize: function(options) {
             this.options = _.defaults(options || {}, this.options);
             this.$el = options._sourceElement;
+            this.$currencySelect = this.$el.find(this.options.currencySelect);
 
-            this.$currencySelect = this.$el.find(this.options.selectedCurrency);
-
-            this.options.attribute = this.$el.find(this.options.selectedCurrency.valueOf()).val();
-
-            this.$el.on('change', this.$currencySelect.selected, _.bind(this.triggerChangeEvent, this));
+            this.options.attribute = this.$currencySelect.val();
+            this.$currencySelect.on('change', _.bind(this.triggerChangeEvent, this));
         },
 
         /**
@@ -43,12 +38,8 @@ define(function(require) {
          * @param {Object} data
          */
         triggerChangeEvent: function(data) {
-            this.options.attribute = this.$el.find(this.options.selectedCurrency.valueOf()).val();
-            console.log(this.options.attribute);
-            console.log(data);
-
-            mediator.trigger('marello_sales:currency:changed', data);
-            console.log('Currency changed');
+            this.options.attribute = this.$currencySelect.val();
+            mediator.trigger('marello_sales:currency:changed', { to: this.options.attribute });
         },
 
         dispose: function() {

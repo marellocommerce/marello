@@ -17,24 +17,27 @@ define(function (require) {
          * @inheritDoc
          */
         initialize: function(options) {
-            console.log('SC select init');
             this.options = $.extend(true, {}, this.options, options);
-
             this.$sourceElement = options._sourceElement;
-            this.saveData($(this.options.currencyDataContainer).data(this.options.attribute));
+
+            const $currencyContainer = $(this.options.currencyDataContainer);
+
+            const initialCurrency = $currencyContainer.find(':selected').val();
+            this.saveData({ currency: initialCurrency });
+
             mediator.on('marello_sales:currency:changed', this.onCurrencyChange, this);
             Select2AutocompleteCurrencyAwareComponent.__super__.initialize.call(this, options);
         },
 
         makeQuery: function (query) {
             var currency = this.getData().currency;
+
             return query + ';' + currency;
         },
 
         onCurrencyChange: function(e) {
-            console.log('Received currency change event', e);
             if (e.to !== undefined) {
-                this.saveData(e.to);
+                this.saveData({ currency: e.to });
             }
         },
 
