@@ -7,6 +7,7 @@ use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Marello\Bundle\SupplierBundle\Form\Type\SupplierSelectType;
 use Oro\Bundle\CurrencyBundle\Model\LocaleSettings;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -17,22 +18,10 @@ class ProductSupplierRelationType extends AbstractType
 {
     const BLOCK_PREFIX = 'marello_product_supplier_relation_form';
 
-    /**
-     * @var LocaleSettings
-     */
-    protected $localeSettings;
+    public function __construct(
+        protected LocaleSettings $localeSettings
+    ) {}
 
-    /**
-     * @param LocaleSettings $localeSettings
-     */
-    public function __construct(LocaleSettings $localeSettings)
-    {
-        $this->localeSettings = $localeSettings;
-    }
-    
-    /**
-     * {@inheritdoc}
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -49,12 +38,10 @@ class ProductSupplierRelationType extends AbstractType
             ->add('priority')
             ->add('cost')
             ->add('canDropship')
+            ->add('leadTime', IntegerType::class)
         ;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -73,9 +60,6 @@ class ProductSupplierRelationType extends AbstractType
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBlockPrefix()
     {
         return self::BLOCK_PREFIX;

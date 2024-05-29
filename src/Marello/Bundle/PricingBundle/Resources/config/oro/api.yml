@@ -25,9 +25,9 @@ api:
             documentation_resource: '@MarelloPricingBundle/Resources/doc/api/assembledpricelist.md'
             fields:
                 createdAt:
-                    exclude: true
+                    exclude: false
                 updatedAt:
-                    exclude: true
+                    exclude: false
             filters:
                 exclusion_policy: all
                 fields:
@@ -41,9 +41,11 @@ api:
                         property_path: currency
                         description: 'Filter prices by currency'
                     createdAt:
-                        exclude: true
+                        data_type: datetime
+                        property_path: createdAt
                     updatedAt:
-                        exclude: true
+                        data_type: datetime
+                        property_path: updatedAt
             actions:
                 delete: false
                 delete_list: false
@@ -55,12 +57,12 @@ api:
 
         Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList:
             fields:
+                createdAt:
+                    exclude: false
+                updatedAt:
+                    exclude: false
                 saleschannel:
                     property_path: channel
-                createdAt:
-                    exclude: true
-                updatedAt:
-                    exclude: true
             filters:
                 exclusion_policy: all
                 fields:
@@ -78,9 +80,11 @@ api:
                         property_path: currency
                         description: 'Filter prices by currency'
                     createdAt:
-                        exclude: true
+                        data_type: datetime
+                        property_path: createdAt
                     updatedAt:
-                        exclude: true
+                        data_type: datetime
+                        property_path: updatedAt
             actions:
                 delete: false
                 delete_list: false

@@ -72,11 +72,7 @@ class ProductController extends AbstractController
         }
 
         $productTypesProvider = $this->container->get(ProductTypesProvider::class);
-        $em = $this->container->get(DoctrineHelper::class);
-        /** @var AttributeFamily $attributeFamily */
-        $countAttributeFamilies = $em
-            ->getEntityRepositoryForClass(AttributeFamily::class)
-            ->countFamiliesByEntityClass(Product::class);
+        $countAttributeFamilies = $this->getAttributeFamilyCount();
         if (count($productTypesProvider->getProductTypes()) <= 1 && $countAttributeFamilies <= 1) {
             $request->setMethod('POST');
             $request->request->set('input_action', 'marello_product_create');
@@ -127,7 +123,12 @@ class ProductController extends AbstractController
                 /** @var AttributeFamily $attributeFamily */
                 $attributeFamily = $em
                     ->getEntityRepositoryForClass(AttributeFamily::class)
-                    ->findOneBy(['entityClass' => Product::class]);
+                    ->findOneBy(
+                        [
+                            'entityClass' => Product::class,
+                            'owner' => $this->getUser()->getOrganization()
+                        ]
+                    );
                 $product->setType(Product::DEFAULT_PRODUCT_TYPE);
                 $product->setAttributeFamily($attributeFamily);
             }
@@ -314,6 +315,29 @@ class ProductController extends AbstractController
         return [
             'form' => $handler->getFormView(),
         ];
+    }
+
+    /**
+     * Get correct attribute family count with the current Organization taken into account.
+     * @return int
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function getAttributeFamilyCount()
+    {
+        $em = $this->container->get(DoctrineHelper::class);
+        $queryBuilder = $em
+            ->getEntityRepositoryForClass(AttributeFamily::class)
+            ->createQueryBuilder('family');
+
+        return (int)$queryBuilder
+            ->select($queryBuilder->expr()->count('family.id'))
+            ->andWhere($queryBuilder->expr()->eq('family.entityClass', ':entityClass'))
+            ->andWhere($queryBuilder->expr()->eq('family.owner', ':organization'))
+            ->setParameter('entityClass', Product::class)
+            ->setParameter('organization', $this->getUser()->getOrganization())
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     public static function getSubscribedServices()
