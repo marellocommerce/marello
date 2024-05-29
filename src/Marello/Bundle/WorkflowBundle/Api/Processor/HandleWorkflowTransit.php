@@ -40,7 +40,8 @@ class HandleWorkflowTransit implements ProcessorInterface
             throw new WorkflowNotFoundException($workflowName);
         }
 
-        $entity = $this->registry->getRepository($workflowDefinition->getRelatedEntity())->find($entityId);
+        $entityManager = $this->registry->getManagerForClass($workflowDefinition->getRelatedEntity());
+        $entity = $entityManager->getRepository($workflowDefinition->getRelatedEntity())->find($entityId);
         if (!$entity) {
             throw new EntityNotFoundException(sprintf(
                 'Entity "%s" with id %d not found.',
@@ -66,5 +67,7 @@ class HandleWorkflowTransit implements ProcessorInterface
         }
 
         $workflow->transit($workflowItem, $transitionName);
+
+        $entityManager->flush();
     }
 }
