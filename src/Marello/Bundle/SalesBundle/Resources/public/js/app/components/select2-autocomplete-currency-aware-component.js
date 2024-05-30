@@ -10,10 +10,7 @@ define(function (require) {
          */
         options: {
             currencyDataContainer: '.marello-currency-select-container',
-            salesChannelSelect: '.marello-sales-channel-select-container input[type="hidden"]',
-            textSelectorSC: 'span[class="select2-chosen"]',
-            attribute: 'currency',
-            allowClear: true
+            attribute: 'currency'
         },
 
         /**
@@ -29,8 +26,6 @@ define(function (require) {
             this.$sourceElement = options._sourceElement;
 
             const $currencyContainer = $(this.options.currencyDataContainer);
-            this.$salesChannelSelect = $currencyContainer.find('input[type="hidden"]');
-
             const initialCurrency = $currencyContainer.find(':selected').val();
             this.saveData({ currency: initialCurrency });
 
@@ -50,10 +45,7 @@ define(function (require) {
         onCurrencyChange: function(e) {
             if (e.to !== undefined) {
                 this.saveData({ currency: e.to });
-                this.$salesChannelSelect.inputWidget('val', '');
-                this.$salesChannelSelect.inputWidget('text', '');
-                this.$salesChannelSelect.data('select2_query_additional_params', {channelId: this.$salesChannelSelect.val()});
-                Select2AutocompleteCurrencyAwareComponent.reinitView();
+                this.$sourceElement.inputWidget('val', '');
             }
         },
 

@@ -29,7 +29,8 @@ class OrderDashboardStatisticProvider
             $this->aclHelper,
             $start,
             $end,
-            $widgetOptions->get('salesChannel')
+            $widgetOptions->get('salesChannel'),
+            $widgetOptions->get('currency') ?? ''
         );
     }
 
@@ -45,7 +46,8 @@ class OrderDashboardStatisticProvider
             $this->aclHelper,
             $start,
             $end,
-            $widgetOptions->get('salesChannel')
+            $widgetOptions->get('salesChannel'),
+            $widgetOptions->get('currency') ?? ''
         );
     }
 
@@ -62,7 +64,8 @@ class OrderDashboardStatisticProvider
             $this->aclHelper,
             $start,
             $end,
-            $widgetOptions->get('salesChannel')
+            $widgetOptions->get('salesChannel'),
+            $widgetOptions->get('currency') ?? ''
         );
     }
 }
