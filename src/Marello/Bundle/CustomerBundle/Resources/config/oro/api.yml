@@ -25,6 +25,11 @@ api:
                         allow_array: true
                         property_path: email
                         description: 'Filter by email'
+                    customerNumber:
+                        data_type: string
+                        allow_array: true
+                        property_path: customerNumber
+                        description: 'Filter by customerNumber'
             actions:
                 get_list:
                     fields:

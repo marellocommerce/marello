@@ -65,6 +65,9 @@ class Customer implements
     ])]
     protected ?MarelloAddress $primaryAddress = null;
 
+    #[ORM\Column(name: 'customer_number', type: Types::STRING, nullable: true)]
+    protected $customerNumber;
+
     #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id', nullable: true)]
     #[Oro\ConfigField(defaultValues: [
@@ -148,6 +151,18 @@ class Customer implements
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCustomerNumber(): ?string
+    {
+        return $this->customerNumber;
+    }
+
+    public function setCustomerNumber(string $customerNumber): self
+    {
+        $this->customerNumber = $customerNumber;
+
+        return $this;
     }
 
     /**

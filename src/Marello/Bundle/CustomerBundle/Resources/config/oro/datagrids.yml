@@ -24,6 +24,8 @@ datagrids:
                 label: marello.customer.name_suffix.label
             email:
                 label: marello.customer.email.label
+            customerNumber:
+                label: marello.customer.customer_number.label
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -52,6 +54,9 @@ datagrids:
                 email:
                     type: string
                     data_name: c.email
+                customerNumber:
+                    type: string
+                    data_name: c.customerNumber
                 createdAt:
                     type: datetime
                     data_name: c.createdAt
@@ -74,6 +79,8 @@ datagrids:
                     data_name: c.nameSuffix
                 email:
                     data_name: c.email
+                customerNumber:
+                    data_name: c.customerNumber
                 createdAt:
                     data_name: c.createdAt
                 updatedAt:
