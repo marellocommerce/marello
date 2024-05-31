@@ -18,7 +18,7 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="marello_customer_customer",
  *       uniqueConstraints={
