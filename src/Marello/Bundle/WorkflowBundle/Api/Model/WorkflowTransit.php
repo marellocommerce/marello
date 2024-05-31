@@ -10,7 +10,7 @@ class WorkflowTransit
 
     private ?string $transitionName;
 
-    private bool $success = false;
+    private array $data = [];
 
     public function getEntityId(): ?int
     {
@@ -48,14 +48,14 @@ class WorkflowTransit
         return $this;
     }
 
-    public function isSuccess(): bool
+    public function getData(): array
     {
-        return $this->success;
+        return $this->data;
     }
 
-    public function setSuccess(bool $success): self
+    public function setData(array $data): self
     {
-        $this->success = $success;
+        $this->data = $data;
 
         return $this;
     }
