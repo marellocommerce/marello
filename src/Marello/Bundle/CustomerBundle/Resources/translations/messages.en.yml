@@ -10,6 +10,7 @@ marello:
         addresses.label:                  'Addresses'
         email.label:                      'Primary Email'
         emails.label:                     'Email Addresses'
+        customer_number.label:            'Customer Number'
         name_prefix.label:                'Name Prefix'
         first_name.label:                 'First Name'
         middle_name.label:                'Middle Name'

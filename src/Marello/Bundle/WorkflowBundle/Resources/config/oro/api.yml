@@ -1,3 +1,45 @@
 api:
+    entity_aliases:
+        Marello\Bundle\WorkflowBundle\Api\Model\WorkflowTransit:
+            alias: marelloworkflowtransit
+            plural_alias: marelloworkflowtransits
+
     entities:
         Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition: ~
+
+        Marello\Bundle\WorkflowBundle\Api\Model\WorkflowTransit:
+            documentation_resource: '@MarelloWorkflowBundle/Resources/doc/api/workflow_api.md'
+            fields:
+                entityId:
+                    data_type: integer
+                workflowName:
+                    data_type: string
+                transitionName:
+                    data_type: string
+            actions:
+                get: false
+                get_list: false
+                update: false
+                delete: false
+                delete_list: false
+                create:
+                    description: Transit workflow step
+                    fields:
+                        entityId:
+                            direction: input-only
+                            form_options:
+                                constraints:
+                                    - NotBlank: ~
+                        workflowName:
+                            direction: input-only
+                            form_options:
+                                constraints:
+                                    - NotBlank: ~
+                        transitionName:
+                            direction: input-only
+                            form_options:
+                                constraints:
+                                    - NotBlank: ~
+                    status_codes:
+                        204: Returned when success
+                        403: Returned when something went wrong
