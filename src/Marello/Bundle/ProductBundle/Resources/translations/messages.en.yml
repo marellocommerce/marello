@@ -102,6 +102,11 @@ marello:
                         required: Currency is required
                     channel:
                         required: Channel is required
+                    price_currency:
+                        invalid: The currency is invalid. Please, select a currency from available Product Sales Channel's currencies
+                    price_channel:
+                        invalid: The Sales Channel is invalid. Please, select a Sales Channel from available Product Sales Channels
+                        currency.invalid: The currency doesn't match the Sales Channel's currency
             export:
                 template:
                     product.label: Download Product Import Template
