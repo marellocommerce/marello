@@ -1,0 +1,14 @@
+marello:
+    ticket:
+        assigned_tickets_widget:
+            title: 'Tickets'
+            no_tickets: 'No Assigned Tickets'
+            description: 'Customer support tickets assigned to current user'
+            statuses:
+                label: 'Status types'
+                open: 'Open'
+                in_progress: 'In Progress'
+                resolved: 'Resolved'
+                closed: 'Closed'
+            number_of_tickets: 'Number of Tickets'
+            settings: 'Assigned Tickets widget settings'

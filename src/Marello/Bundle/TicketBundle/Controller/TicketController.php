@@ -2,12 +2,16 @@
 
 namespace Marello\Bundle\TicketBundle\Controller;
 
+use Marello\Bundle\TicketBundle\Entity\Repository\TicketRepository;
 use Marello\Bundle\TicketBundle\Entity\Ticket;
+use Marello\Bundle\TicketBundle\Provider\TicketStatusInterface;
+use Oro\Bundle\UserBundle\Entity\User;
 use Marello\Bundle\TicketBundle\Form\Type\TicketType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -96,6 +100,51 @@ class TicketController extends AbstractController
             $request,
             null
         );
+    }
+
+    /**
+     * @Route(
+     *     "/widget/sidebar-assigned-tickets/{perPage}",
+     *     name="marello_ticket_widget_sidebar_assigned_tickets",
+     *     defaults={"perPage" = 10},
+     *     requirements={"perPage"="\d+"}
+     * )
+     * @AclAncestor("marello_ticket_view")
+     */
+    public function ticketsWidgetAction(Request $request, int $perPage): Response
+    {
+        /** @var TicketRepository $repository */
+        $repository = $this->container->get('doctrine')->getRepository(Ticket::class);
+        /** @var User $user */
+        $user = $this->getUser();
+        $statuses = $this->extractStatuses($request);
+        $tickets = $repository->getTicketsAssignedTo($user, $perPage, $statuses);
+
+        return $this->render(
+            '@MarelloTicket/Ticket/widget/assignedTicketsWidget.html.twig',
+            ['tickets' => $tickets]
+        );
+    }
+
+    protected function extractStatuses(Request $request): array
+    {
+        $possibleStatuses = [
+            TicketStatusInterface::TICKET_STATUS_OPEN,
+            TicketStatusInterface::TICKET_STATUS_IN_PROGRESS,
+            TicketStatusInterface::TICKET_STATUS_RESOLVED,
+            TicketStatusInterface::TICKET_STATUS_CLOSED,
+        ];
+        $statuses = $request->get('statuses', []);
+        if ($statuses) {
+            $statuses = array_keys($statuses);
+            foreach ($statuses as $key => $status) {
+                if (!\in_array($status, $possibleStatuses)) {
+                    unset($statuses[$key]);
+                }
+            }
+        }
+
+        return $statuses;
     }
 
     public static function getSubscribedServices()

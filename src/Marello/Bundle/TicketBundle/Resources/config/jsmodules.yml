@@ -1,0 +1,7 @@
+aliases:
+    marello/sidebar/widget/assigned_tickets_widget$: marelloticket/sidebar_widgets/assigned_tickets/js/widget
+dynamic-imports:
+    marelloticket:
+        - marelloticket/sidebar_widgets/assigned_tickets/js/widget
+    commons:
+        - marello/sidebar/widget/assigned_tickets_widget
