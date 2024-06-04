@@ -32,6 +32,30 @@ class AssembledPriceListStrategy extends AbstractAssembledPriceListStrategy
         return $entity;
     }
 
+    protected function processProduct(PriceListInterface|AssembledPriceList $entity): ?PriceListInterface
+    {
+        $result = parent::processProduct($entity);
+        if (!$result) {
+            return null;
+        }
+
+        // Check available currencies
+        foreach ($entity->getProduct()->getChannels() as $salesChannel) {
+            if ($salesChannel->getCurrency() === $entity->getCurrency()) {
+                return $entity;
+            }
+        }
+
+        $this->processValidationErrors(
+            $entity,
+            [
+                $this->translator->trans('marello.product.messages.import.error.price_currency.invalid')
+            ]
+        );
+
+        return null;
+    }
+
     private function processPrices(AssembledPriceList $entity): void
     {
         if ($defaultPrice = $entity->getDefaultPrice()) {

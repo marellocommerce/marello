@@ -22,12 +22,12 @@ class AssembledChannelPriceListStrategy extends AbstractAssembledPriceListStrate
             return $entity;
         }
 
-        $result = $this->processProduct($entity);
+        $result = $this->processChannel($entity);
         if (!$result) {
             return null;
         }
 
-        $result = $this->processChannel($entity);
+        $result = $this->processProduct($entity);
         if (!$result) {
             return null;
         }
@@ -35,6 +35,30 @@ class AssembledChannelPriceListStrategy extends AbstractAssembledPriceListStrate
         $this->processPrices($entity);
 
         return $entity;
+    }
+
+    protected function processProduct(PriceListInterface|AssembledChannelPriceList $entity): ?PriceListInterface
+    {
+        $result = parent::processProduct($entity);
+        if (!$result) {
+            return null;
+        }
+
+        // Check available SalesChannels
+        foreach ($entity->getProduct()->getChannels() as $salesChannel) {
+            if ($salesChannel->getCode() === $entity->getChannel()->getCode()) {
+                return $entity;
+            }
+        }
+
+        $this->processValidationErrors(
+            $entity,
+            [
+                $this->translator->trans('marello.product.messages.import.error.price_channel.invalid')
+            ]
+        );
+
+        return null;
     }
 
     protected function processChannel(AssembledChannelPriceList $entity): ?AssembledChannelPriceList
@@ -45,6 +69,17 @@ class AssembledChannelPriceListStrategy extends AbstractAssembledPriceListStrate
                 $entity,
                 [
                     $this->translator->trans('marello.product.messages.import.error.channel.required')
+                ]
+            );
+
+            return null;
+        }
+
+        if ($channel->getCurrency() !== $entity->getCurrency()) {
+            $this->processValidationErrors(
+                $entity,
+                [
+                    $this->translator->trans('marello.product.messages.import.error.price_channel.currency.invalid')
                 ]
             );
 
