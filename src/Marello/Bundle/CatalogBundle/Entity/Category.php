@@ -58,7 +58,7 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
 
     #[ORM\Column(name: 'code', type: Types::STRING, nullable: false)]
     #[Oro\ConfigField(
-        defaultValues: ['dataaudit' => ['auditable' => true]]
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true]]
     )]
     protected ?string $code = null;
 

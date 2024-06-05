@@ -1,0 +1,39 @@
+connector:
+    name: oro_importexport
+    jobs:
+        product_import_validation_from_csv:
+            title: "Product Import Validation from CSV"
+            type: import_validation
+            steps:
+                import_validation:
+                    title: import_validation
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader: oro_importexport.reader.csv
+                        processor: oro_importexport.processor.import_validation_delegate
+                        writer: oro_importexport.writer.doctrine_clear
+                    parameters: ~
+        product_import_from_csv:
+            title: "Product Import from CSV"
+            type: import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader: oro_importexport.reader.csv
+                        processor: oro_importexport.processor.import_delegate
+                        writer: oro_importexport.writer.entity
+                    parameters: ~
+        product_export_to_csv:
+            title: "Product Export to CSV"
+            type: export
+            steps:
+                export:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader: oro_importexport.reader.entity
+                        processor: oro_importexport.processor.export_delegate
+                        writer: oro_importexport.writer.csv
+                    parameters: ~

@@ -27,14 +27,14 @@ class BasePrice implements CurrencyAwareInterface
      * @var float
      */
     #[ORM\Column(name: 'value', type: 'money')]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 40], 'dataaudit' => ['auditable' => true]])]
     protected $value;
 
     /**
      * @var string
      */
     #[ORM\Column(name: 'currency', type: Types::STRING, length: 3)]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $currency;
 
     /**
@@ -42,7 +42,7 @@ class BasePrice implements CurrencyAwareInterface
      */
     #[ORM\JoinColumn(name: 'type', referencedColumnName: 'name', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\PriceType::class)]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $type;
 
     /**

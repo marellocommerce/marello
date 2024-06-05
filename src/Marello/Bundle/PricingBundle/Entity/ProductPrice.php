@@ -2,7 +2,6 @@
 
 namespace Marello\Bundle\PricingBundle\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -17,12 +16,9 @@ use Marello\Bundle\ProductBundle\Entity\Product;
 #[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-usd'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'dataaudit' => ['auditable' => true]])]
 class ProductPrice extends BasePrice
 {
-    /**
-     * @var Product
-     */
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'prices')]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $product;
 
     /**

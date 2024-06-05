@@ -22,7 +22,7 @@ class ProductChannelPrice extends BasePrice
      */
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'channelPrices')]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $product;
 
     /**
@@ -30,7 +30,7 @@ class ProductChannelPrice extends BasePrice
      */
     #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $channel;
 
     /**

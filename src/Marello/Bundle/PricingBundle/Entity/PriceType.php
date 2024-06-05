@@ -16,6 +16,7 @@ class PriceType
      */
     #[ORM\Id]
     #[ORM\Column(type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
     protected $name;
 
     /**

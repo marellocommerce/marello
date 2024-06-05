@@ -12,14 +12,14 @@ trait PriceDatesTrait
      * @var \DateTime
      */
     #[ORM\Column(name: 'start_date', type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => false], 'dataaudit' => ['auditable' => true]])]
     protected $startDate;
 
     /**
      * @var \DateTime
      */
     #[ORM\Column(name: 'end_date', type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => false], 'dataaudit' => ['auditable' => true]])]
     protected $endDate;
 
     public function getStartDate(): ?\DateTime

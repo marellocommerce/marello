@@ -144,9 +144,9 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['order' => 30, 'full' => false],
             'attribute' => ['is_attribute' => true],
-            'extend' => ['owner' => 'Custom']
+            'extend' => ['owner' => 'System']
         ]
     )]
     protected ?ProductStatus $status = null;
@@ -210,7 +210,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['order' => 40, 'full' => false],
             'attribute' => ['is_attribute' => true],
             'extend' => ['owner' => 'System']
         ]
@@ -281,7 +281,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['order' => 40, 'full' => false],
             'attribute' => ['is_attribute' => true],
             'extend' => ['owner' => 'System']
         ]
@@ -303,7 +303,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['order' => 50, 'full' => false],
             'attribute' => ['is_attribute' => true],
             'extend' => ['owner' => 'Custom']
         ]
@@ -324,7 +324,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => false],
-            'importexport' => ['order' => 10]
+            'importexport' => ['order' => 35, 'full' => false]
         ]
     )]
     protected ?AttributeFamily $attributeFamily = null;
@@ -676,6 +676,7 @@ class Product implements
     {
         if (!$this->channels->contains($channel)) {
             $this->channels->add($channel);
+            $channel->addProduct($this);
             $this->addChannelCode($channel->getCode());
         }
 
@@ -747,6 +748,19 @@ class Product implements
             $channelsCodes = array_diff($channelsCodes, [$channel->getCode()]);
             $this->channelsCodes = sprintf('|%s|', implode('|', $channelsCodes));
         }
+
+        return $this;
+    }
+
+    public function clearChannels(): self
+    {
+        /** @var SalesChannel $channel */
+        foreach ($this->channels as $channel) {
+            $channel->removeProduct($this);
+        }
+
+        $this->channels->clear();
+        $this->channelsCodes = '';
 
         return $this;
     }
@@ -1042,9 +1056,7 @@ class Product implements
     {
         if (!$this->hasCategory($category)) {
             $this->categories->add($category);
-            if (!$category->hasProduct($this)) {
-                $category->addProduct($this);
-            }
+            $category->addProduct($this);
             $this->addCategoryCode($category->getCode());
         }
 
@@ -1109,6 +1121,14 @@ class Product implements
     public function hasCategory(Category $category): bool
     {
         return $this->categories->contains($category);
+    }
+
+    public function clearCategories(): self
+    {
+        $this->categories->clear();
+        $this->categoriesCodes = '';
+
+        return $this;
     }
 
     /**

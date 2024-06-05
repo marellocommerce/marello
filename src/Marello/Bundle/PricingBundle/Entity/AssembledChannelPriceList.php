@@ -22,7 +22,7 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
 {
     use EntityCreatedUpdatedAtTrait;
     use ExtendEntityTrait;
-    
+
     /**
      * @var integer
      */
@@ -35,7 +35,7 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @var string
      */
     #[ORM\Column(name: 'currency', type: Types::STRING, length: 3)]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 10, 'identity' => true], 'dataaudit' => ['auditable' => true]])]
     protected $currency;
 
     /**
@@ -43,7 +43,7 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      */
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'channelPrices')]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 5, 'identity' => true, 'full' => false], 'dataaudit' => ['auditable' => true]])]
     protected $product;
 
     /**
@@ -51,7 +51,7 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      */
     #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true, 'full' => false], 'dataaudit' => ['auditable' => true]])]
     protected $channel;
 
     /**
@@ -59,7 +59,7 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      */
     #[ORM\JoinColumn(name: 'default_price_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\OneToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\ProductChannelPrice::class, cascade: ['persist'], orphanRemoval: true)]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 10, 'full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $defaultPrice;
 
     /**
@@ -67,7 +67,7 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      */
     #[ORM\JoinColumn(name: 'special_price_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     #[ORM\OneToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\ProductChannelPrice::class, cascade: ['persist'], orphanRemoval: true)]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 20, 'full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $specialPrice;
 
     /**
