@@ -6,5 +6,5 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 
 interface InventoryItemAwareInterface
 {
-    public function getInventoryItem(): InventoryItem;
+    public function getInventoryItem(): ?InventoryItem;
 }

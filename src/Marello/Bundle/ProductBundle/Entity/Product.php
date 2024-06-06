@@ -803,7 +803,7 @@ class Product implements
     /**
      * @return InventoryItem|null
      */
-    public function getInventoryItem(): InventoryItem
+    public function getInventoryItem(): ?InventoryItem
     {
         return $this->inventoryItem;
     }
