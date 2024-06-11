@@ -130,7 +130,12 @@ class OrderController extends AbstractController
      * @param MarelloAddress $address
      * @return array
      */
-    #[Route(path: '/widget/address/{id}/{typeId}', methods: ['GET', 'POST'], requirements: ['id' => '\d+', 'typeId' => '\d+'], name: 'marello_order_order_address')]
+    #[Route(
+        path: '/widget/address/{id}/{typeId}',
+        name: 'marello_order_order_address',
+        requirements: ['id' => '\d+', 'typeId' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[Template('@MarelloOrder/Order/widget/address.html.twig')]
     #[AclAncestor('marello_order_view')]
     public function addressAction(Request $request, MarelloAddress $address)
@@ -147,7 +152,12 @@ class OrderController extends AbstractController
      * @param MarelloAddress $address
      * @return array
      */
-    #[Route(path: '/update/address/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_order_order_updateaddress')]
+    #[Route(
+        path: '/update/address/{id}',
+        name: 'marello_order_order_updateaddress',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[Template('@MarelloOrder/Order/widget/updateAddress.html.twig')]
     #[AclAncestor('marello_order_update')]
     public function updateAddressAction(Request $request, MarelloAddress $address)
@@ -171,7 +181,12 @@ class OrderController extends AbstractController
     /**
      * @return array
      */
-    #[Route(path: '/widget/products', name: 'marello_order_widget_products_by_channel', requirements: ['id' => '\d+'], defaults: ['id' => 0])]
+    #[Route(
+        path: '/widget/products',
+        name: 'marello_order_widget_products_by_channel',
+        requirements: ['id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
     #[AclAncestor('marello_product_view')]
     #[Template('@MarelloOrder/Order/widget/productsByChannel.html.twig')]
     public function productsByChannelAction(Request $request)

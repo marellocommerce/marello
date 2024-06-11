@@ -14,7 +14,8 @@ class InventoryUpdateEventListener
         protected InventoryManager $manager,
         protected BalancedInventoryManager $balancedInventoryManager,
         protected WebhookProducer $webhookProducer
-    ) {}
+    ) {
+    }
 
     /**
      * Handle incoming event

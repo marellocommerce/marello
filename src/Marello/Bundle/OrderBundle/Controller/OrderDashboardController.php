@@ -17,7 +17,11 @@ class OrderDashboardController extends AbstractController
      * @param mixed $widget
      * @return array
      */
-    #[Route(path: '/orderitems_by_status/chart/{widget}', name: 'marello_order_dashboard_orderitems_by_status_chart', requirements: ['widget' => '[\w-]+'])]
+    #[Route(
+        path: '/orderitems_by_status/chart/{widget}',
+        name: 'marello_order_dashboard_orderitems_by_status_chart',
+        requirements: ['widget' => '[\w-]+']
+    )]
     #[Template('@MarelloOrder/Dashboard/orderitemsByStatus.html.twig')]
     public function orderitemsByStatusAction(Request $request, $widget)
     {

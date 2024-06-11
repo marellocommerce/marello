@@ -47,7 +47,7 @@ class ZipCode implements DatesAwareInterface
      * @var TaxJurisdiction
      */
     #[ORM\JoinColumn(name: 'tax_jurisdiction_id', referencedColumnName: 'id', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxJurisdiction::class, inversedBy: 'zipCodes', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: TaxJurisdiction::class, cascade: ['persist'], inversedBy: 'zipCodes')]
     protected $taxJurisdiction;
 
     /**

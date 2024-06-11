@@ -4,20 +4,30 @@ namespace Marello\Bundle\RefundBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\TaxBundle\Entity\TaxCode;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 #[ORM\Table(name: 'marello_refund_item')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id']])]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ]
+    ]
+)]
 class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -80,7 +90,7 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      *
      */
     #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxCode::class)]
+    #[ORM\ManyToOne(targetEntity: TaxCode::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $taxCode;
 
@@ -88,7 +98,7 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      * @var Refund
      */
     #[ORM\JoinColumn(name: 'refund_id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Refund::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: Refund::class, inversedBy: 'items')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $refund;
 
@@ -99,13 +109,6 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
     #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderItem;
-
-    /**
-     * RefundItem constructor.
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * @param $item

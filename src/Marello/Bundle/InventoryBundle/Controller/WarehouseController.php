@@ -20,7 +20,12 @@ class WarehouseController extends AbstractController
      * @param Request $request
      * @return array|RedirectResponse
      */
-    #[Route(path: '/update-default', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_inventory_warehouse_updatedefault')]
+    #[Route(
+        path: '/update-default',
+        name: 'marello_inventory_warehouse_updatedefault',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[Template('@MarelloInventory/Warehouse/updateDefault.html.twig')]
     #[AclAncestor('marello_inventory_warehouse_update')]
     public function updateDefaultAction(Request $request)
@@ -39,7 +44,8 @@ class WarehouseController extends AbstractController
             $em->flush();
             $request->getSession()->getFlashBag()->add(
                 'success',
-                $this->container->get(TranslatorInterface::class)->trans('marello.inventory.messages.success.warehouse.saved')
+                $this->container
+                    ->get(TranslatorInterface::class)->trans('marello.inventory.messages.success.warehouse.saved')
             );
             return $this->redirectToRoute('marello_inventory_warehouse_updatedefault');
         }

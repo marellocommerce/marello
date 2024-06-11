@@ -83,7 +83,13 @@ class SalesChannelGroup implements DatesAwareInterface, OrganizationAwareInterfa
     protected ?Collection $salesChannels = null;
 
     #[ORM\OneToOne(targetEntity: Channel::class)]
-    #[ORM\JoinColumn(name: 'integration_channel_id', referencedColumnName: 'id', unique: true, nullable: true, onDelete: 'SET NULL')]
+    #[ORM\JoinColumn(
+        name: 'integration_channel_id',
+        referencedColumnName: 'id',
+        unique: true,
+        nullable: true,
+        onDelete: 'SET NULL'
+    )]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true]
     ])]

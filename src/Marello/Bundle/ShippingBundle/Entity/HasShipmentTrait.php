@@ -2,12 +2,11 @@
 
 namespace Marello\Bundle\ShippingBundle\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 trait HasShipmentTrait
 {
-    #[ORM\OneToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\Shipment::class)]
+    #[ORM\OneToOne(targetEntity: Shipment::class)]
     protected $shipment;
 
     /**

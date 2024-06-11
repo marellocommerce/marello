@@ -7,11 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\CurrencyBundle\Entity\Price;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\UserBundle\Entity\Ownership\AuditableUserAwareTrait;
 
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
@@ -22,17 +23,35 @@ use Marello\Bundle\OrderBundle\Model\DiscountAwareInterface;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository;
 use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
 use Marello\Bundle\PricingBundle\Subtotal\Model\SubtotalAwareInterface;
 use Marello\Bundle\PricingBundle\Subtotal\Model\LineItemsAwareInterface;
 use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Oro\Bundle\UserBundle\Entity\Ownership\AuditableUserAwareTrait;
 
 #[ORM\Table(name: 'marello_order_order')]
 #[ORM\UniqueConstraint(columns: ['order_reference', 'saleschannel_id'])]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository::class)]
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeView: 'marello_order_order_view', routeName: 'marello_order_order_index', routeCreate: 'marello_order_order_create', defaultValues: ['entity' => ['icon' => 'fa-shopping-cart'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'USER', 'owner_field_name' => 'owner', 'owner_column_name' => 'user_owner_id', 'organization_field_name' => 'organization', 'organization_column_name' => 'organization_id'], 'grid' => ['default' => 'marello-order-select-grid'], 'dataaudit' => ['auditable' => true]])]
+#[Oro\Config(
+    routeView: 'marello_order_order_view',
+    routeName: 'marello_order_order_index',
+    routeCreate: 'marello_order_order_create',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-shopping-cart'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'USER',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'user_owner_id',
+            'organization_field_name' => 'organization',
+            'organization_column_name' => 'organization_id'
+        ],
+        'grid' => [
+            'default' => 'marello-order-select-grid'
+        ],
+        'dataaudit' => ['auditable' => true]]
+)]
 class Order implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -206,14 +225,19 @@ class Order implements
      */
     #[ORM\OneToMany(targetEntity: \OrderItem::class, mappedBy: 'order', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['full' => true],
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]]
+    )]
     protected $items;
 
     /**
      * @var Customer
      */
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $customer;
 
@@ -221,7 +245,7 @@ class Order implements
      * @var MarelloAddress
      */
     #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $billingAddress;
 
@@ -229,7 +253,7 @@ class Order implements
      * @var MarelloAddress
      */
     #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $shippingAddress;
 

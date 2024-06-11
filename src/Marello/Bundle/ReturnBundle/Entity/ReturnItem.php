@@ -5,22 +5,32 @@ namespace Marello\Bundle\ReturnBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\InventoryBundle\Model\InventoryItemAwareInterface;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\ReturnBundle\Entity\Repository\ReturnItemRepository;
 
 #[ORM\Table(name: 'marello_return_item')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\ReturnBundle\Entity\Repository\ReturnItemRepository::class)]
+#[ORM\Entity(repositoryClass: ReturnItemRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id']])]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ]
+    ]
+)]
 class ReturnItem implements
     CurrencyAwareInterface,
     InventoryItemAwareInterface,
@@ -43,7 +53,7 @@ class ReturnItem implements
      * @var ReturnEntity
      */
     #[ORM\JoinColumn(name: 'return_id', onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \ReturnEntity::class, inversedBy: 'returnItems')]
+    #[ORM\ManyToOne(targetEntity: ReturnEntity::class, inversedBy: 'returnItems')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $return;
 
@@ -51,7 +61,7 @@ class ReturnItem implements
      * @var OrderItem
      */
     #[ORM\JoinColumn(name: 'order_item_id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class, inversedBy: 'returnItems')]
+    #[ORM\ManyToOne(targetEntity: OrderItem::class, inversedBy: 'returnItems')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderItem;
 

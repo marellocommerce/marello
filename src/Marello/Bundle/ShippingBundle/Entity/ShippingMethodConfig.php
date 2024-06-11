@@ -37,11 +37,17 @@ class ShippingMethodConfig implements ExtendEntityInterface
     /**
      * @var Collection|ShippingMethodTypeConfig[]
      */
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig::class, mappedBy: 'methodConfig', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'methodConfig',
+        targetEntity: ShippingMethodTypeConfig::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     protected $typeConfigs;
 
     #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
+    #[ORM\ManyToOne(targetEntity: ShippingMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodConfigsRule;
 

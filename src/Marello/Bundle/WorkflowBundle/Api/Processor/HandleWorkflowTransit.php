@@ -21,7 +21,8 @@ class HandleWorkflowTransit implements ProcessorInterface
         private ManagerRegistry $registry,
         private WorkflowManager $workflowManager,
         private WorkflowRegistry $workflowRegistry
-    ) {}
+    ) {
+    }
 
     public function process(ContextInterface $context)
     {
@@ -35,7 +36,9 @@ class HandleWorkflowTransit implements ProcessorInterface
         $workflowName = $model->getWorkflowName();
         $transitionName = $model->getTransitionName();
 
-        $workflowDefinition = $this->registry->getRepository(WorkflowDefinition::class)->findOneBy(['name' => $workflowName]);
+        $workflowDefinition = $this->registry
+            ->getRepository(WorkflowDefinition::class)
+            ->findOneBy(['name' => $workflowName]);
         if (!$workflowDefinition) {
             throw new WorkflowNotFoundException($workflowName);
         }

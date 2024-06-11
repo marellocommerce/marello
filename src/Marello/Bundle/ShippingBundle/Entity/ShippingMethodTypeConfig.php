@@ -4,12 +4,15 @@ namespace Marello\Bundle\ShippingBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+
+use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodTypeConfigRepository;
 
 #[ORM\Table(name: 'marello_ship_method_type_conf')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodTypeConfigRepository::class)]
+#[ORM\Entity(repositoryClass: ShippingMethodTypeConfigRepository::class)]
 #[Oro\Config]
 class ShippingMethodTypeConfig implements ExtendEntityInterface
 {
@@ -45,7 +48,7 @@ class ShippingMethodTypeConfig implements ExtendEntityInterface
      * @var ShippingMethodConfig
      */
     #[ORM\JoinColumn(name: 'method_config_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig::class, inversedBy: 'typeConfigs')]
+    #[ORM\ManyToOne(targetEntity: ShippingMethodConfig::class, inversedBy: 'typeConfigs')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodConfig;
 

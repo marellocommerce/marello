@@ -21,7 +21,7 @@ class InventoryLevelController extends AbstractController
      * @param InventoryItem $inventoryItem
      * @return array
      */
-    #[Route(path: '/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventorylevel_index')]
+    #[Route(path: '/{id}', name: 'marello_inventory_inventorylevel_index', requirements: ['id' => '\d+'])]
     #[Template('@MarelloInventory/InventoryLevel/index.html.twig')]
     public function indexAction(InventoryItem $inventoryItem)
     {
@@ -38,7 +38,7 @@ class InventoryLevelController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/chart/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventorylevel_chart')]
+    #[Route(path: '/chart/{id}', name: 'marello_inventory_inventorylevel_chart', requirements: ['id' => '\d+'])]
     #[Template('@MarelloInventory/InventoryLevel/chart.html.twig')]
     public function chartAction(InventoryItem $inventoryItem, Request $request)
     {
@@ -82,7 +82,11 @@ class InventoryLevelController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/manage-batches/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventorylevel_manage_batches')]
+    #[Route(
+        path: '/manage-batches/{id}',
+        name: 'marello_inventory_inventorylevel_manage_batches',
+        requirements: ['id' => '\d+']
+    )]
     #[Template]
     public function manageBatchesAction(InventoryLevel $inventoryLevel, Request $request)
     {
@@ -102,7 +106,9 @@ class InventoryLevelController extends AbstractController
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $inventoryLevel,
             $this->createForm(InventoryLevelManageBatchesType::class, $inventoryLevel),
-            $this->container->get(TranslatorInterface::class)->trans('marello.inventory.messages.success.inventorybatches.saved'),
+            $this->container
+                ->get(TranslatorInterface::class)
+                ->trans('marello.inventory.messages.success.inventorybatches.saved'),
             $request
         );
     }
@@ -112,7 +118,11 @@ class InventoryLevelController extends AbstractController
      * @param InventoryLevel $inventoryLevel
      * @return array
      */
-    #[Route(path: '/manage-batches/view/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_inventorylevel_batches_view')]
+    #[Route(
+        path: '/manage-batches/view/{id}',
+        name: 'marello_inventory_inventorylevel_batches_view',
+        requirements: ['id' => '\d+']
+    )]
     #[Template('@MarelloInventory/InventoryLevel/batchesView.html.twig')]
     public function viewAction(InventoryLevel $inventoryLevel)
     {

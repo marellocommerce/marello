@@ -11,15 +11,23 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 #[ORM\Table(name: 'marello_inventory_alloc_item')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id']])]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id']
+    ]
+)]
 class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -37,16 +45,16 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
     /**
      * @var Allocation
      */
-    #[ORM\JoinColumn(name: 'allocation_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Allocation::class, inversedBy: 'items')]
+    #[ORM\JoinColumn(name: 'allocation_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Allocation::class, inversedBy: 'items')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $allocation;
 
     /**
      * @var Product
      */
-    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $product;
 
@@ -63,8 +71,8 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
     #[ORM\Column(name: 'product_name', type: Types::STRING, nullable: false)]
     protected $productName;
 
-    #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\OrderItem::class)]
+    #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: OrderItem::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderItem;
 
@@ -106,8 +114,8 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
     /**
      * @var Warehouse
      */
-    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
+    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Warehouse::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $warehouse;
 

@@ -27,7 +27,22 @@ use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 #[ORM\Table(name: 'marello_refund')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeView: 'marello_refund_view', routeName: 'marello_refund_index', routeCreate: 'marello_refund_create', defaultValues: ['entity' => ['icon' => 'fa-eur'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'grid' => ['default' => 'marello-refund-select-grid'], 'dataaudit' => ['auditable' => true]])]
+#[Oro\Config(
+    routeView: 'marello_refund_view',
+    routeName: 'marello_refund_index',
+    routeCreate: 'marello_refund_create',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-eur'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'grid' => ['default' => 'marello-refund-select-grid'],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class Refund implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -68,28 +83,34 @@ class Refund implements
      * @var float
      */
     #[ORM\Column(name: 'refund_subtotal', type: 'money')]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'entity' => ['label' => 'marello.refund.subtotal.label']])]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'entity' => ['label' => 'marello.refund.subtotal.label']
+    ])]
     protected $refundSubtotal = 0.00;
 
     /**
      * @var float
      */
     #[ORM\Column(name: 'refund_tax_total', type: 'money')]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'entity' => ['label' => 'marello.refund.tax_total.label']])]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'entity' => ['label' => 'marello.refund.tax_total.label']
+    ])]
     protected $refundTaxTotal = 0.00;
 
     /**
      * @var Customer
      */
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class)]
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $customer;
 
     /**
      * @var Collection|RefundItem[]
      */
-    #[ORM\OneToMany(targetEntity: \RefundItem::class, mappedBy: 'refund', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'refund', targetEntity: RefundItem::class, cascade: ['persist'], orphanRemoval: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $items;
 

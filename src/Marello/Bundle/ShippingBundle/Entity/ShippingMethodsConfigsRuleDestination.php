@@ -28,7 +28,13 @@ class ShippingMethodsConfigsRuleDestination
     /**
      * @var Collection|ShippingMethodsConfigsRuleDestinationPostalCode[]
      */
-    #[ORM\OneToMany(targetEntity: \ShippingMethodsConfigsRuleDestinationPostalCode::class, mappedBy: 'destination', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'destination',
+        targetEntity: ShippingMethodsConfigsRuleDestinationPostalCode::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     protected $postalCodes;
 
     /**
@@ -58,7 +64,7 @@ class ShippingMethodsConfigsRuleDestination
      * @var ShippingMethodsConfigsRule
      */
     #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule::class, inversedBy: 'destinations')]
+    #[ORM\ManyToOne(targetEntity: ShippingMethodsConfigsRule::class, inversedBy: 'destinations')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodConfigsRule;
 

@@ -4,17 +4,31 @@ namespace Marello\Bundle\InventoryBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
 
 #[ORM\Table(name: 'marello_inventory_warehouse')]
 #[ORM\UniqueConstraint(columns: ['code'])]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository::class)]
-#[Oro\Config(defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'owner', 'owner_column_name' => 'owner_id'], 'dataaudit' => ['auditable' => true]])]
+#[ORM\Entity(repositoryClass: WarehouseRepository::class)]
+#[Oro\Config(
+    defaultValues: [
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'owner_id'
+        ],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class Warehouse implements EmailHolderInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -54,7 +68,7 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      * @var OrganizationInterface
      */
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $owner;
 
@@ -62,21 +76,36 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      * @var MarelloAddress
      */
     #[ORM\JoinColumn(nullable: true)]
-    #[ORM\OneToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist', 'remove'])]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 40, 'full' => true], 'dataaudit' => ['auditable' => true]])]
+    #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 40, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $address = null;
 
     /**
      * @var WarehouseType
      */
     #[ORM\JoinColumn(name: 'warehouse_type', referencedColumnName: 'name')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\WarehouseType::class)]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 50, 'full' => true], 'dataaudit' => ['auditable' => true]])]
+    #[ORM\ManyToOne(targetEntity: WarehouseType::class)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 50, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $warehouseType;
     
     #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \WarehouseGroup::class, inversedBy: 'warehouses')]
-    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 60, 'full' => true], 'dataaudit' => ['auditable' => true]])]
+    #[ORM\ManyToOne(targetEntity: WarehouseGroup::class, inversedBy: 'warehouses')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 60, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $group;
     
     /**
@@ -95,7 +124,12 @@ class Warehouse implements EmailHolderInterface, ExtendEntityInterface
      * @var int
      */
     #[ORM\Column(name: 'sort_order_ood_loc', type: Types::INTEGER, nullable: true)]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'entity' => ['label' => 'marello.inventory.warehouse.sort_order_ood_loc.label']])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'entity' => ['label' => 'marello.inventory.warehouse.sort_order_ood_loc.label']
+        ]
+    )]
     protected $sortOrderOodLoc;
 
     /**

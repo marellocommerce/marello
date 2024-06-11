@@ -4,15 +4,26 @@ namespace Marello\Bundle\TaxBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
+use Marello\Bundle\TaxBundle\Entity\Repository\TaxRateRepository;
 
 /**
  * TaxRate
  */
 #[ORM\Table(name: 'marello_tax_tax_rate')]
 #[ORM\UniqueConstraint(name: 'marello_tax_rate_codeidx', columns: ['code'])]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxRateRepository::class)]
-#[Oro\Config(routeName: 'marello_tax_taxrate_index', routeView: 'marello_tax_taxrate_view', routeUpdate: 'marello_tax_taxrate_update', defaultValues: ['dataaudit' => ['auditable' => true], 'security' => ['type' => 'ACL', 'group_name' => '']])]
+#[ORM\Entity(repositoryClass: TaxRateRepository::class)]
+#[Oro\Config(
+    routeName: 'marello_tax_taxrate_index',
+    routeView: 'marello_tax_taxrate_view',
+    routeUpdate: 'marello_tax_taxrate_update',
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class TaxRate
 {
     /**

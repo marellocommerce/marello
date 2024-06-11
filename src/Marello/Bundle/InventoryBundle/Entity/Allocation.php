@@ -25,7 +25,21 @@ use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 #[ORM\Table(name: 'marello_inventory_allocation')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeView: 'marello_inventory_allocation_view', routeName: 'marello_inventory_allocation_index', defaultValues: ['entity' => ['icon' => 'fa-list-alt'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true], 'grid' => ['context' => 'marello-allocation-for-context-grid']])]
+#[Oro\Config(
+    routeView: 'marello_inventory_allocation_view',
+    routeName: 'marello_inventory_allocation_index',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-list-alt'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'grid' => ['context' => 'marello-allocation-for-context-grid']
+    ]
+)]
 class Allocation implements
     DerivedPropertyAwareInterface,
     OrganizationAwareInterface,
@@ -51,7 +65,7 @@ class Allocation implements
      *
      *
      */
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\InventoryBundle\Entity\AllocationItem::class, mappedBy: 'allocation', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: AllocationItem::class, mappedBy: 'allocation', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
     protected $items;
@@ -68,7 +82,7 @@ class Allocation implements
      * @var MarelloAddress
      */
     #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAddress;
 
@@ -76,7 +90,7 @@ class Allocation implements
      * @var Warehouse
      */
     #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', onDelete: 'SET NULL', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Warehouse::class)]
+    #[ORM\ManyToOne(targetEntity: Warehouse::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $warehouse;
 
@@ -84,14 +98,14 @@ class Allocation implements
      * @var Allocation
      */
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Allocation::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: Allocation::class, inversedBy: 'children')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $parent;
 
     /**
      * @var Collection|Allocation[]
      */
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Allocation::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: Allocation::class, mappedBy: 'parent')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $children;
 
@@ -99,7 +113,7 @@ class Allocation implements
      * @var Allocation
      */
     #[ORM\JoinColumn(name: 'source_entity_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\Allocation::class)]
+    #[ORM\ManyToOne(targetEntity: Allocation::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $sourceEntity;
 

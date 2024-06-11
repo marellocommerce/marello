@@ -35,7 +35,12 @@ class BalancedInventoryLevelController extends AbstractController
      * @param Request $request
      */
     #[Route(path: '/recalculate', name: 'marello_inventory_balancedinventorylevel_recalculate')]
-    #[Acl(id: 'marello_inventory_inventory_recalculate_update', type: 'entity', class: BalancedInventoryLevel::class, permission: 'EDIT')]
+    #[Acl(
+        id: 'marello_inventory_inventory_recalculate_update',
+        type: 'entity',
+        class: BalancedInventoryLevel::class,
+        permission: 'EDIT'
+    )]
     public function recalculateAction(Request $request)
     {
         $messageProducer = $this->container->get(MessageProducerInterface::class);

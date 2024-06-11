@@ -24,10 +24,24 @@ use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
 use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository;
+
 #[ORM\Table(name: 'marello_order_order_item')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository::class)]
+#[ORM\Entity(repositoryClass: OrderItemRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''], 'dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'USER', 'owner_field_name' => 'owner', 'owner_column_name' => 'user_owner_id', 'organization_field_name' => 'organization', 'organization_column_name' => 'organization_id']])]
+#[Oro\Config(
+    defaultValues: [
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'USER',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'user_owner_id',
+            'organization_field_name' => 'organization',
+            'organization_column_name' => 'organization_id'
+        ]
+    ]
+)]
 class OrderItem implements
     CurrencyAwareInterface,
     QuantityAwareInterface,
@@ -53,7 +67,7 @@ class OrderItem implements
      * @var ProductInterface
      */
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $product;
 
@@ -74,7 +88,7 @@ class OrderItem implements
      * @var Order
      */
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Order::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'items')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $order;
 
@@ -158,7 +172,7 @@ class OrderItem implements
     /**
      * @var ReturnItem[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ReturnBundle\Entity\ReturnItem::class, mappedBy: 'orderItem', cascade: [])]
+    #[ORM\OneToMany(targetEntity: ReturnItem::class, mappedBy: 'orderItem', cascade: [])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $returnItems;
 
@@ -166,7 +180,7 @@ class OrderItem implements
      * @var TaxCode
      */
     #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxCode::class)]
+    #[ORM\ManyToOne(targetEntity: TaxCode::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $taxCode;
     

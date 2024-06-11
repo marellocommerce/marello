@@ -2,19 +2,22 @@
 
 namespace Marello\Bundle\InventoryBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository::class), ORM\HasLifecycleCallbacks]
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
+
+#[ORM\Entity(repositoryClass: WarehouseChannelGroupLinkRepository::class), ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_inventory_wh_chg_link')]
 #[Oro\Config(
     defaultValues: [
@@ -62,7 +65,7 @@ class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEnt
     #[ORM\JoinTable(name: 'marello_inventory_lnk_join_chg')]
     #[ORM\JoinColumn(name: 'link_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'channel_group_id', referencedColumnName: 'id', unique: true)]
-    #[ORM\ManyToMany(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannelGroup::class, fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: SalesChannelGroup::class, fetch: 'EAGER')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannelGroups;
 

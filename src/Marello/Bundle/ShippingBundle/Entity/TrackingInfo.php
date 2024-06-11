@@ -69,7 +69,11 @@ class TrackingInfo implements ExtendEntityInterface
      * @var Shipment
      */
     #[ORM\JoinColumn(name: 'shipment_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\OneToOne(targetEntity: \Marello\Bundle\ShippingBundle\Entity\Shipment::class, inversedBy: 'trackingInfo', cascade: ['persist'])]
+    #[ORM\OneToOne(
+        inversedBy: 'trackingInfo',
+        targetEntity: Shipment::class,
+        cascade: ['persist'],
+    )]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shipment;
 

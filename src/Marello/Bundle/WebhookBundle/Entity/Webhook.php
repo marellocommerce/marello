@@ -2,21 +2,34 @@
 
 namespace Marello\Bundle\WebhookBundle\Entity;
 
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
-use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
+
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\WebhookBundle\Entity\Repository\WebhookRepository;
 
 #[ORM\Table(name: 'marello_webhook')]
 #[ORM\Index(name: 'idx_marello_webhook_created_at', columns: ['created_at'])]
 #[ORM\Index(name: 'idx_marello_webhook_updated_at', columns: ['updated_at'])]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\WebhookBundle\Entity\Repository\WebhookRepository::class)]
+#[ORM\Entity(repositoryClass: WebhookRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-briefcase'], 'dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'security' => ['type' => 'ACL', 'group_name' => '']])]
+#[Oro\Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-briefcase'],
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;

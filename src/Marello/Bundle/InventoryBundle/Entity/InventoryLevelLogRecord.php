@@ -4,11 +4,14 @@ namespace Marello\Bundle\InventoryBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
+use Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelLogRecordRepository;
 
 #[ORM\Table(name: 'marello_inventory_level_log')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelLogRecordRepository::class)]
+#[ORM\Entity(repositoryClass: InventoryLevelLogRecordRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-list-alt']])]
 class InventoryLevelLogRecord
@@ -26,16 +29,26 @@ class InventoryLevelLogRecord
      * @var InventoryLevel
      */
     #[ORM\JoinColumn(name: 'inventory_level_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryLevel::class, inversedBy: 'inventoryLevelLogRecords')]
-    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.inventorylevel.entity_label'], 'importexport' => ['excluded' => true]])]
+    #[ORM\ManyToOne(targetEntity: InventoryLevel::class, inversedBy: 'inventoryLevelLogRecords')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => ['label' => 'marello.inventory.inventorylevel.entity_label'],
+            'importexport' => ['excluded' => true]
+        ]
+    )]
     protected $inventoryLevel;
 
     /**
      * @var InventoryItem
      */
-    #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryItem::class, cascade: ['persist', 'remove'])]
-    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.inventoryitem.entity_label'], 'importexport' => ['excluded' => true]])]
+    #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: InventoryItem::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => ['label' => 'marello.inventory.inventoryitem.entity_label'],
+            'importexport' => ['excluded' => true]
+        ]
+    )]
     protected $inventoryItem;
 
     /**
@@ -70,7 +83,7 @@ class InventoryLevelLogRecord
      * @var User
      */
     #[ORM\JoinColumn(name: 'user_id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\UserBundle\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $user = null;
 

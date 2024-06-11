@@ -27,7 +27,7 @@ class ShippingMethodsConfigsRuleDestinationPostalCode
      * @var ShippingMethodsConfigsRuleDestination
      */
     #[ORM\JoinColumn(name: 'destination_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \ShippingMethodsConfigsRuleDestination::class, inversedBy: 'postalCodes')]
+    #[ORM\ManyToOne(targetEntity: ShippingMethodsConfigsRuleDestination::class, inversedBy: 'postalCodes')]
     private $destination;
 
     /**

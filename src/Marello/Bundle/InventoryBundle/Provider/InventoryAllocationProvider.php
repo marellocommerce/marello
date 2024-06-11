@@ -263,7 +263,6 @@ class InventoryAllocationProvider
             $this->newAllocations = [];
 
             $em->flush();
-
         }
     }
 

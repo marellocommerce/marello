@@ -4,17 +4,28 @@ namespace Marello\Bundle\TaxBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+
+use Marello\Bundle\TaxBundle\Entity\Repository\TaxCodeRepository;
 
 /**
  * TaxCode
  */
 #[ORM\Table(name: 'marello_tax_tax_code')]
 #[ORM\UniqueConstraint(name: 'marello_tax_code_codeidx', columns: ['code'])]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\TaxBundle\Entity\Repository\TaxCodeRepository::class)]
-#[Oro\Config(routeName: 'marello_tax_taxcode_index', routeView: 'marello_tax_taxcode_view', routeUpdate: 'marello_tax_taxcode_update', defaultValues: ['dataaudit' => ['auditable' => true], 'security' => ['type' => 'ACL', 'group_name' => '']])]
+#[ORM\Entity(repositoryClass: TaxCodeRepository::class)]
+#[Oro\Config(
+    routeName: 'marello_tax_taxcode_index',
+    routeView: 'marello_tax_taxcode_view',
+    routeUpdate: 'marello_tax_taxcode_update',
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class TaxCode implements ExtendEntityInterface
 {
     use ExtendEntityTrait;

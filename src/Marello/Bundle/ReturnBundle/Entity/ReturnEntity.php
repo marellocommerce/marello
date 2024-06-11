@@ -2,30 +2,48 @@
 
 namespace Marello\Bundle\ReturnBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
-use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\ShippingBundle\Entity\HasShipmentTrait;
-use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
-use Marello\Bundle\ShippingBundle\Integration\ShippingAwareInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
+use Marello\Bundle\ShippingBundle\Entity\HasShipmentTrait;
+use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
+use Marello\Bundle\ShippingBundle\Integration\ShippingAwareInterface;
+use Marello\Bundle\ReturnBundle\Entity\Repository\ReturnEntityRepository;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
+
 #[ORM\Table(name: 'marello_return_return')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\ReturnBundle\Entity\Repository\ReturnEntityRepository::class)]
+#[ORM\Entity(repositoryClass: ReturnEntityRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeView: 'marello_return_return_view', routeName: 'marello_return_return_index', routeCreate: 'marello_return_return_create', defaultValues: ['entity' => ['icon' => 'fa-undo'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'grid' => ['default' => 'marello-return-select-grid'], 'dataaudit' => ['auditable' => true]])]
+#[Oro\Config(
+    routeView: 'marello_return_return_view',
+    routeName: 'marello_return_return_index',
+    routeCreate: 'marello_return_return_create',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-undo'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'grid' => ['default' => 'marello-return-select-grid'],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class ReturnEntity implements
     DerivedPropertyAwareInterface,
     ShippingAwareInterface,
@@ -52,7 +70,7 @@ class ReturnEntity implements
     /**
      * @var Order
      */
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class)]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $order;
 
@@ -67,15 +85,22 @@ class ReturnEntity implements
      * @var Collection|ReturnItem[]
      */
     #[ORM\JoinColumn]
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\ReturnBundle\Entity\ReturnItem::class, mappedBy: 'return', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
+    #[ORM\OneToMany(
+        mappedBy: 'return',
+        targetEntity: ReturnItem::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[Oro\ConfigField(
+        defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]]
+    )]
     protected $returnItems;
 
     /**
      * @var SalesChannel
      */
-    #[ORM\JoinColumn(name: 'sales_channel_id', onDelete: 'SET NULL', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
+    #[ORM\JoinColumn(name: 'sales_channel_id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannel;
 

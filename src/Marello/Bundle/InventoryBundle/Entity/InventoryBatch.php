@@ -4,20 +4,33 @@ namespace Marello\Bundle\InventoryBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+
+use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
-use Oro\Bundle\SecurityBundle\Tools\UUIDGenerator;
+
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
 
 #[ORM\Table(name: 'marello_inventory_batch')]
 #[ORM\UniqueConstraint(name: 'UNIQ_380BD44456B7924', columns: ['batch_number', 'inventory_level_id'])]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-cubes'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true]])]
+#[Oro\Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-cubes'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class InventoryBatch implements
     DerivedPropertyAwareInterface,
     OrganizationAwareInterface,
@@ -103,8 +116,14 @@ class InventoryBatch implements
      * @var InventoryLevel
      */
     #[ORM\JoinColumn(name: 'inventory_level_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\InventoryBundle\Entity\InventoryLevel::class, inversedBy: 'inventoryBatches', cascade: ['persist'])]
-    #[Oro\ConfigField(defaultValues: ['entity' => ['label' => 'marello.inventory.inventorylevel.entity_label'], 'importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => false]])]
+    #[ORM\ManyToOne(targetEntity: InventoryLevel::class, cascade: ['persist'], inversedBy: 'inventoryBatches')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => ['label' => 'marello.inventory.inventorylevel.entity_label'],
+            'importexport' => ['excluded' => true],
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
     protected $inventoryLevel;
 
 
