@@ -62,7 +62,12 @@ class SalesChannelController extends AbstractController
      * @param SalesChannel $channel
      * @return array
      */
-    #[Route(path: '/update/{id}', name: 'marello_sales_saleschannel_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/update/{id}',
+        name: 'marello_sales_saleschannel_update',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[Template]
     #[AclAncestor('marello_saleschannel_update')]
     public function updateAction(SalesChannel $channel, Request $request)
@@ -80,7 +85,8 @@ class SalesChannelController extends AbstractController
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $channel,
             $this->createForm(SalesChannelType::class, $channel),
-            $this->container->get(TranslatorInterface::class)->trans('marello.sales.saleschannel.messages.success.saved'),
+            $this->container
+                ->get(TranslatorInterface::class)->trans('marello.sales.saleschannel.messages.success.saved'),
             $request,
             'marello_sales.saleschannel_form.handler'
         );

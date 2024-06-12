@@ -26,6 +26,7 @@ use Marello\Bundle\TaxBundle\Form\Type\TaxCodeSelectType;
 use Marello\Bundle\PricingBundle\Form\EventListener\PricingSubscriber;
 use Marello\Bundle\PricingBundle\Form\EventListener\ChannelPricingSubscriber;
 use Marello\Bundle\SalesBundle\Form\EventListener\DefaultSalesChannelSubscriber;
+
 class ProductType extends AbstractType
 {
     const BLOCK_PREFIX = 'marello_product_form';

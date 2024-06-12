@@ -46,7 +46,8 @@ class HandleLogin implements ProcessorInterface
         private UserCheckerInterface $userChecker,
         private EventDispatcher $eventDispatcher,
         private TranslatorInterface $translator
-    ) { }
+    ) {
+    }
 
     /**
      * {@inheritdoc}

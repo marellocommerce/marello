@@ -2,7 +2,6 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
-
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -86,7 +85,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     #[ORM\ManyToMany(targetEntity: MarelloAddress::class, cascade: ['persist'], fetch: 'EAGER')]
     #[ORM\JoinTable(name: 'marello_company_join_address')]
     #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'address_id', referencedColumnName: 'id',  unique: true)]
+    #[ORM\InverseJoinColumn(name: 'address_id', referencedColumnName: 'id', unique: true)]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => [

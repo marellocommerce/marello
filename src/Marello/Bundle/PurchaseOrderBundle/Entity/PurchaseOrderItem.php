@@ -17,11 +17,20 @@ use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\PurchaseOrderBundle\Entity\Repository\PurchaseOrderItemRepository;
 
 #[ORM\Table(name: 'marello_purchase_order_item')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\PurchaseOrderBundle\Entity\Repository\PurchaseOrderItemRepository::class)]
+#[ORM\Entity(repositoryClass: PurchaseOrderItemRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id']])]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id']
+    ]
+)]
 class PurchaseOrderItem implements
     ProductAwareInterface,
     OrganizationAwareInterface
@@ -46,7 +55,7 @@ class PurchaseOrderItem implements
     /**
      * @var ProductInterface
      */
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $product;
 
@@ -54,7 +63,7 @@ class PurchaseOrderItem implements
      * @var PurchaseOrder
      */
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \PurchaseOrder::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: PurchaseOrder::class, inversedBy: 'items')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $order;
 
@@ -116,7 +125,12 @@ class PurchaseOrderItem implements
      * @var array $data
      */
     #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
-    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $data = [];
 
     /**
@@ -125,13 +139,6 @@ class PurchaseOrderItem implements
     #[ORM\Column(name: 'status', type: Types::STRING)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $status = self::STATUS_DRAFT;
-
-    /**
-     * PurchaseOrderItem constructor.
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * @return string

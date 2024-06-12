@@ -65,7 +65,7 @@ class Allocation implements
      *
      *
      */
-    #[ORM\OneToMany(targetEntity: AllocationItem::class, mappedBy: 'allocation', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'allocation', targetEntity: AllocationItem::class, cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
     protected $items;
@@ -74,7 +74,7 @@ class Allocation implements
      * @var Order
      */
     #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Order::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $order;
 

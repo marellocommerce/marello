@@ -4,9 +4,10 @@ namespace Marello\Bundle\PaymentBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 #[ORM\Table(name: 'marello_pmnt_mtdscfgsrl_dst_pc')]
 #[ORM\Entity]
@@ -29,14 +30,19 @@ class PaymentMethodsConfigsRuleDestinationPostalCode implements ExtendEntityInte
      * @var string
      */
     #[ORM\Column(type: Types::TEXT, nullable: false)]
-    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['identity' => true, 'order' => 10]
+        ]
+    )]
     protected $name;
 
     /**
      * @var PaymentMethodsConfigsRuleDestination
      */
-    #[ORM\JoinColumn(name: 'destination_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination::class, inversedBy: 'postalCodes')]
+    #[ORM\JoinColumn(name: 'destination_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: PaymentMethodsConfigsRuleDestination::class, inversedBy: 'postalCodes')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $destination;
 

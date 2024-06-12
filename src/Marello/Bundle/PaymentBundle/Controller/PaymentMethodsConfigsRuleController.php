@@ -45,7 +45,12 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/create', name: 'marello_payment_methods_configs_rule_create')]
     #[Template('@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig')]
-    #[Acl(id: 'marello_payment_methods_configs_rule_create', type: 'entity', permission: 'CREATE', class: PaymentMethodsConfigsRule::class)]
+    #[Acl(
+        id: 'marello_payment_methods_configs_rule_create',
+        type: 'entity',
+        permission: 'CREATE',
+        class: PaymentMethodsConfigsRule::class
+    )]
     public function createAction(Request $request)
     {
         return $this->update(new PaymentMethodsConfigsRule(), $request);
@@ -58,7 +63,12 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/view/{id}', name: 'marello_payment_methods_configs_rule_view', requirements: ['id' => '\d+'])]
     #[Template('@MarelloPayment/PaymentMethodsConfigsRule/view.html.twig')]
-    #[Acl(id: 'marello_payment_methods_configs_rule_view', type: 'entity', class: PaymentMethodsConfigsRule::class, permission: 'VIEW')]
+    #[Acl(
+        id: 'marello_payment_methods_configs_rule_view',
+        type: 'entity',
+        class: PaymentMethodsConfigsRule::class,
+        permission: 'VIEW'
+    )]
     public function viewAction(PaymentMethodsConfigsRule $paymentMethodsConfigsRule)
     {
         return [
@@ -73,7 +83,12 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/update/{id}', name: 'marello_payment_methods_configs_rule_update', requirements: ['id' => '\d+'])]
     #[Template('@MarelloPayment/PaymentMethodsConfigsRule/update.html.twig')]
-    #[Acl(id: 'marello_payment_methods_configs_rule_update', type: 'entity', permission: 'EDIT', class: PaymentMethodsConfigsRule::class)]
+    #[Acl(
+        id: 'marello_payment_methods_configs_rule_update',
+        type: 'entity',
+        permission: 'EDIT',
+        class: PaymentMethodsConfigsRule::class
+    )]
     public function updateAction(Request $request, PaymentMethodsConfigsRule $entity)
     {
         return $this->update($entity, $request);
@@ -119,7 +134,12 @@ class PaymentMethodsConfigsRuleController extends AbstractController
      */
     #[Route(path: '/{gridName}/massAction/{actionName}', name: 'marello_payment_methods_configs_massaction')]
     #[CsrfProtection]
-    #[Acl(id: 'marello_payment_methods_configs_update', type: 'entity', permission: 'EDIT', class: PaymentMethodsConfigsRule::class)]
+    #[Acl(
+        id: 'marello_payment_methods_configs_update',
+        type: 'entity',
+        permission: 'EDIT',
+        class: PaymentMethodsConfigsRule::class
+    )]
     public function markMassAction($gridName, $actionName, Request $request)
     {
         /** @var MassActionDispatcher $massActionDispatcher */

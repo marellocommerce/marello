@@ -2,22 +2,40 @@
 
 namespace Marello\Bundle\PaymentBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+
+use Marello\Bundle\RuleBundle\Entity\Rule;
 use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
+use Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository;
 
 #[ORM\Table(name: 'marello_payment_mtds_cfgs_rl')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository::class)]
-#[Oro\Config(routeName: 'marello_payment_methods_configs_rule_index', routeView: 'marello_payment_methods_configs_rule_view', routeCreate: 'marello_payment_methods_configs_rule_create', routeUpdate: 'marello_payment_methods_configs_rule_update', defaultValues: ['ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true], 'security' => ['type' => 'ACL', 'group_name' => '']])]
+#[ORM\Entity(repositoryClass: PaymentMethodsConfigsRuleRepository::class)]
+#[Oro\Config(
+    routeName: 'marello_payment_methods_configs_rule_index',
+    routeView: 'marello_payment_methods_configs_rule_view',
+    routeCreate: 'marello_payment_methods_configs_rule_create',
+    routeUpdate: 'marello_payment_methods_configs_rule_update',
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class PaymentMethodsConfigsRule implements
     RuleOwnerInterface,
     OrganizationAwareInterface,
@@ -37,21 +55,33 @@ class PaymentMethodsConfigsRule implements
     /**
      * @var Collection|PaymentMethodConfig[]
      */
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig::class, mappedBy: 'methodsConfigsRule', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'methodsConfigsRule',
+        targetEntity: PaymentMethodConfig::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     protected $methodConfigs;
 
     /**
      * @var RuleInterface
      */
-    #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\RuleBundle\Entity\Rule::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Rule::class, cascade: ['persist', 'remove'])]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $rule;
 
     /**
      * @var Collection|PaymentMethodsConfigsRuleDestination[]
      */
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination::class, mappedBy: 'methodsConfigsRule', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'methodsConfigsRule',
+        targetEntity: PaymentMethodsConfigsRuleDestination::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     protected $destinations;
 
     /**
@@ -65,7 +95,7 @@ class PaymentMethodsConfigsRule implements
      * @var Organization
      */
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
     protected $organization;
 
     public function __construct()

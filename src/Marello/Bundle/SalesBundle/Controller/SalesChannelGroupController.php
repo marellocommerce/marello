@@ -38,7 +38,12 @@ class SalesChannelGroupController extends AbstractController
      */
     #[Route(path: '/create', name: 'marello_sales_saleschannelgroup_create')]
     #[Template('@MarelloSales/SalesChannelGroup/update.html.twig')]
-    #[Acl(id: 'marello_sales_saleschannelgroup_create', type: 'entity', permission: 'CREATE', class: SalesChannelGroup::class)]
+    #[Acl(
+        id: 'marello_sales_saleschannelgroup_create',
+        type: 'entity',
+        permission: 'CREATE',
+        class: SalesChannelGroup::class
+    )]
     public function createAction(Request $request)
     {
         return $this->update(new SalesChannelGroup(), $request);
@@ -51,7 +56,12 @@ class SalesChannelGroupController extends AbstractController
      */
     #[Route(path: '/view/{id}', name: 'marello_sales_saleschannelgroup_view', requirements: ['id' => '\d+'])]
     #[Template]
-    #[Acl(id: 'marello_sales_saleschannelgroup_view', type: 'entity', class: SalesChannelGroup::class, permission: 'VIEW')]
+    #[Acl(
+        id: 'marello_sales_saleschannelgroup_view',
+        type: 'entity',
+        class: SalesChannelGroup::class,
+        permission: 'VIEW'
+    )]
     public function viewAction(SalesChannelGroup $salesChannelGroup)
     {
         return [
@@ -66,7 +76,12 @@ class SalesChannelGroupController extends AbstractController
      */
     #[Route(path: '/update/{id}', name: 'marello_sales_saleschannelgroup_update', requirements: ['id' => '\d+'])]
     #[Template]
-    #[Acl(id: 'marello_sales_saleschannelgroup_update', type: 'entity', permission: 'EDIT', class: SalesChannelGroup::class)]
+    #[Acl(
+        id: 'marello_sales_saleschannelgroup_update',
+        type: 'entity',
+        permission: 'EDIT',
+        class: SalesChannelGroup::class
+    )]
     public function updateAction(Request $request, SalesChannelGroup $entity)
     {
         if ($entity->isSystem()) {
@@ -91,7 +106,8 @@ class SalesChannelGroupController extends AbstractController
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->createForm(SalesChannelGroupType::class, $entity),
-            $this->container->get(TranslatorInterface::class)->trans('marello.sales.saleschannelgroup.messages.success.saved'),
+            $this->container
+                ->get(TranslatorInterface::class)->trans('marello.sales.saleschannelgroup.messages.success.saved'),
             $request,
             'marello_sales.saleschannelgroup_form.handler'
         );

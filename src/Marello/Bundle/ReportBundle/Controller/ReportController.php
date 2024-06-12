@@ -2,12 +2,13 @@
 
 namespace Marello\Bundle\ReportBundle\Controller;
 
-use Oro\Bundle\DataGridBundle\Datagrid\Manager;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\DataGridBundle\Datagrid\Manager;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 
 class ReportController extends AbstractController
 {
@@ -17,7 +18,15 @@ class ReportController extends AbstractController
      * @param string $reportName
      * @return array
      */
-    #[Route(path: '/static/{reportGroupName}/{reportName}/{_format}', name: 'marello_report_index', requirements: ['reportGroupName' => '\w+', 'reportName' => '\w+', '_format' => 'html|json'], defaults: ['_format' => 'html'])]
+    #[Route(
+        path: '/static/{reportGroupName}/{reportName}/{_format}',
+        name: 'marello_report_index',
+        requirements: [
+            'reportGroupName' => '\w+',
+            'reportName' => '\w+',
+            '_format' => 'html|json'],
+        defaults: ['_format' => 'html']
+    )]
     #[Template]
     #[AclAncestor('oro_report_view')]
     public function indexAction($reportGroupName, $reportName)

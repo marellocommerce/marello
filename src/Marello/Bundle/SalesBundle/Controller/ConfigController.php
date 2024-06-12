@@ -2,18 +2,21 @@
 
 namespace Marello\Bundle\SalesBundle\Controller;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Provider\SalesChannelConfigurationFormProvider;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ConfigBundle\Form\Handler\ConfigHandler;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\SyncBundle\Content\DataUpdateTopicSender;
 use Oro\Bundle\SyncBundle\Content\TagGeneratorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Provider\SalesChannelConfigurationFormProvider;
 
 class ConfigController extends AbstractController
 {
@@ -24,7 +27,12 @@ class ConfigController extends AbstractController
      * @param mixed $activeSubGroup
      * @return array
      */
-    #[Route(path: '/saleschannel/{id}/{activeGroup}/{activeSubGroup}', name: 'marello_sales_config_saleschannel', requirements: ['id' => '\d+'], defaults: ['activeGroup' => null, 'activeSubGroup' => null])]
+    #[Route(
+        path: '/saleschannel/{id}/{activeGroup}/{activeSubGroup}',
+        name: 'marello_sales_config_saleschannel',
+        requirements: ['id' => '\d+'],
+        defaults: ['activeGroup' => null, 'activeSubGroup' => null]
+    )]
     #[Template]
     #[AclAncestor('marello_sales_saleschannel_update')]
     public function salesChannelAction(
@@ -54,7 +62,8 @@ class ConfigController extends AbstractController
             ) {
                 $request->getSession()->getFlashBag()->add(
                     'success',
-                    $this->container->get(TranslatorInterface::class)->trans('oro.config.controller.config.saved.message')
+                    $this->container
+                        ->get(TranslatorInterface::class)->trans('oro.config.controller.config.saved.message')
                 );
 
                 // outdate content tags, it's only special case for generation that are not covered by NavigationBundle

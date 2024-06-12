@@ -17,4 +17,3 @@ class MarelloPaymentBundle extends Bundle
         parent::build($container);
     }
 }
-

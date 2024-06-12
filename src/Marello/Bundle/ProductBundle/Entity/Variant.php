@@ -2,12 +2,14 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 /**
  * Represents a Marello Variant Product
@@ -15,7 +17,15 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 #[ORM\Table(name: 'marello_product_variant')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeName: 'marello_product_index', routeView: 'marello_product_view', defaultValues: ['entity' => ['icon' => 'fa-barcode'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'dataaudit' => ['auditable' => true]])]
+#[Oro\Config(
+    routeName: 'marello_product_index',
+    routeView: 'marello_product_view',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-barcode'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class Variant
 {
     use EntityCreatedUpdatedAtTrait;
@@ -31,7 +41,7 @@ class Variant
     /**
      * @var string
      */
-    #[ORM\Column(name: 'variant_code', type: Types::STRING, nullable: true, unique: true)]
+    #[ORM\Column(name: 'variant_code', type: Types::STRING, unique: true, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $variantCode;
 
@@ -41,7 +51,7 @@ class Variant
      * @var Collection|Product[] $products
      */
     #[ORM\JoinTable(name: 'marello_product_to_variant')]
-    #[ORM\OneToMany(targetEntity: \Product::class, cascade: ['persist'], mappedBy: 'variant')]
+    #[ORM\OneToMany(mappedBy: 'variant', targetEntity: Product::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $products;
 

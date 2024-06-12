@@ -4,6 +4,7 @@ namespace Marello\Bundle\PricingBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 
 #[ORM\Table(name: 'marello_pricing_price_type')]

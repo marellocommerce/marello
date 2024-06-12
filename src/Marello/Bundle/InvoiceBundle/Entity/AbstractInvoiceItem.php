@@ -4,23 +4,37 @@ namespace Marello\Bundle\InvoiceBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\ProductInterface;
-use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
-use Marello\Bundle\TaxBundle\Model\TaxAwareInterface;
+
 use Oro\Bundle\CurrencyBundle\Entity\PriceAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\TaxBundle\Model\TaxAwareInterface;
+use Marello\Bundle\ProductBundle\Entity\ProductInterface;
+use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
+use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
+
 #[ORM\Table(name: 'marello_invoice_invoice_item')]
 #[ORM\Entity]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ORM\DiscriminatorColumn(name: 'invoice_item_type', type: 'string')]
-#[ORM\DiscriminatorMap(['invoiceitem' => 'Marello\Bundle\InvoiceBundle\Entity\InvoiceItem', 'creditmemoitem' => 'Marello\Bundle\InvoiceBundle\Entity\CreditmemoItem'])]
+#[ORM\DiscriminatorMap([
+    'invoiceitem' => 'Marello\Bundle\InvoiceBundle\Entity\InvoiceItem',
+    'creditmemoitem' => 'Marello\Bundle\InvoiceBundle\Entity\CreditmemoItem'
+])]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id']])]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ]
+    ]
+)]
 abstract class AbstractInvoiceItem implements
     QuantityAwareInterface,
     PriceAwareInterface,
@@ -47,7 +61,7 @@ abstract class AbstractInvoiceItem implements
      * @var ProductInterface|Product
      */
     #[ORM\JoinColumn(onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class)]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $product;
 

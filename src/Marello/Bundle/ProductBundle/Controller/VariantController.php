@@ -27,7 +27,12 @@ class VariantController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/create/parent/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_product_create_variant')]
+    #[Route(
+        path: '/create/parent/{id}',
+        name: 'marello_product_create_variant',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[AclAncestor('marello_product_create_variant')]
     #[Template('@MarelloProduct/Variant/update.html.twig')]
     public function createVariantAction(Product $product, Request $request)
@@ -42,7 +47,11 @@ class VariantController extends AbstractController
      * @return array|Response
      * @throws NotFoundHttpException
      */
-    #[Route(path: '/add/{id}/parent/{parentId}', requirements: ['id' => '\d+', 'parentId' => '\d+'], name: 'marello_product_add_variant')]
+    #[Route(
+        path: '/add/{id}/parent/{parentId}',
+        name: 'marello_product_add_variant',
+        requirements: ['id' => '\d+', 'parentId' => '\d+']
+    )]
     #[AclAncestor('marello_product_add_variant')]
     #[Template('@MarelloProduct/Variant/update.html.twig')]
     public function updateVariantAction(Request $request, Variant $variant)
@@ -84,7 +93,9 @@ class VariantController extends AbstractController
         if ($handler->process($variant, $product)) {
             $request->getSession()->getFlashBag()->add(
                 'success',
-                $this->container->get(TranslatorInterface::class)->trans('marello.product.messages.success.variant.saved')
+                $this->container
+                    ->get(TranslatorInterface::class)
+                    ->trans('marello.product.messages.success.variant.saved')
             );
 
             /*
@@ -109,7 +120,7 @@ class VariantController extends AbstractController
      */
     #[Route(path: '/widget/info/{id}', name: 'marello_product_variant_widget_info', requirements: ['id' => '\d+'])]
     #[AclAncestor('marello_product_view')]
-    #[Template]
+    #[Template('@MarelloProduct/Variant/widget/info.html.twig')]
     public function infoAction(Product $product)
     {
         return [

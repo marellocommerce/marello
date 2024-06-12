@@ -2,36 +2,32 @@
 
 namespace Marello\Bundle\RuleBundle\Entity;
 
-
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- *
- */
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_rule')]
 #[ORM\Index(columns: ['created_at'], name: 'idx_marello_rule_created_at')]
 #[ORM\Index(columns: ['updated_at'], name: 'idx_marello_rule_updated_at')]
 #[Oro\Config(
-   defaultValues: [
-       'entity' => [
-           'icon' => 'fa-briefcase'
-      ],
-       'dataaudit' => [
-           'auditable' => true
-      ],
-       'security' => [
-           'type' => 'ACL',
-           'group_name' => ''
-      ]
-   ]
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-briefcase'
+        ],
+        'dataaudit' => [
+            'auditable' => true
+        ],
+        'security' => [
+            'type' => 'ACL',
+            'group_name' => ''
+        ]
+    ]
 )]
 class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
 {

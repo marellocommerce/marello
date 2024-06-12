@@ -2,26 +2,37 @@
 
 namespace Marello\Bundle\PricingBundle\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\PricingBundle\Entity\Repository\ProductChannelPriceRepository;
 
 /**
- * Represents a Marello ProductPrice
+ * Represents a Marello ProductChannelPrice
  */
 #[ORM\Table(name: 'marello_product_channel_price')]
-#[ORM\UniqueConstraint(name: 'marello_product_channel_price_uidx', columns: ['product_id', 'channel_id', 'currency', 'type'])]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\PricingBundle\Entity\Repository\ProductChannelPriceRepository::class)]
-#[Oro\Config(defaultValues: ['entity' => ['icon' => 'fa-usd'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'dataaudit' => ['auditable' => true]])]
+#[ORM\UniqueConstraint(
+    name: 'marello_product_channel_price_uidx',
+    columns: ['product_id', 'channel_id', 'currency', 'type']
+)]
+#[ORM\Entity(repositoryClass: ProductChannelPriceRepository::class)]
+#[Oro\Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-usd'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class ProductChannelPrice extends BasePrice
 {
     /**
      * @var Product
      */
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'channelPrices')]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'channelPrices')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $product;
 
@@ -29,7 +40,7 @@ class ProductChannelPrice extends BasePrice
      * @var SalesChannel
      */
     #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $channel;
 

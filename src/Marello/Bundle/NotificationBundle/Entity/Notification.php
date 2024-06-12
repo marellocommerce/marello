@@ -2,24 +2,34 @@
 
 namespace Marello\Bundle\NotificationBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
-use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
 use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
+use Oro\Bundle\AttachmentBundle\Entity\Attachment;
+use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
+use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 #[ORM\Table(name: 'marello_notification')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(defaultValues: ['grouping' => ['groups' => ['activity']], 'ownership' => ['organization_field_name' => 'organization', 'organization_column_name' => 'organization_id'], 'security' => ['type' => 'ACL', 'group_name' => '']])]
+#[Oro\Config(
+    defaultValues: [
+        'grouping' => ['groups' => ['activity']],
+        'ownership' => [
+            'organization_field_name' => 'organization',
+            'organization_column_name' => 'organization_id'
+        ],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class Notification implements ActivityInterface, ExtendEntityInterface
 {
     use ExtendActivity;
@@ -39,7 +49,7 @@ class Notification implements ActivityInterface, ExtendEntityInterface
      * @var EmailTemplate
      */
     #[ORM\JoinColumn(nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\EmailBundle\Entity\EmailTemplate::class, cascade: [])]
+    #[ORM\ManyToOne(targetEntity: EmailTemplate::class, cascade: [])]
     protected $template;
 
     /**
@@ -65,7 +75,7 @@ class Notification implements ActivityInterface, ExtendEntityInterface
      * @var Organization
      */
     #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
     protected $organization;
 
     /**
@@ -74,7 +84,7 @@ class Notification implements ActivityInterface, ExtendEntityInterface
     #[ORM\JoinTable(name: 'marello_notification_attach')]
     #[ORM\JoinColumn(name: 'notification_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'attachment_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Oro\Bundle\AttachmentBundle\Entity\Attachment::class, cascade: ['all'])]
+    #[ORM\ManyToMany(targetEntity: Attachment::class, cascade: ['all'])]
     protected $attachments;
 
     /**

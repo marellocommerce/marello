@@ -25,7 +25,8 @@ class WebhookTransport extends AbstractRestTransport
 
     public function __construct(
         protected LoggerInterface $logger
-    ) {}
+    ) {
+    }
 
     public function getSettingsFormType(): string
     {

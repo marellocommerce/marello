@@ -6,10 +6,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+
+use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
 
 #[ORM\Entity]
 class Invoice extends AbstractInvoice implements ExtendEntityInterface
@@ -34,18 +35,27 @@ class Invoice extends AbstractInvoice implements ExtendEntityInterface
     /**
      * @var Collection|InvoiceItem[]
      */
-    #[ORM\OneToMany(targetEntity: \InvoiceItem::class, mappedBy: 'invoice', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: InvoiceItem::class, cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
-    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $items;
 
     /**
      * @var PaymentTerm
-     *
-     * @ORM\ManyToONe(targetEntity="Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm")
      */
     #[ORM\JoinColumn(name: 'payment_term_id', nullable: true, onDelete: 'SET NULL')]
-    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
+    #[ORM\ManyToOne(targetEntity: PaymentTerm::class)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $paymentTerm;
 
     /**

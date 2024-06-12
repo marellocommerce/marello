@@ -35,7 +35,7 @@ class SupplierController extends AbstractController
      * @param Supplier $supplier
      * @return array
      */
-    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_supplier_supplier_view')]
+    #[Route(path: '/view/{id}', name: 'marello_supplier_supplier_view', requirements: ['id' => '\d+'])]
     #[Template]
     #[AclAncestor('marello_supplier_view')]
     public function viewAction(Supplier $supplier)
@@ -47,7 +47,7 @@ class SupplierController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_supplier_supplier_create')]
+    #[Route(path: '/create', name: 'marello_supplier_supplier_create', methods: ['GET', 'POST'])]
     #[Template]
     #[AclAncestor('marello_supplier_create')]
     public function createAction(Request $request)
@@ -61,7 +61,12 @@ class SupplierController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_supplier_supplier_update')]
+    #[Route(
+        path: '/update/{id}',
+        name: 'marello_supplier_supplier_update',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[Template]
     #[AclAncestor('marello_supplier_update')]
     public function updateAction(Supplier $supplier, Request $request)
@@ -81,7 +86,8 @@ class SupplierController extends AbstractController
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $supplier,
             $this->createForm(SupplierType::class, $supplier),
-            $this->container->get(TranslatorInterface::class)->trans('marello.supplier.messages.success.supplier.saved'),
+            $this->container
+                ->get(TranslatorInterface::class)->trans('marello.supplier.messages.success.supplier.saved'),
             $request
         );
     }
@@ -90,7 +96,12 @@ class SupplierController extends AbstractController
      * @param MarelloAddress $address
      * @return array
      */
-    #[Route(path: '/widget/address/{id}/{typeId}', methods: ['GET', 'POST'], requirements: ['id' => '\d+', 'typeId' => '\d+'], name: 'marello_supplier_supplier_address')]
+    #[Route(
+        path: '/widget/address/{id}/{typeId}',
+        name: 'marello_supplier_supplier_address',
+        requirements: ['id' => '\d+', 'typeId' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[Template('@MarelloSupplier/Supplier/widget/address.html.twig')]
     #[AclAncestor('marello_supplier_update')]
     public function addressAction(MarelloAddress $address)
@@ -106,7 +117,12 @@ class SupplierController extends AbstractController
      * @param MarelloAddress $address
      * @return array
      */
-    #[Route(path: '/update/address/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_supplier_supplier_updateaddress')]
+    #[Route(
+        path: '/update/address/{id}',
+        name: 'marello_supplier_supplier_updateaddress',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
     #[Template('@MarelloSupplier/Supplier/widget/updateAddress.html.twig')]
     #[AclAncestor('marello_supplier_update')]
     public function updateAddressAction(Request $request, MarelloAddress $address)
@@ -127,7 +143,7 @@ class SupplierController extends AbstractController
         return $responseData;
     }
 
-    #[Route(path: '/get-supplier-default-data', methods: ['GET'], name: 'marello_supplier_supplier_get_default_data')]
+    #[Route(path: '/get-supplier-default-data', name: 'marello_supplier_supplier_get_default_data', methods: ['GET'])]
     #[AclAncestor('marello_supplier_view')]
     public function getSupplierDefaultDataAction(Request $request)
     {

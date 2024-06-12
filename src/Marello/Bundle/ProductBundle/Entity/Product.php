@@ -82,7 +82,7 @@ class Product implements
      * This is a mirror field for performance reasons only.
      * It mirrors getDefaultName()->getString().
     */
-    #[ORM\Column(name: 'name', type: Types::STRING, length:255,  nullable: false)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length:255, nullable: false)]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
@@ -95,7 +95,7 @@ class Product implements
     #[ORM\ManyToMany(targetEntity: LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
     #[ORM\JoinTable(name: 'marello_product_product_name')]
     #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE' )]
+    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
@@ -182,7 +182,12 @@ class Product implements
     )]
     protected ?int $warranty = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: AssembledPriceList::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: AssembledPriceList::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
@@ -193,7 +198,12 @@ class Product implements
     )]
     protected ?Collection $prices = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: AssembledChannelPriceList::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: AssembledChannelPriceList::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(
         defaultValues: [
@@ -236,7 +246,12 @@ class Product implements
     )]
     protected ?Variant $variant = null;
 
-    #[ORM\OneToOne(mappedBy: 'product', targetEntity: InventoryItem::class, cascade: ['remove', 'persist'], orphanRemoval: true)]
+    #[ORM\OneToOne(
+        mappedBy: 'product',
+        targetEntity: InventoryItem::class,
+        cascade: ['remove', 'persist'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(
         defaultValues: [
@@ -254,7 +269,12 @@ class Product implements
     )]
     protected ?array $data = [];
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductSupplierRelation::class, cascade: ['remove', 'persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: ProductSupplierRelation::class,
+        cascade: ['remove', 'persist'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(
         defaultValues: [
@@ -288,7 +308,12 @@ class Product implements
     )]
     protected ?TaxCode $taxCode = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductChannelTaxRelation::class, cascade: ['remove', 'persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: ProductChannelTaxRelation::class,
+        cascade: ['remove', 'persist'],
+        orphanRemoval: true
+    )]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],

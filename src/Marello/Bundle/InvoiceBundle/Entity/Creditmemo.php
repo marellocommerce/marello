@@ -6,9 +6,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 #[ORM\Entity]
 class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
@@ -33,8 +33,18 @@ class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
     /**
      * @var Collection|CreditmemoItem[]
      */
-    #[ORM\OneToMany(targetEntity: \CreditmemoItem::class, mappedBy: 'invoice', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'invoice',
+        targetEntity: CreditmemoItem::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
     #[ORM\OrderBy(['id' => 'ASC'])]
-    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $items;
 }

@@ -2,35 +2,51 @@
 
 namespace Marello\Bundle\InvoiceBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Marello\Bundle\PaymentBundle\Entity\Payment;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
-use Marello\Bundle\PricingBundle\Subtotal\Model\LineItemsAwareInterface;
-use Marello\Bundle\PricingBundle\Subtotal\Model\SubtotalAwareInterface;
+use Marello\Bundle\PaymentBundle\Entity\Payment;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Bundle\PricingBundle\Subtotal\Model\SubtotalAwareInterface;
+use Marello\Bundle\PricingBundle\Subtotal\Model\LineItemsAwareInterface;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
+use Marello\Bundle\InvoiceBundle\Entity\Repository\AbstractInvoiceRepository;
 
 #[ORM\Table(name: 'marello_invoice_invoice')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\InvoiceBundle\Entity\Repository\AbstractInvoiceRepository::class)]
+#[ORM\Entity(repositoryClass: AbstractInvoiceRepository::class)]
 #[ORM\InheritanceType('SINGLE_TABLE')]
 #[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
-#[ORM\DiscriminatorMap(['invoice' => 'Marello\Bundle\InvoiceBundle\Entity\Invoice', 'creditmemo' => 'Marello\Bundle\InvoiceBundle\Entity\Creditmemo'])]
+#[ORM\DiscriminatorMap([
+    'invoice' => 'Marello\Bundle\InvoiceBundle\Entity\Invoice',
+    'creditmemo' => 'Marello\Bundle\InvoiceBundle\Entity\Creditmemo'])]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeView: 'marello_invoice_invoice_view', routeName: 'marello_invoice_invoice_index', defaultValues: ['entity' => ['icon' => 'fa-file-invoice'], 'security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true]])]
+#[Oro\Config(
+    routeView: 'marello_invoice_invoice_view',
+    routeName: 'marello_invoice_invoice_index',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-file-invoice'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 abstract class AbstractInvoice implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -68,7 +84,7 @@ abstract class AbstractInvoice implements
      * @var MarelloAddress
      */
     #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $billingAddress;
 
@@ -76,7 +92,7 @@ abstract class AbstractInvoice implements
      * @var MarelloAddress
      */
     #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAddress;
 
@@ -118,7 +134,7 @@ abstract class AbstractInvoice implements
      * @var Order
      */
     #[ORM\JoinColumn(onDelete: 'cascade', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class)]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $order;
 
@@ -140,7 +156,7 @@ abstract class AbstractInvoice implements
      * @var Customer
      */
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\CustomerBundle\Entity\Customer::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $customer;
 
@@ -148,7 +164,7 @@ abstract class AbstractInvoice implements
      * @var SalesChannel
      */
     #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class)]
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $salesChannel;
 
@@ -170,9 +186,14 @@ abstract class AbstractInvoice implements
     #[ORM\JoinTable(name: 'marello_invoice_payments')]
     #[ORM\JoinColumn(name: 'invoice_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'payment_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
-    #[ORM\ManyToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\Payment::class, cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Payment::class, cascade: ['persist'])]
     #[ORM\OrderBy(['id' => 'ASC'])]
-    #[Oro\ConfigField(defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $payments;
 
     /**

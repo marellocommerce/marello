@@ -10,13 +10,17 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Bundle\ProductBundle\Entity\Repository\ProductChannelTaxRelationRepository;
 
 /**
  * TaxCode
  */
 #[ORM\Table(name: 'marello_prod_prod_chan_tax_rel')]
-#[ORM\UniqueConstraint(name: 'marello_prod_prod_chan_tax_rel_uidx', columns: ['product_id', 'sales_channel_id', 'tax_code_id'])]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\ProductBundle\Entity\Repository\ProductChannelTaxRelationRepository::class)]
+#[ORM\UniqueConstraint(
+    name: 'marello_prod_prod_chan_tax_rel_uidx',
+    columns: ['product_id', 'sales_channel_id', 'tax_code_id']
+)]
+#[ORM\Entity(repositoryClass: ProductChannelTaxRelationRepository::class)]
 #[Oro\Config]
 class ProductChannelTaxRelation implements SalesChannelAwareInterface
 {
@@ -33,8 +37,8 @@ class ProductChannelTaxRelation implements SalesChannelAwareInterface
      *
      *
      */
-    #[ORM\JoinColumn(name: 'product_id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\ProductBundle\Entity\Product::class, inversedBy: 'salesChannelTaxCodes', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'product_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Product::class, cascade: ['persist'], inversedBy: 'salesChannelTaxCodes')]
     protected $product;
 
     /**
@@ -42,8 +46,8 @@ class ProductChannelTaxRelation implements SalesChannelAwareInterface
      *
      *
      */
-    #[ORM\JoinColumn(name: 'sales_channel_id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\SalesBundle\Entity\SalesChannel::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'sales_channel_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class, cascade: ['persist'])]
     protected $salesChannel;
 
     /**
@@ -51,8 +55,8 @@ class ProductChannelTaxRelation implements SalesChannelAwareInterface
      *
      *
      */
-    #[ORM\JoinColumn(name: 'tax_code_id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\TaxBundle\Entity\TaxCode::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'tax_code_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: TaxCode::class, cascade: ['persist'])]
     protected $taxCode;
 
     /**

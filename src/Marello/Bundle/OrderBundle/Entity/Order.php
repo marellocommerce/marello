@@ -223,7 +223,7 @@ class Order implements
     /**
      * @var Collection|OrderItem[]
      */
-    #[ORM\OneToMany(targetEntity: \OrderItem::class, mappedBy: 'order', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'ASC'])]
     #[Oro\ConfigField(
         defaultValues: [

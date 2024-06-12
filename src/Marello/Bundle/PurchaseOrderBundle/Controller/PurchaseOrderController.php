@@ -39,7 +39,7 @@ class PurchaseOrderController extends AbstractController
      * @param PurchaseOrder $purchaseOrder
      * @return array
      */
-    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_purchaseorder_purchaseorder_view')]
+    #[Route(path: '/view/{id}', name: 'marello_purchaseorder_purchaseorder_view', requirements: ['id' => '\d+'])]
     #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/view.html.twig')]
     #[AclAncestor('marello_purchase_order_view')]
     public function viewAction(PurchaseOrder $purchaseOrder)
@@ -73,7 +73,7 @@ class PurchaseOrderController extends AbstractController
      * @param PurchaseOrder $purchaseOrder
      * @return array
      */
-    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_purchaseorder_purchaseorder_update')]
+    #[Route(path: '/update/{id}', name: 'marello_purchaseorder_purchaseorder_update', requirements: ['id' => '\d+'])]
     #[AclAncestor('marello_purchase_order_update')]
     #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/update.html.twig')]
     public function updateAction(PurchaseOrder $purchaseOrder)
@@ -202,7 +202,12 @@ class PurchaseOrderController extends AbstractController
      * @param PurchaseOrder|null $purchaseOrder
      * @return array
      */
-    #[Route(path: '/widget/products/{id}', name: 'marello_purchase_order_widget_products_by_supplier', requirements: ['id' => '\d+'], defaults: ['id' => 0])]
+    #[Route(
+        path: '/widget/products/{id}',
+        name: 'marello_purchase_order_widget_products_by_supplier',
+        requirements: ['id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
     #[AclAncestor('marello_product_view')]
     #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/widget/productsBySupplier.html.twig')]
     public function productsBySupplierAction(PurchaseOrder $purchaseOrder = null)
@@ -224,7 +229,11 @@ class PurchaseOrderController extends AbstractController
      * @param Supplier $supplier
      * @return JsonResponse
      */
-    #[Route(path: '/supplier-product-price/{productId}/{supplierId}', methods: ['GET'], name: 'marello_purchase_order_supplier_product_price')]
+    #[Route(
+        path: '/supplier-product-price/{productId}/{supplierId}',
+        name: 'marello_purchase_order_supplier_product_price',
+        methods: ['GET']
+    )]
     #[Config\ParamConverter('product', options: ['mapping' => ['productId' => 'id']])]
     #[Config\ParamConverter('supplier', options: ['mapping' => ['supplierId' => 'id']])]
     #[AclAncestor('marello_product_view')]
@@ -243,7 +252,10 @@ class PurchaseOrderController extends AbstractController
     /**
      * @return array
      */
-    #[Route(path: '/widget/purchase-order-candidates-grid', name: 'marello_purchase_order_widget_purchase_order_candidates_grid')]
+    #[Route(
+        path: '/widget/purchase-order-candidates-grid',
+        name: 'marello_purchase_order_widget_purchase_order_candidates_grid'
+    )]
     #[AclAncestor('marello_product_view')]
     #[Config\Template('@MarelloPurchaseOrder/PurchaseOrder/widget/purchaseOrderCandidatesGrid.html.twig')]
     public function purchaseOrderCandidatesGridAction()

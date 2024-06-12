@@ -4,12 +4,15 @@ namespace Marello\Bundle\PaymentBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
+use Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodConfigRepository;
+
 #[ORM\Table(name: 'marello_payment_method_config')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodConfigRepository::class)]
+#[ORM\Entity(repositoryClass: PaymentMethodConfigRepository::class)]
 #[Oro\Config]
 class PaymentMethodConfig implements ExtendEntityInterface
 {
@@ -27,8 +30,8 @@ class PaymentMethodConfig implements ExtendEntityInterface
     /**
      * @var PaymentMethodsConfigsRule
      */
-    #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
+    #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: PaymentMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodsConfigsRule;
 

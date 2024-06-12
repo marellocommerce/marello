@@ -29,7 +29,12 @@ class AjaxUPSController extends AbstractController
      * @param Country $country
      * @return JsonResponse
      */
-    #[Route(path: '/get-shipping-services-by-country/{code}', methods: ['GET'], name: 'marello_ups_country_shipping_services', requirements: ['code' => '^[A-Z]{2}$'])]
+    #[Route(
+        path: '/get-shipping-services-by-country/{code}',
+        name: 'marello_ups_country_shipping_services',
+        requirements: ['code' => '^[A-Z]{2}$'],
+        methods: ['GET']
+    )]
     #[ParamConverter('country', options: ['id' => 'code'])]
     public function getShippingServicesByCountryAction(Country $country)
     {
@@ -51,7 +56,7 @@ class AjaxUPSController extends AbstractController
      * @param Channel|null $channel
      * @return JsonResponse
      */
-    #[Route(path: '/validate-connection/{channelId}/', methods: ['POST'], name: 'marello_ups_validate_connection')]
+    #[Route(path: '/validate-connection/{channelId}/', name: 'marello_ups_validate_connection', methods: ['POST'])]
     #[ParamConverter('channel', class: Channel::class, options: ['id' => 'channelId'])]
     public function validateConnectionAction(Request $request, Channel $channel = null)
     {

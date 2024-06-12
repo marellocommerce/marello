@@ -5,23 +5,35 @@ namespace Marello\Bundle\SupplierBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\SupplierBundle\Entity\Repository\SupplierRepository;
 
 /**
  * Supplier
  */
 #[ORM\Table(name: 'marello_supplier_supplier')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\SupplierBundle\Entity\Repository\SupplierRepository::class)]
+#[ORM\Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeName: 'marello_supplier_supplier_index', routeView: 'marello_supplier_supplier_view', defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'dataaudit' => ['auditable' => true]])]
+#[Oro\Config(
+    routeName: 'marello_supplier_supplier_index',
+    routeView: 'marello_supplier_supplier_view',
+    defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait, AuditableOrganizationAwareTrait;
@@ -49,7 +61,7 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
      * @var MarelloAddress
      */
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[ORM\OneToOne(targetEntity: \Marello\Bundle\AddressBundle\Entity\MarelloAddress::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist', 'remove'])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $address = null;
 

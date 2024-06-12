@@ -2,14 +2,16 @@
 
 namespace Marello\Bundle\UPSBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Symfony\Component\HttpFoundation\ParameterBag;
+
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 #[ORM\Entity]
 class UPSSettings extends Transport
@@ -78,7 +80,7 @@ class UPSSettings extends Transport
      * @var Country
      */
     #[ORM\JoinColumn(name: 'ups_country_code', referencedColumnName: 'iso2_code')]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
+    #[ORM\ManyToOne(targetEntity: Country::class)]
     protected $upsCountry;
 
     /**
@@ -87,7 +89,7 @@ class UPSSettings extends Transport
     #[ORM\JoinTable(name: 'marello_ups_transport_ship_srv')]
     #[ORM\JoinColumn(name: 'transport_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     #[ORM\InverseJoinColumn(name: 'ship_service_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\ManyToMany(targetEntity: \ShippingService::class, fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: ShippingService::class, fetch: 'EAGER')]
     protected $applicableShippingServices;
 
     /**
@@ -95,8 +97,8 @@ class UPSSettings extends Transport
      */
     #[ORM\JoinTable(name: 'marello_ups_transport_label')]
     #[ORM\JoinColumn(name: 'transport_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', onDelete: 'CASCADE', unique: true)]
-    #[ORM\ManyToMany(targetEntity: \Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
+    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
     protected $labels;
 
     /**

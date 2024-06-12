@@ -2,15 +2,16 @@
 
 namespace Marello\Bundle\PaymentBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\AddressBundle\Entity\Country;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
 #[ORM\Table('marello_payment_mtds_cfgs_rl_d')]
 #[ORM\Entity]
@@ -32,22 +33,28 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
     /**
      * @var PaymentMethodsConfigsRule
      */
-    #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule::class, inversedBy: 'destinations')]
+    #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: PaymentMethodsConfigsRule::class, inversedBy: 'destinations')]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodsConfigsRule;
 
     /**
      * @var Collection|PaymentMethodsConfigsRuleDestinationPostalCode[]
      */
-    #[ORM\OneToMany(targetEntity: \Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestinationPostalCode::class, mappedBy: 'destination', cascade: ['ALL'], fetch: 'EAGER', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'destination',
+        targetEntity: PaymentMethodsConfigsRuleDestinationPostalCode::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     protected $postalCodes;
 
     /**
      * @var Region
      */
     #[ORM\JoinColumn(name: 'region_code', referencedColumnName: 'combined_code')]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Region::class)]
+    #[ORM\ManyToOne(targetEntity: Region::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 20, 'short' => true, 'identity' => true]])]
     protected $region;
 
@@ -62,7 +69,7 @@ class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
      * @var Country
      */
     #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
+    #[ORM\ManyToOne(targetEntity: Country::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 40, 'short' => true, 'identity' => true]])]
     protected $country;
 

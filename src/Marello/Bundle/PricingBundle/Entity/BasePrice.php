@@ -4,9 +4,11 @@ namespace Marello\Bundle\PricingBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -41,7 +43,7 @@ class BasePrice implements CurrencyAwareInterface
      * @var PriceType
      */
     #[ORM\JoinColumn(name: 'type', referencedColumnName: 'name', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\PricingBundle\Entity\PriceType::class)]
+    #[ORM\ManyToOne(targetEntity: PriceType::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $type;
 

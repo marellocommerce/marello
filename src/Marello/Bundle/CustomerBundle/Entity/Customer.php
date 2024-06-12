@@ -2,7 +2,6 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
-
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -20,6 +19,7 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_customer_customer')]
 #[ORM\UniqueConstraint(name: 'marello_customer_emailorgidx', columns: ['email', 'organization_id'])]

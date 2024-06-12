@@ -4,21 +4,36 @@ namespace Marello\Bundle\NotificationMessageBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
+
+use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
-use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
-use Oro\Bundle\UserBundle\Entity\Group;
+
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\NotificationMessageBundle\Entity\Repository\NotificationMessageRepository;
 
 #[ORM\Table(name: 'marello_notification_message')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\NotificationMessageBundle\Entity\Repository\NotificationMessageRepository::class)]
+#[ORM\Entity(repositoryClass: NotificationMessageRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[Oro\Config(routeView: 'marello_notificationmessage_view', routeName: 'marello_notificationmessage_index', defaultValues: ['grouping' => ['groups' => ['activity']], 'ownership' => ['owner_type' => 'ORGANIZATION', 'owner_field_name' => 'organization', 'owner_column_name' => 'organization_id'], 'security' => ['type' => 'ACL', 'group_name' => '']])]
+#[Oro\Config(
+    routeView: 'marello_notificationmessage_view',
+    routeName: 'marello_notificationmessage_index',
+    defaultValues: [
+        'grouping' => ['groups' => ['activity']],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class NotificationMessage implements OrganizationAwareInterface, ActivityInterface, ExtendEntityInterface
 {
     use AuditableOrganizationAwareTrait;
@@ -94,7 +109,7 @@ class NotificationMessage implements OrganizationAwareInterface, ActivityInterfa
      * @var Group|null
      */
     #[ORM\JoinColumn(name: 'user_group_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\UserBundle\Entity\Group::class)]
+    #[ORM\ManyToOne(targetEntity: Group::class)]
     protected $userGroup;
 
     /**

@@ -2,7 +2,6 @@
 
 namespace Marello\Bundle\CoreBundle\Model;
 
-
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;

@@ -4,10 +4,13 @@ namespace Marello\Bundle\UPSBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\AddressBundle\Entity\Country;
 
+use Marello\Bundle\UPSBundle\Entity\Repository\ShippingServiceRepository;
+
 #[ORM\Table(name: 'marello_ups_shipping_service')]
-#[ORM\Entity(repositoryClass: \Marello\Bundle\UPSBundle\Entity\Repository\ShippingServiceRepository::class)]
+#[ORM\Entity(repositoryClass: ShippingServiceRepository::class)]
 class ShippingService
 {
     /**
@@ -34,7 +37,7 @@ class ShippingService
      * @var Country
      */
     #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code', nullable: false)]
-    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\AddressBundle\Entity\Country::class)]
+    #[ORM\ManyToOne(targetEntity: Country::class)]
     protected $country;
 
     /**
