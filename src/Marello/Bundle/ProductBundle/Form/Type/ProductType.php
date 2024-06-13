@@ -8,6 +8,7 @@ use Marello\Bundle\PricingBundle\Form\EventListener\PricingSubscriber;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Form\EventListener\DefaultSalesChannelSubscriber;
 use Marello\Bundle\TaxBundle\Form\Type\TaxCodeSelectType;
+use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
 use Oro\Bundle\AttachmentBundle\Form\Type\ImageType;
 use Oro\Bundle\FormBundle\Form\Extension\StripTagsExtension;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
@@ -168,6 +169,14 @@ class ProductType extends AbstractType
                 ImageType::class,
                 [
                     'label' => 'marello.product.image.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'ARFile',
+                FileType::class,
+                [
+                    'label' => 'marello.product.a_r_file.label',
                     'required' => false
                 ]
             )
