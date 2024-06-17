@@ -1,0 +1,4 @@
+css:
+    inputs:
+        - 'bundles/marelloticket/css/scss/main.scss'
+        - 'bundles/marelloticket/sidebar_widgets/assigned_tickets/css/styles.scss'

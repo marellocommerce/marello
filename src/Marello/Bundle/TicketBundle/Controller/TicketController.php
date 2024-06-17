@@ -5,6 +5,7 @@ namespace Marello\Bundle\TicketBundle\Controller;
 use Marello\Bundle\TicketBundle\Entity\Repository\TicketRepository;
 use Marello\Bundle\TicketBundle\Entity\Ticket;
 use Marello\Bundle\TicketBundle\Provider\TicketStatusInterface;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\UserBundle\Entity\User;
 use Marello\Bundle\TicketBundle\Form\Type\TicketType;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
@@ -18,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Marello\Bundle\TicketBundle\Entity\Ticket as TicketAlias;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TicketController extends AbstractController
 {
@@ -104,7 +106,7 @@ class TicketController extends AbstractController
 
     /**
      * @Route(
-     *     "/widget/sidebar-assigned-tickets/{perPage}",
+     *     path="/widget/sidebar-assigned-tickets/{perPage}",
      *     name="marello_ticket_widget_sidebar_assigned_tickets",
      *     defaults={"perPage" = 10},
      *     requirements={"perPage"="\d+"}
@@ -147,6 +149,11 @@ class TicketController extends AbstractController
         return $statuses;
     }
 
+    protected function getEventDispatcher()
+    {
+        return $this->container->get(EventDispatcherInterface::class);
+    }
+
     public static function getSubscribedServices()
     {
         return array_merge(
@@ -154,6 +161,8 @@ class TicketController extends AbstractController
             [
                 TranslatorInterface::class,
                 UpdateHandlerFacade::class,
+                EventDispatcherInterface::class,
+                EntityRoutingHelper::class,
             ]
         );
     }

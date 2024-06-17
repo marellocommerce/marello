@@ -13,7 +13,7 @@ use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Marello\Bundle\TicketBundle\Entity\Repository\TicketRepository")
  * @ORM\Table(name="marello_ticket")
  * @Config(
  *      routeName="marello_ticket_index",

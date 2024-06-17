@@ -3,6 +3,8 @@
 namespace Marello\Bundle\TicketBundle\Entity\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Marello\Bundle\TicketBundle\Entity\Ticket;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 class TicketRepository extends ServiceEntityRepository
@@ -21,8 +23,8 @@ class TicketRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('t');
 
         $qb
-            ->andWhere(
-                $qb->expr()->eq('t.assigned_to', ':user')
+            ->where(
+                $qb->expr()->eq('t.assignedTo', ':user')
             )
             ->orderBy('t.createdAt', 'DESC')
             ->setFirstResult(0)
@@ -30,7 +32,7 @@ class TicketRepository extends ServiceEntityRepository
             ->setParameter('user', $user);
 
         if ($statuses) {
-            $qb->andWhere($qb->expr()->in('t.status', ':statuses'))
+            $qb->andWhere($qb->expr()->in('t.ticketStatus', ':statuses'))
                 ->setParameter('statuses', $statuses);
         }
 

@@ -27,6 +27,12 @@ marello:
         message: 'Category saved'
     ticketcategory:
       entity_plural_label: 'Categories'
+    ticket_status:
+      label: 'Status'
+    ticket_category:
+      label: 'Category'
+    ticket_source:
+      label: 'Source'
     subject.label: 'Subject'
     description.label: 'Description'
     resolution.label: 'Resolution'

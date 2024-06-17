@@ -1,4 +1,3 @@
-
 define(function(require) {
     'use strict';
 
@@ -17,7 +16,7 @@ define(function(require) {
         template: template,
 
         events: {
-            'click .assigned-ticket-widget-row': 'onClickAssignedTicket'
+            'click .assigned-tickets-widget-row': 'onClickAssignedTicket'
         },
 
         listen: {
