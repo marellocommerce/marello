@@ -8,7 +8,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p1
+                    id: '<toString(@product1->sku)>'
             saleschannel:
                 data:
                     type: marellosaleschannels
@@ -16,7 +16,7 @@ data:
             defaultPrice:
                 data:
                     type: marelloproductchannelprices
-                    id: '<toString(@product1->channelPrices->get(0)->defaultPrice->id)>'
+                    id: '<toString(@marello_assembledchannelpricelist_p1_EUR->defaultPrice->id)>'
             specialPrice:
                 data: null
     -
@@ -28,7 +28,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p2
+                    id: '<toString(@product2->sku)>'
             saleschannel:
                 data:
                     type: marellosaleschannels
@@ -36,7 +36,7 @@ data:
             defaultPrice:
                 data:
                     type: marelloproductchannelprices
-                    id: '<toString(@product2->channelPrices->get(0)->defaultPrice->id)>'
+                    id: '<toString(@marello_assembledchannelpricelist_p2_EUR->defaultPrice->id)>'
             specialPrice:
                 data: null
     -
@@ -48,7 +48,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p3
+                    id: '<toString(@product3->sku)>'
             saleschannel:
                 data:
                     type: marellosaleschannels
@@ -56,7 +56,7 @@ data:
             defaultPrice:
                 data:
                     type: marelloproductchannelprices
-                    id: '<toString(@product3->channelPrices->get(0)->defaultPrice->id)>'
+                    id: '<toString(@marello_assembledchannelpricelist_p3_EUR->defaultPrice->id)>'
             specialPrice:
                 data: null
     -
@@ -68,7 +68,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p4
+                    id: '<toString(@product4->sku)>'
             saleschannel:
                 data:
                     type: marellosaleschannels
@@ -76,7 +76,7 @@ data:
             defaultPrice:
                 data:
                     type: marelloproductchannelprices
-                    id: '<toString(@product4->channelPrices->get(0)->defaultPrice->id)>'
+                    id: '<toString(@marello_assembledchannelpricelist_p4_EUR->defaultPrice->id)>'
             specialPrice:
                 data: null
     -
@@ -88,7 +88,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p4
+                    id: '<toString(@product4->sku)>'
             saleschannel:
                 data:
                     type: marellosaleschannels
@@ -96,6 +96,6 @@ data:
             defaultPrice:
                 data:
                     type: marelloproductchannelprices
-                    id: '<toString(@product4->channelPrices->get(1)->defaultPrice->id)>'
+                    id: '<toString(@marello_assembledchannelpricelist_p4_USD->defaultPrice->id)>'
             specialPrice:
                 data: null

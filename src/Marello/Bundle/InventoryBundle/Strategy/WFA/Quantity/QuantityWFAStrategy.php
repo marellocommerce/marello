@@ -46,12 +46,6 @@ class QuantityWFAStrategy implements WFAStrategyInterface
     /** @var EventDispatcherInterface $eventDispatcher */
     private $eventDispatcher;
 
-    /**
-     * @deprecated
-     * @var Warehouse[]
-     */
-    private $linkedWarehouses = [];
-
     private $warehouseTypes = [];
 
     private $excludedWarehouses = [];

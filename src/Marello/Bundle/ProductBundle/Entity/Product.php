@@ -2,8 +2,6 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
-use Cassandra\Varint;
-
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
@@ -1197,9 +1195,9 @@ class Product implements
     /**
      * This field is read-only, updated automatically prior to persisting.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDenormalizedDefaultName(): string
+    public function getDenormalizedDefaultName(): ?string
     {
         return $this->denormalizedDefaultName;
     }

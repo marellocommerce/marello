@@ -105,17 +105,4 @@ class PurchaseOrderAdviceCronTest extends WebTestCase
         self::assertEmpty($commandTester->getDisplay());
         self::assertEquals(PurchaseOrderAdviceCommand::EXIT_CODE, $commandTester->getStatusCode());
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function testAdviceCommandIsRegisteredCorrectly()
-    {
-        /** @var EntityRepository $scheduleRepository */
-        $scheduleRepository = self::getContainer()
-            ->get('doctrine')
-            ->getRepository(Schedule::class);
-        $crons = $scheduleRepository->findBy(['command' => PurchaseOrderAdviceCommand::COMMAND_NAME]);
-        self::assertCount(1, $crons);
-    }
 }

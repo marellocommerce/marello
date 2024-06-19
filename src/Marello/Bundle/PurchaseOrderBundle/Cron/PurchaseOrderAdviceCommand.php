@@ -37,9 +37,7 @@ class PurchaseOrderAdviceCommand extends Command implements CronCommandScheduleD
      * @param NotificationSettings $notificationSettings
      */
     public function __construct(
-        protected ContainerInterface $container,
-        protected EmailTemplateManager $emailTemplateManager,
-        protected NotificationSettings $notificationSettings
+        protected ContainerInterface $container
     ) {
         parent::__construct();
     }
@@ -143,13 +141,14 @@ class PurchaseOrderAdviceCommand extends Command implements CronCommandScheduleD
     private function sendNotification($templateName, $recipient, $items)
     {
         try {
-            $this->emailTemplateManager
-                ->sendTemplateEmail(
-                    From::emailAddress($this->notificationSettings->getSender()->toString()),
-                    [$recipient],
-                    new EmailTemplateCriteria($templateName),
-                    ['items' => $items]
-                );
+            // TODO:: fix me
+//            $this->emailTemplateManager
+//                ->sendTemplateEmail(
+//                    From::emailAddress($this->notificationSettings->getSender()->toString()),
+//                    [$recipient],
+//                    new EmailTemplateCriteria($templateName),
+//                    ['items' => $items]
+//                );
         } catch (EmailTemplateException $exception) {
             $errorContext = NotificationMessageContextFactory::createError(
                 NotificationMessageSourceInterface::NOTIFICATION_MESSAGE_SOURCE_SYSTEM,

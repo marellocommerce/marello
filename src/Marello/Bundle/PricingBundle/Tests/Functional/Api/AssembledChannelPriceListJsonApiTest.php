@@ -31,7 +31,6 @@ class AssembledChannelPriceListJsonApiTest extends RestJsonApiTestCase
      */
     public function testGetListOfAssembledChannelPriceLists()
     {
-        $this->markTestSkipped('issue with product load');
         $response = $this->cget(['entity' => self::TESTING_ENTITY], []);
 
         $this->assertJsonResponse($response);
@@ -45,7 +44,6 @@ class AssembledChannelPriceListJsonApiTest extends RestJsonApiTestCase
      */
     public function testGetPriceListByProductSku()
     {
-        $this->markTestSkipped('issue with product load');
         /** @var Product $product */
         $product = $this->getReference(LoadProductData::PRODUCT_1_REF);
         $response = $this->cget(
@@ -63,7 +61,6 @@ class AssembledChannelPriceListJsonApiTest extends RestJsonApiTestCase
      */
     public function testGetPriceListByChannel()
     {
-        $this->markTestSkipped('issue with product load');
         /** @var SalesChannel $salesChannel */
         $salesChannel = $this->getReference(LoadSalesData::CHANNEL_1_REF);
         $response = $this->cget(
@@ -81,7 +78,6 @@ class AssembledChannelPriceListJsonApiTest extends RestJsonApiTestCase
      */
     public function testCreateNewPriceListWithPrices()
     {
-        $this->markTestSkipped('issue with product load');
         $productResponse =  $this->post(
             ['entity' => 'marelloproducts'],
             'product_without_prices.yml'

@@ -104,13 +104,13 @@ class OrderJsonApiTest extends RestJsonApiTestCase
         $responseContent = json_decode($response->getContent());
         /** @var Order $order */
         $order = $this->getEntityManager()->find(Order::class, $responseContent->data->id);
-        $this->assertEquals($order->getCustomer()->getId(), $responseContent->data->relationships->customer->data->id);
+        $this->assertEquals($order->getCustomer()->getEmail(), $responseContent->data->relationships->customer->data->id);
 
         /** @var Customer $customer */
-        $customer = $this->getEntityManager()->find(
-            Customer::class,
-            $responseContent->data->relationships->customer->data->id
-        );
+        $customer = $this
+            ->getEntityManager()
+            ->getRepository(Customer::class)
+            ->findOneBy(['email'=> $responseContent->data->relationships->customer->data->id]);
         $this->assertEquals($order->getCustomer()->getEmail(), $customer->getEmail());
         $this->assertNull($customer->getPrimaryAddress());
         $this->assertNull($customer->getShippingAddress());

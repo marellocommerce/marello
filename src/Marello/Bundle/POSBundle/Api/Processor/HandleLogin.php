@@ -3,9 +3,9 @@
 namespace Marello\Bundle\POSBundle\Api\Processor;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Security\Http\Event\CheckPassportEvent;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -36,7 +36,7 @@ class HandleLogin implements ProcessorInterface
      * @param UserProviderInterface $userProvider
      * @param OrganizationGuesserInterface $organizationGuesser
      * @param UserCheckerInterface $userChecker
-     * @param EventDispatcher $eventDispatcher
+     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         private string $firewallName,
@@ -44,7 +44,7 @@ class HandleLogin implements ProcessorInterface
         private UserProviderInterface $userProvider,
         private OrganizationGuesserInterface $organizationGuesser,
         private UserCheckerInterface $userChecker,
-        private EventDispatcher $eventDispatcher,
+        private EventDispatcherInterface $eventDispatcher,
         private TranslatorInterface $translator
     ) {
     }

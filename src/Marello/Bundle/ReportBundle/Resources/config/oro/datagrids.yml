@@ -237,7 +237,7 @@ datagrids:
                         - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                     join:
                         inner:
-                            - { join: Marello\Bundle\RefundBundle\Entity\ReturnItem, alias: ri, conditionType: 'WITH', condition: 'oi.id = ri.orderItem' }
+                            - { join: Marello\Bundle\ReturnBundle\Entity\ReturnItem, alias: ri, conditionType: 'WITH', condition: 'oi.id = ri.orderItem' }
                     groupBy: oi.productSku, oi.productName
             columns:
                 productSku:

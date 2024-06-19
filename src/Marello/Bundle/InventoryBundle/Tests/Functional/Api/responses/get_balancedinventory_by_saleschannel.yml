@@ -6,7 +6,6 @@ data:
             inventory: 100
             balancedInventory: 100
             reservedInventory: null
-            updatedAt: null
             saleschannels:
                 - chan_eur
         relationships:
@@ -29,7 +28,6 @@ data:
             inventory: 50
             balancedInventory: 50
             reservedInventory: null
-            updatedAt: null
             saleschannels:
                 - chan_eur
         relationships:
@@ -52,7 +50,6 @@ data:
             inventory: 50
             balancedInventory: 50
             reservedInventory: null
-            updatedAt: null
             saleschannels:
                 - chan_eur
         relationships:
@@ -75,7 +72,6 @@ data:
             inventory: 33
             balancedInventory: 33
             reservedInventory: null
-            updatedAt: null
             saleschannels:
                 - chan_eur
         relationships:
@@ -98,7 +94,6 @@ data:
             inventory: 0
             balancedInventory: 0
             reservedInventory: null
-            updatedAt: null
             saleschannels:
                 - chan_eur
         relationships:

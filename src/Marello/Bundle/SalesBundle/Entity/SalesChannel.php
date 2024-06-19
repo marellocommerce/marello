@@ -190,9 +190,9 @@ class SalesChannel implements
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -218,9 +218,9 @@ class SalesChannel implements
     }
     
     /**
-     * @return SalesChannelType
+     * @return SalesChannelType|null
      */
-    public function getChannelType(): SalesChannelType
+    public function getChannelType(): ?SalesChannelType
     {
         return $this->channelType;
     }
@@ -278,9 +278,9 @@ class SalesChannel implements
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -297,9 +297,9 @@ class SalesChannel implements
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCurrency(): string
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -326,18 +326,18 @@ class SalesChannel implements
     }
 
     /**
-     * @return SalesChannelGroup
+     * @return SalesChannelGroup|null
      */
-    public function getGroup(): SalesChannelGroup
+    public function getGroup(): ?SalesChannelGroup
     {
         return $this->group;
     }
 
     /**
-     * @param SalesChannelGroup $group
+     * @param SalesChannelGroup|null $group
      * @return $this
      */
-    public function setGroup(SalesChannelGroup $group): self
+    public function setGroup(SalesChannelGroup $group = null): self
     {
         $this->group = $group;
 

@@ -1,6 +1,6 @@
 data:
     type: marellocustomers
+    id: 'new_customer2@example.com'
     attributes:
         firstName: 'test'
         lastName: 'user'
-        email: 'new_customer2@example.com'

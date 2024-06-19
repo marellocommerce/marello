@@ -2,16 +2,16 @@
 
 namespace Marello\Bundle\LocaleBundle\Manager;
 
-use Doctrine\Common\Util\ClassUtils;
-use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
-use Marello\Bundle\LocaleBundle\Provider\EntityLocalizationProviderInterface;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Doctrine\ORM\EntityRepository;
-use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
+use Doctrine\Common\Util\ClassUtils;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\EmailBundle\Provider\EmailTemplateContentProvider;
+use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
 use Oro\Bundle\EmailBundle\Model\EmailTemplate as EmailTemplateModel;
+
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
 
 class EmailTemplateManager
 {

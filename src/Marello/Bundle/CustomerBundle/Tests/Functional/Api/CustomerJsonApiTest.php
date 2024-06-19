@@ -43,7 +43,7 @@ class CustomerJsonApiTest extends RestJsonApiTestCase
     {
         $customer = $this->getReference('marello-customer-1');
         $response = $this->get(
-            ['entity' => self::TESTING_ENTITY, 'id' => $customer->getId()],
+            ['entity' => self::TESTING_ENTITY, 'id' => $customer->getEmail()],
             []
         );
 
@@ -66,9 +66,9 @@ class CustomerJsonApiTest extends RestJsonApiTestCase
         $responseContent = json_decode($response->getContent());
 
         /** @var Customer $customer */
-        $customer = $this->getEntityManager()->find(Customer::class, $responseContent->data->id);
+        $customer = $this->getEntityManager()->find(Customer::class, $responseContent->data->attributes->customerId);
         $this->assertNotNull($customer->getPrimaryAddress(), 'Customer with Address');
-        $this->assertEquals($customer->getEmail(), $responseContent->data->attributes->email);
+        $this->assertEquals($customer->getEmail(), $responseContent->data->id);
     }
 
     /**
@@ -85,31 +85,9 @@ class CustomerJsonApiTest extends RestJsonApiTestCase
 
         $responseContent = json_decode($response->getContent());
         /** @var Customer $customer */
-        $customer = $this->getEntityManager()->find(Customer::class, $responseContent->data->id);
+        $customer = $this->getEntityManager()->find(Customer::class, $responseContent->data->attributes->customerId);
         $this->assertNull($customer->getPrimaryAddress(), 'Customer without Address');
-        $this->assertEquals($customer->getEmail(), $responseContent->data->attributes->email);
-    }
-
-    /**
-     * Update existing customer email address
-     */
-    public function testUpdateEmailExistingCustomer()
-    {
-        $existingCustomer = $this->getReference('marello-customer-1');
-        $response = $this->patch(
-            [
-                'entity' => self::TESTING_ENTITY,
-                'id' => $existingCustomer->getId()
-            ],
-            'customer_email_update.yml'
-        );
-
-        $this->assertJsonResponse($response);
-        $responseContent = json_decode($response->getContent());
-
-        /** @var Customer $customer */
-        $customer = $this->getEntityManager()->find(Customer::class, $responseContent->data->id);
-        $this->assertEquals($customer->getEmail(), 'mynewemailaddres@example.com');
+        $this->assertEquals($customer->getEmail(), $responseContent->data->id);
     }
 
     /**
@@ -122,7 +100,7 @@ class CustomerJsonApiTest extends RestJsonApiTestCase
         $response = $this->patch(
             [
                 'entity' => self::TESTING_ENTITY,
-                'id' => $existingCustomer->getId(),
+                'id' => $existingCustomer->getEmail(),
                 'association' => 'marelloaddresses',
             ],
             'customer_address_update.yml'
@@ -131,7 +109,7 @@ class CustomerJsonApiTest extends RestJsonApiTestCase
         $this->assertJsonResponse($response);
         $responseContent = json_decode($response->getContent());
         /** @var Customer $customer */
-        $customer = $this->getEntityManager()->find(Customer::class, $responseContent->data->id);
+        $customer = $this->getEntityManager()->find(Customer::class, $responseContent->data->attributes->customerId);
         $primaryAddress = $customer->getPrimaryAddress();
         self::assertSame('1215 Caldwell Road', $primaryAddress->getStreet());
         self::assertSame('Rochester', $primaryAddress->getCity());
@@ -158,7 +136,7 @@ class CustomerJsonApiTest extends RestJsonApiTestCase
         $entityType = self::extractEntityType(['entity' => self::TESTING_ENTITY]);
         self::assertApiResponseStatusCodeEquals(
             $response,
-            Response::HTTP_BAD_REQUEST,
+            Response::HTTP_CONFLICT,
             $entityType,
             'post'
         );

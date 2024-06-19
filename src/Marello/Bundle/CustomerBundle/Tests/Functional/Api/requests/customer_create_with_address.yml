@@ -1,9 +1,9 @@
 data:
     type: marellocustomers
+    id: 'new_customer@example.com'
     attributes:
         firstName: 'test'
         lastName: 'user'
-        email: 'new_customer@example.com'
     relationships:
         primaryAddress:
             data:

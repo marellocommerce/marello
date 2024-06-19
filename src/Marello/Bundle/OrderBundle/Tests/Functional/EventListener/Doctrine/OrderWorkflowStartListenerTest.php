@@ -176,6 +176,7 @@ class OrderWorkflowStartListenerTest extends WebTestCase
             'input_action' => 'save_and_stay',
             'marello_order_order' => [
                 '_token' => $form['marello_order_order[_token]']->getValue(),
+                'owner' => $form['marello_order_order[owner]']->getValue(),
                 'customer' => $orderCustomer->getId(),
                 'salesChannel' => $salesChannel->getId(),
                 'items' => $orderItems,

@@ -153,7 +153,7 @@ class ProductRepository extends ServiceEntityRepository
                 'p.id,
                 p.sku,
                 sup.name AS supplier,
-                SUM(i.desiredInventory - COALESCE((l.inventory - l.allocatedInventory), 0)) AS orderAmount,
+                SUM(i.desiredInventory - COALESCE((l.inventoryQty - l.allocatedInventory), 0)) AS orderAmount,
                 SUM(i.purchaseInventory) AS purchaseInventory'
             )
             ->innerJoin('p.preferredSupplier', 'sup')
@@ -164,7 +164,7 @@ class ProductRepository extends ServiceEntityRepository
             ->andWhere("s.name = 'enabled'")
             ->andWhere("i.replenishment = 'never_out_of_stock'")
             ->groupBy('p.id, p.sku, sup.name, i.desiredInventory, i.purchaseInventory')
-            ->having('SUM(l.inventory - l.allocatedInventory) < i.purchaseInventory');
+            ->having('SUM(l.inventoryQty - l.allocatedInventory) < i.purchaseInventory');
 
         if (!empty($productIdsToExclude)) {
             $qb

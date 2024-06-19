@@ -91,7 +91,7 @@ class LoadSalesData extends AbstractFixture implements ContainerAwareInterface
         foreach ($this->data as $ref => $values) {
             $channel = $this->buildChannel($ref, $values);
             $channel
-                ->setOwner($organization)
+                ->setOrganization($organization)
                 ->setGroup($defaultSystemGroup);
 
             $this->manager->persist($channel);

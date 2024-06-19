@@ -18,10 +18,9 @@ class RuleTest extends TestCase
     {
         $now = new \DateTime();
         $properties = [
-            ['id', '123'],
-            ['name', 'Test Rule'],
+            ['name', 'Test Rule', false],
             ['enabled', true],
-            ['sortOrder', 10],
+            ['sortOrder', 10, false],
             ['stopProcessing', true],
             ['system', true],
             ['createdAt', $now, false],

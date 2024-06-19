@@ -172,7 +172,7 @@ class OrderItem implements
     /**
      * @var ReturnItem[]|Collection
      */
-    #[ORM\OneToMany(targetEntity: ReturnItem::class, mappedBy: 'orderItem', cascade: [])]
+    #[ORM\OneToMany(mappedBy: 'orderItem', targetEntity: ReturnItem::class, cascade: [])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $returnItems;
 

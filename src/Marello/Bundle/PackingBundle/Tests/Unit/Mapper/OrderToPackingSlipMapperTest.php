@@ -83,7 +83,7 @@ class OrderToPackingSlipMapperTest extends TestCase
         );
         $billingAddress = new MarelloAddress();
         $shippingAddress = new MarelloAddress();
-        $salesChannel = new SalesChannel();
+        $salesChannel = new SalesChannel('saleschannel');
         $customer = new Customer();
         $organization = new Organization();
 

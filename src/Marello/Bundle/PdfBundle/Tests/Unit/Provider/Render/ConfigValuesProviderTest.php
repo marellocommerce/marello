@@ -57,7 +57,7 @@ class ConfigValuesProviderTest extends TestCase
         $configManager = $this->createMock(ConfigManager::class);
         $configManager->expects($this->exactly(count($parameters)))
             ->method('get')
-            ->withConsecutive(...array_map(function ($x) { return [$x, false, false, 'scope']; }, array_keys($parameters)))
+            ->withConsecutive(...array_map(function ($x) { return [$x, false, false, 1]; }, array_keys($parameters)))
             ->willReturnOnConsecutiveCalls(...array_values($parameters))
         ;
 
@@ -65,7 +65,7 @@ class ConfigValuesProviderTest extends TestCase
 
         $provider = new ConfigValuesProvider($configManager, $providerParameters);
 
-        $result = $provider->getParams('test value', [ConfigValuesProvider::SCOPE_IDENTIFIER_KEY => 'scope']);
+        $result = $provider->getParams('test value', [ConfigValuesProvider::SCOPE_IDENTIFIER_KEY => 1]);
 
         $this->assertCount(count($parameters), $result);
         foreach ($parameters as $key => $value) {

@@ -6,10 +6,10 @@ data:
             productId: '@product1->id'
             denormalizedDefaultName: product1
             manufacturingCode: null
-            productType: null
+            productType: 'simple'
             weight: 1
             warranty: null
-            data: null
+            data: []
         relationships:
             names:
                 data:

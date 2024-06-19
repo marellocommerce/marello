@@ -23,7 +23,7 @@ data:
           customer:
               data:
                    type: marellocustomers
-                   id: '8da4d8e7-6b25-4c5c-8075-wrv3n8wt8kbxmtgd'
+                   id: 'new_customer@example.com'
           salesChannel:
               data:
                   type: marellosaleschannels
@@ -31,11 +31,10 @@ data:
 included:
     -
         type: marellocustomers
-        id: '8da4d8e7-6b25-4c5c-8075-wrv3n8wt8kbxmtgd'
+        id: 'new_customer@example.com'
         attributes:
             firstName: 'test'
             lastName: 'user'
-            email: 'new_customer@example.com'
     -
         type: marelloorderitems
         id: '8da4d8e7-6b25-4c5c-8075-nh3fpu9sca3htc3v'

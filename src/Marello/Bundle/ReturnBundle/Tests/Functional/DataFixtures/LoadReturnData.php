@@ -20,7 +20,7 @@ class LoadReturnData extends AbstractFixture implements DependentFixtureInterfac
     public function getDependencies()
     {
         return [
-            LoadOrderData::class,
+            LoadOrderData::class
         ];
     }
 

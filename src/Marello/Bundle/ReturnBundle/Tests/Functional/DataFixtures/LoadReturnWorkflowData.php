@@ -10,7 +10,7 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 
 use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 
-class LoadReturnWorkflowData extends AbstractFixture implements DependentFixtureInterface
+class   LoadReturnWorkflowData extends AbstractFixture //implements DependentFixtureInterface
 {
     /**
      * {@inheritdoc}
