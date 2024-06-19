@@ -3,9 +3,15 @@
 namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\PricingBundle\DependencyInjection\Configuration;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 class OrderItemOriginalPriceListener
 {
+    public function __construct(
+        protected ConfigManager $configManager
+    ) {}
+
     public function prePersist(OrderItem $orderItem): void
     {
         $this->setDefaultPrice($orderItem);
@@ -15,6 +21,10 @@ class OrderItemOriginalPriceListener
     {
         $channel = $orderItem->getOrder()->getSalesChannel();
         $priceList = $orderItem->getProduct()->getSalesChannelPrice($channel);
-        $orderItem->setOriginalPriceInclTax($priceList->getDefaultPrice()->getValue());
+        if ($this->configManager->get(Configuration::VAT_SYSTEM_CONFIG_PATH)) {
+            $orderItem->setOriginalPriceInclTax($priceList->getDefaultPrice()->getValue());
+        } else {
+            $orderItem->setOriginalPriceExclTax($priceList->getDefaultPrice()->getValue());
+        }
     }
 }
