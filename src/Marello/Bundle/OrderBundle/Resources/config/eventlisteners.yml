@@ -68,7 +68,8 @@ services:
 
     Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderItemOriginalPriceListener:
         arguments:
-            - '@oro_config.manager'
+            - '@marello_tax.tax_rule.matcher.composite'
+            - '@marello_tax.calculator'
         tags:
             - { name: doctrine.orm.entity_listener, entity: Marello\Bundle\OrderBundle\Entity\OrderItem, event: prePersist }
 

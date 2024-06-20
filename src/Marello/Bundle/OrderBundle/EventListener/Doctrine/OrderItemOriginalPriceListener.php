@@ -3,28 +3,35 @@
 namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\PricingBundle\DependencyInjection\Configuration;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Marello\Bundle\TaxBundle\Calculator\TaxCalculatorInterface;
+use Marello\Bundle\TaxBundle\Matcher\TaxRuleMatcherInterface;
+use Marello\Bundle\TaxBundle\Model\ResultElement;
 
 class OrderItemOriginalPriceListener
 {
     public function __construct(
-        protected ConfigManager $configManager
+        protected TaxRuleMatcherInterface $taxRuleMatcher,
+        protected TaxCalculatorInterface $taxCalculator
     ) {}
 
     public function prePersist(OrderItem $orderItem): void
     {
-        $this->setDefaultPrice($orderItem);
+        $taxResultElement = $this->getCalculatedPriceValue($orderItem);
+        $orderItem->setOriginalPriceInclTax($taxResultElement->getIncludingTax());
+        $orderItem->setOriginalPriceExclTax($taxResultElement->getExcludingTax());
     }
 
-    private function setDefaultPrice(OrderItem $orderItem): void
+    private function getCalculatedPriceValue(OrderItem $orderItem): ResultElement
     {
         $channel = $orderItem->getOrder()->getSalesChannel();
         $priceList = $orderItem->getProduct()->getSalesChannelPrice($channel);
-        if ($this->configManager->get(Configuration::VAT_SYSTEM_CONFIG_PATH)) {
-            $orderItem->setOriginalPriceInclTax($priceList->getDefaultPrice()->getValue());
-        } else {
-            $orderItem->setOriginalPriceExclTax($priceList->getDefaultPrice()->getValue());
-        }
+
+        $taxRule = $this->taxRuleMatcher->match(
+            $orderItem->getOrder()->getShippingAddress(),
+            [$orderItem->getTaxCode()->getCode()]
+        );
+        $taxRate = $taxRule ? $taxRule->getTaxRate()->getRate() : 0;
+
+        return $this->taxCalculator->calculate($priceList->getDefaultPrice()->getValue(), $taxRate);
     }
 }
