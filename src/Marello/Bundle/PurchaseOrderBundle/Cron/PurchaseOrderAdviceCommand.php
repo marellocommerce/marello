@@ -143,11 +143,6 @@ class PurchaseOrderAdviceCommand extends Command implements CronCommandScheduleD
     private function sendNotification($templateName, $recipient, $items)
     {
         try {
-            foreach ($items as $item) {
-                var_dump($item['sku']);
-                var_dump($item['supplier']);
-                var_dump($item['purchaseInventory']);
-            }
             $this->emailTemplateSender
                 ->sendEmailTemplate(
                     From::emailAddress($this->notificationSettings->getSender()->toString()),
