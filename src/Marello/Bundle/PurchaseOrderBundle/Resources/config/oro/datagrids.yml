@@ -145,8 +145,8 @@ datagrids:
                     - srel.cost AS purchasePrice
                     - i.desiredInventory
                     - i.purchaseInventory
-                    - COALESCE(SUM(l.inventory - l.allocatedInventory), 0) AS virtualInventory
-                    - (i.desiredInventory - COALESCE(SUM(l.inventory - l.allocatedInventory), 0)) AS orderAmount
+                    - COALESCE(SUM(l.inventoryQty - l.allocatedInventory), 0) AS virtualInventory
+                    - (i.desiredInventory - COALESCE(SUM(l.inventoryQty - l.allocatedInventory), 0)) AS orderAmount
                     - >
                       (CASE WHEN p.id IN (:data_in) AND p.id NOT IN (:data_not_in)
                         THEN true ELSE false
@@ -168,7 +168,7 @@ datagrids:
                         - i.replenishment = 'never_out_of_stock'
                         - srel.supplier = :supplierId
 
-                having: SUM(l.inventory - l.allocatedInventory) < i.purchaseInventory  # Only products with virtual stock lower than required purchase stock level
+                having: SUM(l.inventoryQty - l.allocatedInventory) < i.purchaseInventory  # Only products with virtual stock lower than required purchase stock level
                 groupBy: p.sku
 
             bind_parameters:
