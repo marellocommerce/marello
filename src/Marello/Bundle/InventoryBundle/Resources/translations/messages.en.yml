@@ -20,7 +20,6 @@ marello:
             order_on_demand_location.label: Order on Demand location
             group.label:                Warehouse Group
             create_group.label:         Create Group
-
             form:
                 create_own_group:       Create Warehouse Group
 
@@ -87,7 +86,7 @@ marello:
             enable_batch_inventory.label:  Enable Batch Inventory
             batch_inventory.label:         Batches / Lot
             product_unit.label:            Unit
-
+            order_on_demand_allowed.label: Order On Demand Allowed
             section:
                 unit_of_measurement.label:  Unit of Measurement
                 backorder_preorder.label:   Backorder/Pre-order
@@ -101,7 +100,7 @@ marello:
             entity_plural_label:            Inventory Levels
             entity_grid_all_view_label:     All %entity_plural_label%
             id.label:                       Id
-            inventory:
+            inventory_qty:
                 label:                      Inventory Qty
                 grid.label:                 On Hand Qty
             allocated_inventory:
@@ -125,6 +124,7 @@ marello:
             managed_inventory.label:        Manage Inventory
             pick_location.label:            Pick Location
             inventory_batches.label:        Inventory Batches
+            inventory_level_log_records.label: Inventory Level Logrecords
 
             grid:
                 warehouse_code.label:       Warehouse Code

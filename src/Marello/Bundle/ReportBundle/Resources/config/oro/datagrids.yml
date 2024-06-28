@@ -69,7 +69,7 @@ datagrids:
                 label:              marello.product.names.label
                 frontend_type:      string
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.label
+                label:              marello.inventory.inventorylevel.inventory_qty.label
                 frontend_type:      number
                 data_name:          inventoryQty
             status:

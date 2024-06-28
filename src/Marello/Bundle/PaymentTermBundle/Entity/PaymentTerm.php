@@ -40,7 +40,7 @@ class PaymentTerm implements ExtendEntityInterface
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected ?int $id = null;
 
-    #[ORM\Column(name: 'code', type: Types::TEXT, length: 32, nullable: false)]
+    #[ORM\Column(name: 'code', type: Types::STRING, length: 32, nullable: false)]
     #[Oro\ConfigField(
         defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]]
     )]

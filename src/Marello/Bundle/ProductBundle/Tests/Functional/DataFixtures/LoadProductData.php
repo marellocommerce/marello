@@ -126,7 +126,6 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
             'sku'           => 'p4',
             'price'         => 100,
             'weight'        => 10.00,
-            'stockLevel'    => 0,
             'status'        => 'enabled',
             'channel'       => 'channel1;channel2;channel3',
             'supplier'      => [
