@@ -79,7 +79,7 @@ class Shipment implements DatesAwareInterface, OrganizationAwareInterface, Exten
     protected ?string $base64EncodedLabel = null;
 
     #[ORM\OneToOne(mappedBy: 'shipment', targetEntity: TrackingInfo::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'tracking_info_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\JoinColumn(name: 'tracking_info_id', referencedColumnName: 'id', unique: true, nullable: true)]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true]
     ])]

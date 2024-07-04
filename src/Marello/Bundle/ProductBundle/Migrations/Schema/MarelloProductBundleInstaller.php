@@ -83,9 +83,9 @@ class MarelloProductBundleInstaller implements
         $table->addColumn('manufacturing_code', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('barcode', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('created_at', 'datetime');
-        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->addColumn('updated_at', 'datetime');
         $table->addColumn('type', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('weight', 'float', ['notnull' => false]);
         $table->addColumn('warranty', 'integer', ['notnull' => false]);
         $table->addColumn('preferred_supplier_id', 'integer', ['notnull' => false]);
@@ -220,7 +220,7 @@ class MarelloProductBundleInstaller implements
             $schema->getTable('marello_product_product_status'),
             ['product_status'],
             ['name'],
-            ['onDelete' => null, 'onUpdate' => null]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),

@@ -63,7 +63,7 @@ class MarelloSupplierBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addUniqueIndex(['address_id'], 'UNIQ_16532C7BF5B7AF75', []);
-        $table->addUniqueIndex(['organization_id', 'name']);
+        $table->addUniqueIndex(['name', 'organization_id'], 'marello_supplier_supplier_nameorgidx');
         $table->addUniqueIndex(['email']);
 
         $this->attachmentExtension->addAttachmentAssociation($schema, $table->getName());

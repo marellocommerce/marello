@@ -6,17 +6,18 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\WebhookBundle\Entity\Repository\WebhookRepository;
 
 #[ORM\Table(name: 'marello_webhook')]
-#[ORM\Index(name: 'idx_marello_webhook_created_at', columns: ['created_at'])]
-#[ORM\Index(name: 'idx_marello_webhook_updated_at', columns: ['updated_at'])]
+#[ORM\Index(columns: ['created_at'], name: 'idx_marello_webhook_created_at')]
+#[ORM\Index(columns: ['updated_at'], name: 'idx_marello_webhook_updated_at')]
 #[ORM\Entity(repositoryClass: WebhookRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Oro\Config(
@@ -30,11 +31,11 @@ use Marello\Bundle\WebhookBundle\Entity\Repository\WebhookRepository;
         'security' => ['type' => 'ACL', 'group_name' => '']
     ]
 )]
-class Webhook implements OrganizationAwareInterface, ExtendEntityInterface
+class Webhook implements OrganizationAwareInterface, ExtendEntityInterface, DatesAwareInterface
 {
-    use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
+    use DatesAwareTrait;
 
     /**
      * @var int

@@ -104,6 +104,7 @@ class MarelloRefundBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['refund_id'], 'IDX_2D9010DD189801D5', []);
         $table->addIndex(['order_item_id'], 'IDX_2D9010DDE76E9C94', []);
+        $table->addIndex(['tax_code_id'], 'IDX_2D9010DD66925E1D', []);
         $table->addIndex(['organization_id']);
     }
 
@@ -160,6 +161,12 @@ class MarelloRefundBundleInstaller implements
             ['order_item_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_tax_tax_code'),
+            ['tax_code_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),

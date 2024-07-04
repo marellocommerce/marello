@@ -22,6 +22,7 @@ use Marello\Bundle\SupplierBundle\Entity\Repository\SupplierRepository;
 #[ORM\Table(name: 'marello_supplier_supplier')]
 #[ORM\Entity(repositoryClass: SupplierRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\UniqueConstraint(name: 'marello_supplier_supplier_nameorgidx', columns: ['name', 'organization_id'])]
 #[Oro\Config(
     routeName: 'marello_supplier_supplier_index',
     routeView: 'marello_supplier_supplier_view',
@@ -53,7 +54,7 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
     /**
      * @var string
      */
-    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, unique: true, nullable: false)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $name;
     

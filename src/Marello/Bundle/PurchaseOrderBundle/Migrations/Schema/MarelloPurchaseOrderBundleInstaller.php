@@ -57,7 +57,7 @@ class MarelloPurchaseOrderBundleInstaller implements
         $table->addColumn('warehouse_id', 'integer', []);
         $table->addColumn('order_total', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('purchase_order_reference', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('due_date', 'datetime', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
@@ -86,7 +86,7 @@ class MarelloPurchaseOrderBundleInstaller implements
         $table->addColumn('ordered_amount', 'integer', []);
         $table->addColumn('received_amount', 'integer', []);
         $table->addColumn('row_total', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('status', 'string', ['length' => 255]);
         $table->addColumn(
             'purchase_price_value',

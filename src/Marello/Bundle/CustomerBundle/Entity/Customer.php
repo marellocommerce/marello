@@ -23,6 +23,7 @@ use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_customer_customer')]
 #[ORM\UniqueConstraint(name: 'marello_customer_emailorgidx', columns: ['email', 'organization_id'])]
+#[ORM\UniqueConstraint(name: 'marello_customer_numberorgidx', columns: ['customer_number', 'organization_id'])]
 #[Oro\Config(
     routeName: 'marello_customer_index',
     routeView: 'marello_customer_view',

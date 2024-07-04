@@ -69,7 +69,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('parent_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
-        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->addColumn('updated_at', 'datetime');
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['company_number', 'organization_id'], 'marello_customer_company_compnrorgidx');
     }
@@ -97,19 +97,21 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('primary_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('shipping_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
-        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->addColumn('updated_at', 'datetime');
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('first_name', 'string', ['length' => 255]);
         $table->addColumn('middle_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('last_name', 'string', ['length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('email', 'text', []);
+        $table->addColumn('email', 'string', ['length' => 255]);
         $table->addColumn('company_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addUniqueIndex(['email', 'organization_id'], 'marello_customer_emailorgidx');
         $table->addUniqueIndex(['customer_number', 'organization_id'], 'marello_customer_numberorgidx');
+        $table->addUniqueIndex(['primary_address_id'], 'UNIQ_AD0CE5A2CB134313');
+        $table->addUniqueIndex(['shipping_address_id'], 'UNIQ_AD0CE5A24D4CFF2B');
 
         $this->attachmentExtension->addAttachmentAssociation($schema, $table->getName());
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', $table->getName());
