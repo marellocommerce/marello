@@ -141,6 +141,7 @@ api:
             actions: false
 
         Marello\Bundle\InventoryBundle\Entity\Allocation:
+            exclusion_policy: none
             filters:
                 exclusion_policy: all
                 fields:
