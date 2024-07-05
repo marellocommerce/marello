@@ -1,11 +1,11 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Bundle\OrderBundle\Provider\Totals;
 
-use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
-use Marello\Bundle\LayoutBundle\Provider\FormChangesProviderInterface;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
+use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
+use Marello\Bundle\LayoutBundle\Provider\FormChangesProviderInterface;
 use Marello\Bundle\PricingBundle\Subtotal\Provider\TotalAwareSubtotalProviderInterface;
 
 class OrderTotalsProvider implements FormChangesProviderInterface

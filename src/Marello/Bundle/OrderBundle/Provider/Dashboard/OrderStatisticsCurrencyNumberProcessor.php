@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Bundle\OrderBundle\Provider\Dashboard;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;

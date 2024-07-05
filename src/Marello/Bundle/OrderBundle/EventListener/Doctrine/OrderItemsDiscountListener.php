@@ -11,12 +11,12 @@ class OrderItemsDiscountListener
     public function prePersist(Order $order, PrePersistEventArgs $args)
     {
         $orderDiscount = $order->getDiscountAmount();
-        $subtotal = $order->getSubtotal();
+        $total = ($order->getSubtotal() + $order->getTotalTax());
         /** @var OrderItem $item */
         foreach ($order->getItems() as $item) {
-            $percent = $item->getPrice() * $item->getQuantity() / $subtotal;
+            $percent = $item->getPrice() * $item->getQuantity() / $total;
             $itemDiscount = $orderDiscount * $percent;
-            $item->setDiscountAmount(round($itemDiscount, 2));
+            $item->setDiscountAmount(round($itemDiscount, 4));
         }
     }
 }
