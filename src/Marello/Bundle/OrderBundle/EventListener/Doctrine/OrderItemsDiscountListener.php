@@ -11,7 +11,12 @@ class OrderItemsDiscountListener
     public function prePersist(Order $order, PrePersistEventArgs $args)
     {
         $orderDiscount = $order->getDiscountAmount();
-        $total = ($order->getSubtotal() + $order->getTotalTax());
+        $total = (float)($order->getSubtotal() + $order->getTotalTax());
+
+        if (0.00 === $total) {
+            return;
+        }
+
         /** @var OrderItem $item */
         foreach ($order->getItems() as $item) {
             $percent = $item->getPrice() * $item->getQuantity() / $total;

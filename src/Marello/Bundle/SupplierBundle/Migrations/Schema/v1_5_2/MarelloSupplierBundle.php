@@ -27,7 +27,7 @@ class MarelloSupplierBundle implements Migration
     {
         $table = $schema->getTable('marello_supplier_supplier');
         if ($table->hasIndex('UNIQ_16532C7B5E237E06')) {
-            $table->renameIndex('UNIQ_16532C7B5E237E06');
+            $table->dropIndex('UNIQ_16532C7B5E237E06');
             $table->addUniqueIndex(['name', 'organization_id'], 'marello_supplier_supplier_nameorgidx');
         }
     }

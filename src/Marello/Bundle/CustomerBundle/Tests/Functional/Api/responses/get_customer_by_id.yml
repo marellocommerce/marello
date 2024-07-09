@@ -1,13 +1,12 @@
 data:
     type: marellocustomers
-    id: '<toString(@marello-customer-1->id)>'
+    id: '<toString(@marello-customer-1->email)>'
     attributes:
         namePrefix: null
         firstName: James
         middleName: null
         lastName: Boling
         nameSuffix: null
-        email: JamesCBoling@einrot.com
     relationships:
         primaryAddress:
             data:

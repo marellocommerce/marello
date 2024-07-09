@@ -106,7 +106,7 @@ class ProductSupplierRelation
         return $this;
     }
 
-    public function getSupplier(): Supplier
+    public function getSupplier(): ?Supplier
     {
         return $this->supplier;
     }
