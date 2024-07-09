@@ -4,13 +4,10 @@ namespace Marello\Bundle\PurchaseOrderBundle\EventListener\Doctrine;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
-
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
-
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
@@ -29,32 +26,23 @@ use Marello\Bundle\NotificationMessageBundle\Factory\NotificationMessageContextF
 use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageTypeInterface;
 use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageSourceInterface;
 use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageResolvedInterface;
+use Marello\Bundle\SupplierBundle\Entity\Supplier;
 
 class PurchaseOrderOnOrderOnDemandCreationListener
 {
-    const ORDER_ON_DEMAND = 'order_on_demand';
-    
-    /**
-     * @var int
-     */
-    private $allocationId;
+    use ApplicableWorkflowsTrait;
+
+    public const ORDER_ON_DEMAND = 'order_on_demand';
 
     public function __construct(
-        private ConfigManager $configManager,
-        private EventDispatcherInterface $eventDispatcher
-    ) {
-    }
+        protected ConfigManager $configManager,
+        protected EventDispatcherInterface $eventDispatcher,
+        protected WorkflowManager $workflowManager,
+        protected ?int $allocationId = null
+    ) {}
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist(Allocation $entity): void
     {
-        $entity = $args->getObject();
-        if (!$entity instanceof Allocation) {
-            return;
-        }
-
         if (!$this->configManager->get('marello_order.order_on_demand_enabled')
             || !$this->configManager->get('marello_order.order_on_demand')
         ) {
@@ -66,6 +54,7 @@ class PurchaseOrderOnOrderOnDemandCreationListener
         ) {
             return;
         }
+
         $orderOnDemandItems = [];
         foreach ($entity->getItems() as $item) {
             $inventoryItem = $item->getOrderItem()->getInventoryItem();
@@ -81,10 +70,7 @@ class PurchaseOrderOnOrderOnDemandCreationListener
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $args
-     */
-    public function postFlush(PostFlushEventArgs $args)
+    public function postFlush(PostFlushEventArgs $args): void
     {
         if (!$this->allocationId) {
             return;
@@ -143,15 +129,19 @@ class PurchaseOrderOnOrderOnDemandCreationListener
             $supplierCode = $supplier->getCode();
             $allocationItemsBySupplier[$supplierCode][] = $allocationItem->getId();
 
-            // Create Purchase Order if not exist
             if (!isset($poBySupplier[$supplierCode])) {
-                $po = new PurchaseOrder();
-                $po
-                    ->setSupplier($supplier)
-                    ->setOrganization($organization)
-                    ->setWarehouse($warehouse);
+                $po = $this->findApplicablePurchaseOrder($entityManager, $supplier, $organization, $warehouse);
+                // Create Purchase Order if not exist
+                if (!$po) {
+                    $po = new PurchaseOrder();
+                    $po
+                        ->setSupplier($supplier)
+                        ->setOrganization($organization)
+                        ->setWarehouse($warehouse);
 
-                $entityManager->persist($po);
+                    $entityManager->persist($po);
+                }
+
                 $poBySupplier[$supplierCode] = $po;
             }
 
@@ -214,6 +204,33 @@ class PurchaseOrderOnOrderOnDemandCreationListener
                     ]
                 );
         }
+    }
+
+    private function findApplicablePurchaseOrder(
+        EntityManager $entityManager,
+        Supplier $supplier,
+        OrganizationInterface $organization,
+        Warehouse $warehouse
+    ): ?PurchaseOrder {
+        $potentialPurchaseOrders = $entityManager->getRepository(PurchaseOrder::class)->findBy([
+            'supplier' => $supplier,
+            'organization' => $organization,
+            'warehouse' => $warehouse,
+        ]);
+
+        foreach ($potentialPurchaseOrders as $potentialPurchaseOrder) {
+            $workflow = $this->getApplicableWorkflow($potentialPurchaseOrder);
+            if (!$workflow) {
+                continue;
+            }
+
+            $workflowItem = $this->workflowManager->getWorkflowItem($potentialPurchaseOrder, $workflow->getName());
+            if ($workflowItem->getCurrentStep()->getName() === PurchaseOrder::NOT_SENT_STEP) {
+                return $potentialPurchaseOrder;
+            }
+        }
+
+        return null;
     }
 
     /**
