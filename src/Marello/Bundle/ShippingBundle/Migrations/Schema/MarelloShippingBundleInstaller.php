@@ -302,7 +302,7 @@ class MarelloShippingBundleInstaller implements Installation, AttachmentExtensio
             $schema->getTable('marello_tracking_info'),
             ['tracking_info_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => null, 'onUpdate' => null]
         );
     }
 
