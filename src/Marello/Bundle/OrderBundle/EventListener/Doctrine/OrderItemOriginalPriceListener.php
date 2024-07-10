@@ -12,7 +12,8 @@ class OrderItemOriginalPriceListener
     public function __construct(
         protected TaxRuleMatcherInterface $taxRuleMatcher,
         protected TaxCalculatorInterface $taxCalculator
-    ) {}
+    ) {
+    }
 
     public function prePersist(OrderItem $orderItem): void
     {

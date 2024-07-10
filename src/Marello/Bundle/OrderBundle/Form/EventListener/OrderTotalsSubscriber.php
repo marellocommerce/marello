@@ -14,7 +14,8 @@ class OrderTotalsSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         protected SubtotalProviderInterface $subtotalProvider
-    ) {}
+    ) {
+    }
 
     /**
      * {@inheritdoc}

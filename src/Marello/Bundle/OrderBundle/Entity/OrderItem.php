@@ -23,6 +23,7 @@ use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
 use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+
 /**
  * @ORM\Entity(repositoryClass="Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository")
  * @Oro\Config(

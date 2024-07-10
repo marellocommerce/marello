@@ -21,7 +21,8 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         protected ConfigManager $config,
         protected DoctrineHelper $doctrineHelper,
         protected LogoPathProvider $provider
-    ){ }
+    ) {
+    }
 
     /**
      * {@inheritDoc}
