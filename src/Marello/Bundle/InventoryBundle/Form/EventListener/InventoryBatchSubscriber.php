@@ -20,7 +20,8 @@ class InventoryBatchSubscriber implements EventSubscriberInterface
         protected InventoryLevelCalculator $levelCalculator,
         protected EventDispatcherInterface $eventDispatcher,
         protected array $previousSellByDate = []
-    ) {}
+    ) {
+    }
 
     /**
      * Get subscribed events

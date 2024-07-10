@@ -86,6 +86,9 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
      *      defaultValues={
      *          "dataaudit"={
      *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "identity"=true
      *          }
      *      }
      * )

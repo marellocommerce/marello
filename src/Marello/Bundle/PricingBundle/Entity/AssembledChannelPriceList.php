@@ -46,7 +46,8 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true,
+     *               "order"=10,
+     *               "identity"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -64,7 +65,9 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true
+     *               "order"=5,
+     *               "full"=false,
+     *               "identity"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -81,6 +84,10 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
+     *          "importexport"={
+     *              "full"=false,
+     *              "identity"=true
+     *          },
      *          "dataaudit"={
      *              "auditable"=true
      *          }
@@ -101,7 +108,8 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true
+     *              "order"=10,
+     *              "full"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -123,7 +131,8 @@ class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInter
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true
+     *              "order"=20,
+     *              "full"=true
      *          },
      *          "dataaudit"={
      *              "auditable"=true

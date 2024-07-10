@@ -13,7 +13,8 @@ class HandleLabelForFieldConfig implements ProcessorInterface
 {
     public function __construct(
         private ConfigManager $configManager
-    ) {}
+    ) {
+    }
 
     /**
      * @param ContextInterface $context

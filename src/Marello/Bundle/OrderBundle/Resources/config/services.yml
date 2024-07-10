@@ -7,7 +7,7 @@ services:
             - { name: oro_service_link, service: marello_notification.email.send_processor }
 
     marello_order.provider.order_statistic_provider:
-        class: 'Marello\Bundle\OrderBundle\Provider\OrderDashboardStatisticProvider'
+        class: 'Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardStatisticProvider'
         arguments:
             - '@Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository'
             - '@oro_dashboard.provider.big_number.date_helper'
@@ -16,12 +16,12 @@ services:
             - { name: oro_dashboard.big_number.provider, alias: marello-order }
 
     marello_order.provider.order_statistic.formatter:
-        class: 'Marello\Bundle\OrderBundle\Provider\OrderStatisticsCurrencyNumberFormatter'
+        class: 'Marello\Bundle\OrderBundle\Provider\Dashboard\OrderStatisticsCurrencyNumberFormatter'
         arguments:
             - '@oro_locale.formatter.number'
 
     marello_order.provider.order_statistic.currency_number.processor:
-        class: 'Marello\Bundle\OrderBundle\Provider\OrderStatisticsCurrencyNumberProcessor'
+        class: 'Marello\Bundle\OrderBundle\Provider\Dashboard\OrderStatisticsCurrencyNumberProcessor'
         public: true
         arguments:
             - '@marello_order.provider.order_statistic.formatter'
@@ -78,7 +78,7 @@ services:
             - { name: marello.form_changes_data_provider, class: 'Marello\Bundle\OrderBundle\Entity\Order', type: company, priority: 35 }
 
     marello_order.provider.form_changes.totals:
-        class: 'Marello\Bundle\OrderBundle\Provider\OrderTotalsProvider'
+        class: 'Marello\Bundle\OrderBundle\Provider\Totals\OrderTotalsProvider'
         arguments:
             - '@marello_productprice.pricing.subtotal_provider.composite'
         tags:
@@ -136,7 +136,7 @@ services:
         class: 'Marello\Bundle\OrderBundle\Converter\ShippingPricesConverter'
 
     marello_order.subtotal_provider.order_items:
-        class: 'Marello\Bundle\OrderBundle\Provider\OrderItemsSubtotalProvider'
+        class: 'Marello\Bundle\OrderBundle\Provider\OrderItem\OrderItemsSubtotalProvider'
         arguments:
             - '@translator'
             - '@oro_currency.rounding.price_rounding_service'
@@ -148,7 +148,7 @@ services:
             - { name: marello_pricing.subtotal_provider, priority: 20 }
 
     marello_order.subtotal_provider.discount:
-        class: 'Marello\Bundle\OrderBundle\Provider\DiscountSubtotalProvider'
+        class: 'Marello\Bundle\OrderBundle\Provider\Totals\DiscountSubtotalProvider'
         arguments:
             - '@translator'
             - '@oro_currency.rounding.price_rounding_service'
@@ -157,7 +157,7 @@ services:
             - { name: marello_pricing.subtotal_provider, priority: 40 }
 
     marello_order.subtotal_provider.shipping_cost:
-        class: 'Marello\Bundle\OrderBundle\Provider\ShippingCostSubtotalProvider'
+        class: 'Marello\Bundle\OrderBundle\Provider\Totals\ShippingCostSubtotalProvider'
         arguments:
             - '@translator'
             - '@oro_currency.rounding.price_rounding_service'
@@ -246,7 +246,7 @@ services:
             - '@oro_entity.doctrine_helper'
 
     marello_order.provider.orderitems_by_status:
-        class: 'Marello\Bundle\OrderBundle\Provider\OrderDashboardOrderItemsByStatusProvider'
+        class: 'Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider'
         public: true
         arguments:
             - '@doctrine'
@@ -255,7 +255,7 @@ services:
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_currency.query.currency_transformer'
 
-    Marello\Bundle\OrderBundle\Provider\OrderDashboardOrderItemsByStatusProvider:
+    Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider:
         alias: marello_order.provider.orderitems_by_status
 
     marello_order.widget_config_value.widget_orderitems_by_status.converter:

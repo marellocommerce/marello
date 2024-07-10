@@ -10,7 +10,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use PHPUnit\Framework\TestCase;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\ConfigExpression\ContextAccessor;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Component\ConfigExpression\Tests\Unit\Fixtures\ItemStub;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
@@ -18,6 +20,7 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
 use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem;
 use Marello\Bundle\PurchaseOrderBundle\Processor\NoteActivityProcessor;
+use Marello\Bundle\InventoryBundle\Provider\InventoryAllocationProvider;
 use Marello\Bundle\PurchaseOrderBundle\Workflow\Action\ReceivePurchaseOrderAction;
 
 class ReceivePurchaseOrderActionTest extends TestCase
@@ -25,14 +28,20 @@ class ReceivePurchaseOrderActionTest extends TestCase
     /** @var ReceivePurchaseOrderAction $action */
     protected $action;
 
-    /** @var ObjectManager $entityManager */
-    protected $entityManager;
+    /** @var DoctrineHelper $doctrineHelper */
+    protected $doctrineHelper;
 
     /** @var ContextAccessor $contextAccessor */
     protected $contextAccessor;
 
     /** @var NoteActivityProcessor $noteActivityProcessor */
     protected $noteActivityProcessor;
+
+    /** @var InventoryAllocationProvider $inventoryAllocationProvider */
+    protected $inventoryAllocationProvider;
+
+    /** @var MessageProducerInterface $messageProducer */
+    protected $messageProducer;
 
     public function setUp(): void
     {
@@ -43,16 +52,28 @@ class ReceivePurchaseOrderActionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->entityManager = $this
-            ->getMockBuilder(ObjectManager::class)
+        $this->doctrineHelper = $this
+            ->getMockBuilder(DoctrineHelper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->inventoryAllocationProvider = $this
+            ->getMockBuilder(InventoryAllocationProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->messageProducer = $this
+            ->getMockBuilder(MessageProducerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var ReceivePurchaseOrderAction action */
         $this->action = new ReceivePurchaseOrderAction(
             $this->contextAccessor,
-            $this->entityManager,
-            $this->noteActivityProcessor
+            $this->doctrineHelper,
+            $this->noteActivityProcessor,
+            $this->inventoryAllocationProvider,
+            $this->messageProducer
         );
 
         /** @var EventDispatcher $dispatcher */
@@ -169,6 +190,16 @@ class ReceivePurchaseOrderActionTest extends TestCase
             ->method('setStatus')
             ->with('complete');
 
+        $manager = $this->createMock(ObjectManager::class);
+        $this->doctrineHelper
+            ->expects($this->atLeastOnce())
+            ->method('getManager')
+            ->willReturn($manager);
+
+        $manager
+            ->expects($this->atLeastOnce())
+            ->method('flush');
+
         $options = ['entity' => new PropertyPath('test_entity')];
         $contextData = ['test_entity' => $purchaseOrderMock];
         $context = new ItemStub($contextData);
@@ -209,21 +240,21 @@ class ReceivePurchaseOrderActionTest extends TestCase
             ->method('getItems')
             ->willReturn($collection);
 
-        $purchaseOrderItemMock->expects($this->once())
+        $purchaseOrderItemMock->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn(['last_partially_received_qty' => 10]);
 
         $purchaseOrderItemMock->expects($this->once())
             ->method('setData')
-            ->with(null);
+            ->with([]);
 
-        $purchaseOrderItemMock2->expects($this->once())
+        $purchaseOrderItemMock2->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn(['last_partially_received_qty' => 10]);
 
         $purchaseOrderItemMock2->expects($this->once())
             ->method('setData')
-            ->with(null);
+            ->with([]);
 
         $purchaseOrderItemMock->expects($this->atLeastOnce())
             ->method('getProduct')
@@ -256,6 +287,16 @@ class ReceivePurchaseOrderActionTest extends TestCase
             ->expects($this->once())
             ->method('addNote')
             ->with($purchaseOrderMock, $items);
+
+        $manager = $this->createMock(ObjectManager::class);
+        $this->doctrineHelper
+            ->expects($this->atLeastOnce())
+            ->method('getManager')
+            ->willReturn($manager);
+
+        $manager
+            ->expects($this->atLeastOnce())
+            ->method('flush');
 
         $options = ['entity' => new PropertyPath('test_entity'), 'is_partial' => true];
         $contextData = ['test_entity' => $purchaseOrderMock];
@@ -297,15 +338,15 @@ class ReceivePurchaseOrderActionTest extends TestCase
             ->method('getItems')
             ->willReturn($collection);
 
-        $purchaseOrderItemMock->expects($this->once())
+        $purchaseOrderItemMock->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn(['last_partially_received_qty' => 10]);
 
         $purchaseOrderItemMock->expects($this->once())
             ->method('setData')
-            ->with(null);
+            ->with([]);
 
-        $purchaseOrderItemMock2->expects($this->once())
+        $purchaseOrderItemMock2->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn([]);
 
@@ -330,6 +371,16 @@ class ReceivePurchaseOrderActionTest extends TestCase
             ->with(null);
 
         $items[] = ['qty' => 10, 'item' => $purchaseOrderItemMock];
+
+        $manager = $this->createMock(ObjectManager::class);
+        $this->doctrineHelper
+            ->expects($this->atLeastOnce())
+            ->method('getManager')
+            ->willReturn($manager);
+
+        $manager
+            ->expects($this->atLeastOnce())
+            ->method('flush');
 
         $this->noteActivityProcessor
             ->expects($this->once())

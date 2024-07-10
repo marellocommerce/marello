@@ -31,6 +31,9 @@ class BasePrice implements CurrencyAwareInterface
      * @ORM\Column(name="value", type="money")
      * @Oro\ConfigField(
      *      defaultValues={
+     *          "importexport"={
+     *              "order"=40,
+     *          },
      *          "dataaudit"={
      *              "auditable"=true
      *          }
@@ -46,7 +49,7 @@ class BasePrice implements CurrencyAwareInterface
      * @Oro\ConfigField(
      *      defaultValues={
      *          "importexport"={
-     *              "identity"=true,
+     *              "excluded"=true,
      *          },
      *          "dataaudit"={
      *              "auditable"=true
@@ -63,6 +66,9 @@ class BasePrice implements CurrencyAwareInterface
      * @ORM\JoinColumn(name="type", referencedColumnName="name", nullable=false, onDelete="CASCADE")
      * @Oro\ConfigField(
      *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          },
      *          "dataaudit"={
      *              "auditable"=true
      *          }

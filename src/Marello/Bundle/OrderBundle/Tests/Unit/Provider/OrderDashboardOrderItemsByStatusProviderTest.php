@@ -7,7 +7,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Marello\Bundle\OrderBundle\Migrations\Data\ORM\LoadOrderItemStatusData;
-use Marello\Bundle\OrderBundle\Provider\OrderDashboardOrderItemsByStatusProvider;
+use Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;

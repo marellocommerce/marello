@@ -5,10 +5,18 @@
 {% set gridName  = 'marello-products-grid' %}
 
 {% block navButtons %}
+    <div class="pull-left">
+        {% include '@OroImportExport/ImportExport/buttons_from_configuration.html.twig' with {
+            alias: 'oro_product_index'
+        } %}
+    </div>
+
     {% if is_granted('marello_product_create') %}
-        {{ UI.addButton({
-            'path': path('marello_product_create'),
-            'entity_label': 'marello.product.entity_label'|trans
-        }) }}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path': path('marello_product_create'),
+                'entity_label': 'marello.product.entity_label'|trans
+            }) }}
+        </div>
     {% endif %}
 {% endblock %}
