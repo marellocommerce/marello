@@ -59,16 +59,16 @@ class CustomerRepository extends ServiceEntityRepository
         $qb->select('count(DISTINCT c.id) as val')
             ->innerJoin(Order::class, 'o', Join::WITH, 'o.customer = c.id');
         if ($start && $end) {
-            $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            $qb->andWhere($qb->expr()->between('o.purchaseDate', ':dateStart', ':dateEnd'))
                 ->setParameter('dateStart', $start)
                 ->setParameter('dateEnd', $end);
         } elseif ($start) {
             $qb
-                ->andWhere($qb->expr()->gte('o.createdAt', ':dateStart'))
+                ->andWhere($qb->expr()->gte('o.purchaseDate', ':dateStart'))
                 ->setParameter('dateStart', $start);
         } elseif ($end) {
             $qb
-                ->andWhere($qb->expr()->lt('o.createdAt', ':dateEnd'))
+                ->andWhere($qb->expr()->lt('o.purchaseDate', ':dateEnd'))
                 ->setParameter('dateEnd', $end);
         }
 
@@ -78,13 +78,14 @@ class CustomerRepository extends ServiceEntityRepository
                 ->select('1')
                 ->innerJoin(Order::class, 'o2', Join::WITH, 'o2.customer = c2.id')
                 ->where('c2.id = c.id')
-                ->andWhere('o2.createdAt < :dateStart')
+                ->andWhere('o2.purchaseDate < :dateStart')
                 ->setParameter('dateStart', $start);
 
             $qb->andWhere($qb->expr()->exists($subQb->getDQL()));
         }
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
+        var_dump($value['val'] ?: 0);
         return $value['val'] ?: 0;
     }
 }
