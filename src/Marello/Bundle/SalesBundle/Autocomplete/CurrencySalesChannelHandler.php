@@ -7,7 +7,6 @@ use Doctrine\ORM\QueryBuilder;
 
 class CurrencySalesChannelHandler extends SearchHandler
 {
-
     /**
      * {@inheritdoc}
      */

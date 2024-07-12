@@ -33,9 +33,6 @@ define(function (require) {
             Select2AutocompleteCurrencyAwareComponent.__super__.initialize.call(this, options);
         },
 
-
-
-
         makeQuery: function (query) {
             var currency = this.getData().currency;
 

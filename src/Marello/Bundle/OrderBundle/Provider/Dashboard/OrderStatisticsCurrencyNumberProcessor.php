@@ -41,10 +41,10 @@ class OrderStatisticsCurrencyNumberProcessor
      */
     public function getBigNumberValues(
         WidgetOptionBag $widgetOptions,
-                        $getterName,
-                        $lessIsBetter = false,
-                        $lastWeek = false,
-                        $comparable = 'true'
+        $getterName,
+        $lessIsBetter = false,
+        $lastWeek = false,
+        $comparable = 'true'
     ) {
         $lessIsBetter     = (bool)$lessIsBetter;
         $dateRange        = $lastWeek ? $this->dateHelper->getLastWeekPeriod() : $widgetOptions->get('dateRange');
