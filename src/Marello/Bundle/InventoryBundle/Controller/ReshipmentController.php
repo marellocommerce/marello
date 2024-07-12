@@ -21,7 +21,7 @@ class ReshipmentController extends AbstractController
      *     requirements={"id"="\d+"},
      *     name="marello_inventory_reshipment_create"
      * )
-     * @Template("@MarelloInventory/Reshipment/update.html.twig")
+     * @Template("@MarelloInventory/Reshipment/create.html.twig")
      * @AclAncestor("marello_inventory_inventory_view")
      *
      * @param Order $order
