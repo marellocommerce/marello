@@ -218,7 +218,7 @@ datagrids:
                 select:
                     - p.sku
                     - s.label as status
-                    - COALESCE(SUM(il.inventory), 0) AS inventoryQty
+                    - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                     - repl.name AS replenishment
                 from:
                     - { table: MarelloProductBundle:Product, alias: p }
@@ -289,7 +289,7 @@ datagrids:
                     - p.sku
                     - p.type
                     - s.label as status
-                    - COALESCE(SUM(il.inventory), 0) AS inventoryQty
+                    - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                 from:
                     - { table: MarelloProductBundle:Product, alias: p }
                 join:
@@ -546,6 +546,9 @@ datagrids:
             canDropship:
                 label:                marello.supplier.can_dropship.label
                 frontend_type:        boolean
+            leadTime:
+                label:                marello.product.productsupplierrelation.lead_time.label
+                frontend_type:        number
         properties:
             id: ~
         options:

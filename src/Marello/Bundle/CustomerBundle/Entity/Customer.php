@@ -25,7 +25,11 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *           @ORM\UniqueConstraint(
  *               name="marello_customer_emailorgidx",
  *               columns={"email","organization_id"}
- *           )
+ *           ),
+ *          @ORM\UniqueConstraint(
+ *               name="marello_customer_numberorgidx",
+ *               columns={"customer_number","organization_id"}
+ *          )
  *       }
  * )
  * @Oro\Config(
@@ -69,6 +73,13 @@ class Customer implements
      * @var int
      */
     protected $id;
+
+    /**
+     * @ORM\Column(name="customer_number", type="string", nullable=true)
+     *
+     * @var string
+     */
+    protected $customerNumber;
 
     /**
      * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
@@ -186,6 +197,18 @@ class Customer implements
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getCustomerNumber(): ?string
+    {
+        return $this->customerNumber;
+    }
+
+    public function setCustomerNumber(string $customerNumber): self
+    {
+        $this->customerNumber = $customerNumber;
+
+        return $this;
     }
 
     /**

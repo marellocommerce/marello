@@ -21,6 +21,7 @@ use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\TaxBundle\Tests\Functional\DataFixtures\LoadTaxCodeData;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -270,9 +271,15 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
         $this->manager->persist($shippingAddress);
 
         $orderEntity = new Order($address, $address);
-        $customer = Customer::create($row['firstname'], $row['lastname'], $row['email'], $address, $shippingAddress);
-        $customer->setOrganization($organization);
-        $this->setReference('customer' . $this->customers++, $customer);
+        // we need to get the existing customer from reference I guess.
+        /** @var Customer $customer */
+        $customer = $this->getReference('marello-customer-' . $this->customers++);
+        $users = $this->manager
+            ->getRepository(User::class)
+            ->findAll();
+
+        $user = array_shift($users);
+        $orderEntity->setOwner($user);
         $orderEntity->setCustomer($customer);
 
         /** @var SalesChannel $channel */

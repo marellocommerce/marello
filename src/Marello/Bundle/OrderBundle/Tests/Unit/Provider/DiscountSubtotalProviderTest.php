@@ -2,9 +2,9 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Unit\Provider;
 
-use Symfony\Contracts\Translation\TranslatorInterface;
-
 use PHPUnit\Framework\TestCase;
+
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
@@ -13,7 +13,7 @@ use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
-use Marello\Bundle\OrderBundle\Provider\DiscountSubtotalProvider;
+use Marello\Bundle\OrderBundle\Provider\Totals\DiscountSubtotalProvider;
 
 class DiscountSubtotalProviderTest extends TestCase
 {

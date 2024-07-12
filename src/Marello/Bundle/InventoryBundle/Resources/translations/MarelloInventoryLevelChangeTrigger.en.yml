@@ -1,5 +1,6 @@
 manual:             Manual
 import:             Import
+api_update:         API Update
 purchase_order:     Purchase Order
 order_workflow:
     pending:              Pending Order

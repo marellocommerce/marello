@@ -13,6 +13,8 @@ class MarelloInventoryBundle implements Migration
     {
         $this->updateWarehouseTable($schema);
         $this->updateInventoryBatchTable($schema);
+        $this->updateInventoryAllocationTable($schema);
+        $this->updateInventoryAllocationItemTable($schema);
     }
 
     protected function updateWarehouseTable(Schema $schema): void
@@ -25,8 +27,13 @@ class MarelloInventoryBundle implements Migration
         if (!$table->hasColumn('order_on_demand_location')) {
             $table->addColumn('order_on_demand_location', 'boolean', ['notnull' => false]);
         }
+
         if ($table->hasColumn('sort_order')) {
             $table->dropColumn('sort_order');
+        }
+
+        if ($table->hasColumn('notifier')) {
+            $table->changeColumn('notifier', ['notnull' => false]);
         }
     }
 
@@ -39,6 +46,28 @@ class MarelloInventoryBundle implements Migration
 
         if (!$table->hasColumn('sell_by_date')) {
             $table->addColumn('sell_by_date', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
+        }
+    }
+
+    protected function updateInventoryAllocationTable(Schema $schema): void
+    {
+        $table = $schema->getTable('marello_inventory_allocation');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_allocation'),
+            ['source_entity_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    protected function updateInventoryAllocationItemTable(Schema $schema): void
+    {
+        $table = $schema->getTable('marello_inventory_alloc_item');
+        if ($table->hasColumn('inventory_batches')) {
+            $table->dropColumn('inventory_batches');
+        }
+        if ($table->hasColumn('order_item_id')) {
+            $table->changeColumn('order_item_id', []);
         }
     }
 }

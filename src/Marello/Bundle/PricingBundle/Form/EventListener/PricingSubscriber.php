@@ -126,6 +126,8 @@ class PricingSubscriber implements EventSubscriberInterface
                 $assembledPriceList->getMsrpPrice()->getValue() === null) {
                 $assembledPriceList->setMsrpPrice(null);
             }
+
+            $assembledPriceList->preUpdateTimestamp();
         }
         
         if ($form->has('removeSalesChannels')) {

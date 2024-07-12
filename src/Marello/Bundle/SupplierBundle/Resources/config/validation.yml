@@ -6,6 +6,7 @@ Marello\Bundle\SupplierBundle\Entity\Supplier:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: email
             message: 'marello.supplier.supplier.messages.error.unique_email'
+        - Marello\Bundle\SupplierBundle\Validator\Constraints\SupplierEmail: ~
     properties:
         name:
             - NotBlank: ~
@@ -14,3 +15,5 @@ Marello\Bundle\SupplierBundle\Entity\Supplier:
             - Marello\Bundle\CoreBundle\Validator\Constraints\CodeRegex: ~
         currency:
             - NotBlank: ~
+        email:
+            - Email: ~

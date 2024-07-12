@@ -46,7 +46,7 @@ class MarelloOrderBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v3_1_5';
+        return 'v3_1_7';
     }
 
     /**
@@ -139,9 +139,7 @@ class MarelloOrderBundleInstaller implements
         $table->addColumn('shipping_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('salesChannel_id', 'integer', ['notnull' => false]);
         $table->addColumn('localization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('shipment_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['shipment_id'], 'UNIQ_A619DD647BE036FC');
         $table->addUniqueIndex(['order_number'], 'UNIQ_A619DD64551F0F81');
         $table->addUniqueIndex(['order_reference', 'salesChannel_id'], 'UNIQ_A619DD64122432EB32758FE');
         $table->addIndex(['customer_id'], 'IDX_A619DD649395C3F3', []);
@@ -310,13 +308,6 @@ class MarelloOrderBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_localization'),
             ['localization_id'],
-            ['id'],
-            ['onDelete' => null, 'onUpdate' => null]
-        );
-
-        $table->addForeignKeyConstraint(
-            $schema->getTable('marello_shipment'),
-            ['shipment_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
         );

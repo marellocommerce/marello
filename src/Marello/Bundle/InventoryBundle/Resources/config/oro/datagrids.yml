@@ -9,9 +9,9 @@ datagrids:
                     - p.sku as productSku
                     - i.enableBatchInventory as enableBatchInventory
                     - pu.name as productUnit
-                    - COALESCE(SUM(il.inventory), 0) AS inventoryQty
+                    - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                     - COALESCE(SUM(il.allocatedInventory), 0) AS allocatedInventoryQty
-                    - COALESCE(SUM(il.inventory - il.allocatedInventory), 0) AS virtualInventoryQty
+                    - COALESCE(SUM(il.inventoryQty - il.allocatedInventory), 0) AS virtualInventoryQty
                     - i.backorderAllowed as backorderAllowed
                     - i.canPreorder as canPreorder
                     - i.orderOnDemandAllowed as orderOnDemandAllowed
@@ -244,9 +244,9 @@ datagrids:
                     - wht.label as warehouseTypeLabel
                     - wh.label as warehouse
                     - wh.code as warehouseCode
-                    - COALESCE(il.inventory, 0) AS inventoryQty
+                    - COALESCE(il.inventoryQty, 0) AS inventoryQty
                     - COALESCE(il.allocatedInventory, 0) AS allocatedInventoryQty
-                    - COALESCE(il.inventory - il.allocatedInventory, 0) AS virtualInventoryQty
+                    - COALESCE(il.inventoryQty - il.allocatedInventory, 0) AS virtualInventoryQty
                 from:
                     - { table: MarelloInventoryBundle:InventoryLevel, alias: il }
                 join:
@@ -257,6 +257,10 @@ datagrids:
                     and:
                         - IDENTITY(il.inventoryItem) = :inventoryItemId
                 groupBy: il.id, wh.code, wh.label, wht.label
+                orderBy:
+                    -
+                        column: il.id
+                        dir: ASC
             bind_parameters:
                 inventoryItemId: inventoryItemId
         columns:

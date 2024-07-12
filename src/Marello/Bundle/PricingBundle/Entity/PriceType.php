@@ -23,6 +23,13 @@ class PriceType
      *
      * @ORM\Id
      * @ORM\Column(type="string")
+     * @Oro\ConfigField(
+     *       defaultValues={
+     *           "importexport"={
+     *               "identity"=true
+     *           }
+     *       }
+     *  )
      */
     protected $name;
 

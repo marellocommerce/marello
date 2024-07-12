@@ -14,6 +14,8 @@ use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
 use Marello\Bundle\PurchaseOrderBundle\Cron\PurchaseOrderAdviceCommand;
 use Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures\LoadInventoryData;
+use \Oro\Bundle\EmailBundle\Manager\EmailTemplateManager;
+use Oro\Bundle\NotificationBundle\Model\NotificationSettings;
 
 class PurchaseOrderAdviceCronTest extends WebTestCase
 {
@@ -33,7 +35,11 @@ class PurchaseOrderAdviceCronTest extends WebTestCase
 
         $this->application = new Application($this->client->getKernel());
         $this->application->setAutoExit(false);
-        $this->application->add(new PurchaseOrderAdviceCommand($this->getContainer()));
+        $emailTemplateSender = $this->createMock(EmailTemplateManager::class);
+        $notificationSettings = $this->createMock(NotificationSettings::class);
+        $this->application->add(
+            new PurchaseOrderAdviceCommand($this->getContainer(), $emailTemplateSender, $notificationSettings)
+        );
     }
 
     /**
@@ -97,6 +103,7 @@ class PurchaseOrderAdviceCronTest extends WebTestCase
         $configManager = self::getContainer()->get('oro_config.manager');
         // enabled po notification setting again :')
         $configManager->set('marello_purchaseorder.purchaseorder_notification', true);
+        $configManager->set('marello_purchaseorder.purchaseorder_notification_address', 'example@example.com');
 
         $command = $this->application->find(PurchaseOrderAdviceCommand::COMMAND_NAME);
         $commandTester = new CommandTester($command);
