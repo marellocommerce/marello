@@ -20,6 +20,7 @@ class AddARFileToDefaultFamily extends AbstractFixture implements
     public function load(ObjectManager $manager)
     {
         $attributeFamilyRepository = $manager->getRepository(AttributeFamily::class);
+        $attributeGroupRelationRepository = $manager->getRepository(AttributeGroupRelation::class);
         $attributeFamilies =
             $attributeFamilyRepository->findBy([
                 'code' => [
@@ -32,11 +33,16 @@ class AddARFileToDefaultFamily extends AbstractFixture implements
         foreach ($attributeFamilies as $attributeFamily) {
             $defaultAttributeGroup = $attributeFamily->getAttributeGroup(ProductFamilyBuilder::DEFAULT_ATTRIBUTE_GROUP);
             $fieldConfigModel = $configManager->getConfigFieldModel(Product::class, 'ARFile');
-            $attributeGroupRelation = new AttributeGroupRelation();
-            $attributeGroupRelation->setEntityConfigFieldId($fieldConfigModel->getId());
-            $defaultAttributeGroup->addAttributeRelation($attributeGroupRelation);
+            if (!$attributeGroupRelationRepository->findOneBy([
+                'entityConfigFieldId' => $fieldConfigModel->getId(),
+                'attributeGroup' => $defaultAttributeGroup
+            ])) {
+                $attributeGroupRelation = new AttributeGroupRelation();
+                $attributeGroupRelation->setEntityConfigFieldId($fieldConfigModel->getId());
+                $defaultAttributeGroup->addAttributeRelation($attributeGroupRelation);
 
-            $manager->persist($defaultAttributeGroup);
+                $manager->persist($defaultAttributeGroup);
+            }
         }
         $manager->flush();
     }
