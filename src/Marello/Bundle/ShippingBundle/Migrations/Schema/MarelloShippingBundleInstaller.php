@@ -24,7 +24,7 @@ class MarelloShippingBundleInstaller implements Installation, AttachmentExtensio
      */
     public function getMigrationVersion()
     {
-        return 'v1_3_1';
+        return 'v1_3_2';
     }
 
     /**
@@ -302,7 +302,7 @@ class MarelloShippingBundleInstaller implements Installation, AttachmentExtensio
             $schema->getTable('marello_tracking_info'),
             ['tracking_info_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => null, 'onUpdate' => null]
         );
     }
 

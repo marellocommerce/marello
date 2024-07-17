@@ -129,7 +129,7 @@ class InventoryControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->assertStringContainsString('Warehouse DE 1', $crawler->html());
+        $this->assertStringContainsString('Default Warehouse', $crawler->html());
         $this->assertStringContainsString('never_out_of_stock', $crawler->html());
     }
 

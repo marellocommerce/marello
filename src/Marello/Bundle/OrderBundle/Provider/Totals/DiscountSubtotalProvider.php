@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Bundle\OrderBundle\Provider\Totals;
 
 use Marello\Bundle\OrderBundle\Model\DiscountAwareInterface;
 use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;

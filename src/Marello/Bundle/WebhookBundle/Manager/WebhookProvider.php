@@ -12,7 +12,8 @@ class WebhookProvider
 {
     public function __construct(
         protected EntityManagerInterface $entityManager
-    ) {}
+    ) {
+    }
 
     public function getActiveWebhooks(string $eventName, bool $status = true): array
     {

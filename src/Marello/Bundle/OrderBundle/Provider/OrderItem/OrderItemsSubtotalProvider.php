@@ -1,19 +1,21 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Bundle\OrderBundle\Provider\OrderItem;
+
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use Oro\Bundle\CurrencyBundle\Entity\PriceAwareInterface;
+use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
+use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
+use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\PricingBundle\Provider\ChannelPriceProvider;
 use Marello\Bundle\PricingBundle\Subtotal\Model\LineItemsAwareInterface;
-use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
 use Marello\Bundle\PricingBundle\Subtotal\Provider\AbstractSubtotalProvider;
 use Marello\Bundle\PricingBundle\Subtotal\Provider\SubtotalProviderInterface;
-use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
-use Oro\Bundle\CurrencyBundle\Entity\PriceAwareInterface;
-use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
-use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderItemsSubtotalProvider extends AbstractSubtotalProvider
 {
@@ -24,7 +26,6 @@ class OrderItemsSubtotalProvider extends AbstractSubtotalProvider
      * @var ChannelPriceProvider
      */
     protected $channelPriceProvider;
-
 
     /**
      * @param TranslatorInterface $translator

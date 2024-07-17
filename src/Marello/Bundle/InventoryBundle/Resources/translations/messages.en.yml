@@ -87,6 +87,7 @@ marello:
             enable_batch_inventory.label:  Enable Batch Inventory
             batch_inventory.label:         Batches / Lot
             product_unit.label:            Unit
+            order_on_demand_allowed.label: Order On Demand
 
             section:
                 unit_of_measurement.label:  Unit of Measurement
@@ -101,6 +102,8 @@ marello:
             entity_plural_label:            Inventory Levels
             entity_grid_all_view_label:     All %entity_plural_label%
             id.label:                       Id
+            inventory_qty.label:            Inventory Qty
+            inventory_level_log_records.label: Inventory Level Logrecords
             inventory:
                 label:                      Inventory Qty
                 grid.label:                 On Hand Qty
@@ -312,3 +315,5 @@ marello:
                 max_qty_to_preorder: Limit the number of items that can be ordered in one order. Leave blank if no restriction applies.
                 preorder_datetime: Set the expected delivery date or leave blank if this is unknown. Field is cleared when new inventory is added from a Marello purchase order
                 backorder_datetime: Set the expected delivery date or leave blank if this is unknown. Field is cleared when new inventory is added from a Marello purchase order
+inventory_level_log_records:
+    label:
