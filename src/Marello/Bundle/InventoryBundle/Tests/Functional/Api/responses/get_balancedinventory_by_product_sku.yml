@@ -6,7 +6,6 @@ data:
             inventory: 100
             balancedInventory: 100
             reservedInventory: null
-            updatedAt: null
             saleschannels:
                 - chan_eur
         relationships:

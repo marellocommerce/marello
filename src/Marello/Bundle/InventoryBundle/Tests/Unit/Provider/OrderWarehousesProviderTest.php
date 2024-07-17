@@ -2,27 +2,36 @@
 
 namespace Marello\Bundle\InventoryBundle\Tests\Unit\Provider;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
-use Marello\Bundle\InventoryBundle\Entity\Warehouse;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
-use Marello\Bundle\InventoryBundle\Model\OrderWarehouseResult;
-use Marello\Bundle\InventoryBundle\Provider\OrderWarehousesProvider;
-use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
-use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\QtyWHCalculatorInterface;
-use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\QuantityWFAStrategy;
-use Marello\Bundle\InventoryBundle\Strategy\WFA\WFAStrategiesRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Marello\Bundle\InventoryBundle\Entity\WarehouseGroup;
+use PHPUnit\Framework\TestCase;
+
+use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Component\Testing\Unit\EntityTrait;
-use PHPUnit\Framework\TestCase;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Model\OrderWarehouseResult;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
+use Marello\Bundle\InventoryBundle\Provider\OrderWarehousesProvider;
+use Marello\Bundle\InventoryBundle\Strategy\WFA\WFAStrategiesRegistry;
+use Marello\Bundle\InventoryBundle\Provider\AllocationExclusionInterface;
+use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
+use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\QuantityWFAStrategy;
+use Marello\Bundle\InventoryBundle\Provider\Allocation\AllocationItemFilterInterface;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
+use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\QtyWHCalculatorInterface;
 
 class OrderWarehousesProviderTest extends TestCase
 {
@@ -33,25 +42,25 @@ class OrderWarehousesProviderTest extends TestCase
      */
     protected $orderWarehousesProvider;
 
+    /** @var $doctrineHelper DoctrineHelper */
+    protected $doctrineHelper;
+
     protected function setUp(): void
     {
         $this->qtyWHCalculator = $this->createMock(QtyWHCalculatorInterface::class);
-        $this->warehouseChannelGroupLinkRepository = $this->createMock(WarehouseChannelGroupLinkRepository::class);
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->any())
-            ->method('getRepository')
-            ->with(WarehouseChannelGroupLink::class)
-            ->willReturn($this->warehouseChannelGroupLinkRepository);
         $this->configManager = $this->createMock(ConfigManager::class);
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->quantityWFAStrategy = new QuantityWFAStrategy(
             $this->qtyWHCalculator,
-            $this->warehouseChannelGroupLinkRepository,
+            $this->doctrineHelper,
             $this->configManager
         );
 
-//        $this->warehouseChannelGroupLinkRepository
-//            ->expects($this->any())
-//            ->method('')
+        $allocationExclusion = $this->createMock(AllocationExclusionInterface::class);
+        $allocationItemFilter = $this->createMock(AllocationItemFilterInterface::class);
+
+        $this->quantityWFAStrategy->setAllocationExclusionProvider($allocationExclusion);
+        $this->quantityWFAStrategy->setAllocationItemFilterProvider($allocationItemFilter);
 
         $wfaRegistry = $this->createMock(WFAStrategiesRegistry::class);
         $wfaRegistry->expects($this->any())
@@ -67,11 +76,40 @@ class OrderWarehousesProviderTest extends TestCase
      * @param Order $order
      * @param array $expectedResult
      */
-    public function testGetWarehousesForOrder(Order $order, array $expectedResult)
-    {
+    public function testGetWarehousesForOrder(
+        Order $order,
+        ArrayCollection $warehouses,
+        WarehouseGroup $group,
+        array $expectedResult
+    ) {
+//        TODO:: fix me
         return;
-        $actualResult = $this->orderWarehousesProvider->getWarehousesForOrder($order);
+        $warehouseChannelLinkRepository = $this->createMock(WarehouseChannelGroupLinkRepository::class);
+        $this->doctrineHelper
+            ->expects($this->any())
+            ->method('getEntityRepositoryForClass')
+            ->willReturn($warehouseChannelLinkRepository);
 
+        $channelGroupLink = $this->createMock(WarehouseChannelGroupLink::class);
+        $channelGroupLink
+            ->expects($this->atLeastOnce())
+            ->method('getWarehouseGroup')
+            ->willReturn($group);
+
+        $group
+            ->expects($this->atLeastOnce())
+            ->method('getWarehouses')
+            ->willReturn($warehouses);
+
+        $warehouseChannelLinkRepository
+            ->expects($this->atLeastOnce())
+            ->method('findLinkBySalesChannelGroup')
+            ->with($order->getSalesChannel()->getGroup())
+            ->willReturn($channelGroupLink);
+
+
+
+        $actualResult = $this->orderWarehousesProvider->getWarehousesForOrder($order);
         $this->assertEquals($expectedResult, $actualResult);
     }
 
@@ -101,6 +139,7 @@ class OrderWarehousesProviderTest extends TestCase
         $inventoryItem3 = new InventoryItem($product3);
         $inventoryItem4 = new InventoryItem($product4);
 
+        $warehouseGroup = $this->createMock(WarehouseGroup::class);
         $externalWarehouseType = new WarehouseType(WarehouseTypeProviderInterface::WAREHOUSE_TYPE_EXTERNAL);
         $globalWarehouseType = new WarehouseType(WarehouseTypeProviderInterface::WAREHOUSE_TYPE_GLOBAL);
 
@@ -109,17 +148,20 @@ class OrderWarehousesProviderTest extends TestCase
         $defaultWarehouse
             ->setDefault(true)
             ->setCode('default_warehouse')
-            ->setWarehouseType($globalWarehouseType);
+            ->setWarehouseType($globalWarehouseType)
+            ->setGroup($warehouseGroup);
         /** @var Warehouse $externalNotPreferableWarehouse */
         $externalNotPreferableWarehouse = $this->getEntity(Warehouse::class, ['id' => 3]);
         $externalNotPreferableWarehouse
             ->setCode('supplier2_external_warehouse')
-            ->setWarehouseType($externalWarehouseType);
+            ->setWarehouseType($externalWarehouseType)
+            ->setGroup($warehouseGroup);
         /** @var Warehouse $externalPreferableWarehouse */
         $externalPreferableWarehouse = $this->getEntity(Warehouse::class, ['id' => 4]);
         $externalPreferableWarehouse
             ->setCode('supplier1_external_warehouse')
-            ->setWarehouseType($externalWarehouseType);
+            ->setWarehouseType($externalWarehouseType)
+            ->setGroup($warehouseGroup);
 
         /** @var InventoryLevel $inventoryLevel1 */
         $inventoryLevel1 = $this->getEntity(InventoryLevel::class, ['id' => 1]);
@@ -175,9 +217,22 @@ class OrderWarehousesProviderTest extends TestCase
             ->addItem($orderItem4)
             ->addItem($orderItem5);
 
+        $salesChannelMock = $this->createMock(SalesChannel::class);
+        $salesChannelGroupMock = $this->createMock(SalesChannelGroup::class);
+        $salesChannelMock->expects(self::atLeastOnce())
+            ->method('getGroup')
+            ->willReturn($salesChannelGroupMock);
+        $order->setSalesChannel($salesChannelMock);
+
         return [
             [
                 'order' => $order,
+                'warehouses' => new ArrayCollection([
+                    $defaultWarehouse,
+                    $externalNotPreferableWarehouse,
+                    $externalPreferableWarehouse
+                ]),
+                'warehouseGroup' => $warehouseGroup,
                 'expectedResult' => [
                     new OrderWarehouseResult([
                         OrderWarehouseResult::WAREHOUSE_FIELD => $defaultWarehouse,
@@ -190,7 +245,7 @@ class OrderWarehousesProviderTest extends TestCase
                     new OrderWarehouseResult([
                         OrderWarehouseResult::WAREHOUSE_FIELD => $externalPreferableWarehouse,
                         OrderWarehouseResult::ORDER_ITEMS_FIELD => new ArrayCollection([$orderItem5])
-                    ]),
+                    ])
                 ]
             ]
         ];

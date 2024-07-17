@@ -20,7 +20,8 @@ class OrderRepository extends ServiceEntityRepository
         AclHelper $aclHelper,
         \DateTime $start = null,
         \DateTime $end = null,
-        SalesChannel $salesChannel = null
+        SalesChannel $salesChannel = null,
+        string $currency
     ) {
         $select = 'SUM(
              CASE WHEN orders.grandTotal IS NOT NULL THEN orders.grandTotal ELSE 0 END
@@ -46,6 +47,9 @@ class OrderRepository extends ServiceEntityRepository
                 ->andWhere('orders.salesChannelName = :salesChannelName')
                 ->setParameter('salesChannelName', $salesChannel->getName());
         }
+        $qb
+            ->andWhere('orders.currency = :currency')
+            ->setParameter('currency', $currency);
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
         return $value['val'] ?: 0;
@@ -63,7 +67,8 @@ class OrderRepository extends ServiceEntityRepository
         AclHelper $aclHelper,
         \DateTime $start = null,
         \DateTime $end = null,
-        SalesChannel $salesChannel = null
+        SalesChannel $salesChannel = null,
+        string $currency
     ) {
         $qb = $this->createQueryBuilder('o');
         $qb->select('count(o.id) as val');
@@ -85,6 +90,9 @@ class OrderRepository extends ServiceEntityRepository
                 ->andWhere('o.salesChannelName = :salesChannelName')
                 ->setParameter('salesChannelName', $salesChannel->getName());
         }
+        $qb
+            ->andWhere('o.currency = :currency')
+            ->setParameter('currency', $currency);
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
         return $value['val'] ?: 0;
@@ -104,7 +112,8 @@ class OrderRepository extends ServiceEntityRepository
         AclHelper $aclHelper,
         \DateTime $start = null,
         \DateTime $end = null,
-        SalesChannel $salesChannel = null
+        SalesChannel $salesChannel = null,
+        string $currency
     ) {
         $select = 'SUM(
              CASE WHEN o.grandTotal IS NOT NULL THEN o.grandTotal ELSE 0 END
@@ -131,6 +140,10 @@ class OrderRepository extends ServiceEntityRepository
                 ->andWhere('o.salesChannelName = :salesChannelName')
                 ->setParameter('salesChannelName', $salesChannel->getName());
         }
+        $qb
+            ->andWhere('o.currency = :currency')
+            ->setParameter('currency', $currency);
+
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
         return $value['revenue'] ? $value['revenue'] / $value['ordersCount'] : 0;

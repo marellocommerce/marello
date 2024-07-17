@@ -30,5 +30,4 @@ class AllocationItemFilterProvider implements AllocationItemFilterInterface
         }
         return $useDifferentSalesChannel;
     }
-
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Bundle\OrderBundle\Provider\Dashboard;
 
-use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use NumberFormatter as IntlNumberFormatter;
+use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 
 class OrderStatisticsCurrencyNumberFormatter
 {

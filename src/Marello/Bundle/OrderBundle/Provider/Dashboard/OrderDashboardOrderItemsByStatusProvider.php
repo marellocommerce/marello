@@ -1,8 +1,9 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Bundle\OrderBundle\Provider\Dashboard;
 
 use Doctrine\Persistence\ManagerRegistry;
+use Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository;
 use Marello\Bundle\OrderBundle\Migrations\Data\ORM\LoadOrderItemStatusData;
 use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
@@ -10,7 +11,6 @@ use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class OrderDashboardOrderItemsByStatusProvider

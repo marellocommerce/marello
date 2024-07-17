@@ -7,7 +7,8 @@ class WebhookContext
     public function __construct(
         protected array $data,
         protected string $eventName,
-    ) {}
+    ) {
+    }
 
     public function getWebhookDataContext(): array
     {

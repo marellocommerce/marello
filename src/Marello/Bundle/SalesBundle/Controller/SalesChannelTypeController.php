@@ -65,7 +65,7 @@ class SalesChannelTypeController extends AbstractController
      *     methods={"GET", "POST"},
      *     name="marello_sales_saleschanneltype_create"
      * )
-     * @Template("@MarelloSales/SalesChannelType/create.html.twig")
+     * @Template("@MarelloSales/SalesChannelType/update.html.twig")
      *
      * @param Request $request
      *

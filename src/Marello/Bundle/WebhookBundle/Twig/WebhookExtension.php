@@ -12,7 +12,8 @@ class WebhookExtension extends AbstractExtension
 
     public function __construct(
         private WebhookEventProvider $provider
-    ) {}
+    ) {
+    }
 
     public function getName()
     {

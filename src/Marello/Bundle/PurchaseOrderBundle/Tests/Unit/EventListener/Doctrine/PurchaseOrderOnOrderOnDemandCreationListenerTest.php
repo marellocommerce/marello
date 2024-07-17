@@ -6,29 +6,35 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Marello\Bundle\InventoryBundle\Entity\Allocation;
-use Marello\Bundle\InventoryBundle\Entity\AllocationItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
-use Marello\Bundle\InventoryBundle\Entity\Warehouse;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseGroup;
-use Marello\Bundle\InventoryBundle\Provider\AllocationStateStatusInterface;
-use Marello\Bundle\InventoryBundle\Provider\AllocationContextInterface;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use PHPUnit\Framework\TestCase;
+
+use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
+
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
-use Marello\Bundle\PurchaseOrderBundle\EventListener\Doctrine\PurchaseOrderOnOrderOnDemandCreationListener;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Component\Testing\Unit\EntityTrait;
-use PHPUnit\Framework\TestCase;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Bundle\InventoryBundle\Entity\Allocation;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseGroup;
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Entity\AllocationItem;
+use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
+use Marello\Bundle\InventoryBundle\Provider\AllocationContextInterface;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
+use Marello\Bundle\InventoryBundle\Provider\AllocationStateStatusInterface;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
+use Marello\Bundle\PurchaseOrderBundle\EventListener\Doctrine\PurchaseOrderOnOrderOnDemandCreationListener;
 
 class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
 {
@@ -38,6 +44,11 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
      * @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configManager;
+
+    /**
+     * @var EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $dispatcher;
 
     /**
      * @var PurchaseOrderOnOrderOnDemandCreationListener
@@ -50,8 +61,11 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
         $this->configManager->expects($this->any())
             ->method('get')
             ->willReturn(true);
-        $this->listener = new PurchaseOrderOnOrderOnDemandCreationListener();
-        $this->listener->setConfigManager($this->configManager);
+        $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->listener = new PurchaseOrderOnOrderOnDemandCreationListener(
+            $this->configManager,
+            $this->dispatcher
+        );
     }
 
     public function testPostFlush()
@@ -85,7 +99,7 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
         $groupLink = new WarehouseChannelGroupLink();
         $groupLink->setWarehouseGroup($whGroup);
         $linkRepository
-            ->expects(static::exactly(2))
+            ->expects(static::exactly(1))
             ->method('findLinkBySalesChannelGroup')
             ->with($allocation->getOrder()->getSalesChannel()->getGroup())
             ->willReturn($groupLink);
@@ -122,6 +136,26 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
         $manager
             ->expects(static::once())
             ->method('flush');
+
+        $warehouse = $this->createMock(Warehouse::class);
+        $whRepository
+            ->expects($this->atLeastOnce())
+            ->method('findBy')
+            ->with(
+                [
+                    'orderOnDemandLocation' => true,
+                    'group' => $groupLink->getWarehouseGroup(),
+                ],
+                ['sortOrderOodLoc' => 'ASC'],
+                1
+            )
+            ->willReturn([$warehouse]);
+
+        $organization = $this->getEntity(Organization::class, ['id' => 1]);
+        $warehouse->expects($this->any())
+            ->method('getOwner')
+            ->willReturn($organization);
+
 
         $this->listener->postPersist($postPersistArgs);
         $this->listener->postFlush($postFlushArgs);
@@ -203,7 +237,8 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
             [
                 'id' => $id,
                 'sku' => sprintf('SKU-%d', $id),
-                'preferredSupplier' => $supplier
+                'preferredSupplier' => $supplier,
+                'denormalizedDefaultName' => sprintf('SKU-%d', $id)
             ]
         );
         /** @var InventoryItem $inventoryItem */
@@ -212,6 +247,12 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
             ['id' => $id, 'orderOnDemandAllowed' => true, 'enableBatchInventory' => true],
             [$product]
         );
+        $inventoryLevel = $this->getEntity(
+            InventoryLevel::class,
+            ['id'=> $id, 'warehouse' => $this->createMock(Warehouse::class), 'inventoryQty' => 10],
+
+        );
+        $inventoryItem->addInventoryLevel($inventoryLevel);
         $product->setInventoryItem($inventoryItem);
         /** @var ProductSupplierRelation $productSupplierRelation */
         $productSupplierRelation = $this->getEntity(

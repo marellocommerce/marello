@@ -8,7 +8,8 @@ abstract class AbstractWebhookEvent implements WebhookEventInterface
 {
     public function __construct(
         protected $data = null
-    ) {}
+    ) {
+    }
 
     abstract public static function getName(): string;
 

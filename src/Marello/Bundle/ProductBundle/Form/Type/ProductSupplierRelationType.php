@@ -20,7 +20,8 @@ class ProductSupplierRelationType extends AbstractType
 
     public function __construct(
         protected LocaleSettings $localeSettings
-    ) {}
+    ) {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

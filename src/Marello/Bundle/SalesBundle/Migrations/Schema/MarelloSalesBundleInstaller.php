@@ -93,6 +93,7 @@ class MarelloSalesBundleInstaller implements Installation
         $table->addColumn('associated_sales_channel_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['code'], 'marello_sales_sales_channel_codeidx');
+        $table->addUniqueIndex(['integration_channel_id'], 'UNIQ_37C71D13D6A9E29');
         $table->addIndex(['owner_id'], 'idx_37c71d17e3c61f9', []);
     }
     
