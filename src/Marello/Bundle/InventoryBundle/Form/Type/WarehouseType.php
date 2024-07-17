@@ -89,14 +89,6 @@ class WarehouseType extends AbstractType
         $warehouse = $event->getData();
         $form = $event->getForm();
 
-        if ($warehouse->getGroup() === null || $warehouse->getGroup()->isSystem() === true) {
-            $form->add('createOwnGroup', CheckboxType::class, [
-                'required' => false,
-                'mapped' => false,
-                'label' => 'marello.inventory.warehouse.form.create_own_group'
-            ]);
-        }
-
         if ($warehouse->getCode() !== null) {
             // disable code field for wh's
             FormUtils::replaceField($form, 'code', ['disabled' => true]);
