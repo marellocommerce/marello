@@ -8,10 +8,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * Every day at 8 a.m.
-     */
-    public const DEFAULT_SENDING_SCHEDULE = '0 8 * * *';
+    public const DEFAULT_SEND_HOUR = 8;
 
     /**
      * Generates the configuration tree builder.
@@ -29,7 +26,12 @@ class Configuration implements ConfigurationInterface
                 'purchaseorder_notification' => ['value' => true],
                 'purchaseorder_notification_address' => ['value' => 'example@example.com', 'required' => true],
                 'send_directly' => ['value' => true],
-                'sending_schedule' => ['value' => self::DEFAULT_SENDING_SCHEDULE],
+                'sending_time' => [
+                    'value' => (new \DateTime())
+                        ->setDate(0,0,0)
+                        ->setTime(self::DEFAULT_SEND_HOUR,0)
+                        ->getTimestamp()
+                ],
             ]
         );
 

@@ -32,12 +32,15 @@ system_configuration:
                 tooltip: marello.purchaseorder.system_configuration.fields.tooltip.send_directly
                 required: false
 
-        marello_purchaseorder.sending_schedule:
+        marello_purchaseorder.sending_time:
             data_type: string
-            type: Symfony\Component\Form\Extension\Core\Type\TextType
+            type: Symfony\Component\Form\Extension\Core\Type\TimeType
             options:
-                label: marello.purchaseorder.system_configuration.fields.sending_schedule.label
+                label: marello.purchaseorder.system_configuration.fields.sending_time.label
+                tooltip: marello.purchaseorder.system_configuration.fields.tooltip.sending_time
                 required: true
+                widget: single_text
+                input: timestamp
                 constraints:
                     - NotNull: ~
 
@@ -64,4 +67,4 @@ system_configuration:
                                 children:
                                     marello_purchase_order_general:
                                         children:
-                                            - marello_purchaseorder.sending_schedule
+                                            - marello_purchaseorder.sending_time

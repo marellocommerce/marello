@@ -16,11 +16,10 @@ class SendScheduleChangeListener
 
     public function onConfigUpdate(ConfigUpdateEvent $event): void
     {
-        if (!$event->isChanged('marello_purchaseorder.sending_schedule')) {
+        if (!$event->isChanged('marello_purchaseorder.sending_time')) {
             return;
         }
 
-        $newDefinition = $event->getNewValue('marello_purchaseorder.sending_schedule');
         $schedule = $this->registry
             ->getRepository(Schedule::class)
             ->findOneBy(['command' => SendPurchaseOrderCommand::$defaultName]);
@@ -28,7 +27,10 @@ class SendScheduleChangeListener
             throw new LogicException('Send PurchaseOrder command not found, please run "oro:cron:definitions:load" command');
         }
 
-        $schedule->setDefinition($newDefinition);
+        $time = $event->getNewValue('marello_purchaseorder.sending_time');
+        $dateTime = new \DateTime();
+        $dateTime->setTimestamp($time);
+        $schedule->setDefinition(sprintf('%s %s * * *', ltrim($dateTime->format('i'), '0'), $dateTime->format('G')));
         $this->registry->getManagerForClass(Schedule::class)->flush();
     }
 }

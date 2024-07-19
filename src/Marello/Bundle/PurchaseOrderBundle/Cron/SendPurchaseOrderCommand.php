@@ -27,7 +27,7 @@ class SendPurchaseOrderCommand extends Command implements CronCommandScheduleDef
 
     public function getDefaultDefinition()
     {
-        return Configuration::DEFAULT_SENDING_SCHEDULE;
+        return sprintf('* %d * * *', Configuration::DEFAULT_SEND_HOUR);
     }
 
     public function isActive()
