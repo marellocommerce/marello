@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\NotificationMessageBundle\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -55,7 +57,8 @@ class NotificationMessageController extends AbstractController
     public function notificationMessagesWidgetAction(Request $request, int $perPage): Response
     {
         /** @var NotificationMessageRepository $repository */
-        $repository = $this->container->get('doctrine')->getRepository(NotificationMessage::class);
+        $repository = $this->container->get(ManagerRegistry::class)
+            ->getRepository(NotificationMessage::class);
         /** @var User $user */
         $user = $this->getUser();
         $types = $this->extractTypes($request);
@@ -103,6 +106,7 @@ class NotificationMessageController extends AbstractController
             [
                 EventDispatcherInterface::class,
                 EntityRoutingHelper::class,
+                ManagerRegistry::class
             ]
         );
     }
