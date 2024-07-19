@@ -21,7 +21,8 @@ class HandleWorkflowTransit implements ProcessorInterface
         private ManagerRegistry $registry,
         private WorkflowManager $workflowManager,
         private WorkflowRegistry $workflowRegistry
-    ) {}
+    ) {
+    }
 
     public function process(ContextInterface $context)
     {

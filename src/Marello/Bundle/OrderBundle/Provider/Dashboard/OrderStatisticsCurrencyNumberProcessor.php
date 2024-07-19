@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\OrderBundle\Provider;
+namespace Marello\Bundle\OrderBundle\Provider\Dashboard;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
@@ -49,8 +49,7 @@ class OrderStatisticsCurrencyNumberProcessor
         $lessIsBetter     = (bool)$lessIsBetter;
         $dateRange        = $lastWeek ? $this->dateHelper->getLastWeekPeriod() : $widgetOptions->get('dateRange');
         $value            = call_user_func([$this->valueProvider, $getterName], $dateRange, $widgetOptions);
-        $salesChannel = $widgetOptions->get('salesChannel');
-        $currencyCode = $salesChannel ? $salesChannel->getCurrency() : null;
+        $currencyCode = $widgetOptions->get('currency');
         $previousInterval = $widgetOptions->get('usePreviousInterval', []);
         $previousData     = [];
         $comparable       = $comparable == 'true' ? true : false;

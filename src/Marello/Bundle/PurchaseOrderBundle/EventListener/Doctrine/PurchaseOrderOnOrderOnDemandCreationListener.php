@@ -183,8 +183,7 @@ class PurchaseOrderOnOrderOnDemandCreationListener
         array $poBySupplier,
         array $allocationItemsBySupplier,
         Allocation $allocation
-    ): void
-    {
+    ): void {
         foreach ($poBySupplier as $po) {
             $orderTotal = 0.00;
             foreach ($po->getItems() as $poi) {

@@ -29,7 +29,8 @@ class OrderType extends AbstractType
 
     public function __construct(
         protected EventSubscriberInterface $orderTotalsSubscriber
-    ) {}
+    ) {
+    }
 
     /**
      * {@inheritdoc}

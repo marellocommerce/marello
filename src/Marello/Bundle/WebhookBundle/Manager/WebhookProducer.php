@@ -17,7 +17,8 @@ class WebhookProducer
     public function __construct(
         private WebhookProvider $webhookProvider,
         private MessageProducerInterface $messageProducer
-    ) {}
+    ) {
+    }
 
     public function triggerWebhook(WebhookEventInterface $event): void
     {

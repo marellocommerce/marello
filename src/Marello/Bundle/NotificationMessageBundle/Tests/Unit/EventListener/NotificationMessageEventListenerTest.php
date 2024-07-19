@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\NotificationMessageBundle\Tests\Unit\EventListener;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +19,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 
 use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
 use Marello\Bundle\NotificationMessageBundle\Datagrid\ActionPermissionProvider;
+use Marello\Bundle\NotificationMessageBundle\Factory\NotificationMessageFactory;
 use Marello\Bundle\NotificationMessageBundle\Event\CreateNotificationMessageEvent;
 use Marello\Bundle\NotificationMessageBundle\Factory\NotificationMessageContextFactory;
 use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageTypeInterface;
@@ -27,21 +30,24 @@ use Marello\Bundle\NotificationMessageBundle\EventListener\NotificationMessageEv
 
 class NotificationMessageEventListenerTest extends TestCase
 {
-    /** @var ManagerRegistry|\PHPUnit\Framework\MockObject\MockObject */
-    private $registry;
+    /** @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject */
+    private $doctrineHelper;
 
     /** @var TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $translator;
 
-    /** @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject */
-    private $configManager;
+    /** @var MessageProducerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    private $messageProducer;
+
+    /** @var NotificationMessageFactory|\PHPUnit\Framework\MockObject\MockObject */
+    private $notificationFactory;
 
     /** @var ActionPermissionProvider */
     private $listener;
 
     protected function setUp(): void
     {
-        $this->registry = $this->createMock(ManagerRegistry::class);
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->translator = $this->createMock(TranslatorInterface::class);
         $this->translator->expects($this->any())
             ->method('trans')
@@ -49,8 +55,14 @@ class NotificationMessageEventListenerTest extends TestCase
                 return $message . $domain;
             });
 
-        $this->configManager = $this->createMock(ConfigManager::class);
-        $this->listener = new NotificationMessageEventListener($this->registry, $this->configManager, $this->translator);
+        $this->messageProducer = $this->createMock(MessageProducerInterface::class);
+        $this->notificationFactory = $this->createMock(NotificationMessageFactory::class);
+        $this->listener = new NotificationMessageEventListener(
+            $this->doctrineHelper,
+            $this->translator,
+            $this->messageProducer,
+            $this->notificationFactory
+        );
     }
 
     public function testOnCreateNew(): void
@@ -73,33 +85,21 @@ class NotificationMessageEventListenerTest extends TestCase
             ->method('getClassMetadata')
             ->with(get_class($entity))
             ->willReturn($classMetadata);
-        $this->registry->expects($this->once())
-            ->method('getManagerForClass')
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityManagerForClass')
             ->with(NotificationMessage::class)
             ->willReturn($em);
         $notMessageRepo = $this->createMock(NotificationMessageRepository::class);
         $enumRepo = $this->createMock(EnumValueRepository::class);
-        $em->expects($this->exactly(4))
+        $em->expects($this->once())
             ->method('getRepository')
             ->withConsecutive(
-                [NotificationMessage::class],
-                [ExtendHelper::buildEnumValueClassName(
-                    NotificationMessageResolvedInterface::NOTIFICATION_MESSAGE_RESOLVED_ENUM_CODE
-                )],
-                [ExtendHelper::buildEnumValueClassName(
-                    NotificationMessageTypeInterface::NOTIFICATION_MESSAGE_TYPE_ENUM_CODE
-                )],
-                [ExtendHelper::buildEnumValueClassName(
-                    NotificationMessageSourceInterface::NOTIFICATION_MESSAGE_SOURCE_ENUM_CODE
-                )],
+                [NotificationMessage::class]
             )
-            ->willReturnOnConsecutiveCalls($notMessageRepo, $enumRepo, $enumRepo, $enumRepo);
+            ->willReturnOnConsecutiveCalls($notMessageRepo);
         $notMessageRepo->expects($this->once())
             ->method('findOneBy')
             ->willReturn(null);
-        $enumRepo->expects($this->exactly(3))
-            ->method('find')
-            ->willReturn(new TestEnumValue('test', 'Test'));
         $em->expects($this->once())->method('persist');
         $em->expects($this->once())->method('flush');
 
@@ -127,8 +127,8 @@ class NotificationMessageEventListenerTest extends TestCase
             ->method('getClassMetadata')
             ->with(get_class($entity))
             ->willReturn($classMetadata);
-        $this->registry->expects($this->once())
-            ->method('getManagerForClass')
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityManagerForClass')
             ->with(NotificationMessage::class)
             ->willReturn($em);
         $notMessageRepo = $this->createMock(NotificationMessageRepository::class);

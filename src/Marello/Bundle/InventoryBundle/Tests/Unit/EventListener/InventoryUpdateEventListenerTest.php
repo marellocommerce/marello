@@ -4,10 +4,12 @@ namespace Marello\Bundle\InventoryBundle\Tests\Unit\EventListener;
 
 use PHPUnit\Framework\TestCase;
 
+use Marello\Bundle\WebhookBundle\Manager\WebhookProducer;
 use Marello\Bundle\InventoryBundle\Manager\InventoryManager;
 use Marello\Bundle\InventoryBundle\Event\InventoryUpdateEvent;
 use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContext;
 use Marello\Bundle\InventoryBundle\Manager\BalancedInventoryManager;
+use Marello\Bundle\InventoryBundle\Event\InventoryUpdateWebhookEvent;
 use Marello\Bundle\InventoryBundle\EventListener\InventoryUpdateEventListener;
 
 class InventoryUpdateEventListenerTest extends TestCase
@@ -33,6 +35,12 @@ class InventoryUpdateEventListenerTest extends TestCase
     protected $balancedInventoryManager;
 
     /**
+     * @var WebhookProducer|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $webhookProducer;
+
+
+    /**
      * {@inheritdoc}
      */
     public function setUp(): void
@@ -48,9 +56,15 @@ class InventoryUpdateEventListenerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->webhookProducer = $this
+            ->getMockBuilder(WebhookProducer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->listener = new InventoryUpdateEventListener(
             $this->inventoryManager,
-            $this->balancedInventoryManager
+            $this->balancedInventoryManager,
+            $this->webhookProducer
         );
     }
 
@@ -61,6 +75,11 @@ class InventoryUpdateEventListenerTest extends TestCase
             ->method('updateInventoryLevel')
             ->with($this->inventoryUpdateContext);
 
+        $webhookEvent = new InventoryUpdateWebhookEvent($event->getInventoryUpdateContext());
+        $this->webhookProducer->expects($this->once())
+            ->method('triggerWebhook')
+            ->with($webhookEvent);
+
         $this->listener->handleUpdateInventoryEvent($event);
     }
 
@@ -68,6 +87,10 @@ class InventoryUpdateEventListenerTest extends TestCase
     {
         $this->inventoryUpdateContext->setIsVirtual(true);
         $event = $this->prepareEvent();
+        $webhookEvent = new InventoryUpdateWebhookEvent($event->getInventoryUpdateContext());
+        $this->webhookProducer->expects($this->once())
+            ->method('triggerWebhook')
+            ->with($webhookEvent);
         $this->balancedInventoryManager->expects($this->once())
             ->method('updateInventoryLevel')
             ->with($this->inventoryUpdateContext);
