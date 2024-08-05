@@ -1,0 +1,4 @@
+marello:
+    importexport:
+        entity_config:
+            header.label: Import Column Name
