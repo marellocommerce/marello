@@ -18,7 +18,14 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
  * Supplier
  *
  * @ORM\Entity(repositoryClass="Marello\Bundle\SupplierBundle\Entity\Repository\SupplierRepository")
- * @ORM\Table(name="marello_supplier_supplier")
+ * @ORM\Table(name="marello_supplier_supplier",
+ *       uniqueConstraints={
+ *           @ORM\UniqueConstraint(
+ *               name="marello_supplier_supplier_nameorgidx",
+ *               columns={"name", "organization_id"}
+ *           )
+ *       }
+ * )
  * @Oro\Config(
  *      routeName="marello_supplier_supplier_index",
  *      routeView="marello_supplier_supplier_view",
@@ -59,7 +66,7 @@ class Supplier implements CurrencyAwareInterface, EmailHolderInterface, ExtendEn
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true, nullable=false)
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={

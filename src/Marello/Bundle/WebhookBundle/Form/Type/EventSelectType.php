@@ -13,7 +13,8 @@ class EventSelectType extends AbstractType
 
     public function __construct(
         protected WebhookEventProvider $provider
-    ) {}
+    ) {
+    }
 
     public function configureOptions(OptionsResolver $resolver)
     {

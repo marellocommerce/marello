@@ -42,6 +42,12 @@ api:
                         allow_array: true
                         property_path: inventoryItem.product.sku
                         description: 'Filter by product sku'
+                    warehouse:
+                        data_type: string
+                        allow_array: true
+                        property_path: warehouse.code
+                        description: 'Filter by Warehouse code'
+                        operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
             actions:
                 get_subresource: false
                 create: false
@@ -141,6 +147,7 @@ api:
             actions: false
 
         Marello\Bundle\InventoryBundle\Entity\Allocation:
+            exclusion_policy: none
             filters:
                 exclusion_policy: all
                 fields:

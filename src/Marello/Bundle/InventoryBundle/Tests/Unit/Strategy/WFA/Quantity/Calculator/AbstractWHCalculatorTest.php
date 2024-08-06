@@ -26,7 +26,7 @@ abstract class AbstractWHCalculatorTest extends TestCase
      * @var Supplier[]
      */
     protected $suppliers = [];
-    
+
     /**
      * @return Supplier[]
      */
@@ -142,7 +142,7 @@ abstract class AbstractWHCalculatorTest extends TestCase
                     'id' => $k,
                     'inventoryItem' => $inventoryItem,
                     'warehouse' => $warehouses[$k],
-                    'inventory' => $quantity
+                    'inventoryQty' => $quantity
                 ]
             );
             $inventoryItem->addInventoryLevel($inventoryLevel);

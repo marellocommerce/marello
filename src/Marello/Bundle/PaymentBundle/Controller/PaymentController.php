@@ -54,7 +54,7 @@ class PaymentController extends AbstractController
 
     /**
      * @Route(path="/create", name="marello_payment_create")
-     * @Template("@MarelloPayment/Payment/create.html.twig")
+     * @Template("@MarelloPayment/Payment/update.html.twig")
      * @Acl(
      *     id="marello_payment_create",
      *     type="entity",

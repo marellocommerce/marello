@@ -25,7 +25,11 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  *           @ORM\UniqueConstraint(
  *               name="marello_customer_emailorgidx",
  *               columns={"email","organization_id"}
- *           )
+ *           ),
+ *          @ORM\UniqueConstraint(
+ *               name="marello_customer_numberorgidx",
+ *               columns={"customer_number","organization_id"}
+ *          )
  *       }
  * )
  * @Oro\Config(

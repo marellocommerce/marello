@@ -1,13 +1,13 @@
 {% extends '@OroUI/actions/update.html.twig' %}
 {% import '@OroUI/macros.html.twig' as UI %}
-{% set formAction = entity.id ? path('marello_sales_saleschannelgroup_update', {id: entity.id}) : path('marello_sales_saleschannelgroup_create') %}
+{% set formAction = path('marello_sales_saleschannelgroup_update', {id: entity.id}) %}
 
 {% oro_title_set({params : {'%name%': entity.name, '%entityName%': 'marello.sales.saleschannelgroup.entity_label'|trans} }) %}
 
 {% block navButtons %}
     {{ parent() }}
     {{ UI.cancelButton(path('marello_sales_saleschannelgroup_index')) }}
-    {% if entity.id and is_granted('marello_sales_saleschannelgroup_update') or is_granted('marello_sales_saleschannelgroup_create') %}
+    {% if entity.id and is_granted('marello_sales_saleschannelgroup_update') %}
         {% set html = '' %}
         {% if is_granted('marello_sales_saleschannelgroup_view') %}
             {% set html = UI.saveAndCloseButton({
@@ -18,9 +18,6 @@
         {% set html = html ~ UI.saveAndStayButton({
         'route': 'marello_sales_saleschannelgroup_update',
         'params': {'id': '$id'}
-        }) %}
-        {% set html = html ~ UI.saveAndNewButton({
-        'route': 'marello_sales_saleschannelgroup_create'
         }) %}
         {{ UI.dropdownSaveButton({'html': html}) }}
     {% endif %}
@@ -35,9 +32,6 @@
             'entityTitle': entity.name|default('N/A'|trans)
         } %}
         {{ parent() }}
-    {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'marello.sales.saleschannelgroup.entity_label'|trans}) %}
-        {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 
