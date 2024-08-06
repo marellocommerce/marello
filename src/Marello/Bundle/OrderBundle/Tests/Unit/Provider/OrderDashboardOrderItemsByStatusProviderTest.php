@@ -18,7 +18,7 @@ use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Migrations\Data\ORM\LoadOrderItemStatusData;
-use Marello\Bundle\OrderBundle\Provider\OrderDashboardOrderItemsByStatusProvider;
+use Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider;
 
 class OrderDashboardOrderItemsByStatusProviderTest extends TestCase
 {
