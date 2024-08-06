@@ -90,7 +90,7 @@ class QuantityWFAStrategyTest extends TestCase
         $product1 = $this->getEntity(Product::class, ['sku' => 'TPD0001']);
         $product2 = $this->getEntity(Product::class, ['sku' => 'TPD0002']);
         $product3 = $this->getEntity(Product::class, ['sku' => 'TPD0003']);
-        
+
         $warehouse1 = $this->getEntity(Warehouse::class, [
             'id' => 1,
             'default' => true,

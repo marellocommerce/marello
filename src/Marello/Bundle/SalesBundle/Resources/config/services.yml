@@ -215,6 +215,15 @@ services:
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
+    marello_sales.form.autocomplete.currency_sales_channel.search_handler:
+        class: 'Marello\Bundle\SalesBundle\Autocomplete\CurrencySalesChannelHandler'
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - 'Marello\Bundle\SalesBundle\Entity\SalesChannel'
+            - [ "currency" ]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: currency_sales_channel, acl_resource: marello_sales_channel_view }
+
     Marello\Bundle\SalesBundle\Api\Processor\ComputeSalesChannelAddressField:
         arguments:
             - '@oro_config.saleschannel'

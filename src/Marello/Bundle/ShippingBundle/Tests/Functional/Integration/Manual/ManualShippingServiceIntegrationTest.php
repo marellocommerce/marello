@@ -7,11 +7,13 @@ use Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures\LoadAllocationD
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\InventoryBundle\Entity\Allocation;
 use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Marello\Bundle\ShippingBundle\Entity\Shipment;
 use Marello\Bundle\ShippingBundle\Integration\Manual\ManualShippingServiceDataFactory;
 use Marello\Bundle\ShippingBundle\Integration\Manual\ManualShippingServiceIntegration;
 use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadOrderData;
+use Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures\LoadAllocationData;
 
 class ManualShippingServiceIntegrationTest extends WebTestCase
 {
@@ -55,7 +57,7 @@ class ManualShippingServiceIntegrationTest extends WebTestCase
             ->setWarehouse($this->getReference(LoadOrderData::DEFAULT_WAREHOUSE_REF));
 
         $data = $this->dataFactory->createData($shippingDataProvider);
-        
+
         $integration = $this->client->getContainer()->get('marello_shipping.integration.manual.service_integration');
         $shipment = $integration->createShipment($allocation, $data);
 

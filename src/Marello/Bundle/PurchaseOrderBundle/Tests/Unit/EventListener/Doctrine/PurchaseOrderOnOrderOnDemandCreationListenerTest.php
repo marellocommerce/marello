@@ -5,7 +5,6 @@ namespace Marello\Bundle\PurchaseOrderBundle\Tests\Unit\EventListener\Doctrine;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -13,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 
@@ -28,6 +28,7 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\WarehouseGroup;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
 use Marello\Bundle\InventoryBundle\Entity\AllocationItem;
+use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
 use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
 use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
 use Marello\Bundle\InventoryBundle\Provider\AllocationContextInterface;
@@ -62,24 +63,17 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
             ->method('get')
             ->willReturn(true);
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $workflowManager = $this->createMock(WorkflowManager::class);
         $this->listener = new PurchaseOrderOnOrderOnDemandCreationListener(
             $this->configManager,
-            $this->dispatcher
+            $this->dispatcher,
+            $workflowManager
         );
     }
 
     public function testPostFlush()
     {
         $allocation = $this->getAllocation();
-
-        /** @var LifecycleEventArgs|\PHPUnit\Framework\MockObject\MockObject $args **/
-        $postPersistArgs = $this->getMockBuilder(LifecycleEventArgs::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $postPersistArgs
-            ->expects(static::once())
-            ->method('getObject')
-            ->willReturn($allocation);
         /** @var PostFlushEventArgs|\PHPUnit\Framework\MockObject\MockObject $args **/
         $postFlushArgs = $this->getMockBuilder(PostFlushEventArgs::class)
             ->disableOriginalConstructor()
@@ -104,6 +98,11 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
             ->with($allocation->getOrder()->getSalesChannel()->getGroup())
             ->willReturn($groupLink);
         $whRepository = $this->createMock(WarehouseRepository::class);
+        $poRepository = $this->createMock(EntityRepository::class);
+        $poRepository
+            ->expects(static::exactly(1))
+            ->method('findBy')
+            ->willReturn([]);
         $manager
             ->expects(static::any())
             ->method('getRepository')
@@ -111,6 +110,7 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
                 [Allocation::class],
                 [WarehouseChannelGroupLink::class],
                 [Warehouse::class],
+                [PurchaseOrder::class],
                 [WarehouseChannelGroupLink::class],
                 [Warehouse::class]
             )
@@ -118,6 +118,7 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
                 $orderRepository,
                 $linkRepository,
                 $whRepository,
+                $poRepository,
                 $linkRepository,
                 $whRepository
             );
@@ -156,8 +157,7 @@ class PurchaseOrderOnOrderOnDemandCreationListenerTest extends TestCase
             ->method('getOwner')
             ->willReturn($organization);
 
-
-        $this->listener->postPersist($postPersistArgs);
+        $this->listener->postPersist($allocation);
         $this->listener->postFlush($postFlushArgs);
     }
 

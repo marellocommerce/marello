@@ -2,13 +2,13 @@
 
 namespace Marello\Bundle\OrderBundle\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider;
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
-use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
-use Marello\Bundle\OrderBundle\Provider\OrderDashboardOrderItemsByStatusProvider;
+use Symfony\Component\Routing\Annotation\Route;
 
 class OrderDashboardController extends AbstractController
 {

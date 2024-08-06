@@ -39,7 +39,7 @@ class MarelloPackingBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_4_2';
+        return 'v1_4_3';
     }
 
     /**

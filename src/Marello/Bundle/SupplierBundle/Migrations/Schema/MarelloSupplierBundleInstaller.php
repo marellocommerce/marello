@@ -24,7 +24,7 @@ class MarelloSupplierBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_5_1';
+        return 'v1_5_2';
     }
 
     /**

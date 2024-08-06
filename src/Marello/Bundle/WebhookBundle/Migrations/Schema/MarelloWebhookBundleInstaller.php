@@ -8,15 +8,8 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterf
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class MarelloWebhookBundleInstaller implements Installation, ExtendExtensionAwareInterface
+class MarelloWebhookBundleInstaller implements Installation
 {
-    protected ExtendExtension $extendExtension;
-
-    public function setExtendExtension(ExtendExtension $extendExtension)
-    {
-        $this->extendExtension = $extendExtension;
-    }
-
     public function getMigrationVersion()
     {
         return 'v1_1';

@@ -8,7 +8,6 @@ data:
             middleName: null
             lastName: Boling
             nameSuffix: null
-            email: JamesCBoling@einrot.com
         relationships:
             primaryAddress:
                 data:

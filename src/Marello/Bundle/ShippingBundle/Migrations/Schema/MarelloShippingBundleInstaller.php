@@ -24,7 +24,7 @@ class MarelloShippingBundleInstaller implements Installation, AttachmentExtensio
      */
     public function getMigrationVersion()
     {
-        return 'v1_3_1';
+        return 'v1_3_2';
     }
 
     /**

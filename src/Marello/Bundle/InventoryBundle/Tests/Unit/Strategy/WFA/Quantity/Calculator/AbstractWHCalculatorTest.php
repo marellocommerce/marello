@@ -26,7 +26,7 @@ abstract class AbstractWHCalculatorTest extends TestCase
      * @var Supplier[]
      */
     protected $suppliers = [];
-    
+
     /**
      * @return Supplier[]
      */

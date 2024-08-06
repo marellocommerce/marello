@@ -1,4 +1,12 @@
 system_configuration:
+    groups:
+        marello_purchase_order:
+            title: marello.purchaseorder.system_configuration.groups.purchase_order.label
+            icon: fa-truck
+            priority: 50
+        marello_purchase_order_general:
+            title: marello.purchaseorder.system_configuration.groups.purchase_order_general.label
+            priority: 50
     fields:
         marello_purchaseorder.purchaseorder_notification:
             data_type: boolean
@@ -16,6 +24,26 @@ system_configuration:
                 constraints:
                     - NotNull: ~
 
+        marello_purchaseorder.send_directly:
+            data_type: boolean
+            type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
+            options:
+                label: marello.purchaseorder.system_configuration.fields.send_directly.label
+                tooltip: marello.purchaseorder.system_configuration.fields.tooltip.send_directly
+                required: false
+
+        marello_purchaseorder.sending_time:
+            data_type: string
+            type: Symfony\Component\Form\Extension\Core\Type\TimeType
+            options:
+                label: marello.purchaseorder.system_configuration.fields.sending_time.label
+                tooltip: marello.purchaseorder.system_configuration.fields.tooltip.sending_time
+                required: true
+                widget: single_text
+                input: timestamp
+                constraints:
+                    - NotNull: ~
+
     tree:
         system_configuration:
             marello:
@@ -28,3 +56,15 @@ system_configuration:
                                         children:
                                             - marello_purchaseorder.purchaseorder_notification
                                             - marello_purchaseorder.purchaseorder_notification_address
+                    marello_order:
+                        children:
+                            marello_order_on_demand:
+                                children:
+                                    marello_order_on_demand_general:
+                                        children:
+                                            - marello_purchaseorder.send_directly
+                            marello_purchase_order:
+                                children:
+                                    marello_purchase_order_general:
+                                        children:
+                                            - marello_purchaseorder.sending_time

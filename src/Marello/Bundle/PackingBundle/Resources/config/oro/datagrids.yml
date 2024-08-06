@@ -125,6 +125,7 @@ datagrids:
                 where:
                     and:
                         - ps.id = :id
+                groupBy: psi.id
             bind_parameters:
                 - id
         columns:

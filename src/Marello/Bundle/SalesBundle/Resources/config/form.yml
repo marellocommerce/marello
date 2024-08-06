@@ -48,6 +48,12 @@ services:
         tags:
             - { name: form.type }
 
+    Marello\Bundle\SalesBundle\Form\Type\WidgetCurrencySelectType:
+        arguments:
+            - '@oro_locale.settings'
+        tags:
+            - { name: form.type }
+
     #form handlers
     marello_sales.saleschannel_form.handler:
         class: 'Marello\Bundle\SalesBundle\Form\Handler\SalesChannelHandler'
