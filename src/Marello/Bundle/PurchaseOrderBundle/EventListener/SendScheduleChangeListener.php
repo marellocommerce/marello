@@ -12,7 +12,8 @@ class SendScheduleChangeListener
 {
     public function __construct(
         private ManagerRegistry $registry
-    ) {}
+    ) {
+    }
 
     public function onConfigUpdate(ConfigUpdateEvent $event): void
     {

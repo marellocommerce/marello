@@ -28,8 +28,8 @@ class Configuration implements ConfigurationInterface
                 'send_directly' => ['value' => true],
                 'sending_time' => [
                     'value' => (new \DateTime())
-                        ->setDate(0,0,0)
-                        ->setTime(self::DEFAULT_SEND_HOUR,0)
+                        ->setDate(0, 0, 0)
+                        ->setTime(self::DEFAULT_SEND_HOUR, 0)
                         ->getTimestamp()
                 ],
             ]

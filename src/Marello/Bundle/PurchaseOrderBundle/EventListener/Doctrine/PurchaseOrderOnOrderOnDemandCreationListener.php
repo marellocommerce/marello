@@ -39,7 +39,8 @@ class PurchaseOrderOnOrderOnDemandCreationListener
         protected EventDispatcherInterface $eventDispatcher,
         protected WorkflowManager $workflowManager,
         protected ?int $allocationId = null
-    ) {}
+    ) {
+    }
 
     public function postPersist(Allocation $entity): void
     {

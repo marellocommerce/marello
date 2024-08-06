@@ -18,7 +18,8 @@ class PurchaseOrderWorkflowTransitListener
         protected ConfigManager $configManager,
         protected WorkflowManager $workflowManager,
         protected array $entitiesScheduledForWorkflowStart = []
-    ) {}
+    ) {
+    }
 
     public function postPersist(PurchaseOrder $entity): void
     {
