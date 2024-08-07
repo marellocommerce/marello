@@ -18,6 +18,21 @@
             {% if marello_entity_has_attribute(product, 'barcode') %}
                 {{ UI.renderProperty('marello.product.barcode.label'|trans, product.barcode) }}
             {% endif %}
+
+            {% if marello_entity_has_attribute(product, 'ARFile') %}
+                {% if product.ARFile is not null %}
+                    {% set ARFilename = product.ARFile.originalFilename|default(product.ARFile.filename) %}
+                    {% set ARFileLink %}
+                        <a href="{{ file_url(product.ARFile, 'download', true) }}" class="no-hash attachment-item__filename" title="{{ ARFilename }}">
+                            {{ ARFilename }}
+                        </a>
+                        <span class="attachment-item__file-size">({{ file_size(product.ARFile.fileSize) }})</span>
+                    {% endset %}
+                {% else %}
+                    {% set ARFileLink = null %}
+                {% endif %}
+                {{ UI.renderHtmlProperty('marello.product.a_r_file.label'|trans, ARFileLink) }}
+            {% endif %}
         </div>
     </div>
 </div>
