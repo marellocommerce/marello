@@ -29,6 +29,7 @@ class AttributeFormViewListener
         'suppliers',
         'categories',
         'image',
+        'ARFile',
         'barcode'
     ];
     /**

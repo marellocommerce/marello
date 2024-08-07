@@ -35,7 +35,8 @@ class ProductFamilyBuilder
                 'warranty',
                 'suppliers',
                 'categories',
-                'image'
+                'image',
+                'ARFile'
             ],
             'groupVisibility' => true,
         ]
