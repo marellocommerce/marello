@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
 use Oro\Bundle\AttachmentBundle\Form\Type\ImageType;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\FormBundle\Form\Extension\StripTagsExtension;
@@ -172,6 +173,14 @@ class ProductType extends AbstractType
                 ImageType::class,
                 [
                     'label' => 'marello.product.image.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'ARFile',
+                FileType::class,
+                [
+                    'label' => 'marello.product.a_r_file.label',
                     'required' => false
                 ]
             )

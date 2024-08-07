@@ -29,6 +29,7 @@ marello:
         manufacturing_code.label:   Manufacturing Code
         barcode.label:              Barcode
         image.label:                Image
+        a_r_file.label:             AR File
         categories.label:           Categories
         suppliers.label:            Suppliers
         attribute_family.label:     Attribute Family
