@@ -11,7 +11,7 @@ services:
         tags:
             - { name: oro.api.processor, action: get_config, extra: '!identifier_fields_only', priority: -40 }
 
-    Marello\Bundle\ProductBundle\Api\Processor\HandlePropertyLabels:
-        tags:
-            - { name: oro.api.processor, action: get, group: normalize_result, priority: -160 }
-            - { name: oro.api.processor, action: get_list, group: normalize_result, priority: -160 }
+#    Marello\Bundle\ProductBundle\Api\Processor\HandlePropertyLabels:
+#        tags:
+#            - { name: oro.api.processor, action: get, group: normalize_result, priority: -160 }
+#            - { name: oro.api.processor, action: get_list, group: normalize_result, priority: -160 }
