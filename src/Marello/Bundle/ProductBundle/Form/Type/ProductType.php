@@ -176,14 +176,14 @@ class ProductType extends AbstractType
                     'required' => false
                 ]
             )
-            ->add(
-                'ARFile',
-                FileType::class,
-                [
-                    'label' => 'marello.product.a_r_file.label',
-                    'required' => false
-                ]
-            )
+//            ->add(
+//                'ARFile',
+//                FileType::class,
+//                [
+//                    'label' => 'marello.product.a_r_file.label',
+//                    'required' => false
+//                ]
+//            )
             ->add(
                 'appendCategories',
                 EntityIdentifierType::class,

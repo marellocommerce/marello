@@ -145,7 +145,7 @@ class ProductController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_product_update')]
+    #[Route(path: '/update/{id}', name: 'marello_product_update', requirements: ['id' => '\d+'])]
     #[AclAncestor('marello_product_update')]
     #[Template]
     public function updateAction(Product $product, Request $request)

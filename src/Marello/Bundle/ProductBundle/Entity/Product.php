@@ -354,19 +354,6 @@ class Product implements
     )]
     protected ?AttributeFamily $attributeFamily = null;
 
-    #[ORM\OneToOne(targetEntity: File::class, cascade: 'ALL')]
-    #[ORM\JoinColumn(name: 'ar_file_id', referencedColumnName: 'id', nullable: true)]
-    #[Oro\ConfigField(
-        defaultValues: [
-            'dataaudit' => ['auditable' => false],
-            'importexport' => ['excluded' => true],
-            'attribute' => ['is_attribute' => true],
-            'extend' => ['owner' => 'Custom'],
-            'attachment' => ['maxsize' => 50, 'mimetypes' => 'application/zip,model/vnd.usdz+zip']
-        ]
-    )]
-    protected $ARFile;
-
     public function __construct()
     {
         $this->names                = new ArrayCollection();
@@ -1150,7 +1137,6 @@ class Product implements
 
         return $this;
     }
-    
 
     /**
      * @param Category $category
@@ -1184,18 +1170,6 @@ class Product implements
     public function setAttributeFamily(AttributeFamily $attributeFamily): self
     {
         $this->attributeFamily = $attributeFamily;
-
-        return $this;
-    }
-
-    public function getARFile(): ?File
-    {
-        return $this->ARFile;
-    }
-
-    public function setARFile(File $ARFile): self
-    {
-        $this->ARFile = $ARFile;
 
         return $this;
     }

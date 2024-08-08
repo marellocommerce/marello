@@ -30,6 +30,8 @@ class MarelloProductBundleInstaller implements
     const MAX_PRODUCT_IMAGE_SIZE_IN_MB = 1;
     const MAX_PRODUCT_IMAGE_DIMENSIONS_IN_PIXELS = 250;
 
+    const MAX_PRODUCT_ARFILE_SIZE_IN_MB = 50;
+
     /**
      * {@inheritdoc}
      */
@@ -59,8 +61,8 @@ class MarelloProductBundleInstaller implements
         $this->addMarelloProductSalesChannelTaxRelationForeignKeys($schema);
         $this->addMarelloProductSupplierRelationForeignKeys($schema);
 
-        /** Add Image attribute relation **/
-        $this->addImageRelation($schema);
+        /** Add File attributes relations **/
+        $this->addFileRelations($schema);
 
         /** Add attribute family and attribute family relation **/
         $this->addAttributeFamily($schema);
@@ -92,7 +94,7 @@ class MarelloProductBundleInstaller implements
         $table->addColumn('tax_code_id', 'integer', ['notnull' => false]);
         $table->addColumn('channels_codes', 'text', ['notnull' => false, 'comment' => '(DC2Type:text)']);
         $table->addColumn('categories_codes', 'text', ['notnull' => false, 'comment' => '(DC2Type:text)']);
-        $table->addColumn('ar_file_id', 'integer', ['notnull' => false]);
+//        $table->addColumn('ar_file_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['sku', 'organization_id'], 'marello_product_product_skuorgidx');
         $table->addIndex(['created_at'], 'idx_marello_product_created_at', []);
@@ -247,11 +249,11 @@ class MarelloProductBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_attachment_file'),
-            ['ar_file_id'],
-            ['id']
-        );
+//        $table->addForeignKeyConstraint(
+//            $schema->getTable('oro_attachment_file'),
+//            ['ar_file_id'],
+//            ['id']
+//        );
     }
 
     /**
@@ -350,7 +352,7 @@ class MarelloProductBundleInstaller implements
     /**
      * @param Schema $schema
      */
-    protected function addImageRelation(Schema $schema)
+    protected function addFileRelations(Schema $schema)
     {
         $this->attachmentExtension->addImageRelation(
             $schema,
@@ -369,6 +371,7 @@ class MarelloProductBundleInstaller implements
             self::MAX_PRODUCT_IMAGE_DIMENSIONS_IN_PIXELS
         );
 
+        // Add Media url that can be used as external url
         $attachmentTable = $schema->getTable('oro_attachment_file');
         if (!$attachmentTable->hasColumn('media_url')) {
             $attachmentTable->addColumn('media_url', 'string', [
@@ -390,6 +393,21 @@ class MarelloProductBundleInstaller implements
                 ]
             ]);
         }
+
+        // add ARFile relation
+        $this->attachmentExtension->addFileRelation(
+            $schema,
+            self::PRODUCT_TABLE,
+            'ARFile',
+            [
+                'importexport' => ['excluded' => true],
+                'attribute' => ['is_attribute' => true],
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'attachment' => ['mimetypes' => 'application/zip,model/vnd.usdz+zip', 'acl_protected' => false]
+            ],
+            self::MAX_PRODUCT_ARFILE_SIZE_IN_MB
+        );
+
     }
 
     /**
