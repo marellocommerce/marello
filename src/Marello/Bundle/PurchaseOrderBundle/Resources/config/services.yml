@@ -65,3 +65,10 @@ services:
             - '@oro_notification.model.notification_settings'
         tags:
             - { name: console.command }
+
+    Marello\Bundle\PurchaseOrderBundle\Cron\SendPurchaseOrderCommand:
+        arguments:
+            - '@service_container'
+            - '@oro_workflow.manager'
+        tags:
+            - { name: console.command }
