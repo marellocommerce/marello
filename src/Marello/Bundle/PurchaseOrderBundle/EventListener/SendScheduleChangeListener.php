@@ -3,15 +3,23 @@
 namespace Marello\Bundle\PurchaseOrderBundle\EventListener;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\PurchaseOrderBundle\Cron\SendPurchaseOrderCommand;
-use Marello\Bundle\PurchaseOrderBundle\Exception\LogicException;
-use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
+
+use Oro\Bundle\ConfigBundle\Entity\ConfigValue;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 use Oro\Bundle\CronBundle\Entity\Schedule;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
+
+use Marello\Bundle\PurchaseOrderBundle\Exception\LogicException;
+use Marello\Bundle\PurchaseOrderBundle\Cron\SendPurchaseOrderCommand;
 
 class SendScheduleChangeListener
 {
     public function __construct(
-        private ManagerRegistry $registry
+        private ManagerRegistry $registry,
+        private TokenStorageInterface $tokenStorage,
+        protected ConfigManager $configManager
     ) {
     }
 
@@ -25,13 +33,62 @@ class SendScheduleChangeListener
             ->getRepository(Schedule::class)
             ->findOneBy(['command' => SendPurchaseOrderCommand::$defaultName]);
         if (!$schedule) {
-            throw new LogicException('Send PurchaseOrder command not found, please run "oro:cron:definitions:load" command');
+            throw new LogicException(
+                'Send PurchaseOrder command not found, please run "oro:cron:definitions:load" command'
+            );
         }
 
         $time = $event->getNewValue('marello_purchaseorder.sending_time');
-        $dateTime = new \DateTime();
+        // oro_locale.timezone -> identifier
+        $timeZoneValue = $this->configManager
+            ->get('oro_locale.timezone', false, false, $this->tokenStorage->getToken()->getUser());
+        $dateTime = new \DateTime('now');
+        // set timezone that is from the user and or the system (as the user configuring the setting assumes it's in his timezone)
+//        $dateTime->setTimezone(new \DateTimeZone($timeZoneValue));
+        file_put_contents(
+            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
+            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->getTimezone(), true) . "\r\n",
+            FILE_APPEND
+        );
+        file_put_contents(
+            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
+            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->format('Y-m-d H:i:s'), true) . "\r\n",
+            FILE_APPEND
+        );
+
         $dateTime->setTimestamp($time);
-        $schedule->setDefinition(sprintf('%s %s * * *', ltrim($dateTime->format('i'), '0'), $dateTime->format('G')));
+        // convert to UTC timezone as it needs to be stored in UTC timezone for the cron definition
+        $dateTime->setTimezone(new \DateTimeZone('UTC'));
+
+        file_put_contents(
+            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
+            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->getTimezone(), true) . "\r\n",
+            FILE_APPEND
+        );
+        file_put_contents(
+            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
+            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->format('Y-m-d H:i:s'), true) . "\r\n",
+            FILE_APPEND
+        );
+        $newTime = new \DateTime('now');
+        $newTime->setTimezone(new \DateTimeZone('UTC'));
+        file_put_contents(
+            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
+            __METHOD__ . " " . __LINE__ . " " . print_r($newTime->getTimezone(), true) . "\r\n",
+            FILE_APPEND
+        );
+        file_put_contents(
+            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
+            __METHOD__ . " " . __LINE__ . " " . print_r($newTime->format('Y-m-d H:i:s'), true) . "\r\n",
+            FILE_APPEND
+        );
+        $schedule->setDefinition(
+            sprintf(
+                '%s %s * * *',
+                ltrim($dateTime->format('i'), '0'),
+                $dateTime->format('G')
+            )
+        );
         $this->registry->getManagerForClass(Schedule::class)->flush();
     }
 }
