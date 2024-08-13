@@ -247,12 +247,14 @@ datagrids:
                     - COALESCE(il.inventoryQty, 0) AS inventoryQty
                     - COALESCE(il.allocatedInventory, 0) AS allocatedInventoryQty
                     - COALESCE(il.inventoryQty - il.allocatedInventory, 0) AS virtualInventoryQty
+                    - COALESCE(SUM(CASE WHEN (ib.sellByDate IS NOT NULL AND ib.sellByDate < CURRENT_TIMESTAMP()) THEN ib.quantity ELSE 0 END), 0) as expiredInventoryQty
                 from:
                     - { table: Marello\Bundle\InventoryBundle\Entity\InventoryLevel, alias: il }
                 join:
                     left:
                         - { join: il.warehouse, alias: wh }
                         - { join: wh.warehouseType, alias: wht }
+                        - { join: il.inventoryBatches, alias: ib }
                 where:
                     and:
                         - IDENTITY(il.inventoryItem) = :inventoryItemId
@@ -278,6 +280,10 @@ datagrids:
                 label:              marello.inventory.warehousetype.entity_label
                 frontend_type:      string
                 renderable:         false
+            expiredInventoryQty:
+                label:              marello.inventory.inventorylevel.expired_inventory.grid.label
+                frontend_type:      number
+                data_name:          expiredInventoryQty
             inventoryQty:
                 label:              marello.inventory.inventorylevel.inventory.grid.label
                 frontend_type:      number
