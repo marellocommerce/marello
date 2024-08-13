@@ -7,11 +7,10 @@ use Marello\Bundle\CustomerBundle\Entity\Customer;
 
 class CustomerRepository extends ServiceEntityRepository
 {
-    public function isExistCustomerByEmailAndOrganization(Customer $customer): bool
+    public function findCustomerByEmailAndOrganization(Customer $customer): ?Customer
     {
         $qb = $this->createQueryBuilder('c');
         $qb
-            ->select('1')
             ->where($qb->expr()->eq('LOWER(c.email)', ':email'))
             ->setParameter('email', mb_strtolower($customer->getEmail()));
 
@@ -20,6 +19,6 @@ class CustomerRepository extends ServiceEntityRepository
                 ->setParameter('organization', $customer->getOrganization());
         }
 
-        return (bool) $qb->getQuery()->getScalarResult();
+        return $qb->getQuery()->getResult();
     }
 }

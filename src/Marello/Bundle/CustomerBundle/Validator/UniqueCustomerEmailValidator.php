@@ -24,8 +24,9 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
             return;
         }
 
-        $isExist = $this->entityManager->getRepository(Customer::class)->isExistCustomerByEmailAndOrganization($value);
-        if ($isExist) {
+        /** @var Customer $customer */
+        $customer = $this->entityManager->getRepository(Customer::class)->findCustomerByEmailAndOrganization($value);
+        if ($customer && $customer->getId() !== $value->getId()) {
             $this->context->buildViolation($constraint->message)
                 ->atPath('email')
                 ->setInvalidValue($value)
