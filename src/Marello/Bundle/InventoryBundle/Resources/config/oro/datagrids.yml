@@ -41,7 +41,7 @@ datagrids:
                 frontend_type:      boolean
                 data_name:          enableBatchInventory
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.grid.label
+                label:              marello.inventory.inventorylevel.inventory_qty.grid.label
                 frontend_type:      number
                 data_name:          inventoryQty
             allocatedInventoryQty:
@@ -285,7 +285,7 @@ datagrids:
                 frontend_type:      number
                 data_name:          expiredInventoryQty
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.grid.label
+                label:              marello.inventory.inventorylevel.inventory_qty.grid.label
                 frontend_type:      number
                 data_name:          inventoryQty
             allocatedInventoryQty:
