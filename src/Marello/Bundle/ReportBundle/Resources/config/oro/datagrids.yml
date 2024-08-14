@@ -283,3 +283,47 @@ datagrids:
             options:
                 entityHint: report data
                 export: false
+
+    marello_report-inventory-out_of_date_inventory:
+        pageTitle: marello.report.title.out_of_date_inventory
+        source:
+            type: orm
+            acl_resource: oro_report_view
+            query:
+                select:
+                    - ib.batchNumber
+                    - ib.sellByDate
+                    - ib.quantity
+                    - p.sku
+                    - il.pickLocation
+                from:
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryBatch, alias: ib }
+                where:
+                    and:
+                        - ib.sellByDate <= CURRENT_TIMESTAMP()
+                join:
+                    inner:
+                        - { join: Marello\Bundle\InventoryBundle\Entity\InventoryLevel, alias: il, conditionType: 'WITH', condition: 'ib.id = il.id' }
+                        - { join: Marello\Bundle\InventoryBundle\Entity\InventoryItem, alias: i, conditionType: 'WITH', condition: 'il.id = i.id' }
+                        - { join: Marello\Bundle\ProductBundle\Entity\Product, alias: p, conditionType: 'WITH', condition: 'i.id = p.id' }
+        columns:
+            sku:
+                label:              marello.product.sku.label
+                frontend_type:      string
+            batchNumber:
+                label:              marello.inventory.inventorybatch.batch_number.label
+                frontend_type:      string
+            pickLocation:
+                label:              marello.inventory.inventorylevel.pick_location.label
+                frontend_type:      string
+            sellByDate:
+                label:              marello.inventory.inventorybatch.sell_by_date.label
+                frontend_type:      datetime
+                data_name:          sellByDate
+            quantity:
+                label:              marello.inventory.inventorybatch.quantity.label
+                frontend_type:      integer
+                data_name:          quantity
+        options:
+            entityHint: report data
+            export: false
