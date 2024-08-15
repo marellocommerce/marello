@@ -7,6 +7,7 @@ use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\ProductStatus;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
+use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
@@ -44,6 +45,11 @@ class ProductFixture extends AbstractTemplateRepository implements TemplateFixtu
         $entity->addChannel($salesChannel2);
         $entity->addCategory($category1);
         $entity->addCategory($category2);
+
+        $image = new File();
+        $image->setExternalUrl('https://upload.wikimedia.org/wikipedia/commons/a/a9/Example.jpg');
+        $image->setParentEntityClass(Product::class);
+        $entity->setImage($image);
 
         return $entity;
     }
