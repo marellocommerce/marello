@@ -20,51 +20,46 @@ class LoadPOSRolesData extends AbstractFixture implements
             ->getRepository(Role::class)
             ->findOneBy(['role' => self::ROLE_USER]);
         if (!$userRole) {
-            $roleUser = new Role(self::ROLE_USER);
-            $roleUser->setLabel('POS User');
-            $manager->persist($roleUser);
+            $userRole = new Role(self::ROLE_USER);
+            $userRole->setLabel('POS User');
+            $manager->persist($userRole);
         }
 
-        $this->updateDescriptionForUser($userRole, $manager, $roleUser);
+        $this->updateDescriptionForUser($userRole, $manager);
 
         $userRoleAdmin = $manager
             ->getRepository(Role::class)
             ->findOneBy(['role' => self::ROLE_ADMIN]);
         if (!$userRoleAdmin) {
-            $roleAdmin = new Role(self::ROLE_ADMIN);
-            $roleAdmin->setLabel('POS Administrator');
-            $manager->persist($roleAdmin);
+            $userRoleAdmin = new Role(self::ROLE_ADMIN);
+            $userRoleAdmin->setLabel('POS Administrator');
+            $manager->persist($userRoleAdmin);
         }
-        $this->updateDescriptionForAdmin($userRoleAdmin, $manager, $roleAdmin);
+        $this->updateDescriptionForAdmin($userRoleAdmin, $manager);
+
         $manager->flush();
     }
 
-    private function updateDescriptionForAdmin($userRoleAdmin, $manager, $roleAdmin = null): void
+    private function updateDescriptionForAdmin($role, $manager): void
     {
         $description = 'This role is a default user role for a POS Administrator and
          needs to be assigned to the user when a Marello POS+ administrator user is created.';
 
-        $userRoleAdmin->setExtendDescription($description);
-        if ($roleAdmin) {
-            $roleAdmin->setExtendDescription($description);
-            $manager->persist($roleAdmin);
+        if ($role) {
+            $role->setExtendDescription($description);
+            $manager->persist($role);
         }
-
-        $manager->persist($userRoleAdmin);
     }
 
-    private function updateDescriptionForUser($userRole, $manager, $roleUser = null): void
+    private function updateDescriptionForUser($role, $manager): void
     {
         $description = 'This role is a default user role for a POS User and
          needs to be assigned to the user when a Marello POS+ user is created.';
 
-        $userRole->setExtendDescription($description);
-        if ($roleUser) {
-            $roleUser->setExtendDescription($description);
-            $manager->persist($roleUser);
+        if ($role) {
+            $role->setExtendDescription($description);
+            $manager->persist($role);
         }
-
-        $manager->persist($userRole);
     }
 
     /**
