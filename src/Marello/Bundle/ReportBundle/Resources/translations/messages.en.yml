@@ -12,6 +12,9 @@ marello:
             low_inventory_products.label:           Low Inventory Products
             low_inventory_products.description:     Products with lower (total) inventory quantities
 
+            out_of_date_inventory.label:            Out-of-Date Inventory
+            out_of_date_inventory.description:      Inventory Batches that are beyond the Sell By Date
+
             worst_selling_items.label:              All time worst selling
             worst_selling_items.description:        Product all time flop sellers
 
@@ -27,6 +30,7 @@ marello:
         title:
             revenue_per_sales_channel:              Revenue per Saleschannel
             low_inventory_products:                 Low inventory products
+            out_of_date_inventory:                  Out-of-Date Inventory
             worst_selling_items:                    Flop selling products
             best_selling_items:                     Top selling products
             returned_qty:                           Returned quantity per product

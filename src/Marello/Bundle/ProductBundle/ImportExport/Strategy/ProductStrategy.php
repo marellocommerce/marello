@@ -5,11 +5,24 @@ namespace Marello\Bundle\ProductBundle\ImportExport\Strategy;
 use Marello\Bundle\CatalogBundle\Entity\Category;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Oro\Bundle\AttachmentBundle\Entity\File;
+use Oro\Bundle\AttachmentBundle\Tools\MimeTypeChecker;
 use Oro\Bundle\LocaleBundle\ImportExport\Strategy\LocalizedFallbackValueAwareStrategy;
+use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 
 class ProductStrategy extends LocalizedFallbackValueAwareStrategy
 {
     public const DELIMITER = ', ';
+
+    /**
+     * @var MimeTypeChecker
+     */
+    private $mimeTypeChecker;
+
+    public function setMimeTypeChecker(MimeTypeChecker $mimeTypeChecker)
+    {
+        $this->mimeTypeChecker = $mimeTypeChecker;
+    }
 
     protected function importEntityFields(
         $entity,
@@ -18,6 +31,13 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
         $entityIsRelation,
         $itemData
     ) {
+        // Because the import process can't replace the image properly, we store this attachment before parent call
+        // And then reuse during the image processing below
+        $newImage = null;
+        if ($entity instanceof Product && $entity->getImage()) {
+            $newImage = $entity->getImage();
+        }
+
         $entity = parent::importEntityFields($entity, $existingEntity, $isFullData, $entityIsRelation, $itemData);
         if (!$entity instanceof Product) {
             return $entity;
@@ -41,6 +61,11 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
         }
 
         $result = $this->processChannels($entity, $itemData);
+        if (!$result) {
+            return null;
+        }
+
+        $result = $this->processImage($entity, $itemData, $newImage);
         if (!$result) {
             return null;
         }
@@ -93,6 +118,10 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
 
     private function processCategories(Product $entity, array $itemData): ?Product
     {
+        if (!array_key_exists('categories', $itemData)) {
+            return $entity;
+        }
+
         $entity->clearCategories();
         if (empty($itemData['categories'][0]['code'])) {
             return $entity;
@@ -129,6 +158,10 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
 
     private function processChannels(Product $entity, array $itemData): ?Product
     {
+        if (!array_key_exists('channels', $itemData)) {
+            return $entity;
+        }
+
         $entity->clearChannels();
         if (empty($itemData['channels'][0]['code'])) {
             return $entity;
@@ -159,6 +192,41 @@ class ProductStrategy extends LocalizedFallbackValueAwareStrategy
                 return null;
             }
         }
+
+        return $entity;
+    }
+
+    private function processImage(Product $entity, array $itemData, ?File $newImage = null): ?Product
+    {
+        if (!array_key_exists('image', $itemData)) {
+            return $entity;
+        }
+
+        if (!$newImage) {
+            $entity->setImage(null);
+
+            return $entity;
+        }
+
+        if (!$newImage->getFile() instanceof SymfonyFile
+            || !$this->mimeTypeChecker->isImageMimeType($newImage->getFile()->getMimeType())
+        ) {
+            $this->processValidationErrors(
+                $entity,
+                [
+                    $this->translator->trans(
+                        'marello.product.messages.import.error.image.invalid',
+                        [
+                            '%url%' => $itemData['image']['externalUrl'],
+                        ]
+                    )
+                ]
+            );
+
+            return null;
+        }
+
+        $entity->setImage($newImage);
 
         return $entity;
     }

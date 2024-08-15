@@ -30,7 +30,8 @@ class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSub
         private ImageResizeManagerInterface $imageResizeManager,
         private MimeTypeChecker $mimeTypeChecker,
         private array $imagesToApply = []
-    ) {}
+    ) {
+    }
 
     public static function getSubscribedTopics(): array
     {

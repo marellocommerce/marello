@@ -113,6 +113,8 @@ marello:
             virtual_inventory:
                 label:                      Virtual Inventory Qty
                 grid.label:                 Virtual Qty
+            expired_inventory:
+                grid.label:                 Expired Qty
             expired_sell_by_date.label:     Expired Sell-by Date Qty
             expected_inventory.label:       Expected Inventory Qty
             inventory_diff.label:           Inventory Qty Change

@@ -1,0 +1,10 @@
+entity_config:
+    importexport:
+        field:
+            items:
+                header:
+                    grid:
+                        type: string
+                        label: marello.importexport.entity_config.header.label
+                        required: true
+                        sortable: true
