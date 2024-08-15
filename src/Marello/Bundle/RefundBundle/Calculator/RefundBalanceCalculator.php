@@ -27,7 +27,7 @@ class RefundBalanceCalculator
      * @param Refund $refund
      * @return float
      */
-    public function caclulateBalance(Refund $refund)
+    public function calculateBalance(Refund $refund)
     {
         $refundsForSameOrder = $this->doctrine
             ->getManagerForClass(Refund::class)
@@ -67,7 +67,7 @@ class RefundBalanceCalculator
      * @param Refund $refund
      * @return float
      */
-    public function caclulateAmount(Refund $refund)
+    public function calculateAmount(Refund $refund)
     {
         $sum = array_reduce($refund->getItems()->toArray(), function ($carry, RefundItem $item) {
             return $carry + $item->getRefundAmount();
@@ -127,7 +127,8 @@ class RefundBalanceCalculator
         }
         $quantity = isset($item['quantity']) ? (double)$item['quantity'] : 1;
         $amount = (double)$item['refundAmount'] * $quantity;
-
+        // set the taxcalculation to always including tax, otherwise it might get confusing from a user's perspective.
+        $this->taxCalculator->setIsManualTaxSettingOverride(true);
         return $this->taxCalculator->calculate($amount, $rate);
     }
 
