@@ -59,17 +59,19 @@ class HandlePropertyLabels implements ProcessorInterface
     {
         foreach ($data as &$list) {
             foreach ($list as &$item) {
-                foreach ($labels as $key => $label) {
-                    if (array_key_exists($key, $item['attributes'])) {
-                        $labeledAttribute = [$label => $item['attributes'][$key]];
-                        unset($item['attributes'][$key]);
-                        $item['attributes'] = array_merge($item['attributes'], $labeledAttribute);
-                    }
+                if (is_array($item)) {
+                    foreach ($labels as $key => $label) {
+                        if (is_array($item['attributes']) && array_key_exists($key, $item['attributes'])) {
+                            $labeledAttribute = [$label => $item['attributes'][$key]];
+                            unset($item['attributes'][$key]);
+                            $item['attributes'] = array_merge($item['attributes'], $labeledAttribute);
+                        }
 
-                    if (array_key_exists($key, $item['relationships'])) {
-                        $labeledAttribute = [$label => $item['relationships'][$key]];
-                        unset($item['relationships'][$key]);
-                        $item['relationships'] = array_merge($item['relationships'], $labeledAttribute);
+                        if (is_array($item['relationships']) && array_key_exists($key, $item['relationships'])) {
+                            $labeledAttribute = [$label => $item['relationships'][$key]];
+                            unset($item['relationships'][$key]);
+                            $item['relationships'] = array_merge($item['relationships'], $labeledAttribute);
+                        }
                     }
                 }
             }
@@ -86,11 +88,13 @@ class HandlePropertyLabels implements ProcessorInterface
     protected function updateSingleItemData(array $data, array $labels): array
     {
         foreach ($data as &$item) {
-            foreach ($labels as $key => $label) {
-                if (array_key_exists($key, $item['attributes'])) {
-                    $labeledAttribute = [$label => $item['attributes'][$key]];
-                    unset($item['attributes'][$key]);
-                    $item['attributes'] = array_merge($item['attributes'], $labeledAttribute);
+            if (is_array($item)) {
+                foreach ($labels as $key => $label) {
+                    if (is_array($item['attributes']) && array_key_exists($key, $item['attributes'])) {
+                        $labeledAttribute = [$label => $item['attributes'][$key]];
+                        unset($item['attributes'][$key]);
+                        $item['attributes'] = array_merge($item['attributes'], $labeledAttribute);
+                    }
                 }
             }
         }
