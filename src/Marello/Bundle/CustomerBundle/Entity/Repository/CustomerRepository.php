@@ -7,7 +7,7 @@ use Marello\Bundle\CustomerBundle\Entity\Customer;
 
 class CustomerRepository extends ServiceEntityRepository
 {
-    public function findCustomerByEmailAndOrganization(Customer $customer): ?Customer
+    public function findCustomerByEmailAndOrganization(Customer $customer): array|Customer
     {
         $qb = $this->createQueryBuilder('c');
         $qb

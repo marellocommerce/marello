@@ -24,13 +24,23 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
             return;
         }
 
-        /** @var Customer $customer */
+        /** @var array|Customer $customer */
         $customer = $this->entityManager->getRepository(Customer::class)->findCustomerByEmailAndOrganization($value);
-        if ($customer && $customer->getId() !== $value->getId()) {
-            $this->context->buildViolation($constraint->message)
-                ->atPath('email')
-                ->setInvalidValue($value)
-                ->addViolation();
+        if (is_array($customer)) {
+            $this->failValidation($constraint, $value);
+            return;
         }
+
+        if ($customer && $customer->getId() !== $value->getId()) {
+            $this->failValidation($constraint, $value);
+        }
+    }
+
+    protected function failValidation($constraint, $value)
+    {
+        $this->context->buildViolation($constraint->message)
+            ->atPath('email')
+            ->setInvalidValue($value)
+            ->addViolation();
     }
 }
