@@ -43,6 +43,6 @@ class LoadEmailTemplatesData extends AbstractEmailFixture implements VersionedFi
      */
     public function getVersion()
     {
-        return '1.0';
+        return '1.1';
     }
 }
