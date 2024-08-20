@@ -19,8 +19,9 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository;
 
-#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[ORM\Entity(CustomerRepository::class), ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_customer_customer')]
 #[ORM\UniqueConstraint(name: 'marello_customer_emailorgidx', columns: ['email', 'organization_id'])]
 #[ORM\UniqueConstraint(name: 'marello_customer_numberorgidx', columns: ['customer_number', 'organization_id'])]

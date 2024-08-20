@@ -107,7 +107,7 @@ class LoadCustomerData extends AbstractFixture
         }
 
         $primaryAddress->setPhone($row['phone']);
-
+        var_dump($row['email']);
         $shippingAddress = clone $primaryAddress;
         $this->manager->persist($shippingAddress);
         $this->manager->persist($primaryAddress);

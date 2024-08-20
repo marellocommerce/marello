@@ -9,6 +9,13 @@ services:
         tags:
             - { name: doctrine.repository_service }
 
+    Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository:
+        parent: oro_entity.abstract_repository
+        arguments:
+            - 'Marello\Bundle\CustomerBundle\Entity\Customer'
+        tags:
+            - { name: doctrine.repository_service }
+
     marello_customer.twig.customer_extension:
         class: 'Marello\Bundle\CustomerBundle\Twig\CustomerExtension'
         arguments:
@@ -152,3 +159,9 @@ services:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: validator.constraint_validator, alias: marello_customer.company_number_validator }
+
+    Marello\Bundle\CustomerBundle\Validator\UniqueCustomerEmailValidator:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: validator.constraint_validator, alias: marello_customer.unique_customer_email_validator }
