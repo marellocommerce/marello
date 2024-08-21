@@ -85,7 +85,7 @@ class CustomerRepository extends ServiceEntityRepository
         }
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
-        var_dump($value['val'] ?: 0);
+
         return $value['val'] ?: 0;
     }
 }

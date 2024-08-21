@@ -36,8 +36,8 @@ class CustomerMetricsProvider
      * @param WidgetOptionBag $widgetOptions
      * @return int
      */
-    public function getCustomersRetentionValues($dateRange, WidgetOptionBag $widgetOptions) {
-        // instead of createdAt, get placed order or not ?
+    public function getCustomersRetentionValues($dateRange, WidgetOptionBag $widgetOptions)
+    {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'MarelloOrderBundle:Order', 'purchaseDate');
 
         return $this->customerRepository->getTotalCustomersWithNewOrderValue(
