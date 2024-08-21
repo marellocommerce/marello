@@ -28,7 +28,6 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
  * @Config(
  *  routeName="marello_sales_saleschannelgroup_index",
  *  routeView="marello_sales_saleschannelgroup_view",
- *  routeCreate="marello_sales_saleschannelgroup_create",
  *  routeUpdate="marello_sales_saleschannelgroup_update",
  *  defaultValues={
  *      "ownership"={

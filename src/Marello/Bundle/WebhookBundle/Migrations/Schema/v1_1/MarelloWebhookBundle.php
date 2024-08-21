@@ -18,18 +18,25 @@ class MarelloWebhookBundle implements Migration
     protected function updateMarelloWebhookIndex(Schema $schema)
     {
         $table = $schema->getTable('marello_webhook');
-        $table->addIndex(['created_at'], 'idx_marello_webhook_created_at', []);
-        $table->addIndex(['updated_at'], 'idx_marello_webhook_updated_at', []);
+        if(!$table->hasIndex('idx_marello_webhook_created_at')) {
+            $table->addIndex(['created_at'], 'idx_marello_webhook_created_at', []);
+        }
+
+        if(!$table->hasIndex('idx_marello_webhook_updated_at')) {
+            $table->addIndex(['updated_at'], 'idx_marello_webhook_updated_at', []);
+        }
     }
 
     protected function addMarelloWebhookForeignKeys(Schema $schema)
     {
         $table = $schema->getTable('marello_webhook');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_organization'),
-            ['organization_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
+        if (!$table->hasForeignKey('fk_9bb90fb632c8a3de')) {
+            $table->addForeignKeyConstraint(
+                $schema->getTable('oro_organization'),
+                ['organization_id'],
+                ['id'],
+                ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            );
+        }
     }
 }

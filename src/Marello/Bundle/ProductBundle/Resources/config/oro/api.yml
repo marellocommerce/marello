@@ -40,6 +40,11 @@ api:
                         allow_array: true
                         property_path: sku
                         description: 'Filter by sku'
+                    barcode:
+                        data_type: string
+                        allow_array: true
+                        property_path: barcode
+                        description: 'Filter by barcode'
                     saleschannels:
                         data_type: string
                         allow_array: true

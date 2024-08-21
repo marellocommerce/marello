@@ -20,6 +20,7 @@ workflows:
                 is_final: true
             pick_and_pack:
                 allowed_transitions:
+                    - rejected
                     - complete
             resolved:
                 is_final: true
@@ -95,8 +96,6 @@ workflows:
                           actions:
                               - '@assign_value': [$.result.value.quantityConfirmed, $.result.value.quantity]
                               - '@assign_value': [$.result.value.quantityRejected, 0]
-                    - '@extendable':
-                          events: [extendable_action.create_packingslip]
             reallocate_definition:
                 preconditions:
                     '@and':
@@ -183,6 +182,8 @@ workflows:
                                                 enum_code: marello_item_status
                                                 identifier: 'complete'
                                                 attribute: $.result.value.orderItem.status
+                    - '@extendable':
+                          events: [extendable_action.create_packingslip]
                     -   '@extendable':
                             events: [ extendable_action.allocation_complete ]
             item_complete_definition:

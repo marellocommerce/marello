@@ -150,6 +150,9 @@
     {% if marello_entity_has_attribute(entity, 'image') %}
         {% set generalData = generalData|merge([form_row(form.image)]) %}
     {% endif %}
+    {% if marello_entity_has_attribute(entity, 'ARFile') %}
+        {% set generalData = generalData|merge([form_row(form.ARFile)]) %}
+    {% endif %}
 
     {% set dataBlocks = [
         {

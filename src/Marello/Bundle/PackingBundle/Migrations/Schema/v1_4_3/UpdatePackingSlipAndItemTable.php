@@ -48,7 +48,9 @@ class UpdatePackingSlipAndItemTable implements Migration
     {
         $table = $schema->getTable(MarelloPackingBundleInstaller::MARELLO_PACKING_SLIP_ITEM_TABLE);
         if ($table->hasColumn('order_item_id')) {
-            $table->addUniqueIndex(['order_item_id'], 'UNIQ_DBF8FC2AE415FB15', []);
+            if (!$table->hasIndex('UNIQ_DBF8FC2AE415FB15')) {
+                $table->addUniqueIndex(['order_item_id'], 'UNIQ_DBF8FC2AE415FB15', []);
+            }
         }
     }
 }

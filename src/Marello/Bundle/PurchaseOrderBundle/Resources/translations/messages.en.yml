@@ -78,6 +78,14 @@ marello:
                 not_saved:                              Something went wrong, Purchase Order was not saved
 
         system_configuration:
+            groups:
+                purchase_order.label:                   Purchase Order
+                purchase_order_general.label:           General
             fields:
                 purchaseorder_notification.label:          Purchase Order notification
                 purchaseorder_notification_address.label:  Purchase Order notification email address
+                send_directly.label:                       Send Purchase Order directly to a supplier
+                sending_time.label:                        Sending time
+                tooltip:
+                    send_directly:                      Is Purchase Orders for ‘Order on Demand’ products should be send directly to the supplier after creation or should stay on “Ready to be sent” step.
+                    sending_time:                       Purchase Orders are sent every day, you can specify a time to start this process
