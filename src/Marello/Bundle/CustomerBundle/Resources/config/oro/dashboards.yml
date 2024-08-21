@@ -1,0 +1,44 @@
+dashboards:
+    widgets:
+        business_metrics_and_kpi_widget:
+            label:       marello.customer.dashboard.business_metrics_and_kpi.title
+            route:       oro_dashboard_itemized_data_widget
+            route_parameters: { bundle: MarelloCustomer, name: businessMetrics }
+            acl:         marello_customer_view
+            description: marello.customer.dashboard.business_metrics_and_kpi.description
+            icon:        bundles/orodashboard/img/no_icon.png
+            data_items:
+                new_customers:
+                    data_provider: '@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, marello-customer, getTotalCustomersNumberValues, integer)'
+                    label:          marello.customer.dashboard.business_metrics_and_kpi.new_customers
+                    acl:            marello_customer_view
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
+                customer_retention:
+                    data_provider: '@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, marello-customer, getCustomersRetentionValues, integer)'
+                    label:          marello.customer.dashboard.business_metrics_and_kpi.customer_retention
+                    acl:            marello_customer_view
+                    template:      '@OroDashboard/Dashboard/bigNumberSubwidget.html.twig'
+            configuration:
+                dateRange:
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
+                    options:
+                        label: oro.dashboard.date_range.label
+                        value_types: true
+                    show_on_widget: true
+                usePreviousInterval:
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetPreviousDateRangeType
+                    options:
+                        label: oro.dashboard.previous_date_range.label
+                        required: false
+                    converter_attributes:
+                        dateRangeField: dateRange
+                        default_checked: true
+                subWidgets:
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetItemsType
+                    options:
+                        label: oro.dashboard.widget.big_number.metrics
+                        attr:
+                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
+                        item_label: oro.dashboard.widget.big_number.metricName
+                        required: false
+                        widget_name: business_metrics_and_kpi_widget
