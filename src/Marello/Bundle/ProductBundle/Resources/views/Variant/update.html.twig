@@ -11,18 +11,13 @@
 {% endif %}
 
 {% block pageHeader %}
-    {% if entity.id %}
-        {% set breadcrumbs = {
-            'entity':      parent,
-            'indexPath':   path('marello_product_view', { id: parent.id}),
-            'indexLabel':  'marello.product.variant.entity_plural_label'|trans,
-            'entityTitle': parent.name|default('N/A')
-        } %}
-        {{ parent() }}
-    {% else %}
-        {% set title = 'marello.layout.add_entity'|trans({'%entityName%': 'marello.product.variant.entity_plural_label'|trans}) %}
-        {% include '@OroUI/page_title_block.html.twig' with { title: title }%}
-    {% endif %}
+    {% set breadcrumbs = {
+        'entity':      parent,
+        'indexPath':   path('marello_product_view', { id: parent.id}),
+        'indexLabel':  'marello.product.variant.entity_plural_label'|trans,
+        'entityTitle': parent.name|default('N/A')
+    } %}
+    {{ parent() }}
 {% endblock pageHeader %}
 
 {% block navButtons %}

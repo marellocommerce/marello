@@ -289,18 +289,15 @@ datagrids:
                     - p.sku
                     - p.type
                     - s.label as status
-                    - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                 from:
                     - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.status, alias: s }
-                        - { join: p.inventoryItem, alias: i }
-                        - { join: i.inventoryLevels, alias: il }
                 where:
                     and:
                         - p.id != :product
-                groupBy: p.id
+                groupBy: p.id, status
             bind_parameters:
                 -
                     name: variant
