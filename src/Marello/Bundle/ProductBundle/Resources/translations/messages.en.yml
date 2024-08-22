@@ -108,6 +108,8 @@ marello:
                     price_channel:
                         invalid: The Sales Channel is invalid. Please, select a Sales Channel from available Product Sales Channels
                         currency.invalid: The currency doesn't match the Sales Channel's currency
+                    image:
+                        invalid:  "\"%url%\" is not a valid link for a product image"
             export:
                 template:
                     product.label: Download Product Import Template

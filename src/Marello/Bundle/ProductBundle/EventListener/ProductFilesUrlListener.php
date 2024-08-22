@@ -22,7 +22,8 @@ class ProductFilesUrlListener
         protected MessageProducerInterface $messageProducer,
         protected DoctrineHelper $doctrineHelper,
         protected array $filesToUpdate = [],
-    ) {}
+    ) {
+    }
 
     public function postPersist(Product $product, LifecycleEventArgs $args): void
     {

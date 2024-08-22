@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
@@ -654,31 +653,6 @@ class Product implements
      *  )
      */
     protected $attributeFamily;
-
-    /**
-     * @var File
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\AttachmentBundle\Entity\File", cascade={"ALL"})
-     * @ORM\JoinColumn(name="ar_file_id", referencedColumnName="id", nullable=true)
-     * @ConfigField(
-     *       defaultValues={
-     *           "importexport"={
-     *               "excluded"=true
-     *           },
-     *           "attribute"={
-     *               "is_attribute"=true
-     *           },
-     *           "extend"={
-     *               "owner"="Custom"
-     *           },
-     *           "attachment"={
-     *               "maxsize"=50,
-     *               "mimetypes"="application/zip,model/vnd.usdz+zip"
-     *           }
-     *       }
-     *  )
-     */
-    protected $ARFile;
 
     /**
      * @var \DateTime
@@ -1524,18 +1498,6 @@ class Product implements
     public function setAttributeFamily(AttributeFamily $attributeFamily)
     {
         $this->attributeFamily = $attributeFamily;
-
-        return $this;
-    }
-
-    public function getARFile(): ?File
-    {
-        return $this->ARFile;
-    }
-
-    public function setARFile(File $ARFile): self
-    {
-        $this->ARFile = $ARFile;
 
         return $this;
     }

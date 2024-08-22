@@ -1,6 +1,8 @@
 services:
     Marello\Bundle\ProductBundle\ImportExport\DataConverter\ProductDataConverter:
         parent: oro_importexport.data_converter.configurable
+        calls:
+          - [setFieldHelper, ['@oro_entity.helper.field_helper']]
 
     Marello\Bundle\ProductBundle\ImportExport\DataConverter\AssembledPriceListDataConverter:
         parent: oro_importexport.data_converter.configurable
@@ -14,6 +16,8 @@ services:
 
     Marello\Bundle\ProductBundle\ImportExport\Strategy\ProductStrategy:
         parent: oro_locale.importexport.strategy.localized_fallback_value_aware
+        calls:
+          - [setMimeTypeChecker, ['@oro_attachment.tools.mime_type_checker']]
 
     Marello\Bundle\ProductBundle\ImportExport\Strategy\AssembledPriceListStrategy:
         parent: oro_importexport.strategy.configurable_add_or_replace
@@ -129,3 +133,14 @@ services:
           - '@translator'
         tags:
           - { name: oro_importexport.configuration, alias: oro_product_index }
+
+    Marello\Bundle\ProductBundle\ImportExport\Serializer\ProductNormalizer:
+        parent: oro_importexport.serializer.configurable_entity_normalizer
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    Marello\Bundle\ProductBundle\ImportExport\Serializer\ProductImageNormalizer:
+        arguments:
+            - '@Oro\Bundle\AttachmentBundle\Manager\FileManager'
+        tags:
+            - { name: oro_importexport.normalizer, priority: 10 }
