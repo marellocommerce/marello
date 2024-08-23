@@ -32,7 +32,7 @@ class MarelloRefundBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_4_1';
+        return 'v1_4_2';
     }
 
     /**
@@ -160,6 +160,12 @@ class MarelloRefundBundleInstaller implements
             ['order_item_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_tax_tax_code'),
+            ['tax_code_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),

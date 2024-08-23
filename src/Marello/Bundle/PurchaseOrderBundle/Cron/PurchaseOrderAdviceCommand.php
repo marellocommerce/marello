@@ -145,7 +145,7 @@ class PurchaseOrderAdviceCommand extends Command implements CronCommandScheduleD
         try {
             $this->emailTemplateManager
                 ->sendTemplateEmail(
-                    From::emailAddress($this->notificationSettings->getSender()->toString()),
+                    $this->notificationSettings->getSender(),
                     [$recipient],
                     new EmailTemplateCriteria($templateName),
                     ['items' => $items]

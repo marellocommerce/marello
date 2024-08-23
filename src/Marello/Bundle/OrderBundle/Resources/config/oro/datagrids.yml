@@ -361,6 +361,11 @@ datagrids:
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
+            originalPriceExclTax:
+                label:            marello.order.orderitem.original_price_excl_tax.label
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
             originalPriceInclTax:
                 label:            marello.order.orderitem.original_price_incl_tax.label
                 type:             localized_number
@@ -381,13 +386,14 @@ datagrids:
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-            rowTotalInclTax:
-                label:            marello.order.orderitem.total_price_incl_tax.label
+                renderable:       false
+            rowTotalExclTax:
+                label:            marello.order.orderitem.total_price_excl_tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-            rowTotalExclTax:
-                label:            marello.order.orderitem.total_price_excl_tax.label
+            rowTotalInclTax:
+                label:            marello.order.orderitem.total_price_incl_tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure

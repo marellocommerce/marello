@@ -18,5 +18,8 @@ class MarelloCustomerBundle implements Migration
             $table->addColumn('customer_number', 'string', ['notnull' => false, 'length' => 255]);
             $table->addUniqueIndex(['customer_number', 'organization_id'], 'marello_customer_numberorgidx');
         }
+
+        $table->addUniqueIndex(['primary_address_id'], 'UNIQ_AD0CE5A2CB134313');
+        $table->addUniqueIndex(['shipping_address_id'], 'UNIQ_AD0CE5A24D4CFF2B');
     }
 }

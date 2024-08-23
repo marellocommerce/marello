@@ -18,14 +18,18 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository")
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="marello_customer_customer",
  *       uniqueConstraints={
  *           @ORM\UniqueConstraint(
  *               name="marello_customer_emailorgidx",
  *               columns={"email","organization_id"}
- *           )
+ *           ),
+ *          @ORM\UniqueConstraint(
+ *               name="marello_customer_numberorgidx",
+ *               columns={"customer_number","organization_id"}
+ *          )
  *       }
  * )
  * @Oro\Config(

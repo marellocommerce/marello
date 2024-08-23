@@ -47,6 +47,10 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
 
+    public const WORKFLOW_NAME = 'marello_purchase_order_workflow';
+    public const NOT_SENT_STEP = 'not_sent';
+    public const SEND_TRANSITION = 'send';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

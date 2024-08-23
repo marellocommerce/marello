@@ -49,7 +49,7 @@ class SingleWHCalculatorTest extends AbstractWHCalculatorTest
 
         static::assertEquals($expectedResults, $actualResults);
     }
-    
+
     public function calculateDataProvider()
     {
         $orderItem1_1 = $this->getEntity(

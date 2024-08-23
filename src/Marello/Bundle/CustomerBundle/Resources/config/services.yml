@@ -152,3 +152,20 @@ services:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: validator.constraint_validator, alias: marello_customer.company_number_validator }
+
+    Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository:
+        parent: oro_entity.abstract_repository
+        arguments:
+            - 'Marello\Bundle\CustomerBundle\Entity\Customer'
+        tags:
+            - { name: doctrine.repository_service }
+
+    marello_customer.provider.customer_metrics_provider:
+        class: 'Marello\Bundle\CustomerBundle\Provider\CustomerMetricsProvider'
+        public: true
+        arguments:
+            - '@Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository'
+            - '@oro_dashboard.provider.big_number.date_helper'
+            - '@oro_security.acl_helper'
+        tags:
+            - { name: oro_dashboard.big_number.provider, alias: marello-customer }

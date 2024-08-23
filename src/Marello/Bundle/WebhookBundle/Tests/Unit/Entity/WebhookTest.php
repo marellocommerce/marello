@@ -33,7 +33,6 @@ class WebhookTest extends TestCase
             ['secret', '012365xyz', ''],
             ['callbackUrl', 'https://domain.com/xy/', ''],
             ['organization', new Organization()],
-            ['localization', new Localization()],
             ['createdAt', new \DateTime()],
             ['updatedAt', new \DateTime()]
         ];

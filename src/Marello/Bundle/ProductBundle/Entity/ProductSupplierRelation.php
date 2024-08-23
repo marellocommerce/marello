@@ -73,7 +73,7 @@ class ProductSupplierRelation
      *
      * @ORM\Column(name="can_dropship", type="boolean", nullable=false)
      */
-    protected $canDropship;
+    protected $canDropship = false;
 
     /**
      * @var integer|null
@@ -106,7 +106,7 @@ class ProductSupplierRelation
         return $this;
     }
 
-    public function getSupplier(): Supplier
+    public function getSupplier(): ?Supplier
     {
         return $this->supplier;
     }

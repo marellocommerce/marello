@@ -110,6 +110,8 @@ class MarelloCustomerBundleInstaller implements
         $table->addIndex(['organization_id']);
         $table->addUniqueIndex(['email', 'organization_id'], 'marello_customer_emailorgidx');
         $table->addUniqueIndex(['customer_number', 'organization_id'], 'marello_customer_numberorgidx');
+        $table->addUniqueIndex(['primary_address_id'], 'UNIQ_AD0CE5A2CB134313');
+        $table->addUniqueIndex(['shipping_address_id'], 'UNIQ_AD0CE5A24D4CFF2B');
 
         $this->attachmentExtension->addAttachmentAssociation($schema, $table->getName());
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', $table->getName());

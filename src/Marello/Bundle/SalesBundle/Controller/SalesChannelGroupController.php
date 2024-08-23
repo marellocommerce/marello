@@ -35,27 +35,6 @@ class SalesChannelGroupController extends AbstractController
 
     /**
      * @Route(
-     *     path="/create",
-     *     name="marello_sales_saleschannelgroup_create"
-     * )
-     * @Template("@MarelloSales/SalesChannelGroup/update.html.twig")
-     * @Acl(
-     *     id="marello_sales_saleschannelgroup_create",
-     *     type="entity",
-     *     permission="CREATE",
-     *     class="MarelloSalesBundle:SalesChannelGroup"
-     * )
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function createAction(Request $request)
-    {
-        return $this->update(new SalesChannelGroup(), $request);
-    }
-
-    /**
-     * @Route(
      *     path="/view/{id}",
      *     name="marello_sales_saleschannelgroup_view",
      *     requirements={"id"="\d+"}

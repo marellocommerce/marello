@@ -88,6 +88,16 @@ navigation:
                     description: 'marello.report.menu.returned_qty.description'
                     skipBreadcrumbs: true
 
+            out_of_date_inventory:
+                label: 'marello.report.menu.out_of_date_inventory.label'
+                route: 'marello_report_index'
+                route_parameters:
+                    reportGroupName: 'inventory'
+                    reportName:      'out_of_date_inventory'
+                extras:
+                    description: 'marello.report.menu.out_of_date_inventory.description'
+                    skipBreadcrumbs: true
+
         tree:
             application_menu:
                 children:
@@ -101,6 +111,7 @@ navigation:
                                     products_report_tab:
                                         children:
                                             low_inventory_products: ~
+                                            out_of_date_inventory: ~
                                             best_selling_items: ~
                                             worst_selling_items: ~
                                     returns_report_tab:

@@ -461,7 +461,6 @@
                                 <tr class="email-intro">
                                     <td style="font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif;">
                                         <h1>Dear {{ entity.order.customer.firstName ~ ' ' ~ entity.order.customer.middleName ~ ' ' ~ entity.order.customer.lastName }},</h1>
-                                        <p class="greeting" style="font-size: 16px; margin: 1em 0;">Thank you for your order from {{ entity.order.salesChannelName }}.</p>
                                         <p class="greeting" style="font-size: 16px; margin: 1em 0;">
                                             <!-- {% if entity.order.items | length > 1 %}-->
                                             The products below from your order #{{ entity.order.orderNumber }} have been shipped.</p>
@@ -505,15 +504,6 @@
                                                 <th class="item-info item-info-left" style="background-color: #f8f8f8; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 10px 8px; font-size:13px;">
                                                     UNIT
                                                 </th>
-                                                <th class="item-info" style="background-color: #f8f8f8; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 10px 8px; text-align:right; font-size:13px;">
-                                                    PRICE EXCL TAX
-                                                </th>
-                                                <th class="item-info" style="background-color: #f8f8f8; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 10px 8px; text-align:right; font-size:13px;">
-                                                    TAX
-                                                </th>
-                                                <th class="item-info" style="background-color: #f8f8f8; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 10px 8px; text-align:right; font-size:13px;">
-                                                    ROW TOTAL INCL TAX
-                                                </th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -531,66 +521,9 @@
                                                 <td class="item-info" style="border-top: 1px solid #d6d7d7; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 10px 8px; font-size:13px; font-weight: 300;">
                                                     {{ item.orderItem.productUnit.name }}
                                                 </td>
-                                                <td class="item-info" style="border-top: 1px solid #d6d7d7; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 10px 8px; font-size:13px; text-align:right; font-weight: 300;">
-                                                    {{ item.orderItem.price|oro_format_currency({'currency': entity.order.currency}) }}
-                                                </td>
-                                                <td class="item-info" style="border-top: 1px solid #d6d7d7; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 10px 8px; font-size:13px; text-align:right; font-weight: 300;">
-                                                    {{ item.orderItem.tax|oro_format_currency({'currency': entity.order.currency}) }}
-                                                </td>
-                                                <td class="item-info" style="border-top: 1px solid #d6d7d7; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding:10px 8px; font-size:13px; text-align:right; font-weight: 300;">
-                                                    {{ item.orderItem.rowTotalInclTax|oro_format_currency({'currency': entity.order.currency}) }}
-                                                </td>
                                             </tr>
                                             <!--{% endfor %}-->
                                             </tbody>
-                                            <tfoot class="order-totals">
-                                            <tr class="subtotal">
-                                                <th colspan="6" scope="row" style="background-color: #f8f8f8; border-top: 1px solid #d6d7d7; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 20px 8px; font-size:13px; text-align: right;">
-                                                    SUBTOTAL:
-                                                </th>
-                                                <td data-th="subtotaal" style="background-color: #f8f8f8; border-top: 1px solid #d6d7d7; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 20px 8px; font-size:13px; text-align: right;">
-                                                    <span class="price" style="white-space: nowrap;">{{ entity.order.subtotal|oro_format_currency({'currency': entity.order.currency}) }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="tax">
-                                                <th colspan="6" scope="row" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    TAX:
-                                                </th>
-                                                <td data-th="tax" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    <span class="price" style="white-space: nowrap;">({{ entity.order.totalTax|oro_format_currency({'currency': entity.order.currency}) }})</span>
-                                                </td>
-                                            </tr>
-                                            <!--{% if entity.order.discountAmount %}-->
-                                            <tr class="discount">
-                                                <th colspan="6" scope="row" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    DISCOUNT:
-                                                </th>
-                                                <td data-th="discount" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    <span class="price" style="white-space: nowrap;">{{ entity.order.discountAmount|oro_format_currency({'currency': entity.order.currency}) }}</span>
-                                                </td>
-                                            </tr>
-                                            <!--{% endif %}-->
-                                            <tr class="shipping">
-                                                <th colspan="6" scope="row" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    SHIPPING COST:
-                                                </th>
-                                                <td data-th="Verzending en verwerking" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    <span class="price" style="white-space: nowrap;">{{ entity.order.shippingAmountInclTax|oro_format_currency({'currency': entity.order.currency}) }}</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="grand_total">
-                                                <th colspan="6" scope="row" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    <strong style="font-weight: 400;">
-                                                        TOTAL:
-                                                    </strong>
-                                                </th>
-                                                <td data-th="Groot Totaal" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    <strong style="font-weight: 400;">
-                                                        <span class="price" style="white-space: nowrap;">{{ entity.order.grandTotal|oro_format_currency({'currency': entity.order.currency}) }}</span>
-                                                    </strong>
-                                                </td>
-                                            </tr>
-                                            </tfoot>
                                         </table>
                                     </td>
                                 </tr>

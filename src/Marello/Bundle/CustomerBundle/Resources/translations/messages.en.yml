@@ -61,3 +61,10 @@ marello:
 
         navigation:
             customers.label:        'Customers'
+
+        dashboard:
+            business_metrics_and_kpi:
+                title: 'Business Metrics and KPI'
+                description: 'Different business metrics and KPIs'
+                new_customers: 'New Customers'
+                customer_retention: 'Customer Retention'

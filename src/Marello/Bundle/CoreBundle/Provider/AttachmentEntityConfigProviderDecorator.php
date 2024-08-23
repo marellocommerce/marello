@@ -9,8 +9,8 @@ class AttachmentEntityConfigProviderDecorator implements AttachmentEntityConfigP
 {
     public function __construct(
         protected AttachmentEntityConfigProviderInterface $innerProvider
-    ) {}
-
+    ) {
+    }
     public function getFieldConfig(string $entityClass, string $fieldName): ?ConfigInterface
     {
         if (!$entityClass) {
