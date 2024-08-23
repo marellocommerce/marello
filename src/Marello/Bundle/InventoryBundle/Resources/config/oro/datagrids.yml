@@ -665,6 +665,11 @@ datagrids:
                 type:           twig
                 frontend_type:  html
                 template:       '@MarelloInventory/Datagrid/Property/total_allocated.html.twig'
+            inventoryBatches:
+                label:            marello.packing.packingslipitem.inventory_batches.label
+                type:             twig
+                frontend_type:    html
+                template:         '@MarelloPacking/PackingSlip/Datagrid/inventoryBatches.html.twig'
         sorters:
             columns:
                 productSku:

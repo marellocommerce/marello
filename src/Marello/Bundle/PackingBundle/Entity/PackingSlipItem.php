@@ -96,7 +96,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     protected $productName;
 
     /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem")
+     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem")
      * @ORM\JoinColumn(name="order_item_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      * @Oro\ConfigField(
      *      defaultValues={
@@ -166,7 +166,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     protected $status;
 
     /**
-     * @ORM\Column(name="inventory_batches", type="json_array", nullable=true)
+     * @ORM\Column(name="inventory_batches", type="json", nullable=true)
      * @Oro\ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -177,7 +177,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      *
      * @var array
      */
-    protected $inventoryBatches;
+    protected $inventoryBatches = [];
 
     /**
      * @var \Extend\Entity\EV_Marello_Product_Unit
@@ -394,18 +394,18 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getInventoryBatches()
+    public function getInventoryBatches(): ?array
     {
         return $this->inventoryBatches;
     }
 
     /**
-     * @param array $batches
+     * @param array|null $batches
      * @return $this
      */
-    public function setInventoryBatches(array $batches)
+    public function setInventoryBatches(array $batches = null): self
     {
         $this->inventoryBatches = $batches;
 
@@ -423,7 +423,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      * @param string $productUnit
      * @return $this
      */
-    public function setProductUnit($productUnit)
+    public function setProductUnit($productUnit): self
     {
         $this->productUnit = $productUnit;
 

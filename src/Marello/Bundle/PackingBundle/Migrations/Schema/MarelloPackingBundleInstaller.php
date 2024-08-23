@@ -39,7 +39,7 @@ class MarelloPackingBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_4_3';
+        return 'v1_4_4';
     }
 
     /**
@@ -127,7 +127,6 @@ class MarelloPackingBundleInstaller implements
         );
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
-        $table->addUniqueIndex(['order_item_id'], 'UNIQ_DBF8FC2AE415FB15', []);
     }
 
     /**

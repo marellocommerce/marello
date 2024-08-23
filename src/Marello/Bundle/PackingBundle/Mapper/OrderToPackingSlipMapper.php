@@ -102,6 +102,7 @@ class OrderToPackingSlipMapper extends AbstractPackingSlipMapper
         $packingSlipItemData['orderItem'] = $allocationItem->getOrderItem();
         $packingSlipItemData['productUnit'] = $allocationItem->getOrderItem()->getProductUnit();
         $this->assignData($packingSlipItem, $packingSlipItemData);
+        $allocationItem->setInventoryBatches($packingSlipItem->getInventoryBatches());
 
         return $packingSlipItem;
     }
