@@ -70,8 +70,10 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     #[ORM\Column(name: 'product_name', type: Types::STRING, nullable: false)]
     protected $productName;
 
+    // change oneToOne into oneToMany, as the one to one is causing issues with schema validation and is incorrect
+    // as there can be more packingslip items with the order_item_id
     #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    #[ORM\OneToOne(targetEntity: OrderItem::class)]
+    #[ORM\ManyToOne(targetEntity: OrderItem::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderItem;
 
@@ -107,7 +109,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      */
     #[ORM\Column(name: 'inventory_batches', type: Types::JSON, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
-    protected $inventoryBatches;
+    protected $inventoryBatches = [];
 
     /**
      * @var \Extend\Entity\EV_Marello_Product_Unit
@@ -313,18 +315,18 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getInventoryBatches()
+    public function getInventoryBatches(): ?array
     {
         return $this->inventoryBatches;
     }
 
     /**
-     * @param array $batches
+     * @param array|null $batches
      * @return $this
      */
-    public function setInventoryBatches(array $batches)
+    public function setInventoryBatches(array $batches = null): self
     {
         $this->inventoryBatches = $batches;
 
@@ -342,7 +344,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      * @param string $productUnit
      * @return $this
      */
-    public function setProductUnit($productUnit)
+    public function setProductUnit($productUnit): self
     {
         $this->productUnit = $productUnit;
 

@@ -231,6 +231,7 @@ marello:
             total_quantity.label:           Total Quantity
             organization.label:             Organization
             warehouse.label:                Warehouse
+            inventory_batches.label:        Inventory Batches
 
         reshipment:
             label:                          Create Shipment

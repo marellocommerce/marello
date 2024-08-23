@@ -32,7 +32,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v2_6_10';
+        return 'v2_6_11';
     }
 
     /**
@@ -395,7 +395,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $table->addColumn('quantity_confirmed', 'float', ['notnull' => false]);
         $table->addColumn('quantity_rejected', 'float', ['notnull' => false]);
         $table->addColumn('comment', 'text', ['notnull' => false]);
-//        $table->addColumn('inventory_batches', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
+        $table->addColumn('inventory_batches', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);

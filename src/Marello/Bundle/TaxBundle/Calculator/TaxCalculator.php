@@ -24,7 +24,7 @@ class TaxCalculator implements TaxCalculatorInterface
     protected $excludedTaxCalculator;
 
     /** @var bool */
-    private $manualTaxOverride;
+    private $manualTaxOverride = false;
 
     /**
      * @param ConfigManager $configManager

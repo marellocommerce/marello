@@ -119,6 +119,13 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $warehouse;
 
+    /**
+     * @var array
+     */
+    #[ORM\Column(name: 'inventory_batches', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $inventoryBatches;
+
     #[ORM\PrePersist]
     public function prePersist()
     {
@@ -354,6 +361,25 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
     public function setWarehouse(Warehouse $warehouse = null): self
     {
         $this->warehouse = $warehouse;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getInventoryBatches(): ?array
+    {
+        return $this->inventoryBatches;
+    }
+
+    /**
+     * @param array|null $batches
+     * @return $this
+     */
+    public function setInventoryBatches(array $batches = null): self
+    {
+        $this->inventoryBatches = $batches;
 
         return $this;
     }
