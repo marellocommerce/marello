@@ -192,7 +192,7 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *              "excluded"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true
@@ -215,7 +215,7 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *              "excluded"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true
@@ -278,7 +278,7 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *              "excluded"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true
@@ -303,7 +303,7 @@ class Product implements
      *              "auditable"=true
      *          },
      *          "importexport"={
-     *              "excluded"=true
+     *              "excluded"=false
      *          },
      *          "attribute"={
      *              "is_attribute"=true

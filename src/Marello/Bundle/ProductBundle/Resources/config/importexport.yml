@@ -3,6 +3,9 @@ services:
         parent: oro_importexport.data_converter.configurable
         calls:
           - [setFieldHelper, ['@oro_entity.helper.field_helper']]
+          - [setEntityManager, ['@doctrine.orm.entity_manager']]
+          - [setProductAttributesHelper, ['@Marello\Bundle\ProductBundle\ImportExport\Helper\ProductAttributesHelper']]
+          - [setTranslator, ['@translator']]
 
     Marello\Bundle\ProductBundle\ImportExport\DataConverter\AssembledPriceListDataConverter:
         parent: oro_importexport.data_converter.configurable
@@ -104,7 +107,16 @@ services:
               entity: Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList
               alias: marello_product_channel_price
 
+    Marello\Bundle\ProductBundle\ImportExport\TemplateFixture\AttributeFamilyFixture:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: oro_importexport.template_fixture }
+
     Marello\Bundle\ProductBundle\ImportExport\TemplateFixture\ProductFixture:
+        arguments:
+            - '@oro_entity.helper.field_helper'
+            - '@Marello\Bundle\ProductBundle\ImportExport\Helper\ProductAttributesHelper'
         tags:
             - { name: oro_importexport.template_fixture }
 
@@ -144,3 +156,7 @@ services:
             - '@Oro\Bundle\AttachmentBundle\Manager\FileManager'
         tags:
             - { name: oro_importexport.normalizer, priority: 10 }
+
+    Marello\Bundle\ProductBundle\ImportExport\Helper\ProductAttributesHelper:
+        arguments:
+            - '@Oro\Bundle\EntityConfigBundle\Manager\AttributeManager'

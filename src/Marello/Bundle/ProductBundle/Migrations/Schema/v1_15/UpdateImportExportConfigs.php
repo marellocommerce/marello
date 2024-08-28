@@ -43,6 +43,10 @@ class UpdateImportExportConfigs implements Migration
         $this->updateField($queries, Product::class, 'attributeFamily', 'full', false);
         $this->updateField($queries, Product::class, 'createdAt', 'excluded', true);
         $this->updateField($queries, Product::class, 'updatedAt', 'excluded', true);
+        $this->updateField($queries, Product::class, 'barcode', 'excluded', false);
+        $this->updateField($queries, Product::class, 'manufacturingCode', 'excluded', false);
+        $this->updateField($queries, Product::class, 'warranty', 'excluded', false);
+        $this->updateField($queries, Product::class, 'weight', 'excluded', false);
     }
 
     private function updateAssembledPriceListEntity(QueryBag $queries): void
