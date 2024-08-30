@@ -1,17 +1,21 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\EventListener;
+namespace Marello\Bundle\InventoryBundle\EventListener\Doctrine;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Marello\Bundle\CoreBundle\Model\JobIdGenerationTrait;
-use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Marello\Bundle\InventoryBundle\Async\Topic\ResolveRebalanceInventoryTopic;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 
-class InventoryItemEventListener
+use Oro\Component\MessageQueue\Client\Message;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+
+use Marello\Bundle\InventoryBundle\Async\Topics;
+use Marello\Bundle\CoreBundle\Model\JobIdGenerationTrait;
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\ProductBundle\Entity\ProductInterface;
+use Marello\Bundle\InventoryBundle\Async\Topic\ResolveRebalanceInventoryTopic;
+
+class InventoryLevelRebalanceEventListener
 {
     use JobIdGenerationTrait;
 
@@ -42,6 +46,11 @@ class InventoryItemEventListener
         $this->em = $eventArgs->getObjectManager();
         $this->unitOfWork = $this->em->getUnitOfWork();
 
+        if (!empty($this->unitOfWork->getScheduledEntityInsertions())) {
+            $records = $this->filterRecords($this->unitOfWork->getScheduledEntityInsertions());
+            $this->applyCallBackForChangeSet('triggerRebalance', $records);
+        }
+
         if (!empty($this->unitOfWork->getScheduledEntityUpdates())) {
             $records = $this->filterRecords($this->unitOfWork->getScheduledEntityUpdates());
             $this->applyCallBackForChangeSet('triggerRebalance', $records);
@@ -63,7 +72,7 @@ class InventoryItemEventListener
      */
     public function getIsEntityInstanceOf($entity)
     {
-        return ($entity instanceof InventoryItem);
+        return ($entity instanceof InventoryLevel);
     }
 
     /**
@@ -81,15 +90,21 @@ class InventoryItemEventListener
     }
 
     /**
-     * @param InventoryItem $entity
+     * @param InventoryLevel $entity
      */
-    protected function triggerRebalance(InventoryItem $entity)
+    protected function triggerRebalance(InventoryLevel $entity)
     {
         /** @var ProductInterface $product */
-        $product = $entity->getProduct();
+        $product = $entity->getInventoryItem()->getProduct();
+        $message = new Message([
+            'product_id' => $product->getId(),
+            'jobId' => $this->generateJobId($product->getId())
+        ]);
+
+        $this->messageProducer->enableBuffering();
         $this->messageProducer->send(
             ResolveRebalanceInventoryTopic::getName(),
-            ['product_id' => $product->getId(), 'jobId' => $this->generateJobId($product->getId())]
+            $message
         );
     }
 }

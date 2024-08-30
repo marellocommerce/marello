@@ -48,8 +48,8 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $logo = $this->loadSalesChannelLogo((int)$data[$salesChannelIdFieldName]);
 
         $data[$addressFieldName] = $address;
-        $data[$emailFieldName] = $phone;
-        $data[$phoneFieldName] = $email;
+        $data[$emailFieldName] = $email;
+        $data[$phoneFieldName] = $phone;
         $data[$logoFieldName] = $logo;
 
         $context->setData($data);

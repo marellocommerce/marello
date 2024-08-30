@@ -15,6 +15,7 @@ datagrids:
                     - i.backorderAllowed as backorderAllowed
                     - i.canPreorder as canPreorder
                     - i.orderOnDemandAllowed as orderOnDemandAllowed
+                    - p.barcode as productBarcode
                 from:
                     - { table: MarelloInventoryBundle:InventoryItem, alias: i }
                 join:
@@ -64,6 +65,10 @@ datagrids:
                 label:              marello.inventory.inventoryitem.order_on_demand.grid.label
                 frontend_type:      boolean
                 data_name:          orderOnDemandAllowed
+            productBarcode:
+                label:              marello.product.barcode.label
+                frontend_type:      string
+                renderable:         false
         sorters:
             columns:
                 productSku:             { data_name: p.sku }
@@ -73,6 +78,7 @@ datagrids:
                 inventoryQty:           { data_name: inventoryQty }
                 allocatedInventoryQty:  { data_name: allocatedInventoryQty }
                 virtualInventoryQty:    { data_name: virtualInventoryQty }
+                productBarcode:         { data_name: productBarcode }
             default:
                 productName: 'DESC'
         filters:
@@ -102,7 +108,7 @@ datagrids:
                     type:             number
                     data_name:        virtualInventoryQty
                     filter_by_having: true
-                    enabled:          false
+                    renderable:       false
                 backorderAllowed:
                     type:             boolean
                     data_name:        backorderAllowed
@@ -112,6 +118,10 @@ datagrids:
                 orderOnDemandAllowed:
                     type:             boolean
                     data_name:        orderOnDemandAllowed
+                productBarcode:
+                    type:             string
+                    data_name:        productBarcode
+                    renderable:       false
         properties:
             id: ~
             productName:
