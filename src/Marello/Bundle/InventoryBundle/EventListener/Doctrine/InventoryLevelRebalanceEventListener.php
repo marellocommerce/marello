@@ -86,14 +86,13 @@ class InventoryLevelRebalanceEventListener
             array_walk($changeSet, [$this, $callback]);
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
-
         }
     }
 
     /**
      * @param InventoryLevel $entity
      */
-    protected function triggerRebalance(ProductInterface $entity)
+    protected function triggerRebalance(InventoryLevel $entity)
     {
         /** @var ProductInterface $product */
         $product = $entity->getInventoryItem()->getProduct();
