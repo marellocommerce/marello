@@ -2,10 +2,8 @@
 
 namespace Marello\Bundle\InventoryBundle\EventListener;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryBatch;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevelLogRecord;
 use Marello\Bundle\InventoryBundle\Event\InventoryUpdateEvent;
@@ -13,23 +11,11 @@ use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContext;
 
 class InventoryLevelUpdateAfterEventListener
 {
-    /** @var DoctrineHelper $doctrineHelper*/
-    protected $doctrineHelper;
-
-    /**
-     * InventoryLevelUpdateAfterEventListener constructor.
-     * @param DoctrineHelper $doctrineHelper
-     */
-    public function __construct(DoctrineHelper $doctrineHelper)
-    {
-        $this->doctrineHelper = $doctrineHelper;
+    public function __construct(
+        protected DoctrineHelper $doctrineHelper
+    ) {
     }
 
-    /**
-     * Handle incoming event
-     * @param InventoryUpdateEvent $event
-     * @return mixed
-     */
     public function handleInventoryLevelUpdateAfterEvent(InventoryUpdateEvent $event)
     {
         /** @var InventoryUpdateContext $context */
@@ -76,6 +62,11 @@ class InventoryLevelUpdateAfterEventListener
         $subject,
         $batches
     ) {
+        // Skip unmanaged inventory levels
+        if (!$level->isManagedInventory()) {
+            return;
+        }
+
         if ($inventoryAlt === null) {
             $inventoryAlt = 0;
         }
