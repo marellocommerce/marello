@@ -3,22 +3,25 @@
 namespace Marello\Bundle\ProductBundle\EventListener;
 
 use Doctrine\Persistence\ManagerRegistry;
+
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+use Oro\Bundle\MessageQueueBundle\Entity\Job;
+use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
+use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
+use Oro\Bundle\ImportExportBundle\Entity\ImportExportResult;
+use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+use Oro\Bundle\EmailBundle\Provider\RenderedEmailTemplateProvider;
+use Oro\Bundle\ImportExportBundle\Async\ImportExportResultSummarizer;
+use Oro\Bundle\ImportExportBundle\Async\Topic\SendImportNotificationTopic;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
+use Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList;
 use Marello\Bundle\NotificationMessageBundle\Event\CreateNotificationMessageEvent;
 use Marello\Bundle\NotificationMessageBundle\Factory\NotificationMessageContextFactory;
 use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageSourceInterface;
-use Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList;
-use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
-use Oro\Bundle\EmailBundle\Provider\LocalizedTemplateProvider;
-use Oro\Bundle\ImportExportBundle\Async\ImportExportResultSummarizer;
-use Oro\Bundle\ImportExportBundle\Async\Topic\SendImportNotificationTopic;
-use Oro\Bundle\ImportExportBundle\Entity\ImportExportResult;
-use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
-use Oro\Bundle\MessageQueueBundle\Entity\Job;
-use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreateNotificationMessageAfterImportListener
 {
@@ -36,7 +39,7 @@ class CreateNotificationMessageAfterImportListener
         private ManagerRegistry $managerRegistry,
         private EventDispatcherInterface $eventDispatcher,
         private ImportExportResultSummarizer $importExportResultSummarizer,
-        private LocalizedTemplateProvider $localizedTemplateProvider,
+        private RenderedEmailTemplateProvider $renderedEmailTemplateProvider,
         private TranslatorInterface $translator
     ) {
     }
@@ -52,9 +55,6 @@ class CreateNotificationMessageAfterImportListener
         $job = $this->managerRegistry->getManagerForClass(Job::class)
             ->getRepository(Job::class)
             ->findJobById($importExportResult->getJobId());
-        $user = $this->managerRegistry->getManagerForClass(User::class)
-            ->getRepository(User::class)
-            ->find($importExportResult->getOwner());
         $title = 'marello.product.messages.import.notification_message';
         switch ($importExportResult->getType()) {
             case ProcessorRegistry::TYPE_IMPORT_VALIDATION:
@@ -93,18 +93,19 @@ class CreateNotificationMessageAfterImportListener
         }
 
         $summary = $this->importExportResultSummarizer->getSummaryResultForNotification($job, $originFileName);
-        $templateCollection = $this->localizedTemplateProvider->getAggregated(
-            [$user],
-            new EmailTemplateCriteria($template),
-            $summary
-        );
+        /** @var EmailTemplate|null $template */
+        $template = $this->renderedEmailTemplateProvider
+            ->findAndRenderEmailTemplate(
+                new EmailTemplateCriteria($template),
+                $summary
+            );
 
-        foreach ($templateCollection as $template) {
+        if ($template) {
             $context = NotificationMessageContextFactory::createInfo(
                 NotificationMessageSourceInterface::NOTIFICATION_MESSAGE_SOURCE_SYSTEM,
                 $this->translator->trans($title.'.title', ['type' => $type]),
                 $this->translator->trans($message),
-                $template->getEmailTemplate()->getContent(),
+                $template->getContent(),
             );
             $this->eventDispatcher->dispatch(
                 new CreateNotificationMessageEvent($context),

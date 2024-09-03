@@ -266,7 +266,7 @@ services:
             - '@doctrine'
             - '@event_dispatcher'
             - '@Oro\Bundle\ImportExportBundle\Async\ImportExportResultSummarizer'
-            - '@oro_email.provider.localized_template'
+            - '@oro_email.provider.rendered_email_template'
             - '@translator'
         tags:
             - { name: doctrine.orm.entity_listener, entity: Oro\Bundle\ImportExportBundle\Entity\ImportExportResult, event: postPersist }
