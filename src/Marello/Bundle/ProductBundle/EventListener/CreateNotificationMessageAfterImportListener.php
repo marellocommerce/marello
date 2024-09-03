@@ -70,12 +70,15 @@ class CreateNotificationMessageAfterImportListener
         switch ($importExportResult->getEntity()) {
             case AssembledPriceList::class:
                 $message = $title.'.prices';
+                $type = 'Prices';
                 break;
             case AssembledChannelPriceList::class:
                 $message = $title.'.channel_prices';
+                $type = 'Channel Prices';
                 break;
             default:
                 $message = $title.'.products';
+                $type = 'Products';
                 break;
         }
 
@@ -99,7 +102,7 @@ class CreateNotificationMessageAfterImportListener
         foreach ($templateCollection as $template) {
             $context = NotificationMessageContextFactory::createInfo(
                 NotificationMessageSourceInterface::NOTIFICATION_MESSAGE_SOURCE_SYSTEM,
-                $this->translator->trans($title.'.title'),
+                $this->translator->trans($title.'.title', ['type' => $type]),
                 $this->translator->trans($message),
                 $template->getEmailTemplate()->getContent(),
             );

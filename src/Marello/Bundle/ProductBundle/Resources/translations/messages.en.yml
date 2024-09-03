@@ -112,12 +112,12 @@ marello:
                         invalid:  "\"%url%\" is not a valid link for a product image"
                 notification_message:
                     import:
-                        title: Import result
+                        title: Import result type
                         products: Import for Products was finished
                         prices: Import for Prices was finished
                         channel_prices: Import for Channel Prices was finished
                     import_validation:
-                        title: Import validation result
+                        title: Import validation result type
                         products: Import validation for Products was finished
                         prices: Import validation for Prices was finished
                         channel_prices: Import validation for Channel Prices was finished
