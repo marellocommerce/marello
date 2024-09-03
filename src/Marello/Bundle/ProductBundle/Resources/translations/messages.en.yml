@@ -113,6 +113,17 @@ marello:
                         currency.invalid: The currency doesn't match the Sales Channel's currency
                     image:
                         invalid:  "\"%url%\" is not a valid link for a product image"
+                notification_message:
+                    import:
+                        title: Import result type
+                        products: Import for Products was finished
+                        prices: Import for Prices was finished
+                        channel_prices: Import for Channel Prices was finished
+                    import_validation:
+                        title: Import validation result type
+                        products: Import validation for Products was finished
+                        prices: Import validation for Prices was finished
+                        channel_prices: Import validation for Channel Prices was finished
             export:
                 template:
                     product.label: Download Product Import Template

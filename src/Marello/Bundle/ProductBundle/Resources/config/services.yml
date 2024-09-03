@@ -260,3 +260,13 @@ services:
         class: Marello\Bundle\ProductBundle\Provider\ActionGroupRegistryProvider
         arguments:
             - '@oro_action.action_group_registry'
+
+    Marello\Bundle\ProductBundle\EventListener\CreateNotificationMessageAfterImportListener:
+        arguments:
+            - '@doctrine'
+            - '@event_dispatcher'
+            - '@Oro\Bundle\ImportExportBundle\Async\ImportExportResultSummarizer'
+            - '@oro_email.provider.localized_template'
+            - '@translator'
+        tags:
+            - { name: doctrine.orm.entity_listener, entity: Oro\Bundle\ImportExportBundle\Entity\ImportExportResult, event: postPersist }

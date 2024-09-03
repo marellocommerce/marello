@@ -53,7 +53,7 @@ class NotificationMessage implements OrganizationAwareInterface, ActivityInterfa
     /**
      * @var string
      */
-    #[ORM\Column(name: 'title', type: Types::STRING, length: 32)]
+    #[ORM\Column(name: 'title', type: Types::STRING, length: 64)]
     private $title;
 
     /**
