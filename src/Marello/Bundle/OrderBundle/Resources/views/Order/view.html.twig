@@ -147,7 +147,9 @@
     {% set shippingSubblocks = shippingSubblocks|merge([{'data' : [shippingWidget] }]) %}
 
     {% set items %}
-        {{ dataGrid.renderGrid('marello-order-items', {'orderId': entity.id}) }}
+        <div class="marello-order-items">
+            {{ dataGrid.renderGrid('marello-order-items', {'orderId': entity.id}) }}
+        </div>
     {% endset %}
 
     {% set packingSlips %}

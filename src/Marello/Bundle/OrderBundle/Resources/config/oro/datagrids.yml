@@ -411,6 +411,8 @@ datagrids:
                 label:            marello.order.orderitem.allocation_exclusion.label
                 frontend_type:    boolean
                 data_name:        allocationExclusion
+            comment:
+                label:            marello.order.orderitem.comment.label
 
     marello-allocation-order-base-grid:
         extends: marello-allocation-grid
