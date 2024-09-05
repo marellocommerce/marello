@@ -820,7 +820,6 @@ class OrderItem implements
     }
 
     /**
-<<<<<<< HEAD
      * @return string
      */
     public function getItemType(): ?string
