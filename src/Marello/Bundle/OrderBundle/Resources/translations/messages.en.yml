@@ -122,6 +122,7 @@ marello:
             organization.label: Organization
             owner.label:        Owner
             item_type.label:    Order Item Type
+            comment.label:                Comment
             messages:
                 product_not_salable:    Product cannot be sold in the chosen Sales Channel
 

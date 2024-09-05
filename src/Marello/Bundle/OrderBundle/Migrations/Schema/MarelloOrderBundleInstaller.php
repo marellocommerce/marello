@@ -46,7 +46,7 @@ class MarelloOrderBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v3_1_7';
+        return 'v3_1_8';
     }
 
     /**
@@ -234,7 +234,7 @@ class MarelloOrderBundleInstaller implements
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('item_type', 'string', ['notnull' => false, 'length' => 255]);
         $table->addIndex(['user_owner_id']);
-
+        $table->addColumn('comment', 'text', ['notnull' => false]);
         $this->extendExtension->addEnumField(
             $schema,
             $table,

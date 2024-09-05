@@ -368,6 +368,12 @@ class OrderItem implements
     protected $itemType = OrderItemTypeInterface::OI_TYPE_DELIVERY;
 
     /**
+     * @var string
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    protected $comment;
+
+    /**
      * OrderItem constructor.
      */
     public function __construct()
@@ -814,6 +820,7 @@ class OrderItem implements
     }
 
     /**
+<<<<<<< HEAD
      * @return string
      */
     public function getItemType(): ?string
@@ -830,5 +837,28 @@ class OrderItem implements
         $this->itemType = $itemType;
 
         return $this;
+    }
+
+    /**
+     * Set seller comment
+     *
+     * @param string $comment
+     * @return $this
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get seller comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }
