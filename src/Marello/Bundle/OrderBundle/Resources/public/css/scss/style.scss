@@ -31,6 +31,14 @@
     }
 }
 
+.marello-order-items {
+    .grid-body-cell-comment {
+        max-width: 450px;
+        width: 450px;
+        word-wrap: break-word;
+    }
+}
+
 .order-line-item-product {
     width: 315px;
 }
