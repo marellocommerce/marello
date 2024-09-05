@@ -1,0 +1,8 @@
+placeholders:
+    placeholders:
+        scripts_before:
+            items:
+                order_item_template: ~
+    items:
+        order_item_template:
+            template: '@@MarelloOrder/Js/order_item_templates.js.twig'

@@ -121,8 +121,8 @@ marello:
             allocation_exclusion.label: Exclude from Allocation Process
             organization.label: Organization
             owner.label:        Owner
-            item_type.label:        Item Type
-
+            item_type.label:    Order Item Type
+            comment.label:                Comment
             messages:
                 product_not_salable:    Product cannot be sold in the chosen Sales Channel
 
