@@ -26,7 +26,7 @@ class CustomerAddressItemResolver extends AbstractItemResolver
 
         $taxRule = null;
         if ($taxable->getTaxCode()) {
-            $taxRule = $this->matcher->match([$taxable->getTaxCode()->getCode()], null, $address);
+            $taxRule = $this->matcher->match($address, [$taxable->getTaxCode()->getCode()]);
         }
         $taxableAmount = (float)$taxable->getPrice();
 

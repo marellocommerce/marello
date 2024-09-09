@@ -17,6 +17,9 @@ class TaxSubtotalProvider implements SubtotalProviderInterface
     const NAME = 'marello_tax.subtotal_tax';
     const SUBTOTAL_ORDER = 50;
 
+    /** @var CompanyReverseTaxProvider $provider */
+    protected $provider;
+
     /**
      * @param TranslatorInterface $translator
      * @param TaxEventDispatcher $eventDispatcher
@@ -25,8 +28,7 @@ class TaxSubtotalProvider implements SubtotalProviderInterface
     public function __construct(
         protected TranslatorInterface $translator,
         protected TaxEventDispatcher $eventDispatcher,
-        protected TaxFactory $taxFactory,
-        protected CompanyReverseTaxProvider $provider
+        protected TaxFactory $taxFactory
     ) {
     }
 
@@ -117,5 +119,14 @@ class TaxSubtotalProvider implements SubtotalProviderInterface
         $this->eventDispatcher->dispatch($taxable);
 
         return $taxable;
+    }
+
+    /**
+     * @param CompanyReverseTaxProvider $provider
+     * @return void
+     */
+    public function setCompanyReverseTaxProvider(CompanyReverseTaxProvider $provider): void
+    {
+        $this->provider = $provider;
     }
 }
