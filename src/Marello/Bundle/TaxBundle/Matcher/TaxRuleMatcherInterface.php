@@ -15,5 +15,5 @@ interface TaxRuleMatcherInterface
      * @param array $taxCodes
      * @return TaxRule
      */
-    public function match(array $taxCodes, Order $order = null, AbstractAddress $address = null);
+    public function match(AbstractAddress $address = null, array $taxCodes);
 }

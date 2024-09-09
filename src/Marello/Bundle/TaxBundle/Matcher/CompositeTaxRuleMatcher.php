@@ -3,11 +3,9 @@
 namespace Marello\Bundle\TaxBundle\Matcher;
 
 use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\TaxBundle\DependencyInjection\Configuration;
 
 class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
 {
@@ -23,10 +21,11 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
      */
     private $matchers = [];
 
-    public function __construct(
-        protected CompanyReverseTaxProvider $provider
-    ) {
-    }
+    /** @var CompanyReverseTaxProvider $provider */
+    protected $provider;
+
+    /** @var Order $order */
+    protected $order;
 
     /**
      * @param TaxRuleMatcherInterface $matcher
@@ -39,13 +38,13 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
     /**
      * {@inheritdoc}
      */
-    public function match(array $taxCodes, Order $order = null, AbstractAddress $address = null)
+    public function match(AbstractAddress $address = null, array $taxCodes)
     {
         if (null === $address || null === $address->getCountry() || 0 === count($taxCodes)) {
             return null;
         }
 
-        if (!$this->provider->orderIsTaxable($order)) {
+        if (!$this->provider->orderIsTaxable($this->order)) {
             return null;
         }
 
@@ -54,7 +53,8 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
             return $this->cache[$cacheKey];
         }
         foreach ($this->matchers as $matcher) {
-            $taxRule = $matcher->match($taxCodes, $order, $address);
+            $matcher->setOrder($this->order);
+            $taxRule = $matcher->match($address, $taxCodes);
             if ($taxRule) {
                 $this->cache[$cacheKey] = $taxRule;
 
@@ -81,11 +81,20 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
     }
 
     /**
-     * @param ConfigManager $configManager
+     * @param Order|null $order
      * @return void
      */
-    public function setConfigManager(ConfigManager $configManager): void
+    public function setOrder(Order $order = null)
     {
-        $this->configManager = $configManager;
+        $this->order = $order;
+    }
+
+    /**
+     * @param CompanyReverseTaxProvider $provider
+     * @return void
+     */
+    public function setCompanyReverseTaxProvider(CompanyReverseTaxProvider $provider): void
+    {
+        $this->provider = $provider;
     }
 }
