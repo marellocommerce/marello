@@ -42,7 +42,13 @@
 .order-line-item-product {
     width: 315px;
 }
-
+.order-line-item-comment {
+    .comment-widget-edit-btn,
+    .comment-widget-add-btn,
+    .comment-widget-remove-btn {
+        white-space: nowrap;
+    }
+}
 .order-line-item-tax-code,
 .order-line-item-product-unit {
     width: 150px;

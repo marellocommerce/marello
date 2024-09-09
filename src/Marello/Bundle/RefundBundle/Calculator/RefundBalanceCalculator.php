@@ -117,8 +117,9 @@ class RefundBalanceCalculator
             ->find($item['taxCode']);
 
         $taxRule = $this->taxRuleMatcher->match(
-            $refund->getOrder()->getShippingAddress(),
-            [$taxCode->getCode()]
+            [$taxCode->getCode()],
+            $refund->getOrder(),
+            $refund->getOrder()->getShippingAddress()
         );
         if ($taxRule) {
             $rate = $taxRule->getTaxRate()->getRate();

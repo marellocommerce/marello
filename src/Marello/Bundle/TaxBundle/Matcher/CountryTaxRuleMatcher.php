@@ -4,12 +4,14 @@ namespace Marello\Bundle\TaxBundle\Matcher;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
+
 class CountryTaxRuleMatcher extends AbstractTaxRuleMatcher
 {
     /**
      * {@inheritdoc}
      */
-    public function match(AbstractAddress $address = null, array $taxCodes)
+    public function match(array $taxCodes, Order $order = null, AbstractAddress $address = null)
     {
         if (null === $address) {
             return null;
