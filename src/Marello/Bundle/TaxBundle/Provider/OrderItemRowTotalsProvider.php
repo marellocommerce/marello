@@ -2,11 +2,11 @@
 
 namespace Marello\Bundle\TaxBundle\Provider;
 
-use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesProvider;
-use Marello\Bundle\TaxBundle\Calculator\TaxCalculatorInterface;
 use Marello\Bundle\TaxBundle\Matcher\TaxRuleMatcherInterface;
+use Marello\Bundle\TaxBundle\Calculator\TaxCalculatorInterface;
+use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
+use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesProvider;
 
 class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
 {
@@ -53,8 +53,9 @@ class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
                     isset($item['quantity'])
                 ) {
                     $taxRule = $this->taxRuleMatcher->match(
-                        $order->getShippingAddress(),
-                        [$itemResult['tax_code'][$identifier]['code']]
+                        [$itemResult['tax_code'][$identifier]['code']],
+                        $order,
+                        $order->getShippingAddress()
                     );
                     if ($taxRule) {
                         $rate = $taxRule->getTaxRate()->getRate();
