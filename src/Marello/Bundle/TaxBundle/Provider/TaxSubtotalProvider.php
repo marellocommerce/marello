@@ -2,13 +2,14 @@
 
 namespace Marello\Bundle\TaxBundle\Provider;
 
-use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
-use Marello\Bundle\PricingBundle\Subtotal\Provider\SubtotalProviderInterface;
-use Marello\Bundle\TaxBundle\Event\TaxEventDispatcher;
-use Marello\Bundle\TaxBundle\Factory\TaxFactory;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 use Marello\Bundle\TaxBundle\Model\Result;
 use Marello\Bundle\TaxBundle\Model\Taxable;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Marello\Bundle\TaxBundle\Factory\TaxFactory;
+use Marello\Bundle\TaxBundle\Event\TaxEventDispatcher;
+use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
+use Marello\Bundle\PricingBundle\Subtotal\Provider\SubtotalProviderInterface;
 
 class TaxSubtotalProvider implements SubtotalProviderInterface
 {
@@ -17,33 +18,16 @@ class TaxSubtotalProvider implements SubtotalProviderInterface
     const SUBTOTAL_ORDER = 50;
 
     /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-    
-    /**
-     * @var TaxEventDispatcher
-     */
-    protected $eventDispatcher;
-
-    /**
-     * @var TaxFactory
-     */
-    protected $taxFactory;
-
-    /**
      * @param TranslatorInterface $translator
      * @param TaxEventDispatcher $eventDispatcher
      * @param TaxFactory $taxFactory
      */
     public function __construct(
-        TranslatorInterface $translator,
-        TaxEventDispatcher $eventDispatcher,
-        TaxFactory $taxFactory
+        protected TranslatorInterface $translator,
+        protected TaxEventDispatcher $eventDispatcher,
+        protected TaxFactory $taxFactory,
+        protected CompanyReverseTaxProvider $provider
     ) {
-        $this->translator = $translator;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->taxFactory = $taxFactory;
     }
 
     /**
@@ -63,7 +47,7 @@ class TaxSubtotalProvider implements SubtotalProviderInterface
 
         try {
             $tax = $this->getTax($entity);
-            $this->fillSubtotal($subtotal, $tax);
+            $this->fillSubtotal($subtotal, $tax, $entity);
         } catch (\Exception $e) {
         }
 
@@ -90,9 +74,14 @@ class TaxSubtotalProvider implements SubtotalProviderInterface
      * @param Result $tax
      * @return Subtotal
      */
-    protected function fillSubtotal(Subtotal $subtotal, Result $tax)
+    protected function fillSubtotal(Subtotal $subtotal, Result $tax, $entity)
     {
-        $subtotal->setAmount($tax->getTotal()->getTaxAmount());
+        $taxAmount = $tax->getTotal()->getTaxAmount();
+        if (!$this->provider->orderIsTaxable($entity)) {
+            $taxAmount = 0;
+        }
+
+        $subtotal->setAmount($taxAmount);
         $subtotal->setCurrency($tax->getTotal()->getCurrency());
         $subtotal->setVisible((bool)$tax->getTotal()->getTaxAmount());
 
