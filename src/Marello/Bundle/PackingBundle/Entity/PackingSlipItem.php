@@ -70,8 +70,6 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     #[ORM\Column(name: 'product_name', type: Types::STRING, nullable: false)]
     protected $productName;
 
-    // change oneToOne into oneToMany, as the one to one is causing issues with schema validation and is incorrect
-    // as there can be more packingslip items with the order_item_id
     #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: OrderItem::class)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]

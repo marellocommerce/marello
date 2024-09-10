@@ -46,7 +46,7 @@ class CreateNotificationMessageAfterImportListener
 
     public function postPersist(ImportExportResult $importExportResult): void
     {
-        if (!\in_array($importExportResult->getType(),self::SUPPORTED_TYPES)
+        if (!\in_array($importExportResult->getType(), self::SUPPORTED_TYPES)
             || !\in_array($importExportResult->getEntity(), self::SUPPORTED_ENTITIES)
         ) {
             return;

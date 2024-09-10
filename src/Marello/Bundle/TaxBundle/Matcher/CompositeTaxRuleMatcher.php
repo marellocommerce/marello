@@ -2,12 +2,10 @@
 
 namespace Marello\Bundle\TaxBundle\Matcher;
 
-use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\TaxBundle\DependencyInjection\Configuration;
+use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
 
 class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
 {
@@ -78,14 +76,5 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
         $taxCodesHash = md5(json_encode($taxCodes));
 
         return sprintf('%s:%s:%s:%s', $countryCode, $regionCode, $zipCode, $taxCodesHash);
-    }
-
-    /**
-     * @param ConfigManager $configManager
-     * @return void
-     */
-    public function setConfigManager(ConfigManager $configManager): void
-    {
-        $this->configManager = $configManager;
     }
 }
