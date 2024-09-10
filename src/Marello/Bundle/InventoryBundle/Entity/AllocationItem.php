@@ -199,7 +199,7 @@ class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterfa
     /**
      * @var array
      *
-     * @ORM\Column(name: 'inventory_batches', type: json, nullable: true)
+     * @ORM\Column(name="inventory_batches", type="json", nullable=true)
      * @Oro\ConfigField(
      *       defaultValues={
      *           "dataaudit"={

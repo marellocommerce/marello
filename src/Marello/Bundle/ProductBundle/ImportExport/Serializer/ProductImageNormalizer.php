@@ -13,7 +13,8 @@ class ProductImageNormalizer implements ContextAwareNormalizerInterface, Context
 {
     public function __construct(
         private FileManager $fileManager
-    ) {}
+    ) {
+    }
 
     public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
