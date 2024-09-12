@@ -34,7 +34,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_5_2';
+        return 'v1_5_3';
     }
 
     /**
@@ -104,6 +104,8 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('last_name', 'string', ['length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('email', 'string', ['length' => 255]);
+        $table->addColumn('email_lowercase', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('is_hidden', 'boolean', ['default' => false]);
         $table->addColumn('company_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->setPrimaryKey(['id']);

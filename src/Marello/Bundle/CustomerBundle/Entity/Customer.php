@@ -91,6 +91,10 @@ class Customer implements
     ])]
     protected ?Company $company = null;
 
+    #[ORM\Column(name: 'is_hidden', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false], 'importexport' => ['excluded' => true]])]
+    protected $isHidden = false;
+
     /**
      * Customer constructor.
      */
@@ -256,6 +260,25 @@ class Customer implements
     public function setCompany(Company $company = null): self
     {
         $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHidden(): bool
+    {
+        return $this->isHidden;
+    }
+
+    /**
+     * @param bool $isHidden
+     * @return $this
+     */
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

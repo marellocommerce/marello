@@ -8,6 +8,9 @@ datagrids:
                     - c
                 from:
                     - { table: Marello\Bundle\CustomerBundle\Entity\Customer, alias: c }
+                where:
+                    and:
+                        - c.isHidden = false
         columns:
             id:
                 label: marello.customer.id.label

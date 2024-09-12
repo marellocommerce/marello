@@ -10,6 +10,9 @@ trait EmailAddressTrait
     #[ORM\Column(name: 'email', type: Types::STRING, nullable: false)]
     protected ?string $email = null;
 
+    #[ORM\Column(name: 'email_lowercase', type: Types::STRING, nullable: true)]
+    protected ?string $emailLowercase = null;
+
     /**
      * Gets an email address which can be used to send messages
      *
@@ -50,5 +53,22 @@ trait EmailAddressTrait
         $this->email = $email;
 
         return $this;
+    }
+
+    public function setEmailLowercase($emailLowercase = null): self
+    {
+        $this->emailLowercase = $emailLowercase;
+
+        return $this;
+    }
+
+    /**
+     * Gets an email address which can be used to send messages
+     *
+     * @return string
+     */
+    public function getEmailLowercase(): string
+    {
+        return $this->emailLowercase;
     }
 }
