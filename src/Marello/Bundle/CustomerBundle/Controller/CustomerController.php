@@ -31,7 +31,7 @@ class CustomerController extends AbstractController
      * @param Customer $customer
      * @return array
      */
-    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_customer_view')]
+    #[Route(path: '/view/{id}', name: 'marello_customer_view', requirements: ['id' => '\d+'])]
     #[Template]
     #[AclAncestor('marello_customer_view')]
     public function viewAction(Customer $customer)
@@ -51,7 +51,7 @@ class CustomerController extends AbstractController
     /**
      * @return array
      */
-    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_customer_create')]
+    #[Route(path: '/create', name: 'marello_customer_create', methods: ['GET', 'POST'])]
     #[Template('@MarelloCustomer/Customer/update.html.twig')]
     #[AclAncestor('marello_customer_create')]
     public function createAction(Request $request)
@@ -63,7 +63,7 @@ class CustomerController extends AbstractController
      * @param Customer $customer
      * @return array
      */
-    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_customer_update')]
+    #[Route(path: '/update/{id}', name: 'marello_customer_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     #[Template]
     #[AclAncestor('marello_customer_update')]
     public function updateAction(Request $request, Customer $customer)
