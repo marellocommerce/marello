@@ -19,7 +19,7 @@ class MarelloCustomerBundle implements Migration
         }
 
         if (!$table->hasColumn('is_hidden')) {
-            $table->addColumn('is_hidden', 'boolean', ['default' => false]);
+            $table->addColumn('is_hidden', 'boolean', ['notnull' => false, 'default' => false]);
         }
 
         $sql = sprintf('UPDATE %s SET email_lowercase = LOWER(email);',

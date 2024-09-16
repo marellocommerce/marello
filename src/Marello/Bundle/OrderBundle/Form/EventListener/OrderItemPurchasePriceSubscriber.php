@@ -38,7 +38,8 @@ class OrderItemPurchasePriceSubscriber implements EventSubscriberInterface
         $orderItem = $event->getData();
 
         if ($this->pricesIncludeTax === false) {
-            $orderItem->setPurchasePriceIncl($orderItem->getPrice() + $orderItem->getTax() / $orderItem->getQuantity());
+            $poPrice = (float)$orderItem->getPrice() + (float)$orderItem->getTax() / $orderItem->getQuantity();
+            $orderItem->setPurchasePriceIncl($poPrice);
         } else {
             $orderItem->setPurchasePriceIncl($orderItem->getPrice());
         }

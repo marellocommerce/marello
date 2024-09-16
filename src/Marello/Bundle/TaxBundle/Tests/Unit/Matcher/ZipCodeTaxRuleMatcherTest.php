@@ -67,7 +67,7 @@ class ZipCodeTaxRuleMatcherTest extends AbstractTaxRuleMatcherTest
             )
             ->willReturn($zipCodeMatcherTaxRules);
 
-        $this->assertEquals($expected, $this->matcher->match($address, $taxCodes));
+        $this->assertEquals($expected, $this->matcher->match($taxCodes, null, $address));
     }
 
     /**

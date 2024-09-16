@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\TaxBundle\Tests\Unit\Provider;
 
+use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use PHPUnit\Framework\TestCase;
@@ -37,6 +38,11 @@ class TaxSubtotalProviderTest extends TestCase
      */
     protected $taxFactory;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|CompanyReverseTaxProvider
+     */
+    protected $companyReverseTaxProvider;
+
     protected function setUp(): void
     {
         $this->translator = $this->createMock(TranslatorInterface::class);
@@ -54,7 +60,13 @@ class TaxSubtotalProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->provider = new TaxSubtotalProvider($this->translator, $this->taxEventDispatcher, $this->taxFactory);
+        $this->companyReverseTaxProvider = $this->createMock(CompanyReverseTaxProvider::class);
+        $this->provider = new TaxSubtotalProvider(
+            $this->translator,
+            $this->taxEventDispatcher,
+            $this->taxFactory,
+            $this->companyReverseTaxProvider
+        );
     }
 
     public function testGetName()
@@ -75,6 +87,11 @@ class TaxSubtotalProviderTest extends TestCase
         $this->taxFactory->expects($this->once())
             ->method('create')
             ->willReturn($taxable);
+
+        $this->companyReverseTaxProvider
+            ->expects($this->any())
+            ->method('orderIsTaxable')
+            ->willReturn(true);
 
         $this->taxEventDispatcher->expects($this->once())
             ->method('dispatch')

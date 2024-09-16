@@ -81,7 +81,7 @@ class MergeDuplicateCustomerData extends AbstractFixture
     protected function moveCustomers($className, $originalCustomer, array $additionalCustomers)
     {
         $repo = $this->manager->getRepository($className);
-        foreach($additionalCustomers as $additionalCustomer) {
+        foreach ($additionalCustomers as $additionalCustomer) {
             $entities = $repo->findBy(['customer' => $additionalCustomer]);
             foreach ($entities as $entity) {
                 $entity->setCustomer($originalCustomer);

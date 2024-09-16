@@ -25,7 +25,7 @@ class CustomerRepository extends ServiceEntityRepository
                 ->setParameter('organization', $customer->getOrganization());
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**

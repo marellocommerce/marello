@@ -58,7 +58,7 @@ class RegionTaxRuleMatcherTest extends AbstractTaxRuleMatcherTest
             ->with($taxCodes, $country, $region, $regionText)
             ->willReturn($regionTaxRules);
 
-        $this->assertEquals($expected, $this->matcher->match($address, $taxCodes));
+        $this->assertEquals($expected, $this->matcher->match($taxCodes, null, $address));
     }
 
     /**

@@ -143,7 +143,7 @@ class InventoryLevelUpdateStrategy extends ConfigurableAddOrReplaceStrategy
         $inventoryUpdateQty = $entity->getInventoryQty();
         $newEntityKey = $this->createSerializedEntityKey(
             $entity,
-            $entity->getInventoryItem(),
+            $inventoryItem,
             $warehouse->getCode()
         );
 

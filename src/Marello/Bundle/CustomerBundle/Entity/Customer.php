@@ -93,7 +93,7 @@ class Customer implements
 
     #[ORM\Column(name: 'is_hidden', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false], 'importexport' => ['excluded' => true]])]
-    protected $isHidden = false;
+    protected ?bool $isHidden = false;
 
     /**
      * Customer constructor.

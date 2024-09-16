@@ -45,43 +45,12 @@ class SendScheduleChangeListener
         $dateTime = new \DateTime('now');
         // set timezone that is from the user and or the system (as the user configuring the setting assumes it's in his timezone)
 //        $dateTime->setTimezone(new \DateTimeZone($timeZoneValue));
-        file_put_contents(
-            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
-            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->getTimezone(), true) . "\r\n",
-            FILE_APPEND
-        );
-        file_put_contents(
-            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
-            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->format('Y-m-d H:i:s'), true) . "\r\n",
-            FILE_APPEND
-        );
 
         $dateTime->setTimestamp($time);
         // convert to UTC timezone as it needs to be stored in UTC timezone for the cron definition
         $dateTime->setTimezone(new \DateTimeZone('UTC'));
-
-        file_put_contents(
-            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
-            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->getTimezone(), true) . "\r\n",
-            FILE_APPEND
-        );
-        file_put_contents(
-            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
-            __METHOD__ . " " . __LINE__ . " " . print_r($dateTime->format('Y-m-d H:i:s'), true) . "\r\n",
-            FILE_APPEND
-        );
         $newTime = new \DateTime('now');
         $newTime->setTimezone(new \DateTimeZone('UTC'));
-        file_put_contents(
-            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
-            __METHOD__ . " " . __LINE__ . " " . print_r($newTime->getTimezone(), true) . "\r\n",
-            FILE_APPEND
-        );
-        file_put_contents(
-            '/var/www/marellodev/current/applications/marello-application-ee/var/logs/datetime.log',
-            __METHOD__ . " " . __LINE__ . " " . print_r($newTime->format('Y-m-d H:i:s'), true) . "\r\n",
-            FILE_APPEND
-        );
         $schedule->setDefinition(
             sprintf(
                 '%s %s * * *',

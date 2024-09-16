@@ -67,7 +67,7 @@ trait EmailAddressTrait
      *
      * @return string
      */
-    public function getEmailLowercase(): string
+    public function getEmailLowercase(): ?string
     {
         return $this->emailLowercase;
     }
