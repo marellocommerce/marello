@@ -13,7 +13,7 @@ class ProductNormalizer extends ConfigurableEntityNormalizer
             return true;
         }
 
-        return parent::supportsNormalization($data, $format, $context);
+        return false;
     }
 
     protected function isFieldSkippedForNormalization($entityName, $fieldName, array $context)
