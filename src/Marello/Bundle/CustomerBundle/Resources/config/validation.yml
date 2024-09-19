@@ -1,8 +1,6 @@
 Marello\Bundle\CustomerBundle\Entity\Customer:
     constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-              fields: [email, organization]
-              message: 'marello.customer.email.message'
+        - Marello\Bundle\CustomerBundle\Validator\Constraints\UniqueCustomerEmail: ~
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
               fields: [customerNumber, organization]
               message: 'marello.customer.customer.number.message'

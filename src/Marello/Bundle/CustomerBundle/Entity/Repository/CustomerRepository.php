@@ -2,15 +2,31 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\MarelloOrderBundle;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Marello\Bundle\OrderBundle\Entity\Repository\OrderRepository;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 
 class CustomerRepository extends ServiceEntityRepository
 {
+    public function findCustomerByEmailAndOrganization(Customer $customer): array|Customer
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb
+            ->where($qb->expr()->eq('LOWER(c.email)', ':email'))
+            ->setParameter('email', mb_strtolower($customer->getEmail()));
+
+        if ($customer->getOrganization()) {
+            $qb->andWhere($qb->expr()->eq('c.organization', ':organization'))
+                ->setParameter('organization', $customer->getOrganization());
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     /**
      * @param AclHelper $aclHelper
      * @param \DateTime|null $start
