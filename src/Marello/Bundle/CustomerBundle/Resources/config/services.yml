@@ -160,12 +160,11 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: marello_customer.company_number_validator }
 
-    Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository:
-        parent: oro_entity.abstract_repository
+    Marello\Bundle\CustomerBundle\Validator\UniqueCustomerEmailValidator:
         arguments:
-            - 'Marello\Bundle\CustomerBundle\Entity\Customer'
+            - '@doctrine.orm.entity_manager'
         tags:
-            - { name: doctrine.repository_service }
+            - { name: validator.constraint_validator, alias: marello_customer.unique_customer_email_validator }
 
     marello_customer.provider.customer_metrics_provider:
         class: 'Marello\Bundle\CustomerBundle\Provider\CustomerMetricsProvider'
@@ -177,8 +176,3 @@ services:
         tags:
             - { name: oro_dashboard.big_number.provider, alias: marello-customer }
 
-    Marello\Bundle\CustomerBundle\Validator\UniqueCustomerEmailValidator:
-        arguments:
-            - '@doctrine.orm.entity_manager'
-        tags:
-            - { name: validator.constraint_validator, alias: marello_customer.unique_customer_email_validator }

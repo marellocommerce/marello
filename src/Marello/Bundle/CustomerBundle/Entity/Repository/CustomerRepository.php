@@ -17,14 +17,15 @@ class CustomerRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c');
         $qb
             ->where($qb->expr()->eq('LOWER(c.email)', ':email'))
-            ->setParameter('email', mb_strtolower($customer->getEmail()));
+            ->setParameter('email', mb_strtolower($customer->getEmail()))
+            ->andWhere($qb->expr()->eq('c.isHidden', 'false'));
 
         if ($customer->getOrganization()) {
             $qb->andWhere($qb->expr()->eq('c.organization', ':organization'))
                 ->setParameter('organization', $customer->getOrganization());
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**
