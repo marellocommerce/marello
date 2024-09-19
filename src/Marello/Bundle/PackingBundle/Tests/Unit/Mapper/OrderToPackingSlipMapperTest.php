@@ -141,7 +141,8 @@ class OrderToPackingSlipMapperTest extends TestCase
                 'product' => $product1,
                 'orderItem' => $orderItem1,
                 'quantity' => 5,
-                'organization' => $organization
+                'organization' => $organization,
+                'inventoryBatches' => ['000001' => 5]
             ]
         );
         $alloItem2 = $this->getEntity(

@@ -290,6 +290,41 @@ class InventoryAllocationProvider
             }
             $allocationItem->setQuantity($itemWithQty[$item->getProductSku()]);
             $allocationItem->setTotalQuantity($orderItem->getQuantity());
+            $inventoryItem = $item->getProduct()->getInventoryItem();
+            if ($inventoryItem && $allocation->getWarehouse()) {
+                if ($inventoryLevel = $inventoryItem->getInventoryLevel($allocation->getWarehouse())) {
+                    $inventoryBatches = $inventoryLevel->getInventoryBatches()->toArray();
+                    if (count($inventoryBatches) > 0) {
+                        usort($inventoryBatches, function (InventoryBatch $a, InventoryBatch $b) {
+                            if ($a->getDeliveryDate() < $b->getDeliveryDate()) {
+                                return -1;
+                            } elseif ($a->getDeliveryDate() > $b->getDeliveryDate()) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        });
+                        $data = [];
+                        $quantity = $allocationItem->getQuantity();
+                        /** @var InventoryBatch[] $inventoryBatches */
+                        $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        foreach ($inventoryBatches as $inventoryBatch) {
+                            // we cannot use expired batches
+                            if ($inventoryBatch->getSellByDate() && $inventoryBatch->getSellByDate() <= $currentDateTime) {
+                                continue;
+                            }
+                            if ($inventoryBatch->getQuantity() >= $quantity) {
+                                $data[$inventoryBatch->getBatchNumber()] = $quantity;
+                                break;
+                            } elseif (($batchQty = $inventoryBatch->getQuantity()) > 0) {
+                                $data[$inventoryBatch->getBatchNumber()] = $batchQty;
+                                $quantity = $quantity - $batchQty;
+                            }
+                        }
+                        $allocationItem->setInventoryBatches($data);
+                    }
+                }
+            }
             $allocation->addItem($allocationItem);
             if ($orderItem->getItemType() === OrderItemTypeInterface::OI_TYPE_CASHANDCARRY) {
                 $totalItemsCandC++;
