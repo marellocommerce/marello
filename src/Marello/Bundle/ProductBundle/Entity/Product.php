@@ -119,7 +119,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['excluded' => false],
             'attribute' => ['is_attribute' => true],
             'extend' => ['owner' => 'Custom']
         ]
@@ -130,7 +130,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['excluded' => false],
             'attribute' => ['is_attribute' => true],
             'extend' => ['owner' => 'Custom']
         ]
@@ -162,7 +162,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['excluded' => false],
             'attribute' => ['is_attribute' => true],
             'extend' => ['owner' => 'Custom']
         ]
@@ -173,7 +173,7 @@ class Product implements
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' =>true],
+            'importexport' => ['excluded' => false],
             'attribute' => ['is_attribute' => true],
             'extend' => ['owner' => 'Custom']
         ]
