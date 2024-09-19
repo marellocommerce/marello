@@ -4,8 +4,6 @@ namespace Marello\Bundle\InventoryBundle\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
-use Marello\Bundle\POSBundle\Migrations\Data\ORM\LoadSalesChannelPOSTypeData;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,8 +23,8 @@ use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
 use Marello\Bundle\InventoryBundle\Model\OrderWarehouseResult;
 use Marello\Bundle\InventoryBundle\Event\InventoryUpdateEvent;
 use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContextFactory;
+use Marello\Bundle\POSBundle\Migrations\Data\ORM\LoadSalesChannelPOSTypeData;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\QuantityWFAStrategy;
-use function Symfony\Component\Translation\t;
 
 class InventoryAllocationProvider
 {
