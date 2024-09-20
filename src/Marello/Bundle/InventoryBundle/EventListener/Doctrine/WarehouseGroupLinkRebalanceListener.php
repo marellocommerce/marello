@@ -42,6 +42,11 @@ class WarehouseGroupLinkRebalanceListener
         $this->em = $eventArgs->getObjectManager();
         $this->unitOfWork = $this->em->getUnitOfWork();
 
+        if (!empty($this->unitOfWork->getScheduledEntityInsertions())) {
+            $records = $this->filterRecords($this->unitOfWork->getScheduledEntityInsertions());
+            $this->applyCallBackForChangeSet('triggerRebalance', $records);
+        }
+
         if (!empty($this->unitOfWork->getScheduledEntityUpdates())) {
             $records = $this->filterRecords($this->unitOfWork->getScheduledEntityUpdates());
             $this->applyCallBackForChangeSet('triggerRebalance', $records);

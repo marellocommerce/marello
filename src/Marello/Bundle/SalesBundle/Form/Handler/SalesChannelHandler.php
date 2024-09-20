@@ -84,7 +84,7 @@ class SalesChannelHandler implements FormHandlerInterface
         $group = new SalesChannelGroup();
         $group
             ->setName($name)
-            ->setOrganization($entity->getOwner())
+            ->setOrganization($entity->getOrganization())
             ->setDescription(sprintf('%s group', $name))
             ->setSystem(false);
 
