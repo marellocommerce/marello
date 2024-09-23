@@ -48,7 +48,6 @@ system_configuration:
                                             - marello_order.order_notification
                     marello_order:
                         children:
-                            marello_order_general: ~
                             marello_order_on_demand:
                                 children:
                                     marello_order_on_demand_general:

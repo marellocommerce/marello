@@ -4,6 +4,7 @@ navigation:
             warehouses:
                 label: marello.inventory.warehouse.entity_label
                 route: marello_inventory_warehouse_updatedefault
+                position:   101
                 extras:
                     routes: ['marello_inventory_warehouse_*']
             inventory_management:
