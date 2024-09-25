@@ -139,22 +139,13 @@ services:
         tags:
             - { name: oro_form.form.handler, alias: marello_customer.form.handler.customer }
 
-    marelloenterprise_inventory.form_handler.warehousegroup:
-        class: 'MarelloEnterprise\Bundle\InventoryBundle\Form\Handler\WarehouseGroupHandler'
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@oro_security.acl_helper'
-
-    marello_customer.provider.customer_email_owner:
-        class: 'Marello\Bundle\CustomerBundle\Provider\CustomerEmailOwnerProvider'
+    Marello\Bundle\CustomerBundle\Provider\CustomerEmailOwnerProvider:
         tags:
             - { name: oro_email.owner.provider, order: 1 }
 
-    marello_customer.provider.customer_address:
-        class: 'Marello\Bundle\CustomerBundle\Provider\CustomerAddressProvider'
+    Marello\Bundle\CustomerBundle\Provider\CustomerAddressProvider: ~
 
-    marello_customer.form.validator.company_number:
-        class: 'Marello\Bundle\CustomerBundle\Validator\CompanyNumberValidator'
+    Marello\Bundle\CustomerBundle\Validator\CompanyNumberValidator:
         arguments:
             - '@oro_entity.doctrine_helper'
         tags:
@@ -166,8 +157,7 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: marello_customer.unique_customer_email_validator }
 
-    marello_customer.provider.customer_metrics_provider:
-        class: 'Marello\Bundle\CustomerBundle\Provider\CustomerMetricsProvider'
+    Marello\Bundle\CustomerBundle\Provider\CustomerMetricsProvider:
         public: true
         arguments:
             - '@Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository'
