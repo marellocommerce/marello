@@ -37,7 +37,7 @@ services:
     marello_order.form.type.address:
         arguments:
             - '@oro_locale.formatter.address'
-            - '@marello_customer.provider.customer_address'
+            - '@Marello\Bundle\CustomerBundle\Provider\CustomerAddressProvider'
             - '@oro_importexport.serializer'
         abstract: true
 

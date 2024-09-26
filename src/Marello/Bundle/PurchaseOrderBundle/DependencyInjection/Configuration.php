@@ -8,7 +8,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-    public const DEFAULT_SEND_HOUR = 8;
+    public const DEFAULT_SEND_HOUR = 15;
 
     /**
      * Generates the configuration tree builder.

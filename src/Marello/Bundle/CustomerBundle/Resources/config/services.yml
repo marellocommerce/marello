@@ -107,7 +107,6 @@ services:
         arguments:
             - 'Marello\Bundle\CustomerBundle\Form\Type\CompanyType'
 
-
     marello_customer.form.type.customer:
         class: 'Marello\Bundle\CustomerBundle\Form\Type\CustomerType'
         tags:
