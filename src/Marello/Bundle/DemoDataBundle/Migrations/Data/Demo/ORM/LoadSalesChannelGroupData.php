@@ -146,12 +146,10 @@ class LoadSalesChannelGroupData extends AbstractFixture implements
      */
     private function createWarehouseChannelGroupLink(SalesChannelGroup $channelGroup)
     {
-        /** @var AclHelper $aclHelper */
-        $aclHelper = $this->container->get('oro_security.acl_helper');
         /** @var WarehouseChannelGroupLink $systemWarehouseChannelGroupLink */
         $systemWarehouseChannelGroupLink = $this->manager
             ->getRepository(WarehouseChannelGroupLink::class)
-            ->findSystemLink($aclHelper);
+            ->findSystemLink();
 
         if ($systemWarehouseChannelGroupLink) {
             $systemWarehouseChannelGroupLink->addSalesChannelGroup($channelGroup);

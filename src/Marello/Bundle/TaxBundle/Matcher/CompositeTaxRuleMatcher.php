@@ -2,7 +2,10 @@
 
 namespace Marello\Bundle\TaxBundle\Matcher;
 
+use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
 
 class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
 {
@@ -17,6 +20,12 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
      * @var TaxRuleMatcherInterface[]
      */
     private $matchers = [];
+
+    /** @var CompanyReverseTaxProvider $provider */
+    protected $provider;
+
+    /** @var Order $order */
+    protected $order;
 
     /**
      * @param TaxRuleMatcherInterface $matcher
@@ -35,11 +44,16 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
             return null;
         }
 
+        if (!$this->provider->orderIsTaxable($this->order)) {
+            return null;
+        }
+
         $cacheKey = $this->getCacheKey($address, $taxCodes);
         if (array_key_exists($cacheKey, $this->cache)) {
             return $this->cache[$cacheKey];
         }
         foreach ($this->matchers as $matcher) {
+            $matcher->setOrder($this->order);
             $taxRule = $matcher->match($address, $taxCodes);
             if ($taxRule) {
                 $this->cache[$cacheKey] = $taxRule;
@@ -64,5 +78,23 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
         $taxCodesHash = md5(json_encode($taxCodes));
 
         return sprintf('%s:%s:%s:%s', $countryCode, $regionCode, $zipCode, $taxCodesHash);
+    }
+
+    /**
+     * @param Order|null $order
+     * @return void
+     */
+    public function setOrder(Order $order = null)
+    {
+        $this->order = $order;
+    }
+
+    /**
+     * @param CompanyReverseTaxProvider $provider
+     * @return void
+     */
+    public function setCompanyReverseTaxProvider(CompanyReverseTaxProvider $provider): void
+    {
+        $this->provider = $provider;
     }
 }

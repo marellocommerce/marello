@@ -4,6 +4,8 @@ namespace Marello\Bundle\TaxBundle\Matcher;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
+
 class RegionTaxRuleMatcher extends AbstractTaxRuleMatcher
 {
     /**

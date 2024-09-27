@@ -341,6 +341,13 @@ class OrderItem extends ExtendOrderItem implements
     protected $allocationExclusion = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="text", nullable=true)
+     */
+    protected $comment;
+
+    /**
      * OrderItem constructor.
      */
     public function __construct()
@@ -786,5 +793,28 @@ class OrderItem extends ExtendOrderItem implements
         $this->allocationExclusion = $allocationExclusion;
 
         return $this;
+    }
+
+    /**
+     * Set seller comment
+     *
+     * @param string $comment
+     * @return $this
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get seller comment
+     *
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

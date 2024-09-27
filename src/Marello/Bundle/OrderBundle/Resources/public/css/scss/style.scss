@@ -31,13 +31,27 @@
     }
 }
 
+.marello-order-items {
+    .grid-body-cell-comment {
+        max-width: 450px;
+        width: 450px;
+        word-wrap: break-word;
+    }
+}
+
 .order-line-item-product {
     width: 315px;
 }
-
+.order-line-item-comment {
+    .comment-widget-edit-btn,
+    .comment-widget-add-btn,
+    .comment-widget-remove-btn {
+        white-space: nowrap;
+    }
+}
 .order-line-item-tax-code,
 .order-line-item-product-unit {
-    width: 243px;
+    width: 150px;
 
     input[type="text"] {
         width:80px;
@@ -50,7 +64,7 @@
 .order-line-item-price,
 .order-line-item-quantity,
 .order-line-item-total-price {
-    width: 243px;
+    width: 150px;
 
     input[type="text"] {
         width:80px;

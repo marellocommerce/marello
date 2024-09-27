@@ -119,7 +119,7 @@ marello:
             status.label:        Status
             allocation_exclusion.label: Exclude from Allocation Process
             organization.label: Organization
-
+            comment.label:                Comment
             messages:
                 product_not_salable:    Product cannot be sold in the chosen Sales Channel
 

@@ -123,6 +123,7 @@ class RefundBalanceCalculator
             ->getRepository(TaxCode::class)
             ->find($item['taxCode']);
 
+        $this->taxRuleMatcher->setOrder($refund->getOrder());
         $taxRule = $this->taxRuleMatcher->match(
             $refund->getOrder()->getShippingAddress(),
             [$taxCode->getCode()]
