@@ -4,16 +4,18 @@ namespace Marello\Bundle\ProductBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Marello\Bundle\ProductBundle\Async\Topic\ProductFilesUpdateTopic;
-use Marello\Bundle\ProductBundle\DependencyInjection\Configuration;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
+
 use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
+use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ProductBundle\DependencyInjection\Configuration;
+use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
+use Marello\Bundle\ProductBundle\Async\Topic\ProductFilesUpdateTopic;
 
 class ProductFilesUrlListener
 {
@@ -27,7 +29,7 @@ class ProductFilesUrlListener
 
     public function postPersist(Product $product, LifecycleEventArgs $args): void
     {
-        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::IMAGE_USE_EXTERNAL_URL_CONFIG))) {
+        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::USE_EXTERNAL_URL_CONFIG))) {
             return;
         }
 
@@ -45,24 +47,24 @@ class ProductFilesUrlListener
                 continue;
             }
 
-            $this->updateImageFileExternalUrl($value, false);
+            $this->updateFileExternalUrl($value, false);
         }
     }
 
     public function onFlush(OnFlushEventArgs $args): void
     {
-        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::IMAGE_USE_EXTERNAL_URL_CONFIG))) {
+        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::USE_EXTERNAL_URL_CONFIG))) {
             return;
         }
 
         $unitOfWork = $args->getObjectManager()->getUnitOfWork();
         if (!empty($unitOfWork->getScheduledEntityInsertions())) {
             $records = $this->filterRecords($unitOfWork->getScheduledEntityInsertions());
-            $this->applyCallBackForChangeSet([$this, 'updateImageFileExternalUrl'], $records);
+            $this->applyCallBackForChangeSet([$this, 'updateFileExternalUrl'], $records);
         }
         if (!empty($unitOfWork->getScheduledEntityUpdates())) {
             $records = $this->filterRecords($unitOfWork->getScheduledEntityUpdates());
-            $this->applyCallBackForChangeSet([$this, 'updateImageFileExternalUrl'], $records);
+            $this->applyCallBackForChangeSet([$this, 'updateFileExternalUrl'], $records);
         }
     }
 
@@ -82,7 +84,7 @@ class ProductFilesUrlListener
 
     public function onConfigUpdate(ConfigUpdateEvent $event): void
     {
-        $key = Configuration::getConfigKeyByName(Configuration::IMAGE_USE_EXTERNAL_URL_CONFIG);
+        $key = Configuration::getConfigKeyByName(Configuration::USE_EXTERNAL_URL_CONFIG);
         if (!$event->isChanged($key) || !$event->getNewValue($key)) {
             return;
         }
@@ -110,7 +112,7 @@ class ProductFilesUrlListener
         }
     }
 
-    protected function updateImageFileExternalUrl(File $file, bool $checkParent = true): void
+    protected function updateFileExternalUrl(File $file, bool $checkParent = true): void
     {
         if ($checkParent && Product::class !== $file->getParentEntityClass()) {
             return;
@@ -127,7 +129,7 @@ class ProductFilesUrlListener
             ->getEntityManager(Product::class)
             ->getConnection()
             ->getConfiguration()
-            ->setSQLLogger(); //turn off log
+            ->setSQLLogger();
 
         $qb = $em->createQueryBuilder('p');
         $query = $qb->select('p.id', 'p.sku');

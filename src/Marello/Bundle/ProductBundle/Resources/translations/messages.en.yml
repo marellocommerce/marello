@@ -173,7 +173,7 @@ marello:
                 product_configuration.title: Product Configuration
                 product_general.label: General
             fields:
-                image_use_external_url.label: Use External Url For Product Image
+                use_external_url.label: Use External Url For Product Files
 
     attachment:
         file:
