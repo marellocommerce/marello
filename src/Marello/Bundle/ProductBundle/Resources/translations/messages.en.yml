@@ -176,13 +176,15 @@ marello:
                 product_configuration.title: Product Configuration
                 product_general.label: General
             fields:
-                use_external_url.label: Use External Url For Product Files
+                use_external_url:
+                    label: Use External Url For Product Files
+                    tooltip: Enabling this feature will provide a URL for a product image or file in the API response. By default a binary is provided.
 
     attachment:
         file:
             media_url:
                 label:  'External Media Url'
-                description: 'External Url For Product Image'
+                description: 'External Url For Product File'
 oro:
     marelloproduct:
         menu:
@@ -193,4 +195,4 @@ oro:
         file:
             media_url:
                 label:  'External Media Url'
-                description: 'External Url For Product Image'
+                description: 'External Url For Product File'
