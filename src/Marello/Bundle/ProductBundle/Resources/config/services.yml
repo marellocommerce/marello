@@ -203,6 +203,7 @@ services:
             - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
             - '@oro_attachment.manager.image_resize'
             - '@oro_attachment.tools.mime_type_checker'
+            - '@Marello\Bundle\ProductBundle\Manager\ProductFileManager'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
@@ -270,3 +271,10 @@ services:
             - '@translator'
         tags:
             - { name: doctrine.orm.entity_listener, entity: Oro\Bundle\ImportExportBundle\Entity\ImportExportResult, event: postPersist }
+
+    Marello\Bundle\ProductBundle\Manager\ProductFileManager:
+        arguments:
+            - '@oro_attachment.manager.public_mediacache'
+            - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
+            - '@Oro\Bundle\AttachmentBundle\Manager\FileManager'
+            - '/media/cache/attachment/files/'

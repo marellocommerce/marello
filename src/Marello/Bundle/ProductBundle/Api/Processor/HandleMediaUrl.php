@@ -26,7 +26,7 @@ class HandleMediaUrl implements ProcessorInterface
     public function process(ContextInterface $context): void
     {
         $data = $context->getData();
-        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::IMAGE_USE_EXTERNAL_URL_CONFIG))) {
+        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::USE_EXTERNAL_URL_CONFIG))) {
             return;
         }
 

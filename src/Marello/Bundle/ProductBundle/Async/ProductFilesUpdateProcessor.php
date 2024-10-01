@@ -2,23 +2,26 @@
 
 namespace Marello\Bundle\ProductBundle\Async;
 
+use Psr\Log\LoggerInterface;
+
 use Doctrine\ORM\EntityManagerInterface;
 
-use Marello\Bundle\ProductBundle\Async\Topic\ProductFilesUpdateTopic;
-use Marello\Bundle\ProductBundle\DependencyInjection\Configuration;
-use Marello\Bundle\ProductBundle\Entity\Product;
+use Oro\Component\MessageQueue\Util\JSON;
 use Oro\Bundle\AttachmentBundle\Entity\File;
-use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
-use Oro\Bundle\AttachmentBundle\Manager\ImageResizeManagerInterface;
-use Oro\Bundle\AttachmentBundle\Tools\MimeTypeChecker;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\PropertyAccess;
-use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
-use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
+use Oro\Bundle\AttachmentBundle\Tools\MimeTypeChecker;
+use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Component\MessageQueue\Transport\MessageInterface;
 use Oro\Component\MessageQueue\Transport\SessionInterface;
-use Oro\Component\MessageQueue\Util\JSON;
-use Psr\Log\LoggerInterface;
+use Oro\Component\MessageQueue\Client\TopicSubscriberInterface;
+use Oro\Bundle\AttachmentBundle\Manager\ImageResizeManagerInterface;
+use Oro\Component\MessageQueue\Consumption\MessageProcessorInterface;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ProductBundle\Manager\ProductFileManager;
+use Marello\Bundle\ProductBundle\DependencyInjection\Configuration;
+use Marello\Bundle\ProductBundle\Async\Topic\ProductFilesUpdateTopic;
 
 class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
@@ -29,7 +32,9 @@ class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSub
         private AttachmentManager $attachmentManager,
         private ImageResizeManagerInterface $imageResizeManager,
         private MimeTypeChecker $mimeTypeChecker,
-        private array $imagesToApply = []
+        private ProductFileManager $productFileManager,
+        private array $imagesToApply = [],
+        private array $filesToApply = []
     ) {
     }
 
@@ -40,7 +45,7 @@ class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSub
 
     public function process(MessageInterface $message, SessionInterface $session): string
     {
-        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::IMAGE_USE_EXTERNAL_URL_CONFIG))) {
+        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::USE_EXTERNAL_URL_CONFIG))) {
             return self::REJECT;
         }
 
@@ -73,7 +78,12 @@ class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSub
             foreach ($this->imagesToApply as $image) {
                 $this->imageResizeManager->applyFilter($image, 'product_view');
             }
-            $this->imagesToApply = [];
+
+            foreach ($this->filesToApply as $file) {
+                $this->productFileManager->copyToPublicCache($file);
+            }
+
+            $this->imagesToApply = $this->filesToApply = [];
         } catch (\Exception $e) {
             $this->logger->error(
                 'Unexpected exception occurred during updating External Url for Product File',
@@ -93,7 +103,9 @@ class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSub
             $url = $this->attachmentManager->getFilteredImageUrl($file, 'product_view');
             $this->imagesToApply[] = $file;
         } else {
-            $url = $this->attachmentManager->getFileUrl($file);
+            // generate url based on custom public cache directory
+            $url = $this->productFileManager->getFileUrl($file);
+            $this->filesToApply[] = $file;
         }
 
         // media url is an extended field, so it will not 'show up' in the auto complete
