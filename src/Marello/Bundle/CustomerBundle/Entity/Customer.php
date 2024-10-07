@@ -60,22 +60,24 @@ class Customer implements
     #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true, 'order' => 10]])]
     protected ?int $id = null;
 
-    #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'primary_address_id', referencedColumnName: 'id', nullable: true)]
     #[Oro\ConfigField(defaultValues: [
         'dataaudit' => ['auditable' => true]
     ])]
     protected ?MarelloAddress $primaryAddress = null;
 
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id', nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?MarelloAddress $shippingAddress = null;
+
     #[ORM\Column(name: 'customer_number', type: Types::STRING, nullable: true)]
     protected $customerNumber;
-
-    #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id', nullable: true)]
-    #[Oro\ConfigField(defaultValues: [
-        'dataaudit' => ['auditable' => true]
-    ])]
-    protected ?MarelloAddress $shippingAddress = null;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: [

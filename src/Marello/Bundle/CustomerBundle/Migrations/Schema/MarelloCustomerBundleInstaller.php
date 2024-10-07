@@ -34,7 +34,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_5_3';
+        return 'v1_5_4';
     }
 
     /**
@@ -45,6 +45,7 @@ class MarelloCustomerBundleInstaller implements
         $this->createMarelloCompanyTable($schema);
         $this->createMarelloCompanyJoinAddressTable($schema);
         $this->createMarelloCustomerTable($schema);
+
         $this->addMarelloCompanyForeignKeys($schema);
         $this->addMarelloCompanyJoinAddressForeignKeys($schema);
         $this->addMarelloCustomerForeignKeys($schema);
@@ -110,10 +111,10 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('customer_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
+        $table->addIndex(['primary_address_id']);
+        $table->addIndex(['shipping_address_id']);
         $table->addUniqueIndex(['email', 'organization_id'], 'marello_customer_emailorgidx');
         $table->addUniqueIndex(['customer_number', 'organization_id'], 'marello_customer_numberorgidx');
-        $table->addUniqueIndex(['primary_address_id'], 'UNIQ_AD0CE5A2CB134313');
-        $table->addUniqueIndex(['shipping_address_id'], 'UNIQ_AD0CE5A24D4CFF2B');
 
         $this->attachmentExtension->addAttachmentAssociation($schema, $table->getName());
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', $table->getName());
