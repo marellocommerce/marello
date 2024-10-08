@@ -55,6 +55,10 @@ services:
 ##            - { name: doctrine.event_listener, event: postRemove }
 #            - { name: container.service_subscriber, id: oro_email.email_address_visibility.manager }
 
+    Marello\Bundle\CustomerBundle\EventListener\Entity\CustomerEventListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
     marello_customer.form.autocomplete.company.search_handler:
         public: false
         parent: oro_form.autocomplete.search_handler

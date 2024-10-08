@@ -52,9 +52,6 @@ class CustomerHandler implements FormHandlerInterface
      */
     protected function onSuccess(Customer $entity)
     {
-        // make sure email is lower cased when saved...
-        $entity->setEmail(mb_strtolower($entity->getEmail()));
-        $entity->setEmailLowercase(mb_strtolower($entity->getEmail()));
         $this->manager->persist($entity->getPrimaryAddress());
         if ($entity->getShippingAddress()) {
             $this->manager->persist($entity->getShippingAddress());

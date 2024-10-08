@@ -6,6 +6,7 @@ use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\AttachmentBundle\Manager\FileManager;
 use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\GaufretteBundle\FileManager as GaufretteFileManager;
+
 /**
  * Manage full process of saving product related files into public cache directories.
  */
@@ -53,7 +54,7 @@ class ProductFileManager
     {
         // assuming it's original storagepath contains either get, or download
         if (str_contains($path, 'get') || str_contains($path, 'download')) {
-            $path = str_replace(['get', 'download'],'files', $path);
+            $path = str_replace(['get', 'download'], 'files', $path);
         }
 
         return '/' . ltrim($path, '/');

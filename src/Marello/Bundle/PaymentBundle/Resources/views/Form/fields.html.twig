@@ -6,8 +6,7 @@
         {% set collapseId = 'shipping-methods-collection' ~ form.parent.vars.id %}
     {% endif %}
 
-    <div class="payment-method-config shipping-method-config-{{ form.typeConfigs.vars.is_grouped ? 'grouped' : 'simple' }}"
-         data-role="method-view">
+    <div class="payment-method-config" data-role="method-view">
         {% if form.method.vars.value %}
             {% set collapseId = collapseId~ form.method.vars.value %}
             <div class="payment-method-config__header"
