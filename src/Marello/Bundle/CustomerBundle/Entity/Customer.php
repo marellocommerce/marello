@@ -220,7 +220,7 @@ class Customer implements
      */
     public function setPrimaryAddress(MarelloAddress $primaryAddress = null): self
     {
-        $primaryAddress->setCustomer($this);
+        $primaryAddress?->setCustomer($this);
         $this->primaryAddress = $primaryAddress;
 
         return $this;
@@ -233,7 +233,7 @@ class Customer implements
      */
     public function setShippingAddress(MarelloAddress $shippingAddress = null): self
     {
-        $shippingAddress->setCustomer($this);
+        $shippingAddress?->setCustomer($this);
         $this->shippingAddress = $shippingAddress;
 
         return $this;
