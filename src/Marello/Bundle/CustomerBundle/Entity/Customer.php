@@ -225,7 +225,7 @@ class Customer extends ExtendCustomer implements
      */
     public function setPrimaryAddress(MarelloAddress $primaryAddress)
     {
-        $primaryAddress->setCustomer($this);
+        $primaryAddress?->setCustomer($this);
         $this->primaryAddress = $primaryAddress;
 
         return $this;
@@ -238,7 +238,7 @@ class Customer extends ExtendCustomer implements
      */
     public function setShippingAddress(MarelloAddress $shippingAddress)
     {
-        $shippingAddress->setCustomer($this);
+        $shippingAddress?->setCustomer($this);
         $this->shippingAddress = $shippingAddress;
 
         return $this;
