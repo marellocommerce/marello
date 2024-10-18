@@ -21,13 +21,5 @@ class MarelloCustomerBundle implements Migration
         if ($table->hasIndex('UNIQ_AD0CE5A24D4CFF2B')) {
             $table->dropIndex('UNIQ_AD0CE5A24D4CFF2B');
         }
-
-        if ($table->hasColumn('primary_address_id')) {
-            $table->addIndex(['primary_address_id']);
-        }
-
-        if ($table->hasColumn('shipping_address_id')) {
-            $table->addIndex(['shipping_address_id']);
-        }
     }
 }
