@@ -4,6 +4,7 @@ services:
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@oro_config.user'
+            - '@Oro\Bundle\EmailBundle\Provider\TranslatedEmailTemplateProvider'
 
     marello_locale.entity_localization_provider.chain:
         class: 'Marello\Bundle\LocaleBundle\Provider\ChainEntityLocalizationProvider'

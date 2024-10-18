@@ -1,7 +1,7 @@
 oro:
     workflow:
         marello_order_b2c_workflow_1:
-            label: 'Order B2C Workflow #1'
+            label: 'Order B2C'
             attribute:
                 payment_reference:
                     label: 'Payment Reference'
@@ -59,7 +59,7 @@ oro:
                     label:    'Payment Reminder'
 
         marello_order_b2c_workflow_2:
-            label: 'Order B2C/B2B Workflow #2'
+            label: 'Order B2C/B2B'
             attribute:
                 payment_reference:
                     label: 'Payment Reference'

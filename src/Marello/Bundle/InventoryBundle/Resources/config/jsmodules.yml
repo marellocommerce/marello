@@ -1,3 +1,4 @@
 dynamic-imports:
     marelloinventory:
         - marelloinventory/js/app/components/marelloinventory-chart-component
+        - marelloinventory/js/app/views/inventorylevel-item-view

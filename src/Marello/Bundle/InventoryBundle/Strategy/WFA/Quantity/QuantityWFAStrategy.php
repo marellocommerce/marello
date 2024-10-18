@@ -97,8 +97,8 @@ class QuantityWFAStrategy implements WFAStrategyInterface
     ): array {
         $productsByWh = [];
         $warehouses = [];
-        $items = $this->exclusionProvider->getItems($order, $allocation);
         $useDifferentSalesChannel = false;
+        $items = $this->exclusionProvider->getItems($order, $allocation);
         if ($specifiedItems) {
             $items = $this->allocationItemFilterProvider->getFilteredItems($specifiedItems);
             $useDifferentSalesChannel = $this
@@ -147,19 +147,16 @@ class QuantityWFAStrategy implements WFAStrategyInterface
                 );
                 return [];
             }
-            $itemsByProducts[sprintf(
-                '%s_|_%s',
-                $item->getProduct()->getSku(),
-                $item->getId() ? : $key
-            )] = $item;
 
             if ($item instanceof AllocationItem) {
                 $inventoryItem = $item->getProduct()->getInventoryItem();
+                $itemIdentifier = $item->getOrderItem()->getVariantHash();
             } else {
                 $inventoryItem = $item->getInventoryItem();
+                $itemIdentifier = $item->getVariantHash();
             }
 
-            $productSku = $inventoryItem->getProduct()->getSku();
+            $itemsByProducts[$itemIdentifier] = $item;
             $itemQtyToAllocateLeft = $item->getQuantity();
             // allocation for order of batches is not allocated correctly if more orders are open (for OoD)
             $inventoryLevels = $this->getInventoryLevelCandidates($inventoryItem, $item, $warehousesIds);
@@ -184,11 +181,11 @@ class QuantityWFAStrategy implements WFAStrategyInterface
                 if ($batch && $batch->getQuantity() > 0) {
                     $warehouse = $batch->getInventoryLevel()->getWarehouse();
                     $warehouses[$warehouse->getCode()] = $warehouse;
-                    $productsByWh[$productSku]['selected_wh'][$warehouse->getCode()] = $item->getQuantity();
+                    $productsByWh[$itemIdentifier]['selected_wh'][$warehouse->getCode()] = $item->getQuantity();
                     $quantityAvailable = $batch->getQuantity();
                 } else {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $item->getQuantity();
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $item->getQuantity();
                     $quantityAvailable = $item->getQuantity();
                 }
             }
@@ -225,11 +222,11 @@ class QuantityWFAStrategy implements WFAStrategyInterface
                             $inventoryQty = $inventoryCount = $virtualInventoryQuantity;
                         }
 
-                        $productsByWh[$productSku]['selected_wh'][$warehouse->getCode()] = $inventoryQty;
+                        $productsByWh[$itemIdentifier]['selected_wh'][$warehouse->getCode()] = $inventoryQty;
                         $quantityAvailable += $inventoryCount;
                     } else {
                         // default behaviour
-                        $productsByWh[$productSku]['selected_wh'][$warehouse->getCode()] = $virtualInventoryQuantity;
+                        $productsByWh[$itemIdentifier]['selected_wh'][$warehouse->getCode()] = $virtualInventoryQuantity;
                         $quantityAvailable += $virtualInventoryQuantity;
                     }
                     $itemQtyToAllocateLeft -= $virtualInventoryQuantity;
@@ -237,30 +234,30 @@ class QuantityWFAStrategy implements WFAStrategyInterface
 
                 if ($this->isItemAvailable($item, $inventoryItem, 'ondemand')) {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
                     $quantityAvailable += $item->getQuantity();
                 }
 
                 if ($this->isItemAvailable($item, $inventoryItem, 'preorder')) {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
                     $quantityAvailable += $item->getQuantity();
                 }
 
                 if ($this->isItemAvailable($item, $inventoryItem, 'backorder')) {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
                     $quantityAvailable += $item->getQuantity();
                 }
             }
 
             // for one reason or another, no warehouse could be found for this product
             // so add it to the no allocation warehouse to prevent errors but create an allocation with an alert state
-            if (!isset($productsByWh[$productSku]['selected_wh'])) {
-                $productsByWh[$productSku]['selected_wh'][$noAllocationWarehouse->getCode()] = $item->getQuantity();
+            if (!isset($productsByWh[$itemIdentifier]['selected_wh'])) {
+                $productsByWh[$itemIdentifier]['selected_wh'][$noAllocationWarehouse->getCode()] = $item->getQuantity();
             }
-            $productsByWh[$inventoryItem->getProduct()->getSku()]['qtyOrdered'] = $item->getQuantity();
-            $productsByWh[$inventoryItem->getProduct()->getSku()]['qtyAvailable'] = $quantityAvailable;
+            $productsByWh[$itemIdentifier]['qtyOrdered'] = $item->getQuantity();
+            $productsByWh[$itemIdentifier]['qtyAvailable'] = $quantityAvailable;
         }
         $possibleOptionsToFulfill = array_map(
             function ($item) {

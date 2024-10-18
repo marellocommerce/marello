@@ -17,7 +17,9 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\CoreBundle\Model\HashAwareInterface;
 use Marello\Bundle\TaxBundle\Model\TaxAwareInterface;
+use Marello\Bundle\CoreBundle\Model\HashAwareTrait;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
@@ -49,9 +51,11 @@ class OrderItem implements
     TaxAwareInterface,
     ProductAwareInterface,
     OrderAwareInterface,
+    HashAwareInterface,
     OrganizationAwareInterface,
     ExtendEntityInterface
 {
+    use HashAwareTrait;
     use AuditableUserAwareTrait;
     use ExtendEntityTrait;
 

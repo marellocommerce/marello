@@ -1,7 +1,7 @@
 oro:
     workflow:
         marello_order_pos_workflow:
-            label: 'Order POS Workflow'
+            label: 'Order POS'
             attribute:
                 payment_reference:
                     label:      'Payment Reference'

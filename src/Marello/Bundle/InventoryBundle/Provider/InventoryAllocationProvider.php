@@ -288,7 +288,8 @@ class InventoryAllocationProvider
             if ($allocation->getWarehouse()) {
                 $allocationItem->setWarehouse($allocation->getWarehouse());
             }
-            $allocationItem->setQuantity($itemWithQty[$item->getProductSku()]);
+
+            $allocationItem->setQuantity($itemWithQty[$orderItem->getVariantHash()]);
             $allocationItem->setTotalQuantity($orderItem->getQuantity());
             $inventoryItem = $item->getProduct()->getInventoryItem();
             if ($inventoryItem && $allocation->getWarehouse()) {
