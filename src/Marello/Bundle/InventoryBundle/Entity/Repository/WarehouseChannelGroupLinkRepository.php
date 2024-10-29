@@ -22,7 +22,7 @@ class WarehouseChannelGroupLinkRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('wcgl');
         $qb
             ->where($qb->expr()->eq('wcgl.system', $qb->expr()->literal(true)));
-        $results = $this->aclHelper->apply($qb)->getArrayResult();
+        $results = $qb->getQuery()->getResult();
 
         return reset($results);
     }

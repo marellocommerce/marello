@@ -152,6 +152,9 @@ class LoadSalesChannelGroupData extends AbstractFixture implements
             ->findSystemLink();
 
         if ($systemWarehouseChannelGroupLink) {
+            if (is_array($systemWarehouseChannelGroupLink)) {
+                $systemWarehouseChannelGroupLink = array_shift($systemWarehouseChannelGroupLink);
+            }
             $systemWarehouseChannelGroupLink->addSalesChannelGroup($channelGroup);
             $this->manager->persist($systemWarehouseChannelGroupLink);
         }
