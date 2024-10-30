@@ -232,7 +232,6 @@ datagrids:
                     and:
                         - IDENTITY(p.variant) = :variantId
                         - p.id != :productId
-                groupBy: p.id, p.sku, s.label
             bind_parameters:
                 - variantId
                 - productId
@@ -297,7 +296,6 @@ datagrids:
                 where:
                     and:
                         - p.id != :product
-                groupBy: p.id, status
             bind_parameters:
                 -
                     name: variant
