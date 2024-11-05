@@ -123,6 +123,7 @@ marello:
             owner.label:        Owner
             item_type.label:    Order Item Type
             comment.label:                Comment
+            variant_hash.label:           Variant Hash
             messages:
                 product_not_salable:    Product cannot be sold in the chosen Sales Channel
 
