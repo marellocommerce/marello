@@ -1,6 +1,6 @@
 <?php
 
-namespace marello\src\Marello\Bundle\OrderBundle\Migrations\Schema\v3_1_9;
+namespace Marello\Bundle\OrderBundle\Migrations\Schema\v3_1_9;
 
 use Doctrine\DBAL\Schema\Schema;
 
