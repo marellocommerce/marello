@@ -10,6 +10,21 @@ use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageTypeInt
 
 class NotificationMessageContextFactory
 {
+    /**
+     * Create Error Notification Message
+     * @param string $source
+     * @param string $title
+     * @param string $message
+     * @param string|null $solution
+     * @param object|null $entity
+     * @param string|null $operation
+     * @param string|null $step
+     * @param string|null $externalId
+     * @param string|null $log
+     * @param OrganizationInterface|null $organization
+     * @param bool $flush
+     * @return NotificationMessageContext
+     */
     public static function createError(
         string $source,
         string $title,
@@ -22,6 +37,7 @@ class NotificationMessageContextFactory
         ?string $log = null,
         ?OrganizationInterface $organization = null,
         bool $flush = true,
+        bool $queue = false
     ): NotificationMessageContext {
         return self::create(
             NotificationMessageTypeInterface::NOTIFICATION_MESSAGE_TYPE_ERROR,
@@ -36,10 +52,26 @@ class NotificationMessageContextFactory
             $externalId,
             $log,
             $organization,
-            $flush
+            $flush,
+            $queue
         );
     }
 
+    /**
+     * Create Warning Notification Message
+     * @param string $source
+     * @param string $title
+     * @param string $message
+     * @param string|null $solution
+     * @param object|null $entity
+     * @param string|null $operation
+     * @param string|null $step
+     * @param string|null $externalId
+     * @param string|null $log
+     * @param OrganizationInterface|null $organization
+     * @param bool $flush
+     * @return NotificationMessageContext
+     */
     public static function createWarning(
         string $source,
         string $title,
@@ -52,6 +84,7 @@ class NotificationMessageContextFactory
         ?string $log = null,
         ?OrganizationInterface $organization = null,
         bool $flush = true,
+        bool $queue = false
     ): NotificationMessageContext {
         return self::create(
             NotificationMessageTypeInterface::NOTIFICATION_MESSAGE_TYPE_WARNING,
@@ -66,10 +99,26 @@ class NotificationMessageContextFactory
             $externalId,
             $log,
             $organization,
-            $flush
+            $flush,
+            $queue
         );
     }
 
+    /**
+     * Create Success Notification Message
+     * @param string $source
+     * @param string $title
+     * @param string $message
+     * @param string|null $solution
+     * @param object|null $entity
+     * @param string|null $operation
+     * @param string|null $step
+     * @param string|null $externalId
+     * @param string|null $log
+     * @param OrganizationInterface|null $organization
+     * @param bool $flush
+     * @return NotificationMessageContext
+     */
     public static function createSuccess(
         string $source,
         string $title,
@@ -82,6 +131,7 @@ class NotificationMessageContextFactory
         ?string $log = null,
         ?OrganizationInterface $organization = null,
         bool $flush = true,
+        bool $queue = false
     ): NotificationMessageContext {
         return self::create(
             NotificationMessageTypeInterface::NOTIFICATION_MESSAGE_TYPE_SUCCESS,
@@ -96,10 +146,26 @@ class NotificationMessageContextFactory
             $externalId,
             $log,
             $organization,
-            $flush
+            $flush,
+            $queue
         );
     }
 
+    /**
+     * Create Info Notification Message
+     * @param string $source
+     * @param string $title
+     * @param string $message
+     * @param string|null $solution
+     * @param object|null $entity
+     * @param string|null $operation
+     * @param string|null $step
+     * @param string|null $externalId
+     * @param string|null $log
+     * @param OrganizationInterface|null $organization
+     * @param bool $flush
+     * @return NotificationMessageContext
+     */
     public static function createInfo(
         string $source,
         string $title,
@@ -112,6 +178,7 @@ class NotificationMessageContextFactory
         ?string $log = null,
         ?OrganizationInterface $organization = null,
         bool $flush = true,
+        bool $queue = false
     ): NotificationMessageContext {
         return self::create(
             NotificationMessageTypeInterface::NOTIFICATION_MESSAGE_TYPE_INFO,
@@ -126,11 +193,29 @@ class NotificationMessageContextFactory
             $externalId,
             $log,
             $organization,
-            $flush
+            $flush,
+            $queue
         );
     }
 
-    protected static function create(
+    /**
+     * Create generic Notification Message
+     * @param string $alertType
+     * @param string $resolved
+     * @param string $source
+     * @param string $title
+     * @param string $message
+     * @param string|null $solution
+     * @param object|null $entity
+     * @param string|null $operation
+     * @param string|null $step
+     * @param string|null $externalId
+     * @param string|null $log
+     * @param OrganizationInterface|null $organization
+     * @param bool $flush
+     * @return NotificationMessageContext
+     */
+    public static function create(
         string $alertType,
         string $resolved,
         string $source,
@@ -144,6 +229,7 @@ class NotificationMessageContextFactory
         ?string $log = null,
         ?OrganizationInterface $organization = null,
         bool $flush = true,
+        bool $queue = false
     ): NotificationMessageContext {
         $context = new NotificationMessageContext();
         $context->alertType = $alertType;
@@ -174,6 +260,7 @@ class NotificationMessageContextFactory
         }
 
         $context->flush = $flush;
+        $context->queue = $queue;
 
         return $context;
     }

@@ -2,8 +2,9 @@
 
 namespace Marello\Bundle\NotificationMessageBundle\Event;
 
-use Marello\Bundle\NotificationMessageBundle\Model\NotificationMessageContext;
 use Symfony\Contracts\EventDispatcher\Event;
+
+use Marello\Bundle\NotificationMessageBundle\Model\NotificationMessageContext;
 
 class CreateNotificationMessageEvent extends Event
 {

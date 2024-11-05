@@ -62,10 +62,8 @@ class OrderToPackingSlipMapper extends AbstractPackingSlipMapper
     {
         $packingSlipItem = new PackingSlipItem();
         $packingSlipItemData = $this->getData($allocationItem, PackingSlipItem::class);
-        /** @var Product $product */
         $product = $allocationItem->getProduct();
-        /** @var InventoryItem $inventoryItem */
-        $inventoryItem = $product->getInventoryItems()->first();
+        $inventoryItem = $product->getInventoryItem();
         if ($inventoryItem) {
             if ($inventoryLevel = $inventoryItem->getInventoryLevel($warehouse)) {
                 $inventoryBatches = $inventoryLevel->getInventoryBatches()->toArray();
@@ -85,7 +83,7 @@ class OrderToPackingSlipMapper extends AbstractPackingSlipMapper
                     $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
                     foreach ($inventoryBatches as $inventoryBatch) {
                         // we cannot use expired batches
-                        if ($inventoryBatch->getExpirationDate() && $inventoryBatch->getExpirationDate() <= $currentDateTime) {
+                        if ($inventoryBatch->getSellByDate() && $inventoryBatch->getSellByDate() <= $currentDateTime) {
                             continue;
                         }
                         if ($inventoryBatch->getQuantity() >= $quantity) {
