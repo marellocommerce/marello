@@ -53,8 +53,8 @@ class TaxRulesControllerTest extends WebTestCase
 
         /** @var TaxRule $taxRule */
         $taxRule = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloTaxBundle:TaxRule')
-            ->getRepository('MarelloTaxBundle:TaxRule')
+            ->getManagerForClass(TaxRule::class)
+            ->getRepository(TaxRule::class)
             ->findOneBy(['taxCode' => $this->getTaxCode(LoadTaxCodeData::TAXCODE_0_REF)]);
         $this->assertNotEmpty($taxRule);
 

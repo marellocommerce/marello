@@ -109,21 +109,18 @@
         },
         {
             'title': 'marello.order.entity_plural_label'|trans,
-            'class': 'active',
             'subblocks': [
                 { 'data': [order] }
             ]
         },
         {
             'title': 'marello.return.returnentity.entity_plural_label'|trans,
-            'class': 'active',
             'subblocks': [
                 { 'data': [return] }
             ]
         },
         {
             'title': 'marello.refund.entity_plural_label'|trans,
-            'class': 'active',
             'subblocks': [
                 { 'data': [refund] }
             ]
@@ -140,7 +137,6 @@
             {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': additionalInfo.label|trans,
-                    'class': 'active',
                     'subblocks': [
                         { 'data': [customerAdditionalInfoSection] }
                     ]

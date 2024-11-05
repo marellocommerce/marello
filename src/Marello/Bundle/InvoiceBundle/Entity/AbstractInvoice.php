@@ -2,59 +2,51 @@
 
 namespace Marello\Bundle\InvoiceBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-use Marello\Bundle\PaymentBundle\Entity\Payment;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
-use Marello\Bundle\PricingBundle\Subtotal\Model\LineItemsAwareInterface;
-use Marello\Bundle\PricingBundle\Subtotal\Model\SubtotalAwareInterface;
+use Marello\Bundle\PaymentBundle\Entity\Payment;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Bundle\PricingBundle\Subtotal\Model\SubtotalAwareInterface;
+use Marello\Bundle\PricingBundle\Subtotal\Model\LineItemsAwareInterface;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
+use Marello\Bundle\InvoiceBundle\Entity\Repository\AbstractInvoiceRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InvoiceBundle\Entity\Repository\AbstractInvoiceRepository")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="string")
- * @ORM\DiscriminatorMap({
- *     "invoice"="Marello\Bundle\InvoiceBundle\Entity\Invoice",
- *     "creditmemo"="Marello\Bundle\InvoiceBundle\Entity\Creditmemo"
- * })
- * @ORM\Table(name="marello_invoice_invoice")
- * @Oro\Config(
- *      routeView="marello_invoice_invoice_view",
- *      routeName="marello_invoice_invoice_index",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-file-invoice"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table(name: 'marello_invoice_invoice')]
+#[ORM\Entity(repositoryClass: AbstractInvoiceRepository::class)]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'type', type: 'string')]
+#[ORM\DiscriminatorMap([
+    'invoice' => 'Marello\Bundle\InvoiceBundle\Entity\Invoice',
+    'creditmemo' => 'Marello\Bundle\InvoiceBundle\Entity\Creditmemo'])]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    routeView: 'marello_invoice_invoice_view',
+    routeName: 'marello_invoice_invoice_index',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-file-invoice'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 abstract class AbstractInvoice implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -68,224 +60,119 @@ abstract class AbstractInvoice implements
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     * @ORM\Column(name="invoice_type", type="string", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'invoice_type', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $invoiceType;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="invoice_number", type="string", unique=true, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'invoice_number', type: Types::STRING, unique: true, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $invoiceNumber;
 
     /**
      * @var MarelloAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'billing_address_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $billingAddress;
 
     /**
      * @var MarelloAddress
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist"})
-     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'shipping_address_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: MarelloAddress::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAddress;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="invoiced_at", type="datetime", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'invoiced_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $invoicedAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="invoice_due_date", type="datetime", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'invoice_due_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $invoiceDueDate;
 
     /**
      * @var string
-     * @ORM\Column(name="payment_method", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'payment_method', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $paymentMethod;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="shipping_method", type="string", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'shipping_method', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingMethod;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="shipping_method_type", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'shipping_method_type', type: Types::STRING, length: 255, nullable: true)]
     protected $shippingMethodType;
 
     /**
      * @var Order
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order")
-     * @ORM\JoinColumn(onDelete="cascade", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(onDelete: 'cascade', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $order;
 
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=10, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 10, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $currency;
 
     /**
      * @var string
-     * @ORM\Column(name="status", type="string", length=10, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'status', type: Types::STRING, length: 10, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $status;
 
     /**
      * @var Customer
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer", cascade={"persist"})
-     * @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $customer;
 
     /**
      * @var SalesChannel
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $salesChannel;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="saleschannel_name", type="string", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'saleschannel_name', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannelName;
 
     /**
@@ -295,124 +182,67 @@ abstract class AbstractInvoice implements
 
     /**
      * @var Collection|Payment[]
-     *
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\PaymentBundle\Entity\Payment", cascade={"persist"})
-     * @ORM\JoinTable(name="marello_invoice_payments",
-     *      joinColumns={@ORM\JoinColumn(name="invoice_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="payment_id", referencedColumnName="id", unique=true, onDelete="CASCADE")
-     *      }
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinTable(name: 'marello_invoice_payments')]
+    #[ORM\JoinColumn(name: 'invoice_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'payment_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
+    #[ORM\ManyToMany(targetEntity: Payment::class, cascade: ['persist'])]
+    #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $payments;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="subtotal", type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'subtotal', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $subtotal = 0;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="total_tax", type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'total_tax', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalTax = 0;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="grand_total", type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'grand_total', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $grandTotal = 0;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="shipping_amount_incl_tax", type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'shipping_amount_incl_tax', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAmountInclTax;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="shipping_amount_excl_tax", type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'shipping_amount_excl_tax', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAmountExclTax;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="total_due", type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'total_due', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalDue = 0;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="total_paid", type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'total_paid', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalPaid = 0;
 
     /**

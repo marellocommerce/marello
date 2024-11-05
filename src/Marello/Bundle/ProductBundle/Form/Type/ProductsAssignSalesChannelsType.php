@@ -2,10 +2,13 @@
 
 namespace Marello\Bundle\ProductBundle\Form\Type;
 
-use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 
 class ProductsAssignSalesChannelsType extends AbstractType
 {
@@ -45,7 +48,7 @@ class ProductsAssignSalesChannelsType extends AbstractType
                 'addSalesChannels',
                 EntityIdentifierType::class,
                 [
-                    'class'    => 'MarelloSalesBundle:SalesChannel',
+                    'class'    => SalesChannel::class,
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,
@@ -55,7 +58,7 @@ class ProductsAssignSalesChannelsType extends AbstractType
                 'removeSalesChannels',
                 EntityIdentifierType::class,
                 [
-                    'class'    => 'MarelloSalesBundle:SalesChannel',
+                    'class'    => SalesChannel::class,
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,

@@ -2,130 +2,99 @@
 
 namespace Marello\Bundle\ShippingBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
 use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository")
- * @ORM\Table(
- *     name="marello_ship_method_conf_rule"
- * )
- * @Config(
- *      routeName="marello_shipping_methods_configs_rule_index",
- *      routeView="marello_shipping_methods_configs_rule_view",
- *      routeCreate="marello_shipping_methods_configs_rule_create",
- *      routeUpdate="marello_shipping_methods_configs_rule_update",
- *      defaultValues={
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          }
- *      }
- * )
- */
+#[ORM\Table(name: 'marello_ship_method_conf_rule')]
+#[ORM\Entity(repositoryClass: ShippingMethodsConfigsRuleRepository::class)]
+#[Oro\Config(
+    routeName: 'marello_shipping_methods_configs_rule_index',
+    routeView: 'marello_shipping_methods_configs_rule_view',
+    routeCreate: 'marello_shipping_methods_configs_rule_create',
+    routeUpdate: 'marello_shipping_methods_configs_rule_update',
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => [
+            'auditable' => true
+        ],
+        'security' => [
+            'type' => 'ACL',
+            'group_name' => ''
+        ]
+    ]
+)]
 class ShippingMethodsConfigsRule implements RuleOwnerInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     private $id;
 
     /**
      * @var RuleInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\RuleBundle\Entity\Rule", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="rule_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=10
-     *          }
-     *      }
-     *  )
      */
+    #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\RuleBundle\Entity\Rule::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 10]])]
     private $rule;
 
     /**
      * @var Collection|ShippingMethodConfig[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig",
-     *     mappedBy="methodConfigsRule",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'methodConfigsRule',
+        targetEntity: ShippingMethodConfig::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     private $methodConfigs;
 
     /**
      * @var Collection|ShippingMethodsConfigsRuleDestination[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRuleDestination",
-     *     mappedBy="methodConfigsRule",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'methodConfigsRule',
+        targetEntity: ShippingMethodsConfigsRuleDestination::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     private $destinations;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="currency", type="string", length=3, nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=20
-     *          }
-     *      }
-     *  )
      */
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 3, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 20]])]
     private $currency;
 
     /**
      * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: \Oro\Bundle\OrganizationBundle\Entity\Organization::class)]
     private $organization;
 
     /**

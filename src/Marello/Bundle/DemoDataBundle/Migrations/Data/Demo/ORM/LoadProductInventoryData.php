@@ -2,15 +2,16 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 use Marello\Bundle\InventoryBundle\Manager\InventoryManager;
@@ -94,7 +95,7 @@ class LoadProductInventoryData extends AbstractFixture implements DependentFixtu
     private function createProductInventory(array $data)
     {
         $product = $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findOneBy(['sku' => $data['sku']]);
 
         if ($product) {

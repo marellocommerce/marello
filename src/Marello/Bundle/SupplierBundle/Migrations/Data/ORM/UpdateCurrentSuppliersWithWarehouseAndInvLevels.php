@@ -6,14 +6,14 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Bundle\SupplierBundle\Entity\Supplier;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
-use Marello\Bundle\InventoryBundle\Entity\Warehouse;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
-use Marello\Bundle\InventoryBundle\Migrations\Data\ORM\AddExternalWarehouseType;
-use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
 use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
-use Marello\Bundle\SupplierBundle\Entity\Supplier;
+use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
+use Marello\Bundle\InventoryBundle\Migrations\Data\ORM\AddExternalWarehouseType;
 
 class UpdateCurrentSuppliersWithWarehouseAndInvLevels extends AbstractFixture implements DependentFixtureInterface
 {
@@ -51,7 +51,7 @@ class UpdateCurrentSuppliersWithWarehouseAndInvLevels extends AbstractFixture im
     public function updateCurrentSuppliers()
     {
         $suppliers = $this->manager
-            ->getRepository('MarelloSupplierBundle:Supplier')
+            ->getRepository(Supplier::class)
             ->findBy(['canDropship' => true]);
 
         /** @var Supplier $supplier */

@@ -2,12 +2,14 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
+use Marello\Bundle\RuleBundle\Entity\Rule;
 use Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig;
 use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
-use Marello\Bundle\RuleBundle\Entity\Rule;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadPaymentRule extends AbstractFixture
 {
@@ -59,6 +61,6 @@ class LoadPaymentRule extends AbstractFixture
      */
     protected function getOrganization(ObjectManager $manager)
     {
-        return $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        return $manager->getRepository(Organization::class)->getFirst();
     }
 }

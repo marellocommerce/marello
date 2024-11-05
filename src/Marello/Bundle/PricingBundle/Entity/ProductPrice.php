@@ -3,54 +3,30 @@
 namespace Marello\Bundle\PricingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\ProductBundle\Entity\ProductInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 
 /**
  * Represents a Marello ProductPrice
- *
- * @ORM\Entity()
- * @ORM\Table(
- *      name="marello_product_price",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_product_price_uidx",
- *              columns={"product_id", "currency", "type"}
- *          )
- *      }
- * )
- * @Oro\Config(
- *  defaultValues={
- *      "entity"={"icon"="fa-usd"},
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      }
- *  }
- * )
  */
+#[ORM\Table(name: 'marello_product_price')]
+#[ORM\UniqueConstraint(name: 'marello_product_price_uidx', columns: ['product_id', 'currency', 'type'])]
+#[ORM\Entity]
+#[Oro\Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-usd'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class ProductPrice extends BasePrice
 {
-    /**
-     * @var Product
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="prices")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'prices')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $product;
 
     /**

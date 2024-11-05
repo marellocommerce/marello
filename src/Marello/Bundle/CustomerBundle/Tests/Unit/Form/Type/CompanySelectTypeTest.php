@@ -44,7 +44,8 @@ class CompanySelectTypeTest extends TestCase
                     $this->assertEquals('marello_customer_company_create', $options['create_form_route']);
                     $this->assertEquals(['placeholder' => 'marello.customer.company.form.choose'], $options['configs']);
                 }
-            );
+            )
+            ->willReturnSelf();
 
         $this->type->configureOptions($resolver);
     }

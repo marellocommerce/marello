@@ -1,0 +1,4 @@
+services:
+    Marello\Bundle\CustomerBundle\Api\Processor\SetLowerCaseEmailId:
+        tags:
+            - { name: oro.api.processor, action: get, group: normalize_input, class: Marello\Bundle\CustomerBundle\Entity\Customer }

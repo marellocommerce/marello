@@ -24,6 +24,7 @@ class OrderItemTest extends TestCase
             ['product', new Product()],
             ['productName', 'some string'],
             ['productSku', 'some string'],
+            ['variantHash', md5('some string'), false],
             ['order', new Order()],
             ['quantity', 42],
             ['price', 42],

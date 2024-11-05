@@ -2,41 +2,38 @@
 
 namespace Marello\Bundle\NotificationMessageBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
+
+use Oro\Bundle\UserBundle\Entity\Group;
 use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
-use Oro\Bundle\UserBundle\Entity\Group;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\NotificationMessageBundle\Entity\Repository\NotificationMessageRepository")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="marello_notification_message")
- * @Oro\Config(
- *     routeView="marello_notificationmessage_view",
- *     routeName="marello_notificationmessage_index",
- *     defaultValues={
- *         "grouping"={
- *             "groups"={"activity"}
- *         },
- *         "ownership"={
- *             "owner_type"="ORGANIZATION",
- *             "owner_field_name"="organization",
- *             "owner_column_name"="organization_id"
- *         },
- *         "security"={
- *             "type"="ACL",
- *             "group_name"=""
- *         },
- *     }
- * )
- */
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\NotificationMessageBundle\Entity\Repository\NotificationMessageRepository;
+
+#[ORM\Table(name: 'marello_notification_message')]
+#[ORM\Entity(repositoryClass: NotificationMessageRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    routeView: 'marello_notificationmessage_view',
+    routeName: 'marello_notificationmessage_index',
+    defaultValues: [
+        'grouping' => ['groups' => ['activity']],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class NotificationMessage implements OrganizationAwareInterface, ActivityInterface, ExtendEntityInterface
 {
     use AuditableOrganizationAwareTrait;
@@ -45,126 +42,98 @@ class NotificationMessage implements OrganizationAwareInterface, ActivityInterfa
     use ExtendEntityTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=64)
      */
+    #[ORM\Column(name: 'title', type: Types::STRING, length: 64)]
     private $title;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="message", type="string", length=255)
      */
+    #[ORM\Column(name: 'message', type: Types::STRING, length: 255)]
     private $message;
 
     /**
      * @var int|null
-     *
-     * @ORM\Column(name="related_item_id", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'related_item_id', type: Types::INTEGER, nullable: true)]
     private $relatedItemId;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="related_item_class", type="string", length=100, nullable=true)
      */
+    #[ORM\Column(name: 'related_item_class', type: Types::STRING, length: 100, nullable: true)]
     private $relatedItemClass;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="solution", type="text", nullable=true)
      */
+    #[ORM\Column(name: 'solution', type: Types::TEXT, nullable: true)]
     private $solution;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="operation", type="string", length=100, nullable=true)
      */
+    #[ORM\Column(name: 'operation', type: Types::STRING, length: 100, nullable: true)]
     private $operation;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="step", type="string", length=100, nullable=true)
      */
+    #[ORM\Column(name: 'step', type: Types::STRING, length: 100, nullable: true)]
     private $step;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="external_id", type="string", length=100, nullable=true)
      */
+    #[ORM\Column(name: 'external_id', type: Types::STRING, length: 100, nullable: true)]
     private $externalId;
 
     /**
      * @var string|null
-     *
-     * @ORM\Column(name="log", type="text", nullable=true)
      */
+    #[ORM\Column(name: 'log', type: Types::TEXT, nullable: true)]
     private $log;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\Group")
-     * @ORM\JoinColumn(name="user_group_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      *
      * @var Group|null
      */
+    #[ORM\JoinColumn(name: 'user_group_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Group::class)]
     protected $userGroup;
 
     /**
      * @var \Extend\Entity\EV_Marello_NotificationMessage_AlertType
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $alertType;
 
     /**
      * @var \Extend\Entity\EV_Marello_NotificationMessage_Source
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $source;
 
     /**
      * @var \Extend\Entity\EV_Marello_NotificationMessage_Resolved
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $resolved;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="count", type="integer")
      */
+    #[ORM\Column(name: 'count', type: Types::INTEGER)]
     private $count = 1;
 
     /**

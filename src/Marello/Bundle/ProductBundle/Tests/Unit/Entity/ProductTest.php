@@ -40,7 +40,7 @@ class ProductTest extends TestCase
     {
         $this->assertPropertyAccessors(new Product(), [
             ['id', 42],
-            ['sku', 'some string'],
+            ['sku', 'some string', false],
             ['manufacturingCode', 'some string'],
             ['status', new ProductStatus('active')],
             ['type', 'some string'],

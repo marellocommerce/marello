@@ -2,55 +2,48 @@
 
 namespace Marello\Bundle\ReturnBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
-use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\ShippingBundle\Entity\HasShipmentTrait;
-use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
-use Marello\Bundle\ShippingBundle\Integration\ShippingAwareInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\ReturnBundle\Entity\Repository\ReturnEntityRepository")
- * @ORM\Table(name="marello_return_return")
- * @ORM\HasLifecycleCallbacks()
- * @Oro\Config(
- *      routeView="marello_return_return_view",
- *      routeName="marello_return_return_index",
- *      routeCreate="marello_return_return_create",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-undo"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "grid"={
- *              "default"="marello-return-select-grid"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
+use Marello\Bundle\ShippingBundle\Entity\HasShipmentTrait;
+use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\SalesBundle\Model\SalesChannelAwareInterface;
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
+use Marello\Bundle\ShippingBundle\Integration\ShippingAwareInterface;
+use Marello\Bundle\ReturnBundle\Entity\Repository\ReturnEntityRepository;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
+
+#[ORM\Table(name: 'marello_return_return')]
+#[ORM\Entity(repositoryClass: ReturnEntityRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    routeView: 'marello_return_return_view',
+    routeName: 'marello_return_return_index',
+    routeCreate: 'marello_return_return_create',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-undo'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'grid' => ['default' => 'marello-return-select-grid'],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class ReturnEntity implements
     DerivedPropertyAwareInterface,
     ShippingAwareInterface,
@@ -68,133 +61,75 @@ class ReturnEntity implements
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var Order
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\ManyToOne(targetEntity: Order::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $order;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="return_number", type="string", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'return_number', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $returnNumber;
 
     /**
      * @var Collection|ReturnItem[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ReturnBundle\Entity\ReturnItem",
-     *     mappedBy="return",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn]
+    #[ORM\OneToMany(
+        mappedBy: 'return',
+        targetEntity: ReturnItem::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[Oro\ConfigField(
+        defaultValues: ['email' => ['available_in_template' => true], 'dataaudit' => ['auditable' => true]]
+    )]
     protected $returnItems;
 
     /**
      * @var SalesChannel
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
-     * @ORM\JoinColumn(name="sales_channel_id", onDelete="SET NULL", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'sales_channel_id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannel;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="sales_channel_name",type="string", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'sales_channel_name', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannelName;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="return_reference",type="string", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'return_reference', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $returnReference;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="received_at", type="datetime", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'received_at', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $receivedAt;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="track_trace_code", type="string", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'track_trace_code', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $trackTraceCode;
 
     /**

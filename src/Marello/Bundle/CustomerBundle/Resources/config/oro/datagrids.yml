@@ -7,7 +7,10 @@ datagrids:
                     - c.id
                     - c
                 from:
-                    - { table: MarelloCustomerBundle:Customer, alias: c }
+                    - { table: Marello\Bundle\CustomerBundle\Entity\Customer, alias: c }
+                where:
+                    and:
+                        - c.isHidden = false
         columns:
             id:
                 label: marello.customer.id.label
@@ -101,11 +104,13 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
             update:
                 type:       navigate
+                label:      oro.grid.action.update
                 link:       update_link
                 icon:       edit
         options:
@@ -152,7 +157,7 @@ datagrids:
                     - company.name
                     - parent.name as parent_name
                 from:
-                    - { table: MarelloCustomerBundle:Company, alias: company }
+                    - { table: Marello\Bundle\CustomerBundle\Entity\Company, alias: company }
                 join:
                     left:
                         - { join: company.parent, alias: parent }

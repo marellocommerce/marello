@@ -10,7 +10,7 @@
  */
 namespace Marello\Bundle\DataGridBundle\Grid;
 
-use Symfony\Component\Intl\NumberFormatter\NumberFormatter as IntlFormatter;
+use NumberFormatter as IntlNumberFormatter;
 
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
@@ -65,7 +65,7 @@ class FormatterContextResolver
     public static function getResolverPercentageClosure()
     {
         return function (ResultRecordInterface $record, $value, NumberFormatter $formatter) {
-            return [[IntlFormatter::MAX_FRACTION_DIGITS => 2]];
+            return [[IntlNumberFormatter::MAX_FRACTION_DIGITS => 2]];
         };
     }
 }

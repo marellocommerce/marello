@@ -44,7 +44,8 @@ class ParentCompanySelectTypeTest extends TestCase
                         $options['configs']
                     );
                 }
-            );
+            )
+            ->willReturnSelf();
 
         $this->type->configureOptions($resolver);
     }

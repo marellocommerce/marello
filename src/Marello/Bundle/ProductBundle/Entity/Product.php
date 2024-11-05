@@ -2,21 +2,22 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DenormalizedPropertyAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamilyAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\CatalogBundle\Entity\Category;
@@ -26,52 +27,35 @@ use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
 use Marello\Bundle\PricingBundle\Entity\PriceListInterface;
 use Marello\Bundle\PricingBundle\Model\PricingAwareInterface;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 use Marello\Bundle\SalesBundle\Model\SalesChannelsAwareInterface;
 use Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList;
+use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository")
- * @ORM\Table(
- *      name="marello_product_product",
- *      indexes={
- *          @ORM\Index(name="idx_marello_product_created_at", columns={"created_at"}),
- *          @ORM\Index(name="idx_marello_product_updated_at", columns={"updated_at"})
- *      },
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_product_product_skuorgidx",
- *              columns={"sku","organization_id"}
- *          )
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
- * @Config(
- *  routeName="marello_product_index",
- *  routeView="marello_product_view",
- *  defaultValues={
- *      "dataaudit"={
- *            "auditable"=true
- *      },
- *      "entity"={"icon"="fa-barcode"},
- *      "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *     "attribute"={
- *          "has_attributes"=true
- *     },
- *     "tag"={
- *          "enabled"=true
- *     }
- *  }
- * )
- */
+#[ORM\Entity(ProductRepository::class), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_product_product')]
+#[ORM\Index(columns: ['created_at'], name: 'idx_marello_product_created_at')]
+#[ORM\Index(columns: ['updated_at'], name: 'idx_marello_product_updated_at')]
+#[ORM\UniqueConstraint(name: 'marello_product_product_skuorgidx', columns: ['sku', 'organization_id'])]
+#[Oro\Config(
+    routeName: 'marello_product_index',
+    routeView: 'marello_product_view',
+    routeCreate: 'marello_product_create',
+    routeUpdate: 'marello_product_update',
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-barcode',
+        ],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'attribute' => ['has_attributes' => true],
+        'tag' => ['enabled' => true]
+    ]
+)]
 class Product implements
     ProductInterface,
     SalesChannelsAwareInterface,
@@ -79,614 +63,294 @@ class Product implements
     OrganizationAwareInterface,
     AttributeFamilyAwareInterface,
     DenormalizedPropertyAwareInterface,
+    DatesAwareInterface,
     ExtendEntityInterface
 {
-    use ExtendEntityTrait, EntityCreatedUpdatedAtTrait;
+    use DatesAwareTrait, ExtendEntityTrait, AuditableOrganizationAwareTrait;
 
     const DEFAULT_PRODUCT_TYPE = 'simple';
  
-    /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $id;
-    
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?int $id = null;
+
     /**
      * This is a mirror field for performance reasons only.
      * It mirrors getDefaultName()->getString().
-     *
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      },
-     *      mode="hidden"
-     * )
-     */
-    protected $denormalizedDefaultName;
-    
-    /**
-     * @var Collection|LocalizedFallbackValue[]
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
-     *      cascade={"ALL"},
-     *      orphanRemoval=true
-     * )
-     * @ORM\JoinTable(
-     *      name="marello_product_product_name",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
-     *      }
-     * )
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=20,
-     *              "full"=true,
-     *              "fallback_field"="string"
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $names;
+    */
+    #[ORM\Column(name: 'name', type: Types::STRING, length:255, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' => true]
+        ],
+        mode: 'hidden'
+    )]
+    protected ?string $denormalizedDefaultName = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="sku", type="string", nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=10,
-     *              "header"="SKU",
-     *              "identity"=true,
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $sku;
+    #[ORM\ManyToMany(targetEntity: LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
+    #[ORM\JoinTable(name: 'marello_product_product_name')]
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 20, 'full' => true, 'fallback_field' => 'string'],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?Collection $names = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="barcode", type="string", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="Custom"
-     *          }
-     *      }
-     * )
-     */
-    protected $barcode;
+    #[ORM\Column(name: 'sku', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 10, 'identity' => true, 'header' => 'SKU'],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?string $sku = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="manufacturing_code", type="string", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="Custom"
-     *          }
-     *      }
-     * )
-     */
-    protected $manufacturingCode;
+    #[ORM\Column(name: 'barcode', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'Custom']
+        ]
+    )]
+    protected ?string $barcode = null;
 
-    /**
-     * @var ProductStatus
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\ProductStatus")
-     * @ORM\JoinColumn(name="product_status", referencedColumnName="name")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *               "order"=30,
-     *               "full"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     **/
-    protected $status;
+    #[ORM\Column(name: 'manufacturing_code', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'Custom']
+        ]
+    )]
+    protected ?string $manufacturingCode = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255, nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $type = self::DEFAULT_PRODUCT_TYPE;
+    #[ORM\ManyToOne(targetEntity: ProductStatus::class)]
+    #[ORM\JoinColumn(name: 'product_status', referencedColumnName: 'name', onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 30, 'full' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?ProductStatus $status = null;
 
-    /**
-     * @ORM\Column(type="float", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="Custom"
-     *          }
-     *      }
-     * )
-     *
-     * @var float
-     */
-    protected $weight = 0;
+    #[ORM\Column(name: 'type', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true]
+        ]
+    )]
+    protected ?string $type = self::DEFAULT_PRODUCT_TYPE;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="warranty", type="integer", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="Custom"
-     *          }
-     *      }
-     * )
-     */
-    protected $warranty;
+    #[ORM\Column(name: 'weight', type: Types::FLOAT, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'Custom']
+        ]
+    )]
+    protected ?float $weight = 0;
 
-    /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={
-     *          "auditable"=true
-     *      },
-     *      "importexport"={
-     *          "excluded"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $organization;
+    #[ORM\Column(name: 'warranty', type: Types::INTEGER, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'Custom']
+        ]
+    )]
+    protected ?int $warranty = null;
 
-    /**
-     * @var ArrayCollection|AssembledPriceList[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\AssembledPriceList",
-     *     mappedBy="product",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $prices;
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: AssembledPriceList::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?Collection $prices = null;
 
-    /**
-     * @var ArrayCollection|AssembledChannelPriceList[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList",
-     *     mappedBy="product",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $channelPrices;
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: AssembledChannelPriceList::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?Collection $channelPrices = null;
 
-    /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel",
-     *     inversedBy="products",
-     *     fetch="EAGER"
-     * )
-     * @ORM\JoinTable(name="marello_product_saleschannel")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=40,
-     *              "full"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $channels;
+    #[ORM\ManyToMany(targetEntity: SalesChannel::class, inversedBy: 'products', fetch: 'EAGER')]
+    #[ORM\JoinTable(name: 'marello_product_saleschannel')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 40, 'full' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?Collection $channels = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="channels_codes", type="text", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $channelsCodes;
+    #[ORM\Column(name: 'channels_codes', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true]
+        ]
+    )]
+    protected ?string $channelsCodes = null;
 
-    /**
-     * @var Variant
-     *
-     * @ORM\ManyToOne(targetEntity="Variant", inversedBy="products")
-     * @ORM\JoinColumn(name="variant_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $variant;
+    #[ORM\ManyToOne(targetEntity: Variant::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(name: 'variant_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true]
+        ]
+    )]
+    protected ?Variant $variant = null;
 
-    /**
-     * @var InventoryItem
-     *
-     * @ORM\OneToOne(
-     *      targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem",
-     *      mappedBy="product",
-     *      cascade={"remove", "persist"},
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"id" = "ASC"})
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $inventoryItem;
+    #[ORM\OneToOne(
+        mappedBy: 'product',
+        targetEntity: InventoryItem::class,
+        cascade: ['remove', 'persist'],
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true]
+        ]
+    )]
+    protected ?InventoryItem $inventoryItem = null;
 
-    /**
-     * @var array $data
-     *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $data = [];
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['excluded' =>true]
+        ]
+    )]
+    protected ?array $data = [];
 
-    /**
-     * @var ArrayCollection|ProductSupplierRelation[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation",
-     *     mappedBy="product",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="Custom"
-     *          }
-     *      }
-     * )
-     */
-    protected $suppliers;
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: ProductSupplierRelation::class,
+        cascade: ['remove', 'persist'],
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'Custom']
+        ]
+    )]
+    protected ?Collection $suppliers = null;
 
-    /**
-     * @var Supplier
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SupplierBundle\Entity\Supplier")
-     * @ORM\JoinColumn(name="preferred_supplier_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $preferredSupplier;
+    #[ORM\ManyToOne(targetEntity: Supplier::class)]
+    #[ORM\JoinColumn(name: 'preferred_supplier_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true]
+        ]
+    )]
+    protected ?Supplier $preferredSupplier = null;
 
-    /**
-     * @var TaxCode
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxCode")
-     * @ORM\JoinColumn(name="tax_code_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=40,
-     *              "full"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $taxCode;
+    #[ORM\ManyToOne(targetEntity: TaxCode::class)]
+    #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 40, 'full' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?TaxCode $taxCode = null;
 
-    /**
-     * @var ArrayCollection|ProductChannelTaxRelation[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ProductBundle\Entity\ProductChannelTaxRelation",
-     *     mappedBy="product",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $salesChannelTaxCodes;
+    #[ORM\OneToMany(
+        mappedBy: 'product',
+        targetEntity: ProductChannelTaxRelation::class,
+        cascade: ['remove', 'persist'],
+        orphanRemoval: true
+    )]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?Collection $salesChannelTaxCodes = null;
 
-    /**
-     * @var string
-     */
-    protected $replenishment;
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'products', cascade: ['persist'], fetch: 'EAGER')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 50, 'full' => false],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'Custom']
+        ]
+    )]
+    protected ?Collection $categories = null;
 
-    /**
-     * @var ArrayCollection|Category[]
-     *
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\CatalogBundle\Entity\Category", mappedBy="products", fetch="EAGER")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=50,
-     *              "full"=false
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="Custom"
-     *          }
-     *      }
-     * )
-     */
-    protected $categories;
+    #[ORM\Column(name: 'categories_codes', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true]
+        ]
+    )]
+    protected ?string $categoriesCodes = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="categories_codes", type="text", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $categoriesCodes;
-
-    /**
-     * @var AttributeFamily
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily")
-     * @ORM\JoinColumn(name="attribute_family_id", referencedColumnName="id", onDelete="RESTRICT")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          },
-     *          "importexport"={
-     *              "order"=35,
-     *              "full"=false
-     *          }
-     *      }
-     *  )
-     */
-    protected $attributeFamily;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
+    #[ORM\ManyToOne(targetEntity: AttributeFamily::class)]
+    #[ORM\JoinColumn(name: 'attribute_family_id', referencedColumnName: 'id', onDelete: 'RESTRICT')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => false],
+            'importexport' => ['order' => 35, 'full' => false]
+        ]
+    )]
+    protected ?AttributeFamily $attributeFamily = null;
 
     public function __construct()
     {
@@ -712,10 +376,34 @@ class Product implements
         }
     }
 
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
+
+        if (!$this->getDefaultName()) {
+            throw new \RuntimeException(sprintf('Product %s has to have a default name', $this->getSku()));
+        }
+        $this->updateDenormalizedProperties();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+
+        if (!$this->getDefaultName()) {
+            throw new \RuntimeException(sprintf('Product %s has to have a default name', $this->getSku()));
+        }
+        $this->updateDenormalizedProperties();
+    }
+
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -725,7 +413,7 @@ class Product implements
      *
      * @return $this
      */
-    public function setNames(array $names = [])
+    public function setNames(array $names = []): self
     {
         $this->names->clear();
 
@@ -739,7 +427,7 @@ class Product implements
     /**
      * @return Collection|LocalizedFallbackValue[]
      */
-    public function getNames()
+    public function getNames(): Collection
     {
         return $this->names;
     }
@@ -749,7 +437,7 @@ class Product implements
      *
      * @return $this
      */
-    public function addName(LocalizedFallbackValue $name)
+    public function addName(LocalizedFallbackValue $name): self
     {
         if (!$this->names->contains($name)) {
             $this->names->add($name);
@@ -763,7 +451,7 @@ class Product implements
      *
      * @return $this
      */
-    public function removeName(LocalizedFallbackValue $name)
+    public function removeName(LocalizedFallbackValue $name): self
     {
         if ($this->names->contains($name)) {
             $this->names->removeElement($name);
@@ -773,9 +461,9 @@ class Product implements
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSku()
+    public function getSku(): ?string
     {
         return $this->sku;
     }
@@ -785,7 +473,7 @@ class Product implements
      *
      * @return Product
      */
-    public function setSku($sku)
+    public function setSku(string $sku): self
     {
         $this->sku = $sku;
 
@@ -814,7 +502,7 @@ class Product implements
     /**
      * @return string
      */
-    public function getManufacturingCode()
+    public function getManufacturingCode(): ?string
     {
         return $this->manufacturingCode;
     }
@@ -822,15 +510,17 @@ class Product implements
     /**
      * @param string $manufacturingCode
      */
-    public function setManufacturingCode($manufacturingCode)
+    public function setManufacturingCode(string $manufacturingCode = null): self
     {
         $this->manufacturingCode = $manufacturingCode;
+
+        return $this;
     }
 
     /**
      * @return ProductStatus
      */
-    public function getStatus()
+    public function getStatus(): ?ProductStatus
     {
         return $this->status;
     }
@@ -840,7 +530,7 @@ class Product implements
      *
      * @return Product
      */
-    public function setStatus(ProductStatus $status)
+    public function setStatus(ProductStatus $status): self
     {
         $this->status = $status;
 
@@ -851,10 +541,10 @@ class Product implements
      * @param string $currency
      * @return AssembledPriceList
      */
-    public function getPrice($currency = null)
+    public function getPrice(string $currency = null): AssembledPriceList
     {
         if ($currency) {
-            /** @var  $productPrice */
+            /** @var $productPrice */
             $productPrice = $this->getPrices()
                 ->filter(function ($productPrice) use ($currency) {
                     /** @var AssembledPriceList $productPrice */
@@ -873,7 +563,7 @@ class Product implements
     /**
      * @return ArrayCollection|AssembledPriceList[]
      */
-    public function getPrices()
+    public function getPrices(): Collection
     {
         return $this->prices;
     }
@@ -885,7 +575,7 @@ class Product implements
      *
      * @return Product
      */
-    public function addPrice(AssembledPriceList $price)
+    public function addPrice(AssembledPriceList $price): self
     {
         if (!$this->prices->contains($price)) {
             $this->prices->add($price);
@@ -902,7 +592,7 @@ class Product implements
      *
      * @return Product
      */
-    public function removePrice(AssembledPriceList $price)
+    public function removePrice(AssembledPriceList $price): self
     {
         if ($this->prices->contains($price)) {
             $this->prices->removeElement($price);
@@ -915,7 +605,7 @@ class Product implements
      * has prices
      * @return bool
      */
-    public function hasPrices()
+    public function hasPrices(): bool
     {
         return count($this->prices) > 0;
     }
@@ -923,7 +613,7 @@ class Product implements
     /**
      * @return ArrayCollection|AssembledChannelPriceList[]
      */
-    public function getChannelPrices()
+    public function getChannelPrices(): Collection
     {
         return $this->channelPrices;
     }
@@ -935,7 +625,7 @@ class Product implements
      *
      * @return Product
      */
-    public function addChannelPrice(AssembledChannelPriceList $channelPrice)
+    public function addChannelPrice(AssembledChannelPriceList $channelPrice): self
     {
         if (!$this->channelPrices->contains($channelPrice)) {
             $this->channelPrices->add($channelPrice);
@@ -952,7 +642,7 @@ class Product implements
      *
      * @return Product
      */
-    public function removeChannelPrice(AssembledChannelPriceList $channelPrice)
+    public function removeChannelPrice(AssembledChannelPriceList $channelPrice): self
     {
         if ($this->channelPrices->contains($channelPrice)) {
             $this->channelPrices->removeElement($channelPrice);
@@ -965,7 +655,7 @@ class Product implements
      * has channel prices
      * @return bool
      */
-    public function hasChannelPrices()
+    public function hasChannelPrices(): bool
     {
         return count($this->channelPrices) > 0;
     }
@@ -973,7 +663,7 @@ class Product implements
     /**
      * @return ArrayCollection|SalesChannel[]
      */
-    public function getChannels()
+    public function getChannels(): Collection
     {
         return $this->channels;
     }
@@ -981,7 +671,7 @@ class Product implements
     /**
      * @return Variant
      */
-    public function getVariant()
+    public function getVariant(): ?Variant
     {
         return $this->variant;
     }
@@ -991,7 +681,7 @@ class Product implements
      *
      * @return Product
      */
-    public function setVariant(Variant $variant = null)
+    public function setVariant(Variant $variant = null): self
     {
         $this->variant = $variant;
 
@@ -1005,7 +695,7 @@ class Product implements
      *
      * @return Product
      */
-    public function addChannel(SalesChannel $channel)
+    public function addChannel(SalesChannel $channel): self
     {
         if (!$this->channels->contains($channel)) {
             $this->channels->add($channel);
@@ -1020,7 +710,7 @@ class Product implements
      * @param string $code
      * @return $this
      */
-    public function addChannelCode($code)
+    public function addChannelCode($code): self
     {
         if (strpos($this->channelsCodes, '|') === false) {
             $channelsCodes = [];
@@ -1045,7 +735,7 @@ class Product implements
     /**
      * @return bool
      */
-    public function hasChannels()
+    public function hasChannels(): bool
     {
         return count($this->channels) > 0;
     }
@@ -1054,7 +744,7 @@ class Product implements
      * @param SalesChannel $channel
      * @return bool
      */
-    public function hasChannel(SalesChannel $channel)
+    public function hasChannel(SalesChannel $channel): bool
     {
         return $this->channels->contains($channel);
     }
@@ -1066,7 +756,7 @@ class Product implements
      *
      * @return Product
      */
-    public function removeChannel(SalesChannel $channel)
+    public function removeChannel(SalesChannel $channel): self
     {
         if ($this->channels->contains($channel)) {
             $this->channels->removeElement($channel);
@@ -1099,29 +789,10 @@ class Product implements
     }
 
     /**
-     * @return OrganizationInterface
-     */
-    public function getOrganization()
-    {
-        return $this->organization;
-    }
-
-    /**
-     * @param OrganizationInterface $organization
-     * @return Product
-     */
-    public function setOrganization(OrganizationInterface $organization)
-    {
-        $this->organization = $organization;
-
-        return $this;
-    }
-
-    /**
      * @param array $data
      * @return Product
      */
-    public function setData(array $data)
+    public function setData(array $data): self
     {
         $this->data = $data;
 
@@ -1131,7 +802,7 @@ class Product implements
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -1139,7 +810,7 @@ class Product implements
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         try {
             if ($this->getDefaultName()) {
@@ -1165,7 +836,7 @@ class Product implements
      *
      * @return $this
      */
-    public function setInventoryItem(InventoryItem $item)
+    public function setInventoryItem(InventoryItem $item): self
     {
         $this->inventoryItem = $item;
 
@@ -1175,7 +846,7 @@ class Product implements
     /**
      * @return float
      */
-    public function getWeight()
+    public function getWeight(): ?float
     {
         return $this->weight;
     }
@@ -1185,7 +856,7 @@ class Product implements
      *
      * @return Product
      */
-    public function setWeight($weight)
+    public function setWeight(float $weight = null): self
     {
         $this->weight = $weight;
 
@@ -1195,7 +866,7 @@ class Product implements
     /**
      * @return integer
      */
-    public function getWarranty()
+    public function getWarranty(): ?int
     {
         return $this->warranty;
     }
@@ -1205,7 +876,7 @@ class Product implements
      *
      * @return Product
      */
-    public function setWarranty($warranty)
+    public function setWarranty(int $warranty = null): self
     {
         $this->warranty = $warranty;
 
@@ -1215,7 +886,7 @@ class Product implements
     /**
      * @return ArrayCollection|ProductSupplierRelation[]
      */
-    public function getSuppliers()
+    public function getSuppliers(): Collection
     {
         return $this->suppliers;
     }
@@ -1227,7 +898,7 @@ class Product implements
      *
      * @return Product
      */
-    public function addSupplier(ProductSupplierRelation $supplier)
+    public function addSupplier(ProductSupplierRelation $supplier): self
     {
         if (!$this->suppliers->contains($supplier)) {
             $this->suppliers->add($supplier);
@@ -1240,7 +911,7 @@ class Product implements
     /**
      * @return bool
      */
-    public function hasSuppliers()
+    public function hasSuppliers(): bool
     {
         return count($this->suppliers) > 0;
     }
@@ -1252,7 +923,7 @@ class Product implements
      *
      * @return Product
      */
-    public function removeSupplier(ProductSupplierRelation $supplier)
+    public function removeSupplier(ProductSupplierRelation $supplier): self
     {
         if ($this->suppliers->contains($supplier)) {
             $this->suppliers->removeElement($supplier);
@@ -1264,7 +935,7 @@ class Product implements
     /**
      * @return Supplier
      */
-    public function getPreferredSupplier()
+    public function getPreferredSupplier(): ?Supplier
     {
         return $this->preferredSupplier;
     }
@@ -1274,7 +945,7 @@ class Product implements
      *
      * @return Product
      */
-    public function setPreferredSupplier(Supplier $preferredSupplier)
+    public function setPreferredSupplier(Supplier $preferredSupplier = null): self
     {
         $this->preferredSupplier = $preferredSupplier;
 
@@ -1288,7 +959,7 @@ class Product implements
      *
      * @return Product
      */
-    public function setTaxCode(TaxCode $taxCode = null)
+    public function setTaxCode(TaxCode $taxCode = null): self
     {
         $this->taxCode = $taxCode;
 
@@ -1300,7 +971,7 @@ class Product implements
      *
      * @return TaxCode
      */
-    public function getTaxCode()
+    public function getTaxCode(): ?TaxCode
     {
         return $this->taxCode;
     }
@@ -1312,7 +983,7 @@ class Product implements
      *
      * @return Product
      */
-    public function addSalesChannelTaxCode(ProductChannelTaxRelation $salesChannelTaxCode)
+    public function addSalesChannelTaxCode(ProductChannelTaxRelation $salesChannelTaxCode): self
     {
         if (!$this->salesChannelTaxCodes->contains($salesChannelTaxCode)) {
             $this->salesChannelTaxCodes->add($salesChannelTaxCode);
@@ -1329,7 +1000,7 @@ class Product implements
      *
      * @return Product
      */
-    public function removeSalesChannelTaxCode(ProductChannelTaxRelation $salesChannelTaxCode)
+    public function removeSalesChannelTaxCode(ProductChannelTaxRelation $salesChannelTaxCode): self
     {
         if ($this->salesChannelTaxCodes->contains($salesChannelTaxCode)) {
             $this->salesChannelTaxCodes->removeElement($salesChannelTaxCode);
@@ -1343,7 +1014,7 @@ class Product implements
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSalesChannelTaxCodes()
+    public function getSalesChannelTaxCodes(): Collection
     {
         return $this->salesChannelTaxCodes;
     }
@@ -1354,7 +1025,7 @@ class Product implements
      * @param SalesChannel $salesChannel
      * @return TaxCode|null
      */
-    public function getSalesChannelTaxCode(SalesChannel $salesChannel)
+    public function getSalesChannelTaxCode(SalesChannel $salesChannel): ?TaxCode
     {
         /** @var ProductChannelTaxRelation $productChannelTaxRelation */
         $productChannelTaxRelation = $this->getSalesChannelTaxCodes()
@@ -1375,7 +1046,7 @@ class Product implements
      * @param SalesChannel $salesChannel
      * @return PriceListInterface|null
      */
-    public function getSalesChannelPrice(SalesChannel $salesChannel)
+    public function getSalesChannelPrice(SalesChannel $salesChannel): ?PriceListInterface
     {
         /** @var AssembledChannelPriceList $productChannelPrice */
         $productChannelPrice = $this->getChannelPrices()
@@ -1395,7 +1066,7 @@ class Product implements
     /**
      * @return Collection|Category[]
      */
-    public function getCategories()
+    public function getCategories(): Collection
     {
         return $this->categories;
     }
@@ -1404,7 +1075,7 @@ class Product implements
      * @param Category $category
      * @return $this
      */
-    public function addCategory(Category $category)
+    public function addCategory(Category $category): self
     {
         if (!$this->hasCategory($category)) {
             $this->categories->add($category);
@@ -1419,7 +1090,7 @@ class Product implements
      * @param string $code
      * @return $this
      */
-    public function addCategoryCode($code)
+    public function addCategoryCode(string $code): self
     {
         if (strpos($this->categoriesCodes, '|') === false) {
             $categoriesCodes = [];
@@ -1445,7 +1116,7 @@ class Product implements
      * @param Category $category
      * @return $this
      */
-    public function removeCategory(Category $category)
+    public function removeCategory(Category $category): self
     {
         if ($this->hasCategory($category)) {
             $this->categories->removeElement($category);
@@ -1464,13 +1135,12 @@ class Product implements
 
         return $this;
     }
-    
 
     /**
      * @param Category $category
      * @return bool
      */
-    public function hasCategory(Category $category)
+    public function hasCategory(Category $category): bool
     {
         return $this->categories->contains($category);
     }
@@ -1486,7 +1156,7 @@ class Product implements
     /**
      * @return AttributeFamily
      */
-    public function getAttributeFamily()
+    public function getAttributeFamily(): ?AttributeFamily
     {
         return $this->attributeFamily;
     }
@@ -1495,7 +1165,7 @@ class Product implements
      * @param AttributeFamily $attributeFamily
      * @return $this
      */
-    public function setAttributeFamily(AttributeFamily $attributeFamily)
+    public function setAttributeFamily(AttributeFamily $attributeFamily): self
     {
         $this->attributeFamily = $attributeFamily;
 
@@ -1505,7 +1175,7 @@ class Product implements
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -1514,7 +1184,7 @@ class Product implements
      * @param string $type
      * @return Product
      */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->type = $type;
         
@@ -1524,33 +1194,11 @@ class Product implements
     /**
      * This field is read-only, updated automatically prior to persisting.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDenormalizedDefaultName()
+    public function getDenormalizedDefaultName(): ?string
     {
         return $this->denormalizedDefaultName;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        if (!$this->getDefaultName()) {
-            throw new \RuntimeException(sprintf('Product %s has to have a default name', $this->getSku()));
-        }
-        $this->updateDenormalizedProperties();
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        if (!$this->getDefaultName()) {
-            throw new \RuntimeException(sprintf('Product %s has to have a default name', $this->getSku()));
-        }
-        $this->updateDenormalizedProperties();
     }
 
     public function updateDenormalizedProperties(): void

@@ -5,12 +5,14 @@ namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig;
-use Marello\Bundle\PaymentTermBundle\Integration\PaymentTermChannelType;
+
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
+use Marello\Bundle\PaymentTermBundle\Integration\PaymentTermChannelType;
 
 class LoadPaymentRuleConfig extends AbstractFixture implements
     DependentFixtureInterface,
@@ -88,7 +90,7 @@ class LoadPaymentRuleConfig extends AbstractFixture implements
      */
     protected function getOrganization(ObjectManager $manager)
     {
-        return $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        return $manager->getRepository(Organization::class)->getFirst();
     }
 
     /**

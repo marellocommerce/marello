@@ -2,21 +2,24 @@
 
 namespace Marello\Bundle\WorkflowBundle\Datagrid\Extension\MassAction;
 
-use Marello\Bundle\WorkflowBundle\Async\Topic\WorkflowTransitMassTopic;
-use Marello\Bundle\WorkflowBundle\Manager\WorkflowTransitMassManager;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\IterableResult;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 use Oro\Bundle\DataGridBundle\Extension\Action\ActionConfiguration;
-use Oro\Bundle\DataGridBundle\Extension\MassAction\Actions\MassActionInterface;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponse;
 use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerArgs;
 use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerInterface;
 use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionParametersParser;
-use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponse;
-use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Component\MessageQueue\Client\MessageProducerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponseInterface;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\Actions\MassActionInterface;
+
+use Marello\Bundle\WorkflowBundle\Manager\WorkflowTransitMassManager;
+use Marello\Bundle\WorkflowBundle\Async\Topic\WorkflowTransitMassTopic;
 
 class WorkflowTransitMassActionHandler implements MassActionHandlerInterface
 {
@@ -57,7 +60,7 @@ class WorkflowTransitMassActionHandler implements MassActionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(MassActionHandlerArgs $args)
+    public function handle(MassActionHandlerArgs $args): MassActionResponseInterface
     {
         $options = $args->getMassAction()->getOptions();
         $batchSize = $options->offsetGet('batch_size');

@@ -46,7 +46,7 @@ class MarelloNotificationBundleInstaller implements Installation
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('template_id', 'integer', []);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('recipients', 'json_array', []);
+        $table->addColumn('recipients', 'json', ['comment' => '(DC2Type:json)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('body', 'text', []);
         $table->addIndex(['template_id'], 'idx_c883e8665da0fb8', []);

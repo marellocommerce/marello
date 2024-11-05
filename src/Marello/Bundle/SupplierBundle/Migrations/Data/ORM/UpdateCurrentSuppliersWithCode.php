@@ -29,7 +29,7 @@ class UpdateCurrentSuppliersWithCode extends AbstractFixture
     public function updateCurrentSuppliers()
     {
         $suppliers = $this->manager
-            ->getRepository('MarelloSupplierBundle:Supplier')
+            ->getRepository(Supplier::class)
             ->findAll();
         /** @var Supplier $supplier */
         foreach ($suppliers as $supplier) {

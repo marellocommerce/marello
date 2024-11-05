@@ -38,8 +38,8 @@ class MarelloPaymentTermBundleInstaller implements Installation
     {
         $table = $schema->createTable('marello_payment_term');
         $table->addColumn('id', 'integer', ['notnull' => true, 'autoincrement' => true]);
-        $table->addColumn('code', 'string', ['length' => 32, 'notnull' => true,]);
-        $table->addColumn('term', 'integer', ['notnull' => true,]);
+        $table->addColumn('code', 'string', ['length' => 32, 'notnull' => true]);
+        $table->addColumn('term', 'integer', ['notnull' => true]);
 
         $table->addUniqueIndex(['code']);
 

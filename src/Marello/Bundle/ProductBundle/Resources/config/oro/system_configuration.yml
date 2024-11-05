@@ -13,6 +13,7 @@ system_configuration:
             type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
             options:
                 label: marello.product.system_configuration.fields.use_external_url.label
+                tooltip: marello.product.system_configuration.fields.use_external_url.tooltip
                 required: false
 
     tree:

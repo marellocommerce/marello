@@ -4,8 +4,8 @@ imports:
 services:
     marello_tax.tax_rule.matcher.composite:
         class: Marello\Bundle\TaxBundle\Matcher\CompositeTaxRuleMatcher
-        calls:
-            - [setCompanyReverseTaxProvider, ['@Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider']]
+        arguments:
+            - '@Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider'
 
     marello_tax.tax_rule.matcher.country:
         class: Marello\Bundle\TaxBundle\Matcher\CountryTaxRuleMatcher
@@ -59,8 +59,7 @@ services:
             - '@translator'
             - '@marello_tax.event.tax_event_dispatcher'
             - '@marello_tax.factory.tax'
-        calls:
-            - [setCompanyReverseTaxProvider, ['@Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider']]
+            - '@Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider'
         tags:
             - { name: marello_pricing.subtotal_provider, priority: 10 }
 

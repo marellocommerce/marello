@@ -11,7 +11,7 @@ class RegionTaxRuleMatcher extends AbstractTaxRuleMatcher
     /**
      * {@inheritdoc}
      */
-    public function match(AbstractAddress $address = null, array $taxCodes)
+    public function match(array $taxCodes, Order $order = null, AbstractAddress $address = null)
     {
         if (null === $address) {
             return null;

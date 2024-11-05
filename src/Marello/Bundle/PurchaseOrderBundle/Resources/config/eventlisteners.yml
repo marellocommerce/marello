@@ -39,5 +39,7 @@ services:
     Marello\Bundle\PurchaseOrderBundle\EventListener\SendScheduleChangeListener:
         arguments:
             - '@doctrine'
+            - '@security.token_storage'
+            - '@oro_config.user'
         tags:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }

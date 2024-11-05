@@ -80,10 +80,6 @@ workflows:
                     - '@assign_value':
                           attribute: $order.invoicedAt
                           value: $invoiced_at
-                    - '@marello_notification_send':
-                          entity: $order
-                          recipient: $order.customer
-                          template: marello_order_invoiced
                     - '@extendable':
                           events: [extendable_action.order_invoiced]
                     - '@run_action_group':

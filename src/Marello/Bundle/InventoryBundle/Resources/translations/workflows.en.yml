@@ -1,7 +1,7 @@
 oro:
     workflow:
         marello_allocate_workflow:
-            label: 'Allocations Workflow'
+            label: 'Allocation'
             step:
                 pending:
                     label:  'Pending'

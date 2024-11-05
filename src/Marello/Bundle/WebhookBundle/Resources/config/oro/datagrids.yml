@@ -9,7 +9,7 @@ datagrids:
                 select:
                     - w
                 from:
-                    - { table: MarelloWebhookBundle:Webhook, alias: w }
+                    - { table: Marello\Bundle\WebhookBundle\Entity\Webhook, alias: w }
         columns:
             id:
                 label:            marello.webhook.id.label

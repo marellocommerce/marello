@@ -19,6 +19,8 @@ marello:
         company.label:                    'Company'
         phone.label:                      'Phone'
         label:                            'Customer'
+        is_hidden.label:                  'Is hidden'
+        email_lowercase.label:            'Email lowercase'
         form:
             choose:                       'Choose customer'
 

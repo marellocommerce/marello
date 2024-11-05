@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\InventoryBundle\Tests\Unit\EventListener;
 
+use Marello\Bundle\InventoryBundle\Event\InventoryUpdateWebhookEvent;
 use PHPUnit\Framework\TestCase;
 
 use Marello\Bundle\WebhookBundle\Manager\WebhookProducer;
@@ -9,7 +10,6 @@ use Marello\Bundle\InventoryBundle\Manager\InventoryManager;
 use Marello\Bundle\InventoryBundle\Event\InventoryUpdateEvent;
 use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContext;
 use Marello\Bundle\InventoryBundle\Manager\BalancedInventoryManager;
-use Marello\Bundle\InventoryBundle\Event\InventoryUpdateWebhookEvent;
 use Marello\Bundle\InventoryBundle\EventListener\InventoryUpdateEventListener;
 
 class InventoryUpdateEventListenerTest extends TestCase
@@ -38,7 +38,6 @@ class InventoryUpdateEventListenerTest extends TestCase
      * @var WebhookProducer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $webhookProducer;
-
 
     /**
      * {@inheritdoc}

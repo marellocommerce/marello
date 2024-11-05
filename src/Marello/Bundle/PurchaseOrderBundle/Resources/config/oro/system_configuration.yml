@@ -3,7 +3,7 @@ system_configuration:
         marello_purchase_order:
             title: marello.purchaseorder.system_configuration.groups.purchase_order.label
             icon: fa-truck
-            priority: 50
+            priority: 500
         marello_purchase_order_general:
             title: marello.purchaseorder.system_configuration.groups.purchase_order_general.label
             priority: 50
@@ -58,13 +58,13 @@ system_configuration:
                                             - marello_purchaseorder.purchaseorder_notification_address
                     marello_order:
                         children:
-                            marello_order_on_demand:
-                                children:
-                                    marello_order_on_demand_general:
-                                        children:
-                                            - marello_purchaseorder.send_directly
                             marello_purchase_order:
                                 children:
                                     marello_purchase_order_general:
                                         children:
                                             - marello_purchaseorder.sending_time
+                            marello_order_on_demand:
+                                children:
+                                    marello_order_on_demand_general:
+                                        children:
+                                            - marello_purchaseorder.send_directly

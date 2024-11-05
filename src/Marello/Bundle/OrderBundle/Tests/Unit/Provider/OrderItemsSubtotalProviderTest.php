@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Tests\Unit\Provider;
+namespace Marello\Bundle\OrderBundle\Tests\Unit\Provider;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
@@ -68,8 +68,8 @@ class OrderItemsSubtotalProviderTest extends TestCase
             );
 
         $this->salesChannels = [
-            1 => $this->getEntity(SalesChannel::class, ['id' => 1]),
-            2 => $this->getEntity(SalesChannel::class, ['id' => 2])
+            1 => $this->getEntity(SalesChannel::class, ['id' => 1, 'code' => 'sc_1']),
+            2 => $this->getEntity(SalesChannel::class, ['id' => 2, 'code' => 'sc_2'])
         ];
 
         $this->provider = new OrderItemsSubtotalProvider(

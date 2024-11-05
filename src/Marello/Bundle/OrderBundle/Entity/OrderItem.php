@@ -2,13 +2,14 @@
 
 namespace Marello\Bundle\OrderBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\CurrencyBundle\Entity\PriceAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\UserBundle\Entity\Ownership\AuditableUserAwareTrait;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
@@ -16,37 +17,33 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\CoreBundle\Model\HashAwareInterface;
 use Marello\Bundle\TaxBundle\Model\TaxAwareInterface;
+use Marello\Bundle\CoreBundle\Model\HashAwareTrait;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
 use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository")
- * @Oro\Config(
- *      defaultValues={
-*           "security"={
-*               "type"="ACL",
-*               "group_name"=""
-*           },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "ownership"={
- *               "owner_type"="USER",
- *               "owner_field_name"="owner",
- *               "owner_column_name"="user_owner_id",
- *               "organization_field_name"="organization",
- *               "organization_column_name"="organization_id"
- *          },
- *      }
- * )
- * @ORM\Table(name="marello_order_order_item")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table(name: 'marello_order_order_item')]
+#[ORM\Entity(repositoryClass: OrderItemRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    defaultValues: [
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'USER',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'user_owner_id',
+            'organization_field_name' => 'organization',
+            'organization_column_name' => 'organization_id'
+        ]
+    ]
+)]
 class OrderItem implements
     CurrencyAwareInterface,
     QuantityAwareInterface,
@@ -54,323 +51,173 @@ class OrderItem implements
     TaxAwareInterface,
     ProductAwareInterface,
     OrderAwareInterface,
+    HashAwareInterface,
     OrganizationAwareInterface,
     ExtendEntityInterface
 {
+    use HashAwareTrait;
     use AuditableUserAwareTrait;
     use ExtendEntityTrait;
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var ProductInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @ORM\JoinColumn(onDelete="SET NULL")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $product;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
+    #[ORM\Column(name: 'product_name', type: Types::STRING, nullable: false)]
     protected $productName;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_sku",type="string", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'product_sku', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $productSku;
 
     /**
      * @var Order
-     *
-     * @ORM\ManyToOne(targetEntity="Order", inversedBy="items")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: 'items')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $order;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="quantity",type="integer",nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'quantity', type: Types::INTEGER, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $quantity;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="price",type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'price', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $price;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="original_price_incl_tax",type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'original_price_incl_tax', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $originalPriceInclTax;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="original_price_excl_tax",type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'original_price_excl_tax', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $originalPriceExclTax;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="purchase_price_incl",type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'purchase_price_incl', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $purchasePriceIncl;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="tax",type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'tax', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $tax;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="tax_percent", type="percent", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'tax_percent', type: 'percent', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $taxPercent;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="discount_percent", type="percent", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'discount_percent', type: 'percent', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $discountPercent;
 
     /**
      * @var double
-     *
-     * @ORM\Column(name="discount_amount", type="money", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'discount_amount', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $discountAmount;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="row_total_incl_tax",type="money", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'row_total_incl_tax', type: 'money', nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $rowTotalInclTax;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="row_total_excl_tax",type="money", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'row_total_excl_tax', type: 'money', nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $rowTotalExclTax;
     
     /**
      * @var ReturnItem[]|Collection
-     *
-     * @ORM\OneToMany(targetEntity="Marello\Bundle\ReturnBundle\Entity\ReturnItem", mappedBy="orderItem", cascade={})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\OneToMany(mappedBy: 'orderItem', targetEntity: ReturnItem::class, cascade: [])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $returnItems;
 
     /**
      * @var TaxCode
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\TaxBundle\Entity\TaxCode")
-     * @ORM\JoinColumn(name="tax_code_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'tax_code_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: TaxCode::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $taxCode;
     
     /**
      * @var \Extend\Entity\EV_Marello_Item_Status
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $status;
 
     /**
      * @var \Extend\Entity\EV_Marello_Product_Unit
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $productUnit;
 
     /**
-     * @ORM\Column(name="allocation_exclusion", type="boolean", nullable=true, options={"default"=false})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'allocation_exclusion', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false], 'importexport' => ['excluded' => true]])]
     protected $allocationExclusion = false;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="item_type",type="string", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'item_type', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false]])]
     protected $itemType = OrderItemTypeInterface::OI_TYPE_DELIVERY;
 
     /**
      * @var string
-     * @ORM\Column(name="comment", type="text", nullable=true)
      */
+    #[ORM\Column(name: 'comment', type: Types::TEXT, nullable: true)]
     protected $comment;
 
     /**
@@ -381,9 +228,7 @@ class OrderItem implements
         $this->returnItems = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         if (null === $this->product) {
@@ -839,12 +684,12 @@ class OrderItem implements
     }
 
     /**
-     * Set seller comment
+     * Set comment
      *
      * @param string $comment
      * @return $this
      */
-    public function setComment($comment)
+    public function setComment(string $comment = null): self
     {
         $this->comment = $comment;
 
@@ -852,11 +697,11 @@ class OrderItem implements
     }
 
     /**
-     * Get seller comment
+     * Get comment
      *
-     * @return string
+     * @return string|null
      */
-    public function getComment()
+    public function getComment(): ?string
     {
         return $this->comment;
     }

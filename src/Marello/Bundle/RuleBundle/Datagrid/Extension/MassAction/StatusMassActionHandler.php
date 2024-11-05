@@ -4,11 +4,15 @@ namespace Marello\Bundle\RuleBundle\Datagrid\Extension\MassAction;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
+
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponse;
 use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerArgs;
 use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerInterface;
-use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponse;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponseInterface;
+
+use Marello\Bundle\RuleBundle\Entity\RuleOwnerInterface;
 
 class StatusMassActionHandler implements MassActionHandlerInterface
 {
@@ -55,7 +59,7 @@ class StatusMassActionHandler implements MassActionHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function handle(MassActionHandlerArgs $args)
+    public function handle(MassActionHandlerArgs $args): MassActionResponseInterface
     {
         $data = $args->getData();
 

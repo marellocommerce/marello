@@ -2,11 +2,15 @@
 
 namespace Marello\Bundle\SalesBundle\Migrations\Data\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Oro\Bundle\LocaleBundle\Entity\Localization;
+
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SalesBundle\Entity\SalesChannelType;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadSalesChannelData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -46,8 +50,8 @@ class LoadSalesChannelData extends AbstractFixture implements DependentFixtureIn
      */
     protected function loadSalesChannels()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
-        $localization = $this->manager->getRepository('OroLocaleBundle:Localization')->find(1);
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
+        $localization = $this->manager->getRepository(Localization::class)->find(1);
         $i            = 1;
 
         foreach ($this->data as $values) {
@@ -55,7 +59,7 @@ class LoadSalesChannelData extends AbstractFixture implements DependentFixtureIn
             $channel->setChannelType($this->findTypeByName($values['type']));
             $channel->setCode($values['code']);
             $channel->setCurrency($values['currency']);
-            $channel->setOwner($organization);
+            $channel->setOrganization($organization);
             $channel->setLocalization($localization);
 
             $this->manager->persist($channel);

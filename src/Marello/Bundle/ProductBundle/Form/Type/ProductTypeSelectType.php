@@ -32,7 +32,7 @@ class ProductTypeSelectType extends AbstractType
     {
         $resolver->setDefaults([
             'choices' => $this->getChoices(),
-            'preferred_choices' => Product::DEFAULT_PRODUCT_TYPE
+            'preferred_choices' => [Product::DEFAULT_PRODUCT_TYPE]
         ]);
     }
 

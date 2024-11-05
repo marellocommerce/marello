@@ -2,135 +2,84 @@
 
 namespace Marello\Bundle\CatalogBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\CatalogBundle\Entity\Repository\CategoryRepository")
- * @ORM\Table(name="marello_catalog_category",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_catalog_category_codeorgidx",
- *              columns={"code", "organization_id"}
- *          )
- *      }
- * )
- * @Oro\Config(
- *      routeName="marello_category_index",
- *      routeView="marello_category_view",
- *      routeUpdate="marello_category_update",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-folder"
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"="",
- *              "category"="catalog"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
- *
- */
-class Category implements OrganizationAwareInterface, ExtendEntityInterface
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CatalogBundle\Entity\Repository\CategoryRepository;
+
+#[ORM\Entity(CategoryRepository::class), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_catalog_category')]
+#[ORM\UniqueConstraint(name: 'marello_catalog_category_codeorgidx', columns: ['code', 'organization_id'])]
+#[Oro\Config(
+    routeName: 'marello_category_index',
+    routeView: 'marello_category_view',
+    routeUpdate: 'marello_category_update',
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-folder',
+        ],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '', 'category' => 'catalog']
+    ]
+)]
+class Category implements DatesAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
-    use EntityCreatedUpdatedAtTrait;
+    use DatesAwareTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $code;
+    #[ORM\Column(name: 'code', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true]]
+    )]
+    protected ?string $code = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $description;
-    
-    /**
-     * @var Collection|Product[]
-     *
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="categories")
-     * @ORM\JoinTable(
-     *      name="marello_category_to_product",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")
-     *      }
-     * )
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $products;
+    #[ORM\Column(name: 'description', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected ?string $description = null;
+
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'categories')]
+    #[ORM\JoinTable(name: 'marello_category_to_product')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'product_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => [
+                'auditable' => true
+            ]
+        ]
+    )]
+    protected ?Collection $products = null;
 
     /**
      * Constructor
@@ -140,10 +89,24 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
         $this->products = new ArrayCollection();
     }
 
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+    }
+
     /**
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -151,7 +114,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -160,7 +123,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -170,7 +133,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -179,7 +142,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
      * @param string $code
      * @return $this
      */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -189,7 +152,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -198,7 +161,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
      * @param string $description
      * @return $this
      */
-    public function setDescription($description)
+    public function setDescription(string $description = null): self
     {
         $this->description = $description;
         
@@ -206,9 +169,9 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
     }
 
     /**
-     * @return Collection|Product[]
+     * @return Collection
      */
-    public function getProducts()
+    public function getProducts(): Collection
     {
         return $this->products;
     }
@@ -217,7 +180,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
      * @param Product $product
      * @return $this
      */
-    public function addProduct(Product $product)
+    public function addProduct(Product $product): self
     {
         if (!$this->hasProduct($product)) {
             $this->products->add($product);
@@ -231,7 +194,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
      * @param Product $product
      * @return $this
      */
-    public function removeProduct(Product $product)
+    public function removeProduct(Product $product): self
     {
         if ($this->hasProduct($product)) {
             $product->removeCategory($this);
@@ -245,7 +208,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
      * @param Product $product
      * @return bool
      */
-    public function hasProduct(Product $product)
+    public function hasProduct(Product $product): bool
     {
         return $this->products->contains($product);
     }
@@ -253,7 +216,7 @@ class Category implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->getName();
     }

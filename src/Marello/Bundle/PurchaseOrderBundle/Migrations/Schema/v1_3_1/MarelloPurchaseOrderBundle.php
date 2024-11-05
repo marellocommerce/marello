@@ -25,6 +25,6 @@ class MarelloPurchaseOrderBundle implements Migration
     {
         $table = $schema->getTable('marello_purchase_order');
 
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
     }
 }

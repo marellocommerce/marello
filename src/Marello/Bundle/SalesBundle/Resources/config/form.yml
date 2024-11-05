@@ -75,7 +75,7 @@ services:
         class: Oro\Bundle\FormBundle\Form\DataTransformer\EntitiesToIdsTransformer
         arguments:
             - '@doctrine.orm.entity_manager'
-            - 'MarelloSalesBundle:SalesChannel'
+            - Marello\Bundle\SalesBundle\Entity\SalesChannel
 
     marello_sales.form.data_transformer.sales_channel_to_code:
         class: Marello\Bundle\SalesBundle\Form\DataTransformer\SalesChannelToCodeTransformer

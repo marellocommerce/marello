@@ -3,12 +3,14 @@
 namespace Marello\Bundle\ShippingBundle\Method\Provider\Integration;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Marello\Bundle\ShippingBundle\Method\Factory\IntegrationShippingMethodFactoryInterface;
+
 use Marello\Bundle\ShippingBundle\Method\ShippingMethodInterface;
 use Marello\Bundle\ShippingBundle\Method\ShippingMethodProviderInterface;
+use Marello\Bundle\ShippingBundle\Method\Factory\IntegrationShippingMethodFactoryInterface;
 
 class ChannelShippingMethodProvider implements ShippingMethodProviderInterface
 {
@@ -114,7 +116,7 @@ class ChannelShippingMethodProvider implements ShippingMethodProviderInterface
      */
     private function getRepository()
     {
-        return $this->doctrineHelper->getEntityRepository('OroIntegrationBundle:Channel');
+        return $this->doctrineHelper->getEntityRepository(Channel::class);
     }
 
     private function loadChannels()

@@ -2,84 +2,73 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
+use Marello\Bundle\ProductBundle\Entity\Repository\ProductSupplierRelationRepository;
 
 /**
  * ProductSupplierRelation
- *
- * @ORM\Table(
- *     name="marello_product_prod_supp_rel",
- *     uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_product_prod_supp_rel_uidx",
- *              columns={"product_id", "supplier_id", "quantity_of_unit"}
- *          )
- *      }
- * )
- * @ORM\Entity(repositoryClass="Marello\Bundle\ProductBundle\Entity\Repository\ProductSupplierRelationRepository")
  */
+#[ORM\Table(name: 'marello_product_prod_supp_rel')]
+#[ORM\UniqueConstraint(
+    name: 'marello_product_prod_supp_rel_uidx',
+    columns: ['product_id', 'supplier_id', 'quantity_of_unit']
+)]
+#[ORM\Entity(repositoryClass: ProductSupplierRelationRepository::class)]
 class ProductSupplierRelation
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var Product
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="suppliers",
-     *      cascade={"persist"})
-     * @ORM\JoinColumn(name="product_id", nullable=false, onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'product_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Product::class, cascade: ['persist'], inversedBy: 'suppliers')]
     protected $product;
 
     /**
      * @var Supplier
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SupplierBundle\Entity\Supplier", cascade={"persist"})
-     * @ORM\JoinColumn(name="supplier_id", nullable=false, onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'supplier_id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Supplier::class, cascade: ['persist'])]
     protected $supplier;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="quantity_of_unit", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'quantity_of_unit', type: Types::INTEGER, nullable: false)]
     protected $quantityOfUnit;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="priority", type="integer")
      */
+    #[ORM\Column(name: 'priority', type: Types::INTEGER)]
     protected $priority;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="cost", type="money", nullable=true)
      */
+    #[ORM\Column(name: 'cost', type: 'money', nullable: true)]
     protected $cost;
 
     /**
      * @var boolean
-     *
-     * @ORM\Column(name="can_dropship", type="boolean", nullable=false)
      */
-    protected $canDropship = false;
+    #[ORM\Column(name: 'can_dropship', type: Types::BOOLEAN, nullable: false)]
+    protected ?bool $canDropship = false;
 
     /**
      * @var integer|null
-     *
-     * @ORM\Column(name="lead_time", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'lead_time', type: Types::INTEGER, nullable: true)]
     protected $leadTime;
 
     public function getId(): ?int
@@ -94,7 +83,7 @@ class ProductSupplierRelation
         return $this;
     }
 
-    public function getProduct(): Product
+    public function getProduct(): ?Product
     {
         return $this->product;
     }

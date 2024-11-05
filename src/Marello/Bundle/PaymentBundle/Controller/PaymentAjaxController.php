@@ -6,7 +6,7 @@ use Marello\Bundle\LayoutBundle\Context\FormChangeContext;
 use Marello\Bundle\LayoutBundle\Provider\CompositeFormChangesProvider;
 use Marello\Bundle\PaymentBundle\Entity\Payment;
 use Marello\Bundle\PaymentBundle\Form\Type\PaymentCreateType;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,18 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class PaymentAjaxController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/form-changes/{id}",
-     *     methods={"POST"},
-     *     name="marello_payment_form_changes",
-     *     defaults={"id" = 0}
-     * )
-     * @AclAncestor("marello_payment_create")
      *
      * @param Request $request
      * @param Payment|null $payment
      * @return JsonResponse
      */
+    #[Route(path: '/form-changes/{id}', methods: ['POST'], name: 'marello_payment_form_changes', defaults: ['id' => 0])]
+    #[AclAncestor('marello_payment_create')]
     public function formChangesAction(Request $request, Payment $payment = null)
     {
         if (!$payment) {
@@ -65,7 +60,7 @@ class PaymentAjaxController extends AbstractController
         return $this->createForm(PaymentCreateType::class, $payment);
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

@@ -3,6 +3,7 @@
 namespace Marello\Bundle\TaxBundle\Calculator;
 
 use Marello\Bundle\PricingBundle\DependencyInjection\Configuration;
+use Marello\Bundle\TaxBundle\Model\ResultElement;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 class TaxCalculator implements TaxCalculatorInterface
@@ -22,6 +23,9 @@ class TaxCalculator implements TaxCalculatorInterface
      */
     protected $excludedTaxCalculator;
 
+    /** @var bool */
+    private $manualTaxOverride = false;
+
     /**
      * @param ConfigManager $configManager
      * @param TaxCalculatorInterface $includedTaxCalculator
@@ -40,9 +44,9 @@ class TaxCalculator implements TaxCalculatorInterface
     /**
      * {@inheritdoc}
      */
-    public function calculate($amount, $taxRate)
+    public function calculate($amount, $taxRate): ResultElement
     {
-        if ($this->isPricesIncludeTax()) {
+        if ($this->isPricesIncludeTax() || $this->getIsManualTaxSettingOverride()) {
             return $this->includedTaxCalculator->calculate($amount, $taxRate);
         }
 
@@ -52,5 +56,17 @@ class TaxCalculator implements TaxCalculatorInterface
     protected function isPricesIncludeTax()
     {
         return $this->configManager->get(Configuration::VAT_SYSTEM_CONFIG_PATH);
+    }
+
+    public function setIsManualTaxSettingOverride(bool $manualOverride = false): self
+    {
+        $this->manualTaxOverride = $manualOverride;
+
+        return $this;
+    }
+
+    private function getIsManualTaxSettingOverride(): bool
+    {
+        return $this->manualTaxOverride;
     }
 }

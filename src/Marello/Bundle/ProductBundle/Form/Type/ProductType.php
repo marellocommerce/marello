@@ -2,27 +2,31 @@
 
 namespace Marello\Bundle\ProductBundle\Form\Type;
 
-use Marello\Bundle\CatalogBundle\Entity\Category;
-use Marello\Bundle\PricingBundle\Form\EventListener\ChannelPricingSubscriber;
-use Marello\Bundle\PricingBundle\Form\EventListener\PricingSubscriber;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\SalesBundle\Form\EventListener\DefaultSalesChannelSubscriber;
-use Marello\Bundle\TaxBundle\Form\Type\TaxCodeSelectType;
-use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
-use Oro\Bundle\AttachmentBundle\Form\Type\ImageType;
-use Oro\Bundle\FormBundle\Form\Extension\StripTagsExtension;
-use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
-use Oro\Bundle\LocaleBundle\Form\Type\LocalizedFallbackValueCollectionType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
+use Oro\Bundle\AttachmentBundle\Form\Type\ImageType;
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
+use Oro\Bundle\FormBundle\Form\Extension\StripTagsExtension;
+use Oro\Bundle\LocaleBundle\Form\Type\LocalizedFallbackValueCollectionType;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CatalogBundle\Entity\Category;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\ProductBundle\Entity\ProductStatus;
+use Marello\Bundle\TaxBundle\Form\Type\TaxCodeSelectType;
+use Marello\Bundle\PricingBundle\Form\EventListener\PricingSubscriber;
+use Marello\Bundle\PricingBundle\Form\EventListener\ChannelPricingSubscriber;
+use Marello\Bundle\SalesBundle\Form\EventListener\DefaultSalesChannelSubscriber;
 
 class ProductType extends AbstractType
 {
@@ -125,7 +129,7 @@ class ProductType extends AbstractType
                 EntityType::class,
                 [
                     'label'         => 'marello.product.status.label',
-                    'class'         => 'MarelloProductBundle:ProductStatus',
+                    'class'         => ProductStatus::class,
                     'required'      => true,
                 ]
             )
@@ -133,7 +137,7 @@ class ProductType extends AbstractType
                 'addSalesChannels',
                 EntityIdentifierType::class,
                 [
-                    'class'    => 'MarelloSalesBundle:SalesChannel',
+                    'class'    => SalesChannel::class,
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,
@@ -143,7 +147,7 @@ class ProductType extends AbstractType
                 'removeSalesChannels',
                 EntityIdentifierType::class,
                 [
-                    'class'    => 'MarelloSalesBundle:SalesChannel',
+                    'class'    => SalesChannel::class,
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,

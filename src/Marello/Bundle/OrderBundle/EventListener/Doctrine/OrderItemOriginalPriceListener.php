@@ -28,8 +28,9 @@ class OrderItemOriginalPriceListener
         $priceList = $orderItem->getProduct()->getSalesChannelPrice($channel);
 
         $taxRule = $this->taxRuleMatcher->match(
-            $orderItem->getOrder()->getShippingAddress(),
-            [$orderItem->getTaxCode()->getCode()]
+            [$orderItem->getTaxCode()->getCode()],
+            $orderItem->getOrder(),
+            $orderItem->getOrder()->getShippingAddress()
         );
         $taxRate = $taxRule ? $taxRule->getTaxRate()->getRate() : 0;
 

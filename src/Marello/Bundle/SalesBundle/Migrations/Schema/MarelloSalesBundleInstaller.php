@@ -3,8 +3,9 @@
 namespace Marello\Bundle\SalesBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
+
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -64,7 +65,7 @@ class MarelloSalesBundleInstaller implements Installation
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('integration_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime', []);
-        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['integration_channel_id'], 'UNIQ_759DCFAB3D6A9E29');
     }
@@ -78,12 +79,12 @@ class MarelloSalesBundleInstaller implements Installation
     {
         $table = $schema->createTable('marello_sales_sales_channel');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('owner_id', 'integer', []);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('active', 'boolean', []);
         $table->addColumn('channel_type', 'string', ['length' => 64,  'notnull' => true]);
         $table->addColumn('created_at', 'datetime', []);
-        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->addColumn('updated_at', 'datetime', []);
         $table->addColumn('is_default', 'boolean', []);
         $table->addColumn('code', 'string', ['length' => 255]);
         $table->addColumn('currency', 'string', ['length' => 5]);
@@ -94,7 +95,7 @@ class MarelloSalesBundleInstaller implements Installation
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['code'], 'marello_sales_sales_channel_codeidx');
         $table->addUniqueIndex(['integration_channel_id'], 'UNIQ_37C71D13D6A9E29');
-        $table->addIndex(['owner_id'], 'idx_37c71d17e3c61f9', []);
+        $table->addIndex(['organization_id'], 'idx_37c71d17e3c61f9', []);
     }
     
     /**
@@ -128,9 +129,9 @@ class MarelloSalesBundleInstaller implements Installation
         $table = $schema->getTable('marello_sales_sales_channel');
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
-            ['owner_id'],
+            ['organization_id'],
             ['id'],
-            ['onDelete' => null, 'onUpdate' => null]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_localization'),

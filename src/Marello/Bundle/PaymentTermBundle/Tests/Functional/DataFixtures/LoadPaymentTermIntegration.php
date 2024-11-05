@@ -2,15 +2,18 @@
 
 namespace Marello\Bundle\PaymentTermBundle\Tests\Functional\DataFixtures;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+
 use Marello\Bundle\PaymentTermBundle\Entity\MarelloPaymentTermSettings;
 use Marello\Bundle\PaymentTermBundle\Integration\PaymentTermChannelType;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadPaymentTermIntegration extends AbstractFixture implements ContainerAwareInterface
 {
@@ -48,7 +51,7 @@ class LoadPaymentTermIntegration extends AbstractFixture implements ContainerAwa
     private function getOrganization()
     {
         return $this->container->get('doctrine')
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->getFirst();
     }
 }

@@ -35,6 +35,12 @@
             {% endif %}
         </div>
     </td>
+    <td class="inventorylevel-managed{{ form.warehouse.vars.errors|length ? 'has-errors' : '' }}">
+        <div class="fields-row">
+            {{ form_widget(form.managedInventory) }}
+        </div>
+        {{ form_errors(form.managedInventory) }}
+    </td>
 {% endblock %}
 
 {% macro marello_inventory_inventorylevel_collection_item_prototype(widget, attributes) %}
@@ -51,7 +57,7 @@
         <tr data-content="{{ name }}"
             class="marello-line-item display-values"
             data-page-component-module="oroui/js/app/components/view-component"
-            data-page-component-options="{{ {view: 'marellolayout/js/app/views/abstract-item-view'}|json_encode }}"
+            data-page-component-options="{{ {view: 'marelloinventory/js/app/views/inventorylevel-item-view'}|json_encode }}"
             data-layout="separate">
             {{ form_widget(form) }}
         </tr>
@@ -76,8 +82,9 @@
                     <tr>
                         <th class="inventorylevel-line-item-warehouse"><span>{{ 'marello.inventory.inventorylevel.warehouse.label'|trans }}</span></th>
                         <th class="inventorylevel-line-item-pick-location"><span>{{ 'marello.inventory.inventorylevel.pick_location.label'|trans }}</span></th>
-                        <th class="inventorylevel-line-item-inventory-qty"><span>{{ 'marello.inventory.inventorylevel.inventory.label'|trans }}</span></th>
+                        <th class="inventorylevel-line-item-inventory-qty"><span>{{ 'marello.inventory.inventorylevel.inventory_qty.label'|trans }}</span></th>
                         <th class="inventorylevel-line-item-adjustment"><span>{{ 'marello.inventory.model.warehouse.adjustment.label'|trans }}</span></th>
+                        <th class="inventorylevel-line-item-managed-inventory"><span>{{ 'marello.inventory.inventorylevel.managed_inventory.label'|trans }}</span></th>
                     </tr>
                     </thead>
                     <tbody data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %}>

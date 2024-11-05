@@ -40,6 +40,27 @@
         'subblocks': generalSubblocks
     }] %}
 
+    {% set additionalDataData %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ entityConfig.renderDynamicFields(entity) }}
+                </div>
+            </div>
+        </div>
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([{
+        'title' : 'marello.payment_term.payment_term.sections.additional'|trans,
+        'subblocks': [{
+            'title' : null,
+            'useSpan': false,
+            'data' : [
+                additionalDataData
+            ]
+        }]
+    }]) %}
+
     {% set additionalData %}
         <div class="widget-content">
             <div class="row-fluid form-horizontal">

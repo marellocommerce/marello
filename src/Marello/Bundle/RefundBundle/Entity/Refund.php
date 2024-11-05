@@ -2,56 +2,47 @@
 
 namespace Marello\Bundle\RefundBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
-use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
-use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
-use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="marello_refund")
- * @ORM\HasLifecycleCallbacks
- *
- * @Oro\Config(
- *      routeView="marello_refund_view",
- *      routeName="marello_refund_index",
- *      routeCreate="marello_refund_create",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-eur"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "grid"={
- *              "default"="marello-refund-select-grid"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
+use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
+use Marello\Bundle\OrderBundle\Entity\OrderAwareInterface;
+use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertyAwareInterface;
+
+#[ORM\Table(name: 'marello_refund')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    routeView: 'marello_refund_view',
+    routeName: 'marello_refund_index',
+    routeCreate: 'marello_refund_create',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-eur'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'grid' => ['default' => 'marello-refund-select-grid'],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class Refund implements
     DerivedPropertyAwareInterface,
     CurrencyAwareInterface,
@@ -65,132 +56,77 @@ class Refund implements
     use ExtendEntityTrait;
         
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @ORM\Column(name="refund_number", type="string", unique=true, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'refund_number', type: Types::STRING, unique: true, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $refundNumber;
 
     /**
-     * @ORM\Column(name="refund_amount", type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var float
      * technically the grandtotal
      */
+    #[ORM\Column(name: 'refund_amount', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $refundAmount;
 
     /**
-     * @ORM\Column(name="refund_subtotal", type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "entity"={
-     *              "label"="marello.refund.subtotal.label"
-     *          }
-     *      }
-     * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'refund_subtotal', type: 'money')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'entity' => ['label' => 'marello.refund.subtotal.label']
+    ])]
     protected $refundSubtotal = 0.00;
 
     /**
-     * @ORM\Column(name="refund_tax_total", type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "entity"={
-     *              "label"="marello.refund.tax_total.label"
-     *          }
-     *      }
-     * )
-     *
      * @var float
      */
+    #[ORM\Column(name: 'refund_tax_total', type: 'money')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'entity' => ['label' => 'marello.refund.tax_total.label']
+    ])]
     protected $refundTaxTotal = 0.00;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer")
-     * @ORM\JoinColumn(nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var Customer
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $customer;
 
     /**
-     * @ORM\OneToMany(targetEntity="RefundItem", mappedBy="refund", cascade={"persist"}, orphanRemoval=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var Collection|RefundItem[]
      */
+    #[ORM\OneToMany(mappedBy: 'refund', targetEntity: RefundItem::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $items;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\Order")
-     * @ORM\JoinColumn(nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var Order
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Marello\Bundle\OrderBundle\Entity\Order::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $order;
 
     /**
      * @var string
-     * @ORM\Column(name="currency", type="string", length=10, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 10, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $currency;
 
     /**
@@ -257,9 +193,7 @@ class Refund implements
         $this->items = new ArrayCollection();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $sum = array_reduce($this->getItems()->toArray(), function ($carry, RefundItem $item) {

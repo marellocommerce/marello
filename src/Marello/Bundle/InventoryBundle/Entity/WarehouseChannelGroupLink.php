@@ -2,38 +2,34 @@
 
 namespace Marello\Bundle\InventoryBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository"))
- * @ORM\Table(name="marello_inventory_wh_chg_link")
- * @ORM\HasLifecycleCallbacks()
- * @Oro\Config(
- *  defaultValues={
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "ownership"={
- *          "owner_type"="ORGANIZATION",
- *          "owner_field_name"="organization",
- *          "owner_column_name"="organization_id"
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      }
- *  }
- * )
- */
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
+
+#[ORM\Entity(repositoryClass: WarehouseChannelGroupLinkRepository::class), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_inventory_wh_chg_link')]
+#[Oro\Config(
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -42,58 +38,35 @@ class WarehouseChannelGroupLink implements OrganizationAwareInterface, ExtendEnt
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var bool
-     *
-     * @ORM\Column(name="is_system", type="boolean", nullable=false, options={"default"=false})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'is_system', type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $system = false;
 
     /**
      * @var WarehouseGroup
-     *
-     * @ORM\OneToOne(targetEntity="WarehouseGroup", inversedBy="warehouseChannelGroupLink")
-     * @ORM\JoinColumn(name="warehouse_group_id", referencedColumnName="id")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'warehouse_group_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(inversedBy: 'warehouseChannelGroupLink', targetEntity: WarehouseGroup::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $warehouseGroup;
 
     /**
      * @var SalesChannelGroup[]
-     *
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannelGroup", fetch="EAGER")
-     * @ORM\JoinTable(name="marello_inventory_lnk_join_chg",
-     *      joinColumns={@ORM\JoinColumn(name="link_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="channel_group_id", referencedColumnName="id", unique=true)}
-     *      )
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinTable(name: 'marello_inventory_lnk_join_chg')]
+    #[ORM\JoinColumn(name: 'link_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'channel_group_id', referencedColumnName: 'id', unique: true)]
+    #[ORM\ManyToMany(targetEntity: SalesChannelGroup::class, fetch: 'EAGER')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannelGroups;
 
     public function __construct()

@@ -11,7 +11,7 @@ datagrids:
                     - COUNT(o.orderNumber) as totalOrders
                     - SUM(o.grandTotal) as totalRevenue
                 from:
-                    - { table: MarelloOrderBundle:Order, alias: o }
+                    - { table: Marello\Bundle\OrderBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.salesChannel, alias: channel }
@@ -54,7 +54,7 @@ datagrids:
                     - s.label as status
                     - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                 from:
-                    - { table: MarelloInventoryBundle:InventoryItem, alias: i }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryItem, alias: i }
                 join:
                     left:
                         - { join: i.product, alias: p }
@@ -69,7 +69,7 @@ datagrids:
                 label:              marello.product.names.label
                 frontend_type:      string
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.label
+                label:              marello.inventory.inventorylevel.inventory_qty.label
                 frontend_type:      number
                 data_name:          inventoryQty
             status:
@@ -98,7 +98,7 @@ datagrids:
                         - oi.productSku
                         - SUM(oi.quantity) AS quantitySold
                     from:
-                        - { table: MarelloOrderBundle:OrderItem, alias: oi }
+                        - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                     groupBy: oi.productSku, oi.productName
             columns:
                 productSku:
@@ -138,7 +138,7 @@ datagrids:
                         - oi.productSku
                         - SUM(oi.quantity) AS quantitySold
                     from:
-                        - { table: MarelloOrderBundle:OrderItem, alias: oi }
+                        - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                     groupBy: oi.productSku, oi.productName
             columns:
                 productSku:
@@ -234,10 +234,10 @@ datagrids:
                         - SUM(COALESCE(oi.quantity, 0)) AS quantityOrdered
                         - CAST(SUM(COALESCE(ri.quantity, 0)) AS decimal) / SUM(COALESCE(oi.quantity, 0)) AS percentageReturned
                     from:
-                        - { table: MarelloOrderBundle:OrderItem, alias: oi }
+                        - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                     join:
                         inner:
-                            - { join: MarelloReturnBundle:ReturnItem, alias: ri, conditionType: 'WITH', condition: 'oi.id = ri.orderItem' }
+                            - { join: Marello\Bundle\ReturnBundle\Entity\ReturnItem, alias: ri, conditionType: 'WITH', condition: 'oi.id = ri.orderItem' }
                     groupBy: oi.productSku, oi.productName
             columns:
                 productSku:

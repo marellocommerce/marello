@@ -2,17 +2,17 @@
 
 namespace Marello\Bundle\InvoiceBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 
-/**
- * @ORM\Entity
- */
+use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
+
+#[ORM\Entity]
 class Invoice extends AbstractInvoice implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
@@ -21,11 +21,10 @@ class Invoice extends AbstractInvoice implements ExtendEntityInterface
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
@@ -35,38 +34,28 @@ class Invoice extends AbstractInvoice implements ExtendEntityInterface
 
     /**
      * @var Collection|InvoiceItem[]
-     *
-     * @ORM\OneToMany(targetEntity="InvoiceItem", mappedBy="invoice", cascade={"persist"}, orphanRemoval=true)
-     * @ORM\OrderBy({"id" = "ASC"})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\OneToMany(mappedBy: 'invoice', targetEntity: InvoiceItem::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $items;
 
     /**
      * @var PaymentTerm
-     *
-     * @ORM\ManyToONe(targetEntity="Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm")
-     * @ORM\JoinColumn(name="payment_term_id", nullable=true, onDelete="SET NULL")
-     * @Oro\ConfigField(
-     *     defaultValues={
-     *         "email"={
-     *             "available_in_template"=true
-     *         },
-     *         "dataaudit"={
-     *             "auditable"=true
-     *         }
-     *     }
-     * )
      */
+    #[ORM\JoinColumn(name: 'payment_term_id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: PaymentTerm::class)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $paymentTerm;
 
     /**

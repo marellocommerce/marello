@@ -2,90 +2,71 @@
 
 namespace Marello\Bundle\OrderBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\AddressBundle\Form\Type\AddressType;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\OrderBundle\Form\Type\OrderType;
-use Marello\Bundle\OrderBundle\Form\Type\OrderUpdateType;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Oro\Bundle\CurrencyBundle\Utils\CurrencyNameHelper;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\UIBundle\Route\Router;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\CurrencyBundle\Utils\CurrencyNameHelper;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\OrderBundle\Form\Type\OrderType;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\AddressBundle\Form\Type\AddressType;
+use Marello\Bundle\OrderBundle\Form\Type\OrderUpdateType;
 
 class OrderController extends AbstractController
 {
-    /**
-     * @Route(
-     *     path="/",
-     *     name="marello_order_order_index"
-     * )
-     * @Template
-     * @AclAncestor("marello_order_view")
-     */
+    #[Route(path: '/', name: 'marello_order_order_index')]
+    #[Template]
+    #[AclAncestor('marello_order_view')]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloOrderBundle:Order'];
+        return ['entity_class' => Order::class];
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_order_order_view"
-     * )
-     * @Template
-     * @AclAncestor("marello_order_view")
-     *
      * @param Order $order
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_order_order_view')]
+    #[Template]
+    #[AclAncestor('marello_order_view')]
     public function viewAction(Order $order)
     {
         return ['entity' => $order];
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_order_order_create"
-     * )
-     * @Template
-     * @AclAncestor("marello_order_create")
-     *
      * @param Request $request
-     *
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_order_order_create')]
+    #[Template]
+    #[AclAncestor('marello_order_create')]
     public function createAction(Request $request)
     {
         return $this->update($request);
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_order_order_update"
-     * )
-     * @Template
-     * @AclAncestor("marello_order_update")
      *
      * @param Request $request
      * @param Order   $order
-     *
      * @return array
      */
+    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_order_order_update')]
+    #[Template]
+    #[AclAncestor('marello_order_update')]
     public function updateAction(Request $request, Order $order)
     {
         return $this->update($request, $order);
@@ -144,20 +125,19 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/widget/address/{id}/{typeId}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+","typeId"="\d+"},
-     *     name="marello_order_order_address"
-     * )
-     * @Template("@MarelloOrder/Order/widget/address.html.twig")
-     * @AclAncestor("marello_order_view")
      *
      * @param Request $request
      * @param MarelloAddress $address
-     *
      * @return array
      */
+    #[Route(
+        path: '/widget/address/{id}/{typeId}',
+        name: 'marello_order_order_address',
+        requirements: ['id' => '\d+', 'typeId' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
+    #[Template('@MarelloOrder/Order/widget/address.html.twig')]
+    #[AclAncestor('marello_order_view')]
     public function addressAction(Request $request, MarelloAddress $address)
     {
         return [
@@ -167,20 +147,19 @@ class OrderController extends AbstractController
     }
     
     /**
-     * @Route(
-     *     path="/update/address/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_order_order_updateaddress"
-     * )
-     * @Template("@MarelloOrder/Order/widget/updateAddress.html.twig")
-     * @AclAncestor("marello_order_update")
      *
      * @param Request $request
      * @param MarelloAddress $address
-     *
      * @return array
      */
+    #[Route(
+        path: '/update/address/{id}',
+        name: 'marello_order_order_updateaddress',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
+    #[Template('@MarelloOrder/Order/widget/updateAddress.html.twig')]
+    #[AclAncestor('marello_order_update')]
     public function updateAddressAction(Request $request, MarelloAddress $address)
     {
         $responseData = array(
@@ -200,16 +179,16 @@ class OrderController extends AbstractController
     }
 
     /**
-     * @Route(
-     *      path="/widget/products",
-     *      name="marello_order_widget_products_by_channel",
-     *      requirements={"id"="\d+"},
-     *      defaults={"id"=0}
-     * )
-     * @AclAncestor("marello_product_view")
-     * @Template("@MarelloOrder/Order/widget/productsByChannel.html.twig")
      * @return array
      */
+    #[Route(
+        path: '/widget/products',
+        name: 'marello_order_widget_products_by_channel',
+        requirements: ['id' => '\d+'],
+        defaults: ['id' => 0]
+    )]
+    #[AclAncestor('marello_product_view')]
+    #[Template('@MarelloOrder/Order/widget/productsByChannel.html.twig')]
     public function productsByChannelAction(Request $request)
     {
         $channel = $this->container->get(ManagerRegistry::class)
@@ -232,7 +211,7 @@ class OrderController extends AbstractController
         ];
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

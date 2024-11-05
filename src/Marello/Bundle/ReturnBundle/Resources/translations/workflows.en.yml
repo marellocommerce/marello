@@ -1,7 +1,7 @@
 oro:
     workflow:
         marello_return_workflow:
-            label: 'Return Workflow'
+            label: 'Return'
             step:
                 pending:
                     label: 'Pending'

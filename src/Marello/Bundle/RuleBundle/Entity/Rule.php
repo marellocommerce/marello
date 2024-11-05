@@ -2,166 +2,71 @@
 
 namespace Marello\Bundle\RuleBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @ORM\Entity
- * @ORM\Table(
- *     name="marello_rule",
- *     indexes={
- *         @ORM\Index(name="idx_marello_rule_created_at", columns={"created_at"}),
- *         @ORM\Index(name="idx_marello_rule_updated_at", columns={"updated_at"})
- *     }
- * )
- * @ORM\HasLifecycleCallbacks
- * @Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-briefcase"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          }
- *      }
- * )
- */
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_rule')]
+#[ORM\Index(columns: ['created_at'], name: 'idx_marello_rule_created_at')]
+#[ORM\Index(columns: ['updated_at'], name: 'idx_marello_rule_updated_at')]
+#[Oro\Config(
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-briefcase'
+        ],
+        'dataaudit' => [
+            'auditable' => true
+        ],
+        'security' => [
+            'type' => 'ACL',
+            'group_name' => ''
+        ]
+    ]
+)]
 class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
 {
     use DatesAwareTrait;
     use ExtendEntityTrait;
 
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    private ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true,
-     *              "order"=10
-     *          }
-     *      }
-     * )
-     */
-    private $name;
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]]
+    )]
+    private ?string $name = null;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="enabled", type="boolean", nullable=false, options={"default"=true})
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=20
-     *          }
-     *      }
-     *  )
-     */
-    private $enabled = true;
+    #[ORM\Column(name: 'enabled', type: Types::BOOLEAN, nullable: false, options: ['default' => true])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 20]])]
+    private ?bool $enabled = true;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="sort_order", type="integer")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=30
-     *          }
-     *      }
-     *  )
-     */
-    private $sortOrder;
+    #[ORM\Column(name: 'sort_order', type: Types::INTEGER)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 30]])]
+    private ?int $sortOrder = null;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="stop_processing", type="boolean", nullable=false, options={"default"=false})
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=40
-     *          }
-     *      }
-     *  )
-     */
-    private $stopProcessing = false;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="text", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=50
-     *          }
-     *      }
-     *  )
-     */
-    private $expression;
-    
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_system", type="boolean", nullable=false, options={"default"=false})
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=50
-     *          }
-     *      }
-     *  )
-     */
-    private $system = false;
+    #[ORM\Column(name: 'stop_processing', type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 40]])]
+    private ?bool $stopProcessing = false;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 50]])]
+    private ?string $expression = null;
+
+    #[ORM\Column(name: 'is_system', type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 50]])]
+    private ?bool $system = false;
+
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
@@ -169,9 +74,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
         $this->setUpdatedAt($now);
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdate()
     {
         $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
@@ -180,7 +83,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -188,7 +91,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -197,7 +100,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -207,7 +110,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -217,7 +120,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled): self
     {
         $this->enabled = $enabled;
 
@@ -227,7 +130,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return int
      */
-    public function getSortOrder()
+    public function getSortOrder(): int
     {
         return $this->sortOrder;
     }
@@ -236,7 +139,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      * @param int $sortOrder
      * @return $this
      */
-    public function setSortOrder($sortOrder)
+    public function setSortOrder(int $sortOrder): self
     {
         $this->sortOrder = $sortOrder;
 
@@ -246,7 +149,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return bool
      */
-    public function isStopProcessing()
+    public function isStopProcessing(): bool
     {
         return $this->stopProcessing;
     }
@@ -255,7 +158,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
      * @param bool $stopProcessing
      * @return $this
      */
-    public function setStopProcessing($stopProcessing)
+    public function setStopProcessing(bool $stopProcessing): self
     {
         $this->stopProcessing = $stopProcessing;
 
@@ -263,18 +166,18 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     }
     
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpression()
+    public function getExpression(): ?string
     {
         return $this->expression;
     }
 
     /**
-     * @param string $expression
+     * @param string|null $expression
      * @return $this
      */
-    public function setExpression($expression)
+    public function setExpression(string $expression = null): self
     {
         $this->expression = $expression;
 
@@ -282,12 +185,12 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     }
     
     /**
-     * @param bool $isSystem
+     * @param bool $system
      * @return $this
      */
-    public function setSystem($isSystem)
+    public function setSystem(bool $system): self
     {
-        $this->system = $isSystem;
+        $this->system = $system;
 
         return $this;
     }
@@ -295,7 +198,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return bool
      */
-    public function isSystem()
+    public function isSystem(): bool
     {
         return $this->system;
     }
@@ -303,7 +206,7 @@ class Rule implements DatesAwareInterface, RuleInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->name;
     }

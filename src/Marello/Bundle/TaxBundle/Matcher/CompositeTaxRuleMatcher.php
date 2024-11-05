@@ -2,10 +2,10 @@
 
 namespace Marello\Bundle\TaxBundle\Matcher;
 
-use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
 
 class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
 {
@@ -21,11 +21,10 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
      */
     private $matchers = [];
 
-    /** @var CompanyReverseTaxProvider $provider */
-    protected $provider;
-
-    /** @var Order $order */
-    protected $order;
+    public function __construct(
+        protected CompanyReverseTaxProvider $provider
+    ) {
+    }
 
     /**
      * @param TaxRuleMatcherInterface $matcher
@@ -38,13 +37,13 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
     /**
      * {@inheritdoc}
      */
-    public function match(AbstractAddress $address = null, array $taxCodes)
+    public function match(array $taxCodes, Order $order = null, AbstractAddress $address = null)
     {
         if (null === $address || null === $address->getCountry() || 0 === count($taxCodes)) {
             return null;
         }
 
-        if (!$this->provider->orderIsTaxable($this->order)) {
+        if (!$this->provider->orderIsTaxable($order)) {
             return null;
         }
 
@@ -53,8 +52,7 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
             return $this->cache[$cacheKey];
         }
         foreach ($this->matchers as $matcher) {
-            $matcher->setOrder($this->order);
-            $taxRule = $matcher->match($address, $taxCodes);
+            $taxRule = $matcher->match($taxCodes, $order, $address);
             if ($taxRule) {
                 $this->cache[$cacheKey] = $taxRule;
 
@@ -78,23 +76,5 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
         $taxCodesHash = md5(json_encode($taxCodes));
 
         return sprintf('%s:%s:%s:%s', $countryCode, $regionCode, $zipCode, $taxCodesHash);
-    }
-
-    /**
-     * @param Order|null $order
-     * @return void
-     */
-    public function setOrder(Order $order = null)
-    {
-        $this->order = $order;
-    }
-
-    /**
-     * @param CompanyReverseTaxProvider $provider
-     * @return void
-     */
-    public function setCompanyReverseTaxProvider(CompanyReverseTaxProvider $provider): void
-    {
-        $this->provider = $provider;
     }
 }

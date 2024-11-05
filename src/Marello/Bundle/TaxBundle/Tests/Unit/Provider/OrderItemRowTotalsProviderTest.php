@@ -77,7 +77,7 @@ class OrderItemRowTotalsProviderTest extends TestCase
         $this->taxRuleMatcher
             ->expects(static::any())
             ->method('match')
-            ->with($order->getShippingAddress(), ['TEST_CODE'])
+            ->with(['TEST_CODE'], $order, $order->getShippingAddress())
             ->willReturn($matchedRule);
         
         $this->taxCalculator

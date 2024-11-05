@@ -2,10 +2,12 @@
 
 namespace Marello\Bundle\CustomerBundle\Form\Type;
 
-use Marello\Bundle\CustomerBundle\Entity\Company;
-use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Oro\Bundle\FormBundle\Form\Type\OroEntitySelectOrCreateInlineType;
+
+use Marello\Bundle\CustomerBundle\Entity\Company;
 
 class CompanySelectType extends AbstractType
 {

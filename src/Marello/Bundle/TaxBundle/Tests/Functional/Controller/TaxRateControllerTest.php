@@ -2,9 +2,11 @@
 
 namespace Marello\Bundle\TaxBundle\Tests\Functional\Controller;
 
-use Marello\Bundle\TaxBundle\Entity\TaxRate;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
+
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use Marello\Bundle\TaxBundle\Entity\TaxRate;
 
 class TaxRateControllerTest extends WebTestCase
 {
@@ -39,8 +41,8 @@ class TaxRateControllerTest extends WebTestCase
 
         /** @var TaxRate $taxRate */
         $taxRate = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloTaxBundle:TaxRate')
-            ->getRepository('MarelloTaxBundle:TaxRate')
+            ->getManagerForClass(TaxRate::class)
+            ->getRepository(TaxRate::class)
             ->findOneBy(['code' => self::TAX_CODE]);
         $this->assertNotEmpty($taxRate);
 

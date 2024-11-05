@@ -2,212 +2,141 @@
 
 namespace Marello\Bundle\InventoryBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository")
- * @ORM\Table(name="marello_inventory_warehouse",
- *       uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"code"})
- *      }
- * )
- * @Oro\Config(
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="owner_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
+
+#[ORM\Table(name: 'marello_inventory_warehouse')]
+#[ORM\UniqueConstraint(columns: ['code'])]
+#[ORM\Entity(repositoryClass: WarehouseRepository::class)]
+#[Oro\Config(
+    defaultValues: [
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'owner',
+            'owner_column_name' => 'owner_id'
+        ],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class Warehouse implements EmailHolderInterface, ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @ORM\Column(type="string", name="label", nullable=false)
      *
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'label', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $label;
 
     /**
-     * @ORM\Column(type="string", name="code", nullable=false)
      *
      * @var string
-     *
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'code', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $code;
 
     /**
-     * @ORM\Column(type="boolean", nullable=false, name="is_default")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var bool
      */
+    #[ORM\Column(name: 'is_default', type: Types::BOOLEAN, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $default;
 
     /**
      * @var OrganizationInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => true]])]
     protected $owner;
 
     /**
      * @var MarelloAddress
-     *
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=40,
-     *              "full"=true,
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\OneToOne(targetEntity: MarelloAddress::class, cascade: ['persist', 'remove'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 40, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $address = null;
 
     /**
      * @var WarehouseType
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\WarehouseType")
-     * @ORM\JoinColumn(name="warehouse_type", referencedColumnName="name")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=50,
-     *              "full"=true,
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'warehouse_type', referencedColumnName: 'name')]
+    #[ORM\ManyToOne(targetEntity: WarehouseType::class)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 50, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $warehouseType;
     
-    /**
-     * @ORM\ManyToOne(targetEntity="WarehouseGroup", inversedBy="warehouses")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=60,
-     *              "full"=true,
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: WarehouseGroup::class, inversedBy: 'warehouses')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 60, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $group;
     
     /**
-     * @ORM\Column(type="string", nullable=true)
-     *
      * @var string
      */
+    #[ORM\Column(name: 'email', type: Types::STRING, nullable: true)]
     protected $email;
 
     /**
-     * @ORM\Column(name="notifier", type="string", nullable=true)
-     *
      * @var string
      */
+    #[ORM\Column(name: 'notifier', type: Types::STRING, nullable: true)]
     protected $notifier;
 
     /**
-     * @ORM\Column(name="sort_order_ood_loc", type="integer", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-                "entity"={
-     *               "label"="marello.inventory.warehouse.sort_order_ood_loc.label"
-     *           },
-     *      }
-     * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'sort_order_ood_loc', type: Types::INTEGER, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'entity' => ['label' => 'marello.inventory.warehouse.sort_order_ood_loc.label']
+        ]
+    )]
     protected $sortOrderOodLoc;
 
     /**
-     * @ORM\Column(name="order_on_demand_location", type="boolean", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var bool
      */
+    #[ORM\Column(name: 'order_on_demand_location', type: Types::BOOLEAN, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderOnDemandLocation;
 
     /**

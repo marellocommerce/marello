@@ -22,6 +22,7 @@ class CustomizeInventoryLevelFormData implements ProcessorInterface
         protected array $inventoryQtyAdjustmentMap = []
     ) {
     }
+
     public function process(ContextInterface $context): void
     {
         /** @var CustomizeFormDataContext $context */

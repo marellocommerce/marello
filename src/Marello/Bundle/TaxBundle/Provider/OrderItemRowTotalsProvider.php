@@ -52,10 +52,10 @@ class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
                 if (isset($itemResult['price'][$identifier]) && isset($itemResult['tax_code'][$identifier]) &&
                     isset($item['quantity'])
                 ) {
-                    $this->taxRuleMatcher->setOrder($order);
                     $taxRule = $this->taxRuleMatcher->match(
-                        $order->getShippingAddress(),
-                        [$itemResult['tax_code'][$identifier]['code']]
+                        [$itemResult['tax_code'][$identifier]['code']],
+                        $order,
+                        $order->getShippingAddress()
                     );
                     if ($taxRule) {
                         $rate = $taxRule->getTaxRate()->getRate();

@@ -59,6 +59,8 @@ api:
                     exclude: true
                 updatedAt:
                     exclude: true
+                variantHash:
+                    exclude: true
             filters:
                 exclusion_policy: all
                 fields:

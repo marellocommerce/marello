@@ -2,131 +2,67 @@
 
 namespace Marello\Bundle\PaymentTermBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(
- *     name="marello_payment_term",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(columns={"code"})
- *     }
- * )
- * @Oro\Config(
- *      routeName="marello_paymentterm_paymentterm_index",
- *      routeView="marello_paymentterm_paymentterm_view",
- *      routeUpdate="marello_paymentterm_paymentterm_update",
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-usd"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "form"={
- *              "form_type"="Marello\Bundle\PaymentTermBundle\Form\Type\PaymentTermSelectType",
- *              "grid_name"="marello-payment-terms-select-grid",
- *          }
- *      }
- * )
- */
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
+use Marello\Bundle\PaymentTermBundle\Form\Type\PaymentTermSelectType;
+
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_payment_term')]
+#[ORM\UniqueConstraint(columns: ['code'])]
+#[Oro\Config(
+    routeName: 'marello_paymentterm_paymentterm_index',
+    routeView: 'marello_paymentterm_paymentterm_view',
+    routeUpdate: 'marello_paymentterm_paymentterm_update',
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-usd',
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'form' => ['form_type' => PaymentTermSelectType::class, 'grid_name' => 'marello-payment-terms-select-grid']
+    ]
+)]
 class PaymentTerm implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @Oro\ConfigField(
-     *     defaultValues={
-     *         "importexport"={
-     *              "excluded"=true
-     *         }
-     *     }
-     * )
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=32)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true,
-     *              "order"=10,
-     *          }
-     *      }
-     * )
-     */
-    protected $code;
+    #[ORM\Column(name: 'code', type: Types::STRING, length: 32, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 10]]
+    )]
+    protected ?string $code = null;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="term", type="integer")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=20,
-     *          }
-     *      }
-     * )
-     */
-    protected $term;
+    #[ORM\Column(name: 'term', type: Types::INTEGER)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['identity' => true, 'order' => 20]]
+    )]
+    protected ?int $term = null;
 
-    /**
-     * @var Collection|LocalizedFallbackValue[]
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue",
-     *      cascade={"ALL"},
-     *      orphanRemoval=true
-     * )
-     * @ORM\JoinTable(
-     *      name="marello_payment_term_labels",
-     *      joinColumns={
-     *          @ORM\JoinColumn(name="paymentterm_id", referencedColumnName="id", onDelete="CASCADE")
-     *      },
-     *      inverseJoinColumns={
-     *          @ORM\JoinColumn(name="localized_value_id", referencedColumnName="id", onDelete="CASCADE", unique=true)
-     *      }
-     * )
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=30,
-     *              "full"=true,
-     *              "fallback_field"="string"
-     *          }
-     *      }
-     * )
-     */
-    protected $labels;
+    #[ORM\ManyToMany(targetEntity: LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
+    #[ORM\JoinTable(name: 'marello_payment_term_labels')]
+    #[ORM\JoinColumn(name: 'paymentterm_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'localized_value_id', referencedColumnName: 'id', unique: true, onDelete: 'CASCADE')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 30, 'full' => true, 'fallback_field' => 'string']
+        ]
+    )]
+    protected ?Collection $labels = null;
 
     public function __construct()
     {
@@ -151,9 +87,9 @@ class PaymentTerm implements ExtendEntityInterface
 
     /**
      * @param string $code
-     * @return PaymentTerm
+     * @return $this
      */
-    public function setCode(string $code): PaymentTerm
+    public function setCode(string $code = null) : self
     {
         $this->code = $code;
 
@@ -170,9 +106,9 @@ class PaymentTerm implements ExtendEntityInterface
 
     /**
      * @param int $term
-     * @return PaymentTerm
+     * @return $this
      */
-    public function setTerm(int $term): PaymentTerm
+    public function setTerm(int $term): self
     {
         $this->term = $term;
 
@@ -180,18 +116,18 @@ class PaymentTerm implements ExtendEntityInterface
     }
 
     /**
-     * @return Collection
+     * @return Collection|null
      */
-    public function getLabels(): Collection
+    public function getLabels(): ?Collection
     {
         return $this->labels;
     }
 
     /**
      * @param $label LocalizedFallbackValue
-     * @return PaymentTerm
+     * @return $this
      */
-    public function addLabel(LocalizedFallbackValue $label): PaymentTerm
+    public function addLabel(LocalizedFallbackValue $label): self
     {
         if (!$this->labels->contains($label)) {
             $this->labels[] = $label;
@@ -200,7 +136,11 @@ class PaymentTerm implements ExtendEntityInterface
         return $this;
     }
 
-    public function removeLabel(LocalizedFallbackValue $label): PaymentTerm
+    /**
+     * @param LocalizedFallbackValue $label
+     * @return $this
+     */
+    public function removeLabel(LocalizedFallbackValue $label): self
     {
         $this->labels->removeElement($label);
 

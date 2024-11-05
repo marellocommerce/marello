@@ -2,21 +2,23 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
 use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
-use Marello\Bundle\SupplierBundle\Entity\Supplier;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadProductSupplierData extends AbstractFixture implements
     DependentFixtureInterface,
@@ -97,7 +99,7 @@ class LoadProductSupplierData extends AbstractFixture implements
         }
 
         $supplier = $this->manager
-            ->getRepository('MarelloSupplierBundle:Supplier')
+            ->getRepository(Supplier::class)
             ->findOneBy([
                 'code' => $data['supplier']
             ]);

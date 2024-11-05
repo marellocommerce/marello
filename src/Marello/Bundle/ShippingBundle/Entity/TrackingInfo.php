@@ -2,133 +2,79 @@
 
 namespace Marello\Bundle\ShippingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
-/**
- * @ORM\Entity
- * @ORM\Table(
- *     name="marello_tracking_info",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(
- *             name="marello_tracking_info_shipmentidx",
- *             columns={"shipment_id"}
- *         )
- *     }
- * )
- * @ORM\HasLifecycleCallbacks()
- * @Oro\Config(
- *  defaultValues={
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      }
- *  }
- * )
- */
+#[ORM\Table(name: 'marello_tracking_info')]
+#[ORM\UniqueConstraint(name: 'marello_tracking_info_shipmentidx', columns: ['shipment_id'])]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['security' => ['type' => 'ACL', 'group_name' => ''], 'dataaudit' => ['auditable' => true]])]
 class TrackingInfo implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
     use EntityCreatedUpdatedAtTrait;
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
-     * @ORM\Column(name="tracking_url", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
+    #[ORM\Column(name: 'tracking_url', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $trackingUrl;
 
     /**
-     * @ORM\Column(name="track_trace_url", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
+    #[ORM\Column(name: 'track_trace_url', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $trackTraceUrl;
 
     /**
-     * @ORM\Column(name="tracking_code", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
+    #[ORM\Column(name: 'tracking_code', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $trackingCode;
 
     /**
-     * @ORM\Column(name="provider", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
+    #[ORM\Column(name: 'provider', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $provider;
 
     /**
-     * @ORM\Column(name="provider_name", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var string
      */
+    #[ORM\Column(name: 'provider_name', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $providerName;
 
     /**
-     * @ORM\OneToOne(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\Shipment",
-     *     inversedBy="trackingInfo",
-     *     cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="shipment_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      * @var Shipment
      */
+    #[ORM\JoinColumn(name: 'shipment_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\OneToOne(
+        inversedBy: 'trackingInfo',
+        targetEntity: Shipment::class,
+        cascade: ['persist'],
+    )]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shipment;
 
     /**

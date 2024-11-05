@@ -2,19 +2,24 @@
 
 namespace Marello\Bundle\SalesBundle\Tests\Unit\EventListener\Doctrine;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
-use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelGroupRepository;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
-use Marello\Bundle\SalesBundle\EventListener\Doctrine\SalesChannelGroupListener;
-use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
+
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use Symfony\Component\HttpFoundation\RequestStack;
+
 use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
+use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelGroupRepository;
+use Marello\Bundle\SalesBundle\EventListener\Doctrine\SalesChannelGroupListener;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
 
 class SalesChannelGroupListenerTest extends TestCase
 {
@@ -24,9 +29,9 @@ class SalesChannelGroupListenerTest extends TestCase
     private $salesChannelGroupListener;
 
     /**
-     * @var Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestStack|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $session;
+    private $requestStack;
 
     /**
      * @var AclHelper|\PHPUnit\Framework\MockObject\MockObject
@@ -38,7 +43,7 @@ class SalesChannelGroupListenerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->session = $this->createMock(Session::class);
+        $this->requestStack = $this->createMock(RequestStack::class);
         $this->aclHelper = $this->createMock(AclHelper::class);
         $applicationState = $this->createMock(ApplicationState::class);
         $applicationState->expects($this->any())
@@ -46,7 +51,7 @@ class SalesChannelGroupListenerTest extends TestCase
             ->willReturn(true);
         $this->salesChannelGroupListener = new SalesChannelGroupListener(
             $applicationState,
-            $this->session,
+            $this->requestStack,
             $this->aclHelper
         );
     }
@@ -75,7 +80,7 @@ class SalesChannelGroupListenerTest extends TestCase
         $salesChannelGroup
             ->expects(static::exactly($persistQty))
             ->method('getSalesChannels')
-            ->willReturn([$salesChannel]);
+            ->willReturn(new ArrayCollection([$salesChannel]));
 
         $groupRepository = $this->createMock(SalesChannelGroupRepository::class);
         $groupRepository

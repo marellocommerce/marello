@@ -5,7 +5,7 @@ namespace Marello\Bundle\InventoryBundle\Controller;
 use Marello\Bundle\InventoryBundle\Form\Type\ReshipmentType;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -16,19 +16,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ReshipmentController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/create/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_inventory_reshipment_create"
-     * )
-     * @Template("@MarelloInventory/Reshipment/create.html.twig")
-     * @AclAncestor("marello_inventory_inventory_view")
      *
      * @param Order $order
      * @param Request $request
-     *
      * @return array|RedirectResponse
      */
+    #[Route(path: '/create/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_reshipment_create')]
+    #[Template('@MarelloInventory/Reshipment/create.html.twig')]
+    #[AclAncestor('marello_inventory_inventory_view')]
     public function createAction(Order $order, Request $request)
     {
         return $this->container->get(UpdateHandlerFacade::class)->update(
@@ -40,7 +35,7 @@ class ReshipmentController extends AbstractController
         );
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

@@ -1,20 +1,20 @@
 acls:
     marello_notification_notification_view:
         type:       entity
-        class:      MarelloNotificationBundle:Notification
+        class:      Marello\Bundle\NotificationBundle\Entity\Notification
         permission: VIEW
 
     marello_notification_notification_create:
         type:       entity
-        class:      MarelloNotificationBundle:Notification
+        class:      Marello\Bundle\NotificationBundle\Entity\Notification
         permission: CREATE
 
     marello_notification_notification_update:
         type:       entity
-        class:      MarelloNotificationBundle:Notification
+        class:      Marello\Bundle\NotificationBundle\Entity\Notification
         permission: EDIT
 
     marello_notification_notification_delete:
         type:       entity
-        class:      MarelloNotificationBundle:Notification
+        class:      Marello\Bundle\NotificationBundle\Entity\Notification
         permission: DELETE
