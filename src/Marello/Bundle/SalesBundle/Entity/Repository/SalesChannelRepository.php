@@ -4,6 +4,7 @@ namespace Marello\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
@@ -11,6 +12,11 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class SalesChannelRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, SalesChannel::class);
+    }
+
     /**
      * @param string $searchTerm
      * @param int $groupId
@@ -124,5 +130,21 @@ class SalesChannelRepository extends ServiceEntityRepository
             ->setParameters(['product' => $product]);
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Get active sales channels filtered by currency
+     *
+     * @param string $currency
+     * @param AclHelper $aclHelper
+     * @return SalesChannel[]
+     */
+    public function getActiveChannelsByCurrency(string $currency, AclHelper $aclHelper)
+    {
+        $qb = $this->getActiveChannelsQuery();
+        $qb->andWhere($qb->expr()->eq('sc.currency', ':currency'))
+            ->setParameter('currency', $currency);
+
+        return $aclHelper->apply($qb)->getResult();
     }
 }

@@ -2,10 +2,10 @@
 
 namespace Marello\Bundle\ProductBundle\DependencyInjection;
 
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
-use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
@@ -15,12 +15,12 @@ use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritDoc}
-     */
+    public const ROOT_NODE = 'marello_product';
+    public const USE_EXTERNAL_URL_CONFIG = 'use_external_url';
+
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('marello_product');
+        $treeBuilder = new TreeBuilder(self::ROOT_NODE);
         $rootNode = $treeBuilder->getRootNode();
 
         // Here you should define the parameters that are allowed to
@@ -29,10 +29,15 @@ class Configuration implements ConfigurationInterface
         SettingsBuilder::append(
             $rootNode,
             [
-                'image_use_external_url' => ['value' => false]
+                self::USE_EXTERNAL_URL_CONFIG => ['value' => false]
             ]
         );
 
         return $treeBuilder;
+    }
+
+    public static function getConfigKeyByName(string $name): string
+    {
+        return self::ROOT_NODE . ConfigManager::SECTION_MODEL_SEPARATOR . $name;
     }
 }

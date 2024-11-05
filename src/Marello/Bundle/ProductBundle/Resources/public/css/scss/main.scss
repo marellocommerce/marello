@@ -40,3 +40,17 @@ div.product-image {
         }
     }
 }
+.product-supplier-relation-item {
+    &.supplier-line-item-quantity-of-unit input,
+    &.supplier-line-item-cost input,
+    &.supplier-line-item-priority input,
+    &.supplier-line-item-lead-time input {
+        width: 243px;
+    }
+
+    &.supplier-line-item-lead-time {
+        .tooltip-icon {
+            font-size: 11px;
+        }
+    }
+}

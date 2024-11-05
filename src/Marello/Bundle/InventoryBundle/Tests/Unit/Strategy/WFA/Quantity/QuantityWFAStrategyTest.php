@@ -2,28 +2,27 @@
 
 namespace Marello\Bundle\InventoryBundle\Tests\Unit\Strategy\WFA\Quantity;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseGroup;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
-use Marello\Bundle\InventoryBundle\Provider\AllocationExclusionProvider;
-use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use PHPUnit\Framework\TestCase;
 
 use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseGroup;
+use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
+use Marello\Bundle\InventoryBundle\Provider\AllocationExclusionProvider;
+use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\QuantityWFAStrategy;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseChannelGroupLinkRepository;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\QtyWHCalculatorInterface;
 
 class QuantityWFAStrategyTest extends TestCase
@@ -41,28 +40,23 @@ class QuantityWFAStrategyTest extends TestCase
     protected $quantityWFAStrategy;
 
     /**
-     * @var WarehouseChannelGroupLinkRepository|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $warehouseChannelGroupLinkRepository;
-
-    /**
      * @var ConfigManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configManager;
 
+    /**
+     * @var DoctrineHelper|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $doctrineHelper;
+
     protected function setUp(): void
     {
         $this->qtyWHCalculator = $this->createMock(QtyWHCalculatorInterface::class);
-        $this->warehouseChannelGroupLinkRepository = $this->createMock(WarehouseChannelGroupLinkRepository::class);
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->any())
-            ->method('getRepository')
-            ->with(WarehouseChannelGroupLink::class)
-            ->willReturn($this->warehouseChannelGroupLinkRepository);
         $this->configManager = $this->createMock(ConfigManager::class);
+        $this->doctrineHelper = $this->createMock(DoctrineHelper::class);
         $this->quantityWFAStrategy = new QuantityWFAStrategy(
             $this->qtyWHCalculator,
-            $this->warehouseChannelGroupLinkRepository,
+            $this->doctrineHelper,
             $this->configManager
         );
     }
@@ -96,7 +90,7 @@ class QuantityWFAStrategyTest extends TestCase
         $product1 = $this->getEntity(Product::class, ['sku' => 'TPD0001']);
         $product2 = $this->getEntity(Product::class, ['sku' => 'TPD0002']);
         $product3 = $this->getEntity(Product::class, ['sku' => 'TPD0003']);
-        
+
         $warehouse1 = $this->getEntity(Warehouse::class, [
             'id' => 1,
             'default' => true,
@@ -119,9 +113,9 @@ class QuantityWFAStrategyTest extends TestCase
             'code' => QuantityWFAStrategy::CNA_WAREHOUSE_CODE,
         ]);
 
-        $inventoryLevel1 = $this->getEntity(InventoryLevel::class, ['inventory' => 10, 'warehouse' => $warehouse1]);
-        $inventoryLevel2 = $this->getEntity(InventoryLevel::class, ['inventory' => 10, 'warehouse' => $warehouse2]);
-        $inventoryLevel3 = $this->getEntity(InventoryLevel::class, ['inventory' => 0, 'warehouse' => $warehouse3]);
+        $inventoryLevel1 = $this->getEntity(InventoryLevel::class, ['inventoryQty' => 10, 'warehouse' => $warehouse1]);
+        $inventoryLevel2 = $this->getEntity(InventoryLevel::class, ['inventoryQty' => 10, 'warehouse' => $warehouse2]);
+        $inventoryLevel3 = $this->getEntity(InventoryLevel::class, ['inventoryQty' => 0, 'warehouse' => $warehouse3]);
 
         $inventoryItem1 = $this->getEntity(
             InventoryItem::class,
@@ -157,15 +151,30 @@ class QuantityWFAStrategyTest extends TestCase
 
         $orderItem1 = $this->getEntity(
             OrderItem::class,
-            ['productSku' => $product1->getSku(), 'product' => $product1, 'quantity' => 1]
+            [
+                'productSku' => $product1->getSku(),
+                'product' => $product1,
+                'quantity' => 1,
+                'variantHash' => md5($product1->getSku())
+            ]
         );
         $orderItem2 = $this->getEntity(
             OrderItem::class,
-            ['productSku' => $product2->getSku(), 'product' => $product2, 'quantity' => 1]
+            [
+                'productSku' => $product2->getSku(),
+                'product' => $product2,
+                'quantity' => 1,
+                'variantHash' => md5($product2->getSku())
+            ]
         );
         $orderItem3 = $this->getEntity(
             OrderItem::class,
-            ['productSku' => $product3->getSku(), 'product' => $product3, 'quantity' => 1]
+            [
+                'productSku' => $product3->getSku(),
+                'product' => $product3,
+                'quantity' => 1,
+                'variantHash' => md5($product3->getSku())
+            ]
         );
 
         $salesChannelGroup = $this->getEntity(SalesChannelGroup::class, ['id' => 1]);
@@ -182,25 +191,25 @@ class QuantityWFAStrategyTest extends TestCase
         $initialResults = [];
 
         $productsByWh = [
-            'TPD0001' => [
+            md5($product1->getSku()) => [
                 [
-                    'sku' => 'TPD0001',
+                    'sku' => md5($product1->getSku()),
                     'wh' => 'warehouse1',
                     'qty' => 1,
                     'qtyOrdered' => 1,
                 ]
             ],
-            'TPD0002' => [
+            md5($product2->getSku()) => [
                 [
-                    'sku' => 'TPD0002',
+                    'sku' => md5($product2->getSku()),
                     'wh' => 'warehouse2',
                     'qty' => 1,
                     'qtyOrdered' => 1,
                 ]
             ],
-            'TPD0003'=> [
+            md5($product3->getSku()) => [
                 [
-                    'sku' => 'TPD0003',
+                    'sku' => md5($product3->getSku()),
                     'wh' => 'warehouse1',
                     'qty' => 1,
                     'qtyOrdered' => 1,
@@ -208,9 +217,9 @@ class QuantityWFAStrategyTest extends TestCase
             ]
         ];
         $orderItemsByProducts = [
-            'TPD0001_|_0' => $orderItem1,
-            'TPD0002_|_1' => $orderItem2,
-            'TPD0003_|_2' => $orderItem3,
+            md5($product1->getSku()) => $orderItem1,
+            md5($product2->getSku()) => $orderItem2,
+            md5($product3->getSku()) => $orderItem3,
         ];
         $warehouses = [
             $warehouse1->getCode() => $warehouse1,
@@ -235,7 +244,14 @@ class QuantityWFAStrategyTest extends TestCase
         // add no allocation warehouse
         $warehouses[$noAllocationWarehouse->getCode()] = $noAllocationWarehouse;
 
-        $this->warehouseChannelGroupLinkRepository
+        $warehouseChannelGroupLinkRepository = $this->createMock(WarehouseChannelGroupLinkRepository::class);
+        $this->doctrineHelper
+            ->expects(static::once())
+            ->method('getEntityRepositoryForClass')
+            ->with(WarehouseChannelGroupLink::class)
+            ->willReturn($warehouseChannelGroupLinkRepository);
+
+        $warehouseChannelGroupLinkRepository
             ->expects(static::once())
             ->method('findLinkBySalesChannelGroup')
             ->with($salesChannelGroup)

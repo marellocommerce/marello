@@ -80,7 +80,6 @@ class LogoPathProvider
         return $this->configManager->get($key, false, false, $salesChannel);
     }
 
-
     /**
      * @param $id
      * @return object|null

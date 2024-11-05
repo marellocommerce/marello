@@ -2,12 +2,12 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Marello\Bundle\ProductBundle\Entity\Variant;
 use Marello\Bundle\ProductBundle\Entity\Product;
@@ -55,7 +55,7 @@ class LoadProductVariantData extends AbstractFixture implements DependentFixture
     public function loadProductVariant()
     {
         $products = $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findAll();
 
         $first = reset($products);
@@ -96,7 +96,7 @@ class LoadProductVariantData extends AbstractFixture implements DependentFixture
             $variant->setVariantCode($variantCode);
             $skuSearch  = sprintf('%s%%', $skuPattern);
             $products = $this->manager
-                ->getRepository('MarelloProductBundle:Product')
+                ->getRepository(Product::class)
                 ->createQueryBuilder('p')
                 ->where('p.sku LIKE :sku')
                 ->setParameter('sku', $skuSearch)

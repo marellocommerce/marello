@@ -5,6 +5,8 @@ namespace Marello\Bundle\CustomerBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\TestFrameworkBundle\Test\DataFixtures\InitialFixtureInterface;
 
@@ -80,11 +82,11 @@ class LoadCustomerData extends AbstractFixture implements InitialFixtureInterfac
         $billingAddress->setCity($row['city']);
         $billingAddress->setCountry(
             $this->manager
-                ->getRepository('OroAddressBundle:Country')->find($row['country'])
+                ->getRepository(Country::class)->find($row['country'])
         );
         $billingAddress->setRegion(
             $this->manager
-                ->getRepository('OroAddressBundle:Region')
+                ->getRepository(Region::class)
                 ->findOneBy(['combinedCode' => $row['country'] . '-' . $row['state']])
         );
         $billingAddress->setPhone($row['telephone_number']);

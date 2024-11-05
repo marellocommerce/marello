@@ -22,12 +22,8 @@ class SalesChannelTypeController extends AbstractController
      *
      * @return JsonResponse
      * @throws HttpException|AccessDeniedHttpException
-     *
-     * @Route(
-     *     path="/search",
-     *     name="marello_sales_saleschanneltype_search"
-     * )
      */
+    #[Route(path: '/search', name: 'marello_sales_saleschanneltype_search')]
     public function searchAction(Request $request)
     {
         $query = $request->query->get('query');
@@ -60,17 +56,12 @@ class SalesChannelTypeController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_sales_saleschanneltype_create"
-     * )
-     * @Template("@MarelloSales/SalesChannelType/create.html.twig")
      *
      * @param Request $request
-     *
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_sales_saleschanneltype_create')]
+    #[Template('@MarelloSales/SalesChannelType/create.html.twig')]
     public function createAction(Request $request)
     {
         $entity = new SalesChannelType();
@@ -85,7 +76,7 @@ class SalesChannelTypeController extends AbstractController
         );
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

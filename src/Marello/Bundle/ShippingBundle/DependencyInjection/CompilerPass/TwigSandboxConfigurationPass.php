@@ -2,34 +2,43 @@
 
 namespace Marello\Bundle\ShippingBundle\DependencyInjection\CompilerPass;
 
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
+use Oro\Bundle\EmailBundle\DependencyInjection\Compiler\AbstractTwigSandboxConfigurationPass;
 
-class TwigSandboxConfigurationPass implements CompilerPassInterface
+class TwigSandboxConfigurationPass extends AbstractTwigSandboxConfigurationPass
 {
     /**
      * {@inheritDoc}
      */
-    public function process(ContainerBuilder $container)
+    protected function getFunctions(): array
     {
-        if ($container->hasDefinition('oro_email.twig.email_security_policy') &&
-            $container->hasDefinition('oro_email.email_renderer')
-        ) {
-            $securityPolicyDef = $container->getDefinition('oro_email.twig.email_security_policy');
+        return [
+            'marello_shipping_method_with_type_label'
+        ];
+    }
 
-            $functions = $securityPolicyDef->getArgument(4);
-            $functions = array_merge(
-                $functions,
-                ['marello_shipping_method_with_type_label']
-            );
+    /**
+     * {@inheritDoc}
+     */
+    protected function getFilters(): array
+    {
+        return [];
+    }
 
-            $securityPolicyDef->replaceArgument(4, $functions);
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTags(): array
+    {
+        return [];
+    }
 
-            $rendererDef = $container->getDefinition('oro_email.email_renderer');
-            $rendererDef->addMethodCall('addExtension', [
-                new Reference('marello_shipping.twig.shipping_method_extension')
-            ]);
-        }
+    /**
+     * {@inheritDoc}
+     */
+    protected function getExtensions(): array
+    {
+        return [
+            'marello_shipping.twig.shipping_method_extension'
+        ];
     }
 }

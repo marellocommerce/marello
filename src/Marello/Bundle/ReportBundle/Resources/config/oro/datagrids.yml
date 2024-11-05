@@ -11,7 +11,7 @@ datagrids:
                     - COUNT(o.orderNumber) as totalOrders
                     - SUM(o.grandTotal) as totalRevenue
                 from:
-                    - { table: MarelloOrderBundle:Order, alias: o }
+                    - { table: Marello\Bundle\OrderBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.salesChannel, alias: channel }
@@ -52,9 +52,9 @@ datagrids:
                     - p.denormalizedDefaultName as productName
                     - p.sku as productSku
                     - s.label as status
-                    - COALESCE(SUM(il.inventory), 0) AS inventoryQty
+                    - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                 from:
-                    - { table: MarelloInventoryBundle:InventoryItem, alias: i }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryItem, alias: i }
                 join:
                     left:
                         - { join: i.product, alias: p }
@@ -69,7 +69,7 @@ datagrids:
                 label:              marello.product.names.label
                 frontend_type:      string
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.label
+                label:              marello.inventory.inventorylevel.inventory_qty.label
                 frontend_type:      number
                 data_name:          inventoryQty
             status:
@@ -98,7 +98,7 @@ datagrids:
                         - oi.productSku
                         - SUM(oi.quantity) AS quantitySold
                     from:
-                        - { table: MarelloOrderBundle:OrderItem, alias: oi }
+                        - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                     groupBy: oi.productSku, oi.productName
             columns:
                 productSku:
@@ -138,7 +138,7 @@ datagrids:
                         - oi.productSku
                         - SUM(oi.quantity) AS quantitySold
                     from:
-                        - { table: MarelloOrderBundle:OrderItem, alias: oi }
+                        - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                     groupBy: oi.productSku, oi.productName
             columns:
                 productSku:
@@ -234,10 +234,10 @@ datagrids:
                         - SUM(COALESCE(oi.quantity, 0)) AS quantityOrdered
                         - CAST(SUM(COALESCE(ri.quantity, 0)) AS decimal) / SUM(COALESCE(oi.quantity, 0)) AS percentageReturned
                     from:
-                        - { table: MarelloOrderBundle:OrderItem, alias: oi }
+                        - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                     join:
                         inner:
-                            - { join: MarelloReturnBundle:ReturnItem, alias: ri, conditionType: 'WITH', condition: 'oi.id = ri.orderItem' }
+                            - { join: Marello\Bundle\ReturnBundle\Entity\ReturnItem, alias: ri, conditionType: 'WITH', condition: 'oi.id = ri.orderItem' }
                     groupBy: oi.productSku, oi.productName
             columns:
                 productSku:
@@ -283,3 +283,47 @@ datagrids:
             options:
                 entityHint: report data
                 export: false
+
+    marello_report-inventory-out_of_date_inventory:
+        pageTitle: marello.report.title.out_of_date_inventory
+        source:
+            type: orm
+            acl_resource: oro_report_view
+            query:
+                select:
+                    - ib.batchNumber
+                    - ib.sellByDate
+                    - ib.quantity
+                    - p.sku
+                    - il.pickLocation
+                from:
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryBatch, alias: ib }
+                where:
+                    and:
+                        - ib.sellByDate <= CURRENT_TIMESTAMP()
+                join:
+                    inner:
+                        - { join: Marello\Bundle\InventoryBundle\Entity\InventoryLevel, alias: il, conditionType: 'WITH', condition: 'ib.id = il.id' }
+                        - { join: Marello\Bundle\InventoryBundle\Entity\InventoryItem, alias: i, conditionType: 'WITH', condition: 'il.id = i.id' }
+                        - { join: Marello\Bundle\ProductBundle\Entity\Product, alias: p, conditionType: 'WITH', condition: 'i.id = p.id' }
+        columns:
+            sku:
+                label:              marello.product.sku.label
+                frontend_type:      string
+            batchNumber:
+                label:              marello.inventory.inventorybatch.batch_number.label
+                frontend_type:      string
+            pickLocation:
+                label:              marello.inventory.inventorylevel.pick_location.label
+                frontend_type:      string
+            sellByDate:
+                label:              marello.inventory.inventorybatch.sell_by_date.label
+                frontend_type:      datetime
+                data_name:          sellByDate
+            quantity:
+                label:              marello.inventory.inventorybatch.quantity.label
+                frontend_type:      integer
+                data_name:          quantity
+        options:
+            entityHint: report data
+            export: false

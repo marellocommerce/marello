@@ -40,6 +40,11 @@ api:
                         allow_array: true
                         property_path: sku
                         description: 'Filter by sku'
+                    barcode:
+                        data_type: string
+                        allow_array: true
+                        property_path: barcode
+                        description: 'Filter by barcode'
                     saleschannels:
                         data_type: string
                         allow_array: true
@@ -54,6 +59,15 @@ api:
                         property_path: updatedAt
                         description: 'Filter products by updated at'
             actions:
+                #removed tags from API response as it cannot deal with SKU as identifier
+                get:
+                    fields:
+                        tags:
+                            exclude: true
+                get_list:
+                    fields:
+                        tags:
+                            exclude: true
                 create:
                     fields:
                         prices:

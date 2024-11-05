@@ -1,15 +1,15 @@
 acls:
     marello_purchase_order_create:
         type:       entity
-        class:      MarelloPurchaseOrderBundle:PurchaseOrder
+        class:      Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder
         permission: CREATE
 
     marello_purchase_order_view:
         type:       entity
-        class:      MarelloPurchaseOrderBundle:PurchaseOrder
+        class:      Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder
         permission: VIEW
 
     marello_purchase_order_update:
         type: entity
-        class: MarelloPurchaseOrderBundle:PurchaseOrder
+        class: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder
         permission: EDIT

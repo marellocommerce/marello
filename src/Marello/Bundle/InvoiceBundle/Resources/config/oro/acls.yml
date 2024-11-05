@@ -1,0 +1,15 @@
+acls:
+    marello_invoice_create:
+        type: entity
+        class: Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice
+        permission: CREATE
+
+    marello_invoice_view:
+        type: entity
+        class: Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice
+        permission: VIEW
+
+    marello_invoice_update:
+        type: entity
+        class: Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice
+        permission: EDIT

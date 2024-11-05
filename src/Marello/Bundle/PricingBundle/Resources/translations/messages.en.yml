@@ -88,16 +88,16 @@ marello:
             total.label:                Grand Total
 
         vat:
-            included.label:             incl. VAT
-            excluded.label:             excl. VAT
+            included.label:             incl. Tax
+            excluded.label:             excl. Tax
 
         system_configuration:
             groups:
                 pricing.title:          Pricing
                 general.title:          General
-                vat.label:              VAT
+                vat.label:              Tax
             fields:
                 vat:
-                    label:              Price includes VAT
+                    label:              Prices includes Tax
                     included.label:     Include
                     excluded.label:     Exclude

@@ -1,5 +1,13 @@
 api:
     entity_aliases:
+        Marello\Bundle\InventoryBundle\Entity\InventoryLevel:
+            alias: marelloinventorylevel
+            plural_alias: marelloinventorylevels
+
+        Marello\Bundle\InventoryBundle\Entity\InventoryBatch:
+            alias: marelloinventorybatch
+            plural_alias: marelloinventorybatches
+
         Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel:
             alias: marellobalancedinventorylevel
             plural_alias: marellobalancedinventorylevels
@@ -17,6 +25,86 @@ api:
             plural_alias: marelloallocationitems
 
     entities:
+        Marello\Bundle\InventoryBundle\Entity\InventoryLevel:
+            documentation_resource: '@MarelloInventoryBundle/Resources/doc/api/inventorylevel.md'
+            fields:
+                inventoryQty:
+                    description: 'Adjustment to inventoryQty, i.e. a positive value increases inventoryQty, negative decreases it'
+                inventoryBatches:
+                    data_type: integer
+                    target_class: Marello\Bundle\InventoryBundle\Entity\InventoryBatch
+                    target_type: collection
+            filters:
+                exclusion_policy: all
+                fields:
+                    product:
+                        data_type: string
+                        allow_array: true
+                        property_path: inventoryItem.product.sku
+                        description: 'Filter by product sku'
+                    warehouse:
+                        data_type: string
+                        allow_array: true
+                        property_path: warehouse.code
+                        description: 'Filter by Warehouse code'
+                        operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
+            actions:
+                get_subresource: false
+                create: false
+                update:
+                    fields:
+                        inventoryItem:
+                            exclude: true
+                        warehouse:
+                            exclude: true
+                        allocatedInventory:
+                            exclude: true
+                        managedInventory:
+                            exclude: true
+                        pickLocation:
+                            exclude: true
+                        inventoryBatches:
+                            exclude: true
+                        inventoryLevelLogRecords:
+                            exclude: true
+                        createdAt:
+                            exclude: true
+                        updatedAt:
+                            exclude: true
+                        organization:
+                            exclude: true
+                delete: false
+                delete_list: false
+                add_relationship: false
+                get_relationship: false
+                update_relationship: false
+                delete_relationship: false
+
+        Marello\Bundle\InventoryBundle\Entity\InventoryBatch:
+            documentation_resource: '@MarelloInventoryBundle/Resources/doc/api/inventorybatch.md'
+            fields:
+                inventoryLevel:
+                    data_type: integer
+                    target_class: Marello\Bundle\InventoryBundle\Entity\InventoryLevel
+            filters:
+                exclusion_policy: all
+                fields:
+                    product:
+                        data_type: string
+                        allow_array: true
+                        property_path: inventoryLevel.inventoryItem.product.sku
+                        description: 'Filter by product sku'
+            actions:
+                get_subresource: false
+                create: false
+                update: false
+                delete: false
+                delete_list: false
+                add_relationship: false
+                get_relationship: false
+                update_relationship: false
+                delete_relationship: false
+
         Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel:
             documentation_resource: '@MarelloInventoryBundle/Resources/doc/api/balancedinventorylevel.md'
             fields:
@@ -59,6 +147,7 @@ api:
             actions: false
 
         Marello\Bundle\InventoryBundle\Entity\Allocation:
+            exclusion_policy: none
             filters:
                 exclusion_policy: all
                 fields:

@@ -1,6 +1,6 @@
 operations:
     DELETE:
-        exclude_entities: ['MarelloInventoryBundle:Allocation']
+        exclude_entities: [Marello\Bundle\InventoryBundle\Entity\Allocation]
 
     marello_inventory_item_enable_batches:
         label: marello.inventory.inventoryitem.enable_batch_inventory.label

@@ -4,8 +4,9 @@ namespace Marello\Bundle\OrderBundle\Migrations\Data\ORM;
 
 use Doctrine\Persistence\ObjectManager;
 
-use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
+use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
+use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
 
 class LoadEmailTemplatesData extends AbstractEmailFixture implements
     VersionedFixtureInterface
@@ -32,7 +33,7 @@ class LoadEmailTemplatesData extends AbstractEmailFixture implements
             return null;
         }
 
-        return $manager->getRepository('OroEmailBundle:EmailTemplate')->findOneBy([
+        return $manager->getRepository(EmailTemplate::class)->findOneBy([
             'name' => $template['params']['name'],
             'entityName' => 'Marello\Bundle\OrderBundle\Entity\Order',
         ]);
@@ -43,6 +44,6 @@ class LoadEmailTemplatesData extends AbstractEmailFixture implements
      */
     public function getVersion()
     {
-        return '1.0';
+        return '1.1';
     }
 }

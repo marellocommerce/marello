@@ -10,18 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 
 class PaymentTermController extends AbstractController
 {
     /**
      * @return array
-     *
-     * @Route(
-     *     path="/",
-     *     name="marello_paymentterm_paymentterm_index"
-     * )
-     * @Template("@MarelloPaymentTerm/PaymentTerm/index.html.twig")
      */
+    #[Route(path: '/', name: 'marello_paymentterm_paymentterm_index')]
+    #[AclAncestor('marello_paymentterm_paymentterm_view')]
+    #[Template('@MarelloPaymentTerm/PaymentTerm/index.html.twig')]
     public function indexAction()
     {
         return [
@@ -30,15 +28,12 @@ class PaymentTermController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     name="marello_paymentterm_paymentterm_create"
-     * )
-     * @Template("@MarelloPaymentTerm/PaymentTerm/update.html.twig")
-     *
      * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
+    #[Route(path: '/create', name: 'marello_paymentterm_paymentterm_create')]
+    #[AclAncestor('marello_paymentterm_paymentterm_create')]
+    #[Template('@MarelloPaymentTerm/PaymentTerm/update.html.twig')]
     public function createAction(Request $request)
     {
         $entity = new PaymentTerm();
@@ -47,17 +42,14 @@ class PaymentTermController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     requirements={"id" = "\d+"},
-     *     name="marello_paymentterm_paymentterm_update"
-     * )
-     * @Template("@MarelloPaymentTerm/PaymentTerm/update.html.twig")
      *
      * @param PaymentTerm $entity
      * @param Request $request
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
+    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_paymentterm_paymentterm_update')]
+    #[AclAncestor('marello_paymentterm_paymentterm_update')]
+    #[Template('@MarelloPaymentTerm/PaymentTerm/update.html.twig')]
     public function updateAction(PaymentTerm $entity, Request $request)
     {
         return $this->update($entity, $request);
@@ -90,14 +82,10 @@ class PaymentTermController extends AbstractController
     /**
      * @param PaymentTerm $entity
      * @return array
-     *
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id" = "\d+"},
-     *     name="marello_paymentterm_paymentterm_view"
-     * )
-     * @Template("@MarelloPaymentTerm/PaymentTerm/view.html.twig")
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_paymentterm_paymentterm_view')]
+    #[AclAncestor('marello_paymentterm_paymentterm_view')]
+    #[Template('@MarelloPaymentTerm/PaymentTerm/view.html.twig')]
     public function viewAction(PaymentTerm $entity)
     {
         return [
@@ -105,7 +93,7 @@ class PaymentTermController extends AbstractController
         ];
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

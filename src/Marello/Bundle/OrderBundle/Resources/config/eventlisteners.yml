@@ -66,10 +66,16 @@ services:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: kernel.event_listener, event: extendable_action.order_paid, method: onOrderPaid }
 
-    marello_order.listener.order_item_original_price:
-        class: 'Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderItemOriginalPriceListener'
+    Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderItemOriginalPriceListener:
+        arguments:
+            - '@marello_tax.tax_rule.matcher.composite'
+            - '@marello_tax.calculator'
         tags:
-            - { name: doctrine.orm.entity_listener, entity: Marello\Bundle\OrderBundle\Entity\OrderItem, event: prePersist}
+            - { name: doctrine.orm.entity_listener, entity: Marello\Bundle\OrderBundle\Entity\OrderItem, event: prePersist }
+
+    Marello\Bundle\OrderBundle\EventListener\Doctrine\OrderItemsDiscountListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, entity: Marello\Bundle\OrderBundle\Entity\Order, event: prePersist }
 
     marello_order.listener.workflow.po_workflow_completed:
         class: 'Marello\Bundle\OrderBundle\EventListener\Workflow\PurchaseOrderWorkflowCompletedListener'

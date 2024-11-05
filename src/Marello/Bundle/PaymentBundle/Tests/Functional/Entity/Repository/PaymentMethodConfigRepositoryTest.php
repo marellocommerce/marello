@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\PaymentBundle\Tests\Functional\Entity\Repository;
 
+use Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig;
 use Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodConfigRepository;
 use Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures\LoadPaymentMethodConfigsWithFakeMethods;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -24,7 +25,7 @@ class PaymentMethodConfigRepositoryTest extends WebTestCase
         ]);
 
         $this->repository = static::getContainer()->get('doctrine')
-            ->getRepository('MarelloPaymentBundle:PaymentMethodConfig');
+            ->getRepository(PaymentMethodConfig::class);
     }
 
     public function testDeleteByMethod()

@@ -10,12 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class OrderShipmentLabelController extends AbstractController
 {
-    /**
-     * @Route(
-     *     path="/{id}/shipment-label/download",
-     *     name="marello_order_shipment_label_download"
-     * )
-     */
+    #[Route(path: '/{id}/shipment-label/download', name: 'marello_order_shipment_label_download')]
     public function downloadAction(Order $order): BinaryFileResponse
     {
         $shipment = $order->getShipment();
@@ -38,7 +33,7 @@ class OrderShipmentLabelController extends AbstractController
         return $response;
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

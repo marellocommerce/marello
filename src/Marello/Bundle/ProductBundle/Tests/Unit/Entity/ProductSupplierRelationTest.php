@@ -18,12 +18,12 @@ class ProductSupplierRelationTest extends TestCase
     {
         $this->assertPropertyAccessors(new ProductSupplierRelation(), [
             ['id', 42],
-            ['product', new Product()],
-            ['supplier', new Supplier()],
-            ['quantityOfUnit', 42],
-            ['priority', 42],
-            ['cost', 'some string'],
-            ['canDropship', 1]
+            ['product', new Product(), false],
+            ['supplier', new Supplier(), false],
+            ['quantityOfUnit', 42, false],
+            ['priority', 42, false],
+            ['cost', 0.00],
+            ['canDropship', true]
         ]);
     }
 }

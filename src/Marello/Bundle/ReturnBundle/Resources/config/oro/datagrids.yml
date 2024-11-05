@@ -7,9 +7,9 @@ datagrids:
                 select:
                     - r
                     - COALESCE(SUM(ri.quantity), 0) AS returnItemCount
-                    - (SELECT SUM(oi.quantity) FROM MarelloOrderBundle:OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
+                    - (SELECT SUM(oi.quantity) FROM Marello\Bundle\OrderBundle\Entity\OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
                 from:
-                    - { table: MarelloReturnBundle:ReturnEntity, alias: r }
+                    - { table: Marello\Bundle\ReturnBundle\Entity\ReturnEntity, alias: r }
                 join:
                     left:
                         - { join: r.returnItems, alias: ri }
@@ -98,6 +98,7 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
@@ -116,9 +117,9 @@ datagrids:
                 select:
                     - r
                     - COALESCE(SUM(ri.quantity), 0) AS returnItemCount
-                    - (SELECT SUM(oi.quantity) FROM MarelloOrderBundle:OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
+                    - (SELECT SUM(oi.quantity) FROM Marello\Bundle\OrderBundle\Entity\OrderItem oi WHERE oi.order = r.order ) AS orderItemCount
                 from:
-                    - { table: MarelloReturnBundle:ReturnEntity, alias: r }
+                    - { table: Marello\Bundle\ReturnBundle\Entity\ReturnEntity, alias: r }
                 join:
                     left:
                         - { join: r.returnItems, alias: ri }
@@ -200,6 +201,7 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
@@ -219,7 +221,7 @@ datagrids:
                 select:
                     - ri
                 from:
-                    - { table: MarelloReturnBundle:ReturnItem, alias: ri }
+                    - { table: Marello\Bundle\ReturnBundle\Entity\ReturnItem, alias: ri }
                 join:
                     left:
                         - { join: ri.orderItem, alias: oi }
@@ -271,7 +273,7 @@ datagrids:
                 select:
                     - s
                 from:
-                    - { table: MarelloShippingBundle:Shipment, alias: s }
+                    - { table: Marello\Bundle\ShippingBundle\Entity\Shipment, alias: s }
                 join:
                     left:
                         - { join: s.trackingInfo, alias: ti }

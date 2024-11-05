@@ -2,14 +2,18 @@
 
 namespace Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelType;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelType;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 
 class LoadSalesData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -77,7 +81,7 @@ class LoadSalesData extends AbstractFixture implements ContainerAwareInterface
      */
     protected function loadSalesChannels()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
         /** @var AclHelper $aclHelper */
         $aclHelper = $this->container->get('oro_security.acl_helper');
         $defaultSystemGroup = $this->manager
@@ -87,7 +91,7 @@ class LoadSalesData extends AbstractFixture implements ContainerAwareInterface
         foreach ($this->data as $ref => $values) {
             $channel = $this->buildChannel($ref, $values);
             $channel
-                ->setOwner($organization)
+                ->setOrganization($organization)
                 ->setGroup($defaultSystemGroup);
 
             $this->manager->persist($channel);

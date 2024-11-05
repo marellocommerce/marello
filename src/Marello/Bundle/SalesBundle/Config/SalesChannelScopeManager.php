@@ -16,14 +16,14 @@ class SalesChannelScopeManager extends AbstractScopeManager
         return self::SCOPE_NAME;
     }
 
-    public function setScopeId(int $scopeId): void
+    public function setScopeId(?int $scopeId): void
     {
         $this->dispatchScopeIdChangeEvent();
 
         $this->scopeId = $scopeId;
     }
 
-    public function getScopeId(): ?int
+    public function getScopeId(): int
     {
         return $this->scopeId;
     }
@@ -33,7 +33,7 @@ class SalesChannelScopeManager extends AbstractScopeManager
         return $entity instanceof SalesChannel;
     }
 
-    protected function getScopeEntityIdValue(object $entity): mixed
+    protected function getScopeEntityIdValue(object $entity): int
     {
         return $entity->getId();
     }

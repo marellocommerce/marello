@@ -3,9 +3,9 @@
 namespace Marello\Bundle\OrderBundle\Form\EventListener;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Provider\OrderItemsSubtotalProvider;
 use Marello\Bundle\PricingBundle\Subtotal\Provider\SubtotalProviderInterface;
 use Marello\Bundle\TaxBundle\Provider\TaxSubtotalProvider;
+use Marello\Bundle\OrderBundle\Provider\OrderItem\OrderItemsSubtotalProvider;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -14,7 +14,8 @@ class OrderTotalsSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         protected SubtotalProviderInterface $subtotalProvider
-    ) {}
+    ) {
+    }
 
     /**
      * {@inheritdoc}

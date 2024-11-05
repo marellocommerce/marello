@@ -28,5 +28,6 @@ class MarelloProductExtension extends Extension
         $loader->load('services.yml');
         $loader->load('mq_topics.yml');
         $loader->load('services_api.yml');
+        $loader->load('importexport.yml');
     }
 }

@@ -2,9 +2,10 @@
 
 namespace Marello\Bundle\PurchaseOrderBundle\Form\Handler;
 
-use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 
 class PurchaseOrderCreateStepOneHandler
 {
@@ -36,7 +37,7 @@ class PurchaseOrderCreateStepOneHandler
     public function process()
     {
         if ($this->request->isMethod(Request::METHOD_POST)) {
-            $this->submitPostPutRequest($this->form, $this->request);
+            $this->form->handleRequest($this->request);
 
             if ($this->form->isValid()) {
                 return true;

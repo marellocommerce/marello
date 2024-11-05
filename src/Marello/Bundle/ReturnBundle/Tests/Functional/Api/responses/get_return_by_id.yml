@@ -13,7 +13,7 @@ data:
         order:
             data:
                 type: marelloorders
-                id: '<toString(@marello_order_2->id)>'
+                id: '<toString(@return1->order->id)>'
         returnItems:
             data:
                 -
@@ -30,8 +30,6 @@ data:
                 type: marellosaleschannels
                 id: chan_eur
         shipment:
-            data: null
-        localization:
             data: null
         organization:
             data:

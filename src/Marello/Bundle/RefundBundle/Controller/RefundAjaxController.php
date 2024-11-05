@@ -7,7 +7,7 @@ use Marello\Bundle\LayoutBundle\Provider\CompositeFormChangesProvider;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\RefundBundle\Entity\Refund;
 use Marello\Bundle\RefundBundle\Form\Type\RefundType;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,18 +18,13 @@ class RefundAjaxController extends AbstractController
 {
 
     /**
-     * @Route(
-     *     path="/form-changes/{id}",
-     *     methods={"POST"},
-     *     name="marello_refund_form_changes",
-     *     defaults={"id" = 0}
-     * )
-     * @AclAncestor("marello_refund_update")
      *
      * @param Request $request
      * @param Refund|null $order
      * @return JsonResponse
      */
+    #[Route(path: '/form-changes/{id}', methods: ['POST'], name: 'marello_refund_form_changes', defaults: ['id' => 0])]
+    #[AclAncestor('marello_refund_update')]
     public function formChangesAction(Request $request, Refund $refund = null)
     {
         if (!$refund) {
@@ -59,18 +54,13 @@ class RefundAjaxController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/form-create/{id}",
-     *     methods={"POST"},
-     *     name="marello_refund_form_create",
-     *     defaults={"id" = 0}
-     * )
-     * @AclAncestor("marello_refund_create")
      *
      * @param Request $request
      * @param Order|null $order
      * @return JsonResponse
      */
+    #[Route(path: '/form-create/{id}', methods: ['POST'], name: 'marello_refund_form_create', defaults: ['id' => 0])]
+    #[AclAncestor('marello_refund_create')]
     public function formCreateAction(Request $request, Order $order = null)
     {
         $refund = Refund::fromOrder($order);
@@ -105,7 +95,7 @@ class RefundAjaxController extends AbstractController
         return $this->createForm(RefundType::class, $refund);
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

@@ -15,33 +15,33 @@ class OrderOrganizationListener
 
     public function prePersist(LifecycleEventArgs $args)
     {
-        $entity = $args->getObject();
-        if (!$entity instanceof Order) {
-            return;
-        }
-
-        $token = $this->tokenStorage->getToken();
-        if ($token === null) {
-            throw new \Exception('An order must be created by user.');
-        }
-
-        $user = $token->getUser();
-        $organization = $user->getOrganization();
-        if ($entity->getOrganization() === null) {
-            $entity->setOrganization($organization);
-        }
-        if ($entity->getOwner() === null) {
-            $entity->setOwner($user);
-        }
-
-        foreach ($entity->getItems() as $item) {
-            if ($item->getOrganization() === null) {
-                $item->setOrganization($organization);
-            }
-
-            if ($item->getOwner() === null) {
-                $entity->setOwner($user);
-            }
-        }
+//        $entity = $args->getObject();
+//        if (!$entity instanceof Order) {
+//            return;
+//        }
+//
+//        $token = $this->tokenStorage->getToken();
+//        if ($token === null) {
+//            throw new \Exception('An order must be created by user.');
+//        }
+//
+//        $user = $token->getUser();
+//        $organization = $user->getOrganization();
+//        if ($entity->getOrganization() === null) {
+//            $entity->setOrganization($organization);
+//        }
+//        if ($entity->getOwner() === null) {
+//            $entity->setOwner($user);
+//        }
+//
+//        foreach ($entity->getItems() as $item) {
+//            if ($item->getOrganization() === null) {
+//                $item->setOrganization($organization);
+//            }
+//
+//            if ($item->getOwner() === null) {
+//                $entity->setOwner($user);
+//            }
+//        }
     }
 }

@@ -2,16 +2,19 @@
 
 namespace Marello\Bundle\TaxBundle\Controller;
 
-use Marello\Bundle\TaxBundle\Entity\TaxRule;
-use Marello\Bundle\TaxBundle\Form\Handler\TaxRuleHandler;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+
+use Marello\Bundle\TaxBundle\Entity\TaxRule;
+use Marello\Bundle\TaxBundle\Form\Handler\TaxRuleHandler;
 
 /**
  * Class TaxRuleController
@@ -19,83 +22,49 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class TaxRuleController extends AbstractController
 {
-    /**
-     * @Route(
-     *     path="/",
-     *     name="marello_tax_taxrule_index"
-     * )
-     * @Template
-     * @AclAncestor("marello_tax_taxrule_view")
-     */
+    #[Route(path: '/', name: 'marello_tax_taxrule_index')]
+    #[Template]
+    #[AclAncestor('marello_tax_taxrule_view')]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloTaxBundle:TaxRule'];
+        return ['entity_class' => TaxRule::class];
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_tax_taxrule_view"
-     * )
-     * @Template
-     * @Acl(
-     *      id="marello_tax_taxrule_view",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxRule",
-     *      permission="VIEW"
-     * )
      *
      * @param TaxRule $taxRule
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_tax_taxrule_view')]
+    #[Template]
+    #[Acl(id: 'marello_tax_taxrule_view', type: 'entity', class: TaxRule::class, permission: 'VIEW')]
     public function viewAction(TaxRule $taxRule)
     {
         return ['entity' => $taxRule];
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_tax_taxrule_create"
-     * )
-     * @Template
-     * @Acl(
-     *      id="marello_tax_taxrule_create",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxRule",
-     *      permission="CREATE"
-     * )
      *
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_tax_taxrule_create')]
+    #[Template]
+    #[Acl(id: 'marello_tax_taxrule_create', type: 'entity', class: TaxRule::class, permission: 'CREATE')]
     public function createAction(Request $request)
     {
         return $this->update($request, new TaxRule());
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_tax_taxrule_update"
-     * )
-     * @Template
-     * @Acl(
-     *      id="marello_tax_taxrule_update",
-     *      type="entity",
-     *      class="MarelloTaxBundle:TaxRule",
-     *      permission="EDIT"
-     * )
      *
      * @param TaxRule $taxRule
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/update/{id}', methods: ['GET', 'POST'], requirements: ['id' => '\d+'], name: 'marello_tax_taxrule_update')]
+    #[Template]
+    #[Acl(id: 'marello_tax_taxrule_update', type: 'entity', class: TaxRule::class, permission: 'EDIT')]
     public function updateAction(TaxRule $taxRule, Request $request)
     {
         return $this->update($request, $taxRule);
@@ -127,7 +96,7 @@ class TaxRuleController extends AbstractController
         ];
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

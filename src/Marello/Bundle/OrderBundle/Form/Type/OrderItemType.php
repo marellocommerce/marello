@@ -12,6 +12,7 @@ use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -95,6 +96,14 @@ class OrderItemType extends AbstractType
                     'readonly' => true
                 ]
             ])
+            ->add(
+                'comment',
+                TextareaType::class,
+                [
+                    'required' => false,
+                    'label' => 'marello.order.orderitem.comment.label',
+                ]
+            )
             ->add('allocationExclusion', CheckboxType::class, [])
         ;
 

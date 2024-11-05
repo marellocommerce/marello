@@ -2,8 +2,11 @@
 
 namespace Marello\Bundle\SalesBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 
 class LoadSalesChannelGroupData extends AbstractFixture
@@ -38,7 +41,7 @@ class LoadSalesChannelGroupData extends AbstractFixture
      */
     protected function loadSalesChannelGroups()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
         $existingGroup = $this
             ->manager
             ->getRepository(SalesChannelGroup::class)

@@ -37,7 +37,7 @@ services:
     marello_order.form.type.address:
         arguments:
             - '@oro_locale.formatter.address'
-            - '@marello_customer.provider.customer_address'
+            - '@Marello\Bundle\CustomerBundle\Provider\CustomerAddressProvider'
             - '@oro_importexport.serializer'
         abstract: true
 
@@ -70,7 +70,7 @@ services:
         class: Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer
         arguments:
             - '@doctrine.orm.entity_manager'
-            - MarelloSalesBundle:SalesChannel
+            - Marello\Bundle\SalesBundle\Entity\SalesChannel
 
     marello_order.form.data_transformer.tax_code_to_code:
         class: Marello\Bundle\OrderBundle\Form\DataTransformer\TaxCodeToCodeTransformer

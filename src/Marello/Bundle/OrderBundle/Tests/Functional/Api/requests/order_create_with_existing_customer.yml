@@ -38,7 +38,7 @@ data:
           customer:
               data:
                    type: marellocustomers
-                   id: '<toString(@marello_order_0->customer->id)>'
+                   id: '<toString(@marello_order_0->customer->email)>'
           salesChannel:
               data:
                   type: marellosaleschannels

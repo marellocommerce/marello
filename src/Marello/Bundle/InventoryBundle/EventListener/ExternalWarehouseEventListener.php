@@ -3,6 +3,7 @@
 namespace Marello\Bundle\InventoryBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
+use Marello\Bundle\InventoryBundle\DependencyInjection\Configuration;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
@@ -14,27 +15,21 @@ use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
 use Marello\Bundle\ProductBundle\Event\ProductDropshipEvent;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Marello\Bundle\SupplierBundle\Event\SupplierDropshipEvent;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class ExternalWarehouseEventListener
 {
     /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
-    /**
      * @var Warehouse
      */
     protected $warehouse;
 
-    /**
-     * @param DoctrineHelper $doctrineHelper
-     */
-    public function __construct(DoctrineHelper $doctrineHelper)
-    {
-        $this->doctrineHelper = $doctrineHelper;
+    public function __construct(
+        protected DoctrineHelper $doctrineHelper,
+        protected ConfigManager $configManager
+    ) {
     }
 
     /**
@@ -235,7 +230,9 @@ class ExternalWarehouseEventListener
                 ->setWarehouse($warehouse)
                 ->setInventoryQty(0)
                 ->setOrganization($inventoryItem->getOrganization())
-                ->setManagedInventory(false);
+                ->setManagedInventory(
+                    $this->configManager->get(Configuration::SYSTEM_CONFIG_PATH_MANAGED_INVENTORY_FOR_EXTERNAL_WAREHOUSE)
+                );
             $entityManager->persist($inventoryLevel);
             if ($flush) {
                 $entityManager->flush($inventoryLevel);

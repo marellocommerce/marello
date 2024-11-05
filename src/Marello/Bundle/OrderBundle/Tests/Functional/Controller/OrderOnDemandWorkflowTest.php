@@ -2,26 +2,28 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Functional\Controller;
 
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\InventoryBundle\Entity\Allocation;
-use Marello\Bundle\InventoryBundle\Entity\AllocationItem;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadOrderData;
-use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
-use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
-use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
-use Marello\Bundle\ShippingBundle\Entity\Shipment;
-use Marello\Bundle\ShippingBundle\Method\ShippingMethodInterface;
-use Marello\Bundle\ShippingBundle\Method\ShippingMethodProviderInterface;
-use Marello\Bundle\ShippingBundle\Method\ShippingMethodTypeInterface;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\HttpFoundation\Response;
+
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ShippingBundle\Entity\Shipment;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\InventoryBundle\Entity\Allocation;
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\InventoryBundle\Entity\AllocationItem;
+use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
+use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem;
+use Marello\Bundle\ShippingBundle\Method\ShippingMethodInterface;
+use Marello\Bundle\ShippingBundle\Method\ShippingMethodTypeInterface;
+use Marello\Bundle\ShippingBundle\Method\ShippingMethodProviderInterface;
+use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadOrderData;
+use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
+use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
 
 /**
  * @dbIsolationPerTest
@@ -108,8 +110,8 @@ class OrderOnDemandWorkflowTest extends WebTestCase
 
         /** @var Order $order */
         $order = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloOrderBundle:Order')
-            ->getRepository('MarelloOrderBundle:Order')
+            ->getManagerForClass(Order::class)
+            ->getRepository(Order::class)
             ->findOneBy([
                 'customer' => $orderCustomer->getId(),
                 'salesChannel' => $salesChannel->getId(),
@@ -205,6 +207,7 @@ class OrderOnDemandWorkflowTest extends WebTestCase
             'input_action' => 'save_and_stay',
             'marello_order_order' => [
                 '_token' => $form['marello_order_order[_token]']->getValue(),
+                'owner' => $form['marello_order_order[owner]']->getValue(),
                 'customer' => $orderCustomer->getId(),
                 'salesChannel' => $salesChannel->getId(),
                 'items' => $orderItems,

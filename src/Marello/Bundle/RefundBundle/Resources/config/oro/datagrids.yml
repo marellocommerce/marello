@@ -15,7 +15,7 @@ datagrids:
                     - o.orderNumber
                     - o.orderReference
                 from:
-                    - { table: MarelloRefundBundle:Refund, alias: r }
+                    - { table: Marello\Bundle\RefundBundle\Entity\Refund, alias: r }
                 join:
                     inner:
                         - { join: r.order, alias: o }
@@ -132,7 +132,7 @@ datagrids:
                 select:
                     - r
                 from:
-                    - { table: MarelloRefundBundle:Refund, alias: r }
+                    - { table: Marello\Bundle\RefundBundle\Entity\Refund, alias: r }
                 where:
                     and:
                         - r.customer = :customer_id
@@ -240,7 +240,7 @@ datagrids:
                     - i
                     - taxCode.code as taxCodeCode
                 from:
-                    - { table: MarelloRefundBundle:RefundItem, alias: i}
+                    - { table: Marello\Bundle\RefundBundle\Entity\RefundItem, alias: i}
                 where:
                     and:
                         - i.refund = :refund_id
@@ -276,7 +276,7 @@ datagrids:
                     - oi.productName as productName
                     - taxCode.code as taxCodeCode
                 from:
-                    - { table: MarelloRefundBundle:RefundItem, alias: i}
+                    - { table: Marello\Bundle\RefundBundle\Entity\RefundItem, alias: i}
                 join:
                     left:
                         - { join: i.orderItem, alias: oi }

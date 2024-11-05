@@ -16,7 +16,7 @@ datagrids:
                     - rule.sortOrder
                     - payment_methods_configs_rule.currency
                 from:
-                    - { table: MarelloPaymentBundle:PaymentMethodsConfigsRule, alias: payment_methods_configs_rule }
+                    - { table: Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule, alias: payment_methods_configs_rule }
                 join:
                     inner:
                         - { join: payment_methods_configs_rule.rule, alias: rule }
@@ -222,7 +222,7 @@ datagrids:
             type: orm
             query:
                 from:
-                    - { table: MarelloPaymentBundle:Payment, alias: p }
+                    - { table: Marello\Bundle\PaymentBundle\Entity\Payment, alias: p }
                 join:
                     inner:
                         - { join: p.status, alias: s }
@@ -233,7 +233,7 @@ datagrids:
             type: orm
             query:
                 from:
-                    - { table: MarelloInvoiceBundle:AbstractInvoice, alias: i }
+                    - { table: Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice, alias: i }
                 join:
                     inner:
                         - { join: i.payments, alias: p }
@@ -255,7 +255,7 @@ datagrids:
             type: orm
             query:
                 from:
-                    - { table: MarelloInvoiceBundle:AbstractInvoice, alias: i }
+                    - { table: Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice, alias: i }
                 join:
                     inner:
                         - { join: i.payments, alias: p }

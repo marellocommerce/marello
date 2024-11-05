@@ -12,9 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
-use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
-use Marello\Bundle\ManualShippingBundle\Method\ManualShippingMethodType;
 use Marello\Bundle\ManualShippingBundle\Integration\ManualShippingChannelType;
 
 class LoadShippingRuleConfig extends AbstractFixture implements
@@ -64,19 +61,10 @@ class LoadShippingRuleConfig extends AbstractFixture implements
     private function addMethodConfigToDefaultShippingRule(ObjectManager $manager, Channel $channel)
     {
         foreach ($this->getShippingRuleReferences() as $shippingRuleReference) {
-            $typeConfig = new ShippingMethodTypeConfig();
-            $typeConfig->setEnabled(true);
-            $typeConfig->setType(ManualShippingMethodType::IDENTIFIER)
-                ->setOptions([
-                    ManualShippingMethodType::PRICE_OPTION => 5.00,
-                    ManualShippingMethodType::TYPE_OPTION => ManualShippingMethodType::PER_ORDER_TYPE,
-                ]);
-
-            $methodConfig = new ShippingMethodConfig();
-            $methodConfig->setMethod($this->getIdentifier($channel))
-                ->addTypeConfig($typeConfig);
-
-            $shippingRuleReference->addMethodConfig($methodConfig);
+            foreach ($shippingRuleReference->getMethodConfigs() as $methodConfig) {
+                $methodConfig->setMethod($this->getIdentifier($channel));
+                $manager->persist($methodConfig);
+            }
             $manager->persist($shippingRuleReference);
         }
 
@@ -102,7 +90,7 @@ class LoadShippingRuleConfig extends AbstractFixture implements
      */
     protected function getOrganization(ObjectManager $manager)
     {
-        return $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        return $manager->getRepository(Organization::class)->getFirst();
     }
 
     /**

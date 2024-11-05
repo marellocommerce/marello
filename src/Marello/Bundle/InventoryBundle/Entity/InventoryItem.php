@@ -2,301 +2,187 @@
 
 namespace Marello\Bundle\InventoryBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\ProductInterface;
-use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository")
- * @ORM\Table(
- *      name="marello_inventory_item",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"product_id"})
- *      }
- * )
- * @Oro\Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-cubes"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- */
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ProductBundle\Entity\ProductInterface;
+use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
+use Marello\Bundle\InventoryBundle\Entity\Repository\InventoryItemRepository;
+
+#[ORM\Table(name: 'marello_inventory_item')]
+#[ORM\UniqueConstraint(columns: ['product_id'])]
+#[ORM\Entity(repositoryClass: InventoryItemRepository::class)]
+#[Oro\Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-cubes'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
     
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryLevel",
-     *     mappedBy="inventoryItem",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"createdAt" = "DESC"})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var InventoryLevel[]|Collection
      */
+    #[ORM\OneToMany(
+        mappedBy: 'inventoryItem',
+        targetEntity: InventoryLevel::class,
+        cascade: ['persist'],
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['id' => 'ASC'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $inventoryLevels;
 
     /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="inventoryItem")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=10,
-     *              "identity"=true,
-     *          }
-     *      }
-     * )
-     *
      * @var ProductInterface
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(inversedBy: 'inventoryItem', targetEntity: Product::class)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 10, 'identity' => true]
+        ]
+    )]
     protected $product;
 
     /**
-     * @ORM\Column(name="desired_inventory", type="integer", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'desired_inventory', type: Types::INTEGER, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $desiredInventory = 0;
 
     /**
-     * @ORM\Column(name="purchase_inventory", type="integer", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'purchase_inventory', type: Types::INTEGER, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $purchaseInventory = 0;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $replenishment;
 
     /**
-     * @ORM\Column(name="backorder_allowed", type="boolean", nullable=true, options={"default"=false})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Backorder Allowed"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'backorder_allowed', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Backorder Allowed'],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $backorderAllowed;
 
     /**
-     * @ORM\Column(name="max_qty_to_backorder", type="integer", nullable=true, options={"default"=0})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Max Quantity To Backorder"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var integer
      */
+    #[ORM\Column(name: 'max_qty_to_backorder', type: Types::INTEGER, nullable: true, options: ['default' => 0])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Max Quantity To Backorder'],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $maxQtyToBackorder;
 
     /**
-     * @ORM\Column(name="can_preorder", type="boolean", nullable=true, options={"default"=false})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Can Pre-order"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'can_preorder', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Can Pre-order'],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $canPreorder;
 
     /**
-     * @ORM\Column(name="max_qty_to_preorder", type="integer", nullable=true, options={"default"=0})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Max Quantity To Pre-order"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var integer
      */
+    #[ORM\Column(name: 'max_qty_to_preorder', type: Types::INTEGER, nullable: true, options: ['default' => 0])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Max Quantity To Pre-order'],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $maxQtyToPreorder;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="back_orders_datetime", type="datetime", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'back_orders_datetime', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $backOrdersDatetime;
     
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="pre_orders_datetime", type="datetime", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'pre_orders_datetime', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $preOrdersDatetime;
 
     /**
-     * @ORM\Column(name="order_on_demand_allowed", type="boolean", nullable=true, options={"default"=false})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Order On Demand Allowed"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'order_on_demand_allowed', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Order On Demand Allowed'],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $orderOnDemandAllowed;
 
     /**
-     * @ORM\Column(name="enable_batch_inventory", type="boolean", nullable=true, options={"default"=false})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Enable Batch Inventory"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'enable_batch_inventory', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Enable Batch Inventory'],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $enableBatchInventory;
 
     /**
      * @var \Extend\Entity\EV_Marello_Product_Unit
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $productUnit;
 
     /**

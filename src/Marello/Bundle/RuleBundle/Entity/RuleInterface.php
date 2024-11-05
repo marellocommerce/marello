@@ -7,77 +7,77 @@ interface RuleInterface
     /**
      * @return int
      */
-    public function getId();
+    public function getId(): ?int;
 
     /**
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * @param string $name
      *
      * @return $this
      */
-    public function setName($name);
+    public function setName(string $name): self;
 
     /**
      * @return bool
      */
-    public function isEnabled();
+    public function isEnabled(): bool;
 
     /**
      * @param bool $enabled
      *
      * @return $this
      */
-    public function setEnabled($enabled);
+    public function setEnabled(bool $enabled): self;
 
     /**
      * @return int
      */
-    public function getSortOrder();
+    public function getSortOrder(): int;
 
     /**
      * @param int $sortOrder
      *
      * @return $this
      */
-    public function setSortOrder($sortOrder);
+    public function setSortOrder(int $sortOrder): self;
 
     /**
      * @return bool
      */
-    public function isStopProcessing();
+    public function isStopProcessing(): bool;
 
     /**
      * @param bool $stopProcessing
      *
      * @return $this
      */
-    public function setStopProcessing($stopProcessing);
+    public function setStopProcessing(bool $stopProcessing): self;
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpression();
+    public function getExpression(): ?string;
 
     /**
-     * @param string $expression
+     * @param string|null $expression
      *
      * @return $this
      */
-    public function setExpression($expression);
+    public function setExpression(string $expression = null): self;
 
     /**
      * @return bool
      */
-    public function isSystem();
+    public function isSystem(): bool;
 
     /**
      * @param bool $system
      *
      * @return $this
      */
-    public function setSystem($system);
+    public function setSystem(bool $system): self;
 }

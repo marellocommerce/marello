@@ -3,20 +3,12 @@
 namespace Marello\Bundle\WebhookBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
+
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\Migration;
 
-class MarelloWebhookBundle implements Migration, ExtendExtensionAwareInterface
+class MarelloWebhookBundle implements Migration
 {
-    protected ExtendExtension $extendExtension;
-
-    public function setExtendExtension(ExtendExtension $extendExtension)
-    {
-        $this->extendExtension = $extendExtension;
-    }
-
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->addMarelloWebhookTable($schema);

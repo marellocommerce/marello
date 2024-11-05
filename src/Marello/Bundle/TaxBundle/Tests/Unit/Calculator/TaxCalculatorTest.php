@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\TaxBundle\Tests\Unit\Calculator;
 
+use Marello\Bundle\TaxBundle\Model\ResultElement;
 use PHPUnit\Framework\TestCase;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
@@ -38,13 +39,21 @@ class TaxCalculatorTest extends TestCase
         /** @var TaxCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject $taxExcl */
         $taxExcl = $this->createMock(TaxCalculatorInterface::class);
 
+        $resultElm = new ResultElement();
+
         $this->configManager
             ->expects($this->once())
             ->method('get')
             ->with(Configuration::VAT_SYSTEM_CONFIG_PATH)
             ->willReturn($taxConfig);
-        $taxIncl->expects($this->exactly($inclCalculatorRun))->method('calculate');
-        $taxExcl->expects($this->exactly($exclCalculatorRun))->method('calculate');
+        $taxIncl
+            ->expects($this->exactly($inclCalculatorRun))
+            ->method('calculate')
+            ->willReturn($resultElm);
+        $taxExcl
+            ->expects($this->exactly($exclCalculatorRun))
+            ->method('calculate')
+            ->willReturn($resultElm);
 
         $calculator = new TaxCalculator($this->configManager, $taxIncl, $taxExcl);
         $calculator->calculate(0, 0);

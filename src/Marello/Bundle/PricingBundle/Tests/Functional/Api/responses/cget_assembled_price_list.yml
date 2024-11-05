@@ -8,7 +8,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p1
+                    id: '<toString(@product1->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -26,7 +26,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p2
+                    id: '<toString(@product2->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -44,7 +44,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p2
+                    id: '<toString(@product2->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -62,7 +62,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p3
+                    id: '<toString(@product3->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -80,7 +80,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p3
+                    id: '<toString(@product3->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -98,7 +98,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p4
+                    id: '<toString(@product4->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -116,7 +116,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p4
+                    id: '<toString(@product4->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -134,7 +134,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p4
+                    id: '<toString(@product4->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -152,7 +152,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p5
+                    id: '<toString(@product5->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices
@@ -170,7 +170,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p5
+                    id: '<toString(@product5->sku)>'
             defaultPrice:
                 data:
                     type: marelloproductprices

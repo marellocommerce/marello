@@ -14,12 +14,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ProductFamilyBuilder
 {
     const DEFAULT_FAMILY_CODE = 'marello_default';
+    const DEFAULT_ATTRIBUTE_GROUP = 'general';
 
     /** @var array */
     private static $groups = [
         [
             'groupLabel' => 'General',
-            'groupCode' => 'general',
+            'groupCode' => self::DEFAULT_ATTRIBUTE_GROUP,
             'attributes' => [
                 'sku',
                 'names',
@@ -34,7 +35,8 @@ class ProductFamilyBuilder
                 'warranty',
                 'suppliers',
                 'categories',
-                'image'
+                'image',
+                'ARFile'
             ],
             'groupVisibility' => true,
         ]

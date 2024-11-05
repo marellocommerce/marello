@@ -32,7 +32,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v2_6_10';
+        return 'v2_6_11';
     }
 
     /**
@@ -213,7 +213,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $table->addColumn('warehouse_type', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('group_id', 'integer', ['notnull' => false]);
         $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('notifier', 'string', ['notnull' => false, 'length' => 100]);
+        $table->addColumn('notifier', 'string', ['notnull' => false]);
         $table->addColumn('sort_order_ood_loc', 'integer', ['notnull' => false]);
         $table->addColumn('order_on_demand_location', 'boolean', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
@@ -388,14 +388,14 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $table->addColumn('product_id', 'integer', ['notnull' => false]);
         $table->addColumn('product_name', 'string', ['length' => 255]);
         $table->addColumn('product_sku', 'string', ['length' => 255]);
-        $table->addColumn('order_item_id', 'integer', ['notnull' => false]);
+        $table->addColumn('order_item_id', 'integer');
         $table->addColumn('warehouse_id', 'integer', ['notnull' => false]);
         $table->addColumn('quantity', 'float', ['notnull' => true]);
         $table->addColumn('total_quantity', 'float', ['notnull' => false]);
         $table->addColumn('quantity_confirmed', 'float', ['notnull' => false]);
         $table->addColumn('quantity_rejected', 'float', ['notnull' => false]);
         $table->addColumn('comment', 'text', ['notnull' => false]);
-        $table->addColumn('inventory_batches', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('inventory_batches', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
@@ -659,6 +659,12 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
             ['shipment_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_allocation'),
+            ['source_entity_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 

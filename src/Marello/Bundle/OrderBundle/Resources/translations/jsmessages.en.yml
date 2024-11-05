@@ -13,3 +13,9 @@ marello:
         possible_payment_methods.confirmation.content: As order content has been modified, payment methods may have changed. Please, review the payment method selection before saving the order to make sure that the payment method is acceptable.
 
         continue_editing: Continue Editing
+
+        orderitem:
+            comment_widget:
+                edit: Edit Comment
+                add: Add Comment
+                remove: Remove Comment

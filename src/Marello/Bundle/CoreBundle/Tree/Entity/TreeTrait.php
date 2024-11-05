@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\CoreBundle\Tree\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,32 +12,32 @@ trait TreeTrait
      * @var integer
      *
      * @Gedmo\TreeLeft
-     * @ORM\Column(name="tree_left", type="integer")
      */
+    #[ORM\Column(name: 'tree_left', type: Types::INTEGER)]
     protected $left;
 
     /**
      * @var integer
      *
      * @Gedmo\TreeLevel
-     * @ORM\Column(name="tree_level", type="integer")
      */
+    #[ORM\Column(name: 'tree_level', type: Types::INTEGER)]
     protected $level;
 
     /**
      * @var integer
      *
      * @Gedmo\TreeRight
-     * @ORM\Column(name="tree_right", type="integer")
      */
+    #[ORM\Column(name: 'tree_right', type: Types::INTEGER)]
     protected $right;
 
     /**
      * @var integer
      *
      * @Gedmo\TreeRoot
-     * @ORM\Column(name="tree_root", type="integer", nullable=true)
      */
+    #[ORM\Column(name: 'tree_root', type: Types::INTEGER, nullable: true)]
     protected $root;
 
     /**

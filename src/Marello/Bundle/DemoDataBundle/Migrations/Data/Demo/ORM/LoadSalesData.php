@@ -2,12 +2,15 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 use Marello\Bundle\SalesBundle\Entity\SalesChannelType;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 use Marello\Bundle\SalesBundle\Migrations\Data\ORM\LoadSalesChannelGroupData as MigrationLoadSalesChannelGroupData;
 
 class LoadSalesData extends AbstractFixture implements DependentFixtureInterface
@@ -113,7 +116,7 @@ class LoadSalesData extends AbstractFixture implements DependentFixtureInterface
      */
     protected function loadSalesChannels()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
         $defaultSystemGroup = $this->manager->getRepository(SalesChannelGroup::class)->findOneBy(['system' => true]);
         $i = 1;
 
@@ -122,7 +125,7 @@ class LoadSalesData extends AbstractFixture implements DependentFixtureInterface
                 ->setChannelType($this->findTypeByName($values['type']))
                 ->setCode($values['code'])
                 ->setCurrency($values['currency'])
-                ->setOwner($organization)
+                ->setOrganization($organization)
                 ->setGroup($defaultSystemGroup);
             
             $this->manager->persist($channel);

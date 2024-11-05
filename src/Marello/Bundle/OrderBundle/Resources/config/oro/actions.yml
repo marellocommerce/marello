@@ -1,6 +1,6 @@
 operations:
     DELETE:
-        exclude_entities: ['MarelloOrderBundle:Order']
+        exclude_entities: [Marello\Bundle\OrderBundle\Entity\Order]
 action_groups:
     send_order_invoice_email:
         parameters:

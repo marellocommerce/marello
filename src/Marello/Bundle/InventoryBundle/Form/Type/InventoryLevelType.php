@@ -134,11 +134,6 @@ class InventoryLevelType extends AbstractType
         $value = $vars['value'];
         if ($value instanceof InventoryLevel) {
             $warehouseType = $value->getWarehouse()->getWarehouseType()->getName();
-            if ($warehouseType === WarehouseTypeProviderInterface::WAREHOUSE_TYPE_EXTERNAL) {
-                $vars['externalWarehouse'] = true;
-            } else {
-                $vars['externalWarehouse'] = false;
-            }
             $isInventoryBatchEnabled = $value->getInventoryItem()->isEnableBatchInventory();
             if ($isInventoryBatchEnabled &&
                 $warehouseType !== WarehouseTypeProviderInterface::WAREHOUSE_TYPE_EXTERNAL) {
@@ -147,7 +142,6 @@ class InventoryLevelType extends AbstractType
                 $vars['manageBatches'] = false;
             }
         } else {
-            $vars['externalWarehouse'] = false;
             $vars['manageBatches'] = false;
         }
         $view->vars = $vars;

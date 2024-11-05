@@ -6,6 +6,8 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
@@ -104,11 +106,11 @@ class LoadSupplierData extends AbstractFixture implements DependentFixtureInterf
             $address->setCity($values['address']['city']);
             $address->setCountry(
                 $this->manager
-                    ->getRepository('OroAddressBundle:Country')->find($values['address']['country'])
+                    ->getRepository(Country::class)->find($values['address']['country'])
             );
             $address->setRegion(
                 $this->manager
-                    ->getRepository('OroAddressBundle:Region')
+                    ->getRepository(Region::class)
                     ->findOneBy(['combinedCode' => $values['address']['country'] . '-' . $values['address']['state']])
             );
             $this->manager->persist($address);

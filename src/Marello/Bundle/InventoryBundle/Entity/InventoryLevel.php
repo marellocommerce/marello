@@ -2,243 +2,168 @@
 
 namespace Marello\Bundle\InventoryBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\InventoryBundle\Model\InventoryQtyAwareInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelRepository")
- * @ORM\Table(name="marello_inventory_level",
- *       uniqueConstraints={
- *          @ORM\UniqueConstraint(columns={"inventory_item_id", "warehouse_id"})
- *      }
- * )
- * @Oro\Config(
- *      defaultValues={
- *          "entity"={
- *              "icon"="fa-list-alt"
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "dataaudit"={
- *              "auditable"=false
- *          }
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
- */
+use Marello\Bundle\InventoryBundle\Model\InventoryQtyAwareInterface;
+use Marello\Bundle\InventoryBundle\Entity\Repository\InventoryLevelRepository;
+
+#[ORM\Table(name: 'marello_inventory_level')]
+#[ORM\UniqueConstraint(columns: ['inventory_item_id', 'warehouse_id'])]
+#[ORM\Entity(repositoryClass: InventoryLevelRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    defaultValues: [
+        'entity' => ['icon' => 'fa-list-alt'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => false]
+    ]
+)]
 class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInterface, ExtendEntityInterface
 {
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
     
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryItem", inversedBy="inventoryLevels")
-     * @ORM\JoinColumn(name="inventory_item_id", referencedColumnName="id")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="marello.inventory.inventoryitem.entity_label"
-     *          },
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var InventoryItem
      */
+    #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: InventoryItem::class, inversedBy: 'inventoryLevels')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => ['label' => 'marello.inventory.inventoryitem.entity_label'],
+            'importexport' => ['full' => true],
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
     protected $inventoryItem;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\InventoryBundle\Entity\Warehouse")
-     * @ORM\JoinColumn(name="warehouse_id", referencedColumnName="id", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=20,
-     *              "full"=true,
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var Warehouse
      */
+    #[ORM\JoinColumn(name: 'warehouse_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Warehouse::class)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 20, 'full' => true],
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
     protected $warehouse;
 
     /**
-     * @ORM\Column(name="inventory", type="integer")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Inventory Qty"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
-    protected $inventory = 0;
+    #[ORM\Column(name: 'inventory', type: Types::INTEGER)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Inventory Qty'],
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
+    protected $inventoryQty = 0;
 
     /**
-     * @ORM\Column(name="allocated_inventory", type="integer")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var int
      */
+    #[ORM\Column(name: 'allocated_inventory', type: Types::INTEGER)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true], 'dataaudit' => ['auditable' => false]])]
     protected $allocatedInventory = 0;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var \DateTime
      */
+    #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.created_at'],
+            'importexport' => ['excluded' => true],
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
     protected $createdAt;
 
     /**
      * @var \DateTime $updatedAt
-     *
-     * @ORM\Column(type="datetime", name="updated_at")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'updated_at', type: Types::DATETIME_MUTABLE)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => ['label' => 'oro.ui.updated_at'],
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
     protected $updatedAt;
 
     /**
-     * @ORM\Column(name="managed_inventory", type="boolean", nullable=true, options={"default"=false})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Managed Inventory"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=false
-     *          }
-     *      }
-     * )
-     *
      * @var boolean
      */
+    #[ORM\Column(name: 'managed_inventory', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Managed Inventory'],
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
     protected $managedInventory;
 
     /**
-     * @ORM\Column(name="pick_location", type="string", nullable=true, length=100)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "header"="Pick Location"
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'pick_location', type: Types::STRING, length: 100, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['header' => 'Pick Location'],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $pickLocation;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\InventoryBundle\Entity\InventoryBatch",
-     *     mappedBy="inventoryLevel",
-     *     cascade={"persist"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"createdAt" = "DESC"})
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=50,
-     *              "full"=true
-     *          },
-     *      }
-     * )
-     *
      * @var InventoryBatch[]|Collection
      */
+    #[ORM\OneToMany(
+        mappedBy: 'inventoryLevel',
+        targetEntity: InventoryBatch::class,
+        cascade: ['persist'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
+    #[ORM\OrderBy(['createdAt' => 'DESC'])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 50, 'full' => true]
+        ]
+    )]
     protected $inventoryBatches;
 
     /**
-     * @ORM\OneToMany(
-     *     targetEntity="InventoryLevelLogRecord",
-     *     mappedBy="inventoryLevel"
-     * )
-     *
      * @var Collection|InventoryLevelLogRecord[]
      */
+    #[ORM\OneToMany(mappedBy: 'inventoryLevel', targetEntity: InventoryLevelLogRecord::class)]
     protected $inventoryLevelLogRecords;
     
     public function __construct()
@@ -280,7 +205,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      */
     public function setInventoryQty($quantity)
     {
-        $this->inventory = $quantity;
+        $this->inventoryQty = $quantity;
 
         return $this;
     }
@@ -290,7 +215,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      */
     public function getInventoryQty()
     {
-        return $this->inventory;
+        return $this->inventoryQty;
     }
 
     /**
@@ -317,7 +242,7 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
      */
     public function getVirtualInventoryQty()
     {
-        return $this->inventory - $this->allocatedInventory;
+        return $this->inventoryQty - $this->allocatedInventory;
     }
 
     /**
@@ -339,17 +264,13 @@ class InventoryLevel implements OrganizationAwareInterface, InventoryQtyAwareInt
         return $this->warehouse;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdateTimestamp()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersistTimestamp()
     {
         $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));

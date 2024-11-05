@@ -16,7 +16,10 @@
         'params': {'id': '$id'}
     }) %}
     {% if is_granted('marello_customer_update') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'marello_customer_update',
+            'params': {'id': '$id'}
+        }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({ 'html': html }) }}
 {% endblock navButtons %}
@@ -52,6 +55,7 @@
                 form_row(form.lastName),
                 form_row(form.nameSuffix),
                 form_row(form.email),
+                form_row(form.customerNumber),
             ]
         }]
     }] %}

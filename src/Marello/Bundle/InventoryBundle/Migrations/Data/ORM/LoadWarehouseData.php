@@ -5,13 +5,13 @@ namespace Marello\Bundle\InventoryBundle\Migrations\Data\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
-use Marello\Bundle\InventoryBundle\Model\Allocation\Notifier\WarehouseManualNotifier;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\InventoryBundle\Model\Allocation\Notifier\WarehouseManualNotifier;
 
 class LoadWarehouseData implements FixtureInterface
 {
@@ -42,7 +42,7 @@ class LoadWarehouseData implements FixtureInterface
     protected function loadDefaultWarehouse()
     {
         /** @var Organization $organization */
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
         /*
         * Create default warehouse with name of Warehouse.
         */
@@ -70,11 +70,11 @@ class LoadWarehouseData implements FixtureInterface
         $warehouseAddress->setPostalCode($data['postalCode']);
         $warehouseAddress->setCity($data['city']);
         /** @var Country $country */
-        $country = $this->manager->getRepository('OroAddressBundle:Country')->find($data['country']);
+        $country = $this->manager->getRepository(Country::class)->find($data['country']);
         $warehouseAddress->setCountry($country);
         /** @var Region $region */
         $region = $this->manager
-            ->getRepository('OroAddressBundle:Region')
+            ->getRepository(Region::class)
             ->findOneBy(['combinedCode' => $data['country'] . '-' . $data['state']]);
         $warehouseAddress->setRegion($region);
         $warehouseAddress->setPhone($data['phone']);

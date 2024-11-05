@@ -2,30 +2,32 @@
 
 namespace Marello\Bundle\NotificationMessageBundle\Controller;
 
-use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
-use Marello\Bundle\NotificationMessageBundle\Entity\Repository\NotificationMessageRepository;
-use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageTypeInterface;
-use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\UserBundle\Entity\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Doctrine\Persistence\ManagerRegistry;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+
+use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
+use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageTypeInterface;
+use Marello\Bundle\NotificationMessageBundle\Entity\Repository\NotificationMessageRepository;
 
 class NotificationMessageController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/",
-     *     name="marello_notificationmessage_index"
-     * )
-     * @Template("@MarelloNotificationMessage/NotificationMessage/index.html.twig")
-     * @AclAncestor("marello_notificationmessage_view")
      * @return array
      */
+    #[Route(path: '/', name: 'marello_notificationmessage_index')]
+    #[Template('@MarelloNotificationMessage/NotificationMessage/index.html.twig')]
+    #[AclAncestor('marello_notificationmessage_view')]
     public function indexAction(): array
     {
         return [
@@ -34,34 +36,29 @@ class NotificationMessageController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     name="marello_notificationmessage_view",
-     *     requirements={"id"="\d+"}
-     * )
-     * @Template("@MarelloNotificationMessage/NotificationMessage/view.html.twig")
-     * @AclAncestor("marello_notificationmessage_view")
      * @param NotificationMessage $entity
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_notificationmessage_view', requirements: ['id' => '\d+'])]
+    #[Template('@MarelloNotificationMessage/NotificationMessage/view.html.twig')]
+    #[AclAncestor('marello_notificationmessage_view')]
     public function viewAction(NotificationMessage $entity): array
     {
         return ['entity' => $entity];
     }
 
-    /**
-     * @Route(
-     *     "/widget/sidebar-notification-messages/{perPage}",
-     *     name="marello_notificationmessage_widget_sidebar_notification_messages",
-     *     defaults={"perPage" = 10},
-     *     requirements={"perPage"="\d+"}
-     * )
-     * @AclAncestor("marello_notificationmessage_view")
-     */
+    #[Route(
+        path: '/widget/sidebar-notification-messages/{perPage}',
+        name: 'marello_notificationmessage_widget_sidebar_notification_messages',
+        requirements: ['perPage' => '\d+'],
+        defaults: ['perPage' => 10]
+    )]
+    #[AclAncestor('marello_notificationmessage_view')]
     public function notificationMessagesWidgetAction(Request $request, int $perPage): Response
     {
         /** @var NotificationMessageRepository $repository */
-        $repository = $this->container->get('doctrine')->getRepository(NotificationMessage::class);
+        $repository = $this->container->get(ManagerRegistry::class)
+            ->getRepository(NotificationMessage::class);
         /** @var User $user */
         $user = $this->getUser();
         $types = $this->extractTypes($request);
@@ -102,13 +99,14 @@ class NotificationMessageController extends AbstractController
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),
             [
                 EventDispatcherInterface::class,
                 EntityRoutingHelper::class,
+                ManagerRegistry::class
             ]
         );
     }

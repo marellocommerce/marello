@@ -76,7 +76,7 @@ class PurchaseOrderCreateHandler
         /*
          *  Unset any product key that do not need to be processed
          */
-        $keys = $this->request->request->get('marello_purchase_order_create_step_two');
+        $keys = $this->request->get('marello_purchase_order_create_step_two');
         if (!$keys) {
             return false;
         }
@@ -110,15 +110,11 @@ class PurchaseOrderCreateHandler
     {
         $data = $this->form->getData();
 
-        $this
+        $em = $this
             ->doctrine
-            ->getManagerForClass(PurchaseOrder::class)
-            ->persist($data);
-
-        $this
-            ->doctrine
-            ->getManagerForClass(PurchaseOrder::class)
-            ->flush();
+            ->getManagerForClass(PurchaseOrder::class);
+        $em->persist($data);
+        $em->flush();
     }
 
     /**

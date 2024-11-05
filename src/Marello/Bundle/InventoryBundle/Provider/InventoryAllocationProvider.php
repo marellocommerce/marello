@@ -23,6 +23,7 @@ use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
 use Marello\Bundle\InventoryBundle\Model\OrderWarehouseResult;
 use Marello\Bundle\InventoryBundle\Event\InventoryUpdateEvent;
 use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContextFactory;
+use Marello\Bundle\POSBundle\Migrations\Data\ORM\LoadSalesChannelPOSTypeData;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\QuantityWFAStrategy;
 
 class InventoryAllocationProvider
@@ -67,168 +68,200 @@ class InventoryAllocationProvider
         $em = $this
             ->getDoctrineHelper()
             ->getEntityManagerForClass(Allocation::class);
-        foreach ($this->getWarehouseResults($order, $allocation) as $orderWarehouseResults) {
-            if ($allocation && $allocation->getWarehouse()) {
-                $this->handleAllocationInventory($allocation, $order, true);
-            }
-            /** @var OrderWarehouseResult $result */
-            foreach ($orderWarehouseResults as $result) {
-                $newAllocation = new Allocation();
-                $newAllocation->setOrder($order);
-                $newAllocation->setOrganization($order->getOrganization());
-                $newAllocation->setState(
-                    $this->getEnumValue(
-                        AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
-                        AllocationStateStatusInterface::ALLOCATION_STATE_AVAILABLE
-                    )
-                );
-                $newAllocation->setStatus(
-                    $this->getEnumValue(
-                        AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
-                        AllocationStateStatusInterface::ALLOCATION_STATUS_ON_HAND
-                    )
-                );
 
-                // find allocation by warehouse
-                if ($result->getWarehouse()->getCode() === QuantityWFAStrategy::EMPTY_WAREHOUSE_CODE) {
+        // for the POS orders we need to figure out which SC can be used based on the item types and SC
+        // if the SC of the Order is of type POS we need to run the getWarehouseResults twice and merge the results (?)
+        if ($salesChannel = $order->getSalesChannel()) {
+            $orderWarehouseMergedResults = [];
+            if ($salesChannel->getChannelType() &&
+                $salesChannel->getChannelType()->getName() === LoadSalesChannelPOSTypeData::POS
+            ) {
+                $orderCashCarryItems = $order->getItems()->filter(function (OrderItem $item) {
+                    return ($item->getItemType() === OrderItemTypeInterface::OI_TYPE_CASHANDCARRY);
+                });
+                $this->warehousesProvider->setOrderItemsForAllocation($orderCashCarryItems);
+                $cashCarryResults = $this->getWarehouseResults($order, $allocation);
+
+                $orderDeliveryItems = $order->getItems()->filter(function (OrderItem $item) {
+                    return ($item->getItemType() === OrderItemTypeInterface::OI_TYPE_DELIVERY);
+                });
+                $this->warehousesProvider->setOrderItemsForAllocation($orderDeliveryItems);
+                $orderDeliveryResults = $this->getWarehouseResults($order, $allocation);
+
+                $orderWarehouseMergedResults = array_merge(
+                    $cashCarryResults,
+                    $orderDeliveryResults
+                );
+            } else {
+                $orderWarehouseMergedResults = array_merge(
+                    $orderWarehouseMergedResults,
+                    $this->getWarehouseResults($order, $allocation)
+                );
+            }
+
+            foreach ($orderWarehouseMergedResults as $orderWarehouseResults) {
+                if ($allocation && $allocation->getWarehouse()) {
+                    $this->handleAllocationInventory($allocation, $order, true);
+                }
+                /** @var OrderWarehouseResult $result */
+                foreach ($orderWarehouseResults as $result) {
+                    $newAllocation = new Allocation();
+                    $newAllocation->setOrder($order);
+                    $newAllocation->setOrganization($order->getOrganization());
                     $newAllocation->setState(
                         $this->getEnumValue(
                             AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
-                            AllocationStateStatusInterface::ALLOCATION_STATE_WFS
+                            AllocationStateStatusInterface::ALLOCATION_STATE_AVAILABLE
                         )
                     );
                     $newAllocation->setStatus(
                         $this->getEnumValue(
                             AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
-                            AllocationStateStatusInterface::ALLOCATION_STATUS_CNA
+                            AllocationStateStatusInterface::ALLOCATION_STATUS_ON_HAND
                         )
                     );
+
+                    // find allocation by warehouse
+                    if ($result->getWarehouse()->getCode() === QuantityWFAStrategy::EMPTY_WAREHOUSE_CODE) {
+                        $newAllocation->setState(
+                            $this->getEnumValue(
+                                AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
+                                AllocationStateStatusInterface::ALLOCATION_STATE_WFS
+                            )
+                        );
+                        $newAllocation->setStatus(
+                            $this->getEnumValue(
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_CNA
+                            )
+                        );
+                    }
+                    if ($result->getWarehouse()->getCode() === AllocationStateStatusInterface::ALLOCATION_STATUS_CNA) {
+                        $newAllocation->setState(
+                            $this->getEnumValue(
+                                AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
+                                AllocationStateStatusInterface::ALLOCATION_STATE_ALERT
+                            )
+                        );
+                        $newAllocation->setStatus(
+                            $this->getEnumValue(
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_CNA
+                            )
+                        );
+                    }
+                    $warehouseType = $result->getWarehouse()->getWarehouseType()->getName();
+                    if ($warehouseType === WarehouseTypeProviderInterface::WAREHOUSE_TYPE_EXTERNAL) {
+                        $newAllocation->setStatus(
+                            $this->getEnumValue(
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_DROPSHIP
+                            )
+                        );
+                    }
+                    $tmpWarehouses = [QuantityWFAStrategy::CNA_WAREHOUSE_CODE, QuantityWFAStrategy::EMPTY_WAREHOUSE_CODE];
+                    if (!in_array($result->getWarehouse()->getCode(), $tmpWarehouses)) {
+                        $newAllocation->setWarehouse($result->getWarehouse());
+                    }
+
+                    $shippingAddress = $this->getShippingAddress($order);
+                    $newAllocation->setShippingAddress($shippingAddress);
+
+                    $this->createAllocationItems($result, $newAllocation);
+                    $allocationContext = AllocationContextInterface::ALLOCATION_CONTEXT_ORDER;
+
+                    if ($this->isCashAndCarryAllocation) {
+                        $allocationContext = AllocationContextInterface::ALLOCATION_CONTEXT_CASH_CARRY;
+                    }
+                    if ($callback) {
+                        $allocationContext = AllocationContextInterface::ALLOCATION_CONTEXT_RESHIPMENT;
+                        $this->assignDataProperties($newAllocation, $order);
+                    }
+
+                    $newAllocation->setAllocationContext(
+                        $this->getEnumValue(
+                            AllocationContextInterface::ALLOCATION_CONTEXT_ENUM_CODE,
+                            $allocationContext
+                        )
+                    );
+
+                    // allocation has been rejected or needs to be reallocated
+                    // set allocation as the source for the new allocation for reference
+                    if ($allocation) {
+                        $newAllocation->setSourceEntity($allocation);
+                        $newAllocation->setAllocationContext(
+                            $this->getEnumValue(
+                                AllocationContextInterface::ALLOCATION_CONTEXT_ENUM_CODE,
+                                AllocationContextInterface::ALLOCATION_CONTEXT_REALLOCATION
+                            )
+                        );
+                    }
+                    $em->persist($newAllocation);
+                    $this->newAllocations[] = $newAllocation;
                 }
-                if ($result->getWarehouse()->getCode() === AllocationStateStatusInterface::ALLOCATION_STATUS_CNA) {
-                    $newAllocation->setState(
+            }
+
+            if (!$allocation) {
+                $diff = [];
+                $orderItems = $this->exclusionProvider->getItems($order, $allocation);
+                foreach ($orderItems as $orderItem) {
+                    if ($this->allOrderItems->contains($orderItem)) {
+                        continue;
+                    }
+                    $diff[] = $orderItem;
+                }
+
+                /** @var OrderItem $orderItem */
+                foreach ($diff as $orderItem) {
+                    /** @var Order $order */
+                    $diffAllocation = new Allocation();
+                    $diffAllocation->setOrder($order);
+                    $diffAllocation->setState(
                         $this->getEnumValue(
                             AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
                             AllocationStateStatusInterface::ALLOCATION_STATE_ALERT
                         )
                     );
-                    $newAllocation->setStatus(
+                    $diffAllocation->setStatus(
                         $this->getEnumValue(
                             AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
                             AllocationStateStatusInterface::ALLOCATION_STATUS_CNA
                         )
                     );
-                }
-                $warehouseType = $result->getWarehouse()->getWarehouseType()->getName();
-                if ($warehouseType === WarehouseTypeProviderInterface::WAREHOUSE_TYPE_EXTERNAL) {
-                    $newAllocation->setStatus(
-                        $this->getEnumValue(
-                            AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
-                            AllocationStateStatusInterface::ALLOCATION_STATUS_DROPSHIP
-                        )
-                    );
-                }
-                $tmpWarehouses = [QuantityWFAStrategy::CNA_WAREHOUSE_CODE, QuantityWFAStrategy::EMPTY_WAREHOUSE_CODE];
-                if (!in_array($result->getWarehouse()->getCode(), $tmpWarehouses)) {
-                    $newAllocation->setWarehouse($result->getWarehouse());
-                }
-
-                $shippingAddress = $this->getShippingAddress($order);
-                $newAllocation->setShippingAddress($shippingAddress);
-
-                $this->createAllocationItems($result, $newAllocation);
-                $allocationContext = AllocationContextInterface::ALLOCATION_CONTEXT_ORDER;
-
-                if ($this->isCashAndCarryAllocation) {
-                    $allocationContext = AllocationContextInterface::ALLOCATION_CONTEXT_CASH_CARRY;
-                }
-                if ($callback) {
-                    $allocationContext = AllocationContextInterface::ALLOCATION_CONTEXT_RESHIPMENT;
-                    $this->assignDataProperties($newAllocation, $order);
-                }
-                
-                $newAllocation->setAllocationContext(
-                    $this->getEnumValue(
-                        AllocationContextInterface::ALLOCATION_CONTEXT_ENUM_CODE,
-                        $allocationContext
-                    )
-                );
-
-                // allocation has been rejected or needs to be reallocated
-                // set allocation as the source for the new allocation for reference
-                if ($allocation) {
-                    $newAllocation->setSourceEntity($allocation);
-                    $newAllocation->setAllocationContext(
+                    $diffAllocation->setAllocationContext(
                         $this->getEnumValue(
                             AllocationContextInterface::ALLOCATION_CONTEXT_ENUM_CODE,
-                            AllocationContextInterface::ALLOCATION_CONTEXT_REALLOCATION
+                            AllocationContextInterface::ALLOCATION_CONTEXT_ORDER
                         )
                     );
-                }
-                $em->persist($newAllocation);
-                $this->newAllocations[] = $newAllocation;
-            }
-        }
-
-        if (!$allocation) {
-            $diff = [];
-            $orderItems = $this->exclusionProvider->getItems($order, $allocation);
-            foreach ($orderItems as $orderItem) {
-                if ($this->allOrderItems->contains($orderItem)) {
-                    continue;
-                }
-                $diff[] = $orderItem;
-            }
-
-            /** @var OrderItem $orderItem */
-            foreach ($diff as $orderItem) {
-                /** @var Order $order */
-                $diffAllocation = new Allocation();
-                $diffAllocation->setOrder($order);
-                $diffAllocation->setState(
-                    $this->getEnumValue(
-                        AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
-                        AllocationStateStatusInterface::ALLOCATION_STATE_ALERT
-                    )
-                );
-                $diffAllocation->setStatus(
-                    $this->getEnumValue(
-                        AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
-                        AllocationStateStatusInterface::ALLOCATION_STATUS_CNA
-                    )
-                );
-                $diffAllocation->setAllocationContext(
-                    $this->getEnumValue(
-                        AllocationContextInterface::ALLOCATION_CONTEXT_ENUM_CODE,
-                        AllocationContextInterface::ALLOCATION_CONTEXT_ORDER
-                    )
-                );
-                $allocationItem = new AllocationItem();
-                $allocationItem->setOrderItem($orderItem);
-                $allocationItem->setProduct($orderItem->getProduct());
-                $allocationItem->setProductSku($orderItem->getProductSku());
-                $allocationItem->setProductName($orderItem->getProductName());
-                $allocationItem->setQuantity($orderItem->getQuantity());
-                $allocationItem->setTotalQuantity($orderItem->getQuantity());
-                $diffAllocation->addItem($allocationItem);
-                $em->persist($diffAllocation);
-            }
-        }
-
-        if ($this->newAllocations) {
-            if ($callback) {
-                $callback($order);
-            }
-            $em->flush($this->newAllocations);
-
-            foreach ($this->newAllocations as $newAllocation) {
-                if ($newAllocation->getWarehouse()) {
-                    $this->handleAllocationInventory($newAllocation);
+                    $allocationItem = new AllocationItem();
+                    $allocationItem->setOrderItem($orderItem);
+                    $allocationItem->setProduct($orderItem->getProduct());
+                    $allocationItem->setProductSku($orderItem->getProductSku());
+                    $allocationItem->setProductName($orderItem->getProductName());
+                    $allocationItem->setQuantity($orderItem->getQuantity());
+                    $allocationItem->setTotalQuantity($orderItem->getQuantity());
+                    $diffAllocation->addItem($allocationItem);
+                    $em->persist($diffAllocation);
                 }
             }
-        }
-        $this->newAllocations = [];
 
-        $em->flush();
+            if ($this->newAllocations) {
+                if ($callback) {
+                    $callback($order);
+                }
+                $em->flush($this->newAllocations);
+
+                foreach ($this->newAllocations as $newAllocation) {
+                    if ($newAllocation->getWarehouse()) {
+                        $this->handleAllocationInventory($newAllocation);
+                    }
+                }
+            }
+            $this->newAllocations = [];
+
+            $em->flush();
+        }
     }
 
     /**
@@ -239,6 +272,7 @@ class InventoryAllocationProvider
     {
         $itemWithQty = $result->getItemsWithQuantity();
         $totalItemsCandC = 0;
+        $this->isCashAndCarryAllocation = false;
         foreach ($result->getOrderItems() as $item) {
             $allocationItem = new AllocationItem();
             $orderItem = $item;
@@ -254,8 +288,44 @@ class InventoryAllocationProvider
             if ($allocation->getWarehouse()) {
                 $allocationItem->setWarehouse($allocation->getWarehouse());
             }
-            $allocationItem->setQuantity($itemWithQty[$item->getProductSku()]);
+
+            $allocationItem->setQuantity($itemWithQty[$orderItem->getVariantHash()]);
             $allocationItem->setTotalQuantity($orderItem->getQuantity());
+            $inventoryItem = $item->getProduct()->getInventoryItem();
+            if ($inventoryItem && $allocation->getWarehouse()) {
+                if ($inventoryLevel = $inventoryItem->getInventoryLevel($allocation->getWarehouse())) {
+                    $inventoryBatches = $inventoryLevel->getInventoryBatches()->toArray();
+                    if (count($inventoryBatches) > 0) {
+                        usort($inventoryBatches, function (InventoryBatch $a, InventoryBatch $b) {
+                            if ($a->getDeliveryDate() < $b->getDeliveryDate()) {
+                                return -1;
+                            } elseif ($a->getDeliveryDate() > $b->getDeliveryDate()) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        });
+                        $data = [];
+                        $quantity = $allocationItem->getQuantity();
+                        /** @var InventoryBatch[] $inventoryBatches */
+                        $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        foreach ($inventoryBatches as $inventoryBatch) {
+                            // we cannot use expired batches
+                            if ($inventoryBatch->getSellByDate() && $inventoryBatch->getSellByDate() <= $currentDateTime) {
+                                continue;
+                            }
+                            if ($inventoryBatch->getQuantity() >= $quantity) {
+                                $data[$inventoryBatch->getBatchNumber()] = $quantity;
+                                break;
+                            } elseif (($batchQty = $inventoryBatch->getQuantity()) > 0) {
+                                $data[$inventoryBatch->getBatchNumber()] = $batchQty;
+                                $quantity = $quantity - $batchQty;
+                            }
+                        }
+                        $allocationItem->setInventoryBatches($data);
+                    }
+                }
+            }
             $allocation->addItem($allocationItem);
             if ($orderItem->getItemType() === OrderItemTypeInterface::OI_TYPE_CASHANDCARRY) {
                 $totalItemsCandC++;

@@ -5,6 +5,7 @@ namespace Marello\Bundle\ShippingBundle\Entity\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use Marello\Bundle\RuleBundle\Entity\Rule;
 use Oro\Bundle\LocaleBundle\Model\AddressInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
@@ -104,7 +105,7 @@ class ShippingMethodsConfigsRuleRepository extends ServiceEntityRepository
         if (0 < count($rules)) {
             $enabledRulesIds = array_column($rules, 'id');
             $qb = $this->createQueryBuilder('methodsConfigsRule');
-            $qb->update('MarelloRuleBundle:Rule', 'rule')
+            $qb->update(Rule::class, 'rule')
                 ->set('rule.enabled', ':newValue')
                 ->setParameter('newValue', false)
                 ->where($qb->expr()->in('rule.id', ':rules'))

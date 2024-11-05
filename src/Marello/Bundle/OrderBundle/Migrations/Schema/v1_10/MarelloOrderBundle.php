@@ -22,7 +22,7 @@ class MarelloOrderBundle implements Migration
             'payment_method_options',
             'json_array',
             [
-                'notnull' => false, 'comment' => '(DC2Type:json_array)'
+                'notnull' => false, 'comment' => '(DC2Type:json)'
             ]
         );
 

@@ -2,23 +2,15 @@
 
 namespace Marello\Bundle\TaxBundle;
 
-use Marello\Bundle\TaxBundle\DependencyInjection\Compiler\ResolverEventConnectorPass;
-use Marello\Bundle\TaxBundle\DependencyInjection\Compiler\TaxRuleMatcherPass;
-use Marello\Bundle\TaxBundle\DependencyInjection\Compiler\TaxMapperPass;
-use Marello\Bundle\TaxBundle\DependencyInjection\MarelloTaxExtension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+use Marello\Bundle\TaxBundle\DependencyInjection\Compiler\TaxMapperPass;
+use Marello\Bundle\TaxBundle\DependencyInjection\Compiler\TaxRuleMatcherPass;
+use Marello\Bundle\TaxBundle\DependencyInjection\Compiler\ResolverEventConnectorPass;
 
 class MarelloTaxBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getContainerExtension()
-    {
-        return new MarelloTaxExtension();
-    }
-    
     /**
      * {@inheritdoc}
      */

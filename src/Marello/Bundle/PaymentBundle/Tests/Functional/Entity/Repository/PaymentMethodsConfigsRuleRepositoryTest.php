@@ -3,17 +3,19 @@
 namespace Marello\Bundle\PaymentBundle\Tests\Functional\Entity\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
-use Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository;
-use Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures\LoadPaymentMethodsConfigsRulesWithConfigs;
-use Marello\Bundle\PaymentBundle\Tests\Functional\Helper\PaymentTermIntegrationTrait;
-use Marello\Bundle\ShippingBundle\Tests\Unit\Provider\Stub\ShippingAddressStub;
-use Oro\Bundle\AddressBundle\Entity\Country;
+
+use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\LocaleBundle\Model\AddressInterface;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Component\Testing\Unit\EntityTrait;
+
+use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
+use Marello\Bundle\ShippingBundle\Tests\Unit\Provider\Stub\ShippingAddressStub;
+use Marello\Bundle\PaymentBundle\Tests\Functional\Helper\PaymentTermIntegrationTrait;
+use Marello\Bundle\PaymentBundle\Entity\Repository\PaymentMethodsConfigsRuleRepository;
+use Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures\LoadPaymentMethodsConfigsRulesWithConfigs;
 
 class PaymentMethodsConfigsRuleRepositoryTest extends WebTestCase
 {
@@ -40,8 +42,8 @@ class PaymentMethodsConfigsRuleRepositoryTest extends WebTestCase
         ]);
 
         $this->em = static::getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloPaymentBundle:PaymentMethodsConfigsRule');
-        $this->repository = $this->em->getRepository('MarelloPaymentBundle:PaymentMethodsConfigsRule');
+            ->getManagerForClass(PaymentMethodsConfigsRule::class);
+        $this->repository = $this->em->getRepository(PaymentMethodsConfigsRule::class);
     }
 
     /**

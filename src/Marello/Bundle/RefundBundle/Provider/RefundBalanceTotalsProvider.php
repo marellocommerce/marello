@@ -68,7 +68,7 @@ class RefundBalanceTotalsProvider implements FormChangesProviderInterface
      */
     protected function getTotalWithSubtotalsValues(Refund $refund)
     {
-        $balance = $this->balanceCalculator->caclulateBalance($refund);
+        $balance = $this->balanceCalculator->calculateBalance($refund);
         $refundsTotal = $this->balanceCalculator->caclulateRefundsTotal($refund);
         $currency = $refund->getCurrency();
         return [

@@ -3,6 +3,7 @@
 namespace Marello\Bundle\ShippingBundle\Tests\Functional\Entity\Repository;
 
 use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodConfigRepository;
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
 use Marello\Bundle\ShippingBundle\Tests\Functional\DataFixtures\LoadShippingMethodTypeConfigsWithFakeTypes;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
@@ -24,7 +25,7 @@ class ShippingMethodConfigRepositoryTest extends WebTestCase
         ]);
 
         $this->repository = static::getContainer()->get('doctrine')
-            ->getRepository('MarelloShippingBundle:ShippingMethodConfig');
+            ->getRepository(ShippingMethodConfig::class);
     }
 
     public function testDeleteByMethod()

@@ -6,7 +6,7 @@ datagrids:
                 select:
                     - s
                 from:
-                    - { table: MarelloSupplierBundle:Supplier, alias: s }
+                    - { table: Marello\Bundle\SupplierBundle\Entity\Supplier, alias: s }
         columns:
             name:
                 label:            marello.supplier.name.label
@@ -70,12 +70,13 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 icon:           eye
                 rowAction:      true
             update:
                 type:           navigate
-                label:          marello.supplier.update
+                label:          oro.grid.action.update
                 icon:           edit
                 link:           update_link
         options:
@@ -92,8 +93,8 @@ datagrids:
             bind_parameters:
                 -
                     name: isActive
-                    default: 0
-                    type: integer
+                    default: false
+                    type: boolean
 
     marello-supplier-extended-no-actions-grid:
         extends: marello-supplier-extended-grid
@@ -112,7 +113,7 @@ datagrids:
                     - psr.cost
                     - supplier.currency
                 from:
-                    - { table: MarelloProductBundle:ProductSupplierRelation, alias: psr }
+                    - { table: Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation, alias: psr }
                 join:
                     inner:
                         - { join: psr.product, alias: p }
@@ -177,6 +178,7 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 acl_resource:   marello_product_view
                 icon:           eye

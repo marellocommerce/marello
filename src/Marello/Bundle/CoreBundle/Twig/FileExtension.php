@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\CoreBundle\Twig;
 
+use Oro\Bundle\AttachmentBundle\Entity\File;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -54,6 +55,6 @@ class FileExtension extends AbstractExtension
      */
     public function getFileById($id)
     {
-        return $this->doctrineHelper->getEntityRepository('OroAttachmentBundle:File')->find($id);
+        return $this->doctrineHelper->getEntityRepository(File::class)->find($id);
     }
 }

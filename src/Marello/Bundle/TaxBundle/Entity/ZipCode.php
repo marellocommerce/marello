@@ -2,61 +2,52 @@
 
 namespace Marello\Bundle\TaxBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
-/**
- * @ORM\Entity
- * @ORM\Table("marello_tax_zip_code")
- * @ORM\HasLifecycleCallbacks
- * @Config(mode="hidden")
- */
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+
+#[ORM\Table('marello_tax_zip_code')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(mode: 'hidden')]
 class ZipCode implements DatesAwareInterface
 {
     use DatesAwareTrait;
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="zip_code", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'zip_code', type: Types::STRING, length: 255, nullable: true)]
     protected $zipCode;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="zip_range_start", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'zip_range_start', type: Types::STRING, length: 255, nullable: true)]
     protected $zipRangeStart;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="zip_range_end", type="string", length=255, nullable=true)
      */
+    #[ORM\Column(name: 'zip_range_end', type: Types::STRING, length: 255, nullable: true)]
     protected $zipRangeEnd;
 
     /**
      * @var TaxJurisdiction
-     *
-     * @ORM\ManyToOne(
-     *      targetEntity="Marello\Bundle\TaxBundle\Entity\TaxJurisdiction",
-     *      inversedBy="zipCodes",
-     *      cascade={"persist"}
-     * )
-     * @ORM\JoinColumn(name="tax_jurisdiction_id", referencedColumnName="id", nullable=false)
      */
+    #[ORM\JoinColumn(name: 'tax_jurisdiction_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: TaxJurisdiction::class, cascade: ['persist'], inversedBy: 'zipCodes')]
     protected $taxJurisdiction;
 
     /**
@@ -183,17 +174,13 @@ class ZipCode implements DatesAwareInterface
         return $this->taxJurisdiction;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdateTimestamp()
     {
         $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersistTimestamp()
     {
         $this->created = $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));

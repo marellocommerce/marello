@@ -1,8 +1,9 @@
 Marello\Bundle\CustomerBundle\Entity\Customer:
     constraints:
+        - Marello\Bundle\CustomerBundle\Validator\Constraints\UniqueCustomerEmail: ~
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-              fields: [email, organization]
-              message: 'marello.customer.email.message'
+              fields: [customerNumber, organization]
+              message: 'marello.customer.customer.number.message'
     properties:
         firstName:
             - NotBlank: ~

@@ -9,12 +9,11 @@ class AddressStub extends MarelloAddress
     /**
      * @var string
      */
-    protected $regionCode;
-
+    protected ?string $regionCode = null;
     /**
      * @var string
      */
-    protected $street2;
+    protected ?string $street2 = null;
 
     /**
      * @param string $street2

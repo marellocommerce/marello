@@ -3,8 +3,11 @@
 namespace Marello\Bundle\ProductBundle\EventListener\Datagrid;
 
 use Doctrine\ORM\EntityManager;
-use Marello\Bundle\SupplierBundle\Entity\Supplier;
+
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
+
+use Marello\Bundle\SupplierBundle\Entity\Supplier;
+use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
 
 class ProductSupplierGridListener
 {
@@ -32,7 +35,7 @@ class ProductSupplierGridListener
 
             if ($supplierId) {
                 /** @var Supplier $supplier */
-                $supplier = $this->entityManager->getRepository('MarelloSupplierBundle:Supplier')->find($supplierId);
+                $supplier = $this->entityManager->getRepository(Supplier::class)->find($supplierId);
             }
         }
 
@@ -52,7 +55,7 @@ class ProductSupplierGridListener
     private function getProductsRelatedToSupplier(Supplier $supplier)
     {
         $productsIds = $this->entityManager
-            ->getRepository('MarelloProductBundle:ProductSupplierRelation')
+            ->getRepository(ProductSupplierRelation::class)
             ->getProductIdsRelatedToSupplier($supplier);
         return $productsIds;
     }

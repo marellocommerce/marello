@@ -53,8 +53,14 @@ dashboards:
                     converter_attributes:
                         dateRangeField: dateRange
                         default_checked: true
+                currency:
+                    type: Marello\Bundle\SalesBundle\Form\Type\WidgetCurrencySelectType
+                    options:
+                        label: marello.sales.saleschannel.currency.label
+                        required: true
+                    show_on_widget: true
                 salesChannel:
-                    type: Marello\Bundle\SalesBundle\Form\Type\SalesChannelSelectType
+                    type: Marello\Bundle\SalesBundle\Form\Type\SalesChannelCurrencyAwareSelectType
                     options:
                        label: marello.sales.saleschannel.entity_label
                        required: false

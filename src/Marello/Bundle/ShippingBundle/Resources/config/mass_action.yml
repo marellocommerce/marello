@@ -26,7 +26,7 @@ services:
         public: true
         arguments:
             - 'marello.shipping.datagrid.status.success_message'
-            - 'MarelloShippingBundle:ShippingMethodsConfigsRule'
+            - Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule
             - '@doctrine.orm.entity_manager'
             - '@translator'
 #            - '@oro_security.security_facade.link'
