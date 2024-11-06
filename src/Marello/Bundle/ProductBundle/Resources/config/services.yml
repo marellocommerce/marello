@@ -277,4 +277,4 @@ services:
             - '@oro_attachment.manager.public_mediacache'
             - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
             - '@Oro\Bundle\AttachmentBundle\Manager\FileManager'
-            - '/media/cache/attachment/files/'
+            - '/media/cache'
