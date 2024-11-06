@@ -47,7 +47,8 @@ class ProductFileManager
      */
     public function getFileUrl(File $file): string
     {
-        return $this->directoryPath . $file->getId() . DIRECTORY_SEPARATOR . $file->getOriginalFilename();
+        $storagePath = $this->attachmentManager->getFileUrl($file);
+        return $this->directoryPath . $this->normalizePath($storagePath);
     }
 
     private function normalizePath(string $path): string
