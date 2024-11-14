@@ -59,9 +59,9 @@ class OrderItemFormChangesProviderTest extends TestCase
      * @param int $id
      * @return string
      */
-    protected function getIdentifier($id)
+    protected function getIdentifier($rowId, $id)
     {
-        return sprintf('%s%s', OrderItemFormChangesProvider::IDENTIFIER_PREFIX, $id);
+        return sprintf('%s%s-%s', OrderItemFormChangesProvider::IDENTIFIER_PREFIX, $rowId, $id);
     }
 
     /**
@@ -73,7 +73,7 @@ class OrderItemFormChangesProviderTest extends TestCase
     {
         $data = [];
         for ($i = 1; $i <= $count; $i++) {
-            $data[$this->getIdentifier($i)] = [$key => $i];
+            $data[$this->getIdentifier($i-1, $i)] = [$key => $i];
         }
 
         return $data;
@@ -89,7 +89,7 @@ class OrderItemFormChangesProviderTest extends TestCase
         $data = [];
         for ($i = 1; $i <= $count; $i++) {
             foreach ($keys as $type => $key) {
-                $data[$this->getIdentifier($i)][$type][$key] = $i;
+                $data[$this->getIdentifier($i-1, $i)][$type][$key] = $i;
             }
         }
         
@@ -149,7 +149,7 @@ class OrderItemFormChangesProviderTest extends TestCase
     public function processFormChangesDataProvider()
     {
         $notSellableData = $this->getCompositeData(2);
-        $notSellableData[$this->getIdentifier(3)] = ['message' => 'message'];
+        $notSellableData[$this->getIdentifier(2, 3)] = ['message' => 'message'];
 
         return [
             'allProductsValid' => [
@@ -193,9 +193,9 @@ class OrderItemFormChangesProviderTest extends TestCase
                     ],
                 ],
                 'expectedData' => [OrderItemFormChangesProvider::ITEMS_FIELD => [
-                    $this->getIdentifier(1) => ['message' => 'message'],
-                    $this->getIdentifier(2) => ['message' => 'message'],
-                    $this->getIdentifier(3) => ['message' => 'message']
+                    $this->getIdentifier(0, 1) => ['message' => 'message'],
+                    $this->getIdentifier(1, 2) => ['message' => 'message'],
+                    $this->getIdentifier(2, 3) => ['message' => 'message']
                 ]],
             ],
             'formDoesNotHaveItemsField' => [

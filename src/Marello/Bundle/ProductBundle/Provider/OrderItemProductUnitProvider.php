@@ -43,7 +43,7 @@ class OrderItemProductUnitProvider extends AbstractOrderItemFormChangesProvider
                 $inventoryItem = $product->getInventoryItem();
                 $unit = $inventoryItem->getProductUnit();
                 if ($unit) {
-                    $data[sprintf('%s%s-%s', self::IDENTIFIER_PREFIX, $rowId, $product->getId())] = [
+                    $data[$this->getRowIdentifier($rowId, $item['product'])] = [
                         'unit' => $unit->getName()
                     ];
                 }

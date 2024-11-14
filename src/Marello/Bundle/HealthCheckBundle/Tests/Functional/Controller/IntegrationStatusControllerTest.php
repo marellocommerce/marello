@@ -28,15 +28,13 @@ class IntegrationStatusControllerTest extends WebTestCase
 
     public function testIndexAction()
     {
-        $this->client->request(
-            'GET',
-            $this->getUrl(
-                'marello_healthcheck_integration_statuses_index',
-                []
-            )
-        );
+        $this->client->request('GET', $this->getUrl('marello_healthcheck_integration_statuses_index'));
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, Response::HTTP_OK);
 
-        $this->assertResponseStatusCodeEquals($this->client->getResponse(), Response::HTTP_OK);
+        $response = $this->client->requestGrid('marello-base-integration-statuses-grid');
+        $result = $this->getJsonResponseContent($response, Response::HTTP_OK);
+        $this->assertCount(5, $result['data']);
     }
 
     public function testGridFilters()

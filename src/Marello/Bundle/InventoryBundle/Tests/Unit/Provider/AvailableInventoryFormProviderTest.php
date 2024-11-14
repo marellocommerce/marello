@@ -40,9 +40,9 @@ class AvailableInventoryFormProviderTest extends TestCase
      * @param int $id
      * @return string
      */
-    protected function getIdentifier($id)
+    protected function getIdentifier($rowId, $id)
     {
-        return sprintf('%s%s', OrderItemFormChangesProvider::IDENTIFIER_PREFIX, $id);
+        return sprintf('%s%s-%s', OrderItemFormChangesProvider::IDENTIFIER_PREFIX, $rowId, $id);
     }
 
     /**
@@ -75,19 +75,24 @@ class AvailableInventoryFormProviderTest extends TestCase
 
         if ($hasItems) {
             $products = array_values($submitData['products']);
-            $this->inventoryProvider->expects(static::atLeastOnce())
+            $expectation = static::never();
+            if ($isValid) {
+                $expectation = static::atLeastOnce();
+            }
+
+            $this->inventoryProvider->expects($expectation)
                 ->method('getProducts')
                 ->willReturn($products);
 
             /** @var \PHPUnit\Framework\MockObject\MockObject $product */
             foreach ($submitData['products'] as $id => $product) {
                 if ($isValid) {
-                    $this->inventoryProvider->expects(static::atLeastOnce())
+                    $this->inventoryProvider->expects($expectation)
                         ->method('getAvailableInventory')
                         ->willReturn($submitData['inventory'][$id]);
                 }
 
-                $product->expects(static::atLeastOnce())
+                $product->expects($expectation)
                     ->method('getId')
                     ->willReturn($id);
             }
@@ -143,7 +148,7 @@ class AvailableInventoryFormProviderTest extends TestCase
             'NoValidData' => [
                 'formData' => $this->getOrderMock(),
                 'hasItems' => true,
-                'isValid' => true,
+                'isValid' => false,
                 'submitData' => [
                     'products' => [],
                     OrderItemFormChangesProvider::ITEMS_FIELD => [
@@ -175,7 +180,8 @@ class AvailableInventoryFormProviderTest extends TestCase
                 'expectedData' => [
                     OrderItemFormChangesProvider::ITEMS_FIELD => [
                         AvailableInventoryFormProvider::INVENTORY_FIELD => [
-                            $this->getIdentifier(1) => ['value' => 10]
+                            $this->getIdentifier(0, 1) => ['value' => 10],
+                            $this->getIdentifier(1, 0) => ['value' => 10]
                         ]
                     ]
                 ]
@@ -205,8 +211,8 @@ class AvailableInventoryFormProviderTest extends TestCase
                 'expectedData' => [
                     OrderItemFormChangesProvider::ITEMS_FIELD => [
                         AvailableInventoryFormProvider::INVENTORY_FIELD => [
-                            $this->getIdentifier(1) => ['value' => 10],
-                            $this->getIdentifier(2) => ['value' => 10]
+                            $this->getIdentifier(0, 1) => ['value' => 10],
+                            $this->getIdentifier(1, 2) => ['value' => 10]
                         ]
                     ]
                 ]

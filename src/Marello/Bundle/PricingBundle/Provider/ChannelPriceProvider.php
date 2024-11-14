@@ -48,7 +48,7 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
                 $productIds,
                 $this->aclHelper
             );
-            $rowIdentifier = $this->getRowIdentifier($rowId, (int)$item['product']);
+            $rowIdentifier = $this->getRowIdentifier($rowId, $item['product']);
             foreach ($products as $product) {
                 $priceValue = $this->getDefaultPrice($salesChannel, $product);
                 $channelPrice = $this->getChannelPrice($salesChannel, $product);
@@ -60,7 +60,7 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
                 $data[$rowIdentifier]['value'] = $priceValue;
             }
             foreach ($order->getItems() as &$orderItem) {
-                if ($product = $orderItem->getProduct()) {
+                if ($orderItem->getProduct()) {
                     if (isset($data[$rowIdentifier])) {
                         $orderItem->setPrice($data[$rowIdentifier]['value']);
                     }

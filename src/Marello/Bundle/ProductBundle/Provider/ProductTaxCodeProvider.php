@@ -43,7 +43,7 @@ class ProductTaxCodeProvider extends AbstractOrderItemFormChangesProvider
             foreach ($products as $product) {
                 $taxCode = $product->getSalesChannelTaxCode($salesChannel) ? : $product->getTaxCode();
                 if ($taxCode) {
-                    $data[$this->getRowIdentifier($rowId, $product->getId())] = [
+                    $data[$this->getRowIdentifier($rowId, $item['product'])] = [
                         'id' => $taxCode->getId(),
                         'code' => $taxCode->getCode()
                     ];
