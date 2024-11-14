@@ -45,10 +45,11 @@ class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
             $context->setResult($result);
             return null;
         }
+
         $itemResult = $result[self::ITEMS_FIELD];
-        foreach ($submittedData[self::ITEMS_FIELD] as $rowIdentifierKey => $item) {
+        foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
             if (!empty($item['product'])) {
-                $identifier = sprintf('%s%s', self::IDENTIFIER_PREFIX, $item['product']);
+                $identifier = $this->getRowIdentifier($rowId, $item['product']);
                 if (isset($itemResult['price'][$identifier]) && isset($itemResult['tax_code'][$identifier]) &&
                     isset($item['quantity'])
                 ) {
@@ -64,7 +65,7 @@ class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
                     }
                     $amount = (double)$itemResult['price'][$identifier]['value'] * (float)$item['quantity'];
                     $taxTotals = $this->taxCalculator->calculate($amount, $rate);
-                    $itemResult['row_totals'][$identifier][$rowIdentifierKey] = $taxTotals->jsonSerialize();
+                    $itemResult['row_totals'][$identifier][$rowId] = $taxTotals->jsonSerialize();
                 }
             }
         }

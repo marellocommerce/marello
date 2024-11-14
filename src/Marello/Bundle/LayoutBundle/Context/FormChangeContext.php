@@ -10,6 +10,7 @@ class FormChangeContext extends ParameterBag implements FormChangeContextInterfa
     const FORM_FIELD = 'form';
     const SUBMITTED_DATA_FIELD = 'submitted_data';
     const RESULT_FIELD = 'result';
+    const ROW_ITEM_IDENTIFIER = 'row_item_id';
 
     /**
      * {@inheritdoc}

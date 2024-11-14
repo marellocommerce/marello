@@ -4,6 +4,9 @@ namespace Marello\Bundle\PricingBundle\Provider;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\PricingBundle\Entity\BasePrice;
@@ -14,7 +17,6 @@ use Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList;
 use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
 use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
 use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesProvider;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
 {
@@ -38,35 +40,34 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
             return;
         }
         $productIds = [];
-        foreach ($submittedData[self::ITEMS_FIELD] as $item) {
-            $productIds[] = (int)$item['product'];
-        }
-        
         $data = [];
-        $products = $this->getProductRepository()->findBySalesChannel(
-            $salesChannel->getId(),
-            $productIds,
-            $this->aclHelper
-        );
+        foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
+            $productIds[] = (int)$item['product'];
+            $products = $this->getProductRepository()->findBySalesChannel(
+                $salesChannel->getId(),
+                $productIds,
+                $this->aclHelper
+            );
+            $rowIdentifier = $this->getRowIdentifier($rowId, $item['product']);
+            foreach ($products as $product) {
+                $priceValue = $this->getDefaultPrice($salesChannel, $product);
+                $channelPrice = $this->getChannelPrice($salesChannel, $product);
 
-        foreach ($products as $product) {
-            $priceValue = $this->getDefaultPrice($salesChannel, $product);
-            $channelPrice = $this->getChannelPrice($salesChannel, $product);
+                if ($channelPrice['hasPrice']) {
+                    $priceValue = $channelPrice['price'];
+                }
 
-            if ($channelPrice['hasPrice']) {
-                $priceValue = $channelPrice['price'];
+                $data[$rowIdentifier]['value'] = $priceValue;
             }
-
-            $data[$this->getIdentifier($product->getId())]['value'] = $priceValue;
-        }
-        foreach ($order->getItems() as &$item) {
-            if ($product = $item->getProduct()) {
-                $productId = $product->getId();
-                if (isset($data[$this->getIdentifier($productId)])) {
-                    $item->setPrice($data[$this->getIdentifier($productId)]['value']);
+            foreach ($order->getItems() as &$orderItem) {
+                if ($orderItem->getProduct()) {
+                    if (isset($data[$rowIdentifier])) {
+                        $orderItem->setPrice($data[$rowIdentifier]['value']);
+                    }
                 }
             }
         }
+
         $result = $context->getResult();
         $result[self::ITEMS_FIELD]['price'] = $data;
         $context->setResult($result);
@@ -165,14 +166,5 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
     protected function getRepository($className)
     {
         return $this->registry->getManagerForClass($className)->getRepository($className);
-    }
-
-    /**
-     * @param int $id
-     * @return string
-     */
-    protected function getIdentifier($id)
-    {
-        return sprintf('%s%s', self::IDENTIFIER_PREFIX, $id);
     }
 }
