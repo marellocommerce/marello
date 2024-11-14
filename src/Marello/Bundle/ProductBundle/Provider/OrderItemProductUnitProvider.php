@@ -33,25 +33,26 @@ class OrderItemProductUnitProvider extends AbstractOrderItemFormChangesProvider
             return;
         }
         $productIds = [];
-        foreach ($submittedData[self::ITEMS_FIELD] as $item) {
-            $productIds[] = (int)$item['product'];
-        }
         $data = [];
-        /** @var Product[] $products */
-        $products = $this->getRepository()->findBySalesChannel($salesChannel->getId(), $productIds, $this->aclHelper);
-        foreach ($products as $product) {
-            $inventoryItem = $product->getInventoryItem();
-            $unit = $inventoryItem->getProductUnit();
-            if ($unit) {
-                $data[sprintf('%s%s', self::IDENTIFIER_PREFIX, $product->getId())] = [
-                    'unit' => $unit->getName()
-                ];
+
+        foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
+            $productIds[] = (int)$item['product'];
+            /** @var Product[] $products */
+            $products = $this->getRepository()->findBySalesChannel($salesChannel->getId(), $productIds, $this->aclHelper);
+            foreach ($products as $product) {
+                $inventoryItem = $product->getInventoryItem();
+                $unit = $inventoryItem->getProductUnit();
+                if ($unit) {
+                    $data[sprintf('%s%s-%s', self::IDENTIFIER_PREFIX, $rowId, $product->getId())] = [
+                        'unit' => $unit->getName()
+                    ];
+                }
             }
-        }
-        if (!empty($data)) {
-            $result = $context->getResult();
-            $result[self::ITEMS_FIELD]['product_unit'] = $data;
-            $context->setResult($result);
+            if (!empty($data)) {
+                $result = $context->getResult();
+                $result[self::ITEMS_FIELD]['product_unit'] = $data;
+                $context->setResult($result);
+            }
         }
     }
 

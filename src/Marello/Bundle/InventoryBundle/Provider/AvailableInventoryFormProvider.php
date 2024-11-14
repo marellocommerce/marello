@@ -38,45 +38,32 @@ class AvailableInventoryFormProvider extends AbstractOrderItemFormChangesProvide
         } else {
             return;
         }
-        $productIds = [];
 
         if (!array_key_exists(self::ITEMS_FIELD, $submittedData)) {
             return;
         }
 
-        foreach ($submittedData[self::ITEMS_FIELD] as $item) {
+        $data = [];
+        foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
             if (!array_key_exists(self::PRODUCT_FIELD, $item)) {
                 continue;
             }
             $productIds[] = (int)$item[self::PRODUCT_FIELD];
-        }
+            $products = $this->availableInventoryProvider->getProducts($salesChannel->getId(), $productIds);
+            if (0 === count($products)) {
+                return;
+            }
 
-        $data = [];
-        $products = $this->availableInventoryProvider->getProducts($salesChannel->getId(), $productIds);
-
-        if (0 === count($products)) {
-            return;
-        }
-
-        /** @var Product $product */
-        foreach ($products as $product) {
-            $availableInventory = $this->availableInventoryProvider->getAvailableInventory($product, $salesChannel);
-            $productIdentifier = $this->getIdentifier($product->getId());
-            $data[$productIdentifier]['value'] = $availableInventory;
+            /** @var Product $product */
+            foreach ($products as $product) {
+                $availableInventory = $this->availableInventoryProvider->getAvailableInventory($product, $salesChannel);
+                $rowIdentifier = $this->getRowIdentifier($rowId, $product->getId());
+                $data[$rowIdentifier]['value'] = $availableInventory;
+            }
         }
 
         $result = $context->getResult();
         $result[self::ITEMS_FIELD][self::INVENTORY_FIELD] = $data;
         $context->setResult($result);
-    }
-
-    /**
-     * Get entity identifier by combining the id and prefix
-     * @param int $id
-     * @return string
-     */
-    protected function getIdentifier($id)
-    {
-        return sprintf('%s%s', self::IDENTIFIER_PREFIX, $id);
     }
 }
