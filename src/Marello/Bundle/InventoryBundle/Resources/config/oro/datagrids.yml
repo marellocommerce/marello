@@ -80,7 +80,7 @@ datagrids:
                 virtualInventoryQty:    { data_name: virtualInventoryQty }
                 productBarcode:         { data_name: productBarcode }
             default:
-                productName: 'DESC'
+                productSku: 'DESC'
         filters:
             columns:
                 productSku:
@@ -409,7 +409,7 @@ datagrids:
                 reservedInventoryQty:
                     data_name:  balancedInventoryLevel.reservedInventory
             default:
-                productName: 'DESC'
+                productSku: 'DESC'
         properties:
             productName:
                 type: localized_value
@@ -674,8 +674,6 @@ datagrids:
             columns:
                 productSku:
                     data_name:  allocationItem.productSku
-            default:
-                productSku: 'ASC'
         options:
             toolbarOptions:
                 hide: true
