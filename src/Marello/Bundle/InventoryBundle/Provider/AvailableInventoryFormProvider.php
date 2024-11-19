@@ -48,16 +48,19 @@ class AvailableInventoryFormProvider extends AbstractOrderItemFormChangesProvide
             if (!array_key_exists(self::PRODUCT_FIELD, $item)) {
                 continue;
             }
-            $productIds[] = (int)$item[self::PRODUCT_FIELD];
-            $products = $this->availableInventoryProvider->getProducts($salesChannel->getId(), $productIds);
+            $products = $this->availableInventoryProvider
+                ->getProducts(
+                    $salesChannel->getId(),
+                    [(int)$item[self::PRODUCT_FIELD]]
+                );
+
             if (0 === count($products)) {
                 return;
             }
-
+            $rowIdentifier = $this->getRowIdentifier($rowId, $item[self::PRODUCT_FIELD]);
             /** @var Product $product */
             foreach ($products as $product) {
                 $availableInventory = $this->availableInventoryProvider->getAvailableInventory($product, $salesChannel);
-                $rowIdentifier = $this->getRowIdentifier($rowId, $item[self::PRODUCT_FIELD]);
                 $data[$rowIdentifier]['value'] = $availableInventory;
             }
         }

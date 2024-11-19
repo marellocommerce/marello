@@ -37,9 +37,9 @@ class ProductTaxCodeProvider extends AbstractOrderItemFormChangesProvider
 
         $data = [];
         foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
-            $productIds[] = (int)$item['product'];
             /** @var Product[] $products */
-            $products = $this->getRepository()->findBySalesChannel($salesChannel->getId(), $productIds, $this->aclHelper);
+            $products = $this->getRepository()
+                ->findBySalesChannel($salesChannel->getId(), [(int)$item['product']], $this->aclHelper);
             foreach ($products as $product) {
                 $taxCode = $product->getSalesChannelTaxCode($salesChannel) ? : $product->getTaxCode();
                 if ($taxCode) {

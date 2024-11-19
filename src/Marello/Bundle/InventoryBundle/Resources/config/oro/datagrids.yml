@@ -609,6 +609,7 @@ datagrids:
                 where:
                     and:
                         - IDENTITY(allocation.parent) = :allocationParentId
+                        - IDENTITY(allocation.state) != 'closed'
             bind_parameters:
                  allocationParentId: allocationParentId
         filters: ~

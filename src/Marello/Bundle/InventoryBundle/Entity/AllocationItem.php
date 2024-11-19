@@ -13,6 +13,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
 
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CoreBundle\Model\HashAwareTrait;
+use Marello\Bundle\CoreBundle\Model\HashAwareInterface;
 use Marello\Bundle\OrderBundle\Model\QuantityAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
@@ -28,11 +30,15 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
             'owner_column_name' => 'organization_id']
     ]
 )]
-class AllocationItem implements QuantityAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
+class AllocationItem implements QuantityAwareInterface,
+    OrganizationAwareInterface,
+    ExtendEntityInterface,
+    HashAwareInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
+    use HashAwareTrait;
 
     /**
      * @var int

@@ -42,10 +42,9 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
         $productIds = [];
         $data = [];
         foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
-            $productIds[] = (int)$item['product'];
             $products = $this->getProductRepository()->findBySalesChannel(
                 $salesChannel->getId(),
-                $productIds,
+                [(int)$item['product']],
                 $this->aclHelper
             );
             $rowIdentifier = $this->getRowIdentifier($rowId, $item['product']);
