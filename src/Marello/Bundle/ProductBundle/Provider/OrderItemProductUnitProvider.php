@@ -36,9 +36,9 @@ class OrderItemProductUnitProvider extends AbstractOrderItemFormChangesProvider
         $data = [];
 
         foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
-            $productIds[] = (int)$item['product'];
             /** @var Product[] $products */
-            $products = $this->getRepository()->findBySalesChannel($salesChannel->getId(), $productIds, $this->aclHelper);
+            $products = $this->getRepository()
+                ->findBySalesChannel($salesChannel->getId(), [(int)$item['product']], $this->aclHelper);
             foreach ($products as $product) {
                 $inventoryItem = $product->getInventoryItem();
                 $unit = $inventoryItem->getProductUnit();
