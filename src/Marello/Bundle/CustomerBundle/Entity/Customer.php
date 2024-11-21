@@ -97,23 +97,13 @@ class Customer implements
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false], 'importexport' => ['excluded' => true]])]
     protected ?bool $isHidden = false;
 
-    /**
-     * @var CustomerGroup
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\CustomerGroup", inversedBy="customers")
-     * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $customerGroup;
+    #[ORM\ManyToOne(targetEntity: CustomerGroup::class, inversedBy: 'customers')]
+    #[ORM\JoinColumn(name: 'customer_group_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['full' => true, 'order' => 45]
+    ])]
+    protected ?CustomerGroup $customerGroup = null;
 
     /**
      * Customer constructor.
@@ -312,18 +302,18 @@ class Customer implements
     }
 
     /**
-     * @return CustomerGroup
+     * @return CustomerGroup|null
      */
-    public function getCustomerGroup()
+    public function getCustomerGroup(): ?CustomerGroup
     {
         return $this->customerGroup;
     }
 
     /**
-     * @param CustomerGroup $customerGroup
+     * @param CustomerGroup|null $customerGroup
      * @return $this
      */
-    public function setCustomerGroup($customerGroup = null)
+    public function setCustomerGroup(CustomerGroup $customerGroup = null): self
     {
         $this->customerGroup = $customerGroup;
 

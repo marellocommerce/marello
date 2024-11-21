@@ -9,4 +9,4 @@ marello_company:
 marello_customer_group:
     resource: "@MarelloCustomerBundle/Controller/CustomerGroupController.php"
     type:     annotation
-    prefix:   /marello/customer_group
+    prefix:   /marello/customergroup

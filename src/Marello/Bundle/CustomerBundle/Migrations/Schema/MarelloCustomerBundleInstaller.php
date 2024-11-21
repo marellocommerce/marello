@@ -18,6 +18,7 @@ class MarelloCustomerBundleInstaller implements
     const MARELLO_CUSTOMER_TABLE = 'marello_customer_customer';
     const MARELLO_COMPANY_TABLE = 'marello_customer_company';
     const MARELLO_COMPANY_JOIN_ADDRESS_TABLE = 'marello_company_join_address';
+    const MARELLO_CUSTOMER_GROUP_TABLE = 'marello_customer_group';
 
     /**
      * @var ActivityExtension
@@ -34,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_5_4';
+        return 'v1_6';
     }
 
     /**
@@ -45,6 +46,7 @@ class MarelloCustomerBundleInstaller implements
         $this->createMarelloCompanyTable($schema);
         $this->createMarelloCompanyJoinAddressTable($schema);
         $this->createMarelloCustomerTable($schema);
+        $this->createMarelloCustomerGroupTable($schema);
 
         $this->addMarelloCompanyForeignKeys($schema);
         $this->addMarelloCompanyJoinAddressForeignKeys($schema);
@@ -109,6 +111,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('is_hidden', 'boolean', ['notnull' => false, 'default' => false]);
         $table->addColumn('company_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_number', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('customer_group_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addIndex(['primary_address_id']);
@@ -119,6 +122,19 @@ class MarelloCustomerBundleInstaller implements
         $this->attachmentExtension->addAttachmentAssociation($schema, $table->getName());
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', $table->getName());
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', $table->getName());
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function createMarelloCustomerGroupTable(Schema $schema)
+    {
+        $table = $schema->createTable(self::MARELLO_CUSTOMER_GROUP_TABLE);
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('created_at', 'datetime');
+        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
     }
 
     /**
@@ -196,6 +212,12 @@ class MarelloCustomerBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable(self::MARELLO_COMPANY_TABLE),
             ['company_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable(self::MARELLO_CUSTOMER_GROUP_TABLE),
+            ['customer_group_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );

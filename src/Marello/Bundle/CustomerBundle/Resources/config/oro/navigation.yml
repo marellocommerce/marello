@@ -23,11 +23,11 @@ navigation:
                     position: 5
 
             customer_groups:
-                label: marello.customer_group.entity_plural_label
+                label: marello.customer.customergroup.entity_plural_label
                 route: marello_customer_group_index
                 extras:
                     routes: [ 'marello_customer_group_*' ]
-                    position: 4
+                    position: 15
 
             shortcut_new_company:
                 label: 'marello.customer.company.menu.shortcut_new_company.label'

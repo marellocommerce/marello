@@ -20,7 +20,7 @@ class CustomerGroupType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'marello.customer_group.name.label'])
+            ->add('name', TextType::class, ['label' => 'marello.customer.customergroup.name.label'])
             ->add(
                 'appendCustomers',
                 EntityIdentifierType::class,
@@ -50,7 +50,7 @@ class CustomerGroupType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => CustomerGroup::class,
-            'intention' => 'company',
+            'intention' => 'customergroup',
         ]);
     }
 

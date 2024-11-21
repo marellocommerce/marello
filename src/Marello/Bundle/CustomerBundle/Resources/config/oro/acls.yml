@@ -31,5 +31,15 @@ acls:
 
     marello_customer_group_view:
         type: entity
-        class: MarelloCustomerBundle:CustomerGroup
+        class: Marello\Bundle\CustomerBundle\Entity\CustomerGroup
         permission: VIEW
+
+    marello_customer_group_create:
+        type: entity
+        class: Marello\Bundle\CustomerBundle\Entity\CustomerGroup
+        permission: CREATE
+
+    marello_customer_group_update:
+        type: entity
+        class: Marello\Bundle\CustomerBundle\Entity\CustomerGroup
+        permission: CREATE

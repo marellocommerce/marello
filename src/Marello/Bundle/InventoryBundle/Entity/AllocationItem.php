@@ -30,7 +30,8 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
             'owner_column_name' => 'organization_id']
     ]
 )]
-class AllocationItem implements QuantityAwareInterface,
+class AllocationItem implements
+    QuantityAwareInterface,
     OrganizationAwareInterface,
     ExtendEntityInterface,
     HashAwareInterface

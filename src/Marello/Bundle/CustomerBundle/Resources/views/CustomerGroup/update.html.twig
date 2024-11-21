@@ -25,18 +25,18 @@
         {% set breadcrumbs = {
             'entity':      entity,
             'indexPath':   path('marello_customer_group_index'),
-            'indexLabel': 'marello.customer_group.entity_plural_label'|trans,
+            'indexLabel': 'marello.customer.customergroup.entity_plural_label'|trans,
             'entityTitle': entity.name|default('N/A')
         } %}
         {{ parent() }}
     {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'marello.customer_group.entity_label'|trans}) %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'marello.customer.customergroup.entity_label'|trans}) %}
         {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
     {% endif %}
 {% endblock pageHeader %}
 
 {% block content_data %}
-    {% set id = 'marello-customer-update' %}
+    {% set id = 'marello-customergroup-update' %}
 
     {% set dataBlocks = [{
         'title': 'General'|trans,

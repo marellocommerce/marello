@@ -52,7 +52,7 @@ search:
 
     Marello\Bundle\CustomerBundle\Entity\CustomerGroup:
         alias: marello_customer_group
-        label: marello.customer_group.entity_plural_label
+        label: marello.customer.customergroup.entity_plural_label
         route:
             name: marello_customer_group_view
             parameters:

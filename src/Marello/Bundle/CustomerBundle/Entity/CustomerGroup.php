@@ -2,80 +2,51 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="marello_customer_group")
- * @Config(
- *      routeName="marello_customer_group_index",
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *           },
- *           "grid"={
- *                "default"="marello-customer-group-grid"
- *           },
- *           "dataaudit"={
- *                "auditable"=true
- *           }
- *       }
- *  )
- *
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Entity(), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_customer_group')]
+#[Oro\Config(
+    routeName: 'marello_customer_group_index',
+    routeView: 'marello_customer_group_view',
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'grid' => ['default' => 'marello-customer-group-grid']
+    ]
+)]
 class CustomerGroup implements ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use ExtendEntityTrait;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true, 'order' => 10]])]
+    protected ?int $id = null;
 
-    /**
-     * @ORM\Column(
-     *     name="name",
-     *     type="string",
-     *     length=255,
-     *     nullable=false
-     * )
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 20]]
+    )]
+    protected ?string $name = null;
 
-    /**
-     * @var Collection|Customer[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer",
-     *     mappedBy="customerGroup"
-     * )
-     * @ConfigField(
-     *       defaultValues={
-     *           "dataaudit"={
-     *               "auditable"=true
-     *           },
-     *           "importexport"={
-     *               "excluded"=true
-     *           }
-     *       }
-     *  )
-     */
-    private $customers;
+    #[ORM\OneToMany(mappedBy: 'customerGroup', targetEntity: Customer::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['excluded' => true]
+    ])]
+    protected ?Collection $customers = null;
 
     public function __construct()
     {
@@ -83,11 +54,9 @@ class CustomerGroup implements ExtendEntityInterface
     }
 
     /**
-     * Get entity unique id
-     *
-     * @return integer
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -95,7 +64,7 @@ class CustomerGroup implements ExtendEntityInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -103,15 +72,15 @@ class CustomerGroup implements ExtendEntityInterface
     /**
      * @param string $name
      */
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
     /**
-     * @return Collection|Customer[]
+     * @return Collection
      */
-    public function getCustomers()
+    public function getCustomers(): Collection
     {
         return $this->customers;
     }
@@ -121,7 +90,7 @@ class CustomerGroup implements ExtendEntityInterface
      *
      * @return bool
      */
-    protected function hasCustomer(Customer $customer)
+    protected function hasCustomer(Customer $customer): bool
     {
         return $this->customers->contains($customer);
     }
@@ -131,11 +100,11 @@ class CustomerGroup implements ExtendEntityInterface
      *
      * @return $this
      */
-    public function addCustomer(Customer $customer)
+    public function addCustomer(Customer $customer): self
     {
         if (!$this->hasCustomer($customer)) {
-            $customer->setCustomerGroup($this);
             $this->customers->add($customer);
+            $customer->setCustomerGroup($this);
         }
 
         return $this;
@@ -146,11 +115,11 @@ class CustomerGroup implements ExtendEntityInterface
      *
      * @return $this
      */
-    public function removeCustomer(Customer $customer)
+    public function removeCustomer(Customer $customer): self
     {
         if ($this->hasCustomer($customer)) {
-            $customer->setCustomerGroup(null);
             $this->customers->removeElement($customer);
+            $customer->setCustomerGroup(null);
         }
 
         return $this;

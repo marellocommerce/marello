@@ -3,21 +3,21 @@
 namespace Marello\Bundle\CustomerBundle\Migrations\Schema\v1_6;
 
 use Doctrine\DBAL\Schema\Schema;
-use Marello\Bundle\CustomerBundle\Migrations\Schema\MarelloCustomerBundleInstaller;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
+use Marello\Bundle\CustomerBundle\Migrations\Schema\MarelloCustomerBundleInstaller;
+
 class MarelloCustomerBundle implements Migration
 {
-    const MARELLO_CUSTOMER_GROUP_TABLE = 'marello_customer_group';
-
     /**
      * @inheritDoc
      */
     public function up(Schema $schema, QueryBag $queries)
     {
         $this->createMarelloCustomerGroupTable($schema);
-        $this->addMarelloCustomerForeignKeys($schema);
+        $this->updateMarelloCustomerForeignKeys($schema);
     }
 
     /**
@@ -27,7 +27,7 @@ class MarelloCustomerBundle implements Migration
      */
     protected function createMarelloCustomerGroupTable(Schema $schema)
     {
-        $table = $schema->createTable(self::MARELLO_CUSTOMER_GROUP_TABLE);
+        $table = $schema->createTable(MarelloCustomerBundleInstaller::MARELLO_CUSTOMER_GROUP_TABLE);
 
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -36,15 +36,17 @@ class MarelloCustomerBundle implements Migration
         $table->setPrimaryKey(['id']);
     }
 
-    protected function addMarelloCustomerForeignKeys(Schema $schema) {
+    protected function updateMarelloCustomerForeignKeys(Schema $schema) {
         $table = $schema->getTable(MarelloCustomerBundleInstaller::MARELLO_CUSTOMER_TABLE);
 
-        $table->addColumn('customer_group_id', 'integer', ['notnull' => false]);
-        $table->addForeignKeyConstraint(
-            $schema->getTable(self::MARELLO_CUSTOMER_GROUP_TABLE),
-            ['customer_group_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
+        if (!$table->hasColumn('customer_group_id')) {
+            $table->addColumn('customer_group_id', 'integer', ['notnull' => false]);
+            $table->addForeignKeyConstraint(
+                $schema->getTable(MarelloCustomerBundleInstaller::MARELLO_CUSTOMER_GROUP_TABLE),
+                ['customer_group_id'],
+                ['id'],
+                ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            );
+        }
     }
 }

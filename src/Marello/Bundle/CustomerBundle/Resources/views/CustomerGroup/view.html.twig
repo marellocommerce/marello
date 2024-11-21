@@ -8,7 +8,7 @@
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('marello_customer_group_update', { id: entity.id }),
-            'entity_label': 'marello.customer_group.entity_label'|trans
+            'entity_label': 'marello.customer.customergroup.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock navButtons %}
@@ -17,7 +17,7 @@
     {% set breadcrumbs = {
         'entity':      entity,
         'indexPath':   path('marello_customer_group_index'),
-        'indexLabel': 'marello.customer_group.entity_plural_label'|trans,
+        'indexLabel': 'marello.customer.customergroup.entity_plural_label'|trans,
         'entityTitle': entity.name
     } %}
     {{ parent() }}
@@ -29,7 +29,7 @@
         <div class="widget-content">
             <div class="row-fluid form-horizontal">
                 <div class="responsive-block">
-                    {{ UI.renderProperty('marello.customer_group.name.label'|trans, entity.name) }}
+                    {{ UI.renderProperty('marello.customer.customergroup.name.label'|trans, entity.name) }}
                 </div>
             </div>
         </div>

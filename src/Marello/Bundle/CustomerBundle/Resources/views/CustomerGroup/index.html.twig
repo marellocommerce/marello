@@ -1,13 +1,13 @@
 {% extends '@OroUI/actions/index.html.twig' %}
 {% import '@OroUI/macros.html.twig' as UI %}
 {% set gridName = 'marello-customer-group' %}
-{% set pageTitle = 'marello.customer_group.entity_plural_label'|trans %}
+{% set pageTitle = 'marello.customer.customergroup.entity_plural_label'|trans %}
 
 {% block navButtons %}
     {% if is_granted('marello_customer_group_create') %}
         {{ UI.addButton({
             'path': path('marello_customer_group_create'),
-            'entity_label': 'marello.customer_group.entity_label'|trans
+            'entity_label': 'marello.customer.customergroup.entity_label'|trans
         }) }}
     {% endif %}
 {% endblock %}

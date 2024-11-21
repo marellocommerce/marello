@@ -24,7 +24,7 @@ class CustomerGroupSelectType extends AbstractType
                 'create_enabled'        => true,
                 'create_form_route' => 'marello_customer_group_create',
                 'configs' => [
-                    'placeholder' => 'marello.customer_group.form.choose',
+                    'placeholder' => 'marello.customer.customergroup.form.choose',
                 ],
                 'attr' => [
                     'class' => 'marello-customer-group-select',
