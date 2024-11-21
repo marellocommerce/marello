@@ -6,7 +6,7 @@ use Marello\Bundle\InventoryBundle\Model\InventoryItemAwareInterface;
 
 interface ProductInterface extends InventoryItemAwareInterface
 {
-    public function getSku();
+    public function getSku(): ?string;
 
-    public function setSku($sku);
+    public function setSku(string $sku);
 }

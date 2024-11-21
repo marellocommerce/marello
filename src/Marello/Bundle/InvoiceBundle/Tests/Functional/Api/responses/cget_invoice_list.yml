@@ -32,7 +32,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer0->id)>'
+                    id: '<toString(@marello-customer-0->email)>'
             salesChannel:
                 data:
                     type: marellosaleschannels
@@ -79,7 +79,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer1->id)>'
+                    id: '<toString(@marello-customer-1->email)>'
             salesChannel:
                 data:
                     type: marellosaleschannels
@@ -135,7 +135,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer2->id)>'
+                    id: '<toString(@marello-customer-2->email)>'
             salesChannel:
                 data:
                     type: marellosaleschannels
@@ -188,7 +188,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer3->id)>'
+                    id: '<toString(@marello-customer-3->email)>'
             salesChannel:
                 data:
                     type: marellosaleschannels

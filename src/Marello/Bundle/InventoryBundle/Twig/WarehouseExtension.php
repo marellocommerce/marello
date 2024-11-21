@@ -22,7 +22,8 @@ class WarehouseExtension extends AbstractExtension
     public function __construct(
         private ManagerRegistry $registry,
         private InventoryManager $inventoryManager
-    ) {}
+    ) {
+    }
 
     /**
      * Returns the name of the extension.

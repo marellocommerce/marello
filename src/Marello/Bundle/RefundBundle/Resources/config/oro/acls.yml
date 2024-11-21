@@ -1,15 +1,15 @@
 acls:
     marello_refund_create:
         type: entity
-        class: MarelloRefundBundle:Refund
+        class: Marello\Bundle\RefundBundle\Entity\Refund
         permission: CREATE
 
     marello_refund_view:
         type: entity
-        class: MarelloRefundBundle:Refund
+        class: Marello\Bundle\RefundBundle\Entity\Refund
         permission: VIEW
 
     marello_refund_update:
         type: entity
-        class: MarelloRefundBundle:Refund
+        class: Marello\Bundle\RefundBundle\Entity\Refund
         permission: EDIT

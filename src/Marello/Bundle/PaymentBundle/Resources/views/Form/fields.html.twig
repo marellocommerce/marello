@@ -1,19 +1,23 @@
 {% block marello_payment_method_config_widget %}
     {% import '@MarelloPayment/PaymentMethodsConfigsRule/macros.html.twig' as PayRuleMacro %}
 
-    {% set collapseView = {
-    group: 'payment-method',
-    open: true
-    } %}
+    {% set collapseId = 'collapse-'|uniqid %}
+    {% if form.parent is not null  %}
+        {% set collapseId = 'shipping-methods-collection' ~ form.parent.vars.id %}
+    {% endif %}
 
-    <div class="payment-method-config payment-method-config-grouped collapse-view"
-         data-page-component-collapse="{{ collapseView|json_encode }}"
-         data-role="method-view">
+    <div class="payment-method-config" data-role="method-view">
         {% if form.method.vars.value %}
+            {% set collapseId = collapseId~ form.method.vars.value %}
             <div class="payment-method-config__header"
-                 data-collapse-trigger>
+                 role="button"
+                 data-toggle="collapse"
+                 data-target="{{ '#' ~ collapseId }}"
+                 aria-expanded="false"
+                 aria-controls="{{ collapseId }}"
+            >
                 <div class="payment-method-config__item">
-                    <i class="fa-plus-square-o"></i>
+                    <span class="collapse-icon fa-minus-square-o" aria-hidden="true" data-icon></span>
                     {% set icon = methods_icons[form.method.vars.value]|default('') %}
                     {% set label = methods_labels[form.method.vars.value]|trans %}
                     {% if icon %}<img src="{{ asset(icon) }}" alt="{{ label }}" title="{{ label }}"/>{% endif %}
@@ -23,8 +27,11 @@
                 <div class="payment-method-config__info" data-role="method-preview"></div>
             </div>
         {% endif %}
-        <div class="payment-method-config__body"
-             data-collapse-container>
+
+        <div id="{{ collapseId }}" class="shipping-method-config__body collapse show"
+             data-trigger-icon-show-class="fa-minus-square-o"
+             data-trigger-icon-hide-class="fa-plus-square-o"
+        >
             <div class="payment-method-config__global-options">
                 {% set index = (form.method.vars.id|replace({'marello_payment_methods_configs_rule_methodConfigs_': ''})|split('_'))[0] %}
                 <input type="hidden" name ="marello_payment_methods_configs_rule[methodConfigs][{{ index }}][method]" data-name="field__method" value="{{ form.method.vars.value }}">
@@ -45,14 +52,14 @@
     {% if form|length != 0 %}
         <div class="payment-methods-grid">
             <div class="payment-methods-grid__header">
-                {% set collapseView = {
-                widgetModule: 'oroui/js/widget/collapse-group-widget',
-                group: 'payment-method'
-                } %}
                 <div class="payment-methods-grid__header-method"
-                     data-page-component-jquery="{{ collapseView|json_encode }}">
-                    <i class="fa-plus-square-o"></i>
-                    {{ 'marello.payment.payment_methods_table.method.label'|trans }}
+                     data-toggle="collapse"
+                     data-target="[id^='payment-methods-collection{{ form.vars.id }}']"
+                >
+                    {% apply spaceless %}
+                        <span class="collapse-icon fa-minus-square-o" aria-hidden="true" data-icon></span>
+                        {{ 'marello.payment.payment_methods_table.method.label'|trans }}
+                    {% endapply %}
                 </div>
                 <div>{{ 'marello.payment.payment_methods_table.options.label'|trans }}</div>
             </div>

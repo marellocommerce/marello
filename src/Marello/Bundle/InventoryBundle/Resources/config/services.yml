@@ -66,9 +66,7 @@ services:
             - { name: twig.extension }
 
     marello_inventory.provider.order_warehouse:
-        class: 'Marello\Bundle\InventoryBundle\Provider\OrderWarehousesProvider'
-        arguments:
-            - '@Marello\Bundle\InventoryBundle\Strategy\WFA\WFAStrategiesRegistry'
+        alias: Marello\Bundle\InventoryBundle\Provider\OrderWarehousesProvider
 
     Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository:
         parent: oro_entity.abstract_repository
@@ -245,11 +243,16 @@ services:
             - '@oro_config.manager'
         calls:
             - [setAllocationExclusionProvider, ['@Marello\Bundle\InventoryBundle\Provider\AllocationExclusionProvider']]
+            - [setAllocationItemFilterProvider, ['@Marello\Bundle\InventoryBundle\Provider\Allocation\AllocationItemFilterProvider']]
             - [setEventDispatcher, ['@event_dispatcher']]
         tags:
             - { name: marello_inventory_wfa_strategy }
 
-    Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\SingleWHCalculator: ~
+    Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\SingleWHCalculator:
+        calls:
+            - ['setSuccessor', ['@Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\MultiWHCalculator']]
+
+    Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\MultiWHCalculator: ~
 
     Marello\Bundle\InventoryBundle\Command\InventoryReAllocateCronCommand:
         arguments:
@@ -286,6 +289,8 @@ services:
 
     Marello\Bundle\InventoryBundle\Provider\AllocationExclusionProvider: ~
 
+    Marello\Bundle\InventoryBundle\Provider\Allocation\AllocationItemFilterProvider: ~
+
     Marello\Bundle\InventoryBundle\Factory\AllocationShippingContextFactory:
         public: true
         arguments:
@@ -311,6 +316,14 @@ services:
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel }
 
+    Marello\Bundle\InventoryBundle\Api\Processor\CustomizeInventoryLevelFormData:
+        arguments:
+            - '@event_dispatcher'
+            - '@oro_config.manager'
+        tags:
+            - { name: oro.api.processor, action: customize_form_data, event: pre_submit, class: Marello\Bundle\InventoryBundle\Entity\InventoryLevel }
+            - { name: oro.api.processor, action: customize_form_data, event: submit, class: Marello\Bundle\InventoryBundle\Entity\InventoryLevel }
+
     Marello\Bundle\InventoryBundle\EventListener\Datagrid\ExpectedInventoryItemGridListener:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.marello-inventory-expected-inventory-item-grid, method: onBuildAfter }
@@ -318,3 +331,17 @@ services:
     Marello\Bundle\InventoryBundle\EventListener\Datagrid\ExpectedInventoryForAllocationItemsGridListener:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.marello-allocation-items-grid, method: onBuildBefore }
+
+    marello_inventory.api.add_workflow_item_config:
+        class: 'Marello\Bundle\WorkflowBundle\Api\Processor\ProcessWorkflowItemConfig'
+        tags:
+            - { name: oro.api.processor, action: get_config, class: Marello\Bundle\InventoryBundle\Entity\Allocation }
+
+    marello_inventory.api.add_workflow_item:
+        class: 'Marello\Bundle\WorkflowBundle\Api\Processor\ProcessWorkflowItem'
+        arguments:
+            - '@oro_workflow.manager'
+            - '@oro_entity.doctrine_helper'
+            - '@translator.default'
+        tags:
+            - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\InventoryBundle\Entity\Allocation }

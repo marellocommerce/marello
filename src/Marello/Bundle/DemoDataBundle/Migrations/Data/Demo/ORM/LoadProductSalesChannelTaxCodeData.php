@@ -2,9 +2,9 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
 
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\ProductBundle\Entity\Product;
@@ -86,7 +86,7 @@ class LoadProductSalesChannelTaxCodeData extends AbstractFixture implements Depe
         $this->manager = $manager;
         /** @var Product[] $products */
         $products = $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findAll();
 
         foreach ($products as $product) {

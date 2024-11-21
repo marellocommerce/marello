@@ -11,7 +11,7 @@ navigation:
             marello_payment_rules:
                 label:           'marello.payment.menu.paymentmethodsconfigsrule.label'
                 route:           'marello_payment_methods_configs_rule_index'
-                position:        100
+                position:        102
                 extras:
                     routes:      ['/^marello_payment_methods_configs_rule/']
                     description: 'marello.payment.menu.paymentmethodsconfigsrule.description'

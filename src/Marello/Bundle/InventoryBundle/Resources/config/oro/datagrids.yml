@@ -9,14 +9,15 @@ datagrids:
                     - p.sku as productSku
                     - i.enableBatchInventory as enableBatchInventory
                     - pu.name as productUnit
-                    - COALESCE(SUM(il.inventory), 0) AS inventoryQty
+                    - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                     - COALESCE(SUM(il.allocatedInventory), 0) AS allocatedInventoryQty
-                    - COALESCE(SUM(il.inventory - il.allocatedInventory), 0) AS virtualInventoryQty
+                    - COALESCE(SUM(il.inventoryQty - il.allocatedInventory), 0) AS virtualInventoryQty
                     - i.backorderAllowed as backorderAllowed
                     - i.canPreorder as canPreorder
                     - i.orderOnDemandAllowed as orderOnDemandAllowed
+                    - p.barcode as productBarcode
                 from:
-                    - { table: MarelloInventoryBundle:InventoryItem, alias: i }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryItem, alias: i }
                 join:
                     left:
                         - { join: i.product, alias: p }
@@ -41,7 +42,7 @@ datagrids:
                 frontend_type:      boolean
                 data_name:          enableBatchInventory
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.grid.label
+                label:              marello.inventory.inventorylevel.inventory_qty.grid.label
                 frontend_type:      number
                 data_name:          inventoryQty
             allocatedInventoryQty:
@@ -64,6 +65,10 @@ datagrids:
                 label:              marello.inventory.inventoryitem.order_on_demand.grid.label
                 frontend_type:      boolean
                 data_name:          orderOnDemandAllowed
+            productBarcode:
+                label:              marello.product.barcode.label
+                frontend_type:      string
+                renderable:         false
         sorters:
             columns:
                 productSku:             { data_name: p.sku }
@@ -73,8 +78,9 @@ datagrids:
                 inventoryQty:           { data_name: inventoryQty }
                 allocatedInventoryQty:  { data_name: allocatedInventoryQty }
                 virtualInventoryQty:    { data_name: virtualInventoryQty }
+                productBarcode:         { data_name: productBarcode }
             default:
-                productName: 'DESC'
+                productSku: 'DESC'
         filters:
             columns:
                 productSku:
@@ -102,7 +108,7 @@ datagrids:
                     type:             number
                     data_name:        virtualInventoryQty
                     filter_by_having: true
-                    enabled:          false
+                    renderable:       false
                 backorderAllowed:
                     type:             boolean
                     data_name:        backorderAllowed
@@ -112,6 +118,10 @@ datagrids:
                 orderOnDemandAllowed:
                     type:             boolean
                     data_name:        orderOnDemandAllowed
+                productBarcode:
+                    type:             string
+                    data_name:        productBarcode
+                    renderable:       false
         properties:
             id: ~
             productName:
@@ -150,7 +160,7 @@ datagrids:
                     - (lr.inventoryAlteration) AS inventoryDiff
                     - (lr.allocatedInventoryAlteration) AS allocatedInventoryDiff
                 from:
-                    - { table: MarelloInventoryBundle:InventoryLevelLogRecord, alias: lr }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryLevelLogRecord, alias: lr }
                 join:
                     left:
                         - { join: lr.inventoryLevel, alias: il }
@@ -244,19 +254,25 @@ datagrids:
                     - wht.label as warehouseTypeLabel
                     - wh.label as warehouse
                     - wh.code as warehouseCode
-                    - COALESCE(il.inventory, 0) AS inventoryQty
+                    - COALESCE(il.inventoryQty, 0) AS inventoryQty
                     - COALESCE(il.allocatedInventory, 0) AS allocatedInventoryQty
-                    - COALESCE(il.inventory - il.allocatedInventory, 0) AS virtualInventoryQty
+                    - COALESCE(il.inventoryQty - il.allocatedInventory, 0) AS virtualInventoryQty
+                    - COALESCE(SUM(CASE WHEN (ib.sellByDate IS NOT NULL AND ib.sellByDate < CURRENT_TIMESTAMP()) THEN ib.quantity ELSE 0 END), 0) as expiredInventoryQty
                 from:
-                    - { table: MarelloInventoryBundle:InventoryLevel, alias: il }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryLevel, alias: il }
                 join:
                     left:
                         - { join: il.warehouse, alias: wh }
                         - { join: wh.warehouseType, alias: wht }
+                        - { join: il.inventoryBatches, alias: ib }
                 where:
                     and:
                         - IDENTITY(il.inventoryItem) = :inventoryItemId
                 groupBy: il.id, wh.code, wh.label, wht.label
+                orderBy:
+                    -
+                        column: il.id
+                        dir: ASC
             bind_parameters:
                 inventoryItemId: inventoryItemId
         columns:
@@ -274,8 +290,12 @@ datagrids:
                 label:              marello.inventory.warehousetype.entity_label
                 frontend_type:      string
                 renderable:         false
+            expiredInventoryQty:
+                label:              marello.inventory.inventorylevel.expired_inventory.grid.label
+                frontend_type:      number
+                data_name:          expiredInventoryQty
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.grid.label
+                label:              marello.inventory.inventorylevel.inventory_qty.grid.label
                 frontend_type:      number
                 data_name:          inventoryQty
             allocatedInventoryQty:
@@ -309,7 +329,7 @@ datagrids:
                     - p.sku as productSku
                     - scg.name as salesChannelGroupName
                 from:
-                    - { table: MarelloInventoryBundle:BalancedInventoryLevel, alias: balancedInventoryLevel }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel, alias: balancedInventoryLevel }
                 join:
                     left:
                         - { join: balancedInventoryLevel.product, alias: p }
@@ -389,7 +409,7 @@ datagrids:
                 reservedInventoryQty:
                     data_name:  balancedInventoryLevel.reservedInventory
             default:
-                productName: 'DESC'
+                productSku: 'DESC'
         properties:
             productName:
                 type: localized_value
@@ -403,7 +423,7 @@ datagrids:
                 select:
                     - ib
                 from:
-                    - { table: MarelloInventoryBundle:InventoryBatch, alias: ib }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\InventoryBatch, alias: ib }
                 where:
                     and:
                         - IDENTITY(ib.inventoryLevel) = :inventoryLevelId
@@ -451,7 +471,7 @@ datagrids:
                     - IDENTITY(allocation.state) as allocationStateId
                     - IDENTITY(allocation.status) as allocationStatusId
                 from:
-                    - { table: MarelloInventoryBundle:Allocation, alias: allocation }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\Allocation, alias: allocation }
                 join:
                     left:
                         - { join: allocation.parent, alias: parent }
@@ -589,6 +609,7 @@ datagrids:
                 where:
                     and:
                         - IDENTITY(allocation.parent) = :allocationParentId
+                        - IDENTITY(allocation.state) != 'closed'
             bind_parameters:
                  allocationParentId: allocationParentId
         filters: ~
@@ -607,7 +628,7 @@ datagrids:
                     - allocationItem
                     - wh.label as warehouse
                 from:
-                    - { table: MarelloInventoryBundle:AllocationItem, alias: allocationItem }
+                    - { table: Marello\Bundle\InventoryBundle\Entity\AllocationItem, alias: allocationItem }
                 join:
                     left:
                         - { join: allocationItem.orderItem, alias: orderItem }
@@ -645,12 +666,15 @@ datagrids:
                 type:           twig
                 frontend_type:  html
                 template:       '@MarelloInventory/Datagrid/Property/total_allocated.html.twig'
+            inventoryBatches:
+                label:            marello.packing.packingslipitem.inventory_batches.label
+                type:             twig
+                frontend_type:    html
+                template:         '@MarelloPacking/PackingSlip/Datagrid/inventoryBatches.html.twig'
         sorters:
             columns:
                 productSku:
                     data_name:  allocationItem.productSku
-            default:
-                productSku: 'ASC'
         options:
             toolbarOptions:
                 hide: true
@@ -669,7 +693,7 @@ datagrids:
                     - po.dueDate
                     - w.label
                 from:
-                    - { table: MarelloPurchaseOrderBundle:PurchaseOrderItem, alias: poi }
+                    - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem, alias: poi }
                 join:
                     inner:
                         - { join: poi.order, alias: po }

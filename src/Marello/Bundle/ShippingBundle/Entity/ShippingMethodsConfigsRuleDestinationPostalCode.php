@@ -2,36 +2,32 @@
 
 namespace Marello\Bundle\ShippingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table("marello_ship_method_post_code")
- */
+#[ORM\Table('marello_ship_method_post_code')]
+#[ORM\Entity]
 class ShippingMethodsConfigsRuleDestinationPostalCode
 {
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
     private $name;
 
     /**
      * @var ShippingMethodsConfigsRuleDestination
-     *
-     * @ORM\ManyToOne(targetEntity="ShippingMethodsConfigsRuleDestination", inversedBy="postalCodes")
-     * @ORM\JoinColumn(name="destination_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
+    #[ORM\JoinColumn(name: 'destination_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: ShippingMethodsConfigsRuleDestination::class, inversedBy: 'postalCodes')]
     private $destination;
 
     /**

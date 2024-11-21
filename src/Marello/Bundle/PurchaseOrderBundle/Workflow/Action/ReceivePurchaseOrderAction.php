@@ -123,6 +123,7 @@ class ReceivePurchaseOrderAction extends AbstractAction
             }
 
             if ($isFullyReceived) {
+                $fullyReceivedItems++;
                 $data = $item->getData();
                 $orderOnDemandKey = PurchaseOrderOnOrderOnDemandCreationListener::ORDER_ON_DEMAND;
                 if (isset($data[$orderOnDemandKey]) && $item->getStatus() !== PurchaseOrderItem::STATUS_COMPLETE) {
@@ -150,22 +151,24 @@ class ReceivePurchaseOrderAction extends AbstractAction
                             $allocation = $allocationItem->getAllocation();
                         }
                     }
-                    // send re-allocate message for the allocation
-                    $this->allocationProvider->allocateOrderToWarehouses($allocation->getOrder(), $allocation);
-                    $allocation->setState(
-                        $this->getEnumValue(
-                            AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
-                            AllocationStateStatusInterface::ALLOCATION_STATE_CLOSED
-                        )
-                    );
-                    $allocation->setStatus(
-                        $this->getEnumValue(
-                            AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
-                            AllocationStateStatusInterface::ALLOCATION_STATUS_CLOSED
-                        )
-                    );
-                    $this->doctrineHelper->getEntityManagerForClass(Allocation::class)->persist($allocation);
-                    $this->updateAllocationWorkflow($allocation);
+                    if ($allocation->getItems()->count() === $fullyReceivedItems) {
+                        // send re-allocate message for the allocation
+                        $this->allocationProvider->allocateOrderToWarehouses($allocation->getOrder(), $allocation);
+                        $allocation->setState(
+                            $this->getEnumValue(
+                                AllocationStateStatusInterface::ALLOCATION_STATE_ENUM_CODE,
+                                AllocationStateStatusInterface::ALLOCATION_STATE_CLOSED
+                            )
+                        );
+                        $allocation->setStatus(
+                            $this->getEnumValue(
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_ENUM_CODE,
+                                AllocationStateStatusInterface::ALLOCATION_STATUS_CLOSED
+                            )
+                        );
+                        $this->doctrineHelper->getEntityManagerForClass(Allocation::class)->persist($allocation);
+                        $this->updateAllocationWorkflow($allocation);
+                    }
                 }
                 $item->setStatus(PurchaseOrderItem::STATUS_COMPLETE);
             }

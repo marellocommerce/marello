@@ -1,20 +1,20 @@
 acls:
     marello_paymentterm_paymentterm_create:
         type: entity
-        class: MarelloPaymentTermBundle:PaymentTerm
+        class: Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm
         permission: CREATE
 
     marello_paymentterm_paymentterm_view:
         type: entity
-        class: MarelloPaymentTermBundle:PaymentTerm
+        class: Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm
         permission: VIEW
 
     marello_paymentterm_paymentterm_update:
         type: entity
-        class: MarelloPaymentTermBundle:PaymentTerm
+        class: Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm
         permission: EDIT
 
     marello_paymentterm_paymentterm_delete:
         type: entity
-        class: MarelloPaymentTermBundle:PaymentTerm
+        class: Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm
         permission: DELETE

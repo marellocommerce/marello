@@ -105,14 +105,15 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_search.before_search, method: process }
 
-    Marello\Bundle\ProductBundle\EventListener\ProductImageListener:
+    Marello\Bundle\ProductBundle\EventListener\ProductFilesUrlListener:
         arguments:
             - '@oro_config.manager'
             - '@oro_message_queue.client.message_producer'
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: doctrine.event_listener, event: onFlush }
-            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.orm.entity_listener, entity: 'Marello\Bundle\ProductBundle\Entity\Product', event: postPersist }
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
     marello_product.provider.tax_code_provider:
@@ -135,8 +136,6 @@ services:
         parent: oro_entity.abstract_repository
         arguments:
             - 'Marello\Bundle\ProductBundle\Entity\Product'
-        calls:
-            - [setDatabaseDriver, ['%database_driver%']]
         tags:
             - { name: doctrine.repository_service }
 
@@ -196,13 +195,15 @@ services:
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
-    Marello\Bundle\ProductBundle\Async\ProductImageUpdateProcessor:
+    Marello\Bundle\ProductBundle\Async\ProductFilesUpdateProcessor:
         arguments:
             - '@logger'
             - '@doctrine.orm.entity_manager'
             - '@oro_config.manager'
             - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
             - '@oro_attachment.manager.image_resize'
+            - '@oro_attachment.tools.mime_type_checker'
+            - '@Marello\Bundle\ProductBundle\Manager\ProductFileManager'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
@@ -260,3 +261,20 @@ services:
         class: Marello\Bundle\ProductBundle\Provider\ActionGroupRegistryProvider
         arguments:
             - '@oro_action.action_group_registry'
+
+    Marello\Bundle\ProductBundle\EventListener\CreateNotificationMessageAfterImportListener:
+        arguments:
+            - '@doctrine'
+            - '@event_dispatcher'
+            - '@Oro\Bundle\ImportExportBundle\Async\ImportExportResultSummarizer'
+            - '@oro_email.provider.rendered_email_template'
+            - '@translator'
+        tags:
+            - { name: doctrine.orm.entity_listener, entity: Oro\Bundle\ImportExportBundle\Entity\ImportExportResult, event: postPersist }
+
+    Marello\Bundle\ProductBundle\Manager\ProductFileManager:
+        arguments:
+            - '@oro_attachment.manager.public_mediacache'
+            - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
+            - '@Oro\Bundle\AttachmentBundle\Manager\FileManager'
+            - '/media/cache'

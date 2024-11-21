@@ -8,7 +8,7 @@ datagrids:
                     - sup.name as supplier
                     - sup.currency as currency
                 from:
-                    - { table: MarelloPurchaseOrderBundle:PurchaseOrder, alias: po }
+                    - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder, alias: po }
                 join:
                     left:
                         - { join: po.supplier, alias: sup }
@@ -96,7 +96,7 @@ datagrids:
                     - poi
                     - product.manufacturingCode
                 from:
-                    - { table: MarelloPurchaseOrderBundle:PurchaseOrderItem, alias: poi }
+                    - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem, alias: poi }
                 join:
                     left:
                         - { join: poi.product, alias: product }
@@ -145,14 +145,14 @@ datagrids:
                     - srel.cost AS purchasePrice
                     - i.desiredInventory
                     - i.purchaseInventory
-                    - COALESCE(SUM(l.inventory - l.allocatedInventory), 0) AS virtualInventory
-                    - (i.desiredInventory - COALESCE(SUM(l.inventory - l.allocatedInventory), 0)) AS orderAmount
+                    - COALESCE(SUM(l.inventoryQty - l.allocatedInventory), 0) AS virtualInventory
+                    - (i.desiredInventory - COALESCE(SUM(l.inventoryQty - l.allocatedInventory), 0)) AS orderAmount
                     - >
                       (CASE WHEN p.id IN (:data_in) AND p.id NOT IN (:data_not_in)
                         THEN true ELSE false
                       END) as hasProduct
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.inventoryItem, alias: i }
@@ -168,7 +168,7 @@ datagrids:
                         - i.replenishment = 'never_out_of_stock'
                         - srel.supplier = :supplierId
 
-                having: SUM(l.inventory - l.allocatedInventory) < i.purchaseInventory  # Only products with virtual stock lower than required purchase stock level
+                having: SUM(l.inventoryQty - l.allocatedInventory) < i.purchaseInventory  # Only products with virtual stock lower than required purchase stock level
                 groupBy: p.sku
 
             bind_parameters:
@@ -282,7 +282,7 @@ datagrids:
                     - COALESCE(SUM(l.inventory - l.allocatedInventory), 0) AS virtualInventory
                     - (i.desiredInventory - COALESCE(SUM(l.inventory - l.allocatedInventory), 0)) AS orderAmount
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.inventoryItem, alias: i }

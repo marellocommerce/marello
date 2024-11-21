@@ -2,42 +2,29 @@
 
 namespace Marello\Bundle\PricingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
-/**
- * @ORM\Entity()
- * @Oro\Config(
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- * @ORM\Table(name="marello_pricing_price_type")
- **/
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
+#[ORM\Table(name: 'marello_pricing_price_type')]
+#[ORM\Entity]
+#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true]])]
 class PriceType
 {
     /**
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
     protected $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $label;
 
     /**

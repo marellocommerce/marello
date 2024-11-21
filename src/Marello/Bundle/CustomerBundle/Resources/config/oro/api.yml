@@ -31,6 +31,13 @@ api:
                         allow_array: true
                         property_path: email
                         description: 'Filter by email'
+                        options:
+                            case_insensitive: true
+                    customerNumber:
+                        data_type: string
+                        allow_array: true
+                        property_path: customerNumber
+                        description: 'Filter by customerNumber'
             actions:
                 get_list:
                     fields:

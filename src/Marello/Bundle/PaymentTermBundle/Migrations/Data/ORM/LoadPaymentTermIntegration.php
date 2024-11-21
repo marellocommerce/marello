@@ -2,20 +2,23 @@
 
 namespace Marello\Bundle\PaymentTermBundle\Migrations\Data\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
+
+use Marello\Bundle\RuleBundle\Entity\Rule;
 use Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig;
 use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
 use Marello\Bundle\PaymentTermBundle\Entity\MarelloPaymentTermSettings;
 use Marello\Bundle\PaymentTermBundle\Integration\PaymentTermChannelType;
-use Marello\Bundle\RuleBundle\Entity\Rule;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadPaymentTermIntegration extends AbstractFixture implements
     DependentFixtureInterface,
@@ -46,13 +49,13 @@ class LoadPaymentTermIntegration extends AbstractFixture implements
         }
 
         $channel = $this->loadIntegration($manager);
-        $paymentRule = $this->createDefaltPaymentRule($manager);
+        $paymentRule = $this->createDefaultPaymentRule($manager);
         $this->addMethodConfigToDefaultPaymentRule($channel, $paymentRule);
 
         $manager->flush();
     }
 
-    private function createDefaltPaymentRule(ObjectManager $manager): PaymentMethodsConfigsRule
+    private function createDefaultPaymentRule(ObjectManager $manager): PaymentMethodsConfigsRule
     {
         $rule = new Rule();
         $rule->setName(self::DEFAULT_RULE_NAME)
@@ -116,7 +119,7 @@ class LoadPaymentTermIntegration extends AbstractFixture implements
             return $this->getReference(LoadOrganizationAndBusinessUnitData::REFERENCE_DEFAULT_ORGANIZATION);
         } else {
             return $manager
-                ->getRepository('OroOrganizationBundle:Organization')
+                ->getRepository(Organization::class)
                 ->getFirst();
         }
     }

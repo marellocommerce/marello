@@ -4,86 +4,51 @@ namespace Marello\Bundle\ShippingBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
+use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodConfigRepository;
 use Marello\Bundle\ShippingBundle\Method\ShippingMethodTypeInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @ORM\Table(name="marello_ship_method_config")
- * @ORM\Entity(repositoryClass="Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodConfigRepository")
- * @Config
- */
+#[ORM\Entity(ShippingMethodConfigRepository::class)]
+#[ORM\Table(name: 'marello_ship_method_config')]
+#[Oro\Config()]
 class ShippingMethodConfig implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="method", type="string", length=255, nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=10
-     *          }
-     *      }
-     * )
-     */
+    #[ORM\Column(name: 'method', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 10]])]
     protected $method;
 
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="options", type="array")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=0
-     *          }
-     *      }
-     * )
-     */
+    #[ORM\Column(name: 'options', type: 'array')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 0]])]
     protected $options = [];
 
     /**
      * @var Collection|ShippingMethodTypeConfig[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig",
-     *     mappedBy="methodConfig",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'methodConfig',
+        targetEntity: ShippingMethodTypeConfig::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     protected $typeConfigs;
 
-    /**
-     * @var ShippingMethodsConfigsRule
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule",
-     *     inversedBy="methodConfigs"
-     * )
-     * @ORM\JoinColumn(name="rule_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
+    #[ORM\JoinColumn(name: 'rule_id', referencedColumnName: 'id', onDelete: 'CASCADE', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: ShippingMethodsConfigsRule::class, inversedBy: 'methodConfigs')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodConfigsRule;
 
 

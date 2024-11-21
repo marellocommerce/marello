@@ -3,17 +3,19 @@
 namespace Marello\Bundle\ShippingBundle\Tests\Functional\Entity\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\AddressBundle\Entity\Country;
+
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\LocaleBundle\Model\AddressInterface;
-use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository;
-use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
-use Marello\Bundle\ShippingBundle\Tests\Functional\DataFixtures\LoadShippingMethodsConfigsRulesWithConfigs;
-use Marello\Bundle\ShippingBundle\Tests\Functional\Helper\ManualShippingIntegrationTrait;
-use Marello\Bundle\ShippingBundle\Tests\Unit\Provider\Stub\ShippingAddressStub;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Component\Testing\Unit\EntityTrait;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\LocaleBundle\Model\AddressInterface;
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
+use Marello\Bundle\ShippingBundle\Tests\Unit\Provider\Stub\ShippingAddressStub;
+use Marello\Bundle\ShippingBundle\Entity\Repository\ShippingMethodsConfigsRuleRepository;
+use Marello\Bundle\ShippingBundle\Tests\Functional\Helper\ManualShippingIntegrationTrait;
+use Marello\Bundle\ShippingBundle\Tests\Functional\DataFixtures\LoadShippingMethodsConfigsRulesWithConfigs;
 
 class ShippingMethodsConfigsRuleRepositoryTest extends WebTestCase
 {
@@ -40,8 +42,8 @@ class ShippingMethodsConfigsRuleRepositoryTest extends WebTestCase
         ]);
 
         $this->em = static::getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloShippingBundle:ShippingMethodsConfigsRule');
-        $this->repository = $this->em->getRepository('MarelloShippingBundle:ShippingMethodsConfigsRule');
+            ->getManagerForClass(ShippingMethodsConfigsRule::class);
+        $this->repository = $this->em->getRepository(ShippingMethodsConfigsRule::class);
     }
 
     /**

@@ -4,7 +4,7 @@
 {% set pageTitle = 'marello.inventory.inventoryitem.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% include '@OroImportExport/ImportExport/buttons.html.twig' with {
+    {% include '@MarelloImportExport/ImportExport/buttons.html.twig' with {
     entity_class: 'Marello\\Bundle\\InventoryBundle\\Entity\\InventoryLevel',
     exportJob: 'marello_inventory_level_export_to_csv',
     exportProcessor: 'marello_inventorlevel_export',

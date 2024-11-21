@@ -2,14 +2,16 @@
 
 namespace Marello\Bundle\CustomerBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\CustomerBundle\Entity\Company;
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
 use Marello\Bundle\PaymentTermBundle\Tests\Functional\DataFixtures\LoadPaymentTermsData;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadCompanyData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -80,7 +82,7 @@ class LoadCompanyData extends AbstractFixture implements DependentFixtureInterfa
     {
         $this->manager = $manager;
         $organizations = $this->manager
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->findAll();
 
         if (is_array($organizations) && count($organizations) > 0) {

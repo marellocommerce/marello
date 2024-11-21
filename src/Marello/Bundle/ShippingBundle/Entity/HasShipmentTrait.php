@@ -6,9 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 trait HasShipmentTrait
 {
-    /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\ShippingBundle\Entity\Shipment")
-     */
+    #[ORM\OneToOne(targetEntity: Shipment::class)]
     protected $shipment;
 
     /**

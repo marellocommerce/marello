@@ -2,20 +2,23 @@
 
 namespace Marello\Bundle\SalesBundle\EventListener\Doctrine;
 
-use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
-use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+use Doctrine\Persistence\Event\LifecycleEventArgs;
+
+use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Oro\Bundle\DistributionBundle\Handler\ApplicationState;
+
+use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
 
 class SalesChannelGroupListener
 {
     public function __construct(
         protected ApplicationState $applicationState,
-        protected Session $session,
+        private RequestStack $requestStack,
         protected AclHelper $aclHelper
     ) {
     }
@@ -33,7 +36,8 @@ class SalesChannelGroupListener
         }
         if ($entity->isSystem()) {
             $message = 'It is forbidden to delete system Sales Channel Group';
-            $this->session
+            $this->requestStack
+                ->getSession()
                 ->getFlashBag()
                 ->add('error', $message);
             throw new AccessDeniedException($message);

@@ -13,17 +13,18 @@ use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Marello\Bundle\InventoryBundle\Entity\Allocation;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\WarehouseType;
-use Marello\Bundle\InventoryBundle\Entity\AllocationItem;
-use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryBatch;
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Entity\AllocationItem;
 use Marello\Bundle\InventoryBundle\Entity\WarehouseChannelGroupLink;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\WFAStrategyInterface;
 use Marello\Bundle\InventoryBundle\Provider\AllocationExclusionInterface;
 use Marello\Bundle\InventoryBundle\Provider\AllocationStateStatusInterface;
 use Marello\Bundle\InventoryBundle\Provider\WarehouseTypeProviderInterface;
 use Marello\Bundle\NotificationMessageBundle\Event\CreateNotificationMessageEvent;
+use Marello\Bundle\InventoryBundle\Provider\Allocation\AllocationItemFilterInterface;
 use Marello\Bundle\NotificationMessageBundle\Factory\NotificationMessageContextFactory;
 use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageSourceInterface;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\QtyWHCalculatorInterface;
@@ -39,13 +40,11 @@ class QuantityWFAStrategy implements WFAStrategyInterface
     /** @var AllocationExclusionInterface $exclusionProvider */
     private $exclusionProvider;
 
+    /** @var AllocationItemFilterInterface $allocationItemFilterProvider */
+    private $allocationItemFilterProvider;
+
     /** @var EventDispatcherInterface $eventDispatcher */
     private $eventDispatcher;
-
-    /**
-     * @var Warehouse[]
-     */
-    private $linkedWarehouses = [];
 
     private $warehouseTypes = [];
 
@@ -90,11 +89,23 @@ class QuantityWFAStrategy implements WFAStrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function getWarehouseResults(Order $order, Allocation $allocation = null, array $initialResults = []): array
-    {
+    public function getWarehouseResults(
+        Order $order,
+        Allocation $allocation = null,
+        array $initialResults = [],
+        $specifiedItems = null
+    ): array {
         $productsByWh = [];
         $warehouses = [];
+        $useDifferentSalesChannel = false;
         $items = $this->exclusionProvider->getItems($order, $allocation);
+        if ($specifiedItems) {
+            $items = $this->allocationItemFilterProvider->getFilteredItems($specifiedItems);
+            $useDifferentSalesChannel = $this
+                ->allocationItemFilterProvider
+                ->getUseDifferentSalesChannel($specifiedItems);
+        }
+
         $itemsByProducts = [];
         $emptyWarehouse = new Warehouse();
         $emptyWarehouse->setWarehouseType(new WarehouseType('virtual'));
@@ -106,7 +117,7 @@ class QuantityWFAStrategy implements WFAStrategyInterface
 
         // the SalesChannel that the order is placed in is linked to a SalesChannelGroup
         // linked warehouses are warehouses connected to the WarehouseGroup that is linked to the SalesChannelGroup
-        $linkedWarehouses = $this->getLinkedWarehouses($order);
+        $linkedWarehouses = $this->getLinkedWarehouses($order, $useDifferentSalesChannel);
         if (empty($linkedWarehouses)) {
             return [];
         }
@@ -136,19 +147,16 @@ class QuantityWFAStrategy implements WFAStrategyInterface
                 );
                 return [];
             }
-            $itemsByProducts[sprintf(
-                '%s_|_%s',
-                $item->getProduct()->getSku(),
-                $item->getId() ? : $key
-            )] = $item;
 
             if ($item instanceof AllocationItem) {
                 $inventoryItem = $item->getProduct()->getInventoryItem();
+                $itemIdentifier = $item->getOrderItem()->getVariantHash();
             } else {
                 $inventoryItem = $item->getInventoryItem();
+                $itemIdentifier = $item->getVariantHash();
             }
 
-            $productSku = $inventoryItem->getProduct()->getSku();
+            $itemsByProducts[$itemIdentifier] = $item;
             $itemQtyToAllocateLeft = $item->getQuantity();
             // allocation for order of batches is not allocated correctly if more orders are open (for OoD)
             $inventoryLevels = $this->getInventoryLevelCandidates($inventoryItem, $item, $warehousesIds);
@@ -173,11 +181,11 @@ class QuantityWFAStrategy implements WFAStrategyInterface
                 if ($batch && $batch->getQuantity() > 0) {
                     $warehouse = $batch->getInventoryLevel()->getWarehouse();
                     $warehouses[$warehouse->getCode()] = $warehouse;
-                    $productsByWh[$productSku]['selected_wh'][$warehouse->getCode()] = $item->getQuantity();
+                    $productsByWh[$itemIdentifier]['selected_wh'][$warehouse->getCode()] = $item->getQuantity();
                     $quantityAvailable = $batch->getQuantity();
                 } else {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $item->getQuantity();
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $item->getQuantity();
                     $quantityAvailable = $item->getQuantity();
                 }
             }
@@ -214,11 +222,11 @@ class QuantityWFAStrategy implements WFAStrategyInterface
                             $inventoryQty = $inventoryCount = $virtualInventoryQuantity;
                         }
 
-                        $productsByWh[$productSku]['selected_wh'][$warehouse->getCode()] = $inventoryQty;
+                        $productsByWh[$itemIdentifier]['selected_wh'][$warehouse->getCode()] = $inventoryQty;
                         $quantityAvailable += $inventoryCount;
                     } else {
                         // default behaviour
-                        $productsByWh[$productSku]['selected_wh'][$warehouse->getCode()] = $virtualInventoryQuantity;
+                        $productsByWh[$itemIdentifier]['selected_wh'][$warehouse->getCode()] = $virtualInventoryQuantity;
                         $quantityAvailable += $virtualInventoryQuantity;
                     }
                     $itemQtyToAllocateLeft -= $virtualInventoryQuantity;
@@ -226,30 +234,30 @@ class QuantityWFAStrategy implements WFAStrategyInterface
 
                 if ($this->isItemAvailable($item, $inventoryItem, 'ondemand')) {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
                     $quantityAvailable += $item->getQuantity();
                 }
 
                 if ($this->isItemAvailable($item, $inventoryItem, 'preorder')) {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
                     $quantityAvailable += $item->getQuantity();
                 }
 
                 if ($this->isItemAvailable($item, $inventoryItem, 'backorder')) {
                     $warehouses[$emptyWarehouse->getCode()] = $emptyWarehouse;
-                    $productsByWh[$productSku]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
+                    $productsByWh[$itemIdentifier]['selected_wh'][$emptyWarehouse->getCode()] = $itemQtyToAllocateLeft;
                     $quantityAvailable += $item->getQuantity();
                 }
             }
 
             // for one reason or another, no warehouse could be found for this product
             // so add it to the no allocation warehouse to prevent errors but create an allocation with an alert state
-            if (!isset($productsByWh[$productSku]['selected_wh'])) {
-                $productsByWh[$productSku]['selected_wh'][$noAllocationWarehouse->getCode()] = $item->getQuantity();
+            if (!isset($productsByWh[$itemIdentifier]['selected_wh'])) {
+                $productsByWh[$itemIdentifier]['selected_wh'][$noAllocationWarehouse->getCode()] = $item->getQuantity();
             }
-            $productsByWh[$inventoryItem->getProduct()->getSku()]['qtyOrdered'] = $item->getQuantity();
-            $productsByWh[$inventoryItem->getProduct()->getSku()]['qtyAvailable'] = $quantityAvailable;
+            $productsByWh[$itemIdentifier]['qtyOrdered'] = $item->getQuantity();
+            $productsByWh[$itemIdentifier]['qtyAvailable'] = $quantityAvailable;
         }
         $possibleOptionsToFulfill = array_map(
             function ($item) {
@@ -691,30 +699,33 @@ class QuantityWFAStrategy implements WFAStrategyInterface
      * @param Order $order
      * @return Warehouse[]
      */
-    private function getLinkedWarehouses(Order $order)
+    private function getLinkedWarehouses(Order $order, $useDifferentSalesChannel = false)
     {
-        if (empty($this->linkedWarehouses)) {
-            if (!$order->getSalesChannel() || !$order->getSalesChannel()->getGroup()) {
-                return [];
+        if (!$order->getSalesChannel() || !$order->getSalesChannel()->getGroup()) {
+            return [];
+        }
+        $salesChannel = $order->getSalesChannel();
+        if ($useDifferentSalesChannel) {
+            if ($associatedSalesChannel = $order->getSalesChannel()->getAssociatedSalesChannel()) {
+                $salesChannel = $associatedSalesChannel;
             }
-            /** @var WarehouseChannelGroupLink $warehouseGroupLink */
-            $warehouseGroupLink = $this->doctrineHelper->getEntityRepositoryForClass(WarehouseChannelGroupLink::class)
-                ->findLinkBySalesChannelGroup($order->getSalesChannel()->getGroup());
-
-            if (!$warehouseGroupLink) {
-                return [];
-            }
-
-            /** @var Warehouse[] $linkedWarehouses */
-            $linkedWarehouses = $warehouseGroupLink
-                ->getWarehouseGroup()
-                ->getWarehouses()
-                ->toArray();
-
-            $this->linkedWarehouses = $linkedWarehouses;
         }
 
-        return $this->linkedWarehouses;
+        /** @var WarehouseChannelGroupLink $warehouseGroupLink */
+        $warehouseGroupLink = $this->doctrineHelper->getEntityRepositoryForClass(WarehouseChannelGroupLink::class)
+            ->findLinkBySalesChannelGroup($salesChannel->getGroup());
+
+        if (!$warehouseGroupLink) {
+            return [];
+        }
+
+        /** @var Warehouse[] $linkedWarehouses */
+        $linkedWarehouses = $warehouseGroupLink
+            ->getWarehouseGroup()
+            ->getWarehouses()
+            ->toArray();
+
+        return $linkedWarehouses;
     }
 
     /**
@@ -724,6 +735,15 @@ class QuantityWFAStrategy implements WFAStrategyInterface
     public function setAllocationExclusionProvider(AllocationExclusionInterface $provider)
     {
         $this->exclusionProvider = $provider;
+    }
+
+    /**
+     * @param AllocationExclusionInterface $provider
+     * @return void
+     */
+    public function setAllocationItemFilterProvider(AllocationItemFilterInterface $provider)
+    {
+        $this->allocationItemFilterProvider = $provider;
     }
 
     /**

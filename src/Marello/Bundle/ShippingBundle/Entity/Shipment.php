@@ -2,130 +2,107 @@
 
 namespace Marello\Bundle\ShippingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
-/**
- * @ORM\Entity
- * @ORM\Table(
- *     name="marello_shipment",
- *     uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_shipment_trackinginfoidx",
- *              columns={"tracking_info_id"}
- *          )
- *      }
- * )
- * @ORM\HasLifecycleCallbacks()
- * @Oro\Config(
- *  defaultValues={
- *      "ownership"={
- *          "owner_type"="ORGANIZATION",
- *          "owner_field_name"="organization",
- *          "owner_column_name"="organization_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      }
- *  }
- * )
- */
-class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_shipment')]
+#[ORM\UniqueConstraint(name: 'marello_shipment_trackinginfoidx', columns: ['tracking_info_id'])]
+#[Oro\Config(
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+    ]
+)]
+class Shipment implements DatesAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
-    use EntityCreatedUpdatedAtTrait;
+    use DatesAwareTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @ORM\Column(name="shipping_service", type="string", length=255)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     * @var string
-     */
-    protected $shippingService;
+    #[ORM\Column(name: 'shipping_service', type: Types::STRING, length:255, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?string $shippingService = null;
 
-    /**
-     * @ORM\Column(name="ups_shipment_digest", type="text", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     * @var string
-     */
-    protected $upsShipmentDigest;
+    #[ORM\Column(name: 'ups_shipment_digest', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?string $upsShipmentDigest = null;
 
-    /**
-     * @ORM\Column(name="identification_number", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     * @var string
-     */
-    protected $identificationNumber;
+    #[ORM\Column(name: 'identification_number', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?string $identificationNumber = null;
 
-    /**
-     * @ORM\Column(name="ups_package_tracking_number", type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     * @var string
-     */
-    protected $upsPackageTrackingNumber;
+    #[ORM\Column(name: 'ups_package_tracking_number', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?string $upsPackageTrackingNumber = null;
 
-    /**
-     * @ORM\Column(name="base64_encoded_label", type="text", nullable=true)
-     *
-     * @var string
-     */
-    protected $base64EncodedLabel;
+    #[ORM\Column(name: 'base64_encoded_label', type: Types::TEXT, length: 255, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?string $base64EncodedLabel = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\ShippingBundle\Entity\TrackingInfo", cascade={"persist"}, mappedBy="shipment")
-     * @ORM\JoinColumn(name="tracking_info_id", nullable=true)
-     *
-     * @var TrackingInfo
-     */
-    protected $trackingInfo;
+    #[ORM\OneToOne(mappedBy: 'shipment', targetEntity: TrackingInfo::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'tracking_info_id', referencedColumnName: 'id', unique: true, nullable: true)]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?TrackingInfo $trackingInfo = null;
+
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+    }
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -133,7 +110,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getShippingService()
+    public function getShippingService(): ?string
     {
         return $this->shippingService;
     }
@@ -143,7 +120,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setShippingService($shippingService)
+    public function setShippingService(string $shippingService = null): self
     {
         $this->shippingService = $shippingService;
 
@@ -153,7 +130,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getUpsShipmentDigest()
+    public function getUpsShipmentDigest(): ?string
     {
         return $this->upsShipmentDigest;
     }
@@ -163,7 +140,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setUpsShipmentDigest($upsShipmentDigest)
+    public function setUpsShipmentDigest(string $upsShipmentDigest = null): self
     {
         $this->upsShipmentDigest = $upsShipmentDigest;
 
@@ -173,7 +150,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getIdentificationNumber()
+    public function getIdentificationNumber(): ?string
     {
         return $this->identificationNumber;
     }
@@ -183,7 +160,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setIdentificationNumber($identificationNumber)
+    public function setIdentificationNumber(string $identificationNumber = null): self
     {
         $this->identificationNumber = $identificationNumber;
 
@@ -193,7 +170,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getUpsPackageTrackingNumber()
+    public function getUpsPackageTrackingNumber(): ?string
     {
         return $this->upsPackageTrackingNumber;
     }
@@ -203,7 +180,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setUpsPackageTrackingNumber($upsPackageTrackingNumber)
+    public function setUpsPackageTrackingNumber(string $upsPackageTrackingNumber = null): self
     {
         $this->upsPackageTrackingNumber = $upsPackageTrackingNumber;
 
@@ -213,7 +190,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getBase64EncodedLabel()
+    public function getBase64EncodedLabel(): ?string
     {
         return $this->base64EncodedLabel;
     }
@@ -223,7 +200,7 @@ class Shipment implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setBase64EncodedLabel($base64EncodedLabel)
+    public function setBase64EncodedLabel(string $base64EncodedLabel = null): self
     {
         $this->base64EncodedLabel = $base64EncodedLabel;
 

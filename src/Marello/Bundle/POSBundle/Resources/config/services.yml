@@ -1,12 +1,27 @@
 services:
     marello_pos.api.authentication_provider:
-        alias: oro_security.authentication.provider.username_password_organization.main
+        class: Oro\Bundle\SecurityBundle\Authentication\Authenticator\UsernamePasswordOrganizationAuthenticator
+        arguments:
+            - '@security.http_utils'
+            - '@oro_user.security.provider'
+            - '@oro_security.authentication.success_handler'
+            - '@oro_security.authentication.failure_handler'
+            - { }
+            - 'main'
+            - { frontend: 'oro_customer.login.errors.bad_credentials' }
+        calls:
+            - [ setTokenFactory, [ '@oro_security.token.factory.username_password_organization' ] ]
+            - [ setOrganizationGuesser, [ '@oro_security.authentication.organization_guesser' ] ]
         public: false
 
     Marello\Bundle\POSBundle\Api\Processor\HandleLogin:
         arguments:
             - 'main'
             - '@marello_pos.api.authentication_provider'
+            - '@oro_user.security.provider'
+            - '@oro_security.authentication.organization_guesser'
+            - '@security.user_checker.main'
+            - '@event_dispatcher'
             - '@translator'
         tags:
             - { name: oro.api.processor, action: create, group: save_data, requestType: json_api&rest, class: Marello\Bundle\POSBundle\Api\Model\Login }

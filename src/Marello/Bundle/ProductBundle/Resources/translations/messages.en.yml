@@ -9,7 +9,10 @@ marello:
         sku.label:                  SKU
         weight.label:               Weight (in Kg)
         warranty.label:             Product Warranty
-        status.label:               Status
+        status:
+            label:                  Status
+            enabled:                Enabled
+            disabled:               Disabled
         data.label:                 Data
         type.label:                 Product Type
         preferred_supplier.label:   Preferred Supplier
@@ -26,6 +29,7 @@ marello:
         manufacturing_code.label:   Manufacturing Code
         barcode.label:              Barcode
         image.label:                Image
+        a_r_file.label:             AR File
         categories.label:           Categories
         suppliers.label:            Suppliers
         attribute_family.label:     Attribute Family
@@ -63,6 +67,9 @@ marello:
             entity_label:        Product Supplier Relation
             entity_plural_label: Product Supplier Relations
             entity_grid_all_view_label: All %entity_plural_label%
+            lead_time:
+                label: Lead Time
+                tooltip: Lead Time indicates how long a product will take to be delivered from the respective supplier (in days)
 
         messages:
             success:
@@ -77,6 +84,51 @@ marello:
                 sku:                SKU already exists, please provide a unique SKU
                 sales_channels:
                     assignment: There was failure during Sales Channels assignment
+            import:
+                tab_label:
+                    product: Product
+                    assembled_price_list: Prices
+                    assembled_channel_price_list: Channel Prices
+                error:
+                    status:
+                        invalid: Such Product Status doesn't exist
+                    attribute_family:
+                        required: Attribute Family is required
+                    tax_code:
+                        required: Tax Code is required
+                    categories:
+                        invalid: Such Category doesn't exist "{{ code }}"
+                    channels:
+                        invalid: Such Sales Channel doesn't exist "{{ code }}"
+                    product:
+                        required: Product is required
+                    currency:
+                        required: Currency is required
+                    channel:
+                        required: Channel is required
+                    price_currency:
+                        invalid: The currency is invalid. Please, select a currency from available Product Sales Channel's currencies
+                    price_channel:
+                        invalid: The Sales Channel is invalid. Please, select a Sales Channel from available Product Sales Channels
+                        currency.invalid: The currency doesn't match the Sales Channel's currency
+                    image:
+                        invalid:  "\"%url%\" is not a valid link for a product image"
+                notification_message:
+                    import:
+                        title: Import result type
+                        products: Import for Products was finished
+                        prices: Import for Prices was finished
+                        channel_prices: Import for Channel Prices was finished
+                    import_validation:
+                        title: Import validation result type
+                        products: Import validation for Products was finished
+                        prices: Import validation for Prices was finished
+                        channel_prices: Import validation for Channel Prices was finished
+            export:
+                template:
+                    product.label: Download Product Import Template
+                    assembled_price_list.label: Download Prices Import Template
+                    assembled_channel_price_list.label: Download Channel Prices Import Template
 
         sections:
             general:                General
@@ -124,13 +176,15 @@ marello:
                 product_configuration.title: Product Configuration
                 product_general.label: General
             fields:
-                image_use_external_url.label: Use External Url For Product Image
+                use_external_url:
+                    label: Use External Url For Product Files
+                    tooltip: Enabling this feature will provide a URL for a product image or file in the API response. By default a binary is provided.
 
     attachment:
         file:
             media_url:
                 label:  'External Media Url'
-                description: 'External Url For Product Image'
+                description: 'External Url For Product File'
 oro:
     marelloproduct:
         menu:
@@ -141,4 +195,4 @@ oro:
         file:
             media_url:
                 label:  'External Media Url'
-                description: 'External Url For Product Image'
+                description: 'External Url For Product File'

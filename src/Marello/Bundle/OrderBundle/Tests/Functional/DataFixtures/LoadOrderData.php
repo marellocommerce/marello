@@ -2,29 +2,35 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\CustomerBundle\Tests\Functional\DataFixtures\LoadCustomerData;
-use Marello\Bundle\InventoryBundle\Entity\Warehouse;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\PricingBundle\Tests\Functional\DataFixtures\LoadProductChannelPricingData;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
-use Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures\LoadInventoryData;
-use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
-use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
-use Marello\Bundle\TaxBundle\Entity\TaxCode;
-use Marello\Bundle\TaxBundle\Tests\Functional\DataFixtures\LoadTaxCodeData;
+
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
+use Marello\Bundle\TaxBundle\Entity\TaxCode;
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
+use Marello\Bundle\TaxBundle\Tests\Functional\DataFixtures\LoadTaxCodeData;
+use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
+use Marello\Bundle\CustomerBundle\Tests\Functional\DataFixtures\LoadCustomerData;
+use Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures\LoadInventoryData;
+use Marello\Bundle\PricingBundle\Tests\Functional\DataFixtures\LoadProductChannelPricingData;
 
 class LoadOrderData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -124,7 +130,6 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
                     ->setTotalTax($tax)
                     ->setGrandTotal($grandTotal)
                 ;
-
                 $manager->persist($order);
                 $createdOrders++;
                 $order = null;
@@ -158,7 +163,7 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
             "Oro\Bundle\EmailBundle\Entity\EmailUser#organization" that was not configured
             to cascade persist operations for entity: Oro." error.
          */
-        $orders = $manager->getRepository('MarelloOrderBundle:Order')->findAll();
+        $orders = $manager->getRepository(Order::class)->findAll();
         $channel = $this->getReference(LoadSalesData::CHANNEL_1_REF);
         $reasonClass = ExtendHelper::buildEnumValueClassName('marello_return_reason');
         $reasons = $manager->getRepository($reasonClass)->findAll();
@@ -255,11 +260,11 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
         $address->setCity($row['city']);
         $address->setCountry(
             $this->manager
-                ->getRepository('OroAddressBundle:Country')->find($row['country'])
+                ->getRepository(Country::class)->find($row['country'])
         );
         $address->setRegion(
             $this->manager
-                ->getRepository('OroAddressBundle:Region')
+                ->getRepository(Region::class)
                 ->findOneBy(['combinedCode' => $row['country'] . '-' . $row['state']])
         );
         $address->setPhone($row['telephone_number']);
@@ -270,9 +275,15 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
         $this->manager->persist($shippingAddress);
 
         $orderEntity = new Order($address, $address);
-        $customer = Customer::create($row['firstname'], $row['lastname'], $row['email'], $address, $shippingAddress);
-        $customer->setOrganization($organization);
-        $this->setReference('customer' . $this->customers++, $customer);
+        // we need to get the existing customer from reference I guess.
+        /** @var Customer $customer */
+        $customer = $this->getReference('marello-customer-' . $this->customers++);
+        $users = $this->manager
+            ->getRepository(User::class)
+            ->findAll();
+
+        $user = array_shift($users);
+        $orderEntity->setOwner($user);
         $orderEntity->setCustomer($customer);
 
         /** @var SalesChannel $channel */
@@ -303,7 +314,7 @@ class LoadOrderData extends AbstractFixture implements DependentFixtureInterface
     {
         /** @var Product $product */
         $product = $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findOneBy(['sku' => $row['sku'], 'organization' => $organization]);
 
         $itemEntity = new OrderItem();

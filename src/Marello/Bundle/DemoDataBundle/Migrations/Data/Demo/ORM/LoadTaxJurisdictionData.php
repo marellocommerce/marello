@@ -346,7 +346,7 @@ class LoadTaxJurisdictionData extends AbstractFixture
      */
     private function getCountryByIso2Code(ObjectManager $manager, $iso2Code)
     {
-        return $manager->getRepository('OroAddressBundle:Country')->findOneBy(['iso2Code' => $iso2Code]);
+        return $manager->getRepository(Country::class)->findOneBy(['iso2Code' => $iso2Code]);
     }
 
     /**
@@ -358,6 +358,6 @@ class LoadTaxJurisdictionData extends AbstractFixture
      */
     private function getRegionByCountryAndCode(ObjectManager $manager, Country $country, $code)
     {
-        return $manager->getRepository('OroAddressBundle:Region')->findOneBy(['country' => $country, 'code' => $code]);
+        return $manager->getRepository(Region::class)->findOneBy(['country' => $country, 'code' => $code]);
     }
 }

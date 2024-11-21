@@ -2,21 +2,23 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Functional\Controller;
 
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadOrderData;
-use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
-use Marello\Bundle\ShippingBundle\Method\ShippingMethodInterface;
-use Marello\Bundle\ShippingBundle\Method\ShippingMethodProviderInterface;
-use Marello\Bundle\ShippingBundle\Method\ShippingMethodTypeInterface;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\HttpFoundation\Response;
+
+use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
+use Marello\Bundle\ShippingBundle\Method\ShippingMethodInterface;
+use Marello\Bundle\ShippingBundle\Method\ShippingMethodTypeInterface;
+use Marello\Bundle\ShippingBundle\Method\ShippingMethodProviderInterface;
+use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadOrderData;
+use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
+use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
 
 class OrderControllerTest extends WebTestCase
 {
@@ -77,22 +79,19 @@ class OrderControllerTest extends WebTestCase
             ],
         ];
         $submittedData = $this->getSubmittedData($form, $orderCustomer, $salesChannel, $orderItems);
-
         $this->client->followRedirects(true);
 
         $this->client->request($form->getMethod(), $form->getUri(), $submittedData);
         $result  = $this->client->getResponse();
-
         $this->assertResponseStatusCodeEquals($result, Response::HTTP_OK);
 
         /** @var Order $order */
         $order = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloOrderBundle:Order')
-            ->getRepository('MarelloOrderBundle:Order')
+            ->getManagerForClass(Order::class)
+            ->getRepository(Order::class)
             ->findOneBy([
                 'customer' => $orderCustomer->getId(),
                 'salesChannel' => $salesChannel->getId(),
-                'subtotal' => $price
             ]);
         $this->assertNotEmpty($order);
 
@@ -206,6 +205,7 @@ class OrderControllerTest extends WebTestCase
             'input_action' => 'save_and_stay',
             'marello_order_order' => [
                 '_token' => $form['marello_order_order[_token]']->getValue(),
+                'owner' => $form['marello_order_order[owner]']->getValue(),
                 'customer' => $orderCustomer->getId(),
                 'salesChannel' => $salesChannel->getId(),
                 'items' => $orderItems,

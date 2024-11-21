@@ -2,17 +2,21 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\ProductBundle\Entity\Builder\ProductFamilyBuilder;
+
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
+
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Marello\Bundle\ProductBundle\Entity\ProductStatus;
+use Marello\Bundle\ProductBundle\Entity\Builder\ProductFamilyBuilder;
 
 class LoadProductData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -48,7 +52,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
     {
         $this->manager = $manager;
         $organizations = $this->manager
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->findAll();
 
         if (is_array($organizations) && count($organizations) > 0) {
@@ -101,7 +105,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
         $product->setManufacturingCode($this->generateManufacturingCode($data['sku']));
 
         $status = $this->manager
-            ->getRepository('MarelloProductBundle:ProductStatus')
+            ->getRepository(ProductStatus::class)
             ->findOneByName($data['status']);
 
         $product->setStatus($status);

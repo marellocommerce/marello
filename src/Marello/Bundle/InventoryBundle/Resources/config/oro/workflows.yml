@@ -21,6 +21,7 @@ workflows:
             pick_and_pack:
                 allowed_transitions:
                     - complete
+                    - rejected
             resolved:
                 is_final: true
             complete:

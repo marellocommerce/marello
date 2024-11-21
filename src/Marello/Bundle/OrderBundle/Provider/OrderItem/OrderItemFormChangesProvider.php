@@ -44,8 +44,9 @@ class OrderItemFormChangesProvider extends AbstractOrderItemFormChangesProvider
         $submittedData = $context->getSubmittedData();
         if ($context->getForm()->has(self::ITEMS_FIELD) &&
             array_key_exists(self::CHANNEL_FIELD, $submittedData) &&
-            array_key_exists(self::ITEMS_FIELD, $submittedData)) {
-            foreach ($this->providers as $field => $provider) {
+            array_key_exists(self::ITEMS_FIELD, $submittedData)
+        ) {
+            foreach ($this->providers as $provider) {
                 $provider->processFormChanges($context);
             }
 
@@ -59,11 +60,11 @@ class OrderItemFormChangesProvider extends AbstractOrderItemFormChangesProvider
                 }
 
                 if ($itemsCount !== $resultCount) {
-                    $productIds = $this->getProductIdsFromSubmittedData($submittedData);
-                    foreach ($productIds as $product) {
-                        if (!array_key_exists(self::IDENTIFIER_PREFIX . $product, $itemResult) ||
-                            !array_key_exists($field, $itemResult[self::IDENTIFIER_PREFIX . $product])) {
-                            $itemResult[self::IDENTIFIER_PREFIX . $product] = [
+                    $rowIds = $this->getRowItemIdentifiersFromSubmittedData($submittedData);
+                    foreach ($rowIds as $rowIdentifier) {
+                        if (!array_key_exists($rowIdentifier, $itemResult) ||
+                            !array_key_exists($field, $itemResult[$rowIdentifier])) {
+                            $itemResult[$rowIdentifier] = [
                                 'message' => $this->translator
                                     ->trans('marello.order.orderitem.messages.product_not_salable'),
                             ];
@@ -74,20 +75,5 @@ class OrderItemFormChangesProvider extends AbstractOrderItemFormChangesProvider
             $result[self::ITEMS_FIELD] = $itemResult;
             $context->setResult($result);
         }
-    }
-
-    /**
-     * Get product ids from the submitted data
-     * @param $data
-     * @return array
-     */
-    protected function getProductIdsFromSubmittedData($data)
-    {
-        $productIds = [];
-        foreach ($data[self::ITEMS_FIELD] as $item) {
-            $productIds[] = (int)$item['product'];
-        }
-
-        return $productIds;
     }
 }

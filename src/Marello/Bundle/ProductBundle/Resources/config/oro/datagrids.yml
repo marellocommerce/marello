@@ -18,7 +18,7 @@ datagrids:
                     - p.createdAt
                     - p.updatedAt
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
         columns:
             sku:
                 label:              marello.product.sku.label
@@ -91,7 +91,7 @@ datagrids:
                 createdAt:              { data_name: p.createdAt }
                 updatedAt:              { data_name: p.updatedAt }
             default:
-                name: 'DESC'
+                sku: 'DESC'
         filters:
             columns:
                 sku:
@@ -218,10 +218,10 @@ datagrids:
                 select:
                     - p.sku
                     - s.label as status
-                    - COALESCE(SUM(il.inventory), 0) AS inventoryQty
+                    - COALESCE(SUM(il.inventoryQty), 0) AS inventoryQty
                     - repl.name AS replenishment
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.status, alias: s }
@@ -232,7 +232,6 @@ datagrids:
                     and:
                         - IDENTITY(p.variant) = :variantId
                         - p.id != :productId
-                groupBy: p.id, p.sku, s.label
             bind_parameters:
                 - variantId
                 - productId
@@ -243,7 +242,7 @@ datagrids:
             name:
                 label:              marello.product.names.label
             inventoryQty:
-                label:              marello.inventory.inventorylevel.inventory.label
+                label:              marello.inventory.inventorylevel.inventory_qty.label
                 frontend_type:      number
                 data_name:          inventoryQty
             replenishment:
@@ -289,18 +288,14 @@ datagrids:
                     - p.sku
                     - p.type
                     - s.label as status
-                    - COALESCE(SUM(il.inventory), 0) AS inventoryQty
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.status, alias: s }
-                        - { join: p.inventoryItem, alias: i }
-                        - { join: i.inventoryLevels, alias: il }
                 where:
                     and:
                         - p.id != :product
-                groupBy: p.id
             bind_parameters:
                 -
                     name: variant
@@ -386,7 +381,7 @@ datagrids:
                 select:
                     - sc
                 from:
-                    - { table: MarelloSalesBundle:SalesChannel, alias: sc }
+                    - { table: Marello\Bundle\SalesBundle\Entity\SalesChannel, alias: sc }
                 where:
                     and:
                         - sc.id IN(:channels)
@@ -426,7 +421,7 @@ datagrids:
                     - salesChannel.name as salesChannelName
                     - taxCode.code as taxCodeCode
                 from:
-                    - { table: MarelloProductBundle:ProductChannelTaxRelation, alias: pctr }
+                    - { table: Marello\Bundle\ProductBundle\Entity\ProductChannelTaxRelation, alias: pctr }
                 join:
                     left:
                         salesChannel:
@@ -516,7 +511,7 @@ datagrids:
             query:
                 select: [ psr, supplier.name, supplier.currency ]
                 from:
-                    - { table: MarelloProductBundle:ProductSupplierRelation, alias: psr }
+                    - { table: Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation, alias: psr }
                 join:
                     left:
                         supplier:
@@ -546,6 +541,9 @@ datagrids:
             canDropship:
                 label:                marello.supplier.can_dropship.label
                 frontend_type:        boolean
+            leadTime:
+                label:                marello.product.productsupplierrelation.lead_time.label
+                frontend_type:        number
         properties:
             id: ~
         options:
@@ -562,7 +560,7 @@ datagrids:
                     - p.denormalizedDefaultName as productName
                     - p.manufacturingCode
                 from:
-                    - { table: MarelloProductBundle:Product, alias: p }
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
         columns:
             sku:
                 label:              marello.product.sku.label
@@ -613,7 +611,7 @@ datagrids:
                     - category.createdAt
                     - category.updatedAt
                 from:
-                    - { table: MarelloCatalogBundle:Category, alias: category }
+                    - { table: Marello\Bundle\CatalogBundle\Entity\Category, alias: category }
         columns:
             code:
                 label:         marello.catalog.category.code.label

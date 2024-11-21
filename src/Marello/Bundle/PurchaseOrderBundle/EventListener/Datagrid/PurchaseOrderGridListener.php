@@ -3,8 +3,11 @@
 namespace Marello\Bundle\PurchaseOrderBundle\EventListener\Datagrid;
 
 use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+
+use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
 
 class PurchaseOrderGridListener
 {
@@ -38,7 +41,7 @@ class PurchaseOrderGridListener
 
     private function getProductsIdsInPendingPurchaseOrders()
     {
-        $purchaseOrders = $this->entityManager->getRepository('MarelloPurchaseOrderBundle:PurchaseOrder')->findAll();
+        $purchaseOrders = $this->entityManager->getRepository(PurchaseOrder::class)->findAll();
         $productsIds = array();
 
         foreach ($purchaseOrders as $purchaseOrder) {

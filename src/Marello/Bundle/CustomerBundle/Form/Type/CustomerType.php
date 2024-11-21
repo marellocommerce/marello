@@ -40,6 +40,9 @@ class CustomerType extends AbstractType
             ->add('email', EmailType::class, [
                 'required'    => true
             ])
+            ->add('customerNumber', TextType::class, [
+                'required' => false,
+            ])
             ->add('customerGroup', CustomerGroupSelectType::class, [
                 'required' => false,
                 'create_enabled' => false,

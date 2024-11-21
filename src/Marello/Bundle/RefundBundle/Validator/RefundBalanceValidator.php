@@ -35,7 +35,7 @@ class RefundBalanceValidator extends ConstraintValidator
             return;
         }
 
-        if ($this->refundBalanceCalculator->caclulateBalance($value) < 0) {
+        if ($this->refundBalanceCalculator->calculateBalance($value) < 0) {
             $this->context->buildViolation($constraint->message)
                 ->atPath('refund')
                 ->addViolation();

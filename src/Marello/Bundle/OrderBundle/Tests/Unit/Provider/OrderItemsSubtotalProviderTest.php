@@ -1,22 +1,19 @@
 <?php
 
-namespace Marello\Bundle\PricingBundle\Tests\Unit\Provider;
-
-use Symfony\Contracts\Translation\TranslatorInterface;
-
-use PHPUnit\Framework\TestCase;
-
-use Oro\Component\Testing\Unit\EntityTrait;
-use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
-use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
+namespace Marello\Bundle\OrderBundle\Tests\Unit\Provider;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
 use Marello\Bundle\PricingBundle\Provider\ChannelPriceProvider;
-use Marello\Bundle\OrderBundle\Provider\OrderItemsSubtotalProvider;
+use Marello\Bundle\PricingBundle\Subtotal\Model\Subtotal;
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\OrderBundle\Provider\OrderItem\OrderItemsSubtotalProvider;
+use Oro\Bundle\CurrencyBundle\Provider\DefaultCurrencyProviderInterface;
+use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
+use Oro\Component\Testing\Unit\EntityTrait;
+use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OrderItemsSubtotalProviderTest extends TestCase
 {
@@ -71,8 +68,8 @@ class OrderItemsSubtotalProviderTest extends TestCase
             );
 
         $this->salesChannels = [
-            1 => $this->getEntity(SalesChannel::class, ['id' => 1]),
-            2 => $this->getEntity(SalesChannel::class, ['id' => 2])
+            1 => $this->getEntity(SalesChannel::class, ['id' => 1, 'code' => 'sc_1']),
+            2 => $this->getEntity(SalesChannel::class, ['id' => 2, 'code' => 'sc_2'])
         ];
 
         $this->provider = new OrderItemsSubtotalProvider(

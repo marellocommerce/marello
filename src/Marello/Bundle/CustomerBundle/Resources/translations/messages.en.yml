@@ -10,6 +10,7 @@ marello:
         addresses.label:                  'Addresses'
         email.label:                      'Primary Email'
         emails.label:                     'Email Addresses'
+        customer_number.label:            'Customer Number'
         name_prefix.label:                'Name Prefix'
         first_name.label:                 'First Name'
         middle_name.label:                'Middle Name'
@@ -19,6 +20,8 @@ marello:
         company.label:                    'Company'
         phone.label:                      'Phone'
         label:                            'Customer'
+        is_hidden.label:                  'Is hidden'
+        email_lowercase.label:            'Email lowercase'
         form:
             choose:                       'Choose customer'
 
@@ -75,3 +78,11 @@ marello:
         saved.message: 'Customer group saved'
         hasGroup.label: 'Has Group'
         form.choose: 'Choose a group...'
+
+
+        dashboard:
+            business_metrics_and_kpi:
+                title: 'Business Metrics and KPI'
+                description: 'Different business metrics and KPIs'
+                new_customers: 'New Customers'
+                customer_retention: 'Customer Retention'

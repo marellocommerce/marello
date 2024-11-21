@@ -9,7 +9,7 @@ datagrids:
                     - ba.company as billingAddressCompany
                     - sa.company as shippingAddressCompany
                 from:
-                    - { table: MarelloOrderBundle:Order, alias: o }
+                    - { table: Marello\Bundle\OrderBundle\Entity\Order, alias: o }
                 join:
                     left:
                         billingAddress:
@@ -176,15 +176,18 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
             return:
                 type:       navigate
+                label:      marello.return.grid.action.return
                 link:       return_link
                 icon:       undo
             refund:
                 type:       navigate
+                label:      marello.refund.grid.action.refund
                 link:       refund_link
                 icon:       eur
         action_configuration: ['@marello_order.datagrid.action_permission_provider', 'getActionPermissions']
@@ -208,7 +211,7 @@ datagrids:
                 select:
                     - o
                 from:
-                    - { table: MarelloOrderBundle:Order, alias: o }
+                    - { table: Marello\Bundle\OrderBundle\Entity\Order, alias: o }
                 where:
                     and:
                         - o.customer = :customer_id
@@ -299,15 +302,18 @@ datagrids:
         actions:
             view:
                 type:       navigate
+                label:      oro.grid.action.view
                 link:       view_link
                 icon:       eye
                 rowAction:  true
             return:
                 type:       navigate
+                label:      marello.return.grid.action.return
                 link:       return_link
                 icon:       undo
             refund:
                 type:       navigate
+                label:      marello.refund.grid.action.refund
                 link:       refund_link
                 icon:       eur
         action_configuration: ['@marello_order.datagrid.action_permission_provider', 'getActionPermissions']
@@ -327,7 +333,7 @@ datagrids:
                 select:
                     - i
                 from:
-                    - { table: MarelloOrderBundle:OrderItem, alias: i}
+                    - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: i}
                 join:
                     left:
                         product:
@@ -361,6 +367,11 @@ datagrids:
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
+            originalPriceExclTax:
+                label:            marello.order.orderitem.original_price_excl_tax.label
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
             originalPriceInclTax:
                 label:            marello.order.orderitem.original_price_incl_tax.label
                 type:             localized_number
@@ -381,13 +392,14 @@ datagrids:
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-            rowTotalInclTax:
-                label:            marello.order.orderitem.total_price_incl_tax.label
+                renderable:       false
+            rowTotalExclTax:
+                label:            marello.order.orderitem.total_price_excl_tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-            rowTotalExclTax:
-                label:            marello.order.orderitem.total_price_excl_tax.label
+            rowTotalInclTax:
+                label:            marello.order.orderitem.total_price_incl_tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
@@ -399,6 +411,8 @@ datagrids:
                 label:            marello.order.orderitem.allocation_exclusion.label
                 frontend_type:    boolean
                 data_name:        allocationExclusion
+            comment:
+                label:            marello.order.orderitem.comment.label
 
     marello-allocation-order-base-grid:
         extends: marello-allocation-grid
@@ -433,7 +447,7 @@ datagrids:
                     select:
                         - o
                     from:
-                        - { table: MarelloOrderBundle:Order, alias: o }
+                        - { table: Marello\Bundle\OrderBundle\Entity\Order, alias: o }
             columns:
                 orderNumber:
                     label: marello.order.order_number.label
@@ -477,7 +491,7 @@ datagrids:
                     - COUNT(o.orderNumber) as totalOrders
                     - SUM(o.grandTotal) as totalRevenue
                 from:
-                    - { table: MarelloOrderBundle:Order, alias: o }
+                    - { table: Marello\Bundle\OrderBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.salesChannel, alias: channel }
@@ -523,7 +537,7 @@ datagrids:
                     - o.orderNumber as orderNumber
                     - o.purchaseDate as purchaseDate
                 from:
-                    - { table: MarelloOrderBundle:OrderItem, alias: oi }
+                    - { table: Marello\Bundle\OrderBundle\Entity\OrderItem, alias: oi }
                 join:
                     inner:
                         - { join: oi.order, alias: o }

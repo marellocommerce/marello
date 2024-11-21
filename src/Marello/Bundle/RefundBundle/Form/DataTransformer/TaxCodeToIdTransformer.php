@@ -4,7 +4,10 @@ namespace Marello\Bundle\RefundBundle\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
+
+use Marello\Bundle\TaxBundle\Entity\TaxCode;
 
 class TaxCodeToIdTransformer extends EntityToIdTransformer
 {
@@ -17,7 +20,7 @@ class TaxCodeToIdTransformer extends EntityToIdTransformer
     {
         parent::__construct(
             $em,
-            'MarelloTaxBundle:TaxCode',
+            TaxCode::class,
             'id',
             function (EntityRepository $repository, $id) {
                 $qb = $repository->createQueryBuilder('tc');

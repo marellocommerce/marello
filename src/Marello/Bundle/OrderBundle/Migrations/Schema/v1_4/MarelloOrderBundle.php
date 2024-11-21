@@ -29,6 +29,6 @@ class MarelloOrderBundle implements Migration
     protected function modifyMarelloOrderOrderTable(Schema $schema)
     {
         $table = $schema->getTable(self::MARELLO_ORDER_TABLE);
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
     }
 }

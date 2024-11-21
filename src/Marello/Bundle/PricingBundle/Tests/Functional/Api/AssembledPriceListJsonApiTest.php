@@ -53,33 +53,15 @@ class AssembledPriceListJsonApiTest extends RestJsonApiTestCase
     }
 
     /**
-     * test create of new pricelist without a price
-     */
-    public function testCreateNewPriceListWithoutPrice()
-    {
-        $response = $this->post(
-            ['entity' => self::TESTING_ENTITY],
-            'assembledpricelist_without_price_create.yml',
-            [],
-            false
-        );
-
-        $this->assertJsonResponse($response);
-        $this->assertResponseStatusCodeEquals($response, Response::HTTP_INTERNAL_SERVER_ERROR);
-    }
-
-    /**
      * test create of new pricelist with a price
      */
     public function testCreateNewPriceListWithDefaultPrice()
     {
-        $this->markTestSkipped('issue with product load');
         $productResponse =  $this->post(
             ['entity' => 'marelloproducts'],
             'product_without_prices.yml'
         );
         /** @var Product $product1 */
-        $product1 = $this->getReference('product1');
         $this->assertJsonResponse($productResponse);
 
         $response = $this->post(
@@ -103,5 +85,21 @@ class AssembledPriceListJsonApiTest extends RestJsonApiTestCase
         $aclHelper = $this->getContainer()->get('oro_security.acl_helper');
         $product = $productRepo->findOneBySku($responseContent->data->id, $aclHelper);
         $this->assertCount(1, $product->getPrices());
+    }
+
+    /**
+     * test create of new pricelist without a price
+     */
+    public function testCreateNewPriceListWithoutPrice()
+    {
+        $response = $this->post(
+            ['entity' => self::TESTING_ENTITY],
+            'assembledpricelist_without_price_create.yml',
+            [],
+            false
+        );
+
+        $this->assertJsonResponse($response);
+        $this->assertResponseStatusCodeEquals($response, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }

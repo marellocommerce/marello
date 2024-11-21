@@ -27,7 +27,7 @@ class OnPOSOrderCreateListener
      */
     public function __construct(
         private WorkflowManager $workflowManager
-    ){
+    ) {
     }
 
     public function postPersist(LifecycleEventArgs $args)

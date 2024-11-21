@@ -115,7 +115,7 @@ class LoadTaxJurisdictionData extends AbstractFixture
     public static function getCountryByCode(ObjectManager $manager, $code)
     {
         /** @var EntityManagerInterface $manager */
-        return $manager->getReference('OroAddressBundle:Country', $code);
+        return $manager->getReference(Country::class, $code);
     }
 
     /**
@@ -126,6 +126,6 @@ class LoadTaxJurisdictionData extends AbstractFixture
     public static function getRegionByCode(ObjectManager $manager, $code)
     {
         /** @var EntityManagerInterface $manager */
-        return $manager->getReference('OroAddressBundle:Region', $code);
+        return $manager->getReference(Region::class, $code);
     }
 }

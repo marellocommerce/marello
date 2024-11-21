@@ -52,7 +52,7 @@ class ChartBuilder
         // switch back date reversal, for correctly displaying the time line
         $dates = array_reverse($reverseDates, true);
         $data = [
-            $this->translator->trans('marello.inventory.inventorylevel.inventory.label') => array_values(
+            $this->translator->trans('marello.inventory.inventorylevel.inventory_qty.label') => array_values(
                 array_map(function ($value) {
                     return [
                         'time' => $value['date'],

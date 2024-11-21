@@ -2,85 +2,52 @@
 
 namespace Marello\Bundle\AddressBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @ORM\Entity(
- *     repositoryClass="Marello\Bundle\AddressBundle\Entity\Repository\MarelloAddressRepository"
- * )
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="marello_address")
- * @ORM\AssociationOverrides({
- *      @ORM\AssociationOverride(name="region",
- *          joinColumns={
- *              @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code", nullable=true)
- *          }
- *      )
- * })
- * @Oro\Config(
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          }
- *      }
- * )
- */
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\AddressBundle\Entity\Repository\MarelloAddressRepository;
+
+#[ORM\Entity(MarelloAddressRepository::class), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_address')]
+#[ORM\AssociationOverrides([
+    new ORM\AssociationOverride(
+        name: 'region',
+        joinColumns: [new ORM\JoinColumn(name: 'region_code', referencedColumnName: 'combined_code', nullable: true)]
+    )
+])]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => [
+            'auditable' => true
+        ],
+        'security' => [
+            'type' => 'ACL',
+            'group_name' => ''
+        ]
+    ]
+)]
 class MarelloAddress extends AbstractAddress implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=32, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $phone;
+    #[ORM\Column(name: 'phone', type: Types::STRING, length: 32, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $phone = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $company;
+    #[ORM\Column(name: 'company', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $company = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer", inversedBy="addresses",
-     *     cascade={"persist"})
-     * @ORM\JoinColumn(onDelete="SET NULL", nullable=true)
-     *
-     * @var Customer
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $customer;
+    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'], inversedBy: 'addresses')]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?Customer $customer = null;
 
     /**
      * @return string
@@ -149,17 +116,13 @@ class MarelloAddress extends AbstractAddress implements ExtendEntityInterface
         ]));
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
+    #[ORM\PreUpdate]
     public function preUpdateTimestamp()
     {
         $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersistTimestamp()
     {
         $this->created = $this->updated = new \DateTime('now', new \DateTimeZone('UTC'));

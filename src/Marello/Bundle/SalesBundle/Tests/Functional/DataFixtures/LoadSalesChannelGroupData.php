@@ -2,9 +2,12 @@
 
 namespace Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 
 class LoadSalesChannelGroupData extends AbstractFixture implements DependentFixtureInterface
@@ -65,7 +68,7 @@ class LoadSalesChannelGroupData extends AbstractFixture implements DependentFixt
      */
     protected function loadSalesChannelGroups()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
 
         foreach ($this->data as $ref => $values) {
             $channelGroup = $this->buildChannelGroup($ref, $values);

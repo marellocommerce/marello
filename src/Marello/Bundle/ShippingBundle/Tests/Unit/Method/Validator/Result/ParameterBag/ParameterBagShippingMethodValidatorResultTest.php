@@ -19,7 +19,7 @@ class ParameterBagShippingMethodValidatorResultTest extends \PHPUnit\Framework\T
 
     public function testGetErrors()
     {
-        $errors = new \ArrayObject();
+        $errors = [];
         $result = new ParameterBagShippingMethodValidatorResult([
             'errors' => $errors,
         ]);

@@ -29,7 +29,8 @@ class ExternalWarehouseEventListener
     public function __construct(
         protected DoctrineHelper $doctrineHelper,
         protected ConfigManager $configManager
-    ) {}
+    ) {
+    }
 
     /**
      * @param SupplierDropshipEvent $event

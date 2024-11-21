@@ -10,6 +10,8 @@ use Marello\Bundle\CustomerBundle\Tests\Functional\DataFixtures\LoadCustomerData
 
 class CustomerControllerTest extends WebTestCase
 {
+    const GRID_NAME = 'marello-customer';
+
     public function setUp(): void
     {
         $this->initClient(
@@ -24,11 +26,12 @@ class CustomerControllerTest extends WebTestCase
 
     public function testIndex()
     {
-        $this->client->request(
-            'GET',
-            $this->getUrl('marello_customer_index')
-        );
+        $this->client->request('GET', $this->getUrl('marello_customer_index'));
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, Response::HTTP_OK);
 
-        $this->assertResponseStatusCodeEquals($this->client->getResponse(), Response::HTTP_OK);
+        $response = $this->client->requestGrid(self::GRID_NAME);
+        $result = $this->getJsonResponseContent($response, Response::HTTP_OK);
+        $this->assertCount(10, $result['data']);
     }
 }

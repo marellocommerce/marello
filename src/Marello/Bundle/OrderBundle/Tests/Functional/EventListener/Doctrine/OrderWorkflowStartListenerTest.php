@@ -2,7 +2,6 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Functional\EventListener\Doctrine;
 
-use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,10 +10,11 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Marello\Bundle\ShippingBundle\Method\ShippingMethodInterface;
 use Marello\Bundle\OrderBundle\Model\WorkflowNameProviderInterface;
 use Marello\Bundle\ShippingBundle\Method\ShippingMethodTypeInterface;
@@ -136,8 +136,8 @@ class OrderWorkflowStartListenerTest extends WebTestCase
 
         /** @var Order $order */
         $order = $this->getContainer()->get('doctrine')
-            ->getManagerForClass('MarelloOrderBundle:Order')
-            ->getRepository('MarelloOrderBundle:Order')
+            ->getManagerForClass(Order::class)
+            ->getRepository(Order::class)
             ->findOneBy([
                 'customer' => $orderCustomer->getId(),
                 'salesChannel' => $salesChannel->getId(),
@@ -176,6 +176,7 @@ class OrderWorkflowStartListenerTest extends WebTestCase
             'input_action' => 'save_and_stay',
             'marello_order_order' => [
                 '_token' => $form['marello_order_order[_token]']->getValue(),
+                'owner' => $form['marello_order_order[owner]']->getValue(),
                 'customer' => $orderCustomer->getId(),
                 'salesChannel' => $salesChannel->getId(),
                 'items' => $orderItems,

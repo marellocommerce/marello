@@ -4,7 +4,10 @@ namespace Marello\Bundle\ReturnBundle\Form\DataTransformer;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
 
 class OrderToOrderNumberTransformer extends EntityToIdTransformer
 {
@@ -17,7 +20,7 @@ class OrderToOrderNumberTransformer extends EntityToIdTransformer
     {
         parent::__construct(
             $em,
-            'MarelloOrderBundle:Order',
+            Order::class,
             null,
             function (EntityRepository $repository, $orderNumber) {
                 $qb = $repository->createQueryBuilder('o');

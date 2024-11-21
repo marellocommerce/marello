@@ -41,14 +41,14 @@ class SingleWHCalculator extends AbstractWHCalculator
                 ];
             }
         }
-
+        // check the count of result and the array key comparison, might be a little pointless to do both...
         foreach ($wh as $warehouseCode => $result) {
             // warehouse has the same count of products in the result as the items that are ordered..
             // sounds promising...
             if (count(array_keys($result)) === count($orderItemsProducts)) {
                 // the array keys (flipped) (skus) from the order items are the same as the keys (skus) we produced..
                 // sounds promising again
-                if ((array_keys(array_flip($orderItemsProducts)) === array_keys($result))) {
+                if ((array_keys($orderItemsByProducts) === array_keys($result))) {
                     // now check if the total allocated (our result) is the same or more than the qty that is ordered...
                     // for this result
                     $areResultsAllCorrectlyAllocatedForSingleWarehouse = true;

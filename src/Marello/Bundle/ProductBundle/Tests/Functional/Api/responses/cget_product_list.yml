@@ -6,10 +6,10 @@ data:
             productId: '@product1->id'
             denormalizedDefaultName: 'product1'
             manufacturingCode: null
-            productType: null
+            productType: 'simple'
             weight: 1
             warranty: null
-            data: null
+            data: []
         relationships:
             names:
                 data:
@@ -51,10 +51,10 @@ data:
             productId: '@product2->id'
             denormalizedDefaultName: 'product2'
             manufacturingCode: null
-            productType: null
+            productType: 'simple'
             weight: 2
             warranty: null
-            data: null
+            data: []
         relationships:
             names:
                 data:
@@ -102,10 +102,10 @@ data:
             productId: '@product3->id'
             denormalizedDefaultName: 'product3'
             manufacturingCode: null
-            productType: null
+            productType: 'simple'
             weight: 5
             warranty: null
-            data: null
+            data: []
         relationships:
             names:
                 data:
@@ -153,10 +153,10 @@ data:
             productId: '@product4->id'
             denormalizedDefaultName: 'product4'
             manufacturingCode: null
-            productType: null
+            productType: 'simple'
             weight: 10
             warranty: null
-            data: null
+            data: []
         relationships:
             names:
                 data:
@@ -210,10 +210,10 @@ data:
             productId: '@product5->id'
             denormalizedDefaultName: 'product5'
             manufacturingCode: null
-            productType: null
+            productType: 'simple'
             weight: 1
             warranty: null
-            data: null
+            data: []
         relationships:
             names:
                 data:
@@ -267,10 +267,10 @@ data:
             productId: '@product6->id'
             denormalizedDefaultName: 'product6'
             manufacturingCode: null
-            productType: null
+            productType: 'simple'
             weight: 1
             warranty: null
-            data: null
+            data: []
         relationships:
             names:
                 data:

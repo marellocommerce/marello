@@ -52,7 +52,7 @@ class LoadShippingServicesData extends AbstractFixture implements ContainerAware
      */
     public function load(ObjectManager $manager)
     {
-        $this->countryRepository = $manager->getRepository('OroAddressBundle:Country');
+        $this->countryRepository = $manager->getRepository(Country::class);
         $this->loadSpecifiedCountryServices($manager);
         $this->loadEUCountriesServices($manager);
         $this->loadUnspecifiedCountryServices($manager);

@@ -9,6 +9,13 @@ services:
         tags:
             - { name: doctrine.repository_service }
 
+    Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository:
+        parent: oro_entity.abstract_repository
+        arguments:
+            - 'Marello\Bundle\CustomerBundle\Entity\Customer'
+        tags:
+            - { name: doctrine.repository_service }
+
     marello_customer.twig.customer_extension:
         class: 'Marello\Bundle\CustomerBundle\Twig\CustomerExtension'
         arguments:
@@ -47,6 +54,10 @@ services:
 ##            - { name: doctrine.event_listener, event: postFlush }
 ##            - { name: doctrine.event_listener, event: postRemove }
 #            - { name: container.service_subscriber, id: oro_email.email_address_visibility.manager }
+
+    Marello\Bundle\CustomerBundle\EventListener\Entity\CustomerEventListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
 
     marello_customer.form.autocomplete.company.search_handler:
         public: false
@@ -100,7 +111,6 @@ services:
         arguments:
             - 'Marello\Bundle\CustomerBundle\Form\Type\CompanyType'
 
-
     marello_customer.form.type.customer:
         class: 'Marello\Bundle\CustomerBundle\Form\Type\CustomerType'
         tags:
@@ -132,22 +142,13 @@ services:
         tags:
             - { name: oro_form.form.handler, alias: marello_customer.form.handler.customer }
 
-    marelloenterprise_inventory.form_handler.warehousegroup:
-        class: 'MarelloEnterprise\Bundle\InventoryBundle\Form\Handler\WarehouseGroupHandler'
-        arguments:
-            - '@doctrine.orm.entity_manager'
-            - '@oro_security.acl_helper'
-
-    marello_customer.provider.customer_email_owner:
-        class: 'Marello\Bundle\CustomerBundle\Provider\CustomerEmailOwnerProvider'
+    Marello\Bundle\CustomerBundle\Provider\CustomerEmailOwnerProvider:
         tags:
             - { name: oro_email.owner.provider, order: 1 }
 
-    marello_customer.provider.customer_address:
-        class: 'Marello\Bundle\CustomerBundle\Provider\CustomerAddressProvider'
+    Marello\Bundle\CustomerBundle\Provider\CustomerAddressProvider: ~
 
-    marello_customer.form.validator.company_number:
-        class: 'Marello\Bundle\CustomerBundle\Validator\CompanyNumberValidator'
+    Marello\Bundle\CustomerBundle\Validator\CompanyNumberValidator:
         arguments:
             - '@oro_entity.doctrine_helper'
         tags:
@@ -182,3 +183,18 @@ services:
             - [ 'name' ]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: marello_customer_group, acl_resource: marello_customer_group_view }
+
+    Marello\Bundle\CustomerBundle\Validator\UniqueCustomerEmailValidator:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: validator.constraint_validator, alias: marello_customer.unique_customer_email_validator }
+
+    Marello\Bundle\CustomerBundle\Provider\CustomerMetricsProvider:
+        public: true
+        arguments:
+            - '@Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository'
+            - '@oro_dashboard.provider.big_number.date_helper'
+            - '@oro_security.acl_helper'
+        tags:
+            - { name: oro_dashboard.big_number.provider, alias: marello-customer }

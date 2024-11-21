@@ -8,6 +8,7 @@ define(function(require) {
 
     const OrderBillingAddressView = OrderAddressView.extend({
         options: {
+            enterManuallyValue: '0',
             selectors: {
                 useBillingAsShipping: '',
                 shippingAddressBlock: ''

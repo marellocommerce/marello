@@ -2,11 +2,11 @@
 
 namespace Marello\Bundle\TaxBundle\Provider;
 
-use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesProvider;
-use Marello\Bundle\TaxBundle\Calculator\TaxCalculatorInterface;
 use Marello\Bundle\TaxBundle\Matcher\TaxRuleMatcherInterface;
+use Marello\Bundle\TaxBundle\Calculator\TaxCalculatorInterface;
+use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
+use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesProvider;
 
 class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
 {
@@ -45,16 +45,18 @@ class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
             $context->setResult($result);
             return null;
         }
+
         $itemResult = $result[self::ITEMS_FIELD];
-        foreach ($submittedData[self::ITEMS_FIELD] as $rowIdentifierKey => $item) {
+        foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
             if (!empty($item['product'])) {
-                $identifier = sprintf('%s%s', self::IDENTIFIER_PREFIX, $item['product']);
+                $identifier = $this->getRowIdentifier($rowId, $item['product']);
                 if (isset($itemResult['price'][$identifier]) && isset($itemResult['tax_code'][$identifier]) &&
                     isset($item['quantity'])
                 ) {
                     $taxRule = $this->taxRuleMatcher->match(
-                        $order->getShippingAddress(),
-                        [$itemResult['tax_code'][$identifier]['code']]
+                        [$itemResult['tax_code'][$identifier]['code']],
+                        $order,
+                        $order->getShippingAddress()
                     );
                     if ($taxRule) {
                         $rate = $taxRule->getTaxRate()->getRate();
@@ -63,7 +65,7 @@ class OrderItemRowTotalsProvider extends AbstractOrderItemFormChangesProvider
                     }
                     $amount = (double)$itemResult['price'][$identifier]['value'] * (float)$item['quantity'];
                     $taxTotals = $this->taxCalculator->calculate($amount, $rate);
-                    $itemResult['row_totals'][$identifier][$rowIdentifierKey] = $taxTotals->jsonSerialize();
+                    $itemResult['row_totals'][$identifier][$rowId] = $taxTotals->jsonSerialize();
                 }
             }
         }

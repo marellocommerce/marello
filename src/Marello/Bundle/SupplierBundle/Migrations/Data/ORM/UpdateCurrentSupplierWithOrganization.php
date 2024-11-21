@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class UpdateCurrentSupplierWithOrganization extends AbstractFixture
 {
@@ -28,10 +29,10 @@ class UpdateCurrentSupplierWithOrganization extends AbstractFixture
      */
     public function updateCurrentSuppliers()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
 
         $suppliers = $this->manager
-            ->getRepository('MarelloSupplierBundle:Supplier')
+            ->getRepository(Supplier::class)
             ->findBy(['organization' => null]);
         /** @var Supplier $supplier */
         foreach ($suppliers as $supplier) {

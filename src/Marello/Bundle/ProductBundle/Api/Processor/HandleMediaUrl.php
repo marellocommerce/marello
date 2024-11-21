@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\ProductBundle\Api\Processor;
 
+use Marello\Bundle\ProductBundle\DependencyInjection\Configuration;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
@@ -25,8 +26,7 @@ class HandleMediaUrl implements ProcessorInterface
     public function process(ContextInterface $context): void
     {
         $data = $context->getData();
-
-        if (!$this->configManager->get('marello_product.image_use_external_url')) {
+        if (!$this->configManager->get(Configuration::getConfigKeyByName(Configuration::USE_EXTERNAL_URL_CONFIG))) {
             return;
         }
 

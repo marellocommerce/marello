@@ -2,225 +2,154 @@
 
 namespace Marello\Bundle\SalesBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
 use Marello\Bundle\PricingBundle\Model\CurrencyAwareInterface;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
+use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelRepository")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="marello_sales_sales_channel",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_sales_sales_channel_codeidx",
- *              columns={"code"}
- *          )
- *      }
- * )
- * @Oro\Config(
- *  routeName="marello_sales_saleschannel_index",
- *  routeView="marello_sales_saleschannel_view",
- *  routeCreate="marello_sales_saleschannel_create",
- *  routeUpdate="marello_sales_saleschannel_update",
- *  defaultValues={
- *      "entity"={"icon"="fa-sitemap"},
- *      "ownership"={
- *          "owner_type"="ORGANIZATION",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      }
- *  }
- * )
- */
+#[ORM\Entity(SalesChannelRepository::class), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_sales_sales_channel')]
+#[ORM\UniqueConstraint(name: 'marello_sales_sales_channel_codeidx', columns: ['code'])]
+#[Oro\Config(
+    routeName: 'marello_sales_saleschannel_index',
+    routeView: 'marello_sales_saleschannel_view',
+    routeCreate: 'marello_sales_saleschannel_create',
+    routeUpdate: 'marello_sales_saleschannel_update',
+    defaultValues: [
+        'entity' => [
+            'icon' => 'fa-sitemap',
+        ],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class SalesChannel implements
     CurrencyAwareInterface,
     LocalizationAwareInterface,
-    ExtendEntityInterface
+    ExtendEntityInterface,
+    DatesAwareInterface,
+    OrganizationInterface
 {
-    use EntityCreatedUpdatedAtTrait;
+    use DatesAwareTrait;
     use LocalizationTrait;
     use ExtendEntityTrait;
+    use AuditableOrganizationAwareTrait;
     
     const DEFAULT_TYPE = 'marello';
 
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $code;
+    #[ORM\Column(name: 'code', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['identity' => true]
+        ]
+    )]
+    protected ?string $code = null;
 
-    /**
-     * @var string
-     * @ORM\Column(name="currency", type="string", length=5, nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $currency;
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 5, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['identity' => true]
+        ]
+    )]
+    protected ?string $currency = null;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $active = true;
+    #[ORM\Column(name: 'active', type: Types::BOOLEAN, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?bool $active = true;
 
-    /**
-     * @var boolean
-     * mark a channel as a default channel
-     * @ORM\Column(name="is_default", type="boolean", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $default = true;
+    #[ORM\Column(name: 'is_default', type: Types::BOOLEAN, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?bool $default = true;
 
-    /**
-     * @var OrganizationInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $owner;
+    #[ORM\ManyToOne(targetEntity: SalesChannelType::class)]
+    #[ORM\JoinColumn(name: 'channel_type', referencedColumnName: 'name', nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?SalesChannelType $channelType = null;
 
-    /**
-     * @var SalesChannelType
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannelType")
-     * @ORM\JoinColumn(name="channel_type", referencedColumnName="name", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $channelType;
-    
-    /**
-     * @var SalesChannelGroup
-     *
-     * @ORM\ManyToOne(targetEntity="SalesChannelGroup", inversedBy="salesChannels")
-     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $group;
+    #[ORM\ManyToOne(targetEntity: SalesChannelGroup::class, inversedBy: 'salesChannels')]
+    #[ORM\JoinColumn(name: 'group_id', referencedColumnName: 'id')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?SalesChannelGroup $group = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="integration_channel_id", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
-     * @var Channel
-     */
-    protected $integrationChannel;
+    #[ORM\OneToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(name: 'integration_channel_id', nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?Channel $integrationChannel = null;
 
-    /**
-     * @var ArrayCollection
-     * @ORM\ManyToMany(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", mappedBy="channels")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          },
-     *          "attribute"={
-     *              "is_attribute"=true
-     *          },
-     *          "extend"={
-     *              "owner"="System"
-     *          }
-     *      }
-     * )
-     */
-    protected $products;
+    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'channels')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['excluded' =>true],
+            'attribute' => ['is_attribute' => true],
+            'extend' => ['owner' => 'System']
+        ]
+    )]
+    protected ?Collection $products = null;
+
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
+    #[ORM\JoinColumn(name: 'associated_sales_channel_id', referencedColumnName: 'id', nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
+    protected ?SalesChannel $associatedSalesChannel = null;
 
     /**
      * @param string|null $name
@@ -239,18 +168,31 @@ class SalesChannel implements
         }
     }
 
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+    }
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -260,7 +202,7 @@ class SalesChannel implements
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -270,15 +212,15 @@ class SalesChannel implements
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name;
     }
     
     /**
-     * @return SalesChannelType
+     * @return SalesChannelType|null
      */
-    public function getChannelType()
+    public function getChannelType(): ?SalesChannelType
     {
         return $this->channelType;
     }
@@ -288,7 +230,7 @@ class SalesChannel implements
      *
      * @return $this
      */
-    public function setChannelType(SalesChannelType $channelType)
+    public function setChannelType(SalesChannelType $channelType): self
     {
         $this->channelType = $channelType;
 
@@ -298,7 +240,7 @@ class SalesChannel implements
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
@@ -308,7 +250,7 @@ class SalesChannel implements
      *
      * @return $this
      */
-    public function setActive($active)
+    public function setActive(bool $active): self
     {
         $this->active = $active;
 
@@ -318,7 +260,7 @@ class SalesChannel implements
     /**
      * @return boolean
      */
-    public function getDefault()
+    public function getDefault(): bool
     {
         return $this->default;
     }
@@ -328,7 +270,7 @@ class SalesChannel implements
      *
      * @return $this
      */
-    public function setDefault($default)
+    public function setDefault(bool $default): self
     {
         $this->default = $default;
 
@@ -336,9 +278,9 @@ class SalesChannel implements
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -347,7 +289,7 @@ class SalesChannel implements
      * @param $code
      * @return $this
      */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -355,9 +297,9 @@ class SalesChannel implements
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCurrency()
+    public function getCurrency(): ?string
     {
         return $this->currency;
     }
@@ -366,29 +308,9 @@ class SalesChannel implements
      * @param string $currency
      * @return $this
      */
-    public function setCurrency($currency)
+    public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
-
-        return $this;
-    }
-
-    /**
-     * @return OrganizationInterface
-     */
-    public function getOwner()
-    {
-        return $this->owner;
-    }
-
-    /**
-     * @param OrganizationInterface $owner
-     *
-     * @return $this
-     */
-    public function setOwner($owner)
-    {
-        $this->owner = $owner;
 
         return $this;
     }
@@ -398,24 +320,24 @@ class SalesChannel implements
      *
      * @return boolean
      */
-    public function getActive()
+    public function getActive(): bool
     {
         return $this->active;
     }
 
     /**
-     * @return SalesChannelGroup $group
+     * @return SalesChannelGroup|null
      */
-    public function getGroup()
+    public function getGroup(): ?SalesChannelGroup
     {
         return $this->group;
     }
 
     /**
-     * @param SalesChannelGroup $group
+     * @param SalesChannelGroup|null $group
      * @return $this
      */
-    public function setGroup(SalesChannelGroup $group)
+    public function setGroup(SalesChannelGroup $group = null): self
     {
         $this->group = $group;
 
@@ -425,7 +347,7 @@ class SalesChannel implements
     /**
      * @return Channel|null
      */
-    public function getIntegrationChannel()
+    public function getIntegrationChannel(): ?Channel
     {
         return $this->integrationChannel;
     }
@@ -434,7 +356,7 @@ class SalesChannel implements
      * @param Channel $integrationChannel
      * @return $this
      */
-    public function setIntegrationChannel(Channel $integrationChannel = null)
+    public function setIntegrationChannel(Channel $integrationChannel = null): self
     {
         $this->integrationChannel = $integrationChannel;
 
@@ -444,7 +366,7 @@ class SalesChannel implements
     /**
      * @return bool
      */
-    public function hasProducts()
+    public function hasProducts(): bool
     {
         return count($this->products) > 0;
     }
@@ -453,7 +375,7 @@ class SalesChannel implements
      * @param Product $product
      * @return bool
      */
-    public function hasProduct(Product $product)
+    public function hasProduct(Product $product): bool
     {
         return $this->products->contains($product);
     }
@@ -461,8 +383,39 @@ class SalesChannel implements
     /**
      * @return ArrayCollection|SalesChannel|Product[]
      */
-    public function getProducts()
+    public function getProducts(): Collection
     {
         return $this->products;
+    }
+
+    public function addProduct(Product $product)
+    {
+        if (!$this->hasProduct($product)) {
+            $this->products->add($product);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product)
+    {
+        if ($this->hasProduct($product)) {
+            $product->removeChannel($this);
+            $this->products->removeElement($product);
+        }
+
+        return $this;
+    }
+
+    public function getAssociatedSalesChannel(): ?SalesChannel
+    {
+        return $this->associatedSalesChannel;
+    }
+
+    public function setAssociatedSalesChannel(?SalesChannel $associatedSalesChannel = null): self
+    {
+        $this->associatedSalesChannel = $associatedSalesChannel;
+
+        return $this;
     }
 }

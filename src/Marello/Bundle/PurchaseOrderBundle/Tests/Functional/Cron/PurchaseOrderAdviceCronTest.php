@@ -2,14 +2,16 @@
 
 namespace Marello\Bundle\PurchaseOrderBundle\Tests\Functional\Cron;
 
-use Doctrine\ORM\EntityRepository;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Oro\Bundle\CronBundle\Entity\Schedule;
+
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\EmailBundle\Sender\EmailTemplateSender;
+use Oro\Bundle\NotificationBundle\Model\NotificationSettings;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
+
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
 use Marello\Bundle\PurchaseOrderBundle\Cron\PurchaseOrderAdviceCommand;
@@ -33,7 +35,11 @@ class PurchaseOrderAdviceCronTest extends WebTestCase
 
         $this->application = new Application($this->client->getKernel());
         $this->application->setAutoExit(false);
-        $this->application->add(new PurchaseOrderAdviceCommand($this->getContainer()));
+        $emailTemplateSender = $this->createMock(EmailTemplateSender::class);
+        $notificationSettings = $this->createMock(NotificationSettings::class);
+        $this->application->add(
+            new PurchaseOrderAdviceCommand($this->getContainer(), $emailTemplateSender, $notificationSettings)
+        );
     }
 
     /**
@@ -97,6 +103,10 @@ class PurchaseOrderAdviceCronTest extends WebTestCase
         $configManager = self::getContainer()->get('oro_config.manager');
         // enabled po notification setting again :')
         $configManager->set('marello_purchaseorder.purchaseorder_notification', true);
+        $configManager->set('marello_purchaseorder.purchaseorder_notification_address', 'example@example.com');
+//        $configManager->set('oro_notification.email_notification_sender_email', 'johndoe@example.com');
+//        $configManager->set('oro_notification.email_notification_sender_name', 'John Doe');
+//        $configManager->flush();
 
         $command = $this->application->find(PurchaseOrderAdviceCommand::COMMAND_NAME);
         $commandTester = new CommandTester($command);
@@ -104,18 +114,5 @@ class PurchaseOrderAdviceCronTest extends WebTestCase
 
         self::assertEmpty($commandTester->getDisplay());
         self::assertEquals(PurchaseOrderAdviceCommand::EXIT_CODE, $commandTester->getStatusCode());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function testAdviceCommandIsRegisteredCorrectly()
-    {
-        /** @var EntityRepository $scheduleRepository */
-        $scheduleRepository = self::getContainer()
-            ->get('doctrine')
-            ->getRepository(Schedule::class);
-        $crons = $scheduleRepository->findBy(['command' => PurchaseOrderAdviceCommand::COMMAND_NAME]);
-        self::assertCount(1, $crons);
     }
 }

@@ -4,6 +4,7 @@ namespace Marello\Bundle\NotificationBundle\Tests\Functional\Email;
 
 use Doctrine\ORM\NoResultException;
 
+use Marello\Bundle\NotificationBundle\Exception\MarelloNotificationException;
 use Oro\Bundle\NotificationBundle\Async\Topic\SendEmailNotificationTopic;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\MessageQueueBundle\Test\Functional\MessageQueueExtension;
@@ -77,7 +78,7 @@ class SendProcessorTest extends WebTestCase
         /** @var Order $order */
         $order = $this->getReference('marello_order_0');
 
-        $this->expectException(NoResultException::class);
+        $this->expectException(MarelloNotificationException::class);
 
         $this->sendProcessor->sendNotification(
             'no_valid_template',

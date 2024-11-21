@@ -52,11 +52,22 @@ define(function(require) {
          * Trigger subtotals update
          */
         updateOrderItemData: function() {
-            var productId = this.getProductId();
+            var productId = this.getRowItemIdentifier();
             if (productId.length === 0) {
                 this.setOrderItemData({});
             } else {
-                mediator.trigger('order:form-changes:trigger', {updateFields: ['items', 'totals', 'inventory', 'possible_shipping_methods', 'possible_payment_methods']});
+                mediator.trigger(
+                    'order:form-changes:trigger',
+                    {
+                        updateFields: [
+                            'items',
+                            'totals',
+                            'inventory',
+                            'possible_shipping_methods',
+                            'possible_payment_methods'
+                        ]
+                    }
+                );
             }
         },
 
@@ -68,7 +79,6 @@ define(function(require) {
             if (data === undefined || typeof(data) == 'undefined' || data.length == 0) {
                 return;
             }
-
             var identifier = this._getItemIdentifier();
             if (identifier && data[identifier] !== undefined) {
                 if(data[identifier].message !== undefined) {
@@ -85,7 +95,7 @@ define(function(require) {
                 this.data = {};
             }
 
-            var $priceValue = parseFloat(this.getPriceValue()).toFixed(2);
+            var $priceValue = parseFloat(this.getPriceValue());
             if($priceValue === "NaN" || $priceValue === null) {
                 $priceValue = '';
             }
@@ -149,9 +159,9 @@ define(function(require) {
                 this.fieldsByName.rowTotalExclTax.val('');
                 this.fieldsByName.rowTotalInclTax.val('');
             } else {
-                var taxAmount = parseFloat(row_totals.taxAmount).toFixed(2);
-                var taxExcl = parseFloat(row_totals.excludingTax).toFixed(2);
-                var taxIncl = parseFloat(row_totals.includingTax).toFixed(2);
+                var taxAmount = parseFloat(row_totals.taxAmount);
+                var taxExcl = parseFloat(row_totals.excludingTax);
+                var taxIncl = parseFloat(row_totals.includingTax);
                 this.fieldsByName.tax.val(taxAmount);
                 this.fieldsByName.rowTotalExclTax.val(taxExcl);
                 this.fieldsByName.rowTotalInclTax.val(taxIncl);
@@ -176,7 +186,12 @@ define(function(require) {
                 return null;
             }
 
-            return 'product-id-' + productId;
+            var rowId = this.getRowItemIdentifier();
+            if (rowId.length === 0) {
+                return null;
+            }
+
+            return 'product-id-' + rowId + '-' + productId;
         },
 
         /**

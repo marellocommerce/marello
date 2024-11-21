@@ -16,9 +16,9 @@ class SalesChannelGroupTest extends TestCase
     public function testAccessors()
     {
         $this->assertPropertyAccessors(new SalesChannelGroup(), [
-            ['name', 'some string'],
-            ['description', 'some string'],
-            ['system', 1],
+            ['name', 'some string', false],
+            ['description', 'some string', false],
+            ['system', true, true],
             ['organization', new Organization()]
         ]);
     }

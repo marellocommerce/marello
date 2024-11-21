@@ -3,6 +3,7 @@
 namespace Marello\Bundle\InventoryBundle\Tests\Functional\Controller;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
 use Symfony\Component\HttpFoundation\Response;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -90,9 +91,6 @@ class InventoryControllerTest extends WebTestCase
         $inventoryItem = $manager->getInventoryItem($this->getReference(LoadProductData::PRODUCT_1_REF));
         $this->assertEquals(true, $inventoryItem->hasInventoryLevels());
 
-        $token = $this->getContainer()->get('security.csrf.token_manager')
-            ->getToken('marello_inventory_inventory_update')->getValue();
-
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
@@ -117,9 +115,8 @@ class InventoryControllerTest extends WebTestCase
                 ],
                 'desiredInventory' => $inventoryItem->getDesiredInventory(),
                 'purchaseInventory' => $inventoryItem->getPurchaseInventory(),
-                'replenishment' => 'never_out_of_stock',
-                '_token' => $token,
-            ],
+                'replenishment' => 'never_out_of_stock'
+            ]
         ];
 
         $form   = $crawler->selectButton('Save and Close')->form();
@@ -129,7 +126,11 @@ class InventoryControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->assertStringContainsString('Warehouse DE 1', $crawler->html());
+        $aclHelper = $this->getContainer()->get('oro_security.acl_helper');
+        $defaultWarehouse = $this->getContainer()
+            ->get(WarehouseRepository::class)
+            ->getDefault($aclHelper);
+        $this->assertStringContainsString($defaultWarehouse->getLabel(), $crawler->html());
         $this->assertStringContainsString('never_out_of_stock', $crawler->html());
     }
 

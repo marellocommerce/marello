@@ -1,32 +1,32 @@
 acls:
     marello_customer_company_create:
         type: entity
-        class: MarelloCustomerBundle:Company
+        class: Marello\Bundle\CustomerBundle\Entity\Company
         permission: CREATE
 
     marello_customer_company_view:
         type: entity
-        class: MarelloCustomerBundle:Company
+        class: Marello\Bundle\CustomerBundle\Entity\Company
         permission: VIEW
 
     marello_customer_company_update:
         type: entity
-        class: MarelloCustomerBundle:Company
+        class: Marello\Bundle\CustomerBundle\Entity\Company
         permission: EDIT
 
     marello_customer_view:
         type: entity
-        class: MarelloCustomerBundle:Customer
+        class: Marello\Bundle\CustomerBundle\Entity\Customer
         permission: VIEW
 
     marello_customer_create:
         type: entity
-        class: MarelloCustomerBundle:Customer
+        class: Marello\Bundle\CustomerBundle\Entity\Customer
         permission: CREATE
 
     marello_customer_update:
         type: entity
-        class: MarelloCustomerBundle:Customer
+        class: Marello\Bundle\CustomerBundle\Entity\Customer
         permission: EDIT
 
     marello_customer_group_view:

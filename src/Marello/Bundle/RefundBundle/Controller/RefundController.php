@@ -6,7 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\RefundBundle\Entity\Refund;
 use Marello\Bundle\RefundBundle\Form\Type\RefundType;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,14 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RefundController extends AbstractController
 {
-    /**
-     * @Route(
-     *     path="/",
-     *     name="marello_refund_index"
-     * )
-     * @Template
-     * @AclAncestor("marello_refund_view")
-     */
+    #[Route(path: '/', name: 'marello_refund_index')]
+    #[Template]
+    #[AclAncestor('marello_refund_view')]
     public function indexAction()
     {
         return [
@@ -32,35 +27,26 @@ class RefundController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/view/{id}",
-     *     name="marello_refund_view"
-     * )
-     * @Template
-     * @AclAncestor("marello_refund_view")
-     *
      * @param Refund $entity
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_refund_view')]
+    #[Template]
+    #[AclAncestor('marello_refund_view')]
     public function viewAction(Refund $entity)
     {
         return compact('entity');
     }
 
     /**
-     * @Route(
-     *     path="/create/{id}",
-     *     name="marello_refund_create"
-     * )
-     * @Template("@MarelloRefund/Refund/create.html.twig")
-     * @AclAncestor("marello_refund_create")
      *
      * @param Request $request
      * @param Order   $order
-     *
      * @return array
      */
+    #[Route(path: '/create/{id}', name: 'marello_refund_create')]
+    #[Template('@MarelloRefund/Refund/create.html.twig')]
+    #[AclAncestor('marello_refund_create')]
     public function createAction(Request $request, Order $order)
     {
         $entity = Refund::fromOrder($order);
@@ -70,19 +56,14 @@ class RefundController extends AbstractController
 
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_refund_update"
-     * )
-     * @Template
-     * @AclAncestor("marello_refund_update")
      *
      * @param Request $request
      * @param Refund  $refund
-     *
      * @return array
      */
+    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_refund_update')]
+    #[Template]
+    #[AclAncestor('marello_refund_update')]
     public function updateAction(Request $request, Refund $refund = null)
     {
         return $this->update($request, $refund);
@@ -122,7 +103,7 @@ class RefundController extends AbstractController
         return compact('form', 'entity');
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

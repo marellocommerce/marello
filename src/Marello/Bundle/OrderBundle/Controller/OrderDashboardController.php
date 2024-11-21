@@ -2,27 +2,27 @@
 
 namespace Marello\Bundle\OrderBundle\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider;
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
-use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
-use Marello\Bundle\OrderBundle\Provider\OrderDashboardOrderItemsByStatusProvider;
+use Symfony\Component\Routing\Annotation\Route;
 
 class OrderDashboardController extends AbstractController
 {
     /**
-     * @Route(
-     *      path="/orderitems_by_status/chart/{widget}",
-     *      name="marello_order_dashboard_orderitems_by_status_chart",
-     *      requirements={"widget"="[\w-]+"}
-     * )
-     * @Template("@MarelloOrder/Dashboard/orderitemsByStatus.html.twig")
      * @param Request $request
      * @param mixed $widget
      * @return array
      */
+    #[Route(
+        path: '/orderitems_by_status/chart/{widget}',
+        name: 'marello_order_dashboard_orderitems_by_status_chart',
+        requirements: ['widget' => '[\w-]+']
+    )]
+    #[Template('@MarelloOrder/Dashboard/orderitemsByStatus.html.twig')]
     public function orderitemsByStatusAction(Request $request, $widget)
     {
         $options = $this->container->get(WidgetConfigs::class)
@@ -49,7 +49,7 @@ class OrderDashboardController extends AbstractController
         return $widgetAttr;
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(parent::getSubscribedServices(), [
             WidgetConfigs::class,

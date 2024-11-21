@@ -2,8 +2,12 @@
 
 namespace Marello\Bundle\InventoryBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 
 class UpdateCurrentInventoryItemsWithOrganization extends AbstractFixture
 {
@@ -26,10 +30,10 @@ class UpdateCurrentInventoryItemsWithOrganization extends AbstractFixture
      */
     public function updateCurrentInventoryItems()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
 
         $inventoryItems = $this->manager
-            ->getRepository('MarelloInventoryBundle:InventoryItem')
+            ->getRepository(InventoryItem::class)
             ->findBy(['organization' => null]);
         foreach ($inventoryItems as $inventoryItem) {
             $inventoryItem->setOrganization($organization);

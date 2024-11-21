@@ -2,48 +2,43 @@
 
 namespace Marello\Bundle\SalesBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
+use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelTypeRepository;
 
 /**
- * Class WarehouseType
+ * Class SalesChannelType
  * @package Marello\Bundle\SalesBundle\Entity
- *
- * @ORM\Entity(repositoryClass="Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelTypeRepository")
- * @ORM\Table(name="marello_sales_channel_type")
- * @Oro\Config(
- *      defaultValues={
- *          "grouping"={
- *              "groups"={"dictionary"}
- *          }
- *      }
- * )
  */
+#[ORM\Entity(SalesChannelTypeRepository::class)]
+#[ORM\Table(name: 'marello_sales_channel_type')]
+#[Oro\Config(
+    defaultValues: [
+        'grouping' => [
+            'groups' => ['dictionary']
+        ]
+    ]
+)]
 class SalesChannelType
 {
-    /**
-     * @ORM\Column(name="name", type="string", length=64)
-     * @ORM\Id
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Id]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 64)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true]])]
+    protected ?string $name = null;
 
-    /**
-     * @ORM\Column(name="label", type="string", length=255, unique=true)
-     */
-    protected $label;
+    #[ORM\Column(name: 'label', type: Types::STRING, length: 255, unique: true, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected ?string $label = null;
 
     /**
      * @param string $name
      */
-    public function __construct($name = null)
+    public function __construct(string $name = null)
     {
         $this->name = $name;
     }
@@ -54,7 +49,7 @@ class SalesChannelType
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -66,7 +61,7 @@ class SalesChannelType
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -78,7 +73,7 @@ class SalesChannelType
      *
      * @return $this
      */
-    public function setLabel($label)
+    public function setLabel(string $label): self
     {
         $this->label = $label;
 
@@ -90,7 +85,7 @@ class SalesChannelType
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
@@ -98,7 +93,7 @@ class SalesChannelType
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->label;
     }

@@ -20,14 +20,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_0->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel2
             purchaseDate: '@marello_order_0->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -37,7 +32,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer0->id)>'
+                    id: '<toString(@marello-customer-0->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -50,10 +45,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_usd
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -79,14 +70,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_1->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel3
             purchaseDate: '@marello_order_1->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -105,7 +91,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer1->id)>'
+                    id: '<toString(@marello-customer-1->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -118,10 +104,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_gbp
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -147,14 +129,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_2->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel2
             purchaseDate: '@marello_order_2->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -170,7 +147,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer2->id)>'
+                    id: '<toString(@marello-customer-2->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -183,10 +160,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_usd
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -212,14 +185,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_3->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel3
             purchaseDate: '@marello_order_3->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -238,7 +206,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer3->id)>'
+                    id: '<toString(@marello-customer-3->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -251,10 +219,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_gbp
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -280,14 +244,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_4->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel3
             purchaseDate: '@marello_order_4->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -297,7 +256,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer4->id)>'
+                    id: '<toString(@marello-customer-4->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -310,10 +269,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_gbp
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -339,14 +294,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_5->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel3
             purchaseDate: '@marello_order_5->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -359,7 +309,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer5->id)>'
+                    id: '<toString(@marello-customer-5->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -372,10 +322,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_gbp
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -401,14 +347,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_6->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel3
             purchaseDate: '@marello_order_6->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -427,7 +368,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer6->id)>'
+                    id: '<toString(@marello-customer-6->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -440,10 +381,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_gbp
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -469,14 +406,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_7->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel2
             purchaseDate: '@marello_order_7->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -486,7 +418,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer7->id)>'
+                    id: '<toString(@marello-customer-7->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -499,10 +431,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_usd
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -528,14 +456,9 @@ data:
             discountAmount: null
             discountPercent: null
             couponCode: null
-            invoicedAt: null
+            invoicedAt: '@marello_order_8->purchaseDate->format("Y-m-d\TH:i:s\Z")'
             salesChannelName: channel2
             purchaseDate: '@marello_order_8->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -548,7 +471,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer8->id)>'
+                    id: '<toString(@marello-customer-8->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -561,10 +484,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_usd
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -593,11 +512,6 @@ data:
             invoicedAt: null
             salesChannelName: channel1
             purchaseDate: '@marello_order_9->purchaseDate->format("Y-m-d\TH:i:s\Z")'
-            data: null
-            #workflowItem:
-            #    currentStep:
-            #        name: pending
-            #        label: 'Pending Order'
         relationships:
             items:
                 data:
@@ -610,7 +524,7 @@ data:
             customer:
                 data:
                     type: marellocustomers
-                    id: '<toString(@customer9->id)>'
+                    id: '<toString(@marello-customer-9->email)>'
             billingAddress:
                 data:
                     type: marelloaddresses
@@ -623,10 +537,6 @@ data:
                 data:
                     type: marellosaleschannels
                     id: chan_eur
-            shipment:
-                data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations

@@ -2,9 +2,12 @@
 
 namespace Marello\Bundle\InventoryBundle\Migrations\Data\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\InventoryBundle\Entity\WarehouseGroup;
 
 class LoadWarehouseGroupData extends AbstractFixture implements DependentFixtureInterface
@@ -49,7 +52,7 @@ class LoadWarehouseGroupData extends AbstractFixture implements DependentFixture
      */
     public function loadWarehouseGroups()
     {
-        $organization = $this->manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $organization = $this->manager->getRepository(Organization::class)->getFirst();
 
         foreach ($this->data as $values) {
             $existingGroup = $this

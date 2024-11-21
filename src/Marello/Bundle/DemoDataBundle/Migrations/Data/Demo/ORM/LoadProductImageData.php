@@ -2,15 +2,16 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\UserBundle\Entity\User;
+
 use Marello\Bundle\ProductBundle\Entity\Product;
 
 class LoadProductImageData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
@@ -63,7 +64,7 @@ class LoadProductImageData extends AbstractFixture implements DependentFixtureIn
     public function loadProductImages()
     {
         $products = $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findAll();
 
         /** @var Product $product */

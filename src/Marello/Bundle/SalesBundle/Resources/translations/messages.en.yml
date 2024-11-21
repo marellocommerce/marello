@@ -27,6 +27,8 @@ marello:
             group.label:                        Group
             create_own_group.label:             Create Sales Channel Group
             integration_channel.label:          Integration Channel
+            associated_sales_channel.label:     Associated Sales Channel
+            organization.label:                 Organization
             messages:
                 success:
                     saved:                      Sales Channel has been saved successfully
