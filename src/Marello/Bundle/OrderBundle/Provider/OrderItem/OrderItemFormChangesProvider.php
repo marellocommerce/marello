@@ -71,6 +71,18 @@ class OrderItemFormChangesProvider extends AbstractOrderItemFormChangesProvider
                     }
                 }
             }
+
+            $duplicatedItems = array_diff_assoc($productIds, array_unique($productIds));
+            if(!empty($duplicatedItems)) {
+                foreach ($duplicatedItems as $duplicatedItem)
+                {
+                    $itemResult[self::IDENTIFIER_PREFIX . $duplicatedItem] = [
+                        'message' => $this->translator
+                            ->trans('marello.order.orderitem.messages.product_duplicated_in_order'),
+                    ];
+                }
+            }
+
             $result[self::ITEMS_FIELD] = $itemResult;
             $context->setResult($result);
         }
