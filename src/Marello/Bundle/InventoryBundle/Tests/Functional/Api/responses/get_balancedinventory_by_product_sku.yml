@@ -6,6 +6,7 @@ data:
             inventory: 100
             balancedInventory: 100
             reservedInventory: null
+            updatedAt: '@marello_balancedinvlev_p1_channelgroup1->updatedAt->format("Y-m-d\TH:i:s\Z")'
             saleschannels:
                 - chan_eur
         relationships:
@@ -20,4 +21,4 @@ data:
             organization:
                 data:
                     type: organizations
-                    id: '1'
+                    id: '<toString(@organization->id)>'

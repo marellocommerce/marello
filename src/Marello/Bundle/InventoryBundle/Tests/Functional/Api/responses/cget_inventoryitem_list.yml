@@ -1,0 +1,217 @@
+data:
+    -
+        type: marelloinventoryitems
+        id: '<toString(@marello_inventoryitem_p1->id)>'
+        attributes:
+            desiredInventory: 250
+            purchaseInventory: 125
+            backorderAllowed: false
+            maxQtyToBackorder: null
+            canPreorder: false
+            maxQtyToPreorder: null
+            backOrdersDatetime: null
+            preOrdersDatetime: null
+            orderOnDemandAllowed: false
+            enableBatchInventory: false
+        relationships:
+            inventoryLevels:
+                data:
+                    -
+                        type: marelloinventorylevels
+                        id: '<toString(@marello_inventorylvl_0_p1->id)>'
+            product:
+                data:
+                    type: marelloproducts
+                    id: p1
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            replenishment:
+                data:
+                    type: marelloinvreples
+                    id: never_out_of_stock
+            productUnit:
+                data:
+                    type: marelloproductunits
+                    id: item
+    -
+        type: marelloinventoryitems
+        id: '<toString(@marello_inventoryitem_p2->id)>'
+        attributes:
+            desiredInventory: 100
+            purchaseInventory: 100
+            backorderAllowed: false
+            maxQtyToBackorder: null
+            canPreorder: false
+            maxQtyToPreorder: null
+            backOrdersDatetime: null
+            preOrdersDatetime: null
+            orderOnDemandAllowed: false
+            enableBatchInventory: false
+        relationships:
+            inventoryLevels:
+                data:
+                    -
+                        type: marelloinventorylevels
+                        id: '<toString(@marello_inventorylvl_0_p2->id)>'
+            product:
+                data:
+                    type: marelloproducts
+                    id: p2
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            replenishment:
+                data:
+                    type: marelloinvreples
+                    id: discontinued
+            productUnit:
+                data:
+                    type: marelloproductunits
+                    id: item
+    -
+        type: marelloinventoryitems
+        id: '<toString(@marello_inventoryitem_p3->id)>'
+        attributes:
+            desiredInventory: 150
+            purchaseInventory: 100
+            backorderAllowed: false
+            maxQtyToBackorder: null
+            canPreorder: false
+            maxQtyToPreorder: null
+            backOrdersDatetime: null
+            preOrdersDatetime: null
+            orderOnDemandAllowed: false
+            enableBatchInventory: false
+        relationships:
+            inventoryLevels:
+                data:
+                    -
+                        type: marelloinventorylevels
+                        id: '<toString(@marello_inventorylvl_0_p3->id)>'
+            product:
+                data:
+                    type: marelloproducts
+                    id: p3
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            replenishment:
+                data:
+                    type: marelloinvreples
+                    id: never_out_of_stock
+            productUnit:
+                data:
+                    type: marelloproductunits
+                    id: item
+    -
+        type: marelloinventoryitems
+        id: '<toString(@marello_inventoryitem_p4->id)>'
+        attributes:
+            desiredInventory: 100
+            purchaseInventory: 50
+            backorderAllowed: false
+            maxQtyToBackorder: null
+            canPreorder: false
+            maxQtyToPreorder: null
+            backOrdersDatetime: null
+            preOrdersDatetime: null
+            orderOnDemandAllowed: false
+            enableBatchInventory: false
+        relationships:
+            inventoryLevels:
+                data:
+                    -
+                        type: marelloinventorylevels
+                        id: '<toString(@marello_inventorylvl_0_p4->id)>'
+            product:
+                data:
+                    type: marelloproducts
+                    id: p4
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            replenishment:
+                data:
+                    type: marelloinvreples
+                    id: discontinued
+            productUnit:
+                data:
+                    type: marelloproductunits
+                    id: item
+    -
+        type: marelloinventoryitems
+        id: '<toString(@marello_inventoryitem_p5->id)>'
+        attributes:
+            desiredInventory: 50
+            purchaseInventory: 25
+            backorderAllowed: false
+            maxQtyToBackorder: null
+            canPreorder: false
+            maxQtyToPreorder: null
+            backOrdersDatetime: null
+            preOrdersDatetime: null
+            orderOnDemandAllowed: false
+            enableBatchInventory: false
+        relationships:
+            inventoryLevels:
+                data:
+                    -
+                        type: marelloinventorylevels
+                        id: '<toString(@marello_inventorylvl_0_p5->id)>'
+            product:
+                data:
+                    type: marelloproducts
+                    id: p5
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            replenishment:
+                data:
+                    type: marelloinvreples
+                    id: discontinued
+            productUnit:
+                data:
+                    type: marelloproductunits
+                    id: item
+    -
+        type: marelloinventoryitems
+        id: '<toString(@marello_inventoryitem_p6->id)>'
+        attributes:
+            desiredInventory: 0
+            purchaseInventory: 0
+            backorderAllowed: false
+            maxQtyToBackorder: null
+            canPreorder: false
+            maxQtyToPreorder: null
+            backOrdersDatetime: null
+            preOrdersDatetime: null
+            orderOnDemandAllowed: true
+            enableBatchInventory: false
+        relationships:
+            inventoryLevels:
+                data:
+                    -
+                        type: marelloinventorylevels
+                        id: '<toString(@marello_inventorylvl_0_p6->id)>'
+            product:
+                data:
+                    type: marelloproducts
+                    id: p6
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
+            replenishment:
+                data:
+                    type: marelloinvreples
+                    id: never_out_of_stock
+            productUnit:
+                data:
+                    type: marelloproductunits
+                    id: item

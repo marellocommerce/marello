@@ -6,6 +6,8 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -149,6 +151,21 @@ class LoadInventoryData extends AbstractFixture implements DependentFixtureInter
 
             $this->handleInventoryUpdate($product, $inventoryItem, $data['inventory_qty'], 0, null);
             $this->balanceInventory($product, $data['inventory_qty']);
+            $this->setReference(
+                sprintf('marello_inventoryitem_%s',
+                    $inventoryItem->getProduct()->getSku()
+                ),
+                $inventoryItem
+            );
+            foreach ($inventoryItem->getInventoryLevels() as $k => $level) {
+                $this->setReference(
+                    sprintf('marello_inventorylvl_%s_%s',
+                        $k,
+                        $inventoryItem->getProduct()->getSku()
+                    ),
+                    $level
+                );
+            }
         }
     }
 
