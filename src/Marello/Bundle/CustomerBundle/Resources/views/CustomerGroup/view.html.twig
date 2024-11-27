@@ -1,0 +1,62 @@
+{% extends '@OroUI/actions/view.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%name%": entity.name }}) %}
+
+{% block navButtons %}
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('marello_customer_group_update', { id: entity.id }),
+            'entity_label': 'marello.customer.customergroup.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('marello_customer_group_index'),
+        'indexLabel': 'marello.customer.customergroup.entity_plural_label'|trans,
+        'entityTitle': entity.name
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'marello-customer-group-view' %}
+    {% set generalInformation %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ UI.renderProperty('marello.customer.customergroup.name.label'|trans, entity.name) }}
+                </div>
+            </div>
+        </div>
+    {% endset %}
+
+    {% set customer %}
+        {{ dataGrid.renderGrid('marello-customer-group-customer', {'customerGroupId': entity.id}) }}
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General'|trans,
+            'subblocks': [
+            {'data' : [generalInformation]}
+        ]
+        },
+        {
+            'title': 'marello.customer.entity_plural_label'|trans,
+            'class': 'active',
+            'subblocks': [
+            { 'data': [customer] }
+        ]
+        }
+    ] %}
+
+    {% set id = 'marelloCustomerGroupView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

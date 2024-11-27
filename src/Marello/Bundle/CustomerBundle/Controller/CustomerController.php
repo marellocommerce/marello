@@ -2,17 +2,20 @@
 
 namespace Marello\Bundle\CustomerBundle\Controller;
 
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\CustomerBundle\Form\Type\CustomerType;
-use Oro\Bundle\ActivityListBundle\Entity\Manager\ActivityListManager;
-use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\ActivityListBundle\Entity\Manager\ActivityListManager;
+
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\CustomerBundle\Form\Type\CustomerType;
 
 class CustomerController extends AbstractController
 {

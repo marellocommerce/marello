@@ -6,4 +6,7 @@ marello_company:
     resource: "@MarelloCustomerBundle/Controller/CompanyController.php"
     type:     annotation
     prefix:   /marello/company
-
+marello_customer_group:
+    resource: "@MarelloCustomerBundle/Controller/CustomerGroupController.php"
+    type:     annotation
+    prefix:   /marello/customergroup

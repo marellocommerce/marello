@@ -6,6 +6,7 @@ data:
             inventory: 100
             balancedInventory: 100
             reservedInventory: null
+            updatedAt: '@marello_balancedinvlev_p1_channelgroup1->updatedAt->format("Y-m-d\TH:i:s\Z")'
             saleschannels:
                 - chan_eur
         relationships:
@@ -20,7 +21,7 @@ data:
             organization:
                 data:
                     type: organizations
-                    id: '1'
+                    id: '<toString(@organization->id)>'
     -
         type: marellobalancedinventorylevels
         id: '<toString(@marello_balancedinvlev_p2_channelgroup1->id)>'
@@ -28,6 +29,7 @@ data:
             inventory: 50
             balancedInventory: 50
             reservedInventory: null
+            updatedAt: '@marello_balancedinvlev_p2_channelgroup1->updatedAt->format("Y-m-d\TH:i:s\Z")'
             saleschannels:
                 - chan_eur
         relationships:
@@ -42,7 +44,7 @@ data:
             organization:
                 data:
                     type: organizations
-                    id: '1'
+                    id: '<toString(@organization->id)>'
     -
         type: marellobalancedinventorylevels
         id: '<toString(@marello_balancedinvlev_p3_channelgroup1->id)>'
@@ -50,6 +52,7 @@ data:
             inventory: 50
             balancedInventory: 50
             reservedInventory: null
+            updatedAt: '@marello_balancedinvlev_p3_channelgroup1->updatedAt->format("Y-m-d\TH:i:s\Z")'
             saleschannels:
                 - chan_eur
         relationships:
@@ -64,7 +67,7 @@ data:
             organization:
                 data:
                     type: organizations
-                    id: '1'
+                    id: '<toString(@organization->id)>'
     -
         type: marellobalancedinventorylevels
         id: '<toString(@marello_balancedinvlev_p4_channelgroup1->id)>'
@@ -72,6 +75,7 @@ data:
             inventory: 33
             balancedInventory: 33
             reservedInventory: null
+            updatedAt: '@marello_balancedinvlev_p4_channelgroup1->updatedAt->format("Y-m-d\TH:i:s\Z")'
             saleschannels:
                 - chan_eur
         relationships:
@@ -86,7 +90,30 @@ data:
             organization:
                 data:
                     type: organizations
-                    id: '1'
+                    id: '<toString(@organization->id)>'
+    -
+        type: marellobalancedinventorylevels
+        id: '<toString(@marello_balancedinvlev_p5_channelgroup1->id)>'
+        attributes:
+            inventory: 16
+            balancedInventory: 16
+            reservedInventory: null
+            updatedAt: '@marello_balancedinvlev_p5_channelgroup1->updatedAt->format("Y-m-d\TH:i:s\Z")'
+            saleschannels:
+                - chan_eur
+        relationships:
+            product:
+                data:
+                    type: marelloproducts
+                    id: p5
+            salesChannelGroup:
+                data:
+                    type: marellosaleschannelgroups
+                    id: '<toString(@channelgroup1->id)>'
+            organization:
+                data:
+                    type: organizations
+                    id: '<toString(@organization->id)>'
     -
         type: marellobalancedinventorylevels
         id: '<toString(@marello_balancedinvlev_p6_channelgroup1->id)>'
@@ -94,6 +121,7 @@ data:
             inventory: 0
             balancedInventory: 0
             reservedInventory: null
+            updatedAt: '@marello_balancedinvlev_p6_channelgroup1->updatedAt->format("Y-m-d\TH:i:s\Z")'
             saleschannels:
                 - chan_eur
         relationships:
@@ -108,4 +136,4 @@ data:
             organization:
                 data:
                     type: organizations
-                    id: '1'
+                    id: '<toString(@organization->id)>'
