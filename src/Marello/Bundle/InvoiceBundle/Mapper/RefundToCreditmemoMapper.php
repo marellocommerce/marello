@@ -37,6 +37,7 @@ class RefundToCreditmemoMapper extends AbstractInvoiceMapper
         $data['subtotal'] = $subtotal;
         $data['totalTax'] = $totalTax;
         $data['grandTotal'] = $subtotal + $totalTax + $data['shippingAmountInclTax'];
+        $data['total_due'] = $sourceEntity->getRefundAmount();
         if ($data['invoicedAt'] === null) {
             $data['invoicedAt'] = new \DateTime('now', new \DateTimeZone('UTC'));
         }

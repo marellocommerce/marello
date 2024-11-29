@@ -33,7 +33,6 @@ marello:
         shipping_amount_incl_tax.label: Shipping Amount Including Tax
         shipping_amount_excl_tax.label: Shipping Amount Excluding Tax
         organization.label:         Organization
-        type.label:                 Invoice Type
         invoice_type.label:         Invoice Type
         pdf:
             download.label:         Download PDF
@@ -77,7 +76,6 @@ marello:
             shipping_amount_incl_tax.label: Shipping Amount Including Tax
             shipping_amount_excl_tax.label: Shipping Amount Excluding Tax
             organization.label:         Organization
-            type.label:                 Invoice Type
             invoice_type.label:         Invoice Type
             download_pdf.label:         Download invoice PDF
 
@@ -94,6 +92,7 @@ marello:
             invoice_totals:         Invoice Totals
             creditmemo_totals:      Credit Memo Totals
             payments:               Payments
+            original_order:         Original Order
 
         invoiceitem:
             id.label:                 Id
@@ -135,7 +134,7 @@ marello:
             id.label:                   Id
             entity_label:               Abstract Invoice
             entity_plural_label:        Abstract Invoices
-            entity_grid_all_view_label: All %entity_plural_label%
+            entity_grid_all_view_label: All Invoices
             invoice_number.label:       Invoice Number
             billing_address:
                 label:                  Billing Address
@@ -164,7 +163,6 @@ marello:
             shipping_amount_incl_tax.label: Shipping Amount Including Tax
             shipping_amount_excl_tax.label: Shipping Amount Excluding Tax
             organization.label:         Organization
-            type.label:                 Invoice Type
             invoice_type.label:         Invoice Type
 
         abstractinvoiceitem:

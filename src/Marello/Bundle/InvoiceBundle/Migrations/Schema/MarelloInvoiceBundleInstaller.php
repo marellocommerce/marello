@@ -58,7 +58,6 @@ class MarelloInvoiceBundleInstaller implements Installation
         $table->addColumn('order_id', 'integer', ['notnull' => true]);
         $table->addColumn('payment_term_id', 'integer', ['notnull' => false]);
         $table->addColumn('currency', 'string', ['notnull' => false, 'length' => 10]);
-        $table->addColumn('type', 'string', ['notnull' => true]);
         $table->addColumn('invoice_type', 'string', ['notnull' => false]);
         $table->addColumn('status', 'string', ['notnull' => false, 'length' => 10]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);

@@ -189,6 +189,7 @@ class OrderExtension extends AbstractExtension
 
         return $totalPaid;
     }
+
     /**
      * @param Order $order
      * @return float|int

@@ -8,9 +8,9 @@ define(function(require) {
     const BaseView = require('oroui/js/app/views/base/view');
 
     /**
-     * @export marelloorder/js/app/views/order-totals-view
+     * @export marellopayment/js/app/views/total-paid-view
      * @extends oroui.app.views.base.View
-     * @class marelloorder.app.views.OrderTotalsView
+     * @class marellopayment.app.views.TotalPaidCurrenciesView
      */
     const TotalPaidCurrenciesView = BaseView.extend({
         /**
@@ -48,7 +48,7 @@ define(function(require) {
          * Show loading view
          */
         loadingStart: function(e) {
-            if (e.updateFields !== undefined && _.contains(e.updateFields, "currencies") !== true) {
+            if (e.updateFields !== undefined && _.contains(e.updateFields, 'currencies') !== true) {
                 return;
             }
             this.loadingMaskView.show();
@@ -70,8 +70,8 @@ define(function(require) {
             var selector = $("select[name='marello_payment_create[totalPaid][currency]']");
             selector.empty();
             $.each(currencies, function(text, value) {
-                var option = $("<option></option>")
-                    .attr("value", value)
+                var option = $('<option></option>')
+                    .attr('value', value)
                     .text(text);
                 selector.append(option);
             });

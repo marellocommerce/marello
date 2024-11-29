@@ -139,7 +139,7 @@ class Payment implements
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getTotalPaid()
     {

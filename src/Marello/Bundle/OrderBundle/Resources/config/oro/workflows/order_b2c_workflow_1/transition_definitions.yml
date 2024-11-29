@@ -92,24 +92,6 @@ workflows:
                           parameters_mapping:
                               order: $order
                               status: 'invoiced'
-            payment_received_definition:
-                conditions:
-                    '@and':
-                        - '@sales_channel_has_valid_integration':
-                              salesChannel: $order.salesChannel
-                actions:
-                    - '@extendable':
-                          events: [extendable_action.order_paid]
-                    - '@run_action_group':
-                          action_group: send_order_invoice_email
-                          parameters_mapping:
-                              order: $order
-                              current_transition: payment_received
-                    - '@run_action_group':
-                          action_group: marello_order_status_change
-                          parameters_mapping:
-                              order: $order
-                              status: 'paid'
             prepare_shipping_definition:
                 conditions:
                     '@and':
@@ -138,6 +120,12 @@ workflows:
                               order: $order
                               status: 'pick_and_pack'
             ship_definition:
+                preactions:
+                    - '@call_service_method':
+                          service: marello_invoice.provider.invoice_paid_amount
+                          method: getPaidAmountForEntity
+                          method_parameters: [$order]
+                          attribute: $total_paid_amount
                 conditions:
                     '@and':
                         - '@not_empty': $order.shippingAddress.country
@@ -146,6 +134,7 @@ workflows:
                         - '@not_empty': $order.shippingAddress.street
                         - '@sales_channel_has_valid_integration':
                               salesChannel: $order.salesChannel
+                        - '@equal': [$total_paid_amount, $order.grandTotal]
                 actions:
                     - '@extendable':
                           events: [extendable_action.order_ship]

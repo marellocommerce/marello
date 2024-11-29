@@ -8,9 +8,9 @@ define(function(require) {
     const BaseView = require('oroui/js/app/views/base/view');
 
     /**
-     * @export marelloorder/js/app/views/order-totals-view
+     * @export marellopayment/js/app/views/payment-method-view
      * @extends oroui.app.views.base.View
-     * @class marelloorder.app.views.OrderTotalsView
+     * @class marellopayment.app.views.PaymentMethodView
      */
     const PaymentMethodView = BaseView.extend({
         /**
@@ -48,7 +48,7 @@ define(function(require) {
          * Show loading view
          */
         loadingStart: function(e) {
-            if (e.updateFields !== undefined && _.contains(e.updateFields, "paymentMethods") !== true) {
+            if (e.updateFields !== undefined && _.contains(e.updateFields, 'paymentMethods') !== true) {
                 return;
             }
             this.loadingMaskView.show();
@@ -67,7 +67,7 @@ define(function(require) {
          * @param {String} paymentMethodHtml
          */
         render: function(paymentMethodHtml) {
-            $("div[data-ftid='marello_payment_create_paymentMethod']").replaceWith(paymentMethodHtml);
+            this.$el.find(':input[data-ftid]').replaceWith(paymentMethodHtml);
         },
 
         /**

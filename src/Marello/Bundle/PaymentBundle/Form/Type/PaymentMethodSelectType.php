@@ -31,7 +31,6 @@ class PaymentMethodSelectType extends AbstractType
     {
         $resolver
             ->setDefaults([
-                'expanded' => true,
                 'choices' => array_flip($this->getChoices()),
             ]);
     }
