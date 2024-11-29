@@ -66,9 +66,13 @@
                 {{ UI.renderProperty('marello.invoice.total_tax.label'|trans, entity.totalTax|oro_format_currency({'currency':entity.currency})) }}
                 {{ UI.renderProperty('marello.invoice.grand_total.label'|trans, entity.grandTotal|oro_format_currency({'currency':entity.currency})) }}
                 {{ UI.renderProperty('marello.invoice.total_paid.label'|trans, entity.totalPaid|oro_format_currency({'currency':entity.currency})) }}
-                {{ UI.renderProperty('marello.invoice.total_due.label'|trans, entity.totalDue|oro_format_currency({'currency':entity.currency})) }}
-                <br>
-                <br>
+                {% set totalDueLabel = entity.totalDue|oro_format_currency({'currency':entity.currency}) %}
+                {% if entity.invoiceType is same as constant('Marello\\Bundle\\InvoiceBundle\\Entity\\Creditmemo::CREDITMEMO_TYPE') %}
+                    {% if entity.totalDue != 0 %}
+                        {% set totalDueLabel = '-' ~ totalDueLabel %}
+                    {% endif %}
+                {% endif %}
+                {{ UI.renderProperty('marello.invoice.total_due.label'|trans, totalDueLabel) }}
             </div>
         </div>
     {% endset %}
@@ -105,6 +109,35 @@
         </div>
     {% endset %}
     {% set generalSubblocks = generalSubblocks|merge([{'data' : [customerInformation] }]) %}
+
+    {% set orderInformation %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ UI.renderHtmlProperty(
+                        'marello.order.order_number.label'|trans,
+                        UI.entityViewLink(entity.order, entity.order.orderNumber, 'marello_order_order_view')
+                    )}}
+                    {{ UI.renderProperty('marello.order.currency.label'|trans, entity.order.currency) }}
+                    {{ UI.renderHtmlProperty(
+                        'marello.order.sales_channel.label'|trans,
+                        UI.entityViewLink(entity.order.salesChannel, entity.order.salesChannel.name, 'marello_sales_saleschannel_view')
+                    )}}
+                    {{ UI.renderProperty('marello.order.order_reference.label'|trans, entity.order.orderReference) }}
+                    {{ UI.renderProperty('marello.order.payment_method.label'|trans, entity.order.paymentMethod) }}
+                    {{ UI.renderProperty('marello.order.purchase_date.label'|trans, entity.order.purchaseDate|date) }}
+                </div>
+                <div class="responsive-block">
+                    {{ UI.renderProperty('marello.order.subtotal.label'|trans, entity.order.subtotal|oro_format_currency({'currency':entity.order.currency})) }}
+                    {{ UI.renderProperty('marello.order.total_tax.label'|trans, entity.order.totalTax|oro_format_currency({'currency':entity.order.currency})) }}
+                    {{ UI.renderProperty('marello.order.discount_amount.label'|trans, entity.order.discountAmount|oro_format_currency({'currency':entity.order.currency})) }}
+                    {{ UI.renderProperty('marello.order.discount_percent.label'|trans, entity.order.discountPercent) }}
+                    {{ UI.renderProperty('marello.order.shipping_amount_incl_tax.label'|trans, entity.order.shippingAmountInclTax|oro_format_currency({'currency':entity.order.currency})) }}
+                    {{ UI.renderProperty('marello.order.grand_total.label'|trans, entity.order.grandTotal|oro_format_currency({'currency':entity.order.currency})) }}
+                </div>
+            </div>
+        </div>
+    {% endset %}
 
     {% set billingSubblocks = [] %}
     {% set billingAddressBlock %}
@@ -160,6 +193,12 @@
             'title': 'marello.invoice.datablock.general'|trans,
             'class': 'active',
             'subblocks': generalSubblocks
+        },
+        {
+            'title': 'marello.invoice.datablock.original_order'|trans,
+            'class': 'active',
+            'subblocks': [
+                { 'data' : [orderInformation] }]
         },
         {
             'title': 'marello.invoice.datablock.billing_address'|trans,

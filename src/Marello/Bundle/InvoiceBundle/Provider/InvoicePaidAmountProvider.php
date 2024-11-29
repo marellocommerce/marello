@@ -73,6 +73,10 @@ class InvoicePaidAmountProvider
             }
         }
 
+        if ($entity instanceof AbstractInvoice) {
+            $isInvoiceAvailable = true;
+        }
+
         return $isInvoiceAvailable;
     }
 

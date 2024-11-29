@@ -250,7 +250,7 @@ class Refund implements
     }
 
     /**
-     * @param int $refundAmount
+     * @param float $refundAmount
      *
      * @return Refund
      */
