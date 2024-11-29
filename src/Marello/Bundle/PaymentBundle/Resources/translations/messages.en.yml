@@ -92,6 +92,7 @@ marello:
                 success: 'Payment was successfuly added'
                 error:
                     paid_total_exceed: "Total Paid amount of all Payments can't exceed Invoice grandTotal amount"
+                    entity_not_supported: "Entity %entity_type% is not supported to add payments"
 
         paymentmethodconfig:
             entity_label: Payment Method Config

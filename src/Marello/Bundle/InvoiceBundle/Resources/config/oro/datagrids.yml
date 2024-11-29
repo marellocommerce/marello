@@ -19,7 +19,7 @@ datagrids:
                 label:            marello.invoice.invoice_number.label
                 frontend_type:    string
             invoiceType:
-                label:            marello.invoice.type.label
+                label:            marello.invoice.invoice_type.label
                 frontend_type:    string
             orderNumber:
                 label:            marello.order.order_number.label

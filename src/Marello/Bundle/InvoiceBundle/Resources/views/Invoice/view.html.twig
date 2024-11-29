@@ -39,7 +39,7 @@
                         {{ UI.renderProperty('marello.invoice.invoice_number.label'|trans, entity.invoiceNumber) }}
                         {{ UI.renderProperty('marello.invoice.invoiced_at.label'|trans, entity.invoicedAt|oro_format_datetime) }}
                         {{ UI.renderProperty('marello.invoice.invoice_due_date.label'|trans, entity.invoiceDueDate|oro_format_datetime) }}
-                        {{ UI.renderProperty('marello.invoice.type.label'|trans, entity.invoiceType|capitalize) }}
+                        {{ UI.renderProperty('marello.invoice.invoice_type.label'|trans, entity.invoiceType|capitalize) }}
                         {% if entity.order.salesChannel %}
                             {{ UI.renderHtmlProperty(
                                 'marello.invoice.sales_channel.label'|trans,
