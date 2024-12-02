@@ -8,9 +8,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\EmailBundle\Model\From;
+use Oro\Bundle\EmailBundle\Sender\EmailTemplateSender;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EmailBundle\Model\EmailTemplateCriteria;
-use Oro\Bundle\EmailBundle\Manager\EmailTemplateManager;
 use Oro\Bundle\EmailBundle\Exception\EmailTemplateException;
 use Oro\Bundle\NotificationBundle\Model\NotificationSettings;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
@@ -33,12 +33,12 @@ class PurchaseOrderAdviceCommand extends Command implements CronCommandScheduleD
 
     /**
      * @param ContainerInterface $container
-     * @param EmailTemplateManager $emailTemplateManager
+     * @param EmailTemplateSender $emailTemplateSender
      * @param NotificationSettings $notificationSettings
      */
     public function __construct(
         protected ContainerInterface $container,
-        protected EmailTemplateManager $emailTemplateManager,
+        protected EmailTemplateSender $emailTemplateSender,
         protected NotificationSettings $notificationSettings
     ) {
         parent::__construct();
@@ -125,7 +125,7 @@ class PurchaseOrderAdviceCommand extends Command implements CronCommandScheduleD
         $recipient->setEmail($configManager->get('marello_purchaseorder.purchaseorder_notification_address'));
         $recipient->setOrganization($this->getOrganization());
         $this->sendNotification(
-            'marello_purchase_order_advise',
+            'marello_purchase_order_advice',
             $recipient,
             $advisedItems
         );
@@ -143,8 +143,8 @@ class PurchaseOrderAdviceCommand extends Command implements CronCommandScheduleD
     private function sendNotification($templateName, $recipient, $items)
     {
         try {
-            $this->emailTemplateManager
-                ->sendTemplateEmail(
+            $this->emailTemplateSender
+                ->sendEmailTemplate(
                     $this->notificationSettings->getSender(),
                     [$recipient],
                     new EmailTemplateCriteria($templateName),

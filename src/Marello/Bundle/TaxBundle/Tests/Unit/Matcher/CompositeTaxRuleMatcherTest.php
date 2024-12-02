@@ -13,6 +13,7 @@ use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\TaxBundle\Entity\TaxRule;
 use Marello\Bundle\TaxBundle\Matcher\CompositeTaxRuleMatcher;
 use Marello\Bundle\TaxBundle\Matcher\TaxRuleMatcherInterface;
+use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
 
 class CompositeTaxRuleMatcherTest extends TestCase
 {
@@ -23,9 +24,12 @@ class CompositeTaxRuleMatcherTest extends TestCase
      */
     protected $compositeTaxRuleMatcher;
 
+    protected $companyReverseTaxProvider;
+
     protected function setUp(): void
     {
-        $this->compositeTaxRuleMatcher = new CompositeTaxRuleMatcher();
+        $this->companyReverseTaxProvider = $this->createMock(CompanyReverseTaxProvider::class);
+        $this->compositeTaxRuleMatcher = new CompositeTaxRuleMatcher($this->companyReverseTaxProvider);
     }
 
     /**
@@ -63,11 +67,14 @@ class CompositeTaxRuleMatcherTest extends TestCase
         $this->compositeTaxRuleMatcher->addMatcher($this->createMatcherMock($zipCodeMatcherTaxRules));
         $this->compositeTaxRuleMatcher->addMatcher($this->createMatcherMock($regionMatcherTaxRules));
         $this->compositeTaxRuleMatcher->addMatcher($this->createMatcherMock($countryMatcherTaxRules));
-
-        $this->assertEquals($expected, $this->compositeTaxRuleMatcher->match($address, $taxCodes));
+        $this->companyReverseTaxProvider
+            ->expects($this->any())
+            ->method('orderIsTaxable')
+            ->willReturn(true);
+        $this->assertEquals($expected, $this->compositeTaxRuleMatcher->match($taxCodes, null, $address));
 
         //cache
-        $this->assertEquals($expected, $this->compositeTaxRuleMatcher->match($address, $taxCodes));
+        $this->assertEquals($expected, $this->compositeTaxRuleMatcher->match($taxCodes, null, $address));
     }
 
     /**

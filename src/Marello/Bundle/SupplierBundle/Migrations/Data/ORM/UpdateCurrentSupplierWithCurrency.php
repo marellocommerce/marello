@@ -3,8 +3,10 @@
 namespace Marello\Bundle\SupplierBundle\Migrations\Data\ORM;
 
 use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\SupplierBundle\Entity\Supplier;
+
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
+use Marello\Bundle\SupplierBundle\Entity\Supplier;
 
 class UpdateCurrentSupplierWithCurrency
 {
@@ -32,7 +34,7 @@ class UpdateCurrentSupplierWithCurrency
         $currency = $this->container->get('oro_locale.settings')->getCurrency();
 
         $suppliers = $this->manager
-            ->getRepository('MarelloSupplierBundle:Supplier')
+            ->getRepository(Supplier::class)
             ->findBy(['currency' => null]);
         /** @var Supplier $supplier */
         foreach ($suppliers as $supplier) {

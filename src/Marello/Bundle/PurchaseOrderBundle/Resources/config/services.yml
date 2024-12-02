@@ -57,11 +57,11 @@ services:
             - '@translator'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder }
-
+# TODO:: update command service
     Marello\Bundle\PurchaseOrderBundle\Cron\PurchaseOrderAdviceCommand:
         arguments:
             - '@service_container'
-            - '@oro_email.manager.template_email'
+            - '@oro_email.sender.email_template_sender'
             - '@oro_notification.model.notification_settings'
         tags:
             - { name: console.command }

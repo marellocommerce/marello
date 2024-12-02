@@ -63,41 +63,8 @@ class OrderToPackingSlipMapper extends AbstractPackingSlipMapper
         $packingSlipItem = new PackingSlipItem();
         $packingSlipItemData = $this->getData($allocationItem, PackingSlipItem::class);
         $product = $allocationItem->getProduct();
-        $inventoryItem = $product->getInventoryItem();
-        if ($inventoryItem) {
-            if ($inventoryLevel = $inventoryItem->getInventoryLevel($warehouse)) {
-                $inventoryBatches = $inventoryLevel->getInventoryBatches()->toArray();
-                if (count($inventoryBatches) > 0) {
-                    usort($inventoryBatches, function (InventoryBatch $a, InventoryBatch $b) {
-                        if ($a->getDeliveryDate() < $b->getDeliveryDate()) {
-                            return -1;
-                        } elseif ($a->getDeliveryDate() > $b->getDeliveryDate()) {
-                            return 1;
-                        } else {
-                            return 0;
-                        }
-                    });
-                    $data = [];
-                    $quantity = $allocationItem->getQuantity();
-                    /** @var InventoryBatch[] $inventoryBatches */
-                    $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                    foreach ($inventoryBatches as $inventoryBatch) {
-                        // we cannot use expired batches
-                        if ($inventoryBatch->getSellByDate() && $inventoryBatch->getSellByDate() <= $currentDateTime) {
-                            continue;
-                        }
-                        if ($inventoryBatch->getQuantity() >= $quantity) {
-                            $data[$inventoryBatch->getBatchNumber()] = $quantity;
-                            break;
-                        } elseif (($batchQty = $inventoryBatch->getQuantity()) > 0) {
-                            $data[$inventoryBatch->getBatchNumber()] = $batchQty;
-                            $quantity = $quantity - $batchQty;
-                        }
-                    }
-                    $packingSlipItemData['inventoryBatches'] = $data;
-                }
-            }
-        }
+
+        $packingSlipItemData['inventoryBatches'] = $allocationItem->getInventoryBatches();
         $packingSlipItemData['weight'] = ($product->getWeight() * $allocationItem->getQuantity());
         $packingSlipItemData['orderItem'] = $allocationItem->getOrderItem();
         $packingSlipItemData['productUnit'] = $allocationItem->getOrderItem()->getProductUnit();

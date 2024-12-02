@@ -6,12 +6,10 @@ payment_rule.1:
     currency: 'EUR'
     methodConfigs:
          -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_order'
-                        price: 10
+            enabled: true
+            options:
+            type: 'per_order'
+            price: 10
     destinations:
         -
             postalCodes:
@@ -27,12 +25,10 @@ payment_rule.2:
     currency: 'EUR'
     methodConfigs:
          -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_item'
-                        price: 10
+            enabled: true
+            options:
+            type: 'per_item'
+            price: 10
     destinations:
         -
             country: 'US'
@@ -46,13 +42,11 @@ payment_rule.3:
         expression: 'true'
     currency: 'EUR'
     methodConfigs:
-         -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_item'
-                        price: 10
+        -
+            enabled: true
+            options:
+                type: 'per_item'
+                price: 10
     destinations:
         -
             country: 'US'
@@ -66,13 +60,11 @@ payment_rule.4:
         expression: 'true'
     currency: 'EUR'
     methodConfigs:
-         -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_item'
-                        price: 10
+        -
+            enabled: true
+            options:
+                type: 'per_item'
+                price: 10
     destinations:
         -
             postalCodes:
@@ -89,13 +81,11 @@ payment_rule.5:
         expression: 'true'
     currency: 'EUR'
     methodConfigs:
-         -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_item'
-                        price: 10
+        -
+            enabled: true
+            options:
+                type: 'per_item'
+                price: 10
 payment_rule.6:
     rule:
         enabled: true
@@ -103,13 +93,11 @@ payment_rule.6:
         expression: 'true'
     currency: 'EUR'
     methodConfigs:
-         -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_item'
-                        price: 10
+        -
+            enabled: true
+            options:
+                type: 'per_item'
+                price: 10
     destinations:
         -
             country: 'FR'
@@ -120,13 +108,11 @@ payment_rule.7:
         expression: 'true'
     currency: 'EUR'
     methodConfigs:
-         -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_item'
-                        price: 10
+        -
+            enabled: true
+            options:
+                type: 'per_item'
+                price: 10
     destinations:
         -
             postalCodes:
@@ -151,13 +137,11 @@ payment_rule.9:
         expression: 'true'
     currency: 'USD'
     methodConfigs:
-         -
-            typeConfigs:
-                -
-                    enabled: true
-                    options:
-                        type: 'per_order'
-                        price: 10
+        -
+            enabled: true
+            options:
+                type: 'per_order'
+                price: 10
 payment_rule.10:
     rule:
         enabled: true
@@ -186,9 +170,7 @@ payment_rule_without_type_configs:
         sortOrder: 1
         expression: 'true'
     currency: 'USD'
-    methodConfigs:
-         -
-            typeConfigs: []
+    methodConfigs: []
 payment_rule_with_disabled_type_configs:
     rule:
         enabled: true
@@ -196,10 +178,8 @@ payment_rule_with_disabled_type_configs:
         expression: 'true'
     currency: 'USD'
     methodConfigs:
-         -
-            typeConfigs:
-                -
-                    enabled: false
-                    options:
-                        type: 'per_order'
-                        price: 10
+        -
+            enabled: false
+            options:
+                type: 'per_order'
+                price: 10

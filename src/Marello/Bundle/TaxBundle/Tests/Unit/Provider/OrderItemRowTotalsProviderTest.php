@@ -77,7 +77,7 @@ class OrderItemRowTotalsProviderTest extends TestCase
         $this->taxRuleMatcher
             ->expects(static::any())
             ->method('match')
-            ->with($order->getShippingAddress(), ['TEST_CODE'])
+            ->with(['TEST_CODE'], $order, $order->getShippingAddress())
             ->willReturn($matchedRule);
         
         $this->taxCalculator
@@ -105,10 +105,10 @@ class OrderItemRowTotalsProviderTest extends TestCase
         $resultBefore = [
             OrderItemRowTotalsProvider::ITEMS_FIELD => [
                 'price' => [
-                    'product-id-1' => ['value' => 50]
+                    'product-id-0-1' => ['value' => 50]
                 ],
                 'tax_code' => [
-                    'product-id-1' => ['code' => 'TEST_CODE']
+                    'product-id-0-1' => ['code' => 'TEST_CODE']
                 ]
             ]
         ];
@@ -120,7 +120,7 @@ class OrderItemRowTotalsProviderTest extends TestCase
         ];
 
         $expectedResults = $resultBefore;
-        $expectedResults[OrderItemRowTotalsProvider::ITEMS_FIELD]['row_totals']['product-id-1'][0] = $calculationResult;
+        $expectedResults[OrderItemRowTotalsProvider::ITEMS_FIELD]['row_totals']['product-id-0-1'][0] = $calculationResult;
 
         return [
             [

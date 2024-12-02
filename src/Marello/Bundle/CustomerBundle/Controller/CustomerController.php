@@ -2,41 +2,41 @@
 
 namespace Marello\Bundle\CustomerBundle\Controller;
 
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\CustomerBundle\Form\Type\CustomerType;
-use Oro\Bundle\ActivityListBundle\Entity\Manager\ActivityListManager;
-use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\ActivityListBundle\Entity\Manager\ActivityListManager;
+
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\CustomerBundle\Form\Type\CustomerType;
 
 class CustomerController extends AbstractController
 {
     /**
-     * @Route(path="/", name="marello_customer_index")
-     * @Template
-     * @AclAncestor("marello_customer_view")
-     *
      * @return array
      */
+    #[Route(path: '/', name: 'marello_customer_index')]
+    #[Template]
+    #[AclAncestor('marello_customer_view')]
     public function indexAction()
     {
         return ['entity_class' => Customer::class];
     }
 
     /**
-     * @Route(path="/view/{id}", requirements={"id"="\d+"}, name="marello_customer_view")
-     * @Template
-     * @AclAncestor("marello_customer_view")
-     *
      * @param Customer $customer
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', name: 'marello_customer_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[AclAncestor('marello_customer_view')]
     public function viewAction(Customer $customer)
     {
         $entityClass = $this->container->get(EntityRoutingHelper::class)->resolveEntityClass('marellocustomers');
@@ -52,35 +52,23 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_customer_create"
-     * )
-     * @Template("@MarelloCustomer/Customer/update.html.twig")
-     * @AclAncestor("marello_customer_create")
-     *
      * @return array
      */
+    #[Route(path: '/create', name: 'marello_customer_create', methods: ['GET', 'POST'])]
+    #[Template('@MarelloCustomer/Customer/update.html.twig')]
+    #[AclAncestor('marello_customer_create')]
     public function createAction(Request $request)
     {
         return $this->update($request);
     }
 
     /**
-     * @Route(
-     *     path="/update/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_customer_update"
-     * )
-     * @Template
-     * @AclAncestor("marello_customer_update")
-     *
      * @param Customer $customer
-     *
      * @return array
      */
+    #[Route(path: '/update/{id}', name: 'marello_customer_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Template]
+    #[AclAncestor('marello_customer_update')]
     public function updateAction(Request $request, Customer $customer)
     {
         return $this->update($request, $customer);
@@ -101,7 +89,7 @@ class CustomerController extends AbstractController
         );
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

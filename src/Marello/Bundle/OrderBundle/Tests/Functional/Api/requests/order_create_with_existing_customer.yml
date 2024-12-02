@@ -1,48 +1,48 @@
 data:
-    type: marelloorders
-    attributes:
-        orderReference: '2345678'
-        invoiceReference: null
-        subtotal: 101
-        totalTax: 0
-        grandTotal: 101
-        currency: 'USD'
-        paymentMethod: 'payment_term_1'
-        shippingAmountInclTax: null
-        shippingAmountExclTax: null
-        shippingMethod: 'manual_shipping_1'
-        shippingMethodType: 'primary'
-        estimatedShippingCostAmount: null
-        overriddenShippingCostAmount: null
-        discountAmount: null
-        discountPercent: null
-        couponCode: null
-        invoicedAt: '2017-04-12T14:11:39Z'
-    relationships:
-        billingAddress:
-            data:
-                type: marelloaddresses
-                id: '8da4d8e7-6b25-4c5c-8075-b510f7bbb84f'
-        shippingAddress:
-            data:
-                type: marelloaddresses
-                id: '8da4d8e7-6b25-4c5c-8075-fwsjx9748zkeqw93'
-        items:
-            data:
-                -
-                    type: marelloorderitems
-                    id: '8da4d8e7-6b25-4c5c-8075-nh3fpu9sca3htc3v'
-                -
-                    type: marelloorderitems
-                    id: '8da4d8e7-6b25-4c5c-8075-e8catjzt95vx7ngp'
-        customer:
-            data:
-                type: marellocustomers
-                id: '<toString(@marello_order_0->customer->email)>'
-        salesChannel:
-            data:
-                type: marellosaleschannels
-                id: '<toString(@marello_order_0->salesChannel->code)>'
+      type: marelloorders
+      attributes:
+          orderReference: '2345678'
+          invoiceReference: null
+          subtotal: 101
+          totalTax: 0
+          grandTotal: 101
+          currency: 'USD'
+          paymentMethod: 'payment_term_1'
+          shippingAmountInclTax: null
+          shippingAmountExclTax: null
+          shippingMethod: 'manual_shipping_1'
+          shippingMethodType: 'primary'
+          estimatedShippingCostAmount: null
+          overriddenShippingCostAmount: null
+          discountAmount: null
+          discountPercent: null
+          couponCode: null
+          invoicedAt: '2017-04-12T14:11:39Z'
+      relationships:
+          billingAddress:
+              data:
+                  type: marelloaddresses
+                  id: '8da4d8e7-6b25-4c5c-8075-b510f7bbb84f'
+          shippingAddress:
+              data:
+                  type: marelloaddresses
+                  id: '8da4d8e7-6b25-4c5c-8075-fwsjx9748zkeqw93'
+          items:
+              data:
+                  -
+                      type: marelloorderitems
+                      id: '8da4d8e7-6b25-4c5c-8075-nh3fpu9sca3htc3v'
+                  -
+                      type: marelloorderitems
+                      id: '8da4d8e7-6b25-4c5c-8075-e8catjzt95vx7ngp'
+          customer:
+              data:
+                   type: marellocustomers
+                   id: '<toString(@marello_order_0->customer->email)>'
+          salesChannel:
+              data:
+                  type: marellosaleschannels
+                  id: '<toString(@marello_order_0->salesChannel->code)>'
 
 included:
     -

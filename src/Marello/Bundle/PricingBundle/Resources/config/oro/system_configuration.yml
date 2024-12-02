@@ -16,6 +16,13 @@ system_configuration:
                 label: marello.pricing.system_configuration.fields.vat.label
                 required: false
 
+        marello_tax.origin_country:
+            data_type: string
+            type: Oro\Bundle\AddressBundle\Form\Type\CountryType
+            options:
+                label: marello.tax.system_configuration.fields.origin_country.label
+                required: false
+
     tree:
         system_configuration:
             marello:
@@ -27,6 +34,7 @@ system_configuration:
                                     pricing_vat:
                                         children:
                                             - marello_pricing.is_vat_included
+                                            - marello_tax.origin_country
     api_tree:
         pricing-general:
             marello_pricing.is_vat_included: ~

@@ -2,19 +2,23 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Unit\Provider;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\OrderBundle\Migrations\Data\ORM\LoadOrderItemStatusData;
-use Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider;
-use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
-use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
-use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
+
+use PHPUnit\Framework\TestCase;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use PHPUnit\Framework\TestCase;
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Migrations\Data\ORM\LoadOrderItemStatusData;
+use Marello\Bundle\OrderBundle\Provider\Dashboard\OrderDashboardOrderItemsByStatusProvider;
 
 class OrderDashboardOrderItemsByStatusProviderTest extends TestCase
 {
@@ -75,7 +79,7 @@ class OrderDashboardOrderItemsByStatusProviderTest extends TestCase
     {
         $opportunityQB = new QueryBuilder($this->getMockForAbstractClass('Doctrine\ORM\EntityManagerInterface'));
         $opportunityQB
-            ->from('MarelloOrderBundle:Order', 'o', null);
+            ->from(Order::class, 'o', null);
 
         $statusesQB = $this->getMockQueryBuilder();
         $statusesQB->expects($this->once())
@@ -98,7 +102,7 @@ class OrderDashboardOrderItemsByStatusProviderTest extends TestCase
         $this->registry->expects($this->exactly(2))
             ->method('getRepository')
             ->withConsecutive(
-                ['MarelloOrderBundle:Order'],
+                [Order::class],
                 [ExtendHelper::buildEnumValueClassName(LoadOrderItemStatusData::ITEM_STATUS_ENUM_CLASS)]
             )
             ->willReturn($repository);
@@ -134,7 +138,7 @@ class OrderDashboardOrderItemsByStatusProviderTest extends TestCase
                 ]),
                 'expected DQL'  =>
                     'SELECT IDENTITY (oi.status) status, COUNT(oi.id) as quantity '
-                    . 'FROM MarelloOrderBundle:Order o '
+                    . 'FROM Marello\Bundle\OrderBundle\Entity\Order o '
                     . 'INNER JOIN o.items oi '
                     . 'WHERE IDENTITY (oi.status) IS NOT NULL '
                     . 'GROUP BY oi.status '
@@ -147,7 +151,7 @@ class OrderDashboardOrderItemsByStatusProviderTest extends TestCase
                 ]),
                 'expected DQL'  =>
                     'SELECT IDENTITY (oi.status) status, COUNT(oi.id) as quantity '
-                    . 'FROM MarelloOrderBundle:Order o '
+                    . 'FROM Marello\Bundle\OrderBundle\Entity\Order o '
                     . 'INNER JOIN o.items oi '
                     . 'WHERE IDENTITY (oi.status) IS NOT NULL '
                     . 'GROUP BY oi.status '
@@ -190,7 +194,7 @@ class OrderDashboardOrderItemsByStatusProviderTest extends TestCase
         $this->registry->expects($this->exactly(2))
             ->method('getRepository')
             ->withConsecutive(
-                ['MarelloOrderBundle:Order'],
+                [Order::class],
                 [ExtendHelper::buildEnumValueClassName(LoadOrderItemStatusData::ITEM_STATUS_ENUM_CLASS)]
             )
             ->willReturn($repository);

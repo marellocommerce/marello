@@ -66,9 +66,7 @@ services:
             - { name: twig.extension }
 
     marello_inventory.provider.order_warehouse:
-        class: 'Marello\Bundle\InventoryBundle\Provider\OrderWarehousesProvider'
-        arguments:
-            - '@Marello\Bundle\InventoryBundle\Strategy\WFA\WFAStrategiesRegistry'
+        alias: Marello\Bundle\InventoryBundle\Provider\OrderWarehousesProvider
 
     Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository:
         parent: oro_entity.abstract_repository
@@ -250,7 +248,11 @@ services:
         tags:
             - { name: marello_inventory_wfa_strategy }
 
-    Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\SingleWHCalculator: ~
+    Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\SingleWHCalculator:
+        calls:
+            - ['setSuccessor', ['@Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\MultiWHCalculator']]
+
+    Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\Calculator\MultiWHCalculator: ~
 
     Marello\Bundle\InventoryBundle\Command\InventoryReAllocateCronCommand:
         arguments:

@@ -12,9 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
-use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
-use Marello\Bundle\ManualShippingBundle\Method\ManualShippingMethodType;
 use Marello\Bundle\ManualShippingBundle\Integration\ManualShippingChannelType;
 
 class LoadShippingRuleConfig extends AbstractFixture implements
@@ -93,7 +90,7 @@ class LoadShippingRuleConfig extends AbstractFixture implements
      */
     protected function getOrganization(ObjectManager $manager)
     {
-        return $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        return $manager->getRepository(Organization::class)->getFirst();
     }
 
     /**

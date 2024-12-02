@@ -32,7 +32,7 @@ class MarelloWebhookBundleInstaller implements Installation
         $table->addColumn('secret', 'string');
         $table->addColumn('enabled', 'boolean');
         $table->addColumn('created_at', 'datetime');
-        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->addColumn('updated_at', 'datetime');
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addIndex(['created_at'], 'idx_marello_webhook_created_at', []);

@@ -1,20 +1,20 @@
 acls:
     marello_webhook_create:
         type: entity
-        class: MarelloWebhookBundle:Webhook
+        class: Marello\Bundle\WebhookBundle\Entity\Webhook
         permission: CREATE
 
     marello_webhook_update:
         type: entity
-        class: MarelloWebhookBundle:Webhook
+        class: Marello\Bundle\WebhookBundle\Entity\Webhook
         permission: UPDATE
 
     marello_webhook_view:
         type: entity
-        class: MarelloWebhookBundle:Webhook
+        class: Marello\Bundle\WebhookBundle\Entity\Webhook
         permission: VIEW
 
     marello_webhook_delete:
         type: entity
-        class: MarelloWebhookBundle:Webhook
+        class: Marello\Bundle\WebhookBundle\Entity\Webhook
         permission: DELETE

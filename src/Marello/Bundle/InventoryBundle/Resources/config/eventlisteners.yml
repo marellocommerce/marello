@@ -61,14 +61,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: marello_inventory.inventory_level.finish_form_view, method: onFinishView }
 
-    marello_inventory.event_listener.inventoryitem_event_listener:
-        class: 'Marello\Bundle\InventoryBundle\EventListener\InventoryItemEventListener'
-        arguments:
-            - '@oro_message_queue.client.message_producer'
-        lazy:  true
-        tags:
-            - { name: doctrine.event_listener, event: onFlush }
-
     marello_inventory.event_listener.on_product_create_event_listener:
         class: 'Marello\Bundle\InventoryBundle\EventListener\OnProductCreateEventListener'
         arguments:
@@ -94,8 +86,14 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
 
-    marello_inventory.event_listener.doctrine.inventory_batch.inventory_rebalance:
-        class: 'Marello\Bundle\InventoryBundle\EventListener\Doctrine\InventoryBatchInventoryRebalanceListener'
+    Marello\Bundle\InventoryBundle\EventListener\Doctrine\InventoryBatchInventoryRebalanceListener:
+        arguments:
+            - '@oro_message_queue.client.message_producer'
+        lazy:  true
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
+    Marello\Bundle\InventoryBundle\EventListener\Doctrine\InventoryLevelRebalanceEventListener:
         arguments:
             - '@oro_message_queue.client.message_producer'
         lazy:  true

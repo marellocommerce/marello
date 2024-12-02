@@ -2,33 +2,31 @@
 
 namespace Marello\Bundle\PackingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity()
- * @Oro\Config(
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          }
- *      }
- * )
- * @ORM\Table(name="marello_packing_pack_slip_item")
- * @ORM\HasLifecycleCallbacks()
- */
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+
+#[ORM\Table(name: 'marello_packing_pack_slip_item')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id']
+    ]
+)]
 class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
@@ -37,166 +35,87 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
 
     /**
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var PackingSlip
-     *
-     * @ORM\ManyToOne(targetEntity="PackingSlip", inversedBy="items")
-     * @ORM\JoinColumn(name="packing_slip_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'packing_slip_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: PackingSlip::class, inversedBy: 'items')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $packingSlip;
 
     /**
      * @var Product
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $product;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_sku",type="string", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'product_sku', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $productSku;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name",type="string", nullable=false)
      */
+    #[ORM\Column(name: 'product_name', type: Types::STRING, nullable: false)]
     protected $productName;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Marello\Bundle\OrderBundle\Entity\OrderItem")
-     * @ORM\JoinColumn(name="order_item_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
+    #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: OrderItem::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderItem;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="weight",type="float",nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'weight', type: Types::FLOAT, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $weight;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="quantity",type="float",nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'quantity', type: Types::FLOAT, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $quantity;
 
     /**
-     * @ORM\Column(name="comment", type="text", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var string
      */
+    #[ORM\Column(name: 'comment', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $comment;
 
     /**
      * @var string
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $status;
 
     /**
-     * @ORM\Column(name="inventory_batches", type="json_array", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
      * @var array
      */
-    protected $inventoryBatches;
+    #[ORM\Column(name: 'inventory_batches', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $inventoryBatches = [];
 
     /**
      * @var \Extend\Entity\EV_Marello_Product_Unit
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['excluded' => true]])]
     protected $productUnit;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         // prevent overriding product name if already being set
@@ -394,18 +313,18 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
     }
 
     /**
-     * @return array
+     * @return array|null
      */
-    public function getInventoryBatches()
+    public function getInventoryBatches(): ?array
     {
         return $this->inventoryBatches;
     }
 
     /**
-     * @param array $batches
+     * @param array|null $batches
      * @return $this
      */
-    public function setInventoryBatches(array $batches)
+    public function setInventoryBatches(array $batches = null): self
     {
         $this->inventoryBatches = $batches;
 
@@ -423,7 +342,7 @@ class PackingSlipItem implements OrganizationAwareInterface, ExtendEntityInterfa
      * @param string $productUnit
      * @return $this
      */
-    public function setProductUnit($productUnit)
+    public function setProductUnit($productUnit): self
     {
         $this->productUnit = $productUnit;
 

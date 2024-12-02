@@ -21,7 +21,7 @@ class SupplierSelectType extends AbstractType
                 'entity_class'          => Supplier::class,
                 'create_enabled'        => false,
                 'grid_name'             => 'marello-supplier-extended-no-actions-grid',
-                'grid_parameters'       => [ 'isActive' => 1],
+                'grid_parameters'       => ['isActive' => true],
                 'configs'               => [
                     'placeholder'               => 'marello.supplier.form.choose_supplier',
                     'result_template_twig'      => '@MarelloSupplier/Supplier/Autocomplete/result.html.twig',

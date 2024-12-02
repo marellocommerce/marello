@@ -2,222 +2,111 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\CustomerBundle\Entity\Repository\CompanyRepository")
- * @ORM\Table(name="marello_customer_company",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="marello_customer_company_compnrorgidx",
- *              columns={"company_number","organization_id"}
- *          )
- *      }
- *
- * )
- *
- * @Config(
- *      routeName="marello_customer_company_index",
- *      routeView="marello_customer_company_view",
- *      routeCreate="marello_customer_company_create",
- *      routeUpdate="marello_customer_company_update",
- *      defaultValues={
- *          "security"={
- *              "type"="ACL",
- *              "group_name"=""
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          },
- *          "grid"={
- *              "default"="marello-companies-grid"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- *
- * @ORM\HasLifecycleCallbacks()
- */
-class Company implements OrganizationAwareInterface, ExtendEntityInterface
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
+use Marello\Bundle\CustomerBundle\Entity\Repository\CompanyRepository;
+
+#[ORM\Entity(CompanyRepository::class), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_customer_company')]
+#[ORM\UniqueConstraint(name: 'marello_customer_company_compnrorgidx', columns: ['company_number', 'organization_id'])]
+#[Oro\Config(
+    routeName: 'marello_customer_company_index',
+    routeView: 'marello_customer_company_view',
+    routeCreate: 'marello_customer_company_create',
+    routeUpdate: 'marello_customer_company_update',
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'grid' => ['default' => 'marello-companies-grid']
+    ]
+)]
+class Company implements DatesAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
-    use EntityCreatedUpdatedAtTrait;
+    use DatesAwareTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *     defaultValues={
-     *         "importexport"={
-     *             "order"=10,
-     *             "identity"=true
-     *         }
-     *     }
-     * )
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['identity' => true, 'order' => 10]])]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=20
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 20]]
+    )]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="company_number", type="string", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=35
-     *          }
-     *      }
-     * )
-     */
-    protected $companyNumber;
+    #[ORM\Column(name: 'company_number', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 35]]
+    )]
+    protected ?string $companyNumber = null;
 
-    /**
-     * @var PaymentTerm
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm")
-     * @ORM\JoinColumn(name="payment_term_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *     defaultValues={
-     *         "dataaudit"={
-     *             "auditable"=true
-     *         },
-     *         "importexport"={
-     *              "order"=40
-     *         }
-     *     }
-     * )
-     */
-    protected $paymentTerm;
+    #[ORM\ManyToOne(targetEntity: PaymentTerm::class)]
+    #[ORM\JoinColumn(name: 'payment_term_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 40]])]
+    protected ?PaymentTerm $paymentTerm = null;
 
-    /**
-     * @var Company
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\CustomerBundle\Entity\Company", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "header"="Parent",
-     *              "order"=30
-     *          }
-     *      }
-     * )
-     */
-    protected $parent;
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['header' => 'Parent', 'order' => 45]
+    ])]
+    protected ?Company $parent = null;
 
-    /**
-     * @var Collection|Company[]
-     *
-     * @ORM\OneToMany(targetEntity="Marello\Bundle\CustomerBundle\Entity\Company", mappedBy="parent")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $children;
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Company::class)]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['excluded' => true]
+    ])]
+    protected ?Collection $children = null;
 
-    /**
-     * @var MarelloAddress[]
-     *
-     * @ORM\ManyToMany(
-     *     targetEntity="Marello\Bundle\AddressBundle\Entity\MarelloAddress", fetch="EAGER", cascade={"persist"}
-     *     )
-     * @ORM\JoinTable(name="marello_company_join_address",
-     *      joinColumns={@ORM\JoinColumn(name="company_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="address_id", referencedColumnName="id", unique=true)}
-     *      )
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $addresses;
+    #[ORM\ManyToMany(targetEntity: MarelloAddress::class, cascade: ['persist'], fetch: 'EAGER')]
+    #[ORM\JoinTable(name: 'marello_company_join_address')]
+    #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'address_id', referencedColumnName: 'id', unique: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => [
+                'auditable' => true
+            ]
+        ]
+    )]
+    protected ?Collection $addresses = null;
 
-    /**
-     * @var Collection|Customer[]
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer",
-     *      mappedBy="company",
-     *      cascade={"persist"}
-     * )
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
-     **/
-    protected $customers;
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Customer::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['excluded' => true]
+    ])]
+    protected ?Collection $customers = null;
 
-    /**
-     * @ORM\Column(name="tax_identification_number", type="string", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
-     * @var string
-     */
-    protected $taxIdentificationNumber;
+    #[ORM\Column(name: 'tax_identification_number', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected ?string $taxIdentificationNumber = null;
 
     /**
      * Constructor
@@ -229,10 +118,24 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
         $this->customers = new ArrayCollection();
     }
 
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+    }
+
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->getName();
     }
@@ -240,7 +143,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -250,7 +153,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -260,7 +163,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -277,7 +180,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      * @param string|null $companyNumber
      * @return $this
      */
-    public function setCompanyNumber(string $companyNumber = null)
+    public function setCompanyNumber(string $companyNumber = null): self
     {
         $this->companyNumber = $companyNumber;
 
@@ -287,7 +190,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return PaymentTerm
      */
-    public function getPaymentTerm()
+    public function getPaymentTerm(): ?PaymentTerm
     {
         return $this->paymentTerm;
     }
@@ -297,7 +200,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setPaymentTerm(PaymentTerm $paymentTerm = null)
+    public function setPaymentTerm(PaymentTerm $paymentTerm = null): self
     {
         $this->paymentTerm = $paymentTerm;
 
@@ -309,7 +212,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setParent(Company $parent = null)
+    public function setParent(Company $parent = null): self
     {
         $this->parent = $parent;
 
@@ -319,7 +222,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return Company
      */
-    public function getParent()
+    public function getParent(): ?Company
     {
         return $this->parent;
     }
@@ -329,7 +232,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function addAddress(MarelloAddress $address)
+    public function addAddress(MarelloAddress $address): self
     {
         if (!$this->getAddresses()->contains($address)) {
             $this->getAddresses()->add($address);
@@ -343,7 +246,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function removeAddress(MarelloAddress $address)
+    public function removeAddress(MarelloAddress $address): self
     {
         if ($this->hasAddress($address)) {
             $this->getAddresses()->removeElement($address);
@@ -355,7 +258,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return Collection|MarelloAddress[]
      */
-    public function getAddresses()
+    public function getAddresses(): Collection
     {
         return $this->addresses;
     }
@@ -365,7 +268,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return bool
      */
-    protected function hasAddress(MarelloAddress $address)
+    protected function hasAddress(MarelloAddress $address): bool
     {
         return $this->getAddresses()->contains($address);
     }
@@ -375,7 +278,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function addChild(Company $child)
+    public function addChild(Company $child): self
     {
         if (!$this->hasChild($child)) {
             $child->setParent($this);
@@ -390,7 +293,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function removeChild(Company $child)
+    public function removeChild(Company $child): self
     {
         if ($this->hasChild($child)) {
             $child->setParent(null);
@@ -403,7 +306,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return Collection|Company[]
      */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
@@ -413,7 +316,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return bool
      */
-    protected function hasChild(Company $child)
+    protected function hasChild(Company $child): bool
     {
         return $this->children->contains($child);
     }
@@ -423,7 +326,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function addCustomer(Customer $customer)
+    public function addCustomer(Customer $customer): self
     {
         if (!$this->hasCustomer($customer)) {
             $customer->setCompany($this);
@@ -438,7 +341,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function removeCustomer(Customer $customer)
+    public function removeCustomer(Customer $customer): self
     {
         if ($this->hasCustomer($customer)) {
             $customer->setCompany(null);
@@ -451,7 +354,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return Collection|Customer[]
      */
-    public function getCustomers()
+    public function getCustomers(): Collection
     {
         return $this->customers;
     }
@@ -461,7 +364,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return bool
      */
-    protected function hasCustomer(Customer $customer)
+    protected function hasCustomer(Customer $customer): bool
     {
         return $this->customers->contains($customer);
     }
@@ -469,7 +372,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
     /**
      * @return string
      */
-    public function getTaxIdentificationNumber()
+    public function getTaxIdentificationNumber(): ?string
     {
         return $this->taxIdentificationNumber;
     }
@@ -479,7 +382,7 @@ class Company implements OrganizationAwareInterface, ExtendEntityInterface
      *
      * @return $this
      */
-    public function setTaxIdentificationNumber($taxIdentificationNumber)
+    public function setTaxIdentificationNumber(string $taxIdentificationNumber = null): self
     {
         $this->taxIdentificationNumber = $taxIdentificationNumber;
 

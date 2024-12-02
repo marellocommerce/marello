@@ -4,11 +4,14 @@ namespace Marello\Bundle\UPSBundle\EventListener;
 
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Generator\IntegrationIdentifierGeneratorInterface;
-use Marello\Bundle\ShippingBundle\Method\Event\MethodTypeRemovalEventDispatcherInterface;
+
 use Marello\Bundle\UPSBundle\Entity\UPSSettings;
-use Marello\Bundle\UPSBundle\Method\Identifier\UPSMethodTypeIdentifierGeneratorInterface;
 use Marello\Bundle\UPSBundle\Provider\ChannelType;
+use Marello\Bundle\ShippingBundle\Method\Event\MethodTypeRemovalEventDispatcherInterface;
+use Marello\Bundle\UPSBundle\Method\Identifier\UPSMethodTypeIdentifierGeneratorInterface;
 
 class UPSTransportEntityListener
 {
@@ -54,7 +57,7 @@ class UPSTransportEntityListener
         if (0 !== count($deletedServices)) {
             $entityManager = $args->getObjectManager();
             $channel = $entityManager
-                ->getRepository('OroIntegrationBundle:Channel')
+                ->getRepository(Channel::class)
                 ->findOneBy(['type' => ChannelType::TYPE, 'transport' => $transport->getId()]);
 
             if (null !== $channel) {

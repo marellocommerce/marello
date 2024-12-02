@@ -2,16 +2,14 @@
 
 namespace Marello\Bundle\LocaleBundle\Model;
 
+use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\LocaleBundle\Entity\Localization;
 
 trait LocalizationTrait
 {
-    /**
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\LocaleBundle\Entity\Localization")
-     * @ORM\JoinColumn(name="localization_id", nullable=true)
-     *
-     * @var Localization
-     */
+    #[ORM\ManyToOne(targetEntity: Localization::class)]
+    #[ORM\JoinColumn(name: 'localization_id', referencedColumnName: 'id', nullable: true)]
     protected $localization;
 
     /**

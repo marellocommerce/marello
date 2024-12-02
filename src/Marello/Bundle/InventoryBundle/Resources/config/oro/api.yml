@@ -1,5 +1,9 @@
 api:
     entity_aliases:
+        Marello\Bundle\InventoryBundle\Entity\InventoryItem:
+            alias: marelloinventoryitem
+            plural_alias: marelloinventoryitems
+
         Marello\Bundle\InventoryBundle\Entity\InventoryLevel:
             alias: marelloinventorylevel
             plural_alias: marelloinventorylevels
@@ -25,6 +29,27 @@ api:
             plural_alias: marelloallocationitems
 
     entities:
+        Marello\Bundle\InventoryBundle\Entity\InventoryItem:
+            documentation_resource: '@MarelloInventoryBundle/Resources/doc/api/inventoryitem.md'
+            filters:
+                exclusion_policy: all
+                fields:
+                    product:
+                        data_type: string
+                        allow_array: true
+                        property_path: product.sku
+                        description: 'Filter by product sku'
+            actions:
+                get_subresource: false
+                create: false
+                update: false
+                delete: false
+                delete_list: false
+                add_relationship: false
+                get_relationship: false
+                update_relationship: false
+                delete_relationship: false
+
         Marello\Bundle\InventoryBundle\Entity\InventoryLevel:
             documentation_resource: '@MarelloInventoryBundle/Resources/doc/api/inventorylevel.md'
             fields:

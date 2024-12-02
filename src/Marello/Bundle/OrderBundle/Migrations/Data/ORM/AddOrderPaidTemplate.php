@@ -2,8 +2,10 @@
 
 namespace Marello\Bundle\OrderBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+
+use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
 
 class AddOrderPaidTemplate extends AbstractEmailFixture implements DependentFixtureInterface
@@ -59,7 +61,7 @@ class AddOrderPaidTemplate extends AbstractEmailFixture implements DependentFixt
             return null;
         }
 
-        return $manager->getRepository('OroEmailBundle:EmailTemplate')->findOneBy([
+        return $manager->getRepository(EmailTemplate::class)->findOneBy([
             'name' => $template['params']['name'],
             'entityName' => 'Marello\Bundle\OrderBundle\Entity\Order',
         ]);

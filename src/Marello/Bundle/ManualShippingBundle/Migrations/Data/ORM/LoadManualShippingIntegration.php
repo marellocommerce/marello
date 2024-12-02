@@ -2,22 +2,25 @@
 
 namespace Marello\Bundle\ManualShippingBundle\Migrations\Data\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\ManualShippingBundle\Entity\ManualShippingSettings;
-use Marello\Bundle\ManualShippingBundle\Integration\ManualShippingChannelType;
-use Marello\Bundle\ManualShippingBundle\Method\ManualShippingMethodType;
+
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
+
 use Marello\Bundle\RuleBundle\Entity\Rule;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
-use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
+use Marello\Bundle\ManualShippingBundle\Entity\ManualShippingSettings;
+use Marello\Bundle\ManualShippingBundle\Method\ManualShippingMethodType;
+use Marello\Bundle\ManualShippingBundle\Integration\ManualShippingChannelType;
 
 class LoadManualShippingIntegration extends AbstractFixture implements
     DependentFixtureInterface,
@@ -129,7 +132,7 @@ class LoadManualShippingIntegration extends AbstractFixture implements
             return $this->getReference(LoadOrganizationAndBusinessUnitData::REFERENCE_DEFAULT_ORGANIZATION);
         } else {
             return $manager
-                ->getRepository('OroOrganizationBundle:Organization')
+                ->getRepository(Organization::class)
                 ->getFirst();
         }
     }

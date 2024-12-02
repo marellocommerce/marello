@@ -2,121 +2,75 @@
 
 namespace Marello\Bundle\PaymentBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * @ORM\Entity
- * @ORM\Table("marello_payment_mtds_cfgs_rl_d")
- * @ORM\HasLifecycleCallbacks
- * @Config(
- *     mode="hidden",
- * )
- */
+use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
+#[ORM\Table('marello_payment_mtds_cfgs_rl_d')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(mode: 'hidden')]
 class PaymentMethodsConfigsRuleDestination implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
 
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $id;
 
     /**
      * @var PaymentMethodsConfigsRule
-     *
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule",
-     *     inversedBy="destinations"
-     * )
-     * @ORM\JoinColumn(name="configs_rule_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "excluded"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'configs_rule_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: PaymentMethodsConfigsRule::class, inversedBy: 'destinations')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected $methodsConfigsRule;
 
     /**
      * @var Collection|PaymentMethodsConfigsRuleDestinationPostalCode[]
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestinationPostalCode",
-     *     mappedBy="destination",
-     *     cascade={"ALL"},
-     *     fetch="EAGER",
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'destination',
+        targetEntity: PaymentMethodsConfigsRuleDestinationPostalCode::class,
+        cascade: ['ALL'],
+        fetch: 'EAGER',
+        orphanRemoval: true
+    )]
     protected $postalCodes;
 
     /**
      * @var Region
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
-     * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=20,
-     *              "short"=true,
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'region_code', referencedColumnName: 'combined_code')]
+    #[ORM\ManyToOne(targetEntity: Region::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 20, 'short' => true, 'identity' => true]])]
     protected $region;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="region_text", type="string", length=255, nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=30
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'region_text', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 30]])]
     protected $regionText;
 
     /**
      * @var Country
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
-     * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code", nullable=false)
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=40,
-     *              "short"=true,
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Country::class)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['order' => 40, 'short' => true, 'identity' => true]])]
     protected $country;
 
     public function __construct()

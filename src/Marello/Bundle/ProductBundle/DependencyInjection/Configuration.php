@@ -16,7 +16,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     public const ROOT_NODE = 'marello_product';
-    public const IMAGE_USE_EXTERNAL_URL_CONFIG = 'image_use_external_url';
+    public const USE_EXTERNAL_URL_CONFIG = 'use_external_url';
 
     public function getConfigTreeBuilder()
     {
@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
         SettingsBuilder::append(
             $rootNode,
             [
-                self::IMAGE_USE_EXTERNAL_URL_CONFIG => ['value' => false]
+                self::USE_EXTERNAL_URL_CONFIG => ['value' => false]
             ]
         );
 

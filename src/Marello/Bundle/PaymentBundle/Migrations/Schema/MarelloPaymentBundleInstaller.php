@@ -69,9 +69,9 @@ class MarelloPaymentBundleInstaller implements
         $table->addColumn('payment_method', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn(
             'payment_method_options',
-            'json_array',
+            'json',
             [
-                'notnull' => false, 'comment' => '(DC2Type:json_array)'
+                'notnull' => false, 'comment' => '(DC2Type:json)'
             ]
         );
         $table->addColumn('payment_reference', 'string', ['notnull' => false, 'length' => 255]);

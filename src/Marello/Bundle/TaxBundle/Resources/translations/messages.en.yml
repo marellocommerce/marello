@@ -73,3 +73,6 @@ marello:
 
         subtotals:
             tax.label:                          TAX total
+
+        system_configuration:
+            fields.origin_country.label:        Shipping Origin Country

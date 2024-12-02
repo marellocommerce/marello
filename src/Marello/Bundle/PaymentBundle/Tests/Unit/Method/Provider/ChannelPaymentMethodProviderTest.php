@@ -2,17 +2,19 @@
 
 namespace Marello\Bundle\PaymentBundle\Tests\Unit\Method\Provider;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+
+use Oro\Component\Testing\Unit\EntityTrait;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+
+use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
 use Marello\Bundle\PaymentBundle\Method\Factory\IntegrationPaymentMethodFactoryInterface;
 use Marello\Bundle\PaymentBundle\Method\Provider\Integration\ChannelPaymentMethodProvider;
-use Marello\Bundle\PaymentBundle\Method\PaymentMethodInterface;
-use Oro\Component\Testing\Unit\EntityTrait;
 
 class ChannelPaymentMethodProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -55,7 +57,7 @@ class ChannelPaymentMethodProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->doctrineHelper
             ->method('getEntityRepository')
-            ->with('OroIntegrationBundle:Channel')
+            ->with(Channel::class)
             ->willReturn($repository);
 
         $loadedChannel = $this->createChannel('ch_enabled');

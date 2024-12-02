@@ -44,7 +44,7 @@ class CompanyControllerTest extends WebTestCase
 
         $response = $this->client->requestGrid(self::GRID_NAME);
         $result = $this->getJsonResponseContent($response, Response::HTTP_OK);
-        $this->assertCount(3, $result);
+        $this->assertCount(3, $result['data']);
     }
 
     /**

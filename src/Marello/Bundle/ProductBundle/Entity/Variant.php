@@ -2,75 +2,57 @@
 
 namespace Marello\Bundle\ProductBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
 
 /**
  * Represents a Marello Variant Product
- *
- * @ORM\Entity()
- * @ORM\Table(name="marello_product_variant")
- * @ORM\HasLifecycleCallbacks()
- * @Oro\Config(
- *  routeName="marello_product_index",
- *  routeView="marello_product_view",
- *  defaultValues={
- *      "entity"={"icon"="fa-barcode"},
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "dataaudit"={
- *            "auditable"=true
- *      }
- *  }
- * )
  */
+#[ORM\Table(name: 'marello_product_variant')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    routeName: 'marello_product_index',
+    routeView: 'marello_product_view',
+    defaultValues: [
+        'entity' => ['icon' => 'fa-barcode'],
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'dataaudit' => ['auditable' => true]
+    ]
+)]
 class Variant
 {
     use EntityCreatedUpdatedAtTrait;
     
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="variant_code", type="string", nullable=true, unique=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'variant_code', type: Types::STRING, unique: true, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $variantCode;
 
     /**
      * @see \Marello\Bundle\InventoryBundle\Form\Type\ProductInventoryType
      *
      * @var Collection|Product[] $products
-     *
-     * @ORM\OneToMany(targetEntity="Product", cascade={"persist"}, mappedBy="variant")
-     * @ORM\JoinTable(name="marello_product_to_variant")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinTable(name: 'marello_product_to_variant')]
+    #[ORM\OneToMany(mappedBy: 'variant', targetEntity: Product::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $products;
 
     /**

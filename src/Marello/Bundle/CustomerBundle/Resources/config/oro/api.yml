@@ -8,11 +8,17 @@ api:
             alias: marellocustomer
             plural_alias: marellocustomers
 
+        Marello\Bundle\CustomerBundle\Entity\CustomerGroup:
+            alias: marellocustomergroup
+            plural_alias: marellocustomergroups
+
     entities:
         Marello\Bundle\CustomerBundle\Entity\Customer:
             documentation_resource: '@MarelloCustomerBundle/Resources/doc/api/customer.md'
             identifier_field_names: [email]
             fields:
+                customerGroup:
+                    exclude: false
                 createdAt:
                     exclude: true
                 updatedAt:
@@ -25,6 +31,8 @@ api:
                         allow_array: true
                         property_path: email
                         description: 'Filter by email'
+                        options:
+                            case_insensitive: true
                     customerNumber:
                         data_type: string
                         allow_array: true
@@ -49,3 +57,6 @@ api:
                 exclusion_policy: all
             actions:
                 delete_relationship: false
+
+        Marello\Bundle\CustomerBundle\Entity\CustomerGroup:
+            exclude: true

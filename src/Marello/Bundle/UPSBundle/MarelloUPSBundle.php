@@ -2,10 +2,10 @@
 
 namespace Marello\Bundle\UPSBundle;
 
-use Marello\Bundle\UPSBundle\DependencyInjection\CompilerPass\UPSRequestFactoriesCompilerPass;
-use Marello\Bundle\UPSBundle\DependencyInjection\MarelloUPSExtension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+use Marello\Bundle\UPSBundle\DependencyInjection\CompilerPass\UPSRequestFactoriesCompilerPass;
 
 class MarelloUPSBundle extends Bundle
 {
@@ -17,17 +17,5 @@ class MarelloUPSBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new UPSRequestFactoriesCompilerPass());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getContainerExtension()
-    {
-        if (!$this->extension) {
-            $this->extension = new MarelloUPSExtension();
-        }
-
-        return $this->extension;
     }
 }

@@ -86,6 +86,6 @@ class RefundExtension extends AbstractExtension
      */
     public function getBalance(Refund $refund)
     {
-        return $this->refundBalanceCalculator->caclulateBalance($refund);
+        return $this->refundBalanceCalculator->calculateBalance($refund);
     }
 }

@@ -72,7 +72,7 @@ class MarelloPurchaseOrderBundle implements
         $table->addColumn('supplier', 'string', ['length' => 255]);
         $table->addColumn('ordered_amount', 'integer', []);
         $table->addColumn('received_amount', 'integer', []);
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('status', 'string', ['length' => 255]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);

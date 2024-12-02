@@ -12,8 +12,8 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function OrderComponent(options) {
-            OrderComponent.__super__.constructor.call(this, options);
+        constructor: function OrderProductComponent(options) {
+            OrderProductComponent.__super__.constructor.call(this, options);
         },
 
         onModelSelect: function(value, model, listener) {

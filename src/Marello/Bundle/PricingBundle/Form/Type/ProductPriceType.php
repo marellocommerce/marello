@@ -63,19 +63,25 @@ class ProductPriceType extends AbstractType
     public function postSubmit(FormEvent $event)
     {
         $data = $event->getData();
-        if ($data instanceof ProductPrice
-            && $data->getStartDate()
-            && $data->getEndDate()
-            && $data->getStartDate() > $data->getEndDate()
+        if ($data instanceof ProductPrice &&
+            $data->getStartDate() && $data->getEndDate()
         ) {
-            $event->getForm()->get('endDate')->addError(new FormError(
-                $this->translator->trans('marello.pricing.productprice.start.validation.error')
-            ));
+            if (!$data->getValue()) {
+                $event->getForm()->get('value')->addError(new FormError(
+                    $this->translator->trans('marello.pricing.productprice.value.validation.error')
+                ));
+            }
+
+            if ($data->getStartDate() > $data->getEndDate()) {
+                $event->getForm()->get('endDate')->addError(new FormError(
+                    $this->translator->trans('marello.pricing.productprice.start.validation.error')
+                ));
+            }
         }
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -89,7 +95,7 @@ class ProductPriceType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function getBlockPrefix()
     {

@@ -2,12 +2,13 @@
 
 namespace Marello\Bundle\PurchaseOrderBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
@@ -16,24 +17,20 @@ use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 use Marello\Bundle\ProductBundle\Entity\ProductInterface;
 use Marello\Bundle\ProductBundle\Model\ProductAwareInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\PurchaseOrderBundle\Entity\Repository\PurchaseOrderItemRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\PurchaseOrderBundle\Entity\Repository\PurchaseOrderItemRepository")
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="marello_purchase_order_item")
- * @Oro\Config(
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "ownership"={
- *              "owner_type"="ORGANIZATION",
- *              "owner_field_name"="organization",
- *              "owner_column_name"="organization_id"
- *          }
- *      }
- * )
- */
+#[ORM\Table(name: 'marello_purchase_order_item')]
+#[ORM\Entity(repositoryClass: PurchaseOrderItemRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id']
+    ]
+)]
 class PurchaseOrderItem implements
     ProductAwareInterface,
     OrganizationAwareInterface
@@ -47,125 +44,69 @@ class PurchaseOrderItem implements
     public const STATUS_CLOSED = 'closed';
 
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var ProductInterface
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $product;
 
     /**
      * @var PurchaseOrder
-     *
-     * @ORM\ManyToOne(targetEntity="PurchaseOrder", inversedBy="items")
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: PurchaseOrder::class, inversedBy: 'items')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $order;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_sku", type="string")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'product_sku', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $productSku;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="product_name", type="string")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'product_name', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $productName;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="supplier", type="string")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'supplier', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $supplier;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="ordered_amount", type="integer")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'ordered_amount', type: Types::INTEGER)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $orderedAmount = 0;
 
     /**
      * @var int
-     *
-     * @ORM\Column(name="received_amount", type="integer")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'received_amount', type: Types::INTEGER)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $receivedAmount = 0;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="purchase_price_value", type="money")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'purchase_price_value', type: 'money')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $purchasePriceValue;
 
     /**
@@ -175,55 +116,29 @@ class PurchaseOrderItem implements
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="row_total", type="money", nullable=false)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'row_total', type: 'money', nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $rowTotal;
     
     /**
      * @var array $data
-     *
-     * @ORM\Column(name="data", type="json_array", nullable=true)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "email"={
-     *              "available_in_template"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'email' => ['available_in_template' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $data = [];
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="status", type="string")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'status', type: Types::STRING)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $status = self::STATUS_DRAFT;
-
-    /**
-     * PurchaseOrderItem constructor.
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * @return string
@@ -242,10 +157,9 @@ class PurchaseOrderItem implements
     }
 
     /**
-     * @Assert\Callback
-     *
      * @param ExecutionContextInterface $context
      */
+    #[Assert\Callback]
     public function validate(ExecutionContextInterface $context)
     {
         if (($this->receivedAmount < 0) || ($this->receivedAmount > $this->orderedAmount)) {
@@ -406,9 +320,7 @@ class PurchaseOrderItem implements
         return $this;
     }
 
-    /**
-     * @ORM\PostLoad
-     */
+    #[ORM\PostLoad]
     public function loadPurchasePrice()
     {
         $price = new ProductPrice();
@@ -423,10 +335,8 @@ class PurchaseOrderItem implements
         $this->purchasePrice = $price;
     }
 
-    /**
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function updatePurchasePrice()
     {
         if ($this->purchasePrice) {
@@ -500,10 +410,8 @@ class PurchaseOrderItem implements
         return $this;
     }
 
-    /**
-     * @ORM\PreUpdate
-     * @ORM\PrePersist
-     */
+    #[ORM\PreUpdate]
+    #[ORM\PrePersist]
     public function preSaveSetSupplier()
     {
         $this->setSupplier($this->order->getSupplier()->getName());

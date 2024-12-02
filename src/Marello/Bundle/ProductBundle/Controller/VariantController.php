@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\Variant;
@@ -22,37 +22,38 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class VariantController extends AbstractController
 {
     /**
-     * @Route(
-     *     path="/create/parent/{id}",
-     *     methods={"GET", "POST"},
-     *     requirements={"id"="\d+"},
-     *     name="marello_product_create_variant"
-     * )
-     * @AclAncestor("marello_product_create_variant")
-     * @Template("@MarelloProduct/Variant/update.html.twig")
      *
      * @param Product $product
      * @param Request $request
      * @return array
      */
+    #[Route(
+        path: '/create/parent/{id}',
+        name: 'marello_product_create_variant',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
+    #[AclAncestor('marello_product_create_variant')]
+    #[Template('@MarelloProduct/Variant/update.html.twig')]
     public function createVariantAction(Product $product, Request $request)
     {
         return $this->updateVariant($product, new Variant(), $request);
     }
 
     /**
-     * @Route(
-     *     path="/add/{id}/parent/{parentId}",
-     *     requirements={"id"="\d+","parentId"="\d+"}, name="marello_product_add_variant"
-     * )
-     * @AclAncestor("marello_product_add_variant")
-     * @Template("@MarelloProduct/Variant/update.html.twig")
      *
      * @param Request $request
      * @param Variant $variant
      * @return array|Response
      * @throws NotFoundHttpException
      */
+    #[Route(
+        path: '/add/{id}/parent/{parentId}',
+        name: 'marello_product_add_variant',
+        requirements: ['id' => '\d+', 'parentId' => '\d+']
+    )]
+    #[AclAncestor('marello_product_add_variant')]
+    #[Template('@MarelloProduct/Variant/update.html.twig')]
     public function updateVariantAction(Request $request, Variant $variant)
     {
         $entityClass = $request->get('entityClass');
@@ -92,7 +93,9 @@ class VariantController extends AbstractController
         if ($handler->process($variant, $product)) {
             $request->getSession()->getFlashBag()->add(
                 'success',
-                $this->container->get(TranslatorInterface::class)->trans('marello.product.messages.success.variant.saved')
+                $this->container
+                    ->get(TranslatorInterface::class)
+                    ->trans('marello.product.messages.success.variant.saved')
             );
 
             /*
@@ -111,17 +114,13 @@ class VariantController extends AbstractController
     /**
      * @deprecated rendering of widget is obsolete and done directly in product template.
      * See MarelloProduct/Product/view.html.twig#121
-     * @Route(
-     *     path="/widget/info/{id}",
-     *     name="marello_product_variant_widget_info",
-     *     requirements={"id"="\d+"}
-     * )
-     * @AclAncestor("marello_product_view")
-     * @Template
      *
      * @param Product $product
      * @return array
      */
+    #[Route(path: '/widget/info/{id}', name: 'marello_product_variant_widget_info', requirements: ['id' => '\d+'])]
+    #[AclAncestor('marello_product_view')]
+    #[Template('@MarelloProduct/Variant/widget/info.html.twig')]
     public function infoAction(Product $product)
     {
         return [
@@ -129,7 +128,7 @@ class VariantController extends AbstractController
         ];
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

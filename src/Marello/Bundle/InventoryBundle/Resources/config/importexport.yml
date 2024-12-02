@@ -23,6 +23,8 @@ services:
     marello_inventory.importexport.strategy.inventory.add_or_replace:
         class: Marello\Bundle\InventoryBundle\ImportExport\Strategy\InventoryLevelUpdateStrategy
         parent: oro_importexport.strategy.configurable_add_or_replace
+        calls:
+            - [setTokenAccessor, ['@oro_security.token_accessor']]
 
     # Import processor
     marello_inventory.importexport.processor.import.add_or_replace:

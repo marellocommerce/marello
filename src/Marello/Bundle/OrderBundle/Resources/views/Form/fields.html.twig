@@ -59,6 +59,14 @@
         </div>
         {{ form_errors(form.allocationExclusion) }}
     </td>
+    <td class="order-line-item-comment">
+        <div class="fields-row">
+            <div data-page-component-module="marelloorder/js/app/components/order-item-comment-component">
+                {{ form_widget(form.comment) }}
+            </div>
+        </div>
+        {{ form_errors(form.comment) }}
+    </td>
 {% endblock %}
 
 {% macro marello_order_item_collection_item_prototype(widget, attributes) %}
@@ -128,6 +136,7 @@
                             <th class="order-line-item-total-price-excl-tax"><span>{{ 'marello.order.orderitem.total_price_excl_tax.label'|trans }}</span></th>
                             <th class="order-line-item-total-price-incl-tax"><span>{{ 'marello.order.orderitem.total_price_incl_tax.label'|trans }}</span></th>
                             <th class="order-line-item-allocation-exclusion"><span>{{ 'marello.order.form.orderitem.allocation_exclusion.label'|trans }}</span></th>
+                            <th class="order-line-item-comment"><span>{{ 'marello.order.orderitem.comment.label'|trans }}</span></th>
                             <th class="order-line-item-notifications"></th>
                             {% if form.vars.allow_delete %}
                                 <th class="order-row-item-actions"></th>

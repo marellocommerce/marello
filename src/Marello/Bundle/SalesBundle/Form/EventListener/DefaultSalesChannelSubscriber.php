@@ -3,11 +3,15 @@
 namespace Marello\Bundle\SalesBundle\Form\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Marello\Bundle\SalesBundle\Model\SalesChannelsAwareInterface;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Model\SalesChannelsAwareInterface;
 
 class DefaultSalesChannelSubscriber implements EventSubscriberInterface
 {
@@ -55,7 +59,7 @@ class DefaultSalesChannelSubscriber implements EventSubscriberInterface
     public function getDefaultChannels()
     {
         return $this->em
-            ->getRepository('MarelloSalesBundle:SalesChannel')
+            ->getRepository(SalesChannel::class)
             ->getDefaultActiveChannels($this->aclHelper);
     }
 }

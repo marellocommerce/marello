@@ -6,7 +6,7 @@ datagrids:
                 select:
                     - t
                 from:
-                    - { table: MarelloTaxBundle:TaxCode, alias: t }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxCode, alias: t }
         columns:
             code:
                 label:            marello.tax.taxcode.code.label
@@ -39,6 +39,7 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 icon:           eye
                 rowAction:      true
@@ -52,7 +53,7 @@ datagrids:
                 select:
                     - t
                 from:
-                    - { table: MarelloTaxBundle:TaxRate, alias: t }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxRate, alias: t }
         columns:
             code:
                 label:            marello.tax.taxrate.code.label
@@ -87,6 +88,7 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 icon:           eye
                 rowAction:      true
@@ -103,7 +105,7 @@ datagrids:
                     - tr.rate as rate
                     - tj.code as jurisdiction
                 from:
-                    - { table: MarelloTaxBundle:TaxRule, alias: t }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxRule, alias: t }
                 join:
                     left:
                         - { join: t.taxCode, alias: tc }
@@ -151,6 +153,7 @@ datagrids:
         actions:
             view:
                 type:           navigate
+                label:          oro.grid.action.view
                 link:           view_link
                 icon:           eye
                 rowAction:      true
@@ -169,7 +172,7 @@ datagrids:
                     - jurisdiction.createdAt
                     - jurisdiction.updatedAt
                 from:
-                    - { table: MarelloTaxBundle:TaxJurisdiction, alias: jurisdiction }
+                    - { table: Marello\Bundle\TaxBundle\Entity\TaxJurisdiction, alias: jurisdiction }
         columns:
             code:
                 label: marello.tax.taxjurisdiction.code.label

@@ -4,8 +4,8 @@ namespace Marello\Bundle\WebhookBundle\Controller;
 
 use Marello\Bundle\WebhookBundle\Entity\Webhook;
 use Marello\Bundle\WebhookBundle\Form\Type\WebhookType;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SecurityBundle\Annotation\CsrfProtection;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
 use Oro\Bundle\UIBundle\Route\Router;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -17,11 +17,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class WebhookController extends AbstractController
 {
-    /**
-     * @Route("/", name="marello_webhook_index")
-     * @Template
-     * @AclAncestor("marello_webhook_view")
-     */
+    #[Route(path: '/', name: 'marello_webhook_index')]
+    #[Template]
+    #[AclAncestor('marello_webhook_view')]
     public function indexAction(): array
     {
         return [
@@ -29,15 +27,9 @@ class WebhookController extends AbstractController
         ];
     }
 
-    /**
-     * @Route(
-     *     path="/view/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_webhook_view"
-     * )
-     * @AclAncestor("marello_webhook_view")
-     * @Template("@MarelloWebhook/Webhook/view.html.twig")
-     */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_webhook_view')]
+    #[AclAncestor('marello_webhook_view')]
+    #[Template('@MarelloWebhook/Webhook/view.html.twig')]
     public function viewAction(Webhook $webhook): array
     {
         return [
@@ -45,44 +37,25 @@ class WebhookController extends AbstractController
         ];
     }
 
-    /**
-     * @Route(
-     *     path="/create",
-     *     methods={"GET", "POST"},
-     *     name="marello_webhook_create"
-     * )
-     * @Template("@MarelloWebhook/Webhook/update.html.twig")
-     * @AclAncestor("marello_webhook_create")
-     */
+    #[Route(path: '/create', methods: ['GET', 'POST'], name: 'marello_webhook_create')]
+    #[Template('@MarelloWebhook/Webhook/update.html.twig')]
+    #[AclAncestor('marello_webhook_create')]
     public function createAction(Request $request, Webhook $webhook = null)
     {
         return $this->update($request, $webhook);
     }
 
-    /**
-     * @Route(
-     *     path="/update/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_webhook_update"
-     * )
-     * @Template
-     * @AclAncestor("marello_webhook_update")
-     */
+    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_webhook_update')]
+    #[Template]
+    #[AclAncestor('marello_webhook_update')]
     public function updateAction(Request $request, Webhook $webhook = null)
     {
         return $this->update($request, $webhook);
     }
 
-    /**
-     * @Route(
-     *     path="/delete/{id}",
-     *     requirements={"id"="\d+"},
-     *     name="marello_webhook_delete",
-     *     methods={"DELETE"}
-     * )
-     * @CsrfProtection()
-     * @AclAncestor("marello_webhook_delete")
-     */
+    #[Route(path: '/delete/{id}', requirements: ['id' => '\d+'], name: 'marello_webhook_delete', methods: ['DELETE'])]
+    #[AclAncestor('marello_webhook_delete')]
+    #[CsrfProtection]
     public function deleteAction(Webhook $webhook): JsonResponse
     {
         $translator = $this->container->get(TranslatorInterface::class);
@@ -130,7 +103,7 @@ class WebhookController extends AbstractController
         ];
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

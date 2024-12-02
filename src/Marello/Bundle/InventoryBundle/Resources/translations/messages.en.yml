@@ -20,7 +20,6 @@ marello:
             order_on_demand_location.label: Order on Demand location
             group.label:                Warehouse Group
             create_group.label:         Create Group
-
             form:
                 create_own_group:       Create Warehouse Group
 
@@ -87,8 +86,7 @@ marello:
             enable_batch_inventory.label:  Enable Batch Inventory
             batch_inventory.label:         Batches / Lot
             product_unit.label:            Unit
-            order_on_demand_allowed.label: Order On Demand
-
+            order_on_demand_allowed.label: Order On Demand Allowed
             section:
                 unit_of_measurement.label:  Unit of Measurement
                 backorder_preorder.label:   Backorder/Pre-order
@@ -102,9 +100,7 @@ marello:
             entity_plural_label:            Inventory Levels
             entity_grid_all_view_label:     All %entity_plural_label%
             id.label:                       Id
-            inventory_qty.label:            Inventory Qty
-            inventory_level_log_records.label: Inventory Level Logrecords
-            inventory:
+            inventory_qty:
                 label:                      Inventory Qty
                 grid.label:                 On Hand Qty
             allocated_inventory:
@@ -130,6 +126,7 @@ marello:
             managed_inventory.label:        Manage Inventory
             pick_location.label:            Pick Location
             inventory_batches.label:        Inventory Batches
+            inventory_level_log_records.label: Inventory Level Logrecords
 
             grid:
                 warehouse_code.label:       Warehouse Code
@@ -234,6 +231,8 @@ marello:
             total_quantity.label:           Total Quantity
             organization.label:             Organization
             warehouse.label:                Warehouse
+            inventory_batches.label:        Inventory Batches
+            variant_hash.label:             Variant Hash
 
         reshipment:
             label:                          Create Shipment
@@ -295,7 +294,7 @@ marello:
                     inventory_on_demand: Enabling this feature will require you to connect suppliers to Products, failing to do so will result in weird behaviour and issues.
                     inventory_allocation_priority: Set the sorting for Allocations which warehouse options to use first. Mixed will be based on qty and will less prioritise the type of warehouse, external warehouses will be pushed down, Internal will prioritise own warehouses (all warehouses that are not of the external type), External will prioritise warehouses of the external type before all others
                     managed_inventory_for_external_warehouse: Default value for InventoryLevel manageable option for External Warehouses
-                    adjust_inventory_qty: If this option is enabled, an API request to update InventoryLevel will adjust the quantity value with a provided one, as usual. If the option is turned off - then the request will replace the value.
+                    adjust_inventory_qty: If this option is enabled, an API request to update InventoryLevel will adjust the quantity value with the provided one, as usual. If the option is turned off - then the request will replace the value.
         messages:
             success:
                 warehouse.saved:        Warehouse has been saved successfully
@@ -307,6 +306,7 @@ marello:
                 warehouse.not_found:    No warehouse found, cannot update a new level without existing warehouse
                 inventorylevel.duplicate_entry: Duplicate entry found for entity "%entity_sku%", please correct the import file before continuing.
                 inventorylevel.product_not_found: Product not found for sku "%entity_sku%", please correct the import file before continuing.
+                inventorylevel.item_not_found: Inventory Item not found for product with sku "%entity_sku%", please correct the import file before continuing.
             warning:
                 inventorybatches.not_enabled:    Inventory Batches are not enabled for Inventory Item
 
@@ -317,5 +317,3 @@ marello:
                 max_qty_to_preorder: Limit the number of items that can be ordered in one order. Leave blank if no restriction applies.
                 preorder_datetime: Set the expected delivery date or leave blank if this is unknown. Field is cleared when new inventory is added from a Marello purchase order
                 backorder_datetime: Set the expected delivery date or leave blank if this is unknown. Field is cleared when new inventory is added from a Marello purchase order
-inventory_level_log_records:
-    label:

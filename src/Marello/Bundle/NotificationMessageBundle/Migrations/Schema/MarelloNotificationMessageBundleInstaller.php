@@ -28,7 +28,7 @@ class MarelloNotificationMessageBundleInstaller implements Installation, Activit
 
     public function getMigrationVersion()
     {
-        return 'v1_0';
+        return 'v1_1';
     }
 
     public function up(Schema $schema, QueryBag $queries)
@@ -41,7 +41,7 @@ class MarelloNotificationMessageBundleInstaller implements Installation, Activit
     {
         $table = $schema->createTable('marello_notification_message');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('title', 'string', ['notnull' => true, 'length' => 32]);
+        $table->addColumn('title', 'string', ['notnull' => true, 'length' => 64]);
         $table->addColumn('message', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('related_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('related_item_class', 'string', ['notnull' => false, 'length' => 100]);

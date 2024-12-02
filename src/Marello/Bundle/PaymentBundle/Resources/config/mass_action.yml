@@ -26,6 +26,6 @@ services:
         public: true
         arguments:
             - 'marello.payment.datagrid.status.success_message'
-            - 'MarelloPaymentBundle:PaymentMethodsConfigsRule'
+            - Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule
             - '@doctrine.orm.entity_manager'
             - '@translator'

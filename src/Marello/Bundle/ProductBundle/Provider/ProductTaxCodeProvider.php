@@ -3,12 +3,12 @@
 namespace Marello\Bundle\ProductBundle\Provider;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesProvider;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\LayoutBundle\Context\FormChangeContextInterface;
+use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesProvider;
 
 class ProductTaxCodeProvider extends AbstractOrderItemFormChangesProvider
 {
@@ -30,23 +30,27 @@ class ProductTaxCodeProvider extends AbstractOrderItemFormChangesProvider
         } else {
             return;
         }
-        $productIds = [];
-        foreach ($submittedData[self::ITEMS_FIELD] as $item) {
-            $productIds[] = (int)$item['product'];
-        }
-        $data = [];
-        /** @var Product[] $products */
-        $products = $this->getRepository()->findBySalesChannel($salesChannel->getId(), $productIds, $this->aclHelper);
 
-        foreach ($products as $product) {
-            $taxCode = $product->getSalesChannelTaxCode($salesChannel) ? : $product->getTaxCode();
-            if ($taxCode) {
-                $data[sprintf('%s%s', self::IDENTIFIER_PREFIX, $product->getId())] = [
-                    'id' => $taxCode->getId(),
-                    'code' => $taxCode->getCode()
-                ];
+        if (!array_key_exists(self::ITEMS_FIELD, $submittedData)) {
+            return;
+        }
+
+        $data = [];
+        foreach ($submittedData[self::ITEMS_FIELD] as $rowId => $item) {
+            /** @var Product[] $products */
+            $products = $this->getRepository()
+                ->findBySalesChannel($salesChannel->getId(), [(int)$item['product']], $this->aclHelper);
+            foreach ($products as $product) {
+                $taxCode = $product->getSalesChannelTaxCode($salesChannel) ? : $product->getTaxCode();
+                if ($taxCode) {
+                    $data[$this->getRowIdentifier($rowId, $item['product'])] = [
+                        'id' => $taxCode->getId(),
+                        'code' => $taxCode->getCode()
+                    ];
+                }
             }
         }
+
         if (!empty($data)) {
             $result = $context->getResult();
             $result[self::ITEMS_FIELD]['tax_code'] = $data;
@@ -55,7 +59,7 @@ class ProductTaxCodeProvider extends AbstractOrderItemFormChangesProvider
     }
 
     /**
-     * @return ProductRepository
+     * @return \Doctrine\Persistence\ObjectRepository
      */
     protected function getRepository()
     {

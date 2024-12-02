@@ -19,13 +19,13 @@ class SalesChannelTest extends TestCase
     {
         $this->assertPropertyAccessors(new SalesChannel(), [
             ['id', 42],
-            ['name', 'some string'],
-            ['code', 'some string'],
-            ['currency', 'some string'],
-            ['active', 1],
-            ['default', 1],
-            ['owner', new Organization()],
-            ['channelType', new SalesChannelType()],
+            ['name', 'some string', false],
+            ['code', 'some string', false],
+            ['currency', 'some string', false],
+            ['active', true],
+            ['default', true],
+            ['organization', new Organization()],
+            ['channelType', new SalesChannelType(), false],
             ['createdAt', new \DateTime()],
             ['updatedAt', new \DateTime()],
             ['localization', new Localization()]

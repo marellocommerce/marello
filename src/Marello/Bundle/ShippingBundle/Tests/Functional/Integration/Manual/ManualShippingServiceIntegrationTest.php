@@ -5,13 +5,13 @@ namespace Marello\Bundle\ShippingBundle\Tests\Functional\Integration\Manual;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\InventoryBundle\Entity\Allocation;
-use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
 use Marello\Bundle\ShippingBundle\Entity\Shipment;
-use Marello\Bundle\ShippingBundle\Integration\Manual\ManualShippingServiceDataFactory;
-use Marello\Bundle\ShippingBundle\Integration\Manual\ManualShippingServiceIntegration;
+use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
+use Marello\Bundle\InventoryBundle\Entity\Allocation;
 use Marello\Bundle\OrderBundle\Tests\Functional\DataFixtures\LoadOrderData;
 use Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures\LoadAllocationData;
+use Marello\Bundle\ShippingBundle\Integration\Manual\ManualShippingServiceDataFactory;
+use Marello\Bundle\ShippingBundle\Integration\Manual\ManualShippingServiceIntegration;
 
 class ManualShippingServiceIntegrationTest extends WebTestCase
 {

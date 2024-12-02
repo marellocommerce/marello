@@ -3,15 +3,19 @@
 namespace Marello\Bundle\NotificationMessageBundle\Datagrid\Extension\MassAction;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
-use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageResolvedInterface;
+
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\DataGridBundle\Extension\Action\ActionConfiguration;
-use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerArgs;
-use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerInterface;
 use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponse;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerArgs;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionHandlerInterface;
+use Oro\Bundle\DataGridBundle\Extension\MassAction\MassActionResponseInterface;
+
+use Marello\Bundle\NotificationMessageBundle\Entity\NotificationMessage;
+use Marello\Bundle\NotificationMessageBundle\Provider\NotificationMessageResolvedInterface;
 
 class ResolveMassActionHandler implements MassActionHandlerInterface
 {
@@ -24,7 +28,7 @@ class ResolveMassActionHandler implements MassActionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(MassActionHandlerArgs $args)
+    public function handle(MassActionHandlerArgs $args): MassActionResponseInterface
     {
         $em = $this->registry->getManagerForClass(NotificationMessage::class);
         $options = $args->getMassAction()->getOptions();

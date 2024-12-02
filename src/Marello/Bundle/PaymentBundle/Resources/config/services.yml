@@ -255,6 +255,8 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@marello_invoice.provider.invoice_paid_amount'
+        calls:
+            - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
 
     marello_payment.action.handler.payment_methods_configs_rule.enable_status:
         class: 'Marello\Bundle\PaymentBundle\Action\Handler\PaymentMethodsConfigsRuleToggleStatusActionHandler'

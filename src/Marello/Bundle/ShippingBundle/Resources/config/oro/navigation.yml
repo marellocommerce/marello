@@ -4,6 +4,7 @@ navigation:
             marello_shipping_rules:
                 label:           'marello.shipping.shippingmethodsconfigsrule.entity_plural_label'
                 route:           'marello_shipping_methods_configs_rule_index'
+                position:        103
                 extras:
                     routes:      ['/^marello_shipping_methods_configs_rule/']
                     description: 'marello.shipping.menu.shipping_rule.description'

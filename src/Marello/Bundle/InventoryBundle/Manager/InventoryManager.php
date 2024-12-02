@@ -144,7 +144,9 @@ class InventoryManager implements InventoryManagerInterface
         if ($context->getAllocatedInventory()) {
             $allocatedInventory = ($level->getAllocatedInventoryQty() + $context->getAllocatedInventory());
         }
-        $level->setManagedInventory($context->getValue('isInventoryManaged'));
+        if ($isManagedInventory = $context->getValue('isInventoryManaged')) {
+            $level->setManagedInventory($isManagedInventory);
+        }
         /** @var InventoryBatch[] $updatedBatches */
         $updatedBatches = $context->getInventoryBatches();
         if (count($updatedBatches) === 1 && $updatedBatches[0]['batch']->getId() === null) {

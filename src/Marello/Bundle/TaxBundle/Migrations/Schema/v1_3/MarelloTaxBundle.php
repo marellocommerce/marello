@@ -29,7 +29,7 @@ class MarelloTaxBundle implements Migration
     protected function updateMarelloTaxCodeTable(Schema $schema)
     {
         $table = $schema->getTable('marello_tax_tax_code');
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
     }
     
     /**
@@ -38,7 +38,7 @@ class MarelloTaxBundle implements Migration
     protected function updateMarelloTaxJurisdictionTable(Schema $schema)
     {
         $table = $schema->getTable('marello_tax_tax_jurisdiction');
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
     }
     
     /**
@@ -47,7 +47,7 @@ class MarelloTaxBundle implements Migration
     protected function updateMarelloTaxRuleTable(Schema $schema)
     {
         $table = $schema->getTable('marello_tax_tax_rule');
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
     }
 
     /**
@@ -56,6 +56,6 @@ class MarelloTaxBundle implements Migration
     protected function updateMarelloTaxRateTable(Schema $schema)
     {
         $table = $schema->getTable('marello_tax_tax_rate');
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
     }
 }

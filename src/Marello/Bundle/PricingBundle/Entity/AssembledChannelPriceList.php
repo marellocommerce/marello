@@ -2,144 +2,97 @@
 
 namespace Marello\Bundle\PricingBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\PricingBundle\Model\PriceTypeInterface;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @ORM\Entity()
- * @ORM\HasLifecycleCallbacks
- * @Oro\Config(
- *      defaultValues={
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
- * @ORM\Table(name="marello_assembled_ch_pr_list")
- */
+#[ORM\Table(name: 'marello_assembled_ch_pr_list')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+#[Oro\Config(defaultValues: ['dataaudit' => ['auditable' => true]])]
 class AssembledChannelPriceList implements PriceListInterface, ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use ExtendEntityTrait;
-    
+
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(name="id", type="integer")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="currency", type="string", length=3)
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *               "order"=10,
-     *               "identity"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\Column(name: 'currency', type: Types::STRING, length: 3)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 10, 'identity' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $currency;
 
     /**
      * @var Product
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\ProductBundle\Entity\Product", inversedBy="channelPrices")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *               "order"=5,
-     *               "full"=false,
-     *               "identity"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'channelPrices')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 5, 'identity' => true, 'full' => false],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $product;
 
     /**
      * @var SalesChannel
-     *
-     * @ORM\ManyToOne(targetEntity="Marello\Bundle\SalesBundle\Entity\SalesChannel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=false,
-     *              "identity"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'channel_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['identity' => true, 'full' => false],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $channel;
 
     /**
      * @var ProductChannelPrice
-     *
-     * @ORM\OneToOne(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductChannelPrice",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="default_price_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=10,
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'default_price_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: ProductChannelPrice::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 10, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $defaultPrice;
 
     /**
      * @var ProductChannelPrice
-     *
-     * @ORM\OneToOne(
-     *     targetEntity="Marello\Bundle\PricingBundle\Entity\ProductChannelPrice",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\JoinColumn(name="special_price_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
-     * @Oro\ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "order"=20,
-     *              "full"=true
-     *          },
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
+    #[ORM\JoinColumn(name: 'special_price_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\OneToOne(targetEntity: ProductChannelPrice::class, cascade: ['persist'], orphanRemoval: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'importexport' => ['order' => 20, 'full' => true],
+            'dataaudit' => ['auditable' => true]
+        ]
+    )]
     protected $specialPrice;
 
     /**

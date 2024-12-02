@@ -4,6 +4,9 @@ namespace Marello\Bundle\TaxBundle\Matcher;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
+
 class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
 {
     const CACHE_KEY_DELIMITER = ':';
@@ -18,6 +21,11 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
      */
     private $matchers = [];
 
+    public function __construct(
+        protected CompanyReverseTaxProvider $provider
+    ) {
+    }
+
     /**
      * @param TaxRuleMatcherInterface $matcher
      */
@@ -29,9 +37,13 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
     /**
      * {@inheritdoc}
      */
-    public function match(AbstractAddress $address = null, array $taxCodes)
+    public function match(array $taxCodes, Order $order = null, AbstractAddress $address = null)
     {
         if (null === $address || null === $address->getCountry() || 0 === count($taxCodes)) {
+            return null;
+        }
+
+        if (!$this->provider->orderIsTaxable($order)) {
             return null;
         }
 
@@ -40,7 +52,7 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
             return $this->cache[$cacheKey];
         }
         foreach ($this->matchers as $matcher) {
-            $taxRule = $matcher->match($address, $taxCodes);
+            $taxRule = $matcher->match($taxCodes, $order, $address);
             if ($taxRule) {
                 $this->cache[$cacheKey] = $taxRule;
 

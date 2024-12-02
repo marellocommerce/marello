@@ -29,9 +29,6 @@ api:
                     exclude: true
                 categoriesCodes:
                     exclude: true
-                #removed tags from API response as they cannot deal with SKU as identifier
-                tags:
-                    exclude: true
             filters:
                 exclusion_policy: all
                 fields:
@@ -59,6 +56,15 @@ api:
                         property_path: updatedAt
                         description: 'Filter products by updated at'
             actions:
+                #removed tags from API response as it cannot deal with SKU as identifier
+                get:
+                    fields:
+                        tags:
+                            exclude: true
+                get_list:
+                    fields:
+                        tags:
+                            exclude: true
                 create:
                     fields:
                         prices:

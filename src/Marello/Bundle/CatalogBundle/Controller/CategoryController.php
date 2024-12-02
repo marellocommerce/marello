@@ -2,50 +2,50 @@
 
 namespace Marello\Bundle\CatalogBundle\Controller;
 
-use Marello\Bundle\CatalogBundle\Entity\Category;
-use Marello\Bundle\CatalogBundle\Form\Handler\CategoryHandler;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\UIBundle\Route\Router;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+
+use Marello\Bundle\CatalogBundle\Entity\Category;
+use Marello\Bundle\CatalogBundle\Form\Handler\CategoryHandler;
 
 class CategoryController extends AbstractController
 {
-    /**
-     * @Route(path="/", name="marello_category_index")
-     * @AclAncestor("marello_category_view")
-     * @Template
-     */
+    #[Route(path: '/', name: 'marello_category_index')]
+    #[AclAncestor('marello_category_view')]
+    #[Template]
     public function indexAction()
     {
-        return ['entity_class' => 'MarelloCatalogBundle:Category'];
+        return ['entity_class' => Category::class];
     }
 
     /**
-     * @Route(path="/create", name="marello_category_create")
-     * @AclAncestor("marello_category_create")
-     * @Template("@MarelloCatalog/Category/update.html.twig")
-     *
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/create', name: 'marello_category_create')]
+    #[AclAncestor('marello_category_create')]
+    #[Template('@MarelloCatalog/Category/update.html.twig')]
     public function createAction(Request $request)
     {
         return $this->update(new Category(), $request);
     }
 
     /**
-     * @Route(path="/update/{id}", requirements={"id"="\d+"}, name="marello_category_update")
-     * @AclAncestor("marello_category_update")
-     * @Template("@MarelloCatalog/Category/update.html.twig")
      *
      * @param Category $category
      * @param Request $request
      * @return array
      */
+    #[Route(path: '/update/{id}', requirements: ['id' => '\d+'], name: 'marello_category_update')]
+    #[AclAncestor('marello_category_update')]
+    #[Template('@MarelloCatalog/Category/update.html.twig')]
     public function updateAction(Category $category, Request $request)
     {
         return $this->update($category, $request);
@@ -76,14 +76,12 @@ class CategoryController extends AbstractController
     }
 
     /**
-     * @Route(path="/view/{id}", requirements={"id"="\d+"}, name="marello_category_view")
-     * @AclAncestor("marello_category_view")
-     * @Template("@MarelloCatalog/Category/view.html.twig")
-     *
      * @param Category $category
-     *
      * @return array
      */
+    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_category_view')]
+    #[AclAncestor('marello_category_view')]
+    #[Template('@MarelloCatalog/Category/view.html.twig')]
     public function viewAction(Category $category)
     {
         return [
@@ -91,7 +89,7 @@ class CategoryController extends AbstractController
         ];
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

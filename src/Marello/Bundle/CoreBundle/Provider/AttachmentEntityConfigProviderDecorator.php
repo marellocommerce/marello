@@ -11,6 +11,7 @@ class AttachmentEntityConfigProviderDecorator implements AttachmentEntityConfigP
         protected AttachmentEntityConfigProviderInterface $innerProvider
     ) {
     }
+
     public function getFieldConfig(string $entityClass, string $fieldName): ?ConfigInterface
     {
         if (!$entityClass) {

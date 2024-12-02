@@ -9,6 +9,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\CatalogBundle\Entity\Category;
 
 class LoadCategoryData extends AbstractFixture implements DependentFixtureInterface
@@ -126,7 +127,7 @@ class LoadCategoryData extends AbstractFixture implements DependentFixtureInterf
     private function getQueryBuilder()
     {
         return $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->createQueryBuilder('p');
     }
 }

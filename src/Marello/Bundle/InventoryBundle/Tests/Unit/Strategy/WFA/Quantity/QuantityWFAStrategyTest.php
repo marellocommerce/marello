@@ -151,15 +151,30 @@ class QuantityWFAStrategyTest extends TestCase
 
         $orderItem1 = $this->getEntity(
             OrderItem::class,
-            ['productSku' => $product1->getSku(), 'product' => $product1, 'quantity' => 1]
+            [
+                'productSku' => $product1->getSku(),
+                'product' => $product1,
+                'quantity' => 1,
+                'variantHash' => md5($product1->getSku())
+            ]
         );
         $orderItem2 = $this->getEntity(
             OrderItem::class,
-            ['productSku' => $product2->getSku(), 'product' => $product2, 'quantity' => 1]
+            [
+                'productSku' => $product2->getSku(),
+                'product' => $product2,
+                'quantity' => 1,
+                'variantHash' => md5($product2->getSku())
+            ]
         );
         $orderItem3 = $this->getEntity(
             OrderItem::class,
-            ['productSku' => $product3->getSku(), 'product' => $product3, 'quantity' => 1]
+            [
+                'productSku' => $product3->getSku(),
+                'product' => $product3,
+                'quantity' => 1,
+                'variantHash' => md5($product3->getSku())
+            ]
         );
 
         $salesChannelGroup = $this->getEntity(SalesChannelGroup::class, ['id' => 1]);
@@ -176,25 +191,25 @@ class QuantityWFAStrategyTest extends TestCase
         $initialResults = [];
 
         $productsByWh = [
-            'TPD0001' => [
+            md5($product1->getSku()) => [
                 [
-                    'sku' => 'TPD0001',
+                    'sku' => md5($product1->getSku()),
                     'wh' => 'warehouse1',
                     'qty' => 1,
                     'qtyOrdered' => 1,
                 ]
             ],
-            'TPD0002' => [
+            md5($product2->getSku()) => [
                 [
-                    'sku' => 'TPD0002',
+                    'sku' => md5($product2->getSku()),
                     'wh' => 'warehouse2',
                     'qty' => 1,
                     'qtyOrdered' => 1,
                 ]
             ],
-            'TPD0003'=> [
+            md5($product3->getSku()) => [
                 [
-                    'sku' => 'TPD0003',
+                    'sku' => md5($product3->getSku()),
                     'wh' => 'warehouse1',
                     'qty' => 1,
                     'qtyOrdered' => 1,
@@ -202,9 +217,9 @@ class QuantityWFAStrategyTest extends TestCase
             ]
         ];
         $orderItemsByProducts = [
-            'TPD0001_|_0' => $orderItem1,
-            'TPD0002_|_1' => $orderItem2,
-            'TPD0003_|_2' => $orderItem3,
+            md5($product1->getSku()) => $orderItem1,
+            md5($product2->getSku()) => $orderItem2,
+            md5($product3->getSku()) => $orderItem3,
         ];
         $warehouses = [
             $warehouse1->getCode() => $warehouse1,

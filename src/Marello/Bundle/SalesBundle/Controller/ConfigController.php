@@ -2,36 +2,39 @@
 
 namespace Marello\Bundle\SalesBundle\Controller;
 
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Provider\SalesChannelConfigurationFormProvider;
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
-use Oro\Bundle\ConfigBundle\Form\Handler\ConfigHandler;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\SyncBundle\Content\DataUpdateTopicSender;
-use Oro\Bundle\SyncBundle\Content\TagGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\ConfigBundle\Form\Handler\ConfigHandler;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\SyncBundle\Content\DataUpdateTopicSender;
+use Oro\Bundle\SyncBundle\Content\TagGeneratorInterface;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Provider\SalesChannelConfigurationFormProvider;
 
 class ConfigController extends AbstractController
 {
     /**
-     * @Route(
-     *      "/saleschannel/{id}/{activeGroup}/{activeSubGroup}",
-     *      name="marello_sales_config_saleschannel",
-     *      requirements={"id"="\d+"},
-     *      defaults={"activeGroup" = null, "activeSubGroup" = null}
-     * )
-     * @Template()
-     * @AclAncestor("marello_sales_saleschannel_update")
      * @param Request $request
      * @param SalesChannel $entity
      * @param mixed $activeGroup
      * @param mixed $activeSubGroup
      * @return array
      */
+    #[Route(
+        path: '/saleschannel/{id}/{activeGroup}/{activeSubGroup}',
+        name: 'marello_sales_config_saleschannel',
+        requirements: ['id' => '\d+'],
+        defaults: ['activeGroup' => null, 'activeSubGroup' => null]
+    )]
+    #[Template]
+    #[AclAncestor('marello_sales_saleschannel_update')]
     public function salesChannelAction(
         Request $request,
         SalesChannel $entity,
@@ -59,7 +62,8 @@ class ConfigController extends AbstractController
             ) {
                 $request->getSession()->getFlashBag()->add(
                     'success',
-                    $this->container->get(TranslatorInterface::class)->trans('oro.config.controller.config.saved.message')
+                    $this->container
+                        ->get(TranslatorInterface::class)->trans('oro.config.controller.config.saved.message')
                 );
 
                 // outdate content tags, it's only special case for generation that are not covered by NavigationBundle
@@ -88,7 +92,7 @@ class ConfigController extends AbstractController
         ];
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),

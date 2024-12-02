@@ -4,16 +4,19 @@ namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Marello\Bundle\ManualShippingBundle\Method\ManualShippingMethodType;
-use Marello\Bundle\ManualShippingBundle\Migrations\Data\ORM\LoadManualShippingIntegration;
+
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\RuleBundle\Entity\Rule;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodConfig;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodTypeConfig;
 use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Marello\Bundle\ManualShippingBundle\Method\ManualShippingMethodType;
+use Marello\Bundle\ManualShippingBundle\Migrations\Data\ORM\LoadManualShippingIntegration;
 
 class LoadShippingRule extends AbstractFixture implements ContainerAwareInterface
 {
@@ -78,7 +81,7 @@ class LoadShippingRule extends AbstractFixture implements ContainerAwareInterfac
      */
     protected function getOrganization(ObjectManager $manager)
     {
-        return $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        return $manager->getRepository(Organization::class)->getFirst();
     }
 
     private function getIdentifier(Channel $channel)

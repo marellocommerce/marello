@@ -15,3 +15,7 @@ workflows:
                     class: \DateTime
             note:
                 type: string
+            update_balanced_inventory:
+                type: boolean
+            total_paid_amount:
+                type: float

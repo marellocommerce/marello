@@ -8,11 +8,12 @@ system_configuration:
         product_general:
             title: marello.product.system_configuration.groups.product_general.label
     fields:
-        marello_product.image_use_external_url:
+        marello_product.use_external_url:
             data_type: boolean
             type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
             options:
-                label: marello.product.system_configuration.fields.image_use_external_url.label
+                label: marello.product.system_configuration.fields.use_external_url.label
+                tooltip: marello.product.system_configuration.fields.use_external_url.tooltip
                 required: false
 
     tree:
@@ -25,4 +26,4 @@ system_configuration:
                                 children:
                                     product_general:
                                         children:
-                                            - marello_product.image_use_external_url
+                                            - marello_product.use_external_url

@@ -46,7 +46,7 @@ class MarelloOrderBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v3_1_7';
+        return 'v3_1_9';
     }
 
     /**
@@ -87,12 +87,12 @@ class MarelloOrderBundleInstaller implements
         $table->addColumn('payment_method', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn(
             'payment_method_options',
-            'json_array',
+            'json',
             [
-                'notnull' => false, 'comment' => '(DC2Type:json_array)'
+                'notnull' => false, 'comment' => '(DC2Type:json)'
             ]
         );
-        $table->addColumn('data', 'json_array', ['notnull' => false, 'comment' => '(DC2Type:json_array)']);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn(
             'shipping_amount_incl_tax',
             'money',
@@ -234,7 +234,8 @@ class MarelloOrderBundleInstaller implements
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('item_type', 'string', ['notnull' => false, 'length' => 255]);
         $table->addIndex(['user_owner_id']);
-
+        $table->addColumn('comment', 'text', ['notnull' => false]);
+        $table->addColumn('variant_hash', 'string', ['notnull' => true]);
         $this->extendExtension->addEnumField(
             $schema,
             $table,

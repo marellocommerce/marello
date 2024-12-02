@@ -8,7 +8,7 @@ data:
             product:
                 data:
                     type: marelloproducts
-                    id: p1
+                    id: '<toString(@product1->sku)>'
             saleschannel:
                 data:
                     type: marellosaleschannels
@@ -16,6 +16,6 @@ data:
             defaultPrice:
                 data:
                     type: marelloproductchannelprices
-                    id: '<toString(@product1->channelPrices->get(0)->defaultPrice->id)>'
+                    id: '<toString(@marello_assembledchannelpricelist_p1_EUR->defaultPrice->id)>'
             specialPrice:
                 data: null

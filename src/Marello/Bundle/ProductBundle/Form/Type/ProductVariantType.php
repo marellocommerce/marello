@@ -2,14 +2,17 @@
 
 namespace Marello\Bundle\ProductBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\Variant;
 use Marello\Bundle\ProductBundle\Form\EventListener\VariantSubscriber;
-use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Valid;
 
 class ProductVariantType extends AbstractType
 {
@@ -26,7 +29,7 @@ class ProductVariantType extends AbstractType
                 'addVariants',
                 EntityIdentifierType::class,
                 [
-                    'class'    => 'MarelloProductBundle:Product',
+                    'class'    => Product::class,
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,
@@ -36,7 +39,7 @@ class ProductVariantType extends AbstractType
                 'removeVariants',
                 EntityIdentifierType::class,
                 [
-                    'class'    => 'MarelloProductBundle:Product',
+                    'class'    => Product::class,
                     'required' => false,
                     'mapped'   => false,
                     'multiple' => true,

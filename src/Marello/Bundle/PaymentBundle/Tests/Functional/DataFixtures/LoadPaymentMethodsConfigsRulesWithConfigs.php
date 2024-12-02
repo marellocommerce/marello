@@ -2,23 +2,25 @@
 
 namespace Marello\Bundle\PaymentBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Symfony\Component\Yaml\Yaml;
+use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Marello\Bundle\RuleBundle\Entity\Rule;
+use Marello\Bundle\RuleBundle\Entity\RuleInterface;
 use Marello\Bundle\PaymentBundle\Entity\PaymentMethodConfig;
 use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRule;
 use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestination;
-use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestinationPostalCode;
 use Marello\Bundle\PaymentBundle\Tests\Functional\Helper\PaymentTermIntegrationTrait;
+use Marello\Bundle\PaymentBundle\Entity\PaymentMethodsConfigsRuleDestinationPostalCode;
 use Marello\Bundle\PaymentTermBundle\Tests\Functional\DataFixtures\LoadPaymentTermIntegration;
-use Marello\Bundle\RuleBundle\Entity\Rule;
-use Marello\Bundle\RuleBundle\Entity\RuleInterface;
-use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\Yaml\Yaml;
 
 class LoadPaymentMethodsConfigsRulesWithConfigs extends AbstractFixture implements
     DependentFixtureInterface,
@@ -130,7 +132,7 @@ class LoadPaymentMethodsConfigsRulesWithConfigs extends AbstractFixture implemen
         foreach ($data['destinations'] as $destination) {
             /** @var Country $country */
             $country = $manager
-                ->getRepository('OroAddressBundle:Country')
+                ->getRepository(Country::class)
                 ->findOneBy(['iso2Code' => $destination['country']]);
 
             $paymentRuleDestination = new PaymentMethodsConfigsRuleDestination();
@@ -141,7 +143,7 @@ class LoadPaymentMethodsConfigsRulesWithConfigs extends AbstractFixture implemen
             if (array_key_exists('region', $destination)) {
                 /** @var Region $region */
                 $region = $manager
-                    ->getRepository('OroAddressBundle:Region')
+                    ->getRepository(Region::class)
                     ->findOneBy(['combinedCode' => $destination['country'].'-'.$destination['region']]);
                 $paymentRuleDestination->setRegion($region);
             }
@@ -200,7 +202,7 @@ class LoadPaymentMethodsConfigsRulesWithConfigs extends AbstractFixture implemen
     private function getOrganization()
     {
         return $this->container->get('doctrine')
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->getFirst();
     }
 }

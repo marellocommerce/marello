@@ -2,8 +2,10 @@
 
 namespace Marello\Bundle\InventoryBundle\Tests\Functional\Entity\Repository;
 
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
 
 class WarehouseRepositoryTest extends WebTestCase
 {
@@ -14,7 +16,7 @@ class WarehouseRepositoryTest extends WebTestCase
     {
         $this->initClient();
 
-        $this->repository = $this->getContainer()->get('doctrine')->getRepository('MarelloInventoryBundle:Warehouse');
+        $this->repository = $this->getContainer()->get('doctrine')->getRepository(Warehouse::class);
     }
 
     /**

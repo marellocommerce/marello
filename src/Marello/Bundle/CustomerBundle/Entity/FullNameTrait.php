@@ -2,49 +2,31 @@
 
 namespace Marello\Bundle\CustomerBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-trait HasFullNameTrait
+trait FullNameTrait
 {
-    /**
-     * @ORM\Column(name="name_prefix", type="string", nullable=true)
-     *
-     * @var string
-     */
-    protected $namePrefix;
 
-    /**
-     * @ORM\Column(name="first_name", type="string", nullable=false)
-     *
-     * @var string
-     */
-    protected $firstName;
+    #[ORM\Column(name: 'name_prefix', type: Types::STRING, nullable: true)]
+    protected ?string $namePrefix = null;
 
-    /**
-     * @ORM\Column(name="middle_name", type="string", nullable=true)
-     *
-     * @var string
-     */
-    protected $middleName;
+    #[ORM\Column(name: 'first_name', type: Types::STRING, nullable: false)]
+    protected ?string $firstName = null;
 
-    /**
-     * @ORM\Column(name="last_name", type="string", nullable=false)
-     *
-     * @var string
-     */
-    protected $lastName;
+    #[ORM\Column(name: 'middle_name', type: Types::STRING, nullable: true)]
+    protected ?string $middleName = null;
 
-    /**
-     * @ORM\Column(name="name_suffix", type="string", nullable=true)
-     *
-     * @var string
-     */
-    protected $nameSuffix;
+    #[ORM\Column(name: 'last_name', type: Types::STRING, nullable: false)]
+    protected ?string $lastName = null;
+
+    #[ORM\Column(name: 'name_suffix', type: Types::STRING, nullable: true)]
+    protected ?string $nameSuffix = null;
 
     /**
      * @return string
      */
-    public function getNamePrefix()
+    public function getNamePrefix(): ?string
     {
         return $this->namePrefix;
     }
@@ -54,7 +36,7 @@ trait HasFullNameTrait
      *
      * @return $this
      */
-    public function setNamePrefix($namePrefix)
+    public function setNamePrefix(string $namePrefix = null): self
     {
         $this->namePrefix = $namePrefix;
 
@@ -64,7 +46,7 @@ trait HasFullNameTrait
     /**
      * @return string
      */
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
@@ -74,7 +56,7 @@ trait HasFullNameTrait
      *
      * @return $this
      */
-    public function setFirstName($firstName)
+    public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
 
@@ -84,7 +66,7 @@ trait HasFullNameTrait
     /**
      * @return mixed
      */
-    public function getMiddleName()
+    public function getMiddleName(): ?string
     {
         return $this->middleName;
     }
@@ -94,7 +76,7 @@ trait HasFullNameTrait
      *
      * @return $this
      */
-    public function setMiddleName($middleName)
+    public function setMiddleName(string $middleName = null): self
     {
         $this->middleName = $middleName;
 
@@ -104,7 +86,7 @@ trait HasFullNameTrait
     /**
      * @return mixed
      */
-    public function getLastName()
+    public function getLastName(): string
     {
         return $this->lastName;
     }
@@ -114,7 +96,7 @@ trait HasFullNameTrait
      *
      * @return $this
      */
-    public function setLastName($lastName)
+    public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
 
@@ -124,7 +106,7 @@ trait HasFullNameTrait
     /**
      * @return mixed
      */
-    public function getNameSuffix()
+    public function getNameSuffix(): ?string
     {
         return $this->nameSuffix;
     }
@@ -134,7 +116,7 @@ trait HasFullNameTrait
      *
      * @return $this
      */
-    public function setNameSuffix($nameSuffix)
+    public function setNameSuffix(string $nameSuffix = null): self
     {
         $this->nameSuffix = $nameSuffix;
 
@@ -146,7 +128,7 @@ trait HasFullNameTrait
      *
      * @return string
      */
-    public function getFullName()
+    public function getFullName(): string
     {
         $names = array_filter([
             $this->namePrefix,

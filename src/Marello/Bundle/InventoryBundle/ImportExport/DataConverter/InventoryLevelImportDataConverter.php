@@ -14,7 +14,7 @@ class InventoryLevelImportDataConverter extends AbstractTreeDataConverter
         return [
             'SKU'             => 'inventoryItem:product:sku',
             'Warehouse Code'  => 'warehouse:code',
-            'Adjustment'      => 'inventory',
+            'Adjustment'      => 'inventoryQty',
             'Batch Number'    => 'inventoryBatches:0:batchNumber',
             'Purchase Price'  => 'inventoryBatches:0:purchasePrice',
             'Expiration Date' => 'inventoryBatches:0:expirationDate',
@@ -31,7 +31,7 @@ class InventoryLevelImportDataConverter extends AbstractTreeDataConverter
         return [
             'inventoryItem:product:sku',
             'warehouse:code',
-            'inventory',
+            'inventoryQty',
             'inventoryBatches:0:batchNumber',
             'inventoryBatches:0:purchasePrice',
             'inventoryBatches:0:expirationDate',

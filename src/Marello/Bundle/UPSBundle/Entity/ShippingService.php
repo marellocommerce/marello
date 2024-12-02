@@ -2,44 +2,42 @@
 
 namespace Marello\Bundle\UPSBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 use Oro\Bundle\AddressBundle\Entity\Country;
 
-/**
- * @ORM\Table(name="marello_ups_shipping_service")
- * @ORM\Entity(repositoryClass="Marello\Bundle\UPSBundle\Entity\Repository\ShippingServiceRepository")
- */
+use Marello\Bundle\UPSBundle\Entity\Repository\ShippingServiceRepository;
+
+#[ORM\Table(name: 'marello_ups_shipping_service')]
+#[ORM\Entity(repositoryClass: ShippingServiceRepository::class)]
 class ShippingService
 {
     /**
      * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=10)
      */
+    #[ORM\Column(name: 'code', type: Types::STRING, length: 10)]
     protected $code;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="description", type="string", length=255)
      */
+    #[ORM\Column(name: 'description', type: Types::STRING, length: 255)]
     protected $description;
 
     /**
      * @var Country
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
-     * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code", nullable=false)
      */
+    #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'iso2_code', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Country::class)]
     protected $country;
 
     /**

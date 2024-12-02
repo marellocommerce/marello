@@ -35,8 +35,6 @@ data:
                     id: chan_eur
             shipment:
                 data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -73,8 +71,6 @@ data:
                     type: marellosaleschannels
                     id: chan_eur
             shipment:
-                data: null
-            localization:
                 data: null
             organization:
                 data:
@@ -116,8 +112,6 @@ data:
                     id: chan_eur
             shipment:
                 data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -148,8 +142,6 @@ data:
                     type: marellosaleschannels
                     id: chan_eur
             shipment:
-                data: null
-            localization:
                 data: null
             organization:
                 data:
@@ -184,8 +176,6 @@ data:
                     type: marellosaleschannels
                     id: chan_eur
             shipment:
-                data: null
-            localization:
                 data: null
             organization:
                 data:
@@ -227,8 +217,6 @@ data:
                     id: chan_eur
             shipment:
                 data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -259,8 +247,6 @@ data:
                     type: marellosaleschannels
                     id: chan_eur
             shipment:
-                data: null
-            localization:
                 data: null
             organization:
                 data:
@@ -296,8 +282,6 @@ data:
                     id: chan_eur
             shipment:
                 data: null
-            localization:
-                data: null
             organization:
                 data:
                     type: organizations
@@ -331,8 +315,6 @@ data:
                     type: marellosaleschannels
                     id: chan_eur
             shipment:
-                data: null
-            localization:
                 data: null
             organization:
                 data:

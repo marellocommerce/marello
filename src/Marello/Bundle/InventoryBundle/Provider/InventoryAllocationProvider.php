@@ -4,8 +4,6 @@ namespace Marello\Bundle\InventoryBundle\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
-use Marello\Bundle\POSBundle\Migrations\Data\ORM\LoadSalesChannelPOSTypeData;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,8 +23,8 @@ use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
 use Marello\Bundle\InventoryBundle\Model\OrderWarehouseResult;
 use Marello\Bundle\InventoryBundle\Event\InventoryUpdateEvent;
 use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContextFactory;
+use Marello\Bundle\POSBundle\Migrations\Data\ORM\LoadSalesChannelPOSTypeData;
 use Marello\Bundle\InventoryBundle\Strategy\WFA\Quantity\QuantityWFAStrategy;
-use function Symfony\Component\Translation\t;
 
 class InventoryAllocationProvider
 {
@@ -290,8 +288,44 @@ class InventoryAllocationProvider
             if ($allocation->getWarehouse()) {
                 $allocationItem->setWarehouse($allocation->getWarehouse());
             }
-            $allocationItem->setQuantity($itemWithQty[$item->getProductSku()]);
+
+            $allocationItem->setQuantity($itemWithQty[$orderItem->getVariantHash()]);
             $allocationItem->setTotalQuantity($orderItem->getQuantity());
+            $inventoryItem = $item->getProduct()->getInventoryItem();
+            if ($inventoryItem && $allocation->getWarehouse()) {
+                if ($inventoryLevel = $inventoryItem->getInventoryLevel($allocation->getWarehouse())) {
+                    $inventoryBatches = $inventoryLevel->getInventoryBatches()->toArray();
+                    if (count($inventoryBatches) > 0) {
+                        usort($inventoryBatches, function (InventoryBatch $a, InventoryBatch $b) {
+                            if ($a->getDeliveryDate() < $b->getDeliveryDate()) {
+                                return -1;
+                            } elseif ($a->getDeliveryDate() > $b->getDeliveryDate()) {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
+                        });
+                        $data = [];
+                        $quantity = $allocationItem->getQuantity();
+                        /** @var InventoryBatch[] $inventoryBatches */
+                        $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                        foreach ($inventoryBatches as $inventoryBatch) {
+                            // we cannot use expired batches
+                            if ($inventoryBatch->getSellByDate() && $inventoryBatch->getSellByDate() <= $currentDateTime) {
+                                continue;
+                            }
+                            if ($inventoryBatch->getQuantity() >= $quantity) {
+                                $data[$inventoryBatch->getBatchNumber()] = $quantity;
+                                break;
+                            } elseif (($batchQty = $inventoryBatch->getQuantity()) > 0) {
+                                $data[$inventoryBatch->getBatchNumber()] = $batchQty;
+                                $quantity = $quantity - $batchQty;
+                            }
+                        }
+                        $allocationItem->setInventoryBatches($data);
+                    }
+                }
+            }
             $allocation->addItem($allocationItem);
             if ($orderItem->getItemType() === OrderItemTypeInterface::OI_TYPE_CASHANDCARRY) {
                 $totalItemsCandC++;

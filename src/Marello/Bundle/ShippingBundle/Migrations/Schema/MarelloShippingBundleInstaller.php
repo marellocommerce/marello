@@ -70,15 +70,15 @@ class MarelloShippingBundleInstaller implements Installation, AttachmentExtensio
     {
         $table = $schema->createTable('marello_shipment');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('shipping_service', 'string', ['length' => 255]);
+        $table->addColumn('shipping_service', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('ups_shipment_digest', 'text', ['notnull' => false]);
         $table->addColumn('base64_encoded_label', 'text', ['notnull' => false]);
         $table->addColumn('identification_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('ups_package_tracking_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('tracking_info_id', 'integer', ['notnull' => false]);
-        $table->addColumn('created_at', 'datetime', []);
-        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->addColumn('created_at', 'datetime');
+        $table->addColumn('updated_at', 'datetime');
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['tracking_info_id'], 'marello_shipment_trackinginfoidx');
     }

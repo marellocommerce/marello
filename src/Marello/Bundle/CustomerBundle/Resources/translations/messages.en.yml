@@ -16,11 +16,27 @@ marello:
         middle_name.label:                'Middle Name'
         last_name.label:                  'Last Name'
         name_suffix.label:                'Name Suffix'
+        name.label:                       'Name'
         company.label:                    'Company'
+        customer_group.label:             'Customer Group'
         phone.label:                      'Phone'
         label:                            'Customer'
+        is_hidden.label:                  'Is hidden'
+        email_lowercase.label:            'Email lowercase'
         form:
             choose:                       'Choose customer'
+
+        customergroup:
+            entity_label: 'Customer Group'
+            entity_plural_label: 'Customer Groups'
+            entity_grid_all_view_label: All %entity_plural_label%
+            group.label: 'Group'
+            id.label: 'Id'
+            name.label: 'Group name'
+            customers.label: 'Customers'
+            saved.message: 'Customer group saved'
+            hasGroup.label: 'Has Group'
+            form.choose: 'Choose a group'
 
         company:
             entity_label:           'Company'
@@ -38,8 +54,8 @@ marello:
             tax_identification_number.label:  'Tax Identification Number'
 
             form:
-                choose:             'Choose a company...'
-                choose_parent:      'Choose parent company...'
+                choose:             'Choose a company'
+                choose_parent:      'Choose parent company'
                 address:
                     add:            'Add Address'
                     cancel:         'Cancel'
@@ -55,6 +71,7 @@ marello:
                 addresses:           'Addresses'
                 general:             'General'
                 additional:          'Additional'
+
         controller:
             company:
                 saved.message:      'Company has been saved'

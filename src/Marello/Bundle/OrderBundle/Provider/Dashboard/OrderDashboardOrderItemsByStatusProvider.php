@@ -3,15 +3,18 @@
 namespace Marello\Bundle\OrderBundle\Provider\Dashboard;
 
 use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository;
-use Marello\Bundle\OrderBundle\Migrations\Data\ORM\LoadOrderItemStatusData;
-use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\DashboardBundle\Filter\WidgetProviderFilterManager;
-use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\CurrencyBundle\Query\CurrencyQueryBuilderTransformerInterface;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Entity\Repository\OrderItemRepository;
+use Marello\Bundle\OrderBundle\Migrations\Data\ORM\LoadOrderItemStatusData;
 
 class OrderDashboardOrderItemsByStatusProvider
 {
@@ -67,7 +70,7 @@ class OrderDashboardOrderItemsByStatusProvider
         $statuses = $widgetOptions->get('statuses') ? : [];
 
         /** @var OrderItemRepository $orderitemRepository */
-        $orderitemRepository = $this->registry->getRepository('MarelloOrderBundle:Order');
+        $orderitemRepository = $this->registry->getRepository(Order::class);
         $qb = $orderitemRepository->createQueryBuilder('o')
             ->select('IDENTITY (oi.status) status, COUNT(oi.id) as quantity')
             ->andWhere('IDENTITY (oi.status) IS NOT NULL')

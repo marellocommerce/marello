@@ -42,7 +42,7 @@ class VariantControllerTest extends WebTestCase
         /** @var Product $product */
         $product = $this->getContainer()
             ->get('doctrine')
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findOneBy(['variant' => null]);
 
         $crawler = $this->client->request(
@@ -62,7 +62,7 @@ class VariantControllerTest extends WebTestCase
 
         $product = $this->getContainer()
             ->get('doctrine')
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->find($product->getId());
 
         $this->assertNotNull($product->getVariant());

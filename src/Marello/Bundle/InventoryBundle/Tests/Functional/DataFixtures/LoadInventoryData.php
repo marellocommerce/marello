@@ -2,26 +2,31 @@
 
 namespace Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
-use Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel;
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
-use Marello\Bundle\InventoryBundle\Entity\Warehouse;
-use Marello\Bundle\InventoryBundle\Manager\InventoryManager;
-use Marello\Bundle\InventoryBundle\Model\BalancedInventory\BalancedInventoryHandler;
-use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContextFactory;
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Entity\ProductInterface;
-use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContext;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\ProductBundle\Entity\ProductInterface;
+use Marello\Bundle\InventoryBundle\Manager\InventoryManager;
+use Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel;
+use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContextFactory;
+use Marello\Bundle\InventoryBundle\Entity\Repository\WarehouseRepository;
+use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
+use Marello\Bundle\InventoryBundle\Model\BalancedInventory\BalancedInventoryHandler;
 
 class LoadInventoryData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -77,7 +82,7 @@ class LoadInventoryData extends AbstractFixture implements DependentFixtureInter
     {
         $this->manager = $manager;
         $organizations = $this->manager
-            ->getRepository('OroOrganizationBundle:Organization')
+            ->getRepository(Organization::class)
             ->findAll();
 
         if (is_array($organizations) && count($organizations) > 0) {
@@ -122,7 +127,7 @@ class LoadInventoryData extends AbstractFixture implements DependentFixtureInter
     private function createProductInventory(array $data)
     {
         $product = $this->manager
-            ->getRepository('MarelloProductBundle:Product')
+            ->getRepository(Product::class)
             ->findOneBy(['sku' => $data['sku']]);
 
         if ($product) {
@@ -146,6 +151,21 @@ class LoadInventoryData extends AbstractFixture implements DependentFixtureInter
 
             $this->handleInventoryUpdate($product, $inventoryItem, $data['inventory_qty'], 0, null);
             $this->balanceInventory($product, $data['inventory_qty']);
+            $this->setReference(
+                sprintf('marello_inventoryitem_%s',
+                    $inventoryItem->getProduct()->getSku()
+                ),
+                $inventoryItem
+            );
+            foreach ($inventoryItem->getInventoryLevels() as $k => $level) {
+                $this->setReference(
+                    sprintf('marello_inventorylvl_%s_%s',
+                        $k,
+                        $inventoryItem->getProduct()->getSku()
+                    ),
+                    $level
+                );
+            }
         }
     }
 
@@ -170,6 +190,7 @@ class LoadInventoryData extends AbstractFixture implements DependentFixtureInter
 
         /** @var InventoryManager $inventoryManager */
         $inventoryManager = $this->container->get('marello_inventory.manager.inventory_manager');
+        $context->setValue('isInventoryManaged', true);
         $inventoryManager->updateInventoryLevel($context);
     }
 

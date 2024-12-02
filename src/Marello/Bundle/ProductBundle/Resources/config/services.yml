@@ -136,8 +136,6 @@ services:
         parent: oro_entity.abstract_repository
         arguments:
             - 'Marello\Bundle\ProductBundle\Entity\Product'
-        calls:
-            - [setDatabaseDriver, ['%database_driver%']]
         tags:
             - { name: doctrine.repository_service }
 
@@ -205,6 +203,7 @@ services:
             - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
             - '@oro_attachment.manager.image_resize'
             - '@oro_attachment.tools.mime_type_checker'
+            - '@Marello\Bundle\ProductBundle\Manager\ProductFileManager'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
 
@@ -262,3 +261,20 @@ services:
         class: Marello\Bundle\ProductBundle\Provider\ActionGroupRegistryProvider
         arguments:
             - '@oro_action.action_group_registry'
+
+    Marello\Bundle\ProductBundle\EventListener\CreateNotificationMessageAfterImportListener:
+        arguments:
+            - '@doctrine'
+            - '@event_dispatcher'
+            - '@Oro\Bundle\ImportExportBundle\Async\ImportExportResultSummarizer'
+            - '@oro_email.provider.rendered_email_template'
+            - '@translator'
+        tags:
+            - { name: doctrine.orm.entity_listener, entity: Oro\Bundle\ImportExportBundle\Entity\ImportExportResult, event: postPersist }
+
+    Marello\Bundle\ProductBundle\Manager\ProductFileManager:
+        arguments:
+            - '@oro_attachment.manager.public_mediacache'
+            - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
+            - '@Oro\Bundle\AttachmentBundle\Manager\FileManager'
+            - '/media/cache'

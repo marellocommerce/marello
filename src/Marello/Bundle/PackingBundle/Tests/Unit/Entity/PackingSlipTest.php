@@ -28,7 +28,7 @@ class PackingSlipTest extends TestCase
             ['shippingAddress', new MarelloAddress()],
             ['customer', new Customer()],
             ['organization', new Organization()],
-            ['salesChannel', new SalesChannel()],
+            ['salesChannel', new SalesChannel('name')],
             ['warehouse', new Warehouse()],
             ['packingSlipNumber', '#00000000042'],
             ['comment', 'some string'],

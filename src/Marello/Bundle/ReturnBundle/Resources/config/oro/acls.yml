@@ -1,15 +1,15 @@
 acls:
     marello_return_view:
         type:       entity
-        class:      MarelloReturnBundle:ReturnEntity
+        class:      Marello\Bundle\ReturnBundle\Entity\ReturnEntity
         permission: VIEW
 
     marello_return_create:
         type:       entity
-        class:      MarelloReturnBundle:ReturnEntity
+        class:      Marello\Bundle\ReturnBundle\Entity\ReturnEntity
         permission: CREATE
 
     marello_return_update:
         type:       entity
-        class:      MarelloReturnBundle:ReturnEntity
+        class:      Marello\Bundle\ReturnBundle\Entity\ReturnEntity
         permission: EDIT

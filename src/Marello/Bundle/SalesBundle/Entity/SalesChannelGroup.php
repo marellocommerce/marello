@@ -2,160 +2,130 @@
 
 namespace Marello\Bundle\SalesBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelGroupRepository")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(
- *     name="marello_sales_channel_group",
- *     uniqueConstraints={
- *          @ORM\UniqueConstraint(
- *              name="UNIQ_759DCFAB3D6A9E29",
- *              columns={"integration_channel_id"}
- *          )
- *      }
- * )
- * @Config(
- *  routeName="marello_sales_saleschannelgroup_index",
- *  routeView="marello_sales_saleschannelgroup_view",
- *  routeUpdate="marello_sales_saleschannelgroup_update",
- *  defaultValues={
- *      "ownership"={
- *          "owner_type"="ORGANIZATION",
- *          "owner_field_name"="organization",
- *          "owner_column_name"="organization_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "dataaudit"={
- *          "auditable"=true
- *      }
- *  }
- * )
- */
-class SalesChannelGroup implements ExtendEntityInterface
+use Marello\Bundle\SalesBundle\Entity\Repository\SalesChannelGroupRepository;
+
+#[ORM\Entity(SalesChannelGroupRepository::class), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_sales_channel_group')]
+#[ORM\UniqueConstraint(name: 'UNIQ_759DCFAB3D6A9E29', columns: ['integration_channel_id'])]
+#[Oro\Config(
+    routeName: 'marello_sales_saleschannelgroup_index',
+    routeView: 'marello_sales_saleschannelgroup_view',
+    routeCreate: 'marello_sales_saleschannelgroup_create',
+    routeUpdate: 'marello_sales_saleschannelgroup_update',
+    defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
+class SalesChannelGroup implements DatesAwareInterface, OrganizationAwareInterface, ExtendEntityInterface
 {
-    use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
-    
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+    use DatesAwareTrait;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=10,
-     *              "identity"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $name;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    protected ?int $id = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=20
-     *          }
-     *      }
-     * )
-     */
-    protected $description;
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['identity' => true, 'order' => 10]
+        ]
+    )]
+    protected ?string $name = null;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="is_system", type="boolean", nullable=false, options={"default"=false})
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          },
-     *          "importexport"={
-     *              "order"=30
-     *          }
-     *      }
-     *  )
-     */
-    protected $system = false;
-    
-    /**
-     * @var SalesChannel[]
-     *
-     * @ORM\OneToMany(targetEntity="SalesChannel", mappedBy="group", cascade={"persist"}, fetch="EAGER")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     *  )
-     */
-    protected $salesChannels;
+    #[ORM\Column(name: 'description', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 20]
+        ]
+    )]
+    protected ?string $description = null;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="integration_channel_id", nullable=true, onDelete="SET NULL", unique=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     *
-     * @var Channel
-     */
-    protected $integrationChannel;
+    #[ORM\Column(name: 'is_system', type: Types::BOOLEAN, nullable: false, options: ['default' => false])]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+            'importexport' => ['order' => 30]
+        ]
+    )]
+    protected ?bool $system = false;
+
+    #[ORM\OneToMany(mappedBy: 'group', targetEntity: SalesChannel::class, cascade: ['persist'], fetch: 'EAGER')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => true],
+        ]
+    )]
+    protected ?Collection $salesChannels = null;
+
+    #[ORM\OneToOne(targetEntity: Channel::class)]
+    #[ORM\JoinColumn(
+        name: 'integration_channel_id',
+        referencedColumnName: 'id',
+        unique: true,
+        nullable: true,
+        onDelete: 'SET NULL'
+    )]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?Channel $integrationChannel = null;
 
     public function __construct()
     {
         $this->salesChannels = new ArrayCollection();
     }
 
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->setCreatedAt($now);
+        $this->setUpdatedAt($now);
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+    }
+
     /**
-     * @return mixed
+     * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -164,7 +134,7 @@ class SalesChannelGroup implements ExtendEntityInterface
      * @param string $name
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -174,7 +144,7 @@ class SalesChannelGroup implements ExtendEntityInterface
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -183,7 +153,7 @@ class SalesChannelGroup implements ExtendEntityInterface
      * @param string $description
      * @return $this
      */
-    public function setDescription($description)
+    public function setDescription(string $description = null): self
     {
         $this->description = $description;
 
@@ -193,7 +163,7 @@ class SalesChannelGroup implements ExtendEntityInterface
     /**
      * @return boolean
      */
-    public function isSystem()
+    public function isSystem(): bool
     {
         return $this->system;
     }
@@ -202,7 +172,7 @@ class SalesChannelGroup implements ExtendEntityInterface
      * @param boolean $system
      * @return $this
      */
-    public function setSystem($system)
+    public function setSystem(bool $system): self
     {
         $this->system = $system;
 
@@ -212,7 +182,7 @@ class SalesChannelGroup implements ExtendEntityInterface
     /**
      * @return Collection|SalesChannel[]
      */
-    public function getSalesChannels()
+    public function getSalesChannels(): Collection
     {
         return $this->salesChannels;
     }
@@ -222,7 +192,7 @@ class SalesChannelGroup implements ExtendEntityInterface
      *
      * @return $this
      */
-    public function addSalesChannel(SalesChannel $salesChannel)
+    public function addSalesChannel(SalesChannel $salesChannel): self
     {
         if (!$this->salesChannels->contains($salesChannel)) {
             $salesChannel->setGroup($this);
@@ -237,7 +207,7 @@ class SalesChannelGroup implements ExtendEntityInterface
      *
      * @return $this
      */
-    public function removeSalesChannel(SalesChannel $salesChannel)
+    public function removeSalesChannel(SalesChannel $salesChannel): self
     {
         if ($this->salesChannels->contains($salesChannel)) {
             $this->salesChannels->removeElement($salesChannel);
@@ -249,7 +219,7 @@ class SalesChannelGroup implements ExtendEntityInterface
     /**
      * @return Channel|null
      */
-    public function getIntegrationChannel()
+    public function getIntegrationChannel(): ?Channel
     {
         return $this->integrationChannel;
     }
@@ -258,7 +228,7 @@ class SalesChannelGroup implements ExtendEntityInterface
      * @param Channel|null $integrationChannel
      * @return $this
      */
-    public function setIntegrationChannel(Channel $integrationChannel = null)
+    public function setIntegrationChannel(Channel $integrationChannel = null): self
     {
         $this->integrationChannel = $integrationChannel;
 
@@ -268,7 +238,7 @@ class SalesChannelGroup implements ExtendEntityInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }

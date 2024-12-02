@@ -44,7 +44,7 @@ class InventoryUpdateWebhookEvent extends AbstractWebhookEvent
             'sku' => $product->getSku(),
             'updated_at' => $dateTime->format('Y-m-d H:i:s'),
             'warehouse' => $this->data->getInventoryLevel() ?
-                $this->data->getInventoryLevel()->getWarehouse()->getCode() : null
+                $this->data->getInventoryLevel()->getWarehouse()->getCode() : null,
         ];
     }
 }
