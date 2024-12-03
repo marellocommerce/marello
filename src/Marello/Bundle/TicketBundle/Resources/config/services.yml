@@ -1,19 +1,4 @@
 services:
-    _defaults:
-        public: true
-
-    Marello\Bundle\TicketBundle\Controller\TicketController:
-        calls:
-            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
-        tags:
-          - { name: container.service_subscriber }
-
-    Marello\Bundle\TicketBundle\Controller\TicketCategoryController:
-        calls:
-            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
-        tags:
-            - { name: container.service_subscriber }
-
     marello_ticket_categories:
         parent: oro_form.autocomplete.search_handler
         arguments:
@@ -22,8 +7,7 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: marello_ticket_category, acl_resource: marello_category_view }
 
-    marello_ticket.event_listener.on_ticket_create_event_listener:
-        class: 'Marello\Bundle\TicketBundle\EventListener\OnTicketCreateEventListener'
+    Marello\Bundle\TicketBundle\EventListener\OnTicketCreateEventListener:
         arguments:
             - '@oro_entity.doctrine_helper'
         tags:

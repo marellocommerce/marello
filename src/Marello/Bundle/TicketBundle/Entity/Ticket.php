@@ -2,258 +2,190 @@
 
 namespace Marello\Bundle\TicketBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="marello_ticket")
- * @Config(
- *      routeName="marello_ticket_index",
- *      defaultValues={
- *            "security"={
- *                "type"="ACL",
- *                "group_name"=""
- *            }
- *      }
- *  )
- * @ORM\HasLifecycleCallbacks()
- */
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+
+#[ORM\Entity(), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_ticket_ticket')]
+#[Oro\Config(
+    routeName: 'marello_ticket_ticket_index',
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class Ticket implements
     ExtendEntityInterface,
     FullNameInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use ExtendEntityTrait;
-    /**
-     * @var integer
-     *
-     * @ORM\Id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="Marello\Bundle\CustomerBundle\Entity\Customer"
-     * )
-     * @ORM\JoinColumn(
-     *     name="customer_id",
-     *     nullable=true,
-     *     onDelete="SET NULL"
-     * )
+     * @var int|null
      */
-    private $customer;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?int $id = null;
 
     /**
-     * @ORM\Column(
-     *     name="name_prefix",
-     *     type="string",
-     *     length=255,
-     *     nullable=true
-     * )
+     * @var Customer|null
      */
-    private $namePrefix;
+    #[ORM\ManyToOne(targetEntity: Customer::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?Customer $customer = null;
 
     /**
-     * @ORM\Column(
-     *     name="firstName",
-     *     type="string",
-     *     length=255,
-     *     nullable=false
-     * )
+     * @var string|null
      */
-    private $firstName;
+    #[ORM\Column(name: 'name_prefix', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $namePrefix = null;
 
     /**
-     * @ORM\Column(
-     *     name="middle_name",
-     *     type="string",
-     *     length=255,
-     *     nullable=true
-     * )
+     * @var string
      */
-    private $middleName;
+    #[ORM\Column(name: 'first_name', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $firstName = null;
 
     /**
-     * @ORM\Column(
-     *     name="lastName",
-     *     type="string",
-     *     length=255,
-     *     nullable=false
-     * )
+     * @var string|null
      */
-    private $lastName;
+    #[ORM\Column(name: 'middle_name', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $middleName = null;
 
     /**
-     * @ORM\Column(
-     *     name="name_suffix",
-     *     type="string",
-     *     length=255,
-     *     nullable=true
-     * )
+     * @var string
      */
-    private $nameSuffix;
+    #[ORM\Column(name: 'last_name', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $lastName = null;
 
     /**
-     * @ORM\Column(
-     *     name="email",
-     *     type="string",
-     *     length=255,
-     *     nullable=false
-     * )
+     * @var string|null
      */
-    private $email;
+    #[ORM\Column(name: 'name_suffix', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $nameSuffix = null;
 
     /**
-     * @ORM\Column(
-     *     name="phone",
-     *     type="string",
-     *     length=255,
-     *     nullable=true
-     * )
+     * @var string
      */
-    private $phone;
+    #[ORM\Column(name: 'email', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $email = null;
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="Oro\Bundle\UserBundle\Entity\User"
-     * )
-     * @ORM\JoinColumn(
-     *     name="owner_id",
-     *     referencedColumnName="id",
-     *     nullable=false
-     * )
+     * @var string|null
      */
-    private $owner;
+    #[ORM\Column(name: 'phone', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $phone = null;
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="Oro\Bundle\UserBundle\Entity\User"
-     * )
-     * @ORM\JoinColumn(
-     *     name="assigned_to_id",
-     *     referencedColumnName="id",
-     *     nullable=true,
-     *     onDelete="SET NULL"
-     * )
+     * @var User
      */
-    private $assignedTo;
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?User $owner = null;
+
+    /**
+     * @var User
+     */
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'assigned_to_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?User $assignedTo = null;
 
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Priority
      * @Assert\NotNull
      */
-    private $ticketPriority;
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?\Extend\Entity\EV_Marello_Ticket_Priority $ticketPriority = null;
 
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Source
      */
-    private $ticketSource;
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?\Extend\Entity\EV_Marello_Ticket_Source $ticketSource = null;
 
     /**
      * @var \Extend\Entity\EV_Marello_Ticket_Status
      * @Assert\NotNull
      */
-    private $ticketStatus;
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?\Extend\Entity\EV_Marello_Ticket_Status $ticketStatus = null;
 
     /**
-     * @ORM\ManyToOne(
-     *     targetEntity="TicketCategory"
-     * )
-     * @ORM\JoinColumn(
-     *     name="category_id",
-     *     referencedColumnName="id",
-     *     nullable=false
-     * )
+     * @var TicketCategory
      */
-    private $category;
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: TicketCategory::class, cascade: ['persist'])]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?TicketCategory $category = null;
 
     /**
-     * @ORM\Column(
-     *     name="subject",
-     *     type="string",
-     *     length=255,
-     *     nullable=false
-     * )
+     * @var string
      */
-
-    private $subject;
+    #[ORM\Column(name: 'subject', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $subject = null;
 
     /**
-     * @ORM\Column(
-     *     name="description",
-     *     type="string",
-     *     length=1000,
-     *     nullable=false
-     * )
+     * @var string
      */
-    private $description;
+    #[ORM\Column(name: 'description', type: Types::TEXT, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $description = null;
 
     /**
-     * @ORM\Column(
-     *     name="resolution",
-     *     type="string",
-     *     length=1000,
-     *     nullable=true
-     * )
+     * @var string
      */
-    private $resolution;
+    #[ORM\Column(name: 'resolution', type: Types::TEXT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $resolution = null;
 
+    /**
+     * @return int
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function setId($id): void
-    {
-        $this->id = $id;
-    }
-
-    public function getSubject()
+    /**
+     * @return string
+     */
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
 
-    public function setSubject(string $subject): void
-    {
-        $this->subject = $subject;
-    }
-
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    public function setDescription($description): void
-    {
-        $this->description = $description;
-    }
-
     /**
-     * @return mixed
-     */
-    public function getCustomer(): ?Customer
-    {
-        return $this->customer;
-    }
-
-    /**
-     * @param Customer $customer
-     *
+     * @param string|null $subject
      * @return $this
      */
-    public function setCustomer($customer)
+    public function setSubject(?string $subject): self
     {
-        $this->customer = $customer;
+        $this->subject = $subject;
 
         return $this;
     }
@@ -261,144 +193,206 @@ class Ticket implements
     /**
      * @return string
      */
-    public function getResolution()
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     * @return $this
+     */
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return Customer|null
+     */
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer|null $customer
+     * @return $this
+     */
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getResolution(): ?string
     {
         return $this->resolution;
     }
 
     /**
-     * @param string $resolution
+     * @param string|null $resolution
+     * @return $this
      */
-    public function setResolution($resolution)
+    public function setResolution(?string $resolution): self
     {
         $this->resolution = $resolution;
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
-    public function getFirstName()
+    public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
     /**
-     * @param string $firstName
+     * @param string|null $firstName
+     * @return $this
      */
-    public function setFirstName($firstName): void
+    public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
-    public function getLastName()
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
     /**
-     * @param string $lastName
+     * @param string|null $lastName
+     * @return $this
      */
-    public function setLastName($lastName): void
+    public function setLastName(?string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
     /**
-     * @param mixed $email
+     * @param string|null $email
+     * @return $this
      */
-    public function setEmail($email): void
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
     /**
-     * @param mixed $phone
+     * @param string|null $phone
+     * @return $this
      */
-    public function setPhone($phone): void
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return User|null
      */
-    public function getOwner()
+    public function getOwner(): ?User
     {
         return $this->owner;
     }
 
     /**
-     * @param mixed $owner
+     * @param User|null $owner
+     * @return $this
      */
-    public function setOwner($owner): void
+    public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
     }
 
     /**
-     * @return TicketCategory
+     * @return TicketCategory|null
      */
-    public function getCategory()
+    public function getCategory(): ?TicketCategory
     {
         return $this->category;
     }
 
     /**
-     * @param mixed $category
+     * @param TicketCategory|null $category
+     * @return $this
      */
-    public function setCategory($category): void
+    public function setCategory(?TicketCategory $category): self
     {
         $this->category = $category;
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return User|null
      */
-    public function getAssignedTo()
+    public function getAssignedTo(): ?User
     {
         return $this->assignedTo;
     }
 
     /**
-     * @param mixed $assignedTo
+     * @param User|null $assignedTo
+     * @return $this
      */
-    public function setAssignedTo($assignedTo): void
+    public function setAssignedTo(?User $assignedTo): self
     {
         $this->assignedTo = $assignedTo;
+
+        return $this;
     }
 
     /**
      * @return \Extend\Entity\EV_Marello_Ticket_Status
      */
-    public function getTicketStatus()
+    public function getTicketStatus(): ?\Extend\Entity\EV_Marello_Ticket_Status
     {
         return $this->ticketStatus;
     }
 
     /**
-     * @param string $ticketStatus
+     * @param \Extend\Entity\EV_Marello_Ticket_Status $ticketStatus
      * @return $this
      */
-    public function setTicketStatus($ticketStatus)
+    public function setTicketStatus(?\Extend\Entity\EV_Marello_Ticket_Status $ticketStatus)
     {
         $this->ticketStatus = $ticketStatus;
 
@@ -408,16 +402,16 @@ class Ticket implements
     /**
      * @return \Extend\Entity\EV_Marello_Ticket_Source
      */
-    public function getTicketSource()
+    public function getTicketSource(): ?\Extend\Entity\EV_Marello_Ticket_Source
     {
         return $this->ticketSource;
     }
 
     /**
-     * @param string $ticketSource
+     * @param \Extend\Entity\EV_Marello_Ticket_Source $ticketSource
      * @return $this
      */
-    public function setTicketSource($ticketSource)
+    public function setTicketSource(?\Extend\Entity\EV_Marello_Ticket_Source $ticketSource)
     {
         $this->ticketSource = $ticketSource;
 
@@ -427,16 +421,16 @@ class Ticket implements
     /**
      * @return \Extend\Entity\EV_Marello_Ticket_Priority
      */
-    public function getTicketPriority()
+    public function getTicketPriority(): ?\Extend\Entity\EV_Marello_Ticket_Priority
     {
         return $this->ticketPriority;
     }
 
     /**
-     * @param string $ticketPriority
+     * @param \Extend\Entity\EV_Marello_Ticket_Priority $ticketPriority
      * @return $this
      */
-    public function setTicketPriority($ticketPriority)
+    public function setTicketPriority(?\Extend\Entity\EV_Marello_Ticket_Priority $ticketPriority)
     {
         $this->ticketPriority = $ticketPriority;
 
@@ -444,21 +438,18 @@ class Ticket implements
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
-    public function getMiddleName()
+    public function getMiddleName(): ?string
     {
         return $this->middleName;
     }
 
     /**
-     * Set middle name
-     *
-     * @param string $middleName
-     *
-     * @return Ticket
+     * @param string|null $middleName
+     * @return $this
      */
-    public function setMiddleName($middleName)
+    public function setMiddleName(?string $middleName): self
     {
         $this->middleName = $middleName;
 
@@ -466,21 +457,18 @@ class Ticket implements
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
-    public function getNamePrefix()
+    public function getNamePrefix(): ?string
     {
         return $this->namePrefix;
     }
 
     /**
-     * Set name prefix
-     *
-     * @param string $namePrefix
-     *
-     * @return Ticket
+     * @param string|null $namePrefix
+     * @return $this
      */
-    public function setNamePrefix($namePrefix)
+    public function setNamePrefix(?string $namePrefix): self
     {
         $this->namePrefix = $namePrefix;
 
@@ -488,21 +476,18 @@ class Ticket implements
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
-    public function getNameSuffix()
+    public function getNameSuffix(): ?string
     {
         return $this->nameSuffix;
     }
 
     /**
-     * Set name suffix
-     *
-     * @param string $nameSuffix
-     *
-     * @return Ticket
+     * @param string|null $nameSuffix
+     * @return $this
      */
-    public function setNameSuffix($nameSuffix)
+    public function setNameSuffix(?string $nameSuffix): self
     {
         $this->nameSuffix = $nameSuffix;
 

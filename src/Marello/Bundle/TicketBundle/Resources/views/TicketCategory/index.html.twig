@@ -4,12 +4,6 @@
 {% set pageTitle = 'marello.ticket.category.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% import '@OroUI/macros.html.twig' as UI %}
-
-    {% include '@OroImportExport/ImportExport/buttons_from_configuration.html.twig' with {
-        'alias': 'marello_ticket_category'
-    } %}
-
     {% if is_granted('marello_ticket_category_create') %}
         <div class="btn-group">
             {{ UI.addButton({

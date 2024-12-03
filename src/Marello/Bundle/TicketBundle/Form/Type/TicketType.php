@@ -73,7 +73,7 @@ class TicketType extends AbstractType
                 EnumChoiceType::class,
                 [
                     'enum_code' => TicketStatusInterface::TICKET_STATUS_ENUM_CODE,
-                    'label' => 'marello.ticket.status.label',
+                    'label' => 'marello.ticket.ticket_status.label',
                     'required' => true]
             )
             ->add(
@@ -81,7 +81,7 @@ class TicketType extends AbstractType
                 EnumChoiceType::class,
                 [
                     'enum_code' => TicketSourceInterface::TICKET_SOURCE_ENUM_CODE,
-                    'label' => 'marello.ticket.source.label',
+                    'label' => 'marello.ticket.ticket_source.label',
                     'required' => true]
             )
             ->add(
@@ -89,7 +89,7 @@ class TicketType extends AbstractType
                 EnumChoiceType::class,
                 [
                     'enum_code' => TicketPriorityInterface::TICKET_PRIORITY_ENUM_CODE,
-                    'label' => 'marello.ticket.priority.label',
+                    'label' => 'marello.ticket.ticket_priority.label',
                     'required' => true]
             )
             ->add(

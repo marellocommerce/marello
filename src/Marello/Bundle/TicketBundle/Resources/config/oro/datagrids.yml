@@ -10,17 +10,15 @@ datagrids:
                     - CONCAT(ta.firstName, ' ', ta.lastName) as assigned_to
                     - tcat.name as category
                 from:
-                    - { table: MarelloTicketBundle:Ticket, alias: t }
+                    - { table: Marello\Bundle\TicketBundle\Entity\Ticket, alias: t }
                 join:
                     left:
                         - { join: t.customer, alias: tcust }
                         - { join: t.owner, alias: to }
                         - { join: t.assignedTo, alias: ta }
                         - { join: t.category, alias: tcat }
+                groupBy: t.id, category, customer, owner, assigned_to
         columns:
-            id:
-                label: marello.ticket.id.label
-                renderable: false
             subject:
                 label: marello.ticket.subject.label
             customer:
@@ -50,26 +48,20 @@ datagrids:
             assigned_to:
                 label: marello.ticket.assigned_to.label
             source:
-                label: marello.ticket.source.label
+                label: marello.ticket.ticket_source.label
                 frontend_type: string
                 data_name: ticketSource
                 renderable: false
             priority:
-                label: marello.ticket.priority.label
+                label: marello.ticket.ticket_priority.label
                 frontend_type: string
                 data_name: ticketPriority
             status:
-                label: marello.ticket.status.label
+                label: marello.ticket.ticket_status.label
                 frontend_type: string
                 data_name: ticketStatus
             category:
                 label: marello.ticket.category.label
-                renderable: false
-            description:
-                label: marello.ticket.description.label
-                renderable: false
-            resolution:
-                label: marello.ticket.resolution.label
                 renderable: false
             createdAt:
                 label: oro.ui.created_at
@@ -81,25 +73,24 @@ datagrids:
             id: ~
             update_link:
                 type: url
-                route: marello_ticket_update
-                params:
-                    - id
+                route: marello_ticket_ticket_update
+                params:     [ id ]
             view_link:
                 type: url
-                route: marello_ticket_view
-                params:
-                    id: id
+                route: marello_ticket_ticket_view
+                params:     [ id ]
         actions:
             edit:
-                type: navigate
-                label: Edit
-                link: update_link
-                icon: edit
+                type:           navigate
+                label:          oro.grid.action.update
+                icon:           edit
+                link:           update_link
             view:
-                type: navigate
-                link: view_link
-                icon: eye
-                rowAction: true
+                type:           navigate
+                label:          oro.grid.action.view
+                link:           view_link
+                icon:           eye
+                rowAction:      true
         filters:
             columns:
                 createdAt:
@@ -127,7 +118,7 @@ datagrids:
                     - c.id
                     - c.name
                 from:
-                    - { table: MarelloTicketBundle:TicketCategory, alias: c }
+                    - { table: Marello\Bundle\TicketBundle\Entity\TicketCategory, alias: c }
         columns:
             id:
                 label: marello.ticket.category.id.label
@@ -138,24 +129,23 @@ datagrids:
             update_link:
                 type: url
                 route: marello_ticket_category_update
-                params:
-                    id: id
+                params: [ id ]
             view_link:
                 type: url
                 route: marello_ticket_category_view
-                params:
-                    id: id
+                params: [ id ]
         actions:
             edit:
-                type: navigate
-                label: Edit
-                link: update_link
-                icon: edit
+                type:           navigate
+                label:          oro.grid.action.update
+                icon:           edit
+                link:           update_link
             view:
-                type: navigate
-                link: view_link
-                icon: eye
-                rowAction: true
+                type:           navigate
+                label:          oro.grid.action.view
+                link:           view_link
+                icon:           eye
+                rowAction:      true
 
     marello-ticket-category-select-grid:
         extends: marello-ticket-categories-grid
@@ -173,7 +163,7 @@ datagrids:
                     - CONCAT(to.firstName, ' ', to.lastName) as owner
                     - CONCAT(ta.firstName, ' ', ta.lastName) as assigned_to
                 from:
-                    - { table: MarelloTicketBundle:Ticket, alias: t }
+                    - { table: Marello\Bundle\TicketBundle\Entity\Ticket, alias: t }
                 join:
                     left:
                         - { join: t.owner, alias: to }
@@ -195,25 +185,25 @@ datagrids:
             assigned_to:
                 label: marello.ticket.assigned_to.label
             priority:
-                label: marello.ticket.priority.label
+                label: marello.ticket.ticket_priority.label
                 frontend_type: string
                 data_name: ticketPriority
             status:
-                label: marello.ticket.status.label
+                label: marello.ticket.ticket_status.label
                 frontend_type: string
                 data_name: ticketStatus
         properties:
             view_link:
                 type: url
-                route: marello_ticket_view
-                params:
-                    id: id
+                route: marello_ticket_ticket_view
+                params: [ id ]
         actions:
             view:
-                type: navigate
-                link: view_link
-                icon: eye
-                rowAction: true
+                type:           navigate
+                label:          oro.grid.action.view
+                link:           view_link
+                icon:           eye
+                rowAction:      true
         options:
             toolbarOptions:
                 hide: true
@@ -231,7 +221,7 @@ datagrids:
                     - CONCAT(to.firstName, ' ', to.lastName) as owner
                     - CONCAT(ta.firstName, ' ', ta.lastName) as assigned_to
                 from:
-                    - { table: MarelloTicketBundle:Ticket, alias: t }
+                    - { table: Marello\Bundle\TicketBundle\Entity\Ticket, alias: t }
                 join:
                     left:
                         - { join: t.owner, alias: to }
@@ -253,25 +243,25 @@ datagrids:
             assigned_to:
                 label: marello.ticket.assigned_to.label
             priority:
-                label: marello.ticket.priority.label
+                label: marello.ticket.ticket_priority.label
                 frontend_type: string
                 data_name: ticketPriority
             status:
-                label: marello.ticket.status.label
+                label: marello.ticket.ticket_status.label
                 frontend_type: string
                 data_name: ticketStatus
         properties:
             view_link:
                 type: url
-                route: marello_ticket_view
-                params:
-                    id: id
+                route: marello_ticket_ticket_view
+                params: [ id ]
         actions:
             view:
-                type: navigate
-                link: view_link
-                icon: eye
-                rowAction: true
+                type:           navigate
+                label:          oro.grid.action.view
+                link:           view_link
+                icon:           eye
+                rowAction:      true
         options:
             toolbarOptions:
                 hide: true

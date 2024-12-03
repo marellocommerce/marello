@@ -2,14 +2,14 @@
 
 namespace Marello\Bundle\TicketBundle\EventListener;
 
+use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\UnitOfWork;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Marello\Bundle\TicketBundle\Entity\Ticket;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use function PHPUnit\Framework\isEmpty;
+
+use Marello\Bundle\TicketBundle\Entity\Ticket;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 
 class OnTicketCreateEventListener
 {
@@ -24,16 +24,10 @@ class OnTicketCreateEventListener
     protected $em;
 
     /**
-     * @var DoctrineHelper
+     * @param DoctrineHelper $doctrineHelper
      */
-    protected $doctrineHelper;
-
-    /**
-     * @param DoctrineHelper $helper
-     */
-    public function __construct(DoctrineHelper $helper)
+    public function __construct(protected DoctrineHelper $doctrineHelper)
     {
-        $this->doctrineHelper = $helper;
     }
 
     /**
@@ -45,12 +39,12 @@ class OnTicketCreateEventListener
         $this->em = $eventArgs->getObjectManager();
         $this->unitOfWork = $this->em->getUnitOfWork();
 
-        if(!empty($this->unitOfWork->getScheduledEntityInsertions())) {
+        if (!empty($this->unitOfWork->getScheduledEntityInsertions())) {
             $records = $this->filterRecords($this->unitOfWork->getScheduledEntityInsertions());
             $this->applyCallBackForChangeSet('assignCustomer', $records);
         }
 
-        if(!empty($this->unitOfWork->getScheduledEntityUpdates())) {
+        if (!empty($this->unitOfWork->getScheduledEntityUpdates())) {
             $records = $this->filterRecords($this->unitOfWork->getScheduledEntityUpdates());
             $this->applyCallBackForChangeSet('assignCustomer', $records);
         }
@@ -93,8 +87,7 @@ class OnTicketCreateEventListener
             ->getRepository(Customer::class);
         $customer = $repo->findOneBy(['email'=> $email]);
 
-        if($customer)
-        {
+        if ($customer) {
             $ticket = $ticket->setCustomer($customer);
             $this->em->persist($ticket);
             $classMeta = $this->em->getClassMetadata(get_class($ticket));

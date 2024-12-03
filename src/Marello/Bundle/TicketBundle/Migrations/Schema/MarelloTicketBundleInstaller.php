@@ -3,16 +3,13 @@
 namespace Marello\Bundle\TicketBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassLength)
- */
 class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAwareInterface
 {
     /**
@@ -43,31 +40,32 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
 
     protected function createTicketCategoryTable(Schema $schema)
     {
-        $table = $schema->createTable('marello_ticket_category');
+        $table = $schema->createTable('marello_ticket_ticket_category');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['length' => 255]);
-        $table->addColumn('serialized_data', 'json', ['notnull' => false]);
+        $table->addColumn('created_at', 'datetime');
+        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
     }
 
     protected function createMarelloTicketTable(Schema $schema)
     {
-        $table = $schema->createTable('marello_ticket');
+        $table = $schema->createTable('marello_ticket_ticket');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', []);
         $table->addColumn('assigned_to_id', 'integer', ['notnull' => false]);
         $table->addColumn('category_id', 'integer', []);
         $table->addColumn('subject', 'string', ['length' => 255]);
-        $table->addColumn('description', 'string', ['length' => 1000]);
+        $table->addColumn('description', 'text', ['comment' => '(DC2Type:text)']);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('firstname', 'string', ['length' => 255]);
+        $table->addColumn('first_name', 'string', ['length' => 255]);
         $table->addColumn('middle_name', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('lastname', 'string', ['length' => 255]);
+        $table->addColumn('last_name', 'string', ['length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('email', 'string', ['length' => 255]);
         $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('resolution', 'string', ['notnull' => false, 'length' => 1000]);
+        $table->addColumn('resolution', 'text', ['notnull' => false, 'comment' => '(DC2Type:text)']);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $this->extendExtension->addEnumField(
@@ -108,9 +106,9 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
 
     protected function addMarelloTicketForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('marello_ticket');
+        $table = $schema->getTable('marello_ticket_ticket');
         $table->addForeignKeyConstraint(
-            $schema->getTable('marello_ticket_category'),
+            $schema->getTable('marello_ticket_ticket_category'),
             ['category_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => null]

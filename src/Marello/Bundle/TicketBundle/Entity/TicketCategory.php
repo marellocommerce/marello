@@ -2,75 +2,69 @@
 
 namespace Marello\Bundle\TicketBundle\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 
-/**
- * @ORM\Entity()
- * @ORM\Table(name="marello_ticket_category")
- * @Config(
- *     routeName="marello_ticket_category_index",
- *     defaultValues={
- *           "security"={
- *               "type"="ACL",
- *               "group_name"=""
- *           }
- *     }
- * )
- */
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+
+#[ORM\Entity(), ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: 'marello_ticket_ticket_category')]
+#[Oro\Config(
+    routeName: 'marello_ticket_category_index',
+    defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'security' => ['type' => 'ACL', 'group_name' => '']
+    ]
+)]
 class TicketCategory implements ExtendEntityInterface
 {
     use ExtendEntityTrait;
+    use EntityCreatedUpdatedAtTrait;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     *
+     * @var int|null
      */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?int $id = null;
 
     /**
-     * @ORM\Column(
-     *     name="name",
-     *     type="string",
-     *     length=255,
-     *     nullable=false
-     * )
+     * @var string
      */
-    protected $name;
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 255, nullable: false)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $name = null;
 
     /**
-     * @return mixed
+     * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @param mixed $name
+     * @param string|null $name
+     * @return $this
      */
-    public function setName(string $name): void
+    public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
-     * @return integer
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 }

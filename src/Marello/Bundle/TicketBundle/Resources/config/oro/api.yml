@@ -6,11 +6,10 @@ api:
         Marello\Bundle\TicketBundle\Entity\TicketCategory:
             alias: marelloticketcategory
             plural_alias: marelloticketcategories
+
     entities:
         Marello\Bundle\TicketBundle\Entity\Ticket:
             exclude: false
-            fields:
-
 
         Marello\Bundle\TicketBundle\Entity\TicketCategory:
             exclude: false

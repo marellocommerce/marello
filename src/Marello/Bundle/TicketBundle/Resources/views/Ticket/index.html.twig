@@ -4,16 +4,10 @@
 {% set pageTitle = 'marello.ticket.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% import '@OroUI/macros.html.twig' as UI %}
-
-    {% include '@OroImportExport/ImportExport/buttons_from_configuration.html.twig' with {
-        'alias': 'marello_ticket'
-    } %}
-
-    {% if is_granted('marello_ticket_create') %}
+    {% if is_granted('marello_ticket_ticket_create') %}
         <div class="btn-group">
             {{ UI.addButton({
-                'path': path('marello_ticket_create'),
+                'path': path('marello_ticket_ticket_create'),
                 'entity_label': 'marello.ticket.entity_label'|trans
             }) }}
         </div>

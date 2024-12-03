@@ -1,24 +1,24 @@
 {% extends '@OroUI/actions/update.html.twig' %}
 {% import '@OroUI/macros.html.twig' as UI %}
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
-{% set formAction = entity.id ? path('marello_ticket_update', {id: entity.id}) : path('marello_ticket_create') %}
+{% set formAction = entity.id ? path('marello_ticket_ticket_update', {id: entity.id}) : path('marello_ticket_ticket_create') %}
 
 {% oro_title_set({params : {"%name%": entity.subject, '%entityName%': 'marello.ticket.entity_label'|trans} }) %}
 
 {% block navButtons %}
     {{ parent() }}
 
-    {{ UI.cancelButton(path('marello_ticket_index')) }}
-    {% if is_granted('marello_ticket_update') %}
+    {{ UI.cancelButton(path('marello_ticket_ticket_index')) }}
+    {% if is_granted('marello_ticket_ticket_update') %}
         {% set html = '' %}
-        {% if is_granted('marello_ticket_view') %}
+        {% if is_granted('marello_ticket_ticket_view') %}
             {% set html = UI.saveAndCloseButton({
-                'route': 'marello_ticket_view',
+                'route': 'marello_ticket_ticket_view',
                 'params': {'id': '$id'}
             }) %}
         {% endif %}
         {% set html = html ~ UI.saveAndStayButton({
-            'route': 'marello_ticket_update',
+            'route': 'marello_ticket_ticket_update',
             'params': {'id': '$id'}
         }) %}
 
@@ -30,7 +30,7 @@
     {% if entity.id %}
         {% set breadcrumbs = {
             'entity':      entity,
-            'indexPath':   path('marello_ticket_index'),
+            'indexPath':   path('marello_ticket_ticket_index'),
             'indexLabel': 'marello.ticket.entity_plural_label'|trans,
             'entityTitle': entity.subject|default('N/A'|trans)
         } %}

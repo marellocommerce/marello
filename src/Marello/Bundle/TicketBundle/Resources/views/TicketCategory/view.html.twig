@@ -11,6 +11,7 @@
             'entity_label': 'marello.ticket.category.label'|trans
         }) }}
     {% endif %}
+    {{ parent() }}
 {% endblock navButtons %}
 
 {% block pageHeader %}
@@ -18,7 +19,7 @@
         'entity':      entity,
         'indexPath':   path('marello_ticket_category_index'),
         'indexLabel':  'marello.ticket.category.entity_plural_label'|trans,
-        'entityTitle': entity.name,
+        'entityTitle': entity.name
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
@@ -43,7 +44,9 @@
         {
             'title': 'marello.sections.general'|trans,
             'subblocks': [
-            {'data' : [generalInformation]}
+            {
+                'data' : [generalInformation]
+            }
         ]
         }
     ] %}

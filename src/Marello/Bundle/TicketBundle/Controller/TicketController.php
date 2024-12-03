@@ -2,82 +2,62 @@
 
 namespace Marello\Bundle\TicketBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
+use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+
 use Marello\Bundle\TicketBundle\Entity\Ticket;
 use Marello\Bundle\TicketBundle\Form\Type\TicketType;
-use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Marello\Bundle\TicketBundle\Entity\Ticket as TicketAlias;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TicketController extends AbstractController
 {
-    /**
-     * @Route("/", name="marello_ticket_index")
-     * @Template
-     * @AclAncestor("marello_ticket_view")
-     */
+    #[Route(path: '/', name: 'marello_ticket_ticket_index')]
+    #[Template]
+    #[AclAncestor('marello_ticket_ticket_view')]
     public function indexAction(): array
     {
-        return [ 'entity_class' => 'MarelloTicketBundle::Ticket' ];
+        return ['entity_class' => Ticket::class];
     }
 
-    /**
-     * @Route(path="/view/{id}", name="marello_ticket_view", requirements={"id"="\d+"})
-     * @Template
-     */
-    public function viewAction(TicketAlias $ticket)
+    #[Route(path: '/view/{id}', name: 'marello_ticket_ticket_view', requirements: ['id' => '\d+'])]
+    #[Template]
+    #[Acl(id: 'marello_ticket_ticket_view', type: 'entity', class: Ticket::class, permission: 'VIEW')]
+    public function viewAction(Ticket $ticket)
     {
-        return [
-            'entity' => $ticket
-        ];
+        return ['entity' => $ticket];
     }
 
-    /**
-     * @Route(
-     *     path="/create",
-     *     name="marello_ticket_create",
-     *     options={"expose"=true}
-     * )
-     * @Template("@MarelloTicket/Ticket/update.html.twig")
-     * @Acl(
-     *       id="marello_ticket_create",
-     *       type="entity",
-     *       class="MarelloTicketBundle:Ticket",
-     *       permission="CREATE"
-     *  )
-     */
+    #[Route(path: '/create', name: 'marello_ticket_ticket_create', methods: ['GET', 'POST'])]
+    #[Template('@MarelloTicket/Ticket/update.html.twig')]
+    #[Acl(id: 'marello_ticket_ticket_create', type: 'entity', class: Ticket::class, permission: 'CREATE')]
     public function createAction(Request $request): array|RedirectResponse
     {
-        $createMessage = $this->get(TranslatorInterface::class)->trans(
+        $createMessage = $this->container->get(TranslatorInterface::class)->trans(
             'marello.ticket.saved.message'
         );
 
         return $this->update(new Ticket(), $request, $createMessage);
     }
 
-    /**
-     * @Route(
-     *     path="/update/{id}",
-     *     name="marello_ticket_update",
-     *     requirements={"id"="\d+"}
-     * )
-     * @Template
-     * @Acl(
-     *      id="marello_ticket_update",
-     *      type="entity",
-     *      class="MarelloTicketBundle:Ticket",
-     *      permission="EDIT"
-     * )
-     */
+    #[Route(
+        path: '/update/{id}',
+        name: 'marello_ticket_ticket_update',
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
+    )]
+    #[Template]
+    #[Acl(id: 'marello_ticket_ticket_update', type: 'entity', class: Ticket::class, permission: 'EDIT')]
     public function updateAction(Ticket $entity, Request $request): array|RedirectResponse
     {
-        $createMessage = $this->get(TranslatorInterface::class)->trans(
+        $createMessage = $this->container->get(TranslatorInterface::class)->trans(
             'marello.ticket.saved.message'
         );
 
@@ -89,7 +69,7 @@ class TicketController extends AbstractController
         Request $request,
         string $message = ''
     ): array|RedirectResponse {
-        return $this->get(UpdateHandlerFacade::class)->update(
+        return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,
             $this->createForm(TicketType::class, $entity),
             $message,
@@ -98,7 +78,7 @@ class TicketController extends AbstractController
         );
     }
 
-    public static function getSubscribedServices()
+    public static function getSubscribedServices(): array
     {
         return array_merge(
             parent::getSubscribedServices(),
