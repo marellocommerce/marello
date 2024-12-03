@@ -381,18 +381,18 @@ class Ticket implements
     }
 
     /**
-     * @return \Extend\Entity\EV_Marello_Ticket_Status
+     * @return \Extend\Entity\EV_Marello_Ticket_Status|null
      */
-    public function getTicketStatus(): ?\Extend\Entity\EV_Marello_Ticket_Status
+    public function getTicketStatus()
     {
         return $this->ticketStatus;
     }
 
     /**
-     * @param \Extend\Entity\EV_Marello_Ticket_Status $ticketStatus
+     * @param \Extend\Entity\EV_Marello_Ticket_Status|null $ticketStatus
      * @return $this
      */
-    public function setTicketStatus(?\Extend\Entity\EV_Marello_Ticket_Status $ticketStatus)
+    public function setTicketStatus($ticketStatus): self
     {
         $this->ticketStatus = $ticketStatus;
 
@@ -402,16 +402,16 @@ class Ticket implements
     /**
      * @return \Extend\Entity\EV_Marello_Ticket_Source
      */
-    public function getTicketSource(): ?\Extend\Entity\EV_Marello_Ticket_Source
+    public function getTicketSource()
     {
         return $this->ticketSource;
     }
 
     /**
-     * @param \Extend\Entity\EV_Marello_Ticket_Source $ticketSource
+     * @param \Extend\Entity\EV_Marello_Ticket_Source|null $ticketSource
      * @return $this
      */
-    public function setTicketSource(?\Extend\Entity\EV_Marello_Ticket_Source $ticketSource)
+    public function setTicketSource($ticketSource): self
     {
         $this->ticketSource = $ticketSource;
 
@@ -419,18 +419,18 @@ class Ticket implements
     }
 
     /**
-     * @return \Extend\Entity\EV_Marello_Ticket_Priority
+     * @return \Extend\Entity\EV_Marello_Ticket_Priority|null
      */
-    public function getTicketPriority(): ?\Extend\Entity\EV_Marello_Ticket_Priority
+    public function getTicketPriority()
     {
         return $this->ticketPriority;
     }
 
     /**
-     * @param \Extend\Entity\EV_Marello_Ticket_Priority $ticketPriority
+     * @param \Extend\Entity\EV_Marello_Ticket_Priority|null $ticketPriority
      * @return $this
      */
-    public function setTicketPriority(?\Extend\Entity\EV_Marello_Ticket_Priority $ticketPriority)
+    public function setTicketPriority($ticketPriority): self
     {
         $this->ticketPriority = $ticketPriority;
 
