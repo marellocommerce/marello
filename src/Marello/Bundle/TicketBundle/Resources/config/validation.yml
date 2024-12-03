@@ -1,0 +1,19 @@
+Marello\Bundle\TicketBundle\Entity\Ticket:
+    properties:
+        firstName:
+            -   NotBlank: ~
+        lastName:
+            -   NotBlank: ~
+        email:
+            -   NotBlank: ~
+            -   Email: ~
+        owner:
+            -   NotBlank: ~
+        ticketSource:
+            -   NotBlank: ~
+        category:
+            -   NotBlank: ~
+        subject:
+            -   NotBlank: ~
+        description:
+            -   NotBlank: ~

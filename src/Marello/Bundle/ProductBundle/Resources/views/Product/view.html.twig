@@ -18,14 +18,10 @@
 {% endblock pageHeader %}
 
 {% block breadcrumbs %}
-    {% import '@OroUI/macros.html.twig' as UI %}
-
     {{ parent() }}
     {% if is_granted('VIEW', entity, 'status') %}
         <span class="page-title__status">
-            {% if not entity.status %}
-            {# status not defined #}
-            {% elseif entity.status.name == constant('ENABLED', entity.status) %}
+            {% if entity.status.name == constant('ENABLED', entity.status) %}
                 {{ UI.badge('marello.product.status.enabled'|trans, 'enabled') }}
             {% elseif entity.status.name == constant('DISABLED', entity.status) %}
                 {{ UI.badge('marello.product.status.disabled'|trans, 'disabled') }}
@@ -33,16 +29,6 @@
         </span>
     {% endif %}
 {% endblock breadcrumbs %}
-
-{#{% block navButtons %}#}
-{#    {{ parent() }}#}
-{#    {% if is_granted('EDIT', entity) %}#}
-{#        {{ UI.editButton({#}
-{#            'path': path('marello_product_update', {'id': entity.id}),#}
-{#            'entity_label': 'marello.product.entity_label'|trans#}
-{#        }) }}#}
-{#    {% endif %}#}
-{#{% endblock %}#}
 
 {% block content_data %}
     {% set id = 'marello-product-view' %}
