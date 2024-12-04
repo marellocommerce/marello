@@ -19,7 +19,7 @@ datagrids:
                 label:            marello.invoice.invoice_number.label
                 frontend_type:    string
             invoiceType:
-                label:            marello.invoice.type.label
+                label:            marello.invoice.invoice_type.label
                 frontend_type:    string
             orderNumber:
                 label:            marello.order.order_number.label
@@ -36,19 +36,20 @@ datagrids:
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align:            right
+                align:            left
             totalPaid:
                 label:            marello.invoice.total_paid.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align:            right
+                align:            left
             totalDue:
                 label:            marello.invoice.total_due.label
-                type:             localized_number
-                method:           formatCurrency
-                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align:            right
+                data_name:        totalDue
+                type:             twig
+                frontend_type:    html
+                template:         '@MarelloInvoice/Datagrid/totalDue.html.twig'
+                align:            left
             invoicedAt:
                 frontend_type:    datetime
                 label:            marello.invoice.invoiced_at.label

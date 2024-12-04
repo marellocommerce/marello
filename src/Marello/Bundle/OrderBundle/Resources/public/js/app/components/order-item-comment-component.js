@@ -6,11 +6,11 @@ define(function(require) {
     const BaseComponent = require('oroui/js/app/components/base/component');
 
     /**
-     * @export oroorder/js/app/components/notes-component
+     * @export marelloorder/js/app/components/order-item-comment-component
      * @extends oroui.app.components.base.Component
-     * @class oroorder.app.components.NotesComponent
+     * @class marelloorder.app.components.CommentComponent
      */
-    const NotesComponent = BaseComponent.extend({
+    const CommentComponent = BaseComponent.extend({
         /**
          * @property {Object}
          */
@@ -68,8 +68,8 @@ define(function(require) {
         /**
          * @inheritDoc
          */
-        constructor: function NotesComponent(options) {
-            NotesComponent.__super__.constructor.call(this, options);
+        constructor: function CommentComponent(options) {
+            CommentComponent.__super__.constructor.call(this, options);
         },
 
         /**
@@ -97,13 +97,13 @@ define(function(require) {
 
             this.$notes.change(_.bind(this.change, this));
             this.$notes.blur(_.bind(this.change, this));
-            this.$preview.click(_.bind(this.addNotes, this));
-            this.$addBtn.click(_.bind(this.addNotes, this))
-                .mousedown(_.bind(this.addNotes, this));
-            this.$editBtn.click(_.bind(this.addNotes, this))
-                .mousedown(_.bind(this.addNotes, this));
-            this.$removeBtn.click(_.bind(this.removeNotes, this))
-                .mousedown(_.bind(this.removeNotes, this));
+            this.$preview.click(_.bind(this.addComment, this));
+            this.$addBtn.click(_.bind(this.addComment, this))
+                .mousedown(_.bind(this.addComment, this));
+            this.$editBtn.click(_.bind(this.addComment, this))
+                .mousedown(_.bind(this.addComment, this));
+            this.$removeBtn.click(_.bind(this.removeComment, this))
+                .mousedown(_.bind(this.removeComment, this));
 
             this.changed();
             this.$el.show();
@@ -115,9 +115,9 @@ define(function(require) {
 
         change: function(e) {
             if (e.relatedTarget === this.$addBtn.get(0) || e.relatedTarget === this.$editBtn.get(0)) {
-                this.addNotes(e);
+                this.addComment(e);
             } else if (e.relatedTarget === this.$removeBtn.get(0)) {
-                this.removeNotes(e);
+                this.removeComment(e);
             } else {
                 this.changed();
             }
@@ -125,13 +125,13 @@ define(function(require) {
 
         changed: function() {
             if (!this.hasVal()) {
-                this.removeNotes();
+                this.removeComment();
             } else {
                 this.showPreview();
             }
         },
 
-        addNotes: function(e) {
+        addComment: function(e) {
             this.$notes.show().focus();
             this.$preview.hide();
             this.$removeBtn.show();
@@ -142,7 +142,7 @@ define(function(require) {
             }
         },
 
-        removeNotes: function(e) {
+        removeComment: function(e) {
             this.$notes.val('');
             this.showPreview();
             if (e) {
@@ -166,5 +166,5 @@ define(function(require) {
         }
     });
 
-    return NotesComponent;
+    return CommentComponent;
 });

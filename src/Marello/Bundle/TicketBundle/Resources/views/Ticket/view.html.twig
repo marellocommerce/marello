@@ -1,0 +1,87 @@
+{% extends '@OroUI/actions/view.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%id%": entity.id }}) %}
+
+{% block navButtons %}
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('marello_ticket_ticket_update', { id: entity.id }),
+            'entity_label': 'marello.ticket.entity_label'|trans
+        }) }}
+    {% endif %}
+    {{ parent() }}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('marello_ticket_ticket_index'),
+        'indexLabel':  'marello.ticket.entity_plural_label'|trans,
+        'entityTitle': entity.subject
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'marello-ticket-view' %}
+    {% set generalSubblocks = [] %}
+    {% set generalInformation %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    <div class="box-type1">
+                        {% if entity.customer %}
+                            {{ UI.renderProperty('marello.ticket.customer.label'|trans, entity.customer) }}
+                        {% endif %}
+                        {{ UI.renderProperty('marello.ticket.first_name.label'|trans, entity.firstName) }}
+                        {{ UI.renderProperty('marello.ticket.last_name.label'|trans, entity.lastName) }}
+                        {{ UI.renderProperty('marello.ticket.email.label'|trans, entity.email) }}
+                        {{ UI.renderProperty('marello.ticket.phone.label'|trans, entity.phone) }}
+                        {{ UI.renderProperty('marello.ticket.owner.label'|trans, entity.owner.fullName) }}
+                        {{ UI.renderProperty('marello.ticket.assigned_to.label'|trans, entity.assignedTo.fullName) }}
+                        {{ UI.renderProperty('marello.ticket.ticket_source.label'|trans, entity.ticketSource) }}
+                        {{ UI.renderProperty('marello.ticket.ticket_status.label'|trans, entity.ticketStatus) }}
+                        {{ UI.renderProperty('marello.ticket.ticket_priority.label'|trans, entity.ticketPriority) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endset %}
+
+    {% set ticketInformation %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    <div class="box-type1">
+                        {{ UI.renderProperty('marello.ticket.category.label'|trans, entity.category.getName()) }}
+                        {{ UI.renderProperty('marello.ticket.subject.label'|trans, entity.subject) }}
+                        {{ UI.renderProperty('marello.ticket.description.label'|trans, entity.description) }}
+                        {{ UI.renderProperty('marello.ticket.resolution.label'|trans, entity.resolution) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endset %}
+
+
+    {% set dataBlocks = [
+        {
+            'title': 'marello.sections.general'|trans,
+            'subblocks': [
+                {'data' : [generalInformation]}
+            ]
+        },
+        {
+            'title': 'marello.sections.ticket'|trans,
+            'subblocks': [
+                {'data' : [ticketInformation]}
+            ]
+        }
+    ] %}
+
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

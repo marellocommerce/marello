@@ -232,6 +232,7 @@ marello:
             organization.label:             Organization
             warehouse.label:                Warehouse
             inventory_batches.label:        Inventory Batches
+            variant_hash.label:             Variant Hash
 
         reshipment:
             label:                          Create Shipment

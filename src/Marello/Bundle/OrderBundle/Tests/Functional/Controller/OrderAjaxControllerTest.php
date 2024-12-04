@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\OrderBundle\Tests\Functional\Controller;
 
+use Marello\Bundle\OrderBundle\Provider\OrderItem\OrderItemFormChangesProvider;
 use Symfony\Component\HttpFoundation\Response;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -53,12 +54,12 @@ class OrderAjaxControllerTest extends WebTestCase
         $result = $this->getJsonResponseContent($response, 200);
         $this->assertArrayHasKey(self::ITEMS_FIELD, $result);
         $this->assertCount(count($productIds), $result[self::ITEMS_FIELD]);
-        foreach ($productIds as $id) {
-            $this->assertArrayHasKey($this->getIdentifier($id), $result[self::ITEMS_FIELD]);
+        foreach ($productIds as $rowId => $id) {
+            $this->assertArrayHasKey($this->getIdentifier($rowId, $id), $result[self::ITEMS_FIELD]);
             foreach ($orderItemKeys as $key) {
                 $this->assertArrayHasKey(
                     $key,
-                    $result[self::ITEMS_FIELD][$this->getIdentifier($id)]
+                    $result[self::ITEMS_FIELD][$this->getIdentifier($rowId, $id)]
                 );
             }
         }
@@ -66,11 +67,12 @@ class OrderAjaxControllerTest extends WebTestCase
     }
 
     /**
-     * @param int $productId
+     * @param $rowId
+     * @param $productId
      * @return string
      */
-    protected function getIdentifier($productId)
+    protected function getIdentifier($rowId, $productId)
     {
-        return sprintf('%s%s', self::IDENTIFIER_PREFIX, $productId);
+        return sprintf('%s%s-%s', self::IDENTIFIER_PREFIX, $rowId, $productId);
     }
 }

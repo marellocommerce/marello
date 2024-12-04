@@ -7,11 +7,11 @@ define(function(require) {
     const BaseView = require('oroui/js/app/views/base/view');
 
     /**
-     * @export marelloorder/js/app/views/order-discount-view
+     * @export marellopayment/js/app/views/payment-source-view
      * @extends oroui.app.views.base.View
-     * @class marelloorder.app.views.OrderDiscountView
+     * @class marellopayment.app.views.PaymentSourceView
      */
-    const OrderDiscountView = BaseView.extend({
+    const PaymentSourceView = BaseView.extend({
         /**
          * @property {Object}
          */
@@ -43,9 +43,9 @@ define(function(require) {
                 return;
             }
 
-            OrderDiscountView.__super__.dispose.call(this);
+            PaymentSourceView.__super__.dispose.call(this);
         }
     });
 
-    return OrderDiscountView;
+    return PaymentSourceView;
 });

@@ -122,7 +122,7 @@ class ChannelPriceProviderTest extends TestCase
 
         $expectedData = [
             'price' => [
-                sprintf('%s%s', ChannelPriceProvider::IDENTIFIER_PREFIX, $product->getId()) => [
+                $this->channelPriceProvider->getRowIdentifier($product->getId()-1, $product->getId()) => [
                     'value' => $expectedValue,
                 ]
             ]

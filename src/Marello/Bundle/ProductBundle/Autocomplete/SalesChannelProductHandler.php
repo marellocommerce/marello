@@ -69,6 +69,7 @@ class SalesChannelProductHandler extends SearchHandler
         $queryBuilder->join('p.channels', 'sc')
             ->andWhere('sc.id = :channel_id')
             ->setParameter('channel_id', (int) $channelId);
+        $queryBuilder->orderBy('p.sku', 'DESC');
 
         return $queryBuilder;
     }

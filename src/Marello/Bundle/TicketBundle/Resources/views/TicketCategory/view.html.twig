@@ -1,0 +1,71 @@
+{% extends '@OroUI/actions/view.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+
+{% oro_title_set({params : {"%id%": entity.id }}) %}
+
+{% block navButtons %}
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('marello_ticket_category_update', { id: entity.id }),
+            'entity_label': 'marello.ticket.category.label'|trans
+        }) }}
+    {% endif %}
+    {{ parent() }}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('marello_ticket_category_index'),
+        'indexLabel':  'marello.ticket.category.entity_plural_label'|trans,
+        'entityTitle': entity.name
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+
+{% block content_data %}
+    {% set id = 'marello-ticket-category-view' %}
+    {% set generalSubblocks = [] %}
+    {% set generalInformation %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    <div class="box-type1">
+                        {{ UI.renderProperty('marello.ticket.category.name'|trans, entity.name) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endset %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'marello.sections.general'|trans,
+            'subblocks': [
+            {
+                'data' : [generalInformation]
+            }
+        ]
+        }
+    ] %}
+
+    {% set tickets %}
+        {{ dataGrid.renderGrid('marello-category-tickets-grid', {'categoryId': entity.id}) }}
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([{
+        'title': 'marello.sections.marello_tickets_grid'|trans,
+        'subblocks': [{
+            'title': '',
+            'useSpan': false,
+            'data' : [tickets]
+        }]
+    }] ) %}
+
+    {% set id = 'marelloTicketCategoriesView' %}
+    {% set data = { 'dataBlocks': dataBlocks } %}
+
+    {{ parent() }}
+{% endblock content_data %}

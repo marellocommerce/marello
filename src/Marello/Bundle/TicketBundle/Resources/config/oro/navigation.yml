@@ -1,0 +1,24 @@
+navigation:
+    menu_config:
+        items:
+            marello_tickets:
+                label: marello.ticket.entity_plural_label
+                uri:  '#'
+
+            marello_ticket_category_list:
+                label: marello.ticket.category.entity_plural_label
+                route: marello_ticket_category_index
+
+            marello_ticket_list:
+                label: marello.ticket.entity_plural_label
+                route: marello_ticket_ticket_index
+
+        tree:
+            application_menu:
+                children:
+                    customers_tab:
+                        children:
+                            marello_tickets:
+                                children:
+                                    marello_ticket_list: ~
+                                    marello_ticket_category_list: ~

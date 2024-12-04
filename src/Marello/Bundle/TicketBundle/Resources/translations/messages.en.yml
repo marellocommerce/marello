@@ -1,0 +1,43 @@
+marello:
+    ticket:
+        entity_label: Ticket
+        entity_plural_label: Tickets
+        entity_description: Customer support request
+        entity_grid_all_view_label:   All %entity_plural_label%
+        id.label: Id
+        customer.label: Customer
+        name_prefix.label: Name Prefix
+        first_name.label: First Name
+        middle_name.label: MiddleName
+        last_name.label: Last Name
+        name_suffix.label: Name Suffix
+        email.label: Email
+        phone.label: Phone
+        owner.label: Owner
+        assigned_to.label: Assigned to
+        ticket_status.label: Status
+        ticket_source.label: Source
+        ticket_priority.label: Priority
+        category:
+            label: Category
+            name: Name
+            id.label: ID
+            entity_plural_label: Categories
+            form.choose: Choose category
+            saved:
+                message: Category saved
+        ticketcategory:
+            entity_label: Category
+            entity_plural_label: Categories
+            entity_grid_all_view_label:   All %entity_plural_label%
+            id.label: Id
+            name.label: Name
+        subject.label: Subject
+        description.label: Description
+        resolution.label: Resolution
+        saved:
+            message: Ticket saved
+    sections:
+        general: General information
+        ticket: Ticket
+        marello_tickets_grid: Customer support tickets

@@ -49,6 +49,7 @@ marello:
             start_date.label:           Start
             end_date.label:             End
             start.validation.error:     End date cannot be earlier than start date
+            value.validation.error:     No special price is added
             no_channels_enabled_or_configured: >
                                     No configured channels found for the current product.
                                     Please make sure Sales Channels exist and linked.

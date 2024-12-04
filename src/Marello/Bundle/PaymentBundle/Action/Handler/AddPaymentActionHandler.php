@@ -2,12 +2,18 @@
 
 namespace Marello\Bundle\PaymentBundle\Action\Handler;
 
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\PaymentBundle\Entity\Payment;
+use Marello\Bundle\InvoiceBundle\Entity\Invoice;
 use Marello\Bundle\InvoiceBundle\Entity\AbstractInvoice;
 use Marello\Bundle\InvoiceBundle\Provider\InvoicePaidAmountProvider;
-use Marello\Bundle\PaymentBundle\Entity\Payment;
 use Marello\Bundle\PaymentBundle\Migrations\Data\ORM\LoadPaymentStatusData;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 class AddPaymentActionHandler
 {
@@ -20,6 +26,9 @@ class AddPaymentActionHandler
      * @var InvoicePaidAmountProvider
      */
     private $invoicePaidAmountProvider;
+
+    /** @var DoctrineHelper $doctrineHelper */
+    private $doctrineHelper;
 
     /**
      * @param EntityManagerInterface $entityManager
@@ -83,10 +92,68 @@ class AddPaymentActionHandler
     }
 
     /**
+     * @param object $entity
+     * @param $paymentMethod
+     * @param \DateTime $paymentDate
+     * @param $paymentReference
+     * @param $paymentDetails
+     * @param $paidTotal
+     * @return array|string[]
+     */
+    public function addPaymentToEntity(
+        object $entity,
+        $paymentMethod,
+        \DateTime $paymentDate,
+        $paymentReference,
+        $paymentDetails,
+        $paidTotal
+    ): array {
+        if ($entity instanceof Order) {
+            $repo = $this->doctrineHelper->getEntityRepositoryForClass(AbstractInvoice::class);
+            $invoices = $repo->findBy([
+                'order' => $entity->getId(),
+                'invoiceType' => Invoice::INVOICE_TYPE
+            ]);
+
+            if (!empty($invoices)) {
+                $invoice = array_shift($invoices);
+                // only allow to add on the first invoice that is found, at least for now.
+                return $this->handleAction(
+                    $invoice,
+                    $paymentMethod,
+                    $paymentDate,
+                    $paymentReference,
+                    $paymentDetails,
+                    $paidTotal
+                );
+            }
+        }
+
+        if ($entity instanceof AbstractInvoice) {
+            return $this->handleAction(
+                $entity,
+                $paymentMethod,
+                $paymentDate,
+                $paymentReference,
+                $paymentDetails,
+                $paidTotal
+            );
+        }
+
+        return [
+            'type' => 'error',
+            'message' => 'marello.payment.message.add_payment.error.entity_not_supported',
+            'message_parameters' => [
+                'entity_type' => ClassUtils::getClass($entity)
+            ]
+        ];
+    }
+
+    /**
      * @param string $name
      * @return null|object
      */
-    private function findStatusByName($name)
+    private function findStatusByName($name): ?object
     {
         $statusClass = ExtendHelper::buildEnumValueClassName(
             LoadPaymentStatusData::PAYMENT_STATUS_ENUM_CLASS
@@ -100,5 +167,14 @@ class AddPaymentActionHandler
         }
 
         return null;
+    }
+
+    /**
+     * @param DoctrineHelper $doctrineHelper
+     * @return void
+     */
+    public function setDoctrineHelper(DoctrineHelper $doctrineHelper): void
+    {
+        $this->doctrineHelper = $doctrineHelper;
     }
 }

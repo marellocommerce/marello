@@ -97,6 +97,14 @@ class Customer implements
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false], 'importexport' => ['excluded' => true]])]
     protected ?bool $isHidden = false;
 
+    #[ORM\ManyToOne(targetEntity: CustomerGroup::class, inversedBy: 'customers')]
+    #[ORM\JoinColumn(name: 'customer_group_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true],
+        'importexport' => ['full' => true, 'order' => 45]
+    ])]
+    protected ?CustomerGroup $customerGroup = null;
+
     /**
      * Customer constructor.
      */
@@ -291,5 +299,24 @@ class Customer implements
     public function __toString(): string
     {
         return $this->getFullName();
+    }
+
+    /**
+     * @return CustomerGroup|null
+     */
+    public function getCustomerGroup(): ?CustomerGroup
+    {
+        return $this->customerGroup;
+    }
+
+    /**
+     * @param CustomerGroup|null $customerGroup
+     * @return $this
+     */
+    public function setCustomerGroup(CustomerGroup $customerGroup = null): self
+    {
+        $this->customerGroup = $customerGroup;
+
+        return $this;
     }
 }

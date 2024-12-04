@@ -28,3 +28,18 @@ acls:
         type: entity
         class: Marello\Bundle\CustomerBundle\Entity\Customer
         permission: EDIT
+
+    marello_customer_group_view:
+        type: entity
+        class: Marello\Bundle\CustomerBundle\Entity\CustomerGroup
+        permission: VIEW
+
+    marello_customer_group_create:
+        type: entity
+        class: Marello\Bundle\CustomerBundle\Entity\CustomerGroup
+        permission: CREATE
+
+    marello_customer_group_update:
+        type: entity
+        class: Marello\Bundle\CustomerBundle\Entity\CustomerGroup
+        permission: CREATE

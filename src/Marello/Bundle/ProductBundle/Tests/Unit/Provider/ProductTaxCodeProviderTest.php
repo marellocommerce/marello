@@ -104,7 +104,7 @@ class ProductTaxCodeProviderTest extends TestCase
         $expectedData = [
             ProductTaxCodeProvider::ITEMS_FIELD => [
                 'tax_code' => [
-                    sprintf('%s%s', ProductTaxCodeProvider::IDENTIFIER_PREFIX, $product->getId()) => $expectedValue,
+                    $this->productTaxCodeProvider->getRowIdentifier($product->getId()-1, $product->getId()) => $expectedValue,
                 ]
             ]
         ];

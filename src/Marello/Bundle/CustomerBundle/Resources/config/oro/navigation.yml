@@ -22,6 +22,13 @@ navigation:
                     routes: ['marello_customer_company_*']
                     position: 5
 
+            customer_groups:
+                label: marello.customer.customergroup.entity_plural_label
+                route: marello_customer_group_index
+                extras:
+                    routes: [ 'marello_customer_group_*' ]
+                    position: 15
+
             shortcut_new_company:
                 label: 'marello.customer.company.menu.shortcut_new_company.label'
                 route: 'marello_customer_company_create'
@@ -43,6 +50,7 @@ navigation:
                         children:
                             customers: ~
                             companies: ~
+                            customer_groups: ~
             shortcuts:
                 children:
                     shortcut_new_company: ~

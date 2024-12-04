@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        public: true
+
+    Marello\Bundle\TicketBundle\Controller\TicketController:
+        calls:
+            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
+        tags:
+            - { name: container.service_subscriber }
+
+    Marello\Bundle\TicketBundle\Controller\TicketCategoryController:
+        calls:
+            - [ 'setContainer', [ '@Psr\Container\ContainerInterface' ] ]
+        tags:
+            - { name: container.service_subscriber }

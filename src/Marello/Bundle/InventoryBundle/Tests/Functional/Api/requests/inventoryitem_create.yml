@@ -1,0 +1,6 @@
+data:
+      type: marelloinventoryitems
+      attributes:
+          desiredInventory: 100
+          purchaseInventory: 50
+          backorderAllowed: true

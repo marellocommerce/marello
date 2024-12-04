@@ -10,9 +10,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Marello\Bundle\CatalogBundle\Tests\Functional\DataFixtures\LoadCategoryData;
 use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
 
-/**
- * @outputBuffering enabled
- */
 class CategoryControllerTest extends WebTestCase
 {
     const GRID_NAME = 'marello-categories-grid';
@@ -40,7 +37,7 @@ class CategoryControllerTest extends WebTestCase
 
         $response = $this->client->requestGrid(self::GRID_NAME);
         $result = $this->getJsonResponseContent($response, Response::HTTP_OK);
-        $this->assertCount(3, $result);
+        $this->assertCount(3, $result['data']);
     }
 
     /**

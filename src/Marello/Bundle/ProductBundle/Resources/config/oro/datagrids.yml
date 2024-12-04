@@ -91,7 +91,7 @@ datagrids:
                 createdAt:              { data_name: p.createdAt }
                 updatedAt:              { data_name: p.updatedAt }
             default:
-                name: 'DESC'
+                sku: 'DESC'
         filters:
             columns:
                 sku:

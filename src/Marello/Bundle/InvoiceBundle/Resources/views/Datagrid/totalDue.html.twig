@@ -1,0 +1,7 @@
+{% set totalDueLabel = record.getValue('totalDue')|oro_format_currency({'currency':record.getValue('currency')}) %}
+{% if record.getValue('invoiceType') is same as constant('Marello\\Bundle\\InvoiceBundle\\Entity\\Creditmemo::CREDITMEMO_TYPE') %}
+    {% if record.getValue('totalDue') != 0 %}
+        {% set totalDueLabel = '-' ~ totalDueLabel %}
+    {% endif %}
+{% endif %}
+{{ totalDueLabel }}

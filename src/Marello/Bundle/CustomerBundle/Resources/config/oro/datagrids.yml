@@ -319,3 +319,273 @@ datagrids:
                 selectors:
                     included: '#appendCustomers'
                     excluded: '#removeCustomers'
+
+    marello-customer-group:
+        source:
+            type: orm
+            query:
+                select:
+                    - cg
+                from:
+                    - { table: Marello\Bundle\CustomerBundle\Entity\CustomerGroup, alias: cg }
+        columns:
+            name:
+                label: marello.customer.customergroup.name.label
+            createdAt:
+                label: oro.ui.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: oro.ui.updated_at
+                frontend_type: datetime
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: cg.name
+                createdAt:
+                    type: datetime
+                    data_name: cg.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: cg.updatedAt
+        sorters:
+            columns:
+                name:
+                    data_name: cg.name
+                createdAt:
+                    data_name: cg.createdAt
+                updatedAt:
+                    data_name: cg.updatedAt
+            default:
+                createdAt: 'DESC'
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: marello_customer_group_view
+                params: [ id ]
+            update_link:
+                type: url
+                route: marello_customer_group_update
+                params: [ id ]
+        actions:
+            view:
+                type: navigate
+                label: oro.grid.action.view
+                link: view_link
+                icon: eye
+                rowAction: true
+            update:
+                type: navigate
+                label:  oro.grid.action.update
+                link: update_link
+                icon: edit
+
+    marello-customer-group-customer:
+        extends: marello-customer
+        source:
+            query:
+                select:
+                    - CONCAT(c.firstName, ' ', c.lastName) as fullName
+                    - comp.name as companyName
+                join:
+                    left:
+                        - { join: c.customerGroup, alias: customerGroup }
+                        -   join: c.company
+                            alias: comp
+                where:
+                    and:
+                        - customerGroup.id = :customerGroupId
+            bind_parameters:
+                - customerGroupId
+        columns:
+            fullName:
+                label: marello.customer.name.label
+            companyName:
+                label: marello.customer.company.label
+            namePrefix:
+                renderable: false
+            firstName:
+                renderable: false
+            middleName:
+                renderable: false
+            lastName:
+                renderable: false
+            nameSuffix:
+                renderable: false
+            email:
+                renderable: false
+        sorters:
+            columns:
+                companyName:
+                    data_name: companyName
+            default:
+                companyName: ASC
+        filters:
+            columns:
+                fullName:
+                    type: string
+                    data_name: fullName
+                companyName:
+                    type: string
+                    data_name: companyName
+                namePrefix:
+                    renderable: false
+                firstName:
+                    renderable: false
+                middleName:
+                    renderable: false
+                lastName:
+                    renderable: false
+                nameSuffix:
+                    renderable: false
+                email:
+                    renderable: false
+                createdAt:
+                    renderable: false
+                updatedAt:
+                    renderable: false
+
+    marello-customer-group-customers-extend-grid:
+        extends: marello-customer
+        source:
+            query:
+                select:
+                    - CONCAT(c.firstName, ' ', c.lastName) as fullName
+                    - comp.name as companyName
+                    - >
+                        (
+                            CASE WHEN (:customer_group_id IS NOT NULL) THEN
+                                CASE WHEN
+                                    c MEMBER OF customerGroup.customers
+                                    OR c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
+                                THEN true ELSE false END
+                            ELSE
+                                CASE WHEN c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
+                                THEN true ELSE false END
+                            END
+                        ) as belongsToCustomerGroup
+                where:
+                    or:
+                        - c.customerGroup IS NULL
+                        - c.customerGroup = :customer_group_id
+                join:
+                    left:
+                        -   join: 'Marello\Bundle\CustomerBundle\Entity\CustomerGroup'
+                            alias: customerGroup
+                            conditionType: WITH
+                            condition: 'customerGroup = :customer_group_id'
+                        - join: c.company
+                          alias: comp
+            bind_parameters:
+                -   name: customer_group_id
+                    default: null
+                    type: integer
+        columns:
+            belongsToCustomerGroup:
+                label: marello.customer.customergroup.hasGroup.label
+                editable: true
+                frontend_type: boolean
+                add_before: true
+            fullName:
+                label: marello.customer.name.label
+            companyName:
+                label: marello.customer.company.label
+            namePrefix:
+                renderable: false
+            firstName:
+                renderable: false
+            middleName:
+                renderable: false
+            lastName:
+                renderable: false
+            nameSuffix:
+                renderable: false
+            email:
+                renderable: false
+        properties:
+            id: ~
+        actions: ~
+        sorters:
+            columns:
+                belongsToCustomerGroup:
+                    data_name: belongsToCustomerGroup
+                companyName:
+                    data_name: companyName
+            default:
+                belongsToCustomerGroup: 'DESC'
+        filters:
+            columns:
+                belongsToCustomerGroup:
+                    type: boolean
+                    data_name: belongsToCustomerGroup
+                fullName:
+                    type: string
+                    data_name: fullName
+                companyName:
+                    type: string
+                    data_name: companyName
+                namePrefix:
+                    renderable: false
+                firstName:
+                    renderable: false
+                middleName:
+                    renderable: false
+                lastName:
+                    renderable: false
+                nameSuffix:
+                    renderable: false
+                email:
+                    renderable: false
+                createdAt:
+                    renderable: false
+                updatedAt:
+                    renderable: false
+        options:
+            entityHint: 'Customer group customers'
+            entity_pagination: true
+            rowSelection:
+                dataField: id
+                columnName: belongsToCustomerGroup
+                selectors:
+                    included: '#appendCustomers'
+                    excluded: '#removeCustomers'
+
+    marello-customer-group-select-grid:
+        extended_entity_name: 'Marello\Bundle\CustomerBundle\Entity\CustomerGroup'
+        acl_resource: marello_customer_group_view
+        options:
+            entityHint: marello.customer.customergroup.entity_plural_label
+        inline_editing:
+            enable: true
+            behaviour: enable_selected
+            entity_name: 'Marello\Bundle\CustomerBundle\Entity\CustomerGroup'
+        source:
+            type: orm
+            query:
+                select:
+                    - cg.id
+                    - cg.name
+                from:
+                    - { table: Marello\Bundle\CustomerBundle\Entity\CustomerGroup, alias: cg }
+            hints:
+                - HINT_TRANSLATABLE
+        columns:
+            id:
+                label: marello.customer.customergroup.id.label
+                renderable: false
+            name:
+                label: marello.customer.customergroup.name.label
+        properties:
+            id: ~
+        sorters:
+            columns:
+                name:
+                    data_name: cg.name
+            default:
+                name: 'ASC'
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: cg.name
