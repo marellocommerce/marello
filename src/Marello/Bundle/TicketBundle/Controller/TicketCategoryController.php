@@ -29,7 +29,7 @@ class TicketCategoryController extends AbstractController
 
     #[Route(path: '/view/{id}', name: 'marello_ticket_category_view', requirements: ['id' => '\d+'])]
     #[Template]
-    #[Acl(id: 'marello_ticket_ticket_view', type: 'entity', class: TicketCategory::class, permission: 'VIEW')]
+    #[Acl(id: 'marello_ticket_category_view', type: 'entity', class: TicketCategory::class, permission: 'VIEW')]
     public function viewAction(TicketCategory $category)
     {
         return [
