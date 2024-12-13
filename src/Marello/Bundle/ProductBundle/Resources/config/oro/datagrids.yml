@@ -885,7 +885,7 @@ datagrids:
                     default: []
         columns:
             isRelated:
-                label: oro.product.is_related.label
+                label: marello.product.related_products.is_related.label
                 frontend_type: boolean
                 editable: true
                 order: -10

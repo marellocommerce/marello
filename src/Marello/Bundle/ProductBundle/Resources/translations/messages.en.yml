@@ -133,7 +133,7 @@ marello:
         related_products:
             label: Related Products
             no_entities: No records found
-
+            is_related.label: Is Related
         upsell_products:
             label: Up-sell Products
             no_entities: No records found
