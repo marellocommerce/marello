@@ -37,7 +37,7 @@ class MarelloProductBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_15_1';
+        return 'v1_16';
     }
 
     /**
@@ -53,6 +53,7 @@ class MarelloProductBundleInstaller implements
         $this->createMarelloProductVariantTable($schema);
         $this->createMarelloProductSalesChannelTaxRelationTable($schema);
         $this->createMarelloProductSupplierRelationTable($schema);
+        $this->createMarelloProductRelationsTables($schema);
 
         /** Foreign keys generation **/
         $this->addMarelloProductProductForeignKeys($schema);
@@ -211,6 +212,99 @@ class MarelloProductBundleInstaller implements
     }
 
     /**
+     * Create marello product relations tables
+     * related, cross-sells and upsells
+     *
+     * @param Schema $schema
+     */
+    protected function createMarelloProductRelationsTables(Schema $schema)
+    {
+        $table = $schema->createTable('marello_product_related_products');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('product_id', 'integer', ['notnull' => true]);
+        $table->addColumn('related_item_id', 'integer', ['notnull' => true]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['product_id'], 'idx_marello_product_related_products_product_id');
+        $table->addIndex(['related_item_id'], 'idx_marello_product_related_products_related_item_id');
+        $table->addUniqueIndex(['product_id', 'related_item_id'], 'idx_marello_product_related_products_unique');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_product'),
+            ['product_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_product'),
+            ['related_item_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table = $schema->createTable('marello_product_crosssells');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('product_id', 'integer', ['notnull' => true]);
+        $table->addColumn('related_item_id', 'integer', ['notnull' => true]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['product_id'], 'idx_marello_product_crosssell_product_product_id');
+        $table->addIndex(['related_item_id'], 'idx_marello_product_crosssell_product_related_item_id');
+        $table->addUniqueIndex(['product_id', 'related_item_id'], 'idx_marello_product_crosssell_product_unique');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_product'),
+            ['product_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_product'),
+            ['related_item_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table = $schema->createTable('marello_product_upsells');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('product_id', 'integer', ['notnull' => true]);
+        $table->addColumn('related_item_id', 'integer', ['notnull' => true]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['product_id'], 'idx_marello_product_upsell_product_product_id');
+        $table->addIndex(['related_item_id'], 'idx_marello_product_upsell_product_related_item_id');
+        $table->addUniqueIndex(['product_id', 'related_item_id'], 'idx_marello_product_upsell_product_unique');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_product'),
+            ['product_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_product'),
+            ['related_item_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    /**
      * Add marello_product_product foreign keys.
      *
      * @param Schema $schema
@@ -248,11 +342,6 @@ class MarelloProductBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
-//        $table->addForeignKeyConstraint(
-//            $schema->getTable('oro_attachment_file'),
-//            ['ar_file_id'],
-//            ['id']
-//        );
     }
 
     /**

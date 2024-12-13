@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
 use Oro\Bundle\AttachmentBundle\Form\Type\ImageType;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\FormBundle\Form\Extension\StripTagsExtension;
@@ -25,6 +24,7 @@ use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\ProductBundle\Entity\ProductStatus;
 use Marello\Bundle\TaxBundle\Form\Type\TaxCodeSelectType;
 use Marello\Bundle\PricingBundle\Form\EventListener\PricingSubscriber;
+use Marello\Bundle\ProductBundle\Form\EventListener\RelatedItemsSubscriber;
 use Marello\Bundle\PricingBundle\Form\EventListener\ChannelPricingSubscriber;
 use Marello\Bundle\SalesBundle\Form\EventListener\DefaultSalesChannelSubscriber;
 
@@ -46,6 +46,11 @@ class ProductType extends AbstractType
      * @var ChannelPricingSubscriber
      */
     protected $channelPricingSubscriber;
+
+    /**
+     * @var RelatedItemsSubscriber
+     */
+    protected $relatedItemsSubscriber;
 
     /**
      * @var EventSubscriberInterface
@@ -200,13 +205,14 @@ class ProductType extends AbstractType
         $builder->addEventSubscriber($this->defaultSalesChannelSubscriber);
         $builder->addEventSubscriber($this->pricingSubscriber);
         $builder->addEventSubscriber($this->channelPricingSubscriber);
+        $builder->addEventSubscriber($this->relatedItemsSubscriber);
         if ($this->subscriptionProductSubscriber) {
             $builder->addEventSubscriber($this->subscriptionProductSubscriber);
         }
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -221,10 +227,23 @@ class ProductType extends AbstractType
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getBlockPrefix();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getBlockPrefix()
     {
         return self::BLOCK_PREFIX;
+    }
+
+    public function setRelatedItemsSubscriber(RelatedItemsSubscriber $relatedItemsSubscriber)
+    {
+        $this->relatedItemsSubscriber = $relatedItemsSubscriber;
     }
 }

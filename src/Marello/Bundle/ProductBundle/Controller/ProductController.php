@@ -140,6 +140,82 @@ class ProductController extends AbstractController
     }
 
     /**
+     * Related items in product form
+     * @return array|RedirectResponse
+     */
+    #[Route(
+        path: '/related-items-update/{id}',
+        name: 'marello_product_related_items_update',
+        requirements: ['id' => '\d+']
+    )]
+    #[Template]
+    #[AclAncestor('marello_product_update')]
+    public function updateRelatedItemsAction(Product $product, Request $request)
+    {
+        if (!$this->relatedItemsIsGranted()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->update($product, $request);
+    }
+
+    /**
+     * Checks if at least one "Related Items" functionality is available for the user
+     */
+    private function relatedItemsIsGranted(): bool
+    {
+//        return $this->isGranted('oro_related_products_edit')
+//            || $this->isGranted('oro_upsell_products_edit');
+        return true;
+    }
+
+
+    /**
+     * @param Product $product
+     * @return array
+     */
+    #[Route(
+        path: '/get-possible-products-for-related-products/{id}',
+        name: 'marello_product_possible_products_for_related_products',
+        requirements: ['id' => '\d+']
+    )]
+    #[Template('@MarelloProduct/Product/selectRelatedProducts.html.twig')]
+    public function getPossibleProductsForRelatedProductsAction(Product $product)
+    {
+        return ['product' => $product];
+    }
+
+    /**
+     * @param Product $product
+     * @return array
+     */
+    #[Route(
+        path: '/get-possible-products-for-upsell-products/{id}',
+        name: 'marello_product_possible_products_for_upsell_products',
+        requirements: ['id' => '\d+']
+    )]
+    #[Template('@MarelloProduct/Product/selectUpsellProducts.html.twig')]
+    public function getPossibleProductsForUpsellProductsAction(Product $product)
+    {
+        return ['product' => $product];
+    }
+
+    /**
+     * @param Product $product
+     * @return array
+     */
+    #[Route(
+        path: '/get-possible-products-for-crosssell-products/{id}',
+        name: 'marello_product_possible_products_for_crosssell_products',
+        requirements: ['id' => '\d+']
+    )]
+    #[Template('@MarelloProduct/Product/selectCrosssellProducts.html.twig')]
+    public function getPossibleProductsForCrosssellProductsAction(Product $product)
+    {
+        return ['product' => $product];
+    }
+
+    /**
      *
      * @param Product $product
      * @param Request $request

@@ -1,0 +1,26 @@
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+<div class="widget-content">
+    <input
+        type="hidden"
+        data-role="related-items-appended-ids"
+        name="productAppendRelatedSelect"
+        id="productAppendRelatedSelect"
+        value="{{ app.request.get('addedProductRelatedItems')|join(',') }}"
+    />
+    <input
+        type="hidden"
+        data-role="related-items-removed-ids"
+        name="productRemoveRelatedSelect"
+        id="productRemoveRelatedSelect"
+        value="{{ app.request.get('removedProductRelatedItems')|join(',') }}"
+    />
+
+    {{ dataGrid.renderGrid('marello-products-related-products-select', {'productId': product.id, 'relatedItemsIds': marello_get_related_products_ids(product)}) }}
+
+    <div class="widget-actions form-actions">
+        <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+        <button class="btn btn-primary" data-role="related-items-submit-button" type="button">
+            {{ 'marello.product.widgets.select_products'|trans }}
+        </button>
+    </div>
+</div>

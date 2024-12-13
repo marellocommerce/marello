@@ -12,8 +12,14 @@ services:
             - '@marello_productprice.pricing.form.event_listener.pricing_subscriber'
             - '@marello_productprice.pricing.form.event_listener.channel_pricing_subscriber'
             - '@?marello_subscription.form.event_listener.subscription_product'
+        calls:
+            - ['setRelatedItemsSubscriber', ['@Marello\Bundle\ProductBundle\Form\EventListener\RelatedItemsSubscriber']]
         tags:
             - { name: form.type }
+
+    Marello\Bundle\ProductBundle\Form\EventListener\RelatedItemsSubscriber:
+        arguments:
+            - '@security.authorization_checker'
 
     marello_product.product_form.type.product_select:
         class: 'Marello\Bundle\ProductBundle\Form\Type\ProductSelectType'

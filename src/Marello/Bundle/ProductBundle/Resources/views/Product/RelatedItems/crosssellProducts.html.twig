@@ -1,0 +1,37 @@
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+
+{% set gridName = 'marello-products-crosssell-products-edit' %}
+
+{% set relatedGridParams = {
+    relatedItemsIds: marello_get_crosssell_products_ids(entity),
+    _parameters: {
+        data_in: [],
+        data_not_in: []
+    }
+} %}
+
+{% if form.appendCrosssell.vars.value is not empty %}
+    {% set relatedGridParams = relatedGridParams|merge({
+        _parameters: relatedGridParams._parameters|merge({
+            data_in: form.appendCrosssell.vars.value|split(',')
+        })
+    }) %}
+{% endif %}
+{% if form.removeCrosssell.vars.value is not empty %}
+    {% set relatedGridParams = relatedGridParams|merge({
+        _parameters: relatedGridParams._parameters|merge({
+            data_not_in: form.removeCrosssell.vars.value|split(',')
+        })
+    }) %}
+{% endif %}
+
+<div id="crosssell-products-block" class="tab-content">
+    {{ form_widget(form.appendCrosssell, {'id': 'productAppendCrosssell'}) }}
+    {{ form_widget(form.removeCrosssell, {'id': 'productRemoveCrosssell'}) }}
+    {{ placeholder('marello_product_crosssell_products_buttons', {
+        'entity':  entity,
+        'gridName': gridName
+    }) }}
+    {{ dataGrid.renderGrid(gridName, relatedGridParams, {cssClass: 'inner-grid' }) }}
+    {{ placeholder('marello_product_crosssell_products_edit', {'entity': entity}) }}
+</div>

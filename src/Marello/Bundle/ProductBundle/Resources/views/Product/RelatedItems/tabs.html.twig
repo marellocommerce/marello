@@ -1,0 +1,8 @@
+{% import '@OroUI/macros.html.twig' as UI %}
+
+<div {{ UI.renderPageComponentAttributes({
+    module: 'marelloproduct/js/app/components/related-items-tabs-component',
+    options: {
+        'data': relatedItemsTabsItems
+    }
+}) }}></div>

@@ -1,4 +1,22 @@
 placeholders:
+    placeholders:
+        marello_product_related_items_view: ~
+        marello_product_related_items_edit: ~
+        marello_product_related_products_buttons:
+            items:
+                marello_product_select_related_products_button: ~
+
+        marello_product_upsell_products_view: ~
+        marello_product_upsell_products_edit: ~
+        marello_product_upsell_products_buttons:
+            items:
+                marello_product_select_upsell_products_button: ~
+
+        marello_product_crosssell_products_view: ~
+        marello_product_crosssell_products_edit: ~
+        marello_product_crosssell_products_buttons:
+            items:
+                marello_product_select_crosssell_products_button: ~
     items:
         marello_add_variant_link:
             template:   '@@MarelloProduct/Variant/addVariantLink.html.twig'
@@ -8,3 +26,10 @@ placeholders:
             template:   '@@MarelloProduct/Variant/addVariantButton.html.twig'
             applicable: '@oro_ui.placeholder.filter->isInstanceOf($entity$, Marello\Bundle\ProductBundle\Entity\Product)'
             acl:        marello_product_create_variant
+
+        marello_product_select_related_products_button:
+            template: '@@MarelloProduct/Product/selectRelatedProductsButton.html.twig'
+        marello_product_select_upsell_products_button:
+            template: '@@MarelloProduct/Product/selectUpsellProductsButton.html.twig'
+        marello_product_select_crosssell_products_button:
+            template: '@@MarelloProduct/Product/selectCrosssellProductsButton.html.twig'

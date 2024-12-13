@@ -2,6 +2,7 @@
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
 {% import '@OroEntityConfig/macros.html.twig' as entityConfig %}
 {% import '@OroUI/macros.html.twig' as UI %}
+{% import '@MarelloProduct/Product/RelatedItems/macros.html.twig' as relatedProductsDataGrid %}
 
 {% oro_title_set({params : {"%name%": entity.defaultName.string|default('N/A'|trans) } }) %}
 {% set gridName  = 'marello-products-grid' %}
@@ -184,6 +185,115 @@
             ]
         }]
     }]) %}
+
+    {% set relatedItemsTabsItems = [] %}
+    {% set relatedItemsSubblocks = [] %}
+
+    {% set relatedItemsTabsItems = relatedItemsTabsItems|merge([{
+        'id': 'marello-products-related-products-view',
+        'label': 'marello.product.sections.tabs.related_products'|trans}
+    ]) %}
+
+    {% set relatedItemsIds = marello_get_related_products_ids(entity) %}
+    {% set relatedGrid %}
+        {% if relatedItemsIds is not empty %}
+            {{
+            relatedProductsDataGrid.renderGrid('marello-products-related-products-view',
+                {'relatedItemsIds': relatedItemsIds},
+                {cssClass: 'inner-grid'})
+            }}
+        {% else %}
+            <div id="marello-products-related-products-view" class="tab-content">
+                <div class="no-data">
+                    {{ 'marello.product.related_products.no_entities'|trans }}
+                </div>
+            </div>
+        {% endif %}
+    {% endset %}
+
+    {% set relatedItemsSubblocks = relatedItemsSubblocks|merge([
+        relatedGrid,
+        placeholder('marello_product_related_items_view', {'entity':  entity}),
+    ]) %}
+
+    {% set relatedItemsTabsItems = relatedItemsTabsItems|merge([{
+        'id': 'marello-products-upsell-products-view',
+        'label': 'marello.product.sections.tabs.upsell_products'|trans
+    }]) %}
+
+    {% set relatedItemsIds = marello_get_upsell_products_ids(entity) %}
+    {% set relatedGrid %}
+        {% if relatedItemsIds is not empty %}
+            {{
+            relatedProductsDataGrid.renderGrid('marello-products-upsell-products-view',
+                {'relatedItemsIds': relatedItemsIds},
+                {cssClass: 'inner-grid'})
+            }}
+        {% else %}
+            <div id="marello-products-upsell-products-view" class="tab-content">
+                <div class="no-data">
+                    {{ 'marello.product.upsell_products.no_entities'|trans }}
+                </div>
+            </div>
+        {% endif %}
+    {% endset %}
+
+    {% set relatedItemsSubblocks = relatedItemsSubblocks|merge([
+        relatedGrid,
+        placeholder('marello_product_upsell_products_view', {'entity':  entity})
+    ]) %}
+
+    {% set relatedItemsTabsItems = relatedItemsTabsItems|merge([{
+        'id': 'marello-products-crosssell-products-view',
+        'label': 'marello.product.sections.tabs.crosssell_products'|trans
+    }]) %}
+
+    {% set relatedItemsIds = marello_get_crosssell_products_ids(entity) %}
+    {% set relatedGrid %}
+        {% if relatedItemsIds is not empty %}
+            {{
+            relatedProductsDataGrid.renderGrid('marello-products-crosssell-products-view',
+                {'relatedItemsIds': relatedItemsIds},
+                {cssClass: 'inner-grid'})
+            }}
+        {% else %}
+            <div id="marello-products-upsell-products-view" class="tab-content">
+                <div class="no-data">
+                    {{ 'marello.product.crosssell_products.no_entities'|trans }}
+                </div>
+            </div>
+        {% endif %}
+    {% endset %}
+
+    {% set relatedItemsSubblocks = relatedItemsSubblocks|merge([
+        relatedGrid,
+        placeholder('marello_product_crosssell_products_view', {'entity':  entity})
+    ]) %}
+
+    {% if relatedItemsSubblocks|length %}
+        {% if relatedItemsTabsItems|length == 1 %}
+            {% set relatedItemsTabs = '' %}
+        {% else %}
+            {% set relatedItemsTabs %}
+                <div {{ UI.renderPageComponentAttributes({
+                    module: 'marelloproduct/js/app/components/related-items-tabs-component',
+                    options: {
+                        'data': relatedItemsTabsItems
+                    }
+                }) }}></div>
+            {% endset %}
+        {% endif %}
+
+        {% set dataBlocks = dataBlocks|merge({
+            'relatedItems': {
+                'title': 'marello.product.sections.related_items'|trans,
+                'priority': 1500,
+                'subblocks': [{
+                    'data': [relatedItemsTabs]|merge(relatedItemsSubblocks)
+                }]
+            }
+        }) %}
+    {% endif %}
 
     {%- set additionalInfoPlaceholders = marello_get_additional_placeholder_data('product') -%}
     {% for additionalInfo in additionalInfoPlaceholders %}

@@ -720,3 +720,213 @@ datagrids:
                 selectors:
                     included: '#productAppendCategories'
                     excluded: '#productRemoveCategories'
+
+    marello-related-products-base-grid:
+        source:
+            type: orm
+            acl_resource: marello_product_view
+            query:
+                select:
+                    - p.id
+                    - p.sku
+                    - p.type
+                    - p.channelsCodes
+                from:
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
+        columns:
+            sku:
+                label:              marello.product.sku.label
+                frontend_type:      string
+            name:
+                label:              marello.product.names.label
+            type:
+                label:              marello.product.type.label
+                frontend_type:      string
+            channels:
+                label:              marello.product.channels.label
+                type:               twig
+                frontend_type:      html
+                template:           '@MarelloProduct/Product/Datagrid/Property/channels.html.twig'
+                renderable:         false
+            categories:
+                label:              marello.product.categories.label
+                type:               twig
+                frontend_type:      html
+                template:           '@MarelloProduct/Product/Datagrid/Property/categories.html.twig'
+                renderable:         false
+        sorters:
+            columns:
+                sku:                    { data_name: p.sku }
+            default:
+                sku: 'DESC'
+        properties:
+            id: ~
+            name:
+                type: localized_value
+                data_name: names
+        filters:
+            columns:
+                sku:
+                    type:             string
+                    data_name:        p.sku
+                name:
+                    type:             string
+                    data_name:        name
+                type:
+                    type:             string
+                    data_name:        p.type
+                channels:
+                    data_name:          p.channelsCodes
+                    type:               choice_like
+                    options:
+                        field_options:
+                            multiple:   true
+                            choices:    '@marello_sales.provider.basic_sales_channels_choices->getChannels()'
+                    enabled:            false
+        options:
+            entityHint: product
+            entity_pagination: true
+
+    marello-products-related-items-view:
+        extends: marello-related-products-base-grid
+        source:
+            query:
+                where:
+                    and:
+                        - 'p.id IN(:relatedItemsIds)'
+            bind_parameters:
+                -
+                    name: relatedItemsIds
+                    default: []
+
+    marello-products-related-products-view:
+        extends: marello-products-related-items-view
+
+    marello-products-upsell-products-view:
+        extends: marello-products-related-items-view
+
+    marello-products-crosssell-products-view:
+        extends: marello-products-related-items-view
+
+    marello-products-related-items-edit:
+        acl_resource: marello_product_update
+        extends: marello-related-products-base-grid
+        options:
+            jsmodules:
+                - orodatagrid/js/datagrid/listener/action-form-listener
+                - marelloproduct/js/app/datagrid/listener/related-items-listener
+        source:
+            query:
+                where:
+                    or:
+                        - 'p.id IN (:relatedItemsIds) AND p.id NOT IN (:data_not_in)'
+                        - '(p.id IN (:data_in)) AND p.id NOT IN (:data_not_in)'
+            bind_parameters:
+                -
+                    name: relatedItemsIds
+                    default: []
+        actions:
+            delete:
+                type:          frontend
+                label:         oro.grid.action.delete
+                icon:          trash
+                configuration:
+                    triggerAction: excludeRow
+
+    marello-products-related-products-edit:
+        extends: marello-products-related-items-edit
+        options:
+            rowSelection:
+                dataField: id
+                columnName: isRelated
+                selectors:
+                    included: '#productAppendRelated'
+                    excluded: '#productRemoveRelated'
+
+    marello-products-upsell-products-edit:
+        extends: marello-products-related-items-edit
+        options:
+            rowSelection:
+                dataField: id
+                columnName: isRelated
+                selectors:
+                    included: '#productAppendUpsell'
+                    excluded: '#productRemoveUpsell'
+
+    marello-products-crosssell-products-edit:
+        extends: marello-products-related-items-edit
+        options:
+            rowSelection:
+                dataField: id
+                columnName: isRelated
+                selectors:
+                    included: '#productAppendCrosssell'
+                    excluded: '#productRemoveCrosssell'
+
+    marello-products-related-items-select:
+        extends: marello-related-products-base-grid
+        options:
+            entityHint: marello.product.entity_plural_label
+        source:
+            query:
+                select:
+                    - >
+                        (
+                          CASE WHEN (p.id IN (:relatedItemsIds) OR p.id IN (:data_in)) AND p.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        ) as isRelated
+                where:
+                    and:
+                        - p.id != :productId
+            bind_parameters:
+                - productId
+                -
+                    name: relatedItemsIds
+                    default: []
+        columns:
+            isRelated:
+                label: oro.product.is_related.label
+                frontend_type: boolean
+                editable: true
+                order: -10
+        filters:
+            columns:
+                isRelated:
+                    data_name: isRelated
+                    type:  boolean
+        sorters:
+            columns:
+                isRelated:
+                    data_name: isRelated
+            default:
+                isRelated: DESC
+
+    marello-products-related-products-select:
+        extends: marello-products-related-items-select
+        options:
+            rowSelection:
+                dataField: id
+                columnName: isRelated
+                selectors:
+                    included: '#productAppendRelatedSelect'
+                    excluded: '#productRemoveRelatedSelect'
+
+    marello-products-upsell-products-select:
+        extends: marello-products-related-items-select
+        options:
+            rowSelection:
+                dataField: id
+                columnName: isRelated
+                selectors:
+                    included: '#productAppendUpsellSelect'
+                    excluded: '#productRemoveUpsellSelect'
+
+    marello-products-crosssell-products-select:
+        extends: marello-products-related-items-select
+        options:
+            rowSelection:
+                dataField: id
+                columnName: isRelated
+                selectors:
+                    included: '#productAppendCrosssellSelect'
+                    excluded: '#productRemoveCrosssellSelect'

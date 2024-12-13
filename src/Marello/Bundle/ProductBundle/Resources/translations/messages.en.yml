@@ -130,10 +130,27 @@ marello:
                     assembled_price_list.label: Download Prices Import Template
                     assembled_channel_price_list.label: Download Channel Prices Import Template
 
+        related_products:
+            label: Related Products
+            no_entities: No records found
+
+        upsell_products:
+            label: Up-sell Products
+            no_entities: No records found
+
+        crosssell_products:
+            label: Cross-sell Products
+            no_entities: No records found
+
         sections:
             general:                General
             additional:             Additional
+            related_items:          Related Items
 
+            tabs:
+                related_products:   Related Products
+                upsell_products:    Up-sell Products
+                crosssell_products: Cross-sell Products
         form:
             choose_product:        Select Product
             add_product:           Add Product
@@ -179,6 +196,17 @@ marello:
                 use_external_url:
                     label: Use External Url For Product Files
                     tooltip: Enabling this feature will provide a URL for a product image or file in the API response. By default a binary is provided.
+        widgets:
+            select_related_products:
+                title: Select related products for {{ sku }} - {{ name }}
+                label: Select related products
+            select_products: Select products
+            select_upsell_products:
+                title: Select up-sell products for {{ sku }} - {{ name }}
+                label: Select up-sell products
+            select_crosssell_products:
+                title: Select cross-sell products for {{ sku }} - {{ name }}
+                label: Select cross-sell products
 
     attachment:
         file:

@@ -1,0 +1,37 @@
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+
+{% set gridName = 'marello-products-upsell-products-edit' %}
+
+{% set relatedGridParams = {
+    relatedItemsIds: marello_get_upsell_products_ids(entity),
+    _parameters: {
+        data_in: [],
+        data_not_in: []
+    }
+} %}
+
+{% if form.appendUpsell.vars.value is not empty %}
+    {% set relatedGridParams = relatedGridParams|merge({
+        _parameters: relatedGridParams._parameters|merge({
+            data_in: form.appendUpsell.vars.value|split(',')
+        })
+    }) %}
+{% endif %}
+{% if form.removeUpsell.vars.value is not empty %}
+    {% set relatedGridParams = relatedGridParams|merge({
+        _parameters: relatedGridParams._parameters|merge({
+            data_not_in: form.removeUpsell.vars.value|split(',')
+        })
+    }) %}
+{% endif %}
+
+<div id="upsell-products-block" class="tab-content">
+    {{ form_widget(form.appendUpsell, {'id': 'productAppendUpsell'}) }}
+    {{ form_widget(form.removeUpsell, {'id': 'productRemoveUpsell'}) }}
+    {{ placeholder('marello_product_upsell_products_buttons', {
+        'entity':  entity,
+        'gridName': gridName
+    }) }}
+    {{ dataGrid.renderGrid(gridName, relatedGridParams, {cssClass: 'inner-grid' }) }}
+    {{ placeholder('marello_product_upsell_products_edit', {'entity': entity}) }}
+</div>

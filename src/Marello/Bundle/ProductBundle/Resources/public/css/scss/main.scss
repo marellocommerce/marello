@@ -54,3 +54,15 @@ div.product-image {
         }
     }
 }
+
+.related-items-widget {
+    overflow: hidden;
+
+    &__button {
+        float: right;
+    }
+
+    ~ div .grid-views {
+        margin-top: -28px;
+    }
+}

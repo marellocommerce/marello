@@ -4,6 +4,9 @@ namespace Marello\Bundle\ProductBundle\Twig;
 
 use Marello\Bundle\CatalogBundle\Provider\CategoriesIdsProvider;
 use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct;
 use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
 use Marello\Bundle\SalesBundle\Provider\ChannelProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -58,7 +61,10 @@ class ProductExtension extends AbstractExtension
             new TwigFunction(
                 'marello_get_product_by_sku',
                 [$this, 'getProductBySku']
-            )
+            ),
+            new TwigFunction('marello_get_upsell_products_ids', [$this, 'getUpsellProductsIds']),
+            new TwigFunction('marello_get_related_products_ids', [$this, 'getRelatedProductsIds']),
+            new TwigFunction('marello_get_crosssell_products_ids', [$this, 'getCrosssellProductsIds']),
         ];
     }
 
@@ -100,6 +106,72 @@ class ProductExtension extends AbstractExtension
         /** @var ProductRepository $productRepository */
         $productRepository = $this->doctrineHelper->getEntityRepository(Product::class);
         return $productRepository->findOneBySku($sku, $this->aclHelper, $organization);
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return int[]
+     */
+    public function getUpsellProductsIds(Product $product)
+    {
+        $qb = $this
+            ->doctrineHelper
+            ->getEntityManagerForClass(UpsellProduct::class)
+            ->createQueryBuilder();
+
+        $qb->select('DISTINCT IDENTITY(rp.relatedItem) as id')
+            ->from(UpsellProduct::class, 'rp')
+            ->where($qb->expr()->eq('rp.product', ':id'))
+            ->setParameter('id', $product->getId())
+            ->orderBy('rp.relatedItem');
+
+        $productIds = $qb->getQuery()->getArrayResult();
+        return array_column($productIds, 'id');
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return int[]
+     */
+    public function getRelatedProductsIds(Product $product)
+    {
+        $qb = $this
+            ->doctrineHelper
+            ->getEntityManagerForClass(RelatedProduct::class)
+            ->createQueryBuilder();
+
+        $qb->select('DISTINCT IDENTITY(rp.relatedItem) as id')
+            ->from(RelatedProduct::class, 'rp')
+            ->where($qb->expr()->eq('rp.product', ':id'))
+            ->setParameter('id', $product->getId())
+            ->orderBy('rp.relatedItem');
+
+        $productIds = $qb->getQuery()->getArrayResult();
+        return array_column($productIds, 'id');
+    }
+
+    /**
+     * @param Product $product
+     *
+     * @return int[]
+     */
+    public function getCrosssellProductsIds(Product $product)
+    {
+        $qb = $this
+            ->doctrineHelper
+            ->getEntityManagerForClass(CrosssellProduct::class)
+            ->createQueryBuilder();
+
+        $qb->select('DISTINCT IDENTITY(rp.relatedItem) as id')
+            ->from(CrosssellProduct::class, 'rp')
+            ->where($qb->expr()->eq('rp.product', ':id'))
+            ->setParameter('id', $product->getId())
+            ->orderBy('rp.relatedItem');
+
+        $productIds = $qb->getQuery()->getArrayResult();
+        return array_column($productIds, 'id');
     }
 
     /**

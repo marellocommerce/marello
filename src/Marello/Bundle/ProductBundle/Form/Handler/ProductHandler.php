@@ -8,6 +8,10 @@ use Marello\Bundle\CatalogBundle\Entity\Category;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\ProductChannelTaxRelation;
 use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct;
+use Marello\Bundle\ProductBundle\RelatedItem\RelatedItemEntityInterface;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
@@ -58,6 +62,7 @@ class ProductHandler
             $this->submitPostPutRequest($this->form, $this->request);
 
             if ($this->form->isValid()) {
+                $this->saveAllRelatedItems($this->form, $entity);
                 $addChannels = $this->form->get('addSalesChannels')->getData();
                 $removeChannels = $this->form->get('removeSalesChannels')->getData();
                 $salesChannelTaxCodes = $this->form->get('salesChannelTaxCodes')->getData();
@@ -223,5 +228,77 @@ class ProductHandler
         foreach ($categories as $category) {
             $product->removeCategory($category);
         }
+    }
+
+    private function saveAllRelatedItems(FormInterface $form, Product $entity): void
+    {
+        $this->saveRelatedProducts($form, $entity);
+        $this->saveUpsellProducts($form, $entity);
+        $this->saveCrosssellProducts($form, $entity);
+    }
+
+    private function saveRelatedProducts(FormInterface $form, Product $entity): void
+    {
+        $appendRelated = $form->get('appendRelated')->getData();
+        $removeRelated = $form->get('removeRelated')->getData();
+        $this->saveRelatedItems(
+            $appendRelated,
+            $removeRelated,
+            $entity,
+            RelatedProduct::class
+        );
+    }
+
+    private function saveCrosssellProducts(FormInterface $form, Product $entity): void
+    {
+        $appendRelated = $form->get('appendCrosssell')->getData();
+        $removeRelated = $form->get('removeCrosssell')->getData();
+        $this->saveRelatedItems(
+            $appendRelated,
+            $removeRelated,
+            $entity,
+            CrosssellProduct::class
+        );
+    }
+
+    private function saveUpsellProducts(FormInterface $form, Product $entity): void
+    {
+        $appendUpsell = $form->get('appendUpsell')->getData();
+        $removeUpsell = $form->get('removeUpsell')->getData();
+        $this->saveRelatedItems(
+            $appendUpsell,
+            $removeUpsell,
+            $entity,
+            UpsellProduct::class
+        );
+    }
+
+    private function saveRelatedItems(
+        array $appendRelatedItemIds,
+        array $removeRelatedItemIds,
+        Product $entity,
+        $entityClass
+    ): void {
+        /** @var $appendRelatedItem RelatedItemEntityInterface */
+        foreach ($appendRelatedItemIds as $appendRelatedItem) {
+            $relatedItem = $this->createNewRelation($entityClass);
+            $relatedItem->setProduct($entity)
+                ->setRelatedItem($appendRelatedItem);
+
+            $this->manager->persist($relatedItem);
+        }
+
+        /** @var $removeRelatedItem RelatedItemEntityInterface */
+        foreach ($removeRelatedItemIds as $removeRelatedItem) {
+            $persistedRelation = $this->manager->getRepository($entityClass)
+                ->findOneBy(['product' => $entity, 'relatedItem' => $removeRelatedItem]);
+
+            $this->manager->remove($persistedRelation);
+        }
+    }
+
+    private function createNewRelation(string $entityClass)
+    {
+        return new $entityClass();
     }
 }

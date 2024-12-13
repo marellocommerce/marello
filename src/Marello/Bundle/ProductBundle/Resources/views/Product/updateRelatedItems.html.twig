@@ -1,0 +1,53 @@
+{% extends '@OroUI/actions/update.html.twig' %}
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+{% import '@OroUI/macros.html.twig' as UI %}
+
+{% oro_title_set({params : {"%sku%": entity.sku|default('N/A'|trans) , "%name%": (entity.id ? entity.defaultName.string : '')|default('N/A'|trans) } }) %}
+
+{% set formAction = entity.id ? path('marello_product_related_items_update', { 'id': entity.id }) : path('marello_product_create')  %}
+
+{% block navButtons %}
+    {% import '@OroUI/macros.html.twig' as UI %}
+
+    {{ parent() }}
+
+    {{ UI.cancelButton(path('marello_product_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
+    {% if entity.id or is_granted('marello_product_update') %}
+        {% set html = html ~ UI.saveAndStayButton() %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% if entity.id %}
+        {% set breadcrumbs =
+            {
+                'entity':      entity,
+                'indexPath':   path('marello_product_index'),
+                'indexLabel': 'marello.product.entity_plural_label'|trans,
+                'entityTitle': entity.sku ~ ' - ' ~ entity.defaultName
+            }
+        %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'marello.product.entity_label'|trans}) %}
+        {% include '@OroUI/page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% import '@OroUI/macros.html.twig' as UI %}
+
+    {% set id = 'marello-product-related-items-update' %}
+    {% set dataBlocks = {} %}
+
+    {% set data = {
+        'formErrors': form_errors(form),
+        'dataBlocks': dataBlocks
+        }
+    %}
+
+    {{ UI.scrollData(id, data, entity, form) }}
+
+{% endblock content_data %}
