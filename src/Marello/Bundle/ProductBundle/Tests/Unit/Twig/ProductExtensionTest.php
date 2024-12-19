@@ -76,12 +76,13 @@ class ProductExtensionTest extends TestCase
     public function testGetFunctions()
     {
         $functions = $this->extension->getFunctions();
-        $this->assertCount(3, $functions);
+        $this->assertCount(4, $functions);
 
         $expectedFunctions = array(
             'marello_sales_get_saleschannel_ids',
             'marello_product_get_categories_ids',
-            'marello_get_product_by_sku'
+            'marello_get_product_by_sku',
+            'marello_get_related_item_ids'
         );
 
         foreach ($functions as $function) {

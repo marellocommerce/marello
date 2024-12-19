@@ -37,7 +37,7 @@ class MarelloProductBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_16';
+        return 'v1_16_1';
     }
 
     /**
@@ -95,6 +95,7 @@ class MarelloProductBundleInstaller implements
         $table->addColumn('tax_code_id', 'integer', ['notnull' => false]);
         $table->addColumn('channels_codes', 'text', ['notnull' => false, 'comment' => '(DC2Type:text)']);
         $table->addColumn('categories_codes', 'text', ['notnull' => false, 'comment' => '(DC2Type:text)']);
+        $table->addColumn('inventory_item_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['sku', 'organization_id'], 'marello_product_product_skuorgidx');
         $table->addIndex(['created_at'], 'idx_marello_product_created_at', []);

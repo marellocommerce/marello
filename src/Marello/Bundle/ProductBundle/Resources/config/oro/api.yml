@@ -12,6 +12,18 @@ api:
             alias: marelloproductchanneltax
             plural_alias: marelloproductchanneltaxes
 
+        Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct:
+            alias: marellorelatedproduct
+            plural_alias: marellorelatedproducts
+
+        Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct:
+            alias: marelloupsellproduct
+            plural_alias: marelloupsellproducts
+
+        Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct:
+            alias: marellocrosssellproduct
+            plural_alias: marellocrosssellproducts
+
     entities:
         Marello\Bundle\ProductBundle\Entity\Product:
             documentation_resource: '@MarelloProductBundle/Resources/doc/api/product.md'
@@ -75,9 +87,6 @@ api:
         Marello\Bundle\ProductBundle\Entity\Variant:
             documentation_resource: '@MarelloProductBundle/Resources/doc/api/variant.md'
             identifier_field_names: [variantCode]
-            fields:
-                products:
-                    property_path: products
             filters:
                 exclusion_policy: all
                 fields:
@@ -132,6 +141,72 @@ api:
                         data_type: datetime
                         property_path: updatedAt
                         description: 'Filter taxes by updated at'
+            actions:
+                create: false
+                delete: false
+                delete_list: false
+                add_relationship: false
+                update_relationship: false
+                delete_relationship: false
+
+        Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct:
+            filters:
+                exclusion_policy: all
+                fields:
+                    productSku:
+                        data_type: string
+                        allow_array: true
+                        property_path: product.sku
+                        description: 'Filter by Related Product sku'
+                    relatedProductSku:
+                        data_type: string
+                        allow_array: true
+                        property_path: relatedItem.sku
+                        description: 'Filter by Related Product sku'
+            actions:
+                create: false
+                delete: false
+                delete_list: false
+                add_relationship: false
+                update_relationship: false
+                delete_relationship: false
+
+        Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct:
+            filters:
+                exclusion_policy: all
+                fields:
+                    productSku:
+                        data_type: string
+                        allow_array: true
+                        property_path: product.sku
+                        description: 'Filter by Upsell Product sku'
+                    relatedProductSku:
+                        data_type: string
+                        allow_array: true
+                        property_path: relatedItem.sku
+                        description: 'Filter by Upsell Product sku'
+            actions:
+                create: false
+                delete: false
+                delete_list: false
+                add_relationship: false
+                update_relationship: false
+                delete_relationship: false
+
+        Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct:
+            filters:
+                exclusion_policy: all
+                fields:
+                    productSku:
+                        data_type: string
+                        allow_array: true
+                        property_path: product.sku
+                        description: 'Filter by Crosssell Product sku'
+                    relatedProductSku:
+                        data_type: string
+                        allow_array: true
+                        property_path: relatedItem.sku
+                        description: 'Filter by Crosssell Product sku'
             actions:
                 create: false
                 delete: false

@@ -3,7 +3,7 @@
 {% set gridName = 'marello-products-related-products-edit' %}
 
 {% set relatedGridParams = {
-    relatedItemsIds: marello_get_related_products_ids(entity),
+    relatedItemsIds: marello_get_related_item_ids(entity),
     _parameters: {
         data_in: [],
         data_not_in: []
@@ -30,6 +30,7 @@
     {{ form_widget(form.removeRelated, {'id': 'productRemoveRelated'}) }}
     {{ placeholder('marello_product_related_products_buttons', {
         'entity':  entity,
+        'itemsLimit': itemsLimit,
         'gridName': gridName
     }) }}
     {{ dataGrid.renderGrid(gridName, relatedGridParams, {cssClass: 'inner-grid'}) }}

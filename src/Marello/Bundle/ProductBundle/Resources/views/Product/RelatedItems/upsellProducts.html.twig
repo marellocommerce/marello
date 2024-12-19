@@ -3,7 +3,7 @@
 {% set gridName = 'marello-products-upsell-products-edit' %}
 
 {% set relatedGridParams = {
-    relatedItemsIds: marello_get_upsell_products_ids(entity),
+    relatedItemsIds: marello_get_related_item_ids(entity, 'Marello\\Bundle\\ProductBundle\\Entity\\RelatedItem\\UpsellProduct'),
     _parameters: {
         data_in: [],
         data_not_in: []
@@ -30,6 +30,7 @@
     {{ form_widget(form.removeUpsell, {'id': 'productRemoveUpsell'}) }}
     {{ placeholder('marello_product_upsell_products_buttons', {
         'entity':  entity,
+        'itemsLimit': itemsLimit,
         'gridName': gridName
     }) }}
     {{ dataGrid.renderGrid(gridName, relatedGridParams, {cssClass: 'inner-grid' }) }}

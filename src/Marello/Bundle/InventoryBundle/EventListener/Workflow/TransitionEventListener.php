@@ -65,6 +65,10 @@ class TransitionEventListener
             return;
         }
 
+        if (!$this->isTransitionAllowed($event->getContext())) {
+            return;
+        }
+
         /** @var Allocation $entity */
         $entity = $event->getContext()->getData()->get(self::CONTEXT_KEY);
 
@@ -179,6 +183,22 @@ class TransitionEventListener
         return [
             self::WORKFLOW_NAME
         ];
+    }
+
+    /**
+     * @param WorkflowItem $context
+     * @return bool
+     * @throws \Oro\Bundle\WorkflowBundle\Exception\WorkflowException
+     */
+    protected function isTransitionAllowed(WorkflowItem $context): bool
+    {
+        /** @var Allocation $allocation */
+        $allocation = $context->getData()->get(self::CONTEXT_KEY);
+        if (!$allocation->getAllocationContext()) {
+            return false;
+        }
+
+        return ($allocation->getAllocationContext()->getId() !== 'reshipment');
     }
 
     /**

@@ -2,6 +2,9 @@
 
 namespace Marello\Bundle\ProductBundle\Form\EventListener;
 
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct;
 use Twig\Environment;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -9,11 +12,8 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 use Oro\Bundle\UIBundle\View\ScrollData;
 use Oro\Bundle\UIBundle\Event\BeforeListRenderEvent;
-use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
-use Oro\Bundle\FormBundle\Event\FormHandler\FormProcessEvent;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
-
+use Marello\Bundle\ProductBundle\Provider\RelatedItemProvider;
 /**
  * Adds related product information (tabs, grids, forms) to the product edit page.
  */
@@ -24,22 +24,15 @@ class RelatedItemsProductUpdateListener
     /** @var int */
     const BLOCK_PRIORITY = 1500;
 
-    /** @var TranslatorInterface */
-    private $translator;
-
-    /** @var AuthorizationCheckerInterface */
-    private $authorizationChecker;
-
     /**
      * @param TranslatorInterface               $translator
      * @param AuthorizationCheckerInterface     $authorizationChecker
      */
     public function __construct(
-        TranslatorInterface $translator,
-        AuthorizationCheckerInterface $authorizationChecker
+        private TranslatorInterface $translator,
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private RelatedItemProvider $relatedItemProvider
     ) {
-        $this->translator = $translator;
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -116,7 +109,8 @@ class RelatedItemsProductUpdateListener
             '@MarelloProduct/Product/RelatedItems/relatedProducts.html.twig',
             [
                 'form' => $event->getFormView(),
-                'entity' => $event->getEntity()
+                'entity' => $event->getEntity(),
+                'itemsLimit' => $this->relatedItemProvider->getLimitByRelatedItemClass(RelatedProduct::class)
             ]
         );
     }
@@ -128,11 +122,13 @@ class RelatedItemsProductUpdateListener
      */
     private function getUpsellProductsEditBlock(BeforeListRenderEvent $event, Environment $twigEnv)
     {
+        var_dump($this->relatedItemProvider->getLimitByRelatedItemClass(UpsellProduct::class));
         return $twigEnv->render(
             '@MarelloProduct/Product/RelatedItems/upsellProducts.html.twig',
             [
                 'form' => $event->getFormView(),
-                'entity' => $event->getEntity()
+                'entity' => $event->getEntity(),
+                'itemsLimit' => $this->relatedItemProvider->getLimitByRelatedItemClass(UpsellProduct::class)
             ]
         );
     }
@@ -148,7 +144,8 @@ class RelatedItemsProductUpdateListener
             '@MarelloProduct/Product/RelatedItems/crosssellProducts.html.twig',
             [
                 'form' => $event->getFormView(),
-                'entity' => $event->getEntity()
+                'entity' => $event->getEntity(),
+                'itemsLimit' => $this->relatedItemProvider->getLimitByRelatedItemClass(CrosssellProduct::class)
             ]
         );
     }

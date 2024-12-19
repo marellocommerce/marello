@@ -1,4 +1,4 @@
-{% macro renderRelatedItemButton(dataUrl, label, title, itemsIdsToAddFieldName, itemsIdsToRemoveFieldName, gridName) %}
+{% macro renderRelatedItemButton(dataUrl, label, title, limit, itemsIdsToAddFieldName, itemsIdsToRemoveFieldName, gridName) %}
     {% import '@OroUI/macros.html.twig' as UI %}
 
     {{ UI.clientLink({
@@ -16,6 +16,7 @@
                     'height': '80vh',
                     'autoResize': true,
                 },
+                'itemsLimit': limit,
                 'itemsIdsToAdd': itemsIdsToAddFieldName,
                 'itemsIdsToRemove': itemsIdsToRemoveFieldName,
                 'gridName': gridName

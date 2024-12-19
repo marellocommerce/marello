@@ -11,6 +11,7 @@ use Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation;
 use Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct;
 use Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct;
 use Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct;
+use Marello\Bundle\ProductBundle\Provider\RelatedItemProvider;
 use Marello\Bundle\ProductBundle\RelatedItem\RelatedItemEntityInterface;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\SupplierBundle\Entity\Supplier;
@@ -31,6 +32,10 @@ class ProductHandler
 
     /** @var ObjectManager */
     protected $manager;
+
+    /** @var RelatedItemProvider $relatedItemProvider
+     */
+    protected $relatedItemProvider;
 
     /**
      * @param FormInterface   $form
@@ -279,13 +284,28 @@ class ProductHandler
         Product $entity,
         $entityClass
     ): void {
-        /** @var $appendRelatedItem RelatedItemEntityInterface */
-        foreach ($appendRelatedItemIds as $appendRelatedItem) {
-            $relatedItem = $this->createNewRelation($entityClass);
-            $relatedItem->setProduct($entity)
-                ->setRelatedItem($appendRelatedItem);
 
-            $this->manager->persist($relatedItem);
+        if (!empty($appendRelatedItemIds)) {
+            // check the count of existing related products combined with the new ones.
+            $numberOfRelations = count($appendRelatedItemIds);
+            $existingRelations = $this
+                ->manager
+                ->getRepository($entityClass)
+                ->findBy(['product' => $entity->getId()]);
+            $numberOfRelations += count($existingRelations);
+            if ($numberOfRelations > $this->relatedItemProvider->getLimitByRelatedItemClass($entityClass)) {
+                throw new \OverflowException(
+                    'It is not possible to add more related items, because of the limit of relations.'
+                );
+            }
+            /** @var $appendRelatedItem RelatedItemEntityInterface */
+            foreach ($appendRelatedItemIds as $appendRelatedItem) {
+                $relatedItem = $this->createNewRelation($entityClass);
+                $relatedItem->setProduct($entity)
+                    ->setRelatedItem($appendRelatedItem);
+
+                $this->manager->persist($relatedItem);
+            }
         }
 
         /** @var $removeRelatedItem RelatedItemEntityInterface */
@@ -297,8 +317,21 @@ class ProductHandler
         }
     }
 
+    /**
+     * @param string $entityClass
+     * @return mixed
+     */
     private function createNewRelation(string $entityClass)
     {
         return new $entityClass();
+    }
+
+    /**
+     * @param RelatedItemProvider $relatedItemProvider
+     * @return void
+     */
+                                                                            public function setRelatedItemProvider(RelatedItemProvider $relatedItemProvider)
+    {
+        $this->relatedItemProvider = $relatedItemProvider;
     }
 }

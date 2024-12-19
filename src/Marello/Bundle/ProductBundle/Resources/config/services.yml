@@ -44,6 +44,7 @@ services:
         calls:
             - ['setOroEntityDoctrineHelper', ['@oro_entity.doctrine_helper']]
             - ['setTokenAccessor', ['@oro_security.token_accessor']]
+            - ['setRelatedItemProvider', ['@Marello\Bundle\ProductBundle\Provider\RelatedItemProvider']]
         tags:
             - { name: twig.extension }
 
@@ -131,6 +132,11 @@ services:
             - '@oro_security.acl_helper'
         tags:
             - { name: marello_order.order_item_data_provider, type: product_unit, priority: 25 }
+
+    Marello\Bundle\ProductBundle\Provider\RelatedItemProvider:
+        arguments:
+            - '@oro_config.manager'
+            - '@oro_entity.doctrine_helper'
 
     Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository:
         parent: oro_entity.abstract_repository
@@ -225,6 +231,7 @@ services:
         arguments:
             - '@translator'
             - '@security.authorization_checker'
+            - '@Marello\Bundle\ProductBundle\Provider\RelatedItemProvider'
         tags:
             - { name: kernel.event_listener, event: oro_ui.scroll_data.before.marello-product-update, method: onProductEdit }
             - { name: kernel.event_listener, event: oro_ui.scroll_data.before.marello-product-related-items-update, method: onProductEdit }

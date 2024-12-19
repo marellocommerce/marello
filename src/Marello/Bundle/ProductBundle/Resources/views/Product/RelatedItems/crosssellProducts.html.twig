@@ -3,7 +3,7 @@
 {% set gridName = 'marello-products-crosssell-products-edit' %}
 
 {% set relatedGridParams = {
-    relatedItemsIds: marello_get_crosssell_products_ids(entity),
+    relatedItemsIds: marello_get_related_item_ids(entity, 'Marello\\Bundle\\ProductBundle\\Entity\\RelatedItem\\CrosssellProduct'),
     _parameters: {
         data_in: [],
         data_not_in: []
@@ -30,6 +30,7 @@
     {{ form_widget(form.removeCrosssell, {'id': 'productRemoveCrosssell'}) }}
     {{ placeholder('marello_product_crosssell_products_buttons', {
         'entity':  entity,
+        'itemsLimit': itemsLimit,
         'gridName': gridName
     }) }}
     {{ dataGrid.renderGrid(gridName, relatedGridParams, {cssClass: 'inner-grid' }) }}

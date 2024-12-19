@@ -15,7 +15,7 @@
         value="{{ app.request.get('removedProductRelatedItems')|join(',') }}"
     />
 
-    {{ dataGrid.renderGrid('marello-products-crosssell-products-select', {'productId': product.id, 'relatedItemsIds': marello_get_crosssell_products_ids(product)}) }}
+    {{ dataGrid.renderGrid('marello-products-crosssell-products-select', {'productId': product.id, 'relatedItemsIds': marello_get_related_item_ids(product, 'Marello\\Bundle\\ProductBundle\\Entity\\RelatedItem\\CrosssellProduct')}) }}
 
     <div class="widget-actions form-actions">
         <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>

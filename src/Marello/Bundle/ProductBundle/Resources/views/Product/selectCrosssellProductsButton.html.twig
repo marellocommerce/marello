@@ -5,6 +5,7 @@
         path('marello_product_possible_products_for_crosssell_products', {'id': entity.id}),
         'marello.product.widgets.select_crosssell_products.label'|trans,
         'marello.product.widgets.select_crosssell_products.title'|trans({'{{ sku }}': entity.sku, '{{ name }}': entity.name}),
+        itemsLimit,
         '#productAppendCrosssell',
         '#productRemoveCrosssell',
         gridName

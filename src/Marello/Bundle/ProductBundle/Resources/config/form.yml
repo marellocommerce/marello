@@ -118,6 +118,8 @@ services:
             - '@marello_product.product.form'
             - '@request_stack'
             - '@doctrine.orm.entity_manager'
+        calls:
+            - ['setRelatedItemProvider', ['@Marello\Bundle\ProductBundle\Provider\RelatedItemProvider']]
 
     marello_product.product_variant_form.handler:
         class: 'Marello\Bundle\ProductBundle\Form\Handler\ProductVariantHandler'

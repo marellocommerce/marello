@@ -24,6 +24,10 @@ api:
             alias: marelloshippingmethodtypeconfig
             plural_alias: marelloshippingmethodtypeconfigs
 
+        Marello\Bundle\ShippingBundle\Entity\TrackingInfo:
+            alias: marellotrackinginfo
+            plural_alias: marellotrackinginfos
+
     entities:
         Marello\Bundle\ShippingBundle\Entity\Shipment:
             fields:
@@ -38,6 +42,22 @@ api:
                         exclude: true
                     updatedAt:
                         exclude: true
+            actions:
+                create: false
+                update: false
+                delete: false
+                delete_list: false
+                update_relationship: false
+                delete_relationship: false
+
+        Marello\Bundle\ShippingBundle\Entity\TrackingInfo:
+            fields:
+                createdAt:
+                    exclude: true
+                updatedAt:
+                    exclude: true
+            filters:
+                exclusion_policy: all
             actions:
                 create: false
                 update: false

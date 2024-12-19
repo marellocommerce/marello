@@ -194,7 +194,7 @@
         'label': 'marello.product.sections.tabs.related_products'|trans}
     ]) %}
 
-    {% set relatedItemsIds = marello_get_related_products_ids(entity) %}
+    {% set relatedItemsIds = marello_get_related_product_ids(entity) %}
     {% set relatedGrid %}
         {% if relatedItemsIds is not empty %}
             {{
@@ -221,7 +221,7 @@
         'label': 'marello.product.sections.tabs.upsell_products'|trans
     }]) %}
 
-    {% set relatedItemsIds = marello_get_upsell_products_ids(entity) %}
+    {% set relatedItemsIds = marello_get_related_item_ids(entity, 'Marello\\Bundle\\ProductBundle\\Entity\\RelatedItem\\UpsellProduct') %}
     {% set relatedGrid %}
         {% if relatedItemsIds is not empty %}
             {{
@@ -248,7 +248,7 @@
         'label': 'marello.product.sections.tabs.crosssell_products'|trans
     }]) %}
 
-    {% set relatedItemsIds = marello_get_crosssell_products_ids(entity) %}
+    {% set relatedItemsIds = marello_get_related_item_ids(entity, 'Marello\\Bundle\\ProductBundle\\Entity\\RelatedItem\\CrosssellProduct') %}
     {% set relatedGrid %}
         {% if relatedItemsIds is not empty %}
             {{

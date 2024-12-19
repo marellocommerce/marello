@@ -2,7 +2,6 @@
 
 namespace Marello\Bundle\ProductBundle\Entity\RelatedItem;
 
-
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 

@@ -17,6 +17,13 @@ class Configuration implements ConfigurationInterface
 {
     public const ROOT_NODE = 'marello_product';
     public const USE_EXTERNAL_URL_CONFIG = 'use_external_url';
+    public const DEFAULT_MAX_NUMBER_OF_RELATED_ITEMS_COUNT = 25;
+
+    public const RELATED_PRODUCTS_BIDIRECTIONAL = 'related_products_bidirectional';
+    public const MAX_NUMBER_OF_RELATED_PRODUCTS = 'max_number_of_related_products';
+    public const MAX_NUMBER_OF_UPSELL_PRODUCTS = 'max_number_of_upsell_products';
+    public const MAX_NUMBER_OF_CROSSSELL_PRODUCTS = 'max_number_of_crosssell_products';
+
 
     public function getConfigTreeBuilder()
     {
@@ -29,7 +36,17 @@ class Configuration implements ConfigurationInterface
         SettingsBuilder::append(
             $rootNode,
             [
-                self::USE_EXTERNAL_URL_CONFIG => ['value' => false]
+                self::USE_EXTERNAL_URL_CONFIG => ['value' => false],
+                self::RELATED_PRODUCTS_BIDIRECTIONAL => ['value' => false],
+                self::MAX_NUMBER_OF_RELATED_PRODUCTS => [
+                    'value' => self::DEFAULT_MAX_NUMBER_OF_RELATED_ITEMS_COUNT
+                ],
+                self::MAX_NUMBER_OF_UPSELL_PRODUCTS => [
+                    'value' => self::DEFAULT_MAX_NUMBER_OF_RELATED_ITEMS_COUNT
+                ],
+                self::MAX_NUMBER_OF_CROSSSELL_PRODUCTS => [
+                    'value' => self::DEFAULT_MAX_NUMBER_OF_RELATED_ITEMS_COUNT
+                ],
             ]
         );
 

@@ -31,7 +31,7 @@ class DocumentTableExtensionTest extends TestCase
 
     public function testGetOperators()
     {
-        $this->assertCount(0, $this->extension->getOperators());
+        $this->assertCount(2, $this->extension->getOperators());
     }
 
     public function testGetTests()
