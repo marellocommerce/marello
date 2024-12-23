@@ -29,3 +29,5 @@ marello:
         widgets:
             select_related_items:
                 limit_has_been_reached: Limit of related items has been reached
+        system_configuration:
+            change_related_item_assigned_confirmation: You are about to change the assigned item limit. This change will remove all items above the limit based on the assigned id's. You'll need to re-assign items if limit is changed back.

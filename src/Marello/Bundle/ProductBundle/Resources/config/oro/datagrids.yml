@@ -754,11 +754,6 @@ datagrids:
                 frontend_type:      html
                 template:           '@MarelloProduct/Product/Datagrid/Property/categories.html.twig'
                 renderable:         false
-        sorters:
-            columns:
-                sku:                    { data_name: p.sku }
-            default:
-                sku: 'DESC'
         properties:
             id: ~
             name:
@@ -896,9 +891,10 @@ datagrids:
                     type:  boolean
         sorters:
             columns:
-                isRelated:
-                    data_name: isRelated
+                isRelated:  { data_name: isRelated }
+                sku:        { data_name: p.sku }
             default:
+                sku: 'DESC'
                 isRelated: DESC
 
     marello-products-related-products-select:

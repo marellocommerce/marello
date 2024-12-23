@@ -5,3 +5,4 @@ services:
 
     Marello\Bundle\ProductBundle\Async\Topic\ProductsAssignSalesChannelsTopic: ~
     Marello\Bundle\ProductBundle\Async\Topic\ProductFilesUpdateTopic: ~
+    Marello\Bundle\ProductBundle\Async\Topic\NumberOfRelatedItemsUpdateTopic: ~

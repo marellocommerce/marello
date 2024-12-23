@@ -352,3 +352,17 @@
         </div>
     {% endapply %}
 {% endblock %}
+
+{% block marello_config_integer_widget %}
+    <div class="max-number-config-integer"
+        data-page-component-module="oroui/js/app/components/view-component"
+        data-page-component-options="{{
+            {
+                view: 'marelloproduct/js/app/views/config-integer-view',
+                sourceElement: form.vars.id
+            }|json_encode
+        }}"
+        data-layout="separate">
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}

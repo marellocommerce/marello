@@ -38,7 +38,7 @@ system_configuration:
 
         marello_product.max_number_of_related_products:
             data_type: integer
-            type: Symfony\Component\Form\Extension\Core\Type\IntegerType
+            type: Marello\Bundle\ProductBundle\Form\Type\ConfigIntegerType
             search_type: text
             priority: 80
             options:
@@ -52,7 +52,7 @@ system_configuration:
 
         marello_product.max_number_of_upsell_products:
             data_type: integer
-            type: Symfony\Component\Form\Extension\Core\Type\IntegerType
+            type: Marello\Bundle\ProductBundle\Form\Type\ConfigIntegerType
             search_type: text
             priority: 80
             options:
@@ -66,7 +66,7 @@ system_configuration:
 
         marello_product.max_number_of_crosssell_products:
             data_type: integer
-            type: Symfony\Component\Form\Extension\Core\Type\IntegerType
+            type: Marello\Bundle\ProductBundle\Form\Type\ConfigIntegerType
             search_type: text
             priority: 80
             options:

@@ -330,7 +330,7 @@ class ProductHandler
      * @param RelatedItemProvider $relatedItemProvider
      * @return void
      */
-                                                                            public function setRelatedItemProvider(RelatedItemProvider $relatedItemProvider)
+    public function setRelatedItemProvider(RelatedItemProvider $relatedItemProvider)
     {
         $this->relatedItemProvider = $relatedItemProvider;
     }
