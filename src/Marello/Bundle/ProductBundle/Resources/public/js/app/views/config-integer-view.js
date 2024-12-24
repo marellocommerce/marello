@@ -19,6 +19,11 @@ define(function(require) {
         $form: null,
 
         /**
+         * @property {Object}
+         */
+        $relatedItemConfig: {},
+
+        /**
          * @constructor
          */
         initialize: function(options) {
@@ -33,26 +38,54 @@ define(function(require) {
         handleLayoutInit: function() {
             this.$form = this.$el.closest('form');
             this.$relatedItemElement = this.$form.find(':input[id="'+ this.options.sourceElement + '"]');
-            this.$relatedItemElementOldVal = this.$relatedItemElement.val();
-            this.$relatedItemElement.on('change', _.bind(this.onRelatedItemAssignedChange, this));
+            this.$relatedItemElement.change(_.bind(function() {
+                this.setRelatedItemValueHistory(this._getRelatedItemValue());
+                this.onRelatedItemAssignedChange();
+            }, this));
+
+            this.initRelatedItemValueHistory();
+        },
+
+        /**
+         * get related item limit config value
+         * @returns {string}
+         * @protected
+         */
+        _getRelatedItemValue: function() {
+            return this.$relatedItemElement.length !== 0 ? this.$relatedItemElement.val() : '';
+        },
+
+        /**
+         * update the current and prev relatedItemConfigValues
+         * @param relatedItemConfigValue
+         */
+        setRelatedItemValueHistory: function(relatedItemConfigValue) {
+            let $prevElm =  'prev-' + this.options.sourceElement;
+            let $currentElm =  'current-' + this.options.sourceElement;
+            this.$relatedItemConfig[$prevElm] = (this.$relatedItemConfig[$currentElm] === null) ? parseInt(relatedItemConfigValue) : this.$relatedItemConfig[$currentElm];
+            this.$relatedItemConfig[$currentElm] = parseInt(relatedItemConfigValue);
+        },
+
+        /**
+         * initialize relatedItemConfig history (current and prev changed relatedConfigValues)
+         */
+        initRelatedItemValueHistory: function () {
+            this.setRelatedItemValueHistory(this._getRelatedItemValue());
         },
 
         onRelatedItemAssignedChange: function() {
-            if (this.$relatedItemElement.val() < this.$relatedItemElementOldVal) {
+            let $prevElm =  'prev-' + this.options.sourceElement;
+            let $currentElm =  'current-' + this.options.sourceElement;
+            if (this.$relatedItemConfig[$currentElm] < this.$relatedItemConfig[$prevElm]) {
                 const confirmation = new StandardConfirmation({
                     content: __('marello.product.system_configuration.change_related_item_assigned_confirmation'),
                     okText: _.__('OK')
                 });
-                confirmation.on('ok', () => {
-                    this.$relatedItemElementOldVal = this.$relatedItemElement.val();
-                });
                 confirmation.on('cancel', () => {
-                    this.$relatedItemElement.val(this.$relatedItemElementOldVal);
+                    this.$relatedItemElement.val(this.$relatedItemConfig[$prevElm]);
                 });
 
                 confirmation.open();
-            } else {
-                this.$relatedItemElementOldVal = this.$relatedItemElement.val();
             }
         }
     });
