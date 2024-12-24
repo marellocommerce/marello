@@ -5,3 +5,11 @@
 div[data-name="field__received-items"] .control-group .controls:first-child {
     margin-left:0;
 }
+
+.form-horizontal:has(.control-group-marello_po_partial_receive) {
+    margin-right:150px;
+
+    .control-group {
+        max-width: 100%;
+    }
+}

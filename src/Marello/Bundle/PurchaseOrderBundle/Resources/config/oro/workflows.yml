@@ -12,8 +12,8 @@ workflows:
                 type: entity
                 options:
                     class: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder
-            pickup_location:
-                type: string
+#            pickup_location:
+#                type: string
         steps:
             not_sent:
                 allowed_transitions:
@@ -43,10 +43,6 @@ workflows:
                 page_template: '@OroWorkflow/Workflow/transitionForm.html.twig'
                 form_options:
                     attribute_fields:
-                        pickup_location:
-                            form_type: Symfony\Component\Form\Extension\Core\Type\TextType
-                            options:
-                                required: false
                         received_items:
                             form_type: Marello\Bundle\PurchaseOrderBundle\Form\Type\PartialReceiveType
                             options:
@@ -70,7 +66,6 @@ workflows:
                     - '@marello_receive_purchase_order':
                         entity: $received_items
                         is_partial: true
-                        pickup_location: $pickup_location
                     - '@marello_purchase_order_transit_complete_action':
                         transitionName: 'complete_purchase_order'
                         entity: $received_items

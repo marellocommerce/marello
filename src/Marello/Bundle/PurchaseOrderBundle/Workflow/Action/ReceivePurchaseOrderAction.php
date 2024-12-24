@@ -46,9 +46,6 @@ class ReceivePurchaseOrderAction extends AbstractAction
     /** @var PropertyPathInterface|bool $isPartial */
     protected $isPartial;
 
-    /** @var PropertyPathInterface|bool $pickupLocation */
-    protected $pickupLocation;
-
     /**
      * ReceivePurchaseOrderAction constructor.
      * @param ContextAccessor $contextAccessor
@@ -83,7 +80,6 @@ class ReceivePurchaseOrderAction extends AbstractAction
         }
 
         $isPartial = $this->contextAccessor->getValue($context, $this->isPartial);
-        $pickupLocation = $this->contextAccessor->getValue($context, $this->pickupLocation);
         $items = $purchaseOrder->getItems();
         $updatedItems = [];
         $fullyReceivedItems = 0;
@@ -172,10 +168,6 @@ class ReceivePurchaseOrderAction extends AbstractAction
                 }
                 $item->setStatus(PurchaseOrderItem::STATUS_COMPLETE);
             }
-
-            if ($pickupLocation) {
-                $this->setPickupLocation($item, $pickupLocation);
-            }
         }
 
         if (!empty($updatedItems)) {
@@ -227,19 +219,6 @@ class ReceivePurchaseOrderAction extends AbstractAction
         );
     }
 
-    protected function setPickupLocation(PurchaseOrderItem $item, string $pickupLocation): void
-    {
-        $inventoryItem = $item->getProduct()->getInventoryItem();
-        $purchaseOrder = $item->getOrder();
-        foreach ($inventoryItem->getInventoryLevels() as $inventoryLevel) {
-            if ($inventoryLevel->getWarehouse() !== $purchaseOrder->getWarehouse()) {
-                continue;
-            }
-
-            $inventoryLevel->setPickLocation($pickupLocation);
-        }
-    }
-
     /**
      * Initialize action based on passed options.
      *
@@ -260,10 +239,6 @@ class ReceivePurchaseOrderAction extends AbstractAction
 
         if (array_key_exists('is_partial', $options)) {
             $this->isPartial = $this->getOption($options, 'is_partial');
-        }
-
-        if (array_key_exists('pickup_location', $options)) {
-            $this->pickupLocation = $this->getOption($options, 'pickup_location');
         }
 
         $this->options = $options;
