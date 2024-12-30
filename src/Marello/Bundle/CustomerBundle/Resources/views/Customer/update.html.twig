@@ -61,15 +61,37 @@
         }]
     }] %}
 
+    {% set primaryAddress %}
+        <div
+            data-page-component-module="oroui/js/app/components/view-component"
+            data-page-component-options="{{ {
+                view: 'marellocustomer/js/app/views/customer-primary-address-view',
+                selectors: {
+                    usePrimaryAsShipping: '#' ~ form.primaryAddress.usePrimaryAddressAsShipping.vars.id,
+                    shippingAddressBlock: '#' ~ form.shippingAddress.vars.id
+                }
+            }|json_encode }}">
+            {{ form_widget(form.primaryAddress) }}
+        </div>
+    {% endset %}
+
+
+
+    {% set shippingAddress %}
+        <div id="{{ form.shippingAddress.vars.id }}">
+            {{ form_widget(form.shippingAddress) }}
+        </div>
+    {% endset %}
+
     {% set dataBlocks = dataBlocks|merge( [{
-        'title' : 'Addresses'|trans,
+        'title' : 'marello.customer.addresses.label'|trans,
         'subblocks': [{
             'title': 'marello.customer.primary_address.label'|trans,
-            'data': [form_widget(form.primaryAddress)]
+            'data': [primaryAddress]
         },
         {
             'title': 'marello.customer.shipping_address.label'|trans,
-            'data': [form_widget(form.shippingAddress)]
+            'data': [shippingAddress]
         }]
     }] ) %}
 

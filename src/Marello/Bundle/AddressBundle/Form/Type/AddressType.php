@@ -2,12 +2,14 @@
 
 namespace Marello\Bundle\AddressBundle\Form\Type;
 
-use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 use Oro\Bundle\AddressBundle\Form\Type\AddressType as OroAddressType;
+
+use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
 
 class AddressType extends AbstractType
 {
@@ -38,6 +40,7 @@ class AddressType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => MarelloAddress::class,
+            'allow_extra_fields' => true
         ]);
     }
 

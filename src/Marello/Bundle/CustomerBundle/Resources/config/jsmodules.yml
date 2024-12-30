@@ -6,5 +6,6 @@ dynamic-imports:
         - marellocustomer/js/app/components/customer-selection-component
         - marellocustomer/js/app/components/select-create-company-customer-inline-type-component
         - marellocustomer/js/app/components/select-create-company-customer-inline-type-async-component
+        - marellocustomer/js/app/views/customer-primary-address-view
     commons:
         - oro/select2-autocomplete-company-customer-component

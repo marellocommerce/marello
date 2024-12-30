@@ -5,7 +5,9 @@ marello:
         entity_grid_all_view_label:       All %entity_plural_label%
         id.label:                         'Id'
         organization.label:               'Organization'
-        primary_address.label:            'Primary Address'
+        primary_address:
+            label:                        'Primary Address'
+            use_as_shipping.label:        'Use Primary Address as Shipping Address'
         shipping_address.label:           'Shipping Address'
         addresses.label:                  'Addresses'
         email.label:                      'Primary Email'

@@ -193,7 +193,7 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('paymentMethod', HiddenType::class)
-            ->add('paymentMethodOptions', HiddenType::class, ['mapped' => false,]);
+            ->add('paymentMethodOptions', HiddenType::class, ['mapped' => false]);
 
         return $this;
     }

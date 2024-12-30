@@ -18,22 +18,22 @@
         {% set asyncNameSegment = 'async-' %}
     {% endif %}
     {% set urlParts = {
-    grid: {
-    route: 'oro_datagrid_widget',
-    parameters: {
-    gridName     : form.vars.grid_name,
-    params       : form.vars.grid_parameters,
-    renderParams : form.vars.grid_render_parameters
-    }
-    }
+        grid: {
+            route: 'oro_datagrid_widget',
+            parameters: {
+                gridName     : form.vars.grid_name,
+                params       : form.vars.grid_parameters,
+                renderParams : form.vars.grid_render_parameters
+            }
+        }
     } %}
 
     {% if form.vars.create_enabled|default(false) is same as(true) %}
         {% set urlParts = urlParts|merge({
-        create: {
-        route:      form.vars.create_form_route,
-        parameters: form.vars.create_form_route_parameters
-        }
+            create: {
+                route:      form.vars.create_form_route,
+                parameters: form.vars.create_form_route_parameters
+            }
         }) %}
     {% endif %}
     <div {{ UI.renderPageComponentAttributes({
@@ -47,4 +47,14 @@
             createEnabled: form.vars.create_enabled|default(false),
         }
     }) }} style="display: none"></div>
+{% endblock %}
+
+{% block marello_customer_primary_address_widget %}
+    {% if form.parent is not empty %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ form_rest(form) }}
+        </div>
+    {% else %}
+        {{ form_rest(form) }}
+    {% endif %}
 {% endblock %}
