@@ -98,6 +98,7 @@ class MarelloProductBundleInstaller implements
         $table->addColumn('inventory_item_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['sku', 'organization_id'], 'marello_product_product_skuorgidx');
+        $table->addUniqueIndex(['inventory_item_id'], 'marello_product_inv_item_uidx');
         $table->addIndex(['created_at'], 'idx_marello_product_created_at', []);
         $table->addIndex(['updated_at'], 'idx_marello_product_updated_at', []);
         $table->addIndex(['product_status'], 'IDX_25845B8D197C24B8', []);

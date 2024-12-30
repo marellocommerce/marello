@@ -69,7 +69,7 @@ class RelatedItemConfigListener
         }
 
         if ($event->getNewValue($key) < $event->getOldValue($key)) {
-            $this->sendToMessageProducer( $event->getNewValue($key), CrosssellProduct::class);
+            $this->sendToMessageProducer($event->getNewValue($key), CrosssellProduct::class);
         }
     }
 

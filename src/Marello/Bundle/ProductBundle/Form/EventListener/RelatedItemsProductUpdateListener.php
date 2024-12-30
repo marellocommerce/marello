@@ -2,9 +2,6 @@
 
 namespace Marello\Bundle\ProductBundle\Form\EventListener;
 
-use Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct;
-use Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct;
-use Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct;
 use Twig\Environment;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -14,6 +11,10 @@ use Oro\Bundle\UIBundle\View\ScrollData;
 use Oro\Bundle\UIBundle\Event\BeforeListRenderEvent;
 
 use Marello\Bundle\ProductBundle\Provider\RelatedItemProvider;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\UpsellProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\RelatedProduct;
+use Marello\Bundle\ProductBundle\Entity\RelatedItem\CrosssellProduct;
+
 /**
  * Adds related product information (tabs, grids, forms) to the product edit page.
  */

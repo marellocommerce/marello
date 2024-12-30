@@ -251,7 +251,7 @@ class Product implements
         orphanRemoval: true
     )]
     #[ORM\OrderBy(['id' => 'ASC'])]
-    #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'inventory_item_id', referencedColumnName: 'id', nullable: true, onDelete: 'CASCADE')]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],

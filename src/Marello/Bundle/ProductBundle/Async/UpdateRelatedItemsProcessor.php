@@ -13,7 +13,9 @@ use Marello\Bundle\ProductBundle\Async\Topic\NumberOfRelatedItemsUpdateTopic;
 
 class UpdateRelatedItemsProcessor implements MessageProcessorInterface, TopicSubscriberInterface
 {
-    public function __construct(private DoctrineHelper $doctrineHelper) {}
+    public function __construct(private DoctrineHelper $doctrineHelper)
+    {
+    }
 
     /**
      * @return array

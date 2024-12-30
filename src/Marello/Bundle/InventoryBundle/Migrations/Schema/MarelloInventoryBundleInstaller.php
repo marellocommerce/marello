@@ -32,7 +32,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v2_6_12';
+        return 'v2_7';
     }
 
     /**
@@ -77,7 +77,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
     {
         $table = $schema->createTable('marello_inventory_item');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('product_id', 'integer', []);
+        $table->addColumn('product_id', 'integer', ['notnull' => true]);
         $table->addColumn('desired_inventory', 'integer', ['notnull' => false]);
         $table->addColumn('purchase_inventory', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -422,6 +422,14 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
             ['organization_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table = $schema->getTable('marello_product_product');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_item'),
+            ['inventory_item_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 
