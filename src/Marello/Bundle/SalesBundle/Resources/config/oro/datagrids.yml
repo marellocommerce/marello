@@ -167,6 +167,12 @@ datagrids:
         options:
             entity_pagination: true
 
+    marello-sales-channel-groups-select:
+        extends: marello-sales-channel-groups
+        properties:
+            id: ~
+        actions: ~
+
     marello-group-sales-channels:
         extends: marello-sales-channel
         source:

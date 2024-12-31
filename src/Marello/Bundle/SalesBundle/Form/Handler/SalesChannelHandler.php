@@ -4,12 +4,15 @@ namespace Marello\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
-use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
-use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
+
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
+
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 
 class SalesChannelHandler implements FormHandlerInterface
 {
@@ -41,13 +44,13 @@ class SalesChannelHandler implements FormHandlerInterface
 
         if (in_array($request->getMethod(), ['POST', 'PUT'])) {
             $this->submitPostPutRequest($form, $request);
-            $createOwnGroup = false;
-            if ($form->has('createOwnGroup')) {
-                $createOwnGroup = $form->get('createOwnGroup')->getData();
+            $selectedSalesChannelGroup = null;
+            if ($form->has('selectSalesChannelGroup')) {
+                $selectedSalesChannelGroup = $form->get('selectSalesChannelGroup')->getData();
             }
 
             if ($form->isValid()) {
-                $this->onSuccess($data, $createOwnGroup);
+                $this->onSuccess($data, $selectedSalesChannelGroup);
 
                 return true;
             }
@@ -58,39 +61,14 @@ class SalesChannelHandler implements FormHandlerInterface
 
     /**
      * "Success" form handler
-     *
      * @param SalesChannel $entity
-     * @param bool $createOwnGroup
+     * @param SalesChannelGroup|null $salesChannelGroup
+     * @return void
      */
-    protected function onSuccess(SalesChannel $entity, $createOwnGroup = false)
+    protected function onSuccess(SalesChannel $entity, ?SalesChannelGroup $salesChannelGroup)
     {
-        if ($createOwnGroup) {
-            $group = $this->createOwnGroup($entity);
-            $entity->setGroup($group);
-        }
-
+        $entity->setGroup($salesChannelGroup);
         $this->manager->persist($entity);
         $this->manager->flush();
-    }
-
-
-    /**
-     * @param SalesChannel $entity
-     * @return SalesChannelGroup
-     */
-    private function createOwnGroup(SalesChannel $entity)
-    {
-        $name = $entity->getName();
-        $group = new SalesChannelGroup();
-        $group
-            ->setName($name)
-            ->setOrganization($entity->getOrganization())
-            ->setDescription(sprintf('%s group', $name))
-            ->setSystem(false);
-
-        $this->manager->persist($group);
-        $this->manager->flush($group);
-
-        return $group;
     }
 }

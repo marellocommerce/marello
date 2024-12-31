@@ -71,10 +71,11 @@ class SalesChannelType extends AbstractType
         $form = $event->getForm();
 
         if ($channel->getGroup() === null || $channel->getGroup()->isSystem() === true) {
-            $form->add('createOwnGroup', CheckboxType::class, [
+            $form->add('selectSalesChannelGroup', SalesChannelGroupSelectType::class, [
                 'required' => false,
                 'mapped' => false,
-                'label' => 'marello.sales.saleschannel.create_own_group.label'
+                'label' => 'marello.sales.form.choose.sales_channel_group',
+                'create_form_route'  => 'marello_sales_saleschannelgroup_create',
             ]);
         }
 
