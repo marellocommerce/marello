@@ -123,7 +123,6 @@ class RelatedItemsProductUpdateListener
      */
     private function getUpsellProductsEditBlock(BeforeListRenderEvent $event, Environment $twigEnv)
     {
-        var_dump($this->relatedItemProvider->getLimitByRelatedItemClass(UpsellProduct::class));
         return $twigEnv->render(
             '@MarelloProduct/Product/RelatedItems/upsellProducts.html.twig',
             [

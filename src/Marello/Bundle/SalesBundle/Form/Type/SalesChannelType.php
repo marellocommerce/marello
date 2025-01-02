@@ -74,8 +74,8 @@ class SalesChannelType extends AbstractType
             $form->add('selectSalesChannelGroup', SalesChannelGroupSelectType::class, [
                 'required' => false,
                 'mapped' => false,
-                'label' => 'marello.sales.form.choose.sales_channel_group',
-                'create_form_route'  => 'marello_sales_saleschannelgroup_create',
+                'label' => 'marello.sales.saleschannelgroup.entity_label',
+                'create_form_route'  => 'marello_sales_saleschannelgroup_create_from_dialog',
             ]);
         }
 

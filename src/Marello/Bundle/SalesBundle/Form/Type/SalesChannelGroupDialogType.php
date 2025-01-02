@@ -4,28 +4,22 @@ namespace Marello\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 
-class SalesChannelGroupType extends AbstractType
+class SalesChannelGroupDialogType extends AbstractType
 {
-    const BLOCK_PREFIX = 'marello_sales_channel_group';
+    const BLOCK_PREFIX = 'marello_sales_channel_group_dialog';
 
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $entity = $builder->getData();
-        if ($entity instanceof SalesChannelGroup) {
-            $entityId = $entity->getId();
-        } else {
-            $entityId = null;
-        }
-
         $builder
             ->add(
                 'name',
@@ -36,15 +30,6 @@ class SalesChannelGroupType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => false
-                ]
-            )
-            ->add(
-                'salesChannels',
-                SystemGroupSalesChannelMultiselectType::class,
-                [
-                    'attr' => [
-                        'data-entity-id' => $entityId
-                    ]
                 ]
             );
     }

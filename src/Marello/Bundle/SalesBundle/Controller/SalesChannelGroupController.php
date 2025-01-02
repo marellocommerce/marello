@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\SalesBundle\Controller;
 
+use Marello\Bundle\SalesBundle\Form\Type\SalesChannelGroupDialogType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -47,6 +48,19 @@ class SalesChannelGroupController extends AbstractController
     public function createAction(Request $request)
     {
         return $this->update(new SalesChannelGroup(), $request);
+    }
+
+    /**
+     *
+     * @param Request $request
+     * @return array
+     */
+    #[Route(path: '/create_from_dialog', name: 'marello_sales_saleschannelgroup_create_from_dialog')]
+    #[Template('@MarelloSales/SalesChannelGroup/dialog/create.html.twig')]
+    #[AclAncestor('marello_sales_saleschannelgroup_create')]
+    public function createFromDialogAction(Request $request)
+    {
+        return $this->update(new SalesChannelGroup(), $request, SalesChannelGroupDialogType::class);
     }
 
     /**
@@ -101,11 +115,11 @@ class SalesChannelGroupController extends AbstractController
      * @param Request $request
      * @return array|RedirectResponse
      */
-    protected function update(SalesChannelGroup $entity, Request $request)
+    protected function update(SalesChannelGroup $entity, Request $request, $formType = SalesChannelGroupType::class)
     {
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $entity,
-            $this->createForm(SalesChannelGroupType::class, $entity),
+            $this->createForm($formType, $entity),
             $this->container
                 ->get(TranslatorInterface::class)->trans('marello.sales.saleschannelgroup.messages.success.saved'),
             $request,

@@ -1,0 +1,30 @@
+{% extends '@OroUI/actions/update.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
+{% set formAction = path('marello_sales_saleschannelgroup_create_from_dialog')  %}
+{% oro_title_set({params : {'%name%': entity.name, '%entityName%': 'marello.sales.saleschannelgroup.entity_label'|trans} }) %}
+
+{% block content_data %}
+    {% set id = 'marello-saleschannel-group-dialog-update' %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'marello.sales.saleschannelgroup.datablock.general'|trans,
+            'class': 'active',
+            'subblocks': [
+                {
+                    'data': [
+                        form_row(form.name),
+                        form_row(form.description)
+                    ]
+                }
+            ]
+        }
+    ] %}
+
+    {% set data = {
+        'formErrors': form_errors(form),
+        'dataBlocks': dataBlocks
+    }%}
+
+    {{ parent() }}
+{% endblock content_data %}
