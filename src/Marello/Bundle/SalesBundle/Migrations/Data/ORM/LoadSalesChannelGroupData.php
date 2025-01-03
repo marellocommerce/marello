@@ -6,10 +6,11 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
 use Marello\Bundle\SalesBundle\Entity\SalesChannelGroup;
 
-class LoadSalesChannelGroupData extends AbstractFixture
+class LoadSalesChannelGroupData extends AbstractFixture implements VersionedFixtureInterface
 {
     /**
      * @var ObjectManager
@@ -21,7 +22,7 @@ class LoadSalesChannelGroupData extends AbstractFixture
      */
     protected $data = [
         [
-            'name' => 'System Group',
+            'name' => 'N/A',
             'description' => 'System Sales Channel Group',
             'system' => true
         ],
@@ -52,9 +53,7 @@ class LoadSalesChannelGroupData extends AbstractFixture
         foreach ($this->data as $values) {
             $group = ($existingGroup) ?: new SalesChannelGroup();
             $group
-                ->setName(
-                    sprintf('%s %s', $organization->getName(), $values['name'])
-                )
+                ->setName($values['name'])
                 ->setDescription(sprintf('%s for %s organization', $values['description'], $organization->getName()))
                 ->setSystem($values['system'])
                 ->setOrganization($organization);
@@ -63,5 +62,15 @@ class LoadSalesChannelGroupData extends AbstractFixture
         }
 
         $this->manager->flush();
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * @return string
+     */
+    public function getVersion()
+    {
+        return '1.0';
     }
 }
