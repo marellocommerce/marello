@@ -38,7 +38,6 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: marello_core.validator_constraints.code_regex_validator }
 
-
     marello_core.twig.core_extension:
         class: Marello\Bundle\CoreBundle\Twig\CoreExtension
         calls:

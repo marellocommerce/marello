@@ -42,7 +42,6 @@ class ReshipmentHandler implements FormHandlerInterface
 
         if (in_array($request->getMethod(), ['POST', 'PUT'])) {
             $this->submitPostPutRequest($form, $request);
-
             if ($form->isValid()) {
                 $this->onSuccess($data);
 

@@ -6,6 +6,7 @@ use Marello\Bundle\InventoryBundle\Provider\AvailableInventoryProvider;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\OrderBundle\Validator\Constraints\AvailableInventoryConstraint;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -62,9 +63,11 @@ class ReshipmentItemType extends AbstractType
                 'label' => 'marello.order.orderitem.quantity.label',
                 'mapped' => false,
             ])
+            ->add('owner', HiddenType::class)
         ;
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'fillAvailableQuantity']);
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'addOwner']);
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'changeItemQuantity']);
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'addQuantityError']);
     }
@@ -79,6 +82,14 @@ class ReshipmentItemType extends AbstractType
             $orderItem->getOrder()->getSalesChannel()
         );
         $form->get('availableQuantity')->setData($availableInventory);
+    }
+
+    public function addOwner(FormEvent $event)
+    {
+        $form = $event->getForm();
+        /** @var OrderItem $orderItem */
+        $orderItem = $event->getData();
+        $form->get('owner')->setData($orderItem->getOrder()->getOwner());
     }
 
     public function changeItemQuantity(FormEvent $event)

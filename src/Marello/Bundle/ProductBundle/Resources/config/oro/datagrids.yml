@@ -179,8 +179,6 @@ datagrids:
 
     marello-products-sales-channel-aware-selection-grid:
         extends: marello-products-sales-channel-aware-grid
-        inline_editing:
-            enable: false
         source:
             query:
                 select:
@@ -190,7 +188,7 @@ datagrids:
                         END) as hasChannel
         columns:
             hasChannel:
-                label:         'Select'
+                label:         'Select Product(s)'
                 editable:      true
                 frontend_type: boolean
                 add_before:    true

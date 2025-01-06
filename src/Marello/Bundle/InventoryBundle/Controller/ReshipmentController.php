@@ -21,7 +21,7 @@ class ReshipmentController extends AbstractController
      * @param Request $request
      * @return array|RedirectResponse
      */
-    #[Route(path: '/create/{id}', requirements: ['id' => '\d+'], name: 'marello_inventory_reshipment_create')]
+    #[Route(path: '/create/{id}', name: 'marello_inventory_reshipment_create', requirements: ['id' => '\d+'])]
     #[Template('@MarelloInventory/Reshipment/create.html.twig')]
     #[AclAncestor('marello_inventory_inventory_view')]
     public function createAction(Order $order, Request $request)

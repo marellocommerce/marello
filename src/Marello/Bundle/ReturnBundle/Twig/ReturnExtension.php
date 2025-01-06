@@ -57,6 +57,10 @@ class ReturnExtension extends AbstractExtension
                 'marello_return_is_on_hold',
                 [$this, 'isOnHold']
             ),
+            new TwigFunction(
+                'marello_return_get_order_item_shipped_quantity',
+                [$this, 'getOrderItemShippedQuantity']
+            ),
         ];
     }
 
@@ -68,6 +72,16 @@ class ReturnExtension extends AbstractExtension
     public function getOrderItemReturnedQuantity(OrderItem $orderItem)
     {
         return $this->returnHelper->getOrderItemReturnedQuantity($orderItem);
+    }
+
+    /**
+     * @param OrderItem $orderItem
+     *
+     * @return int
+     */
+    public function getOrderItemShippedQuantity(OrderItem $orderItem)
+    {
+        return $this->returnHelper->getOrderItemShippedQuantity($orderItem);
     }
 
     /**

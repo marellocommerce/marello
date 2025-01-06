@@ -4,6 +4,8 @@ imports:
 services:
     marello_return.util.return_helper:
         class: Marello\Bundle\ReturnBundle\Util\ReturnHelper
+        calls:
+            - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
 
     marello_return.twig.return_extension:
         class: Marello\Bundle\ReturnBundle\Twig\ReturnExtension
@@ -83,3 +85,9 @@ services:
     Marello\Bundle\ReturnBundle\EventListener\Action\Condition\ReturnAllowedActionListener:
         tags:
             - { name: kernel.event_listener, event: extendable_condition.return_allowed, method: isReturnAllowed }
+
+    Marello\Bundle\ReturnBundle\Validator\ReturnItemValidator:
+        arguments:
+            - '@marello_return.util.return_helper'
+        tags:
+            - { name: validator.constraint_validator, alias: return_item_validate }

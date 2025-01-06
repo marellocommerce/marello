@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
 class ReturnItemConstraint extends Constraint
 {
     /** @var string */
-    public $message = 'Returned quantity is greater than ordered.';
+    public $message = 'Returned quantity is greater than shipped.';
 
     /** @var bool */
     public $includeSelf = true;

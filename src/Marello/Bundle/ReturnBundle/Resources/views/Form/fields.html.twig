@@ -14,7 +14,14 @@
             {{ form.vars.value.orderItem.quantity|default('') }}
         </div>
     </td>
-    <td class="return-line-item-ordered-quantity">
+    <td class="return-line-item-shipped-quantity">
+        <div class="fields-row">
+            {% if form.vars.value is not null %}
+                {{ marello_return_get_order_item_shipped_quantity(form.vars.value.orderItem) }}
+            {% endif %}
+        </div>
+    </td>
+    <td class="return-line-item-returned-quantity">
         <div class="fields-row">
             {% if form.vars.value is not null %}
                 {{ marello_return_get_order_item_returned_quantity(form.vars.value.orderItem) }}
@@ -81,6 +88,7 @@
                         <th class="return-line-item-name"><span>{{ 'marello.product.sku.label'|trans }}</span></th>
                         <th class="return-line-item-name"><span>{{ 'marello.product.entity_label'|trans }}</span></th>
                         <th class="return-line-item-ordered-quantity"><span>{{ 'marello.return.returnitem.ordered_quantity.label'|trans }}</span></th>
+                        <th class="return-line-item-shipped-quantity"><span>{{ 'marello.return.returnitem.shipped_quantity.label'|trans }}</span></th>
                         <th class="return-line-item-returned-quantity"><span>{{ 'marello.return.returnitem.returned_quantity.label'|trans }}</span></th>
                         <th class="return-line-item-quantity"><span>{{ 'marello.return.returnitem.quantity.label'|trans }}</span></th>
                         <th class="return-line-item-status"><span>{{ 'marello.return.returnitem.status.label'|trans }}</span></th>

@@ -18,7 +18,7 @@ system_configuration:
 
         marello_tax.origin_country:
             data_type: string
-            type: Oro\Bundle\AddressBundle\Form\Type\CountryType
+            type: Oro\Bundle\LocaleBundle\Form\Type\CountryType
             options:
                 label: marello.tax.system_configuration.fields.origin_country.label
                 required: false
