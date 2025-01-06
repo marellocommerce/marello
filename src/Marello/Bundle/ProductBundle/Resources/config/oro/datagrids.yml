@@ -188,7 +188,7 @@ datagrids:
                         END) as hasChannel
         columns:
             hasChannel:
-                label:         'Select Product(s)'
+                label:         'Select'
                 editable:      true
                 frontend_type: boolean
                 add_before:    true

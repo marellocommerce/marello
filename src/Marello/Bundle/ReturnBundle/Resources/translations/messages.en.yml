@@ -36,9 +36,9 @@ marello:
             entity_label:               Returned Item
             entity_plural_label:        Returned items
             entity_grid_all_view_label: All %entity_plural_label%
-            ordered_quantity.label:     Quantity Ordered
-            shipped_quantity.label:     Quantity Shipped
-            returned_quantity.label:    Quantity Returned
+            ordered_quantity.label:     Qty Ordered
+            shipped_quantity.label:     Qty Shipped
+            returned_quantity.label:    Qty Returned
             quantity.label:             Return Quantity
             reason.label:               Return Reason
             status.label:               Status
