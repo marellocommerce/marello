@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class SubtotalProviderPass implements CompilerPassInterface
 {
-    const COMPOSITE_SERVICE = 'marello_productprice.pricing.subtotal_provider.composite';
+    const COMPOSITE_SERVICE = 'marello_pricing.pricing.subtotal_provider.composite';
     const TAG = 'marello_pricing.subtotal_provider';
     const PRIORITY = 'priority';
     

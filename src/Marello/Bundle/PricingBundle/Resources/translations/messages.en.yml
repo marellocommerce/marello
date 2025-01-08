@@ -97,8 +97,19 @@ marello:
                 pricing.title:          Pricing
                 general.title:          General
                 vat.label:              Tax
+                pricing_rounding.label: Price Precision and Rounding
             fields:
                 vat:
                     label:              Prices includes Tax
                     included.label:     Include
                     excluded.label:     Exclude
+                precision:
+                    label:              Pricing Precision
+                    tooltip:            The number of digits allowed in the fractional part of the price calculation rule results. If this value is empty, the system will not apply any rounding until the maximum supported price precision (4 digits) is reached.
+                rounding_type:
+                    label:              Pricing Rounding Type
+                    tooltip:            The rounding type that is used when calculated product price or subtotal has more digits in the fractional part than allowed by the respective price precision settings.
+                    choices:
+                        half_down.label: Half Down
+                        half_up.label:   Half Up
+                        half_even.label: Half Even

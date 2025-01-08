@@ -6,6 +6,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\ProductBundle\Entity\Product;
@@ -20,6 +21,9 @@ use Marello\Bundle\OrderBundle\Provider\OrderItem\AbstractOrderItemFormChangesPr
 
 class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
 {
+    /** @var RoundingServiceInterface $rounding */
+    protected $rounding;
+
     public function __construct(
         protected ManagerRegistry $registry,
         protected AclHelper $aclHelper
@@ -56,7 +60,7 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
                     $priceValue = $channelPrice['price'];
                 }
 
-                $data[$rowIdentifier]['value'] = $priceValue;
+                $data[$rowIdentifier]['value'] = $this->rounding->round($priceValue);
             }
             foreach ($order->getItems() as &$orderItem) {
                 if ($orderItem->getProduct()) {
@@ -165,5 +169,14 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
     protected function getRepository($className)
     {
         return $this->registry->getManagerForClass($className)->getRepository($className);
+    }
+
+    /**
+     * @param RoundingServiceInterface $roundingService
+     * @return void
+     */
+    public function setRoundingService(RoundingServiceInterface $roundingService): void
+    {
+        $this->rounding = $roundingService;
     }
 }

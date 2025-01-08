@@ -9,6 +9,6 @@ services:
     marello_ups.form.type.shipping_method_config_options:
         class: Marello\Bundle\UPSBundle\Form\Type\UPSShippingMethodOptionsType
         arguments:
-            - '@oro_currency.rounding.price_rounding_service'
+            - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
         tags:
             - { name: form.type }

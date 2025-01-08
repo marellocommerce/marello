@@ -7,6 +7,8 @@ system_configuration:
             icon: fa-cogs
         pricing_vat:
             title: marello.pricing.system_configuration.groups.vat.label
+        pricing_rounding:
+            title: marello.pricing.system_configuration.groups.pricing_rounding.label
 
     fields:
         marello_pricing.is_vat_included:
@@ -23,6 +25,36 @@ system_configuration:
                 label: marello.tax.system_configuration.fields.origin_country.label
                 required: false
 
+        marello_pricing.rounding_type:
+            data_type: string
+            type: Symfony\Component\Form\Extension\Core\Type\ChoiceType
+            options:
+                label: marello.pricing.system_configuration.fields.rounding_type.label
+                tooltip: marello.pricing.system_configuration.fields.rounding_type.tooltip
+                required: true
+                constraints:
+                    - NotBlank: ~
+                choice_translation_domain: messages
+                choices:
+                    marello.pricing.system_configuration.fields.rounding_type.choices.half_down.label: 5
+                    marello.pricing.system_configuration.fields.rounding_type.choices.half_up.label: 6
+                    marello.pricing.system_configuration.fields.rounding_type.choices.half_even.label: 4
+
+        marello_pricing.precision:
+            data_type: integer
+            type: Symfony\Component\Form\Extension\Core\Type\IntegerType
+            options:
+                label: marello.pricing.system_configuration.fields.precision.label
+                tooltip: marello.pricing.system_configuration.fields.precision.tooltip
+                required: true
+                constraints:
+                    - NotBlank: ~
+                    - Range:
+                          min: 0
+                          max: 4
+                    - Type:
+                          type: integer
+
     tree:
         system_configuration:
             marello:
@@ -31,6 +63,10 @@ system_configuration:
                         children:
                             pricing_general:
                                 children:
+                                    pricing_rounding:
+                                        children:
+                                            - marello_pricing.rounding_type
+                                            - marello_pricing.precision
                                     pricing_vat:
                                         children:
                                             - marello_pricing.is_vat_included

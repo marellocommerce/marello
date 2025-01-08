@@ -80,7 +80,7 @@ services:
     marello_order.provider.form_changes.totals:
         class: 'Marello\Bundle\OrderBundle\Provider\Totals\OrderTotalsProvider'
         arguments:
-            - '@marello_productprice.pricing.subtotal_provider.composite'
+            - '@marello_pricing.pricing.subtotal_provider.composite'
         tags:
             - { name: marello.form_changes_data_provider, class: 'Marello\Bundle\OrderBundle\Entity\Order', type: totals, priority: 40 }
 
@@ -139,9 +139,9 @@ services:
         class: 'Marello\Bundle\OrderBundle\Provider\OrderItem\OrderItemsSubtotalProvider'
         arguments:
             - '@translator'
-            - '@oro_currency.rounding.price_rounding_service'
+            - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
             - '@oro_currency.config.currency'
-            - '@marello_productprice.pricing.provider.channelprice_provider'
+            - '@marello_pricing.pricing.provider.channelprice_provider'
         calls:
             - ['addDependOnProvider', ['@marello_tax.provider.tax_subtotal', '@=service("marello_tax.provider.tax_subtotal_operation").getSubtotalOperation()']]
         tags:
@@ -151,7 +151,7 @@ services:
         class: 'Marello\Bundle\OrderBundle\Provider\Totals\DiscountSubtotalProvider'
         arguments:
             - '@translator'
-            - '@oro_currency.rounding.price_rounding_service'
+            - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
             - '@oro_currency.config.currency'
         tags:
             - { name: marello_pricing.subtotal_provider, priority: 40 }
@@ -160,7 +160,7 @@ services:
         class: 'Marello\Bundle\OrderBundle\Provider\Totals\ShippingCostSubtotalProvider'
         arguments:
             - '@translator'
-            - '@oro_currency.rounding.price_rounding_service'
+            - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
             - '@oro_currency.config.currency'
         tags:
             - { name: marello_pricing.subtotal_provider, priority: 35 }

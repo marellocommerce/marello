@@ -2,22 +2,28 @@
 
 namespace Marello\Bundle\PricingBundle\Form\Type;
 
-use Marello\Bundle\PricingBundle\Entity\ProductPrice;
-use Oro\Bundle\CurrencyBundle\Form\DataTransformer\MoneyValueTransformer;
-use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
-use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
+use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
+use Oro\Bundle\CurrencyBundle\Form\DataTransformer\MoneyValueTransformer;
+
+use Marello\Bundle\PricingBundle\Entity\ProductPrice;
 
 class ProductPriceType extends AbstractType
 {
     const BLOCK_PREFIX = 'marello_product_price';
+
+    /** @var RoundingServiceInterface $rounding */
+    protected $rounding;
 
     public function __construct(
         private TranslatorInterface $translator
@@ -43,6 +49,7 @@ class ProductPriceType extends AbstractType
         if ($options['currency'] && $options['currency_symbol']) {
             $builder
                 ->add('value', OroMoneyType::class, [
+                    'scale' => $this->rounding->getPrecision(),
                     'required' => false,
                     'label' => 'marello.pricing.productprice.value.label',
                     'currency' => $options['currency'],
@@ -51,6 +58,7 @@ class ProductPriceType extends AbstractType
         } else {
             $builder
                 ->add('value', OroMoneyType::class, [
+                    'scale' => $this->rounding->getPrecision(),
                     'required' => false,
                     'label' => 'marello.pricing.productprice.value.label',
                 ]);
@@ -100,5 +108,14 @@ class ProductPriceType extends AbstractType
     public function getBlockPrefix()
     {
         return self::BLOCK_PREFIX;
+    }
+
+    /**
+     * @param RoundingServiceInterface $roundingService
+     * @return void
+     */
+    public function setRoundingService(RoundingServiceInterface $roundingService): void
+    {
+        $this->rounding = $roundingService;
     }
 }

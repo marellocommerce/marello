@@ -31,12 +31,12 @@ services:
     marello_tax.calculator.included_tax:
         class: Marello\Bundle\TaxBundle\Calculator\IncludedTaxCalculator
         arguments:
-            - '@oro_currency.rounding.price_rounding_service'
+            - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
 
     marello_tax.calculator.excluded_tax:
         class: Marello\Bundle\TaxBundle\Calculator\ExcludedTaxCalculator
         arguments:
-            - '@oro_currency.rounding.price_rounding_service'
+            - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
 
     marello_tax.calculator:
         class: Marello\Bundle\TaxBundle\Calculator\TaxCalculator

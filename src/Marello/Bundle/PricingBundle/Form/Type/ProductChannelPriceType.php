@@ -2,24 +2,30 @@
 
 namespace Marello\Bundle\PricingBundle\Form\Type;
 
-use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
-use Marello\Bundle\SalesBundle\Form\Type\SalesChannelSelectType;
-use Oro\Bundle\CurrencyBundle\Form\DataTransformer\MoneyValueTransformer;
-use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
-use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
+use Oro\Bundle\FormBundle\Form\Type\OroMoneyType;
+use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
+use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
+use Oro\Bundle\CurrencyBundle\Form\DataTransformer\MoneyValueTransformer;
+
+use Marello\Bundle\PricingBundle\Entity\ProductChannelPrice;
+use Marello\Bundle\SalesBundle\Form\Type\SalesChannelSelectType;
 
 class ProductChannelPriceType extends AbstractType
 {
     const BLOCK_PREFIX = 'marello_product_channel_price';
+
+    /** @var RoundingServiceInterface $rounding */
+    protected $rounding;
 
     public function __construct(
         private TranslatorInterface $translator
@@ -39,6 +45,7 @@ class ProductChannelPriceType extends AbstractType
                 'required' => true
             ])
             ->add('value', OroMoneyType::class, [
+                'scale' => $this->rounding->getPrecision(),
                 'required' => false,
                 'constraints' => $options['allowed_empty_value'] === false ? new NotNull() : null,
                 'label'    => 'marello.pricing.productprice.value.label',
@@ -88,5 +95,14 @@ class ProductChannelPriceType extends AbstractType
     public function getBlockPrefix()
     {
         return self::BLOCK_PREFIX;
+    }
+
+    /**
+     * @param RoundingServiceInterface $roundingService
+     * @return void
+     */
+    public function setRoundingService(RoundingServiceInterface $roundingService): void
+    {
+        $this->rounding = $roundingService;
     }
 }

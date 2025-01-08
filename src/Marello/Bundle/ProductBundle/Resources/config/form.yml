@@ -9,8 +9,8 @@ services:
         class: 'Marello\Bundle\ProductBundle\Form\Type\ProductType'
         arguments:
             - '@marello_sales.form.event_listener.default_sales_channel_subscriber'
-            - '@marello_productprice.pricing.form.event_listener.pricing_subscriber'
-            - '@marello_productprice.pricing.form.event_listener.channel_pricing_subscriber'
+            - '@marello_pricing.pricing.form.event_listener.pricing_subscriber'
+            - '@marello_pricing.pricing.form.event_listener.channel_pricing_subscriber'
             - '@?marello_subscription.form.event_listener.subscription_product'
         calls:
             - ['setRelatedItemsSubscriber', ['@Marello\Bundle\ProductBundle\Form\EventListener\RelatedItemsSubscriber']]

@@ -3,7 +3,7 @@ services:
     marello_sales_form_type.saleschannel:
         class: 'Marello\Bundle\SalesBundle\Form\Type\SalesChannelType'
         arguments:
-            - '@marello_productprice.pricing.form.event_listener.currency_subscriber'
+            - '@marello_pricing.pricing.form.event_listener.currency_subscriber'
         tags:
             - { name: form.type }
 

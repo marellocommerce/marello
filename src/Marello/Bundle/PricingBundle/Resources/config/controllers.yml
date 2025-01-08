@@ -7,4 +7,4 @@ services:
             - [setContainer, ['@Psr\Container\ContainerInterface']]
         tags:
             - { name: container.service_subscriber }
-            - { name: container.service_subscriber, id: marello_productprice.pricing.provider.currency_provider, key: Marello\Bundle\PricingBundle\Provider\CurrencyProvider }
+            - { name: container.service_subscriber, id: marello_pricing.pricing.provider.currency_provider, key: Marello\Bundle\PricingBundle\Provider\CurrencyProvider }

@@ -80,4 +80,4 @@ services:
 
     Marello\Bundle\OrderBundle\Form\EventListener\OrderTotalsSubscriber:
         arguments:
-            - '@marello_productprice.pricing.subtotal_provider.composite'
+            - '@marello_pricing.pricing.subtotal_provider.composite'

@@ -3,6 +3,8 @@ services:
         class: Marello\Bundle\PricingBundle\Form\Type\ProductPriceType
         arguments:
             - '@translator'
+        calls:
+            - ['setRoundingService', ['@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService']]
         tags:
             - { name: form.type }
 
@@ -15,6 +17,8 @@ services:
         class: Marello\Bundle\PricingBundle\Form\Type\ProductChannelPriceType
         arguments:
             - '@translator'
+        calls:
+            - ['setRoundingService', ['@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService']]
         tags:
             - { name: form.type }
 
