@@ -2,10 +2,12 @@
 
 namespace Marello\Bundle\ReturnBundle\Tests\Unit\Validator;
 
+use Marello\Bundle\ProductBundle\Provider\ProductTaxCodeProvider;
 use PHPUnit\Framework\TestCase;
 
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Marello\Bundle\ReturnBundle\Entity\ReturnItem;
+use Marello\Bundle\ReturnBundle\Util\ReturnHelper;
 use Marello\Bundle\ReturnBundle\Validator\ReturnItemValidator;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Marello\Bundle\ReturnBundle\Validator\Constraints\ReturnItemConstraint;
@@ -19,10 +21,11 @@ class ReturnItemValidatorTest extends TestCase
     /** @var ConstraintViolationBuilderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $builder;
 
-    public function setUp(): void
-    {
-        parent::setUp();
+    /** @var ReturnHelper|\PHPUnit\Framework\MockObject\MockObject */
+    protected $returnHelper;
 
+    protected function setUp(): void
+    {
         $this->builder = $this
             ->getMockForAbstractClass(ConstraintViolationBuilderInterface::class);
 
@@ -36,7 +39,9 @@ class ReturnItemValidatorTest extends TestCase
             ->method('buildViolation')
             ->will($this->returnValue($this->builder));
 
-        $this->validator = new ReturnItemValidator();
+        $this->returnHelper = $this->createMock(ReturnHelper::class);
+
+        $this->validator = new ReturnItemValidator($this->returnHelper);
         $this->validator->initialize($context);
     }
 
@@ -70,12 +75,12 @@ class ReturnItemValidatorTest extends TestCase
     public function validateDataProvider()
     {
         return [
-            'VALID: One Return item with same quantity as ordered'      => [$this->getItem(), true],
-            'VALID: One return item with quantity less then ordered'    => [$this->getItem([5]), true],
-            'VALID: Two return items with same quantity as ordered'     => [$this->getItem([5, 5]), true],
-            'VALID: Two return items with lower quantity as ordered'    => [$this->getItem([2, 3]), true],
-            'INVALID: One return item with quantity more than ordered'  => [$this->getItem([14]), false],
-            'INVALID: Two return items with quantity more than ordered' => [$this->getItem([7, 6]), false],
+            'VALID: One Return item with same quantity as shipped'      => [$this->getItem(), true, 10],
+            'VALID: One return item with quantity less than shipped'    => [$this->getItem([5]), true, 10],
+            'VALID: Two return items with same quantity as shipped'     => [$this->getItem([5, 5]), true, 10],
+            'VALID: Two return items with lower quantity as shipped'    => [$this->getItem([2, 3]), true, 5],
+            'INVALID: One return item with quantity more than shipped'  => [$this->getItem([14]), false, 10],
+            'INVALID: Two return items with quantity more than shipped' => [$this->getItem([7, 6]), false, 7]
         ];
     }
 
@@ -85,7 +90,7 @@ class ReturnItemValidatorTest extends TestCase
      * @param ReturnItem $item
      * @param bool       $valid
      */
-    public function testValidate(ReturnItem $item, $valid)
+    public function testValidate(ReturnItem $item, $valid, $shippedQty)
     {
         if ($valid) {
             $this->builder
@@ -96,6 +101,9 @@ class ReturnItemValidatorTest extends TestCase
                 ->expects($this->once())
                 ->method('addViolation');
         }
+        $this->returnHelper->expects(static::atLeastOnce())
+            ->method('getOrderItemShippedQuantity')
+            ->willReturn($shippedQty);
 
         $this->validator->validate($item, new ReturnItemConstraint());
     }

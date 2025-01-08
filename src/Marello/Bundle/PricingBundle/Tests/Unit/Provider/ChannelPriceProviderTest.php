@@ -15,6 +15,7 @@ use Marello\Bundle\PricingBundle\Provider\ChannelPriceProvider;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\Repository\ProductRepository;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
 use Oro\Bundle\EntityBundle\ORM\Registry;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Component\Testing\Unit\EntityTrait;
@@ -45,11 +46,19 @@ class ChannelPriceProviderTest extends TestCase
      */
     protected $channelPriceProvider;
 
+    /**
+     * @var RoundingServiceInterface
+     */
+    protected $roundingService;
+
     protected function setUp(): void
     {
         $this->registry = $this->createMock(Registry::class);
         $this->aclHelper = $this->createMock(AclHelper::class);
+        $this->roundingService = $this->createMock(RoundingServiceInterface::class);
+
         $this->channelPriceProvider = new ChannelPriceProvider($this->registry, $this->aclHelper);
+        $this->channelPriceProvider->setRoundingService($this->roundingService);
     }
 
     /**
@@ -119,6 +128,10 @@ class ChannelPriceProviderTest extends TestCase
                 $productPriceRepository,
                 $productChannelPriceRepository
             );
+
+        $this->roundingService->expects($this->atLeastOnce())
+            ->method('round')
+            ->willReturn($expectedValue);
 
         $expectedData = [
             'price' => [

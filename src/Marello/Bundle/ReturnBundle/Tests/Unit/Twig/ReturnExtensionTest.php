@@ -67,11 +67,12 @@ class ReturnExtensionTest extends WebTestCase
     public function testGetFunctionsAreRegisteredInExtension()
     {
         $functions = $this->extension->getFunctions();
-        $this->assertCount(2, $functions);
+        $this->assertCount(3, $functions);
 
         $expectedFunctions = array(
             'marello_return_get_order_item_returned_quantity',
-            'marello_return_is_on_hold'
+            'marello_return_is_on_hold',
+            'marello_return_get_order_item_shipped_quantity'
         );
 
         foreach ($functions as $function) {
@@ -95,5 +96,22 @@ class ReturnExtensionTest extends WebTestCase
             ->with($orderItem);
 
         $this->assertEquals(0, $this->extension->getOrderItemReturnedQuantity($orderItem));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function testGetOrderItemShippedQuantity()
+    {
+        /** @var OrderItem $orderItem */
+        $orderItem = $this->getMockBuilder(OrderItem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->helper->expects($this->once())
+            ->method('getOrderItemShippedQuantity')
+            ->with($orderItem);
+
+        $this->assertEquals(0, $this->extension->getOrderItemShippedQuantity($orderItem));
     }
 }

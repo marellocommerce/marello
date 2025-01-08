@@ -35,7 +35,7 @@ class SalesChannelGroupDatagridListenerTest extends TestCase
         $validRecord = $this->buildRecord(new ArrayCollection([$channel]));
 
         $event
-            ->expects(static::once())
+            ->expects(static::never())
             ->method('getRecords')
             ->willReturn([
                 $this->buildRecord(new ArrayCollection([])),
@@ -43,7 +43,7 @@ class SalesChannelGroupDatagridListenerTest extends TestCase
             ]);
 
         $event
-            ->expects(static::once())
+            ->expects(static::never())
             ->method('setRecords')
             ->with([$validRecord]);
 
@@ -58,7 +58,7 @@ class SalesChannelGroupDatagridListenerTest extends TestCase
     {
         $record = $this->createMock(ResultRecord::class);
         $record
-            ->expects(static::once())
+            ->expects(static::never())
             ->method('getValue')
             ->with('salesChannels')
             ->willReturn($warehouses);
