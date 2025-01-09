@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\ReturnBundle\Tests\Functional\Api;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\ReturnBundle\Tests\Functional\DataFixtures\LoadUnReturnedOrderData;
 use Symfony\Component\HttpFoundation\Response;
 
 use Marello\Bundle\ReturnBundle\Entity\ReturnEntity;
@@ -18,7 +20,8 @@ class ReturnJsonApiTest extends RestJsonApiTestCase
         parent::setUp();
         $this->loadFixtures([
             LoadOrderData::class,
-            LoadReturnWorkflowData::class
+            LoadReturnWorkflowData::class,
+            LoadUnReturnedOrderData::class
         ]);
     }
 
