@@ -77,6 +77,14 @@ api:
                     fields:
                         tags:
                             exclude: true
+                get_subresource:
+                    fields:
+                        tags:
+                            exclude: true
+                get_relationship:
+                    fields:
+                        tags:
+                            exclude: true
                 create:
                     fields:
                         prices:
