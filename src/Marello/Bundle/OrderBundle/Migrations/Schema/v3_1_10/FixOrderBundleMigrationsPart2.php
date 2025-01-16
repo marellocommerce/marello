@@ -9,11 +9,12 @@ use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigEntityValueQuery;
 
 use Marello\Bundle\OrderBundle\Migrations\Schema\v3_1_6\UpdateEntityConfigExtendClassQuery;
 
-class FixOrderBundleMigrations implements Migration
+class FixOrderBundleMigrationsPart2 implements Migration, OrderedMigrationInterface
 {
     /**
      * {@inheritDoc}
@@ -22,23 +23,11 @@ class FixOrderBundleMigrations implements Migration
     {
         $orderTable = $schema->getTable('marello_order_order');
         $this->createUserOwnership($schema, $queries, $orderTable, Order::class);
-        if ($orderTable->hasIndex('uniq_a619dd647be036fc')) {
-            $orderTable->dropIndex('uniq_a619dd647be036fc');
-            $orderTable->removeForeignKey('fk_a619dd647be036fc');
-        }
-
-        if ($orderTable->hasColumn('shipment_id')) {
-            $orderTable->dropColumn('shipment_id');
-        }
-
         $queries->addPreQuery(
             new UpdateEntityConfigExtendClassQuery()
         );
 
         $orderItemTable = $schema->getTable('marello_order_order_item');
-        if (!$orderItemTable->hasColumn('item_type')) {
-            $orderItemTable->addColumn('item_type', 'string', ['notnull' => false, 'length' => 255]);
-        }
         $this->createUserOwnership($schema, $queries, $orderItemTable, OrderItem::class);
         $queries->addQuery(
             new UpdateEntityConfigEntityValueQuery(
@@ -68,8 +57,7 @@ class FixOrderBundleMigrations implements Migration
      */
     protected function createUserOwnership(Schema $schema, QueryBag $queries, Table $table, string $entity): void
     {
-        if (!$table->hasColumn('user_owner_id')) {
-            $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
+        if ($table->hasColumn('user_owner_id')) {
             $table->addIndex(['user_owner_id']);
 
             $table->addForeignKeyConstraint(
@@ -120,5 +108,13 @@ class FixOrderBundleMigrations implements Migration
                 )
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOrder()
+    {
+        return 20;
     }
 }
