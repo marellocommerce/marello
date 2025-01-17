@@ -31,6 +31,12 @@ navigation:
                 extras:
                     routes: ['marello_inventory_allocation_index*']
                     position: 25
+            delivery_promise:
+                label: marello.inventory.deliverypromise.entity_plural_label
+                route: marello_inventory_deliverypromise_index
+                extras:
+                    routes: ['marello_inventory_deliverypromise_index*']
+                    position: 40
         tree:
             application_menu:
                 children:
@@ -43,6 +49,7 @@ navigation:
                                 children:
                                     inventory: ~
                                     balanced_inventory: ~
+                                    delivery_promise: ~
                     sales_tab:
                         children:
                             allocations: ~

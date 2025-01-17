@@ -32,7 +32,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v2_7';
+        return 'v2_8';
     }
 
     /**
@@ -53,6 +53,9 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $this->createMarelloInventoryBalancedInventoryLevel($schema);
         $this->createMarelloInventoryAllocation($schema);
         $this->createMarelloInventoryAllocationItem($schema);
+        $this->createMarelloInventoryDeliveryPromise($schema);
+        $this->createMarelloInventoryDeliveryPromiseLabel($schema);
+        $this->createMarelloInventoryDeliveryPromiseToolTip($schema);
 
         /** Foreign keys generation **/
         $this->addMarelloInventoryItemForeignKeys($schema);
@@ -66,6 +69,8 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $this->addMarelloInventoryBalancedInventoryLevelForeignKeys($schema);
         $this->addMarelloInventoryAllocationForeignKeys($schema);
         $this->addMarelloInventoryAllocationItemForeignKeys($schema);
+        $this->addMarelloInventoryDeliveryPromiseLabelForeignKeys($schema);
+        $this->addMarelloInventoryDeliveryPromiseTooltipForeignKeys($schema);
     }
 
     /**
@@ -111,6 +116,11 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
             ]
         );
+        $table->addColumn('on_hand_promise', 'integer', ['notnull' => false]);
+        $table->addColumn('drop_ship_promise', 'integer', ['notnull' => false]);
+        $table->addColumn('back_order_promise', 'integer', ['notnull' => false]);
+        $table->addColumn('pre_order_promise', 'integer', ['notnull' => false]);
+        $table->addColumn('order_on_demand_promise', 'integer', ['notnull' => false]);
 
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['product_id'], 'UNIQ_40B8D0414584665A', []);
@@ -130,10 +140,10 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->addColumn('inventory_item_id', 'integer', ['notnull' => false]);
+        $table->addColumn('pick_location', 'string', ['length' => 100, 'notnull' => false]);
+
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('managed_inventory', 'boolean', ['notnull' => false, 'default' => false]);
-        $table->addColumn('pick_location', 'string', ['length' => 100, 'notnull' => false]);
-        
         $table->setPrimaryKey(['id']);
         $table->addIndex(['inventory_item_id']);
         $table->addColumn('warehouse_id', 'integer', []);
@@ -404,6 +414,49 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
     }
 
     /**
+     * @param Schema $schema
+     */
+    protected function createMarelloInventoryDeliveryPromise(Schema $schema)
+    {
+        $table = $schema->createTable('marello_inventory_delivery_promise');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('code', 'string', ['length' => 255]);
+        $table->addColumn('label', 'string', ['length' => 255]);
+        $table->addColumn('min_days', 'integer', ['notnull' => false]);
+        $table->addColumn('max_days', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('created_at', 'datetime');
+        $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['code']);
+        $table->addIndex(['organization_id']);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function createMarelloInventoryDeliveryPromiseLabel(Schema $schema)
+    {
+        $table = $schema->createTable('marello_inventory_deli_prom_label');
+        $table->addColumn('delivery_promise_id', 'integer');
+        $table->addColumn('localized_value_id', 'integer');
+        $table->setPrimaryKey(['delivery_promise_id', 'localized_value_id']);
+        $table->addUniqueIndex(['localized_value_id']);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function createMarelloInventoryDeliveryPromiseToolTip(Schema $schema)
+    {
+        $table = $schema->createTable('marello_inventory_deli_prom_tooltip');
+        $table->addColumn('delivery_promise_id', 'integer');
+        $table->addColumn('localized_value_id', 'integer');
+        $table->setPrimaryKey(['delivery_promise_id', 'localized_value_id']);
+        $table->addUniqueIndex(['localized_value_id']);
+    }
+
+    /**
      * Add marello_inventory_item foreign keys.
      *
      * @param Schema $schema
@@ -420,6 +473,41 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_delivery_promise'),
+            ['on_hand_promise'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_delivery_promise'),
+            ['drop_ship_promise'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_delivery_promise'),
+            ['back_order_promise'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_delivery_promise'),
+            ['pre_order_promise'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_delivery_promise'),
+            ['order_on_demand_promise'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
@@ -712,6 +800,46 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
             ['organization_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addMarelloInventoryDeliveryPromiseLabelForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_inventory_deli_prom_label');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_fallback_localization_val'),
+            ['localized_value_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_delivery_promise'),
+            ['delivery_promise_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addMarelloInventoryDeliveryPromiseTooltipForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_inventory_deli_prom_tooltip');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_fallback_localization_val'),
+            ['localized_value_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_delivery_promise'),
+            ['delivery_promise_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 

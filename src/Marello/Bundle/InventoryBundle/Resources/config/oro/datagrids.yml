@@ -752,3 +752,68 @@ datagrids:
             mass_actions:
                 delete:
                     enabled: false
+
+    marello-inventory-delivery-promise:
+        source:
+            type: orm
+            query:
+                select:
+                    - deliverypromise
+                from:
+                    - { table: Marello\Bundle\InventoryBundle\Entity\DeliveryPromise, alias: deliverypromise }
+        columns:
+            code:
+                label:          marello.inventory.deliverypromise.code.label
+                frontend_type:  string
+            label:
+                label:          marello.inventory.deliverypromise.labels.label
+                frontend_type:  string
+            minDays:
+                label:          marello.inventory.deliverypromise.min_days.label
+                frontend_type:  string
+            maxDays:
+                label:          marello.inventory.deliverypromise.max_days.label
+                frontend_type:  string
+            createdAt:
+                label:          oro.ui.created_at
+                frontend_type:  datetime
+            updatedAt:
+                label:          oro.ui.updated_at
+                frontend_type:  datetime
+        filters:
+            columns:
+                code:
+                    type:       string
+                    data_name:  deliverypromise.code
+                label:
+                    type:       string
+                    data_name:  label
+                minDays:
+                    type:       string
+                    data_name:  deliverypromise.minDays
+                maxDays:
+                    type:       string
+                    data_name:  deliverypromise.maxDays
+                createdAt:
+                    type:       datetime
+                    data_name:  deliverypromise.createdAt
+                updatedAt:
+                    type:       datetime
+                    data_name:  deliverypromise.updatedAt
+        sorters:
+            columns:
+                code:
+                    data_name:  deliverypromise.code
+                label:
+                    data_name:  label
+                createdAt:
+                    data_name:  deliverypromise.createdAt
+                updatedAt:
+                    data_name:  deliverypromise.updatedAt
+            default:
+                code: 'DESC'
+        properties:
+            id: ~
+            label:
+                type: localized_value
+                data_name: labels

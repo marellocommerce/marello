@@ -35,3 +35,14 @@ Marello\Bundle\InventoryBundle\Entity\InventoryItem:
             fields: [desiredInventory, purchaseInventory]
             errorPath: desiredInventory
             message: 'marello.inventory.validation.messages.error.inventoryitem.desired_should_be_greater_than_purchase_inventory'
+
+Marello\Bundle\InventoryBundle\Entity\DeliveryPromise:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+              fields: [code]
+              errorPath: code
+              message: 'marello.inventory.validation.messages.error.deliverypromise.unique_code'
+    properties:
+        code:
+            - NotBlank: ~
+            - Marello\Bundle\CoreBundle\Validator\Constraints\CodeRegex: ~

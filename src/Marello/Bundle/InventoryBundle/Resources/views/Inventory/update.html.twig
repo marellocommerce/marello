@@ -194,6 +194,31 @@
         %}
     {% endif %}
 
+    {% set inventoryOrderPromiseWidget %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ form_row(form.onHandPromise) }}
+                    {{ form_row(form.dropShipPromise) }}
+                    {{ form_row(form.backOrderPromise) }}
+                    {{ form_row(form.preOrderPromise) }}
+                    {% if orderOnDemandAllowed %}
+                        {{ form_row(form.orderOnDemandPromise) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([{
+        'title': 'marello.inventory.deliverypromise.entity_plural_label'|trans,
+        'useSpan': false,
+        'subblocks': [
+            { 'data' : [inventoryOrderPromiseWidget] }
+        ]
+    }])
+    %}
+
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,

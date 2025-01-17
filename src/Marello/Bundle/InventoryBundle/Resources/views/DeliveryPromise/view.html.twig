@@ -1,0 +1,53 @@
+{% extends '@OroUI/actions/view.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
+
+{% block navButtons %}
+    {% if is_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('marello_inventory_deliverypromise_update', { id: entity.id }),
+            'entity_label': 'marello.inventory.deliverypromise.entity_label'|trans
+        }) }}
+    {% endif %}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% set breadcrumbs = {
+        'entity':      entity,
+        'indexPath':   path('marello_inventory_deliverypromise_index'),
+        'indexLabel': 'marello.inventory.deliverypromise.entity_label'|trans,
+        'entityTitle': entity.code
+    } %}
+    {{ parent() }}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'marello-delivery-promise-view' %}
+    {% set generalSubblocks = [] %}
+
+    {% set promiseInformationWidget %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ UI.renderProperty('marello.inventory.deliverypromise.code.label'|trans, entity.code) }}
+                    {{ UI.renderProperty('marello.inventory.deliverypromise.labels.label'|trans, entity.defaultLabel) }}
+                    {{ UI.renderProperty('marello.inventory.deliverypromise.min_days.label'|trans, entity.minDays) }}
+                    {{ UI.renderProperty('marello.inventory.deliverypromise.max_days.label'|trans, entity.maxDays) }}
+                    {{ UI.renderProperty('oro.ui.created_at'|trans, entity.createdAt|date) }}
+                    {{ UI.renderProperty('oro.ui.updated_at'|trans, entity.updatedAt|date|default('N/A'|trans)) }}
+                </div>
+            </div>
+        </div>
+    {% endset %}
+    {% set generalSubblocks = generalSubblocks|merge([{'data' : [promiseInformationWidget] }]) %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'General Information'|trans,
+            'class': 'active',
+            'subblocks': generalSubblocks
+        }
+    ] %}
+
+    {% set data = { 'dataBlocks': dataBlocks } %}
+    {{ parent() }}
+{% endblock content_data %}

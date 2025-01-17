@@ -20,3 +20,17 @@ search:
                         name:           orderNumber
                         target_type:    text
                         target_fields:  [orderNumber]
+
+    Marello\Bundle\InventoryBundle\Entity\DeliveryPromise:
+        alias: marello_deliverypromise
+        label: marello.deliverypromise.entity_plural_label
+        route:
+            name: marello_inventory_deliverypromise_index
+            parameters:
+                id: id
+        search_template: '@MarelloInventory/DeliveryPromise/searchResult.html.twig'
+        fields:
+            -
+                name: defaultLabel
+                target_type: text
+                target_fields: [defaultLabel]

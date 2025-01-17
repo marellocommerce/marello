@@ -186,6 +186,66 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
     protected $productUnit;
 
     /**
+     * @var DeliveryPromise|null
+     */
+    #[ORM\ManyToOne(targetEntity: DeliveryPromise::class)]
+    #[ORM\JoinColumn(name: 'on_hand_promise', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
+    protected ?DeliveryPromise $onHandPromise = null;
+
+    /**
+     * @var DeliveryPromise|null
+     */
+    #[ORM\ManyToOne(targetEntity: DeliveryPromise::class)]
+    #[ORM\JoinColumn(name: 'drop_ship_promise', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
+    protected ?DeliveryPromise $dropShipPromise = null;
+
+    /**
+     * @var DeliveryPromise|null
+     */
+    #[ORM\ManyToOne(targetEntity: DeliveryPromise::class)]
+    #[ORM\JoinColumn(name: 'back_order_promise', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
+    protected ?DeliveryPromise $backOrderPromise = null;
+
+    /**
+     * @var DeliveryPromise|null
+     */
+    #[ORM\ManyToOne(targetEntity: DeliveryPromise::class)]
+    #[ORM\JoinColumn(name: 'pre_order_promise', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
+    protected ?DeliveryPromise $preOrderPromise = null;
+
+    /**
+     * @var DeliveryPromise|null
+     */
+    #[ORM\ManyToOne(targetEntity: DeliveryPromise::class)]
+    #[ORM\JoinColumn(name: 'order_on_demand_promise', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => false]
+        ]
+    )]
+    protected ?DeliveryPromise $orderOnDemandPromise = null;
+
+    /**
      * InventoryItem constructor.
      *
      * @param ProductInterface|Product $product
@@ -511,6 +571,106 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
     public function setProductUnit($productUnit)
     {
         $this->productUnit = $productUnit;
+
+        return $this;
+    }
+
+    /**
+     * @return DeliveryPromise|null
+     */
+    public function getOnHandPromise(): ?DeliveryPromise
+    {
+        return $this->onHandPromise;
+    }
+
+    /**
+     * @param DeliveryPromise|null $onHandPromise
+     * @return $this
+     */
+    public function setOnHandPromise(?DeliveryPromise $onHandPromise): self
+    {
+        file_put_contents(
+            '/app/var/logs/inventoyitem.log',
+            __METHOD__ . " " . __LINE__ . " " . print_r($onHandPromise->getDefaultLabel(), true). "\r\n",
+            FILE_APPEND
+        );
+        $this->onHandPromise = $onHandPromise;
+
+        return $this;
+    }
+
+    /**
+     * @return DeliveryPromise|null
+     */
+    public function getDropShipPromise(): ?DeliveryPromise
+    {
+        return $this->dropShipPromise;
+    }
+
+    /**
+     * @param DeliveryPromise|null $dropShipPromise
+     * @return $this
+     */
+    public function setDropShipPromise(?DeliveryPromise $dropShipPromise): self
+    {
+        $this->dropShipPromise = $dropShipPromise;
+
+        return $this;
+    }
+
+    /**
+     * @return DeliveryPromise|null
+     */
+    public function getBackOrderPromise(): ?DeliveryPromise
+    {
+        return $this->backOrderPromise;
+    }
+
+    /**
+     * @param DeliveryPromise|null $backOrderPromise
+     * @return $this
+     */
+    public function setBackOrderPromise(?DeliveryPromise $backOrderPromise): self
+    {
+        $this->backOrderPromise = $backOrderPromise;
+
+        return $this;
+    }
+
+    /**
+     * @return DeliveryPromise|null
+     */
+    public function getPreOrderPromise(): ?DeliveryPromise
+    {
+        return $this->preOrderPromise;
+    }
+
+    /**
+     * @param DeliveryPromise|null $preOrderPromise
+     * @return $this
+     */
+    public function setPreOrderPromise(?DeliveryPromise $preOrderPromise): self
+    {
+        $this->preOrderPromise = $preOrderPromise;
+
+        return $this;
+    }
+
+    /**
+     * @return DeliveryPromise|null
+     */
+    public function getOrderOnDemandPromise(): ?DeliveryPromise
+    {
+        return $this->orderOnDemandPromise;
+    }
+
+    /**
+     * @param DeliveryPromise|null $orderOnDemandPromise
+     * @return $this
+     */
+    public function setOrderOnDemandPromise(?DeliveryPromise $orderOnDemandPromise): self
+    {
+        $this->orderOnDemandPromise = $orderOnDemandPromise;
 
         return $this;
     }
