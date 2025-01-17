@@ -182,6 +182,30 @@
         %}
     {% endif %}
 
+    {% set deliveryPromisesInfoWidget %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    {{ UI.renderProperty('marello.inventory.inventoryitem.on_hand_promise.label'|trans, entity.onHandPromise) }}
+                    {{ UI.renderProperty('marello.inventory.inventoryitem.drop_ship_promise.label'|trans, entity.dropShipPromise) }}
+                    {{ UI.renderProperty('marello.inventory.inventoryitem.back_order_promise.label'|trans, entity.backOrderPromise) }}
+                    {{ UI.renderProperty('marello.inventory.inventoryitem.pre_order_promise.label'|trans, entity.preOrderPromise) }}
+                    {% if orderOnDemandAllowed %}
+                        {{ UI.renderProperty('marello.inventory.inventoryitem.order_on_demand_promise.label'|trans, entity.orderOnDemandPromise) }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endset %}
+    {% set dataBlocks = dataBlocks|merge([{
+            'title': 'marello.inventory.deliverypromise.entity_plural_label'|trans,
+            'useSpan': false,
+            'subblocks': [
+                { 'data' : [deliveryPromisesInfoWidget] }
+            ]
+        }])
+    %}
+
     {% set dataBlocks = dataBlocks|merge([{
         'title': 'marello.inventory.movements.label'|trans,
         'useSpan': false,

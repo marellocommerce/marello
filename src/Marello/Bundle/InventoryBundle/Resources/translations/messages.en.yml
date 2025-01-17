@@ -94,6 +94,11 @@ marello:
                 preorder.label:             Pre-order
                 orderondemand.label:        Order On Demand
                 inventorybatch.label:       Inventory Batch
+            on_hand_promise.label:          On Hand
+            drop_ship_promise.label:        Drop Shipment
+            back_order_promise.label:       Backorder
+            pre_order_promise.label:        Pre-Order
+            order_on_demand_promise.label:  Order On Demand
 
         inventorylevel:
             entity_label:                   Inventory Level
@@ -181,6 +186,21 @@ marello:
             balanced_inventory_qty.label:   Balanced Inventory Qty
             reserved_inventory_qty.label:   Reserved Inventory Qty
             organization.label:             Organization
+
+        deliverypromise:
+            entity_label:                   Delivery Promise
+            entity_plural_label:            Delivery Promises
+            entity_grid_all_view_label:     All %entity_plural_label%
+            id.label:                       Id
+            code.label:                     Code
+            labels.label:                   Label
+            min_days.label:                 Minimum Days
+            max_days.label:                 Maximum Days
+            tooltips.label:                 Tooltips
+            organization.label:             Organization
+
+            form:
+                choose_delivery_promise:   Choose Delivery Promise
 
         allocation:
             id.label:                       Id
@@ -297,11 +317,12 @@ marello:
                     adjust_inventory_qty: If this option is enabled, an API request to update InventoryLevel will adjust the quantity value with the provided one, as usual. If the option is turned off - then the request will replace the value.
         messages:
             success:
-                warehouse.saved:        Warehouse has been saved successfully
-                inventoryitem.saved:    Inventory Item has been saved successfully
-                inventorybatches.saved:    Inventory Batches have been saved successfully
-                reshipment.saved: Reshipment has been saved successfully
-                inventory_rebalance.started: Rebalance started successfully. You will receive email notification upon completion.
+                warehouse.saved:                Warehouse has been saved successfully
+                inventoryitem.saved:            Inventory Item has been saved successfully
+                inventorybatches.saved:         Inventory Batches have been saved successfully
+                reshipment.saved:               Reshipment has been saved successfully
+                deliverypromise.saved:          Delivery Promise has been saved successfully
+                inventory_rebalance.started:    Rebalance started successfully. You will receive email notification upon completion.
             error:
                 warehouse.not_found:    No warehouse found, cannot update a new level without existing warehouse
                 inventorylevel.duplicate_entry: Duplicate entry found for entity "%entity_sku%", please correct the import file before continuing.

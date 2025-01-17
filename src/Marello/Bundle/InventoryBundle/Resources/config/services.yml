@@ -345,3 +345,12 @@ services:
             - '@translator.default'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\InventoryBundle\Entity\Allocation }
+
+    # Autocomplete search handler
+    marello_inventory.delivery_promise.form.autocomplete.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - 'Marello\Bundle\InventoryBundle\Entity\DeliveryPromise'
+            - ['defaultLabel']
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: delivery_promise }

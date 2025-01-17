@@ -35,3 +35,7 @@ oro_entity:
         Marello\Bundle\InventoryBundle\Entity\AllocationItem:
             alias: marelloallocationitem
             plural_alias: marelloallocationitems
+
+        Marello\Bundle\InventoryBundle\Entity\DeliveryPromise:
+            alias: marellodeliverypromise
+            plural_alias: marellodeliverypromises

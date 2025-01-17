@@ -28,6 +28,10 @@ api:
             alias: marelloallocationitem
             plural_alias: marelloallocationitems
 
+        Marello\Bundle\InventoryBundle\Entity\DeliveryPromise:
+            alias: marellodeliverypromise
+            plural_alias: marellodeliverypromises
+
     entities:
         Marello\Bundle\InventoryBundle\Entity\InventoryItem:
             documentation_resource: '@MarelloInventoryBundle/Resources/doc/api/inventoryitem.md'
@@ -232,3 +236,5 @@ api:
                 delete_list: false
                 update_relationship: false
                 delete_relationship: false
+
+        Marello\Bundle\InventoryBundle\Entity\DeliveryPromise: ~

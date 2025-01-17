@@ -2,20 +2,24 @@
 
 namespace Marello\Bundle\InventoryBundle\Form\Type;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
-use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
-use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+
+use Oro\Bundle\FormBundle\Form\Type\OroDateTimeType;
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
+
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\InventoryBundle\Entity\DeliveryPromise;
 
 class InventoryItemType extends AbstractType
 {
@@ -134,6 +138,46 @@ class InventoryItemType extends AbstractType
                     'enum_code' => 'marello_product_unit',
                     'required'  => false,
                     'label'     => 'marello.inventory.inventoryitem.product_unit.label',
+                ]
+            )
+            ->add(
+                'onHandPromise',
+                DeliveryPromiseSelectType::class,
+                [
+                    'label'         => 'marello.inventory.inventoryitem.on_hand_promise.label',
+                    'required'      => false
+                ]
+            )
+            ->add(
+                'dropShipPromise',
+                DeliveryPromiseSelectType::class,
+                [
+                    'label'         => 'marello.inventory.inventoryitem.drop_ship_promise.label',
+                    'required'      => false
+                ]
+            )
+            ->add(
+                'backOrderPromise',
+                DeliveryPromiseSelectType::class,
+                [
+                    'label'         => 'marello.inventory.inventoryitem.back_order_promise.label',
+                    'required'      => false
+                ]
+            )
+            ->add(
+                'preOrderPromise',
+                DeliveryPromiseSelectType::class,
+                [
+                    'label'         => 'marello.inventory.inventoryitem.pre_order_promise.label',
+                    'required'      => false
+                ]
+            )
+            ->add(
+                'orderOnDemandPromise',
+                DeliveryPromiseSelectType::class,
+                [
+                    'label'         => 'marello.inventory.inventoryitem.order_on_demand_promise.label',
+                    'required'      => false
                 ]
             )
             ->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetDataListener']);
