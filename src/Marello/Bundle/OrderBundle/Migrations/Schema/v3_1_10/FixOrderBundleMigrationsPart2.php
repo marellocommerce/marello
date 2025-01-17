@@ -58,7 +58,9 @@ class FixOrderBundleMigrationsPart2 implements Migration, OrderedMigrationInterf
     protected function createUserOwnership(Schema $schema, QueryBag $queries, Table $table, string $entity): void
     {
         if ($table->hasColumn('user_owner_id')) {
-            $table->addIndex(['user_owner_id']);
+            if (!$table->hasIndex('idx_a619dd649eb185f9')) {
+                $table->addIndex(['user_owner_id']);
+            }
 
             $table->addForeignKeyConstraint(
                 $schema->getTable('oro_user'),
