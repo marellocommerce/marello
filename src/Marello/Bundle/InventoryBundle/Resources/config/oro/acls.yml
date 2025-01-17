@@ -18,3 +18,8 @@ acls:
         type:       entity
         class:      Marello\Bundle\InventoryBundle\Entity\BalancedInventoryLevel
         permission: EDIT
+
+    marello_inventory_deliverypromise_delete:
+        type: entity
+        class: Marello\Bundle\InventoryBundle\Entity\DeliveryPromise
+        permission: DELETE
