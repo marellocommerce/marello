@@ -589,11 +589,6 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
      */
     public function setOnHandPromise(?DeliveryPromise $onHandPromise): self
     {
-        file_put_contents(
-            '/app/var/logs/inventoyitem.log',
-            __METHOD__ . " " . __LINE__ . " " . print_r($onHandPromise->getDefaultLabel(), true). "\r\n",
-            FILE_APPEND
-        );
         $this->onHandPromise = $onHandPromise;
 
         return $this;
