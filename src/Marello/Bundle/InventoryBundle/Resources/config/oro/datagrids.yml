@@ -754,6 +754,7 @@ datagrids:
                     enabled: false
 
     marello-inventory-delivery-promise:
+        extended_entity_name: Marello\Bundle\InventoryBundle\Entity\DeliveryPromise
         source:
             type: orm
             query:
@@ -817,3 +818,23 @@ datagrids:
             label:
                 type: localized_value
                 data_name: labels
+            deliverypromise_view_link:
+                type:       url
+                route:      marello_inventory_deliverypromise_view
+                params:     [ id ]
+            deliverypromise_update_link:
+                type:       url
+                route:      marello_inventory_deliverypromise_update
+                params:     [ id ]
+        actions:
+            view:
+                type:           navigate
+                label:          oro.grid.action.view
+                link:           deliverypromise_view_link
+                icon:           eye
+                acl_recource:   marello_inventory_deliverypromise_view
+            update:
+                type:           navigate
+                label:          oro.grid.action.update
+                icon:           edit
+                link:           deliverypromise_update_link
