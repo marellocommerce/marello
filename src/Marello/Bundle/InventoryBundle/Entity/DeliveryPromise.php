@@ -23,6 +23,10 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
 #[ORM\Table(name: 'marello_inventory_delivery_promise')]
 #[ORM\Entity(), ORM\HasLifecycleCallbacks]
 #[Oro\Config(
+    routeName: 'marello_inventory_deliverypromise_index',
+    routeView: 'marello_inventory_deliverypromise_view',
+    routeCreate: 'marello_inventory_deliverypromise_create',
+    routeUpdate: 'marello_inventory_deliverypromise_update',
     defaultValues: [
         'entity' => ['icon' => 'fa-cubes'],
         'security' => ['type' => 'ACL', 'group_name' => ''],
