@@ -57,7 +57,11 @@ class DeliveryPromiseController extends AbstractController
      * @param Request $request
      * @return array
      */
-    #[Route(path: '/update/{id}', name: 'marello_inventory_deliverypromise_update', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/update/{id}',
+        name: 'marello_inventory_deliverypromise_update',
+        requirements: ['id' => '\d+'], methods: ['GET', 'POST']
+    )]
     #[Template]
     #[Acl(id: 'marello_inventory_deliverypromise_update', type: 'entity', class: DeliveryPromise::class, permission: 'EDIT')]
     public function updateAction(DeliveryPromise $deliveryPromise, Request $request)
