@@ -326,8 +326,8 @@ datagrids:
                     default_per_page: 10
 
     marello-order-items:
+        extended_entity_name: Marello\Bundle\OrderBundle\Entity\OrderItem
         source:
-            extended_entity_name: Marello\Bundle\OrderBundle\Entity\OrderItem
             type: orm
             query:
                 select:

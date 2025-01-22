@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
@@ -33,10 +35,12 @@ use Marello\Bundle\PurchaseOrderBundle\Entity\Repository\PurchaseOrderItemReposi
 )]
 class PurchaseOrderItem implements
     ProductAwareInterface,
-    OrganizationAwareInterface
+    OrganizationAwareInterface,
+    ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
+    use ExtendEntityTrait;
 
     public const STATUS_DRAFT = 'draft';
     public const STATUS_PENDING = 'pending';
@@ -139,6 +143,13 @@ class PurchaseOrderItem implements
     #[ORM\Column(name: 'status', type: Types::STRING)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $status = self::STATUS_DRAFT;
+
+    /**
+     * @var \DateTime
+     */
+    #[ORM\Column(name: 'confirmed_delivery_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $confirmedDeliveryDate;
 
     /**
      * @return string
@@ -408,6 +419,25 @@ class PurchaseOrderItem implements
         $this->receivedAmount = $receivedAmount;
 
         return $this;
+    }
+
+    /**
+     * @param \DateTime|null $confirmedDeliveryDate
+     * @return $this
+     */
+    public function setConfirmedDeliveryDate(\DateTime $confirmedDeliveryDate = null): self
+    {
+        $this->confirmedDeliveryDate = $confirmedDeliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getConfirmedDeliveryDate(): ?\DateTime
+    {
+        return $this->confirmedDeliveryDate;
     }
 
     #[ORM\PreUpdate]

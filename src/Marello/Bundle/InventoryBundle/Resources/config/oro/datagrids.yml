@@ -620,8 +620,8 @@ datagrids:
                 hide: true
 
     marello-allocation-items-grid:
+        extended_entity_name: Marello\Bundle\InventoryBundle\Entity\AllocationItem
         source:
-            extended_entity_name: Marello\Bundle\InventoryBundle\Entity\AllocationItem
             type: orm
             query:
                 select:
@@ -680,16 +680,16 @@ datagrids:
                 hide: true
 
     marello-inventory-expected-inventory-item-grid:
+        extended_entity_name: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem
+        inline_editing:
+            enable: true
+            behaviour: enable_selected
         source:
             type: orm
             acl_resource: marello_inventory_inventory_view
             query:
                 select:
-                    - poi.productSku
-                    - poi.productName
-                    - poi.orderedAmount
-                    - poi.receivedAmount
-                    - poi.supplier
+                    - poi
                     - po.dueDate
                     - w.label
                 from:
@@ -703,20 +703,34 @@ datagrids:
                         - poi.status = 'pending'
         columns:
             productSku:
-                label: marello.purchaseorder.purchaseorderitem.product_sku.label
+                label:              marello.purchaseorder.purchaseorderitem.product_sku.label
+                data_name:          productSku
+                type:               twig
+                frontend_type:      html
+                template:           '@MarelloProduct/Product/Datagrid/productSku.html.twig'
             productName:
-                label: marello.purchaseorder.purchaseorderitem.product_name.label
-            orderedAmount:
-                label: marello.purchaseorder.purchaseorderitem.ordered_amount.label
-            receivedAmount:
-                label: marello.purchaseorder.purchaseorderitem.received_amount.label
+                label:              marello.purchaseorder.purchaseorderitem.product_name.label
+                frontend_type:      string
             supplier:
                 label: marello.purchaseorder.purchaseorderitem.supplier.label
+            orderedAmount:
+                label: marello.purchaseorder.purchaseorderitem.ordered_amount.label
+                frontend_type: number
+            receivedAmount:
+                label: marello.purchaseorder.purchaseorderitem.received_amount.label
+                frontend_type: number
+            confirmedDeliveryDate:
+                label: marello.purchaseorder.purchaseorderitem.confirmed_delivery_date.label
+                frontend_type: datetime
+                inline_editing:
+                    enable: true
             dueDate:
                 label: marello.purchaseorder.due_date.label
                 frontend_type: datetime
             label:
                 label: marello.purchaseorder.warehouse.label
+        properties:
+            id: ~
         sorters:
             columns:
                 productSku: { data_name: poi.productSku }
@@ -739,6 +753,9 @@ datagrids:
                 supplier:
                     type: string
                     data_name: poi.supplier
+                confirmedDeliveryDate:
+                    type: datetime
+                    data_name: poi.confirmedDeliveryDate
                 dueDate:
                     type: datetime
                     data_name: po.dueDate

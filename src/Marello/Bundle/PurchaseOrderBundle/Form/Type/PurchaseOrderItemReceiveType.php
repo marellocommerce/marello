@@ -2,13 +2,14 @@
 
 namespace Marello\Bundle\PurchaseOrderBundle\Form\Type;
 
-use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem;
-use Marello\Bundle\PurchaseOrderBundle\Form\EventListener\PurchaseOrderItemSubscriber;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
+use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem;
+use Marello\Bundle\PurchaseOrderBundle\Form\EventListener\PurchaseOrderItemSubscriber;
 
 class PurchaseOrderItemReceiveType extends AbstractType
 {

@@ -63,6 +63,7 @@ marello:
             validation:
                 received_amount:                        Total amount received can only be as many items as ordered amount.
             candidates.label:                           Purchase Order Item Candidates
+            confirmed_delivery_date.label:              Confirmed Delivery Date
         navigation:
             purchasing.label:                           Purchasing
 
@@ -87,5 +88,5 @@ marello:
                 send_directly.label:                       Send Purchase Order directly to a supplier
                 sending_time.label:                        Sending time
                 tooltip:
-                    send_directly:                      Is Purchase Orders for ‘Order on Demand’ products should be send directly to the supplier after creation or should stay on “Ready to be sent” step.
+                    send_directly:                      Is Purchase Orders for 'Order on Demand' products should be send directly to the supplier after creation or should stay on "Ready to be sent" step.
                     sending_time:                       Purchase Orders are sent every day, you can specify a time to start this process. This time is in the UTC timezone, convert you're own timezone to UTC to set the correct time.

@@ -89,6 +89,10 @@ datagrids:
             delete: false
 
     marello-purchase-order-items:
+        extended_entity_name: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem
+        inline_editing:
+            enable: true
+            behaviour: enable_selected
         source:
             type: orm
             query:
@@ -130,6 +134,13 @@ datagrids:
             receivedAmount:
                 label: marello.purchaseorder.purchaseorderitem.received_amount.label
                 frontend_type: number
+            confirmedDeliveryDate:
+                label: marello.purchaseorder.purchaseorderitem.confirmed_delivery_date.label
+                frontend_type: datetime
+                inline_editing:
+                    enable: true
+        properties:
+            id: ~
 
     marello-purchase-order-item-candidates:
         source:
