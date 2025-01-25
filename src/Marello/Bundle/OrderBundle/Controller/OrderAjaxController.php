@@ -57,7 +57,7 @@ class OrderAjaxController extends AbstractController
      */
     protected function getType(Order $order)
     {
-        return $this->createForm(OrderType::class, $order);
+        return $this->createForm('marello_order_order', $order);
     }
 
     public static function getSubscribedServices(): array
