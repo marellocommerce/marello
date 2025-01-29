@@ -29,14 +29,16 @@ marello:
         due_date.label:                                 Due Date
         purchase_order_reference.label:                 Purchase Order Reference
         sections:
-            additional:               Additional
+            additional:                                 Additional
+            items:                                      Purchasing Products
         ui:
             continue:                                   Continue
             sections:
                 items:                                  Purchase Order Items
         form:
             add_product:                                Add Product
-
+            add_products:                               Add Multiple Products
+            add_products_from_advise:                   Add Products from Advice
         purchaseorderitem:
             entity_label:                               Purchase Order Item
             entity_plural_label:                        Purchase Order Items
@@ -64,6 +66,7 @@ marello:
                 received_amount:                        Total amount received can only be as many items as ordered amount.
             candidates.label:                           Purchase Order Item Candidates
             confirmed_delivery_date.label:              Confirmed Delivery Date
+            requested_delivery_date.label:              Requested Delivery Date
         navigation:
             purchasing.label:                           Purchasing
 

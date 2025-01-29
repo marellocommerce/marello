@@ -29,6 +29,7 @@ define(function(require) {
             this.supplierEl = $('input[name="marello_purchase_order_create_step_two[supplier]"]');
             this.productEl = this.$el.find('td.purchase-order-line-item-product').find('input[name*="product"]');
             this.productEl.change(_.bind(this.updatePurchasePrice, this));
+
             this.amountEl = this.$el.find('td.purchase-order-line-item-ordered-amount').find('input');
             this.amountEl.change(_.bind(this.updateRowTotal, this));
             this.priceEl = this.$el.find('td.purchase-order-line-item-purchase-price').find('input[name*="value"]');
@@ -37,6 +38,8 @@ define(function(require) {
             var end_pos = currencyLabel.indexOf(')',start_pos);
             this.currencySymbol = currencyLabel.substring(start_pos,end_pos);
             this.priceEl.change(_.bind(this.updateRowTotal, this));
+
+            this.updatePurchasePrice();
             PurchaseOrderItemView.__super__.initialize.apply(this, arguments);
         },
         

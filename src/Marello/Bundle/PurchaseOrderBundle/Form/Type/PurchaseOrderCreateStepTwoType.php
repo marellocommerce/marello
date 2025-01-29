@@ -83,21 +83,6 @@ class PurchaseOrderCreateStepTwoType extends AbstractType
                 ]
             )
             ->add(
-                'itemsAdvice',
-                PurchaseOrderAdvisedItemCollectionType::class,
-                [
-                    'mapped' => false
-                ]
-            )
-            ->add(
-                'itemsAdditional',
-                PurchaseOrderItemCollectionType::class,
-                [
-                    'mapped'      => false,
-                    'constraints' => [new Valid()],
-                ]
-            )
-            ->add(
                 'items',
                 PurchaseOrderItemCollectionType::class,
                 [
@@ -113,19 +98,6 @@ class PurchaseOrderCreateStepTwoType extends AbstractType
             if ($purchaseOrder && $supplier = $purchaseOrder->getSupplier()) {
                 if ($currency = $supplier->getCurrency()) {
                     $currencySymbol = $this->currencyNameHelper->getCurrencyName($currency);
-                    $form->remove('itemsAdditional');
-                    $form->add(
-                        'itemsAdditional',
-                        PurchaseOrderItemCollectionType::class,
-                        [
-                            'mapped' => false,
-                            'constraints' => [new Valid()],
-                            'entry_options' => [
-                                'currency' => $currency,
-                                'currency_symbol' => $currencySymbol
-                            ]
-                        ]
-                    );
                     $form->remove('items');
                     $form->add(
                         'items',
@@ -161,35 +133,8 @@ class PurchaseOrderCreateStepTwoType extends AbstractType
                 }
             }
 
-            /** @var PurchaseOrderItem $item */
-            foreach ($form->get('itemsAdditional')->getData() as $item) {
-                if ($item->getProduct()) {
-                    $price = $item->getPurchasePrice();
-                    $price->setProduct($item->getProduct())->setCurrency($purchaseOrder->getSupplier()->getCurrency());
-                    $item->setRowTotal($item->getPurchasePrice()->getValue() * $item->getOrderedAmount());
-                    $orderTotal += $item->getRowTotal();
-                    $purchaseOrder->addItem($item);
-                }
-            }
             $purchaseOrder->setOrderTotal($orderTotal);
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function finishView(FormView $view, FormInterface $form, array $options)
-    {
-        /** @var PurchaseOrder $purchaseOrder */
-        $purchaseOrder = $form->getData();
-
-        $view->children['itemsAdvice']->vars['grid_url'] = $this->router->generate(
-            'marello_purchase_order_widget_products_by_supplier',
-            [
-                'id' => $purchaseOrder->getId(),
-                'supplierId' => $form->get('supplier')->getData() ? $form->get('supplier')->getData()->getId() : null
-            ]
-        );
     }
 
     /**

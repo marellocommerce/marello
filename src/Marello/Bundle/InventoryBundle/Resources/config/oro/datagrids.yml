@@ -690,13 +690,11 @@ datagrids:
             query:
                 select:
                     - poi
-                    - po.dueDate
                     - w.label
                 from:
                     - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem, alias: poi }
                 join:
                     inner:
-                        - { join: poi.order, alias: po }
                         - { join: po.warehouse, alias: w }
                 where:
                     and:
@@ -719,14 +717,14 @@ datagrids:
             receivedAmount:
                 label: marello.purchaseorder.purchaseorderitem.received_amount.label
                 frontend_type: number
+            requestedDeliveryDate:
+                label: marello.purchaseorder.purchaseorderitem.requested_delivery_date.label
+                frontend_type: datetime
             confirmedDeliveryDate:
                 label: marello.purchaseorder.purchaseorderitem.confirmed_delivery_date.label
                 frontend_type: datetime
                 inline_editing:
                     enable: true
-            dueDate:
-                label: marello.purchaseorder.due_date.label
-                frontend_type: datetime
             label:
                 label: marello.purchaseorder.warehouse.label
         properties:
@@ -738,10 +736,9 @@ datagrids:
                 orderedAmount: { data_name: poi.orderedAmount }
                 receivedAmount: { data_name: poi.receivedAmount }
                 supplier: { data_name: poi.supplier }
-                dueDate: { data_name: po.dueDate }
                 label: { data_name: w.label }
             default:
-                dueDate: 'ASC'
+                confirmedDeliveryDate: 'ASC'
         filters:
             columns:
                 productSku:
@@ -753,12 +750,12 @@ datagrids:
                 supplier:
                     type: string
                     data_name: poi.supplier
+                requestedDeliveryDate:
+                    type: datetime
+                    data_name: poi.requestedDeliveryDate
                 confirmedDeliveryDate:
                     type: datetime
                     data_name: poi.confirmedDeliveryDate
-                dueDate:
-                    type: datetime
-                    data_name: po.dueDate
                 label:
                     type: string
                     data_name: w.label

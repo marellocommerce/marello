@@ -3,9 +3,9 @@
 namespace Marello\Bundle\OrderBundle\EventListener\Doctrine;
 
 use Marello\Bundle\OrderBundle\Entity\OrderItem;
-use Marello\Bundle\TaxBundle\Calculator\TaxCalculatorInterface;
-use Marello\Bundle\TaxBundle\Matcher\TaxRuleMatcherInterface;
 use Marello\Bundle\TaxBundle\Model\ResultElement;
+use Marello\Bundle\TaxBundle\Matcher\TaxRuleMatcherInterface;
+use Marello\Bundle\TaxBundle\Calculator\TaxCalculatorInterface;
 
 class OrderItemOriginalPriceListener
 {
@@ -25,15 +25,21 @@ class OrderItemOriginalPriceListener
     private function getCalculatedPriceValue(OrderItem $orderItem): ResultElement
     {
         $channel = $orderItem->getOrder()->getSalesChannel();
-        $priceList = $orderItem->getProduct()->getSalesChannelPrice($channel);
+        $amount = 0;
+        if ($orderItem->getProduct()) {
+            $priceList = $orderItem->getProduct()->getSalesChannelPrice($channel);
+            if ($priceList->getDefaultPrice()) {
+                $amount = $priceList->getDefaultPrice()->getValue();
+            }
+        }
 
-        $taxRule = $this->taxRuleMatcher->match(
+        $taxRule = $orderItem->getTaxCode() ? $this->taxRuleMatcher->match(
             [$orderItem->getTaxCode()->getCode()],
             $orderItem->getOrder(),
             $orderItem->getOrder()->getShippingAddress()
-        );
+        ) : null;
         $taxRate = $taxRule ? $taxRule->getTaxRate()->getRate() : 0;
 
-        return $this->taxCalculator->calculate($priceList->getDefaultPrice()->getValue(), $taxRate);
+        return $this->taxCalculator->calculate($amount, $taxRate);
     }
 }
