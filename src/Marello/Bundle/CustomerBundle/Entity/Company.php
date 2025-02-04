@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use MarelloEnterprise\Bundle\ReplenishmentBundle\Entity\ReplenishmentOrderConfig;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -107,6 +108,13 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
         defaultValues: ['dataaudit' => ['auditable' => true]]
     )]
     protected ?string $taxIdentificationNumber = null;
+
+    /**
+     * @var float
+     */
+    #[ORM\Column(name: 'discount_percentage', type: Types::FLOAT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $discountPercentage;
 
     /**
      * Constructor
@@ -385,6 +393,25 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     public function setTaxIdentificationNumber(string $taxIdentificationNumber = null): self
     {
         $this->taxIdentificationNumber = $taxIdentificationNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPercentage(): ?float
+    {
+        return $this->discountPercentage;
+    }
+
+    /**
+     * @param float|null $discountPercentage
+     * @return self
+     */
+    public function setDiscountPercentage(float $discountPercentage = null): self
+    {
+        $this->discountPercentage = $discountPercentage;
 
         return $this;
     }

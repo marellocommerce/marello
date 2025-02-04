@@ -2,18 +2,22 @@
 
 namespace Marello\Bundle\CustomerBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
+use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
+
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
 use Marello\Bundle\AddressBundle\Form\Type\AddressType;
 use Marello\Bundle\CustomerBundle\Entity\Company;
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\PaymentTermBundle\Form\Type\PaymentTermSelectType;
-use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
-use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class CompanyType extends AbstractType
 {
@@ -60,6 +64,15 @@ class CompanyType extends AbstractType
                 'label' => 'marello.customer.company.tax_identification_number.label',
                 'required' => false,
             ])
+            ->add(
+                'discountPercentage',
+                NumberType::class,
+                [
+                    'required' => false,
+                    'label' => 'marello.customer.company.discount_percentage.label',
+                    'constraints' => new Range(['min' => 1, 'max' => 100]),
+                ]
+            )
             ->add(
                 'appendCustomers',
                 EntityIdentifierType::class,

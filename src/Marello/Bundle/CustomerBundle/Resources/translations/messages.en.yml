@@ -54,7 +54,7 @@ marello:
             organization.label:     'Organization'
             payment_term.label:     'Payment Term'
             tax_identification_number.label:  'Tax Identification Number'
-
+            discount_percentage.label:  Discount Percentage
             form:
                 choose:             'Choose a company'
                 choose_parent:      'Choose parent company'

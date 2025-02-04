@@ -36,6 +36,7 @@
                         {{ UI.renderProperty('marello.customer.company.payment_term.label'|trans, entity.paymentTerm.labels|localized_value) }}
                     {% endif %}
                     {{ UI.renderProperty('marello.customer.company.tax_identification_number.label'|trans, entity.taxIdentificationNumber ? entity.taxIdentificationNumber : 'N/A') }}
+                    {{ UI.renderProperty('marello.customer.company.discount_percentage.label'|trans, entity.discountPercentage ? entity.discountPercentage : 'N/A') }}
                     {{ entityConfig.renderDynamicFields(entity) }}
                 </div>
             </div>
