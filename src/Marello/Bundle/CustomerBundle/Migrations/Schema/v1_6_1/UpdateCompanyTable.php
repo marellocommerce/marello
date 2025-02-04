@@ -28,7 +28,7 @@ class UpdateCompanyTable implements Migration
     {
         $table = $schema->getTable(MarelloCustomerBundleInstaller::MARELLO_COMPANY_TABLE);
         if (!$table->hasColumn('discount_percentage')) {
-            $table->addColumn('discount_percentage', 'float', ['notnull' => true]);
+            $table->addColumn('discount_percentage', 'float', ['notnull' => false]);
         }
     }
 }

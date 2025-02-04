@@ -71,7 +71,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('tax_identification_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('parent_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('discount_percentage', 'float', ['notnull' => true]);
+        $table->addColumn('discount_percentage', 'float', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->setPrimaryKey(['id']);
