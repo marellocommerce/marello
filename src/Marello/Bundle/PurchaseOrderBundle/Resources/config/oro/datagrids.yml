@@ -310,14 +310,12 @@ datagrids:
                     and:
                         - sup.name <> ''
                         - sup.id = :supplierId
-                        - s.name = 'enabled'                                          # Only select product with enabled status
+                        - s.name = 'enabled'
                         - i.replenishment = 'never_out_of_stock'
                         - srel.supplier = :supplierId
                 groupBy: p.sku
-
             bind_parameters:
                 - supplierId
-
         columns:
             hasProduct:
                 label:              marello.purchaseorder.has_item.label
@@ -337,10 +335,6 @@ datagrids:
                 label:              marello.product.preferred_supplier.label
                 frontend_type:      string
                 data_name:          preferredSupplier
-            orderAmount:
-                label:              marello.purchaseorder.purchaseorderitem.order_amount.label
-                frontend_type:      number
-                data_name:          orderAmount
         sorters:
             columns:
                 hasProduct:             { data_name: hasProduct }
@@ -348,7 +342,6 @@ datagrids:
                 productName:            { data_name: p.denormalizedDefaultName }
                 manufacturingCode:      { data_name: p.manufacturingCode }
                 preferredSupplier:      { data_name: preferredSupplier }
-                orderAmount:            { data_name: orderAmount }
             default:
                 hasProduct: 'DESC'
         filters:
@@ -365,10 +358,6 @@ datagrids:
                 manufacturingCode:
                     type:             string
                     data_name:        p.manufacturingCode
-                orderAmount:
-                    type:             number
-                    data_name:        orderAmount
-                    filter_by_having: true
         properties:
             id: ~
             purchasePrice: ~
@@ -387,7 +376,6 @@ datagrids:
                     excluded: '#removeProducts'
             requireJSModules:
                 - marellopurchaseorder/js/datagrid/marello-purchase-order-item-candidates-builder
-
 
     marello-purchase-order-item-candidates-grid:
         source:

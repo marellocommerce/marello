@@ -100,7 +100,9 @@ define(function(require) {
                     // Last index means for a next item, so we need to get lastIndex-1 for the current row
                     var currentIndex = $listContainer.data('last-index') - 1;
                     var productField = $listContainer.find('[name$="[items][' + currentIndex + '][product]"]').first();
+                    var orderAmount = $listContainer.find('[name$="[items][' + currentIndex + '][orderedAmount]"]');
                     productField.inputWidget('val', model.id);
+                    orderAmount.inputWidget('val', model.attributes.orderAmount);
                 }, this));
             }
             mediator.trigger('po:row:product:changed');
