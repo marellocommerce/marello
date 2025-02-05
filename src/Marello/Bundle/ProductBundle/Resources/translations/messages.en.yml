@@ -44,6 +44,12 @@ marello:
             variant_code.label:       Variant code
             products.label:           Products
             selected_variants.label:  Selected Variants
+            name.label:               Name
+            names.label:              Names
+            description.label:        Description
+            descriptions.label:       Descriptions
+            image.label:                Image
+            a_r_file.label:             AR File
 
         productstatus:
             entity_label:           Product Status

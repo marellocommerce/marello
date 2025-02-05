@@ -22,6 +22,10 @@ class MarelloProductBundle extends Bundle
             ->addCompilerPass(new EntityFallbackFieldsStoragePass([
                 'Marello\Bundle\ProductBundle\Entity\Product' => [
                     'name' => 'names'
+                ],
+                'Marello\Bundle\ProductBundle\Entity\Variant' => [
+                    'name' => 'names',
+                    'description' => 'descriptions'
                 ]
             ]))
             ->addCompilerPass(new EmailTwigSandboxConfigurationPass());

@@ -37,7 +37,7 @@ class MarelloProductBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_16_1';
+        return 'v1_17';
     }
 
     /**
@@ -54,6 +54,8 @@ class MarelloProductBundleInstaller implements
         $this->createMarelloProductSalesChannelTaxRelationTable($schema);
         $this->createMarelloProductSupplierRelationTable($schema);
         $this->createMarelloProductRelationsTables($schema);
+        $this->createVariantProductNameTable($schema);
+        $this->createVariantProductDescriptionTable($schema);
 
         /** Foreign keys generation **/
         $this->addMarelloProductProductForeignKeys($schema);
@@ -61,6 +63,8 @@ class MarelloProductBundleInstaller implements
         $this->addMarelloProductSaleschannelForeignKeys($schema);
         $this->addMarelloProductSalesChannelTaxRelationForeignKeys($schema);
         $this->addMarelloProductSupplierRelationForeignKeys($schema);
+        $this->addVariantProductNameForeignKeys($schema);
+        $this->addVariantProductDescriptionForeignKeys($schema);
 
         /** Add File attributes relations **/
         $this->addFileRelations($schema);
@@ -157,6 +161,7 @@ class MarelloProductBundleInstaller implements
         $table = $schema->createTable('marello_product_variant');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('variant_code', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('name', 'string', ['length' => 255, 'notnull' => false]);
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
@@ -211,6 +216,30 @@ class MarelloProductBundleInstaller implements
             ],
             'marello_product_prod_supp_rel_uidx'
         );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function createVariantProductNameTable(Schema $schema)
+    {
+        $table = $schema->createTable('marello_product_variant_name');
+        $table->addColumn('variant_id', 'integer', []);
+        $table->addColumn('localized_value_id', 'integer', []);
+        $table->setPrimaryKey(['variant_id', 'localized_value_id']);
+        $table->addUniqueIndex(['localized_value_id']);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function createVariantProductDescriptionTable(Schema $schema)
+    {
+        $table = $schema->createTable('marello_product_variant_decription');
+        $table->addColumn('variant_id', 'integer', []);
+        $table->addColumn('localized_value_id', 'integer', []);
+        $table->setPrimaryKey(['variant_id', 'localized_value_id']);
+        $table->addUniqueIndex(['localized_value_id']);
     }
 
     /**
@@ -442,6 +471,46 @@ class MarelloProductBundleInstaller implements
     /**
      * @param Schema $schema
      */
+    protected function addVariantProductNameForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_product_variant_name');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_fallback_localization_val'),
+            ['localized_value_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_variant'),
+            ['variant_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addVariantProductDescriptionForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_product_variant_desc');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_fallback_localization_val'),
+            ['localized_value_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_product_variant'),
+            ['variant_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     */
     protected function addFileRelations(Schema $schema)
     {
         $this->attachmentExtension->addImageRelation(
@@ -498,6 +567,34 @@ class MarelloProductBundleInstaller implements
             self::MAX_PRODUCT_ARFILE_SIZE_IN_MB
         );
 
+        // add image and ARFile to variants
+        $this->attachmentExtension->addImageRelation(
+            $schema,
+            'marello_product_variant',
+            'image',
+            [
+                'importexport' => ['excluded' => true],
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
+                'attachment' => [
+                    'acl_protected' => false
+                ]
+            ],
+            self::MAX_PRODUCT_IMAGE_SIZE_IN_MB,
+            self::MAX_PRODUCT_IMAGE_DIMENSIONS_IN_PIXELS,
+            self::MAX_PRODUCT_IMAGE_DIMENSIONS_IN_PIXELS
+        );
+
+        $this->attachmentExtension->addFileRelation(
+            $schema,
+            'marello_product_variant',
+            'ARFile',
+            [
+                'importexport' => ['excluded' => true],
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
+                'attachment' => ['mimetypes' => 'application/zip,model/vnd.usdz+zip', 'acl_protected' => false]
+            ],
+            self::MAX_PRODUCT_ARFILE_SIZE_IN_MB
+        );
     }
 
     /**

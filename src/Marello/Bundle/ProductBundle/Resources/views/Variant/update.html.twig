@@ -38,12 +38,25 @@
     {% set id = 'marello-product-variant-update' %}
     {% set dataBlocks = [
         {
+            'title': 'General'|trans,
+            'class': 'active',
+            'subblocks': [{
+            'title': 'marello.product.variant.entity_plural_label'|trans,
+            'data': [
+                    form_row(form.names),
+                    form_row(form.variantCode),
+                    form_row(form.image),
+                    form_row(form.ARFile),
+                    form_row(form.descriptions)
+                ]
+            }]
+        },
+        {
             'title': 'marello.product.variant.entity_plural_label'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,
                 'data' : [
-                    form_row(form.variantCode),
                     form_widget(form.addVariants, {'id': 'addVariants'}),
                     form_widget(form.removeVariants, {'id': 'removeVariants'}),
                     dataGrid.renderGrid(gridName, { product: parent.id ? : null, variant: parent.variant.id ? : null })

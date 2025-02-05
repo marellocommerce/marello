@@ -2,9 +2,11 @@
 
 namespace Marello\Bundle\ProductBundle\Form\EventListener;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 
 use Marello\Bundle\ProductBundle\Entity\Variant;
 
@@ -37,6 +39,12 @@ class VariantSubscriber implements EventSubscriberInterface
                     $entity->setVariantCode($this->getVariantCode($parent->getSku()));
                     $event->setData($entity);
                 }
+            }
+        }
+
+        if ($entity && $form->has('variantCode')) {
+            if ($entity->getVariantCode() !== null) {
+                FormUtils::replaceField($form, 'variantCode', ['disabled' => true]);
             }
         }
     }
