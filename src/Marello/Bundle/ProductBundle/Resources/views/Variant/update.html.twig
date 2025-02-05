@@ -38,10 +38,9 @@
     {% set id = 'marello-product-variant-update' %}
     {% set dataBlocks = [
         {
-            'title': 'General'|trans,
+            'title': 'marello.product.sections.general'|trans,
             'class': 'active',
             'subblocks': [{
-            'title': 'marello.product.variant.entity_plural_label'|trans,
             'data': [
                     form_row(form.names),
                     form_row(form.variantCode),
@@ -65,10 +64,28 @@
         }
     ] %}
 
+    {% set additionalData = [] %}
+    {% for child in form.children %}
+        {% if child.vars.extra_field is defined and child.vars.extra_field %}
+            {% set additionalData = additionalData|merge([form_row(child)]) %}
+        {% endif %}
+    {% endfor %}
+
+    {% if additionalData is not empty %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'marello.product.sections.additional'|trans,
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }] ) %}
+    {% endif %}
+
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,
     } %}
-
+    
     {{ parent() }}
 {% endblock %}

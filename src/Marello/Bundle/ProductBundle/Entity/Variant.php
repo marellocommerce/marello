@@ -66,7 +66,7 @@ class Variant implements
      * This is a mirror field for performance reasons only.
      * It mirrors getDefaultName()->getString().
      */
-    #[ORM\Column(name: 'name', type: Types::STRING, length:255, nullable: false)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length:255, nullable: true)]
     #[Oro\ConfigField(
         defaultValues: [
             'dataaudit' => ['auditable' => true],
