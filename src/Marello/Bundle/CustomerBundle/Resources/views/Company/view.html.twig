@@ -18,6 +18,7 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
+    {% set id = 'marello-company-view' %}
     {% set generalInfo %}
         <div class="widget-content">
             <div class="row-fluid form-horizontal">
@@ -104,9 +105,25 @@
         ]
     }]) %}
 
-    {% set id = 'marello-company-view' %}
-    {% set data = {'dataBlocks': dataBlocks} %}
+    {%- set additionalInfoPlaceholders = marello_get_additional_placeholder_data('company') -%}
+    {% for additionalInfo in additionalInfoPlaceholders %}
+        {% set companyAdditionalInfoSection %}
+            {% set placeholderName = additionalInfo.placeholder %}
+            {% placeholder placeholderName with {'company': entity} %}
+        {% endset %}
+        {% if companyAdditionalInfoSection|trim is not empty %}
+            {% set dataBlocks = dataBlocks|merge([
+                {
+                    'title': additionalInfo.label|trans,
+                    'subblocks': [
+                    { 'data': [companyAdditionalInfoSection] }
+                ]
+                }
+            ]) %}
+        {% endif %}
+    {% endfor %}
 
+    {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
 {% endblock content_data %}
 
