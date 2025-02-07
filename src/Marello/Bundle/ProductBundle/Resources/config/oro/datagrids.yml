@@ -294,6 +294,7 @@ datagrids:
                 where:
                     and:
                         - p.id != :product
+                        - IDENTITY(p.attributeFamily) = :attributeFamily
             bind_parameters:
                 -
                     name: variant
@@ -301,6 +302,10 @@ datagrids:
                     type: integer
                 -
                     name: product
+                    default: null
+                    type: integer
+                -
+                    name: attributeFamily
                     default: null
                     type: integer
         columns:
