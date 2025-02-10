@@ -58,7 +58,11 @@
                 'data' : [
                     form_widget(form.addVariants, {'id': 'addVariants'}),
                     form_widget(form.removeVariants, {'id': 'removeVariants'}),
+<<<<<<< Updated upstream
                     dataGrid.renderGrid(gridName, { product: parent.id ? : null, variant: parent.variant.id ? : null })
+=======
+                    dataGrid.renderGrid(gridName, { product: parent.id ? : null, variant: parent.variant.id ? : null, attributeFamily: parent.attributeFamily.id ? : null })
+>>>>>>> Stashed changes
                 ]
             }]
         }

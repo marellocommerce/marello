@@ -9,6 +9,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
+
 use Marello\Bundle\ProductBundle\Entity\Variant;
 use Marello\Bundle\ProductBundle\Entity\Product;
 
@@ -102,8 +104,11 @@ class LoadProductVariantData extends AbstractFixture implements DependentFixture
                 ->setParameter('sku', $skuSearch)
                 ->getQuery()
                 ->getResult();
-
+            /** @var Product $product */
             foreach ($products as $product) {
+                $name = new LocalizedFallbackValue();
+                $name->setString($product->getDenormalizedDefaultName());
+                $variant->addName($name);
                 $variant->addProduct($product);
             }
 
