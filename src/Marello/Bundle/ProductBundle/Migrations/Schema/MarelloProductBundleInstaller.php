@@ -235,7 +235,7 @@ class MarelloProductBundleInstaller implements
      */
     protected function createVariantProductDescriptionTable(Schema $schema)
     {
-        $table = $schema->createTable('marello_product_variant_decription');
+        $table = $schema->createTable('marello_product_variant_desc');
         $table->addColumn('variant_id', 'integer', []);
         $table->addColumn('localized_value_id', 'integer', []);
         $table->setPrimaryKey(['variant_id', 'localized_value_id']);

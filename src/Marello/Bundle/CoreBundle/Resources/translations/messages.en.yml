@@ -7,7 +7,7 @@ oro:
             text: |
                 Welcome to Marello!
                 Marello Unified Commerce Management provides capabilities to meet and exceed rising expectations in commerce. Learn more at www.marello.com
-        copy: © 2019 Marello. All Rights Reserved
+    copyright: © {{year}} Marello. All Rights Reserved
 
 marello:
     core:
@@ -17,9 +17,6 @@ marello:
             groups:
                 marello:
                     title: Marello
-
-        copyright:
-            message: '© %copyright_date% Marello. All Rights Reserved'
 
         ui:
             sections:
