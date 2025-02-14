@@ -29,14 +29,18 @@ define(function(require) {
             this.supplierEl = $('input[name="marello_purchase_order_create_step_two[supplier]"]');
             this.productEl = this.$el.find('td.purchase-order-line-item-product').find('input[name*="product"]');
             this.productEl.change(_.bind(this.updatePurchasePrice, this));
+
             this.amountEl = this.$el.find('td.purchase-order-line-item-ordered-amount').find('input');
             this.amountEl.change(_.bind(this.updateRowTotal, this));
             this.priceEl = this.$el.find('td.purchase-order-line-item-purchase-price').find('input[name*="value"]');
-            var currencyLabel = this.priceEl.closest('.control-group').find('label').text();
-            var start_pos = currencyLabel.indexOf('(') + 1;
-            var end_pos = currencyLabel.indexOf(')',start_pos);
-            this.currencySymbol = currencyLabel.substring(start_pos,end_pos);
+            // var currencyLabel = this.priceEl.closest('.control-group').find('label').text();
+            // console.log(currencyLabel);
+            // var start_pos = currencyLabel.indexOf('(') + 1;
+            // var end_pos = currencyLabel.indexOf(')',start_pos);
+            // this.currencySymbol = currencyLabel.substring(start_pos,end_pos);
             this.priceEl.change(_.bind(this.updateRowTotal, this));
+
+            this.updatePurchasePrice();
             PurchaseOrderItemView.__super__.initialize.apply(this, arguments);
         },
         
@@ -62,6 +66,8 @@ define(function(require) {
         updateRowTotal: function() {
             var rowTotal = parseFloat(this.amountEl.val()) * parseFloat(this.priceEl.val());
             if (!isNaN(rowTotal)) {
+                console.log(this.currencySymbol);
+                console.log(rowTotal);
                 this.$el.find('td.purchase-order-line-item-row-total').html(this.currencySymbol + rowTotal.toFixed(2));
             } else {
                 this.$el.find('td.purchase-order-line-item-row-total').html('');

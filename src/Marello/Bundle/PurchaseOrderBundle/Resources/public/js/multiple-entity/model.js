@@ -17,7 +17,8 @@ define(['backbone'],
                 value: null,
                 orderAmount: null,
                 purchasePrice: null,
-                currency: null
+                currency: null,
+                requestedDeliveryDate: null
             },
 
             /**

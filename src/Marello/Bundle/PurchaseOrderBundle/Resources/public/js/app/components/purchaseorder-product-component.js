@@ -27,6 +27,7 @@ define(function(require) {
                     'sku': model.get('sku'),
                     'orderAmount': model.get('orderAmount'),
                     'purchasePrice': model.get('purchasePrice'),
+                    'requestedDeliveryDate': model.get('requestedDeliveryDate'),
                     'currency': this.currency,
                     isDefault: false
                 });

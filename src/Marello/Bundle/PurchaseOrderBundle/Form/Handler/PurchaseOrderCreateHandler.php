@@ -81,17 +81,6 @@ class PurchaseOrderCreateHandler
             return false;
         }
 
-        $addedKeys = explode(',', $keys['itemsAdvice']['added']);
-        if (key_exists('items', $keys)) {
-            foreach ($keys['items'] as $key => $data) {
-                if (null != $data['product'] && !in_array($data['product'], $addedKeys)) {
-                    unset($keys['items'][$key]);
-                }
-            }
-        }
-        unset($keys['itemsAdvice']);
-        $this->request->request->set('marello_purchase_order_create_step_two', $keys);
-
         $this->submitPostPutRequest($this->form, $this->request);
 
         if ($this->form->isSubmitted() && $this->form->isValid()) {

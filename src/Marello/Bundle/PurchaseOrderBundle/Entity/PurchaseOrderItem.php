@@ -152,6 +152,13 @@ class PurchaseOrderItem implements
     protected $confirmedDeliveryDate;
 
     /**
+     * @var \DateTime
+     */
+    #[ORM\Column(name: 'requested_delivery_date', type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $requestedconfirmedDeliveryDate;
+
+    /**
      * @return string
      */
     public function __toString()
@@ -438,6 +445,25 @@ class PurchaseOrderItem implements
     public function getConfirmedDeliveryDate(): ?\DateTime
     {
         return $this->confirmedDeliveryDate;
+    }
+
+    /**
+     * @param \DateTime|null $requestedconfirmedDeliveryDate
+     * @return $this
+     */
+    public function setRequestedDeliveryDate(\DateTime $requestedconfirmedDeliveryDate = null): self
+    {
+        $this->requestedconfirmedDeliveryDate = $requestedconfirmedDeliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getRequestedDeliveryDate(): ?\DateTime
+    {
+        return $this->requestedconfirmedDeliveryDate;
     }
 
     #[ORM\PreUpdate]
