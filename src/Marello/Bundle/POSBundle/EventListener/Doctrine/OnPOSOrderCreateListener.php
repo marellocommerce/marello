@@ -99,6 +99,10 @@ class OnPOSOrderCreateListener
             }
         }
 
+        if (count($applicableWorkflows) !== 1) {
+            return null;
+        }
+
         return array_shift($applicableWorkflows);
     }
 }
