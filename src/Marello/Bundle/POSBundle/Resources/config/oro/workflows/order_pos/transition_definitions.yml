@@ -2,6 +2,9 @@ workflows:
     marello_order_pos_workflow:
         transition_definitions:
             processing_definition:
+                preconditions:
+                    '@and':
+                        -   '@equal': [ $order.salesChannel.channelType.name, 'pos' ]
                 actions:
                     - '@assign_value':
                           - [$update_balanced_inventory, true]
