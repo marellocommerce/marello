@@ -91,18 +91,27 @@ class OnPOSOrderCreateListener
         }
 
         $applicableWorkflows = [];
+        $posWorkflows = [];
         // apply force autostart (ignore default filters)
         $workflows = $this->workflowManager->getApplicableWorkflows($entity);
         foreach ($workflows as $name => $workflow) {
-            if (str_contains($name, WorkflowNameProviderInterface::ORDER_POS_WORKFLOW)) {
+            if (str_starts_with($name, WorkflowNameProviderInterface::MARELLO_WORKFLOW_START)) {
                 $applicableWorkflows[$name] = $workflow;
+            }
+
+            if (str_starts_with($name, WorkflowNameProviderInterface::ORDER_POS_WORKFLOW)) {
+                $posWorkflows[$name] = $workflow;
             }
         }
 
-        if (count($applicableWorkflows) !== 1) {
+        if (count($applicableWorkflows) === 1 && count($posWorkflows) === 1) {
             return null;
         }
 
-        return array_shift($applicableWorkflows);
+        if (count($applicableWorkflows) > 1 && count($posWorkflows) === 1) {
+            return array_shift($posWorkflows);
+        }
+
+        return null;
     }
 }

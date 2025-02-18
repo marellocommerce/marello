@@ -6,6 +6,7 @@ workflows:
                 is_start: true
                 is_hidden: true
                 is_unavailable_hidden: true
+                transition_definition: processing_definition
             processing:
                 step_to: processing
                 is_start: true
