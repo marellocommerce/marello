@@ -58,11 +58,10 @@ class OrderItemStatusListener
                     $entity->setStatus($this->findStatusByName(LoadOrderItemStatusData::WAITING_FOR_SUPPLY));
                 } elseif ($entity->isAllocationExclusion()) {
                     $entity->setStatus($this->findStatusByName(OrderItemStatusesInterface::OIS_COMPLETE));
-                } else {
-                    if (!$entity->getStatus()) {
-                        $entity->setStatus($this->findDefaultStatus());
-                    }
                 }
+            }
+            if (!$entity->getStatus()) {
+                $entity->setStatus($this->findDefaultStatus());
             }
         }
         if ($entity instanceof PackingSlipItem) {

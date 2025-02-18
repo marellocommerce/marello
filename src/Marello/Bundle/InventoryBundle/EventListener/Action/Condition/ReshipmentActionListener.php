@@ -19,9 +19,11 @@ class ReshipmentActionListener
         /** @var Order $order */
         $order = $event->getContext()->getEntity();
         foreach ($order->getItems() as $item) {
-            $status = $item->getStatus()->getId();
-            if (in_array($status, $this->getStatuses(), true)) {
-                return true;
+            if ($item->getStatus()) {
+                $status = $item->getStatus()->getId();
+                if (in_array($status, $this->getStatuses(), true)) {
+                    return true;
+                }
             }
         }
 
