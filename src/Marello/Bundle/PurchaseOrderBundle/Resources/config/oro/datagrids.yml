@@ -278,6 +278,105 @@ datagrids:
             requireJSModules:
                 - marellopurchaseorder/js/datagrid/marello-purchase-order-item-candidates-builder
 
+    marello-purchase-order-item-purchase-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - p.id
+                    - p.sku
+                    - p.denormalizedDefaultName as productName
+                    - p.manufacturingCode
+                    - sup.id AS preferredSupplierId
+                    - sup.name AS preferredSupplier
+                    - srel.cost AS purchasePrice
+                    - i.desiredInventory
+                    - i.purchaseInventory
+                    - (i.desiredInventory - COALESCE(SUM(l.inventoryQty - l.allocatedInventory), 0)) AS orderAmount
+                    - >
+                        (CASE WHEN p.id IN (:data_in) AND p.id NOT IN (:data_not_in)
+                          THEN true ELSE false
+                        END) as hasProduct
+                from:
+                    - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
+                join:
+                    left:
+                        - { join: p.inventoryItem, alias: i }
+                        - { join: i.inventoryLevels, alias: l }
+                        - { join: p.status, alias: s }
+                        - { join: p.preferredSupplier, alias: sup }
+                        - { join: p.suppliers, alias: srel }
+                where:
+                    and:
+                        - sup.name <> ''
+                        - sup.id = :supplierId
+                        - s.name = 'enabled'
+                        - i.replenishment = 'never_out_of_stock'
+                        - srel.supplier = :supplierId
+                groupBy: p.sku
+            bind_parameters:
+                - supplierId
+        columns:
+            hasProduct:
+                label:              marello.purchaseorder.has_item.label
+                editable:           true
+                frontend_type:      boolean
+            sku:
+                label:              marello.product.sku.label
+                frontend_type:      string
+            productName:
+                label:              marello.product.name.label
+                frontend_type:      string
+                data_name:          productName
+            manufacturingCode:
+                label:              marello.product.manufacturing_code.label
+                frontend_type:      string
+            preferredSupplier:
+                label:              marello.product.preferred_supplier.label
+                frontend_type:      string
+                data_name:          preferredSupplier
+        sorters:
+            columns:
+                hasProduct:             { data_name: hasProduct }
+                sku:                    { data_name: p.sku }
+                productName:            { data_name: p.denormalizedDefaultName }
+                manufacturingCode:      { data_name: p.manufacturingCode }
+                preferredSupplier:      { data_name: preferredSupplier }
+            default:
+                hasProduct: 'DESC'
+        filters:
+            columns:
+                hasProduct:
+                    data_name:        hasProduct
+                    type:             boolean
+                sku:
+                    type:             string
+                    data_name:        p.sku
+                productName:
+                    type:             string
+                    data_name:        productName
+                manufacturingCode:
+                    type:             string
+                    data_name:        p.manufacturingCode
+        properties:
+            id: ~
+            purchasePrice: ~
+            view_link:
+                type: url
+                route: marello_product_view
+                params:
+                    - id
+        options:
+            entityHint: products
+            rowSelection:
+                dataField: id
+                columnName: hasProduct
+                selectors:
+                    included: '#appendProducts'
+                    excluded: '#removeProducts'
+            requireJSModules:
+                - marellopurchaseorder/js/datagrid/marello-purchase-order-item-candidates-builder
+
     marello-purchase-order-item-candidates-grid:
         source:
             type: orm

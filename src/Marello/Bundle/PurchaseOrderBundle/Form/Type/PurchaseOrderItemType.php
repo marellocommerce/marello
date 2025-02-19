@@ -35,7 +35,15 @@ class PurchaseOrderItemType extends AbstractType
                 'label' => 'Purchase Price',
                 'currency' => $options['currency'],
                 'currency_symbol' => $options['currency_symbol']
-            ]);
+            ])
+            ->add(
+                'requestedDeliveryDate',
+                OroDateType::class,
+                [
+                    'required' => false,
+                    'label' => 'marello.purchaseorder.purchaseorderitem.requested_delivery_date.label',
+                ]
+            );
     }
 
     /**

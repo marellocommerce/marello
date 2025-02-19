@@ -243,7 +243,7 @@ class ProductController extends AbstractController
      * @param Product $product
      * @return array
      */
-    #[Route(path: '/view/{id}', requirements: ['id' => '\d+'], name: 'marello_product_view')]
+    #[Route(path: '/view/{id}', name: 'marello_product_view', requirements: ['id' => '\d+'])]
     #[AclAncestor('marello_product_view')]
     #[Template('@MarelloProduct/Product/view.html.twig')]
     public function viewAction(Product $product)

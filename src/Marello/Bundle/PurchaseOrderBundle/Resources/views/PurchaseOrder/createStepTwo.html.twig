@@ -43,16 +43,18 @@
 {% block content_data %}
     {% set id = 'marello-purchase-order-create-step-two' %}
 
-    {% set itemsAdditional %}
+    {% set items %}
         <div class="purchaseorder-items-additional"
              data-page-component-module="oroui/js/app/components/view-component"
              data-page-component-options="{{ {
                  view: 'marellopurchaseorder/js/app/views/purchaseorder-items-view',
-                 items: itemsAdditional|default({})
+                 items: items|default({}),
+                 supplierId: form.supplier.vars.value,
+                 selectorWindowTitle: 'marello.purchaseorder.purchaseorderitem.entity_plural_label'|trans
              }|json_encode }}"
              data-layout="separate">
-            {{ form_widget(form.itemsAdditional) }}
-            {{ form_errors(form.itemsAdditional) }}
+            {{ form_widget(form.items) }}
+            {{ form_errors(form.items) }}
         </div>
     {% endset %}
 
@@ -80,23 +82,12 @@
                 ]
             }]
         },
-        'items_advice': {
-            'title': 'marello.purchaseorder.items_advice'|trans,
+        'items': {
+            'title': 'marello.purchaseorder.sections.items'|trans,
             'class': '',
             'subblocks': [{
-                'title': 'marello.purchaseorder.select_products_advice'|trans,
                 'data': [
-                    form_widget(form.itemsAdvice),
-                ]
-            }]
-        },
-        'items_additional': {
-            'title': 'marello.purchaseorder.items_additional'|trans,
-            'class': '',
-            'subblocks': [{
-                'title': 'marello.purchaseorder.select_products_additional'|trans,
-                'data': [
-                    itemsAdditional
+                    items
                 ]
             }]
         },

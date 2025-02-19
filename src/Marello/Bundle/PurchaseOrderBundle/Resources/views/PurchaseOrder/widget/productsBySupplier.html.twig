@@ -3,7 +3,9 @@
 
 <div class="widget-content grid-widget-content">
     {% set gridName = 'marello-purchase-order-item-candidates' %}
-
+    {% if type is same as 'supplier' %}
+        {% set gridName = 'marello-purchase-order-item-purchase-grid' %}
+    {% endif %}
     {% set params = {} %}
     {% set params = {
         'supplierId':       supplierId,

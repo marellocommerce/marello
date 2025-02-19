@@ -125,7 +125,7 @@ class PurchaseOrderController extends AbstractController
      */
     protected function createStepTwo(Request $request, PurchaseOrder $purchaseOrder)
     {
-        if ($request->request->get('input_action') === 'marello_purchaseorder_purchaseorder_create') {
+        if ($request->get(Router::ACTION_PARAMETER) === 'marello_purchaseorder_purchaseorder_create') {
             $form = $this->createForm(PurchaseOrderCreateStepOneType::class, $purchaseOrder);
             $queryParams = $request->query->all();
             $form->handleRequest($request);
@@ -156,7 +156,7 @@ class PurchaseOrderController extends AbstractController
                 $this->container->get(TranslatorInterface::class)->trans('marello.purchaseorder.messages.purchaseorder.saved')
             );
 
-            return $this->container->get(Router::class)->redirect($purchaseOrder);
+            return $this->container->get(Router::class)->redirect($form->getData());
         }
 
         $this->addFlash(
@@ -170,10 +170,7 @@ class PurchaseOrderController extends AbstractController
             }
         }
 
-        return [
-            'form' => $form->createView(),
-            'entity' => $purchaseOrder
-        ];
+        return $this->update($purchaseOrder);
     }
 
     /**
@@ -223,6 +220,7 @@ class PurchaseOrderController extends AbstractController
         return [
             'purchaseOrder' => $purchaseOrder,
             'supplierId' => $supplier->getId(),
+            'type' => $this->container->get(RequestStack::class)->getCurrentRequest()->get('type'),
             'currency' => $this->container->get(CurrencyNameHelper::class)->getCurrencyName($supplier->getCurrency())
         ];
     }

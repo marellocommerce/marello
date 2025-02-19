@@ -2,10 +2,11 @@
 
 namespace Marello\Bundle\PurchaseOrderBundle\Form\Type;
 
-use Oro\Bundle\FormBundle\Form\Type\CollectionType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Oro\Bundle\FormBundle\Form\Type\CollectionType;
 
 class PurchaseOrderItemCollectionType extends AbstractType
 {
