@@ -19,6 +19,9 @@ datagrids:
                     - p.updatedAt
                 from:
                     - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
+                join:
+                    left:
+                        - { join: p.attributeFamily, alias: pf }
         columns:
             sku:
                 label:              marello.product.sku.label
@@ -30,6 +33,11 @@ datagrids:
             type:
                 label:              marello.product.type.label
                 frontend_type:      string
+                inline_editing:
+                    enable: false
+            attributeFamily:
+                label:              marello.product.attribute_family.label
+                data_name:          product_family
                 inline_editing:
                     enable: false
             channels:
@@ -80,6 +88,10 @@ datagrids:
                 type:       url
                 route:      marello_product_update
                 params:     [ id ]
+            product_family:
+                type: localized_value
+                data_name: pf.labels
+                allow_empty: true
         sorters:
             columns:
                 type:                   { data_name: p.type }
@@ -103,6 +115,13 @@ datagrids:
                 type:
                     type:             string
                     data_name:        p.type
+                attributeFamily:
+                    type:             entity
+                    data_name:        p.attributeFamily
+                    options:
+                        field_options:
+                            multiple:   true
+                            class:      Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily
                 manufacturingCode:
                     data_name:          p.manufacturingCode
                     type:               string
