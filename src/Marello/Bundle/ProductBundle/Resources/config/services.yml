@@ -309,3 +309,8 @@ services:
             - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
             - '@Oro\Bundle\AttachmentBundle\Manager\FileManager'
             - '/media/cache'
+
+    Marello\Bundle\ProductBundle\Provider\VariantFieldProvider:
+        public: false
+        arguments:
+            - '@oro_entity_config.manager.attribute_manager'

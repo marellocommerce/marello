@@ -105,6 +105,18 @@ class Variant implements
     protected ?Collection $descriptions = null;
 
     /**
+     * @var array
+     */
+    #[ORM\Column(name: 'variant_fields', type: Types::ARRAY, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => ['auditable' => false],
+            'importexport' => ['excluded' => true]
+        ]
+    )]
+    protected $variantFields = [];
+
+    /**
      * Variant constructor.
      */
     public function __construct()
@@ -323,6 +335,26 @@ class Variant implements
     public function getDenormalizedDefaultName(): ?string
     {
         return $this->denormalizedDefaultName;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getVariantFields(): ?array
+    {
+        return (array) $this->variantFields;
+    }
+
+    /**
+     * @param array|null $variantFields
+     *
+     * @return Variant
+     */
+    public function setVariantFields(?array $variantFields): self
+    {
+        $this->variantFields = $variantFields;
+
+        return $this;
     }
 
     public function updateDenormalizedProperties(): void

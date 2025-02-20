@@ -162,6 +162,7 @@ class MarelloProductBundleInstaller implements
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('variant_code', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('name', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('variant_fields', 'array', ['notnull' => false, 'comment' => '(DC2Type:array)']);
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);

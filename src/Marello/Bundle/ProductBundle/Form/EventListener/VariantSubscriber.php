@@ -8,7 +8,9 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Entity\Variant;
+use Marello\Bundle\ProductBundle\Form\Type\ProductVariantFieldsCollectionType;
 
 class VariantSubscriber implements EventSubscriberInterface
 {
@@ -35,6 +37,7 @@ class VariantSubscriber implements EventSubscriberInterface
         if (!$entity || null === $entity->getId()) {
             if ($form->has('variantCode')) {
                 if ($entity instanceof Variant && count($entity->getProducts()) > 0) {
+                    /** @var Product $parent */
                     $parent = $entity->getProducts()->first();
                     $entity->setVariantCode($this->getVariantCode($parent->getSku()));
                     $event->setData($entity);
@@ -43,9 +46,22 @@ class VariantSubscriber implements EventSubscriberInterface
         }
 
         if ($entity && $form->has('variantCode')) {
+            /** @var Product $parent */
+            $parent = $entity->getProducts()->first();
+            $attributeFamily = $parent->getAttributeFamily();
             if ($entity->getVariantCode() !== null) {
                 FormUtils::replaceField($form, 'variantCode', ['disabled' => true]);
             }
+
+            $form->add(
+                'variantFields',
+                ProductVariantFieldsCollectionType::class,
+                [
+                    'label' => 'marello.product.variant.variant_fields.label',
+                    'required' => false,
+                    'attributeFamily' => $attributeFamily
+                ]
+            );
         }
     }
 

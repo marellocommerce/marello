@@ -50,6 +50,7 @@ marello:
             descriptions.label:       Descriptions
             image.label:                Image
             a_r_file.label:             AR File
+            variant_fields.label:     Variant Fields
 
         productstatus:
             entity_label:           Product Status

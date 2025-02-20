@@ -9,8 +9,10 @@ dynamic-imports:
         - marelloproduct/js/app/views/product-channel-taxcode-view
         - marelloproduct/js/app/views/product-channel-taxcodes-view
         - marelloproduct/js/app/components/related-items-tabs-component
+        - marelloproduct/js/app/components/product-variant-component
         - marelloproduct/js/app/datagrid/listener/related-items-listener
         - marelloproduct/js/app/views/config-integer-view
+        - marelloproduct/js/app/views/variant-fields-view
     commons:
         - oro/select2-autocomplete-sales-channel-aware-component
         - oro/related-items-widget

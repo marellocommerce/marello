@@ -36,6 +36,13 @@
 
 {% block content_data %}
     {% set id = 'marello-product-variant-update' %}
+
+    {% set productsVariantSelector %}
+        <div data-page-component-module="marelloproduct/js/app/components/product-variant-component">
+            {{ form_row(form.variantFields) }}
+        </div>
+    {% endset %}
+
     {% set dataBlocks = [
         {
             'title': 'marello.product.sections.general'|trans,
@@ -46,7 +53,8 @@
                     form_row(form.variantCode),
                     form_row(form.image),
                     form_row(form.ARFile),
-                    form_row(form.descriptions)
+                    form_row(form.descriptions),
+                    productsVariantSelector
                 ]
             }]
         },
