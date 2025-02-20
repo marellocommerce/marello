@@ -22,7 +22,7 @@ class ProductDuplicator
      * @var EventDispatcherInterface
      */
     protected $eventDispatcher;
-    
+
     /**
      * @var SkuIncrementorInterface
      */
@@ -85,7 +85,7 @@ class ProductDuplicator
 
         return $productCopy;
     }
-    
+
     /**
      * @param SkuIncrementorInterface $skuIncrementor
      */
@@ -143,6 +143,10 @@ class ProductDuplicator
         foreach ($product->getSuppliers() as $supplier) {
             $productCopy->addSupplier(clone $supplier);
         }
+
+        $inventoryItemClone = clone $product->getInventoryItem();
+        $productCopy->setInventoryItem($inventoryItemClone);
+        $inventoryItemClone->setProduct($productCopy);
 
         if ($productImage = $product->getImage()) {
             /** @var File $imageFileCopy */

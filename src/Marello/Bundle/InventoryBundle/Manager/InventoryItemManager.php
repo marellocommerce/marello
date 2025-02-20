@@ -36,11 +36,11 @@ class InventoryItemManager implements InventoryItemManagerInterface
             return null;
         }
 
-        if (!$this->hasInventoryItem($product)) {
+        if (!$this->hasInventoryItem($product) && !$product->getInventoryItem()) {
             $inventoryItem = new InventoryItem($product);
             $inventoryItem->setOrganization($product->getOrganization());
             $inventoryItem->setEnableBatchInventory(false);
-            
+
             return $inventoryItem;
         }
 
