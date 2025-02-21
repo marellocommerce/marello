@@ -6,8 +6,9 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 
-class CreateInventoryDeliveryPromise implements Migration
+class CreateInventoryDeliveryPromise implements Migration, OrderedMigrationInterface
 {
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -101,5 +102,13 @@ class CreateInventoryDeliveryPromise implements Migration
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOrder()
+    {
+        return 10;
     }
 }

@@ -6,8 +6,9 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 
-class UpdateInventoryItemTable implements Migration
+class UpdateInventoryItemTable implements Migration, OrderedMigrationInterface
 {
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -51,5 +52,13 @@ class UpdateInventoryItemTable implements Migration
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOrder()
+    {
+        return 15;
     }
 }
