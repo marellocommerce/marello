@@ -345,7 +345,7 @@ datagrids:
             bind_parameters:
                 order_id: orderId
         columns:
-            productSKU:
+            productSku:
                 label:              marello.product.sku.label
                 data_name:          productSku
                 type:               twig

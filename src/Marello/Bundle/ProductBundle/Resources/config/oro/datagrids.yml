@@ -257,7 +257,10 @@ datagrids:
         columns:
             sku:
                 label:              marello.product.sku.label
-                frontend_type:      string
+                data_name:          sku
+                type:               twig
+                frontend_type:      html
+                template:           '@MarelloProduct/Product/Datagrid/productSku.html.twig'
             name:
                 label:              marello.product.names.label
             inventoryQty:
