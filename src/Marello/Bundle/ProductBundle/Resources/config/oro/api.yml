@@ -112,7 +112,6 @@ api:
                         property_path: updatedAt
                         description: 'Filter variants by updated at'
             actions:
-                create: false
                 delete: false
                 delete_list: false
                 add_relationship: false
