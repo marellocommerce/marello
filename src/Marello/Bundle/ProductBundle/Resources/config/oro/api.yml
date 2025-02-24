@@ -65,6 +65,14 @@ api:
                     fields:
                         tags:
                             exclude: true
+                get_subresource:
+                    fields:
+                        tags:
+                            exclude: true
+                get_relationship:
+                    fields:
+                        tags:
+                            exclude: true
                 create:
                     fields:
                         prices:
@@ -95,7 +103,6 @@ api:
                         property_path: updatedAt
                         description: 'Filter variants by updated at'
             actions:
-                create: false
                 delete: false
                 delete_list: false
                 add_relationship: false
