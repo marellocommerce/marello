@@ -60,7 +60,8 @@ class DeliveryPromiseController extends AbstractController
     #[Route(
         path: '/update/{id}',
         name: 'marello_inventory_deliverypromise_update',
-        requirements: ['id' => '\d+'], methods: ['GET', 'POST']
+        requirements: ['id' => '\d+'],
+        methods: ['GET', 'POST']
     )]
     #[Template]
     #[Acl(id: 'marello_inventory_deliverypromise_update', type: 'entity', class: DeliveryPromise::class, permission: 'EDIT')]
@@ -85,7 +86,9 @@ class DeliveryPromiseController extends AbstractController
         return $this->container->get(UpdateHandlerFacade::class)->update(
             $deliveryPromise,
             $this->createForm(DeliveryPromiseType::class, $deliveryPromise),
-            $this->container->get(TranslatorInterface::class)->trans('marello.inventory.messages.success.deliverypromise.saved'),
+            $this->container
+                ->get(TranslatorInterface::class)
+                ->trans('marello.inventory.messages.success.deliverypromise.saved'),
             $request
         );
     }

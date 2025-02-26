@@ -2,17 +2,26 @@
 
 namespace Marello\Bundle\PurchaseOrderBundle\Twig;
 
-use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
+use Twig\Extension\AbstractExtension;
+
+use Symfony\Component\Intl\Currencies;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+
+use Marello\Bundle\SupplierBundle\Entity\Supplier;
+use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder;
 
 class PurchaseOrderExtension extends AbstractExtension
 {
     const NAME = 'marello_purchaseorder';
     
-    /** @var WorkflowManager */
+    /** @var WorkflowManager $workflowManager */
     protected $workflowManager;
+
+    /** @var DoctrineHelper $doctrineHelper */
+    protected $doctrineHelper;
 
     /**
      * ProductExtension constructor.
@@ -45,6 +54,14 @@ class PurchaseOrderExtension extends AbstractExtension
             new TwigFunction(
                 'marello_purchaseorder_can_edit',
                 [$this, 'canEdit']
+            ),
+            new TwigFunction(
+                'marello_get_supplier_currency',
+                [$this, 'getSupplierCurrency']
+            ),
+            new TwigFunction(
+                'marello_get_supplier_currency_symbol',
+                [$this, 'getSupplierCurrencySymbol']
             )
         ];
     }
@@ -64,5 +81,46 @@ class PurchaseOrderExtension extends AbstractExtension
         }
 
         return false;
+    }
+
+    /**
+     * @param int|null $supplierId
+     * @return string|null
+     */
+    public function getSupplierCurrency(?int $supplierId)
+    {
+        if (!$supplierId) {
+            return null;
+        }
+
+        $supplier = $this->doctrineHelper->getEntity(Supplier::class, $supplierId);
+        if (!$supplier) {
+            return null;
+        }
+
+        return $supplier->getCurrency();
+    }
+
+    /**
+     * @param int|null $supplierId
+     * @return string|null
+     */
+    public function getSupplierCurrencySymbol(?int $supplierId)
+    {
+        if (!$supplierId) {
+            return null;
+        }
+
+        $supplier = $this->doctrineHelper->getEntity(Supplier::class, $supplierId);
+        if (!$supplier) {
+            return null;
+        }
+
+        return Currencies::getSymbol($supplier->getCurrency());
+    }
+
+    public function setDoctrineHelper(DoctrineHelper $doctrineHelper)
+    {
+        $this->doctrineHelper = $doctrineHelper;
     }
 }

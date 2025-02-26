@@ -18,7 +18,9 @@ define(function(require) {
          * @property {Object}
          */
         options: {
-            route: 'marello_purchase_order_supplier_product_price'
+            route: 'marello_purchase_order_supplier_product_price',
+            currency: null,
+            currencySymbol: null
         },
 
         /**
@@ -33,17 +35,12 @@ define(function(require) {
             this.amountEl = this.$el.find('td.purchase-order-line-item-ordered-amount').find('input');
             this.amountEl.change(_.bind(this.updateRowTotal, this));
             this.priceEl = this.$el.find('td.purchase-order-line-item-purchase-price').find('input[name*="value"]');
-            // var currencyLabel = this.priceEl.closest('.control-group').find('label').text();
-            // console.log(currencyLabel);
-            // var start_pos = currencyLabel.indexOf('(') + 1;
-            // var end_pos = currencyLabel.indexOf(')',start_pos);
-            // this.currencySymbol = currencyLabel.substring(start_pos,end_pos);
             this.priceEl.change(_.bind(this.updateRowTotal, this));
 
             this.updatePurchasePrice();
             PurchaseOrderItemView.__super__.initialize.apply(this, arguments);
         },
-        
+
         updatePurchasePrice: function() {
             if (this.supplierEl.val() !== undefined && this.productEl.val() !== undefined && this.supplierEl.val() !== '' && this.productEl.val() !== '') {
                 var self = this;
@@ -53,6 +50,7 @@ define(function(require) {
                     success: function (json) {
                         if (json['purchasePrice'] !== null) {
                             self.priceEl.val(json['purchasePrice'].toFixed(2)).trigger('change');
+                            self.priceEl.closest('.fields-row').find('label').html(self.options.currencySymbol);
                         } else {
                             self.priceEl.val('').trigger('change');
                         }
@@ -66,13 +64,11 @@ define(function(require) {
         updateRowTotal: function() {
             var rowTotal = parseFloat(this.amountEl.val()) * parseFloat(this.priceEl.val());
             if (!isNaN(rowTotal)) {
-                console.log(this.currencySymbol);
-                console.log(rowTotal);
-                this.$el.find('td.purchase-order-line-item-row-total').html(this.currencySymbol + rowTotal.toFixed(2));
+                this.$el.find('td.purchase-order-line-item-row-total').html(this.options.currencySymbol + rowTotal.toFixed(2));
             } else {
                 this.$el.find('td.purchase-order-line-item-row-total').html('');
             }
-            mediator.trigger('po:row:total:changed', {'currency': this.currencySymbol});
+            mediator.trigger('po:row:total:changed', {'currency': this.options.currencySymbol});
         },
 
         /**
@@ -81,7 +77,7 @@ define(function(require) {
         removeRow: function() {
             this.$el.trigger('content:remove');
             this.remove();
-            mediator.trigger('po:row:total:changed', {'currency': this.currencySymbol});
+            mediator.trigger('po:row:total:changed', {'currency': this.options.currencySymbol});
         }
 
     });

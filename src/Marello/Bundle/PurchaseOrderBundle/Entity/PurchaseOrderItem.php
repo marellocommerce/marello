@@ -156,7 +156,7 @@ class PurchaseOrderItem implements
      */
     #[ORM\Column(name: 'requested_delivery_date', type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
-    protected $requestedconfirmedDeliveryDate;
+    protected $requestedDeliveryDate;
 
     /**
      * @return string
@@ -448,12 +448,12 @@ class PurchaseOrderItem implements
     }
 
     /**
-     * @param \DateTime|null $requestedconfirmedDeliveryDate
+     * @param \DateTime|null $requestedDeliveryDate
      * @return $this
      */
-    public function setRequestedDeliveryDate(\DateTime $requestedconfirmedDeliveryDate = null): self
+    public function setRequestedDeliveryDate(\DateTime $requestedDeliveryDate = null): self
     {
-        $this->requestedconfirmedDeliveryDate = $requestedconfirmedDeliveryDate;
+        $this->requestedDeliveryDate = $requestedDeliveryDate;
 
         return $this;
     }
@@ -463,7 +463,7 @@ class PurchaseOrderItem implements
      */
     public function getRequestedDeliveryDate(): ?\DateTime
     {
-        return $this->requestedconfirmedDeliveryDate;
+        return $this->requestedDeliveryDate;
     }
 
     #[ORM\PreUpdate]

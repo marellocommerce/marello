@@ -43,6 +43,8 @@ services:
     Marello\Bundle\PurchaseOrderBundle\Twig\PurchaseOrderExtension:
         arguments:
             - '@oro_workflow.manager'
+        calls:
+            - [setDoctrineHelper, ['@oro_entity.doctrine_helper']]
         tags:
             - { name: twig.extension }
 

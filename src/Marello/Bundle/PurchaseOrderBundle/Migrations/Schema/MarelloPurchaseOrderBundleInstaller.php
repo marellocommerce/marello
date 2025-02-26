@@ -25,7 +25,7 @@ class MarelloPurchaseOrderBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_3_6';
+        return 'v1_3_6_1';
     }
 
     /**

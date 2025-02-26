@@ -53,11 +53,7 @@
     </td>
     <td class="purchase-order-line-item-purchase-price">
         <div class="fields-row">
-            <div class="control-label wrap">
-                <label for="marello_purchase_order_create_step_two_items_<%= _.escape(id) %>_purchasePrice_value-uid-5ac534cd1729d" class="required">
-                    Price (<%= currency %>)<em>*</em>
-                </label>
-            </div>
+            <label></label>
             {{ form_widget(form.purchasePrice.value) }}
         </div>
         {{ form_errors(form.purchasePrice) }}
@@ -65,35 +61,6 @@
     <td class="purchase-order-line-item-row-total">
     </td>
 {% endblock %}
-
-{#{% block marello_purchase_order_item_advice_widget %}#}
-{#    <td class="purchase-order-line-item-product">#}
-{#        <div class="fields-row">#}
-{#            {{ form_widget(form.product) }}#}
-{#        </div>#}
-{#        {{ form_errors(form.product) }}#}
-{#    </td>#}
-{#    <td class="purchase-order-line-item-ordered-amount">#}
-{#        <div class="fields-row">#}
-{#            {{ form_widget(form.orderedAmount) }}#}
-{#        </div>#}
-{#        {{ form_errors(form.orderedAmount) }}#}
-{#    </td>#}
-{#    <td class="purchase-order-line-item-requested-delivery-date">#}
-{#        <div class="fields-row">#}
-{#            {{ form_widget(form.requestedDeliveryDate) }}#}
-{#        </div>#}
-{#        {{ form_errors(form.requestedDeliveryDate) }}#}
-{#    </td>#}
-{#    <td class="purchase-order-line-item-purchase-price">#}
-{#        <div class="fields-row">#}
-{#            {{ form_widget(form.purchasePrice.value) }}#}
-{#        </div>#}
-{#        {{ form_errors(form.purchasePrice) }}#}
-{#    </td>#}
-{#    <td class="purchase-order-line-item-row-total">#}
-{#    </td>#}
-{#{% endblock %}#}
 
 {% macro marello_purchase_order_item_receive_collection_item_prototype(widget, attributes) %}
     {% if 'collection' in widget.vars.block_prefixes %}
@@ -134,10 +101,15 @@
         {% set allow_delete = true %}
     {% endif %}
 
+    {% set component_options = component_options|default({})|merge({
+        view: 'marellopurchaseorder/js/app/views/purchaseorder-item-view',
+        currency: marello_get_supplier_currency(widget.parent.vars.form.supplier.vars.value),
+        currencySymbol: marello_get_supplier_currency_symbol(widget.parent.vars.form.supplier.vars.value)
+    }) %}
     <tr data-content="{{ name }}"
         class="purchase-order-line-item display-values marello-line-item"
         data-page-component-module="oroui/js/app/components/view-component"
-        data-page-component-options="{{ {view: 'marellopurchaseorder/js/app/views/purchaseorder-item-view'}|json_encode }}"
+        data-page-component-options="{{ component_options|json_encode }}"
         data-layout="separate">
         {{ form_widget(form) }}
 
@@ -269,47 +241,4 @@
             </div>
         </div>
     {% endapply %}
-{% endblock %}
-
-{% block oro_multiple_entity_widget %}
-    {{ form_widget(form) }}
-
-    <div id="{{ id }}-container"></div>
-
-    <script type="text/javascript">
-            loadModules([
-                    'jquery',
-                    'marellopurchaseorder/js/multiple-entity',
-                    'marellopurchaseorder/js/multiple-entity/collection'
-                ],
-                function($, MultipleEntity, MultipleEntityCollection) {
-                    {% set selectionUrl = null %}
-                    {% set originalFieldId = attr['data-ftid'] %}
-                    {% if form.vars.grid_url is defined and form.vars.grid_url %}
-                        {% set selectionUrl = form.vars.grid_url %}
-                    {% elseif form.vars.selection_url is defined and form.vars.selection_url %}
-                        {% set selectionUrl = form.vars.selection_url %}
-                    {% endif %}
-                    {% set selectionRouteName = form.vars.selection_route|default(null) %}
-                    {% set selectionRouteParameters = form.vars.selection_route_parameters|default({}) %}
-
-                    var widget = new MultipleEntity({
-                        el: '#{{ id }}-container',
-                        addedElement: 'input[data-ftid="{{ originalFieldId }}_added"]',
-                        removedElement: 'input[data-ftid="{{ originalFieldId }}_removed"]',
-                        name: {{ id|json_encode|raw }},
-                        defaultElement: {{ form.vars.default_element|json_encode|raw }},
-                        selectionUrl: {{ selectionUrl|json_encode|raw }},
-                        selectionRouteName: {{ selectionRouteName|json_encode|raw }},
-                        selectionRouteParams: {{ selectionRouteParameters|json_encode(constant('JSON_FORCE_OBJECT'))|raw }},
-                        allowAction: {{ form.vars.allow_action|json_encode|raw }},
-                        collection: new MultipleEntityCollection(),
-                        selectorWindowTitle: {{ form.vars.selector_window_title|trans|json_encode|raw }}
-                    });
-
-                    {% if form.vars.extra_config is defined and form.vars.extra_config %}
-                        {{ block('oro_multiple_entity_js_' ~ form.vars.extra_config) }}
-                    {% endif %}
-                });
-    </script>
 {% endblock %}

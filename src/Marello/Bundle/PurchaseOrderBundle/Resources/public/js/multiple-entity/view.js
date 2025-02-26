@@ -86,6 +86,7 @@ define(function(require) {
 
         render: function() {
             let data = this.model.toJSON();
+            console.log(data);
             data.purchasePrice = parseFloat(data.purchasePrice).toFixed(2);
             this.$el.append(this.template(data));
             this.$el.find('a.entity-info').click(_.bind(this.viewDetails, this));

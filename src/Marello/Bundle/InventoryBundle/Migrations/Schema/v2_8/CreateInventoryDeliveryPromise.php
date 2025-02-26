@@ -16,6 +16,7 @@ class CreateInventoryDeliveryPromise implements Migration, OrderedMigrationInter
         $this->createMarelloInventoryDeliveryPromiseLabel($schema);
         $this->createMarelloInventoryDeliveryPromiseToolTip($schema);
 
+        $this->addMarelloInventoryDeliveryPromiseForeignKeys($schema);
         $this->addMarelloInventoryDeliveryPromiseLabelForeignKeys($schema);
         $this->addMarelloInventoryDeliveryPromiseTooltipForeignKeys($schema);
     }
@@ -63,6 +64,19 @@ class CreateInventoryDeliveryPromise implements Migration, OrderedMigrationInter
         $table->addUniqueIndex(['localized_value_id']);
     }
 
+    /**
+     * @param Schema $schema
+     */
+    protected function addMarelloInventoryDeliveryPromiseForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_inventory_delivery_promise');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
 
     /**
      * @param Schema $schema

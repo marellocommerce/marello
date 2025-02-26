@@ -9,13 +9,13 @@ use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
-use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\EntityBundle\EntityProperty\DenormalizedPropertyAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
+
+use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
 
 /**
   * @method LocalizedFallbackValue getDefaultLabel()
@@ -41,10 +41,9 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
 class DeliveryPromise implements
     OrganizationAwareInterface,
     DenormalizedPropertyAwareInterface,
-    DatesAwareInterface,
     ExtendEntityInterface
 {
-    use DatesAwareTrait;
+    use EntityCreatedUpdatedAtTrait;
     use AuditableOrganizationAwareTrait;
     use ExtendEntityTrait;
 
@@ -60,7 +59,7 @@ class DeliveryPromise implements
     /**
      * @var string|null
      */
-    #[ORM\Column(name: 'code', type: Types::STRING, nullable: false)]
+    #[ORM\Column(name: 'code', type: Types::STRING, nullable: false, unique: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false]])]
     protected ?string $code;
 

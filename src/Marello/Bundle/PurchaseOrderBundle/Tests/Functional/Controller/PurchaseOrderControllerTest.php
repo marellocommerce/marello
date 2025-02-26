@@ -347,8 +347,8 @@ class PurchaseOrderControllerTest extends WebTestCase
         $form = $crawler->selectButton('Save and Close')->form();
         $formValues = $form->getPhpValues();
         $formValues['marello_purchase_order_create_step_two']['supplier'] = $supplier->getId();
-        $tomorrow = new \DateTime('yesterday');
-        $formValues['marello_purchase_order_create_step_two']['dueDate'] = $tomorrow->format('Y-m-d');
+        $yesterday = new \DateTime('yesterday');
+        $formValues['marello_purchase_order_create_step_two']['dueDate'] = $yesterday->format('Y-m-d');
         $formValues['marello_purchase_order_create_step_two']['warehouse'] = $this->defaultWarehouse->getId();
         $formValues['marello_purchase_order_create_step_two']['items'] = array();
         $product1 = $this->getReference(LoadProductData::PRODUCT_1_REF);

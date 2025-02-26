@@ -67,6 +67,7 @@ marello:
             candidates.label:                           Purchase Order Item Candidates
             confirmed_delivery_date.label:              Confirmed Delivery Date
             requested_delivery_date.label:              Requested Delivery Date
+
         navigation:
             purchasing.label:                           Purchasing
 
