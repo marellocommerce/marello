@@ -15,8 +15,9 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
+use Marello\Bundle\TicketBundle\Entity\Repository\TicketRepository;
 
-#[ORM\Entity(), ORM\HasLifecycleCallbacks]
+#[ORM\Entity(repositoryClass: TicketRepository::class), ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_ticket_ticket')]
 #[Oro\Config(
     routeName: 'marello_ticket_ticket_index',
