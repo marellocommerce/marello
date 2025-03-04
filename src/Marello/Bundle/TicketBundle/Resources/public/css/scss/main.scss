@@ -1,0 +1,27 @@
+.table thead th > span.marello-notification-message-type,
+span.marello-assigned-ticket-status {
+  border-radius: 12px;
+  display: inline-flex;
+  line-height: 1.0;
+  padding: 4px 12px;
+  text-transform: none;
+
+  &.ticket-status {
+    background-color: #dafbb9;
+    color: #465f2d;
+  }
+
+  &.ticket-subject {
+    margin-bottom: 3px;
+  }
+}
+
+.marello-assigned-ticket-activity-body {
+  padding: 5px 10px;
+}
+
+.marelo-notificationmessage-group-config-table {
+  .selector {
+    width: 150px;
+  }
+}

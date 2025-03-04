@@ -12,3 +12,12 @@ services:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: doctrine.event_listener, event: onFlush }
+
+    Marello\Bundle\TicketBundle\Entity\Repository\TicketRepository:
+        parent: oro_entity.abstract_repository
+        arguments:
+            - 'Marello\Bundle\TicketBundle\Entity\Ticket'
+        calls:
+            - [ 'setAclHelper', [ '@oro_security.acl_helper' ] ]
+        tags:
+            - { name: doctrine.repository_service }

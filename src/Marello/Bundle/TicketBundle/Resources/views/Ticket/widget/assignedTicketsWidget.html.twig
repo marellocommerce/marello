@@ -1,0 +1,16 @@
+{% if tickets|length > 0 %}
+    {% for ticket in tickets %}
+        <div class="assigned-tickets-widget-row {{ loop.first ? 'first' : '' }} {{ loop.last ? 'last' : '' }}"
+             data-url="{{ path("marello_ticket_view", {'id':ticket.id}) }}">
+            <span class="marello-assigned-ticket-status ticket-status">
+                {{ ticket.ticketStatus }}
+            </span>
+            {% set label = null %}
+            <span class="ticket-title">{{ label ? ticket.subject ~ ' ' ~ label : ticket.subject}}</span>
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="no-tickets">
+        {{ 'marello.ticket.assigned_tickets_widget.no_tickets'|trans }}
+    </p>
+{% endif %}

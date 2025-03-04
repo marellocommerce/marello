@@ -37,6 +37,18 @@ marello:
         resolution.label: Resolution
         saved:
             message: Ticket saved
+    assigned_tickets_widget:
+        title: Tickets
+        no_tickets: No Assigned Tickets
+        description: Customer support tickets assigned to current user
+        settings: Assigned Tickets widget settings
+        status_types:
+            label: Status types
+            open: Open
+            in_progress: In Progress
+            resolved: Resolved
+            closed: Closed
+        number_of_tickets: Number of Tickets            
     sections:
         general: General information
         ticket: Ticket

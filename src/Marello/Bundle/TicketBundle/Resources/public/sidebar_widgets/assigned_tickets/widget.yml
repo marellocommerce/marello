@@ -1,0 +1,13 @@
+title: marello.ticket.assigned_tickets_widget.title
+iconClass: 'fa-comments-o'
+module: 'marello/sidebar/widget/assigned_tickets_widget'
+placement: 'both'
+cssClass: 'sidebar-widget-assigned-tickets'
+description: marello.ticket.assigned_tickets_widget.description
+settings:
+    perPage: 5
+    statuses:
+        - open
+        - in_progress
+        - resolved
+        - closed

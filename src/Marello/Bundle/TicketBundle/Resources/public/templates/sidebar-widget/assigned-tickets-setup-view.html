@@ -1,0 +1,41 @@
+<fieldset>
+    <div class="control-group">
+        <div class="control-label wrap">
+            <label class="required"><%- _.__("marello.ticket.assigned_tickets_widget.number_of_tickets") %><em>*</em></label>
+        </div>
+        <div class="controls"><input type="text" name="perPage" value="<%- settings.perPage %>"/></div>
+    </div>
+    <div class="control-group">
+        <div class="control-label wrap">
+            <label class="required"><%- _.__("marello.ticket.assigned_tickets_widget.statuses.label") %><em>*</em></label>
+        </div>
+        <div class="controls">
+            <div data-name="field__groups" class="horizontal horizontal choice-widget-expanded">
+                <div class="choice-widget-expanded__item">
+                    <span class="checkbox-view">
+                        <input id="assigned-tickets-status-types-settings-open" type="checkbox" name="statuses[open]" value="1" <%- settings.statuses.open ? 'checked' : '' %> class="checkbox-view__input input-widget">
+                    </span>
+                    <label for="assigned-tickets-status-types-settings-open"><%- _.__("marello.ticket.assigned_tickets_widget.statuses.open") %><em>&nbsp;</em></label>
+                </div>
+                <div class="choice-widget-expanded__item">
+                    <span class="checkbox-view">
+                        <input id="assigned-tickets-status-types-settings-in_progress" type="checkbox" name="statuses[in_progress]" value="1" <%- settings.statuses.in_progress ? 'checked' : '' %> class="checkbox-view__input input-widget">
+                    </span>
+                    <label for="assigned-tickets-status-types-settings-in_progress"><%- _.__("marello.ticket.assigned_tickets_widget.statuses.in_progress") %><em>&nbsp;</em></label>
+                </div>
+                <div class="choice-widget-expanded__item">
+                    <span class="checkbox-view">
+                        <input id="assigned-tickets-status-types-settings-resolved" type="checkbox" name="statuses[resolved]" value="1" <%- settings.statuses.resolved ? 'checked' : '' %> class="checkbox-view__input input-widget">
+                    </span>
+                    <label for="assigned-tickets-status-types-settings-resolved"><%- _.__("marello.ticket.assigned_tickets_widget.statuses.resolved") %><em>&nbsp;</em></label>
+                </div>
+                <div class="choice-widget-expanded__item">
+                    <span class="checkbox-view">
+                        <input id="assigned-tickets-status-types-settings-closed" type="checkbox" name="statuses[closed]" value="1" <%- settings.statuses.closed ? 'checked' : '' %> class="checkbox-view__input input-widget">
+                    </span>
+                    <label for="assigned-tickets-status-types-settings-closed"><%- _.__("marello.ticket.assigned_tickets_widget.statuses.closed") %><em>&nbsp;</em></label>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
