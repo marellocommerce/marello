@@ -103,8 +103,8 @@
 
     {% set component_options = component_options|default({})|merge({
         view: 'marellopurchaseorder/js/app/views/purchaseorder-item-view',
-        currency: marello_get_supplier_currency(widget.parent.vars.form.supplier.vars.value),
-        currencySymbol: marello_get_supplier_currency_symbol(widget.parent.vars.form.supplier.vars.value)
+        currency: marello_get_supplier_currency(widget.parent.vars.form.supplier.vars.value|number_format),
+        currencySymbol: marello_get_supplier_currency_symbol(widget.parent.vars.form.supplier.vars.value|number_format)
     }) %}
     <tr data-content="{{ name }}"
         class="purchase-order-line-item display-values marello-line-item"

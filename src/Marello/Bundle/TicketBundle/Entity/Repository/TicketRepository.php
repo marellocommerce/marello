@@ -3,10 +3,10 @@
 namespace Marello\Bundle\TicketBundle\Entity\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use Marello\Bundle\TicketBundle\Entity\Ticket;
+
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 class TicketRepository extends ServiceEntityRepository
 {
     /** @var AclHelper $aclHelper */
