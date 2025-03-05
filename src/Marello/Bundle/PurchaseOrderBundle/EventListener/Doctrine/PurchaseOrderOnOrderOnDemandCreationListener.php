@@ -127,48 +127,50 @@ class PurchaseOrderOnOrderOnDemandCreationListener
 
             $product = $allocationItem->getProduct();
             $supplier = $product->getPreferredSupplier();
-            $supplierCode = $supplier->getCode();
-            $allocationItemsBySupplier[$supplierCode][] = $allocationItem->getId();
+            if ($supplier) {
+                $supplierCode = $supplier->getCode();
+                $allocationItemsBySupplier[$supplierCode][] = $allocationItem->getId();
 
-            if (!isset($poBySupplier[$supplierCode])) {
-                $po = $this->findApplicablePurchaseOrder($entityManager, $supplier, $organization, $warehouse);
-                // Create Purchase Order if not exist
-                if (!$po) {
-                    $po = new PurchaseOrder();
-                    $po
-                        ->setSupplier($supplier)
-                        ->setOrganization($organization)
-                        ->setWarehouse($warehouse);
+                if (!isset($poBySupplier[$supplierCode])) {
+                    $po = $this->findApplicablePurchaseOrder($entityManager, $supplier, $organization, $warehouse);
+                    // Create Purchase Order if not exist
+                    if (!$po) {
+                        $po = new PurchaseOrder();
+                        $po
+                            ->setSupplier($supplier)
+                            ->setOrganization($organization)
+                            ->setWarehouse($warehouse);
 
-                    $entityManager->persist($po);
+                        $entityManager->persist($po);
+                    }
+
+                    $poBySupplier[$supplierCode] = $po;
                 }
 
-                $poBySupplier[$supplierCode] = $po;
+                /** @var PurchaseOrder $po */
+                $po = $poBySupplier[$supplierCode];
+                $price = $this->getPurchasePrice($product, $allocation->getOrder());
+                $poItem = new PurchaseOrderItem();
+                $poItem
+                    ->setProduct($product)
+                    ->setOrderedAmount($allocationItem->getQuantity())
+                    ->setRowTotal($price->getValue() * $allocationItem->getQuantity())
+                    ->setPurchasePrice($price)
+                    ->setData([
+                        self::ORDER_ON_DEMAND =>
+                            [
+                                'order' => $allocation->getOrder()->getId(),
+                                'orderItem' => $allocationItem->getOrderItem()->getId(),
+                                'allocation' => $allocation->getId(),
+                                'allocationItem' => $allocationItem->getId()
+                            ]
+                    ]);
+
+                $po->addItem($poItem);
+                $entityManager->persist($poItem);
+
+                $this->createInventoryBatch($allocationItem, $warehouse, $entityManager);
             }
-
-            /** @var PurchaseOrder $po */
-            $po = $poBySupplier[$supplierCode];
-            $price = $this->getPurchasePrice($product, $allocation->getOrder());
-            $poItem = new PurchaseOrderItem();
-            $poItem
-                ->setProduct($product)
-                ->setOrderedAmount($allocationItem->getQuantity())
-                ->setRowTotal($price->getValue() * $allocationItem->getQuantity())
-                ->setPurchasePrice($price)
-                ->setData([
-                    self::ORDER_ON_DEMAND =>
-                        [
-                            'order' => $allocation->getOrder()->getId(),
-                            'orderItem' => $allocationItem->getOrderItem()->getId(),
-                            'allocation' => $allocation->getId(),
-                            'allocationItem' => $allocationItem->getId()
-                        ]
-                ]);
-
-            $po->addItem($poItem);
-            $entityManager->persist($poItem);
-
-            $this->createInventoryBatch($allocationItem, $warehouse, $entityManager);
         }
 
         return [$poBySupplier, $allocationItemsBySupplier];
