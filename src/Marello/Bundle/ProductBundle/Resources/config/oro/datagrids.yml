@@ -17,11 +17,13 @@ datagrids:
                     - p.categoriesCodes
                     - p.createdAt
                     - p.updatedAt
+                    - v.variantCode
                 from:
                     - { table: Marello\Bundle\ProductBundle\Entity\Product, alias: p }
                 join:
                     left:
                         - { join: p.attributeFamily, alias: pf }
+                        - { join: p.variant, alias: v }
         columns:
             sku:
                 label:              marello.product.sku.label
@@ -65,6 +67,12 @@ datagrids:
             weight:
                 label:              marello.product.weight.label
                 frontend_type:      number
+                renderable:         false
+                inline_editing:
+                    enable: false
+            variantCode:
+                label:              marello.product.variant.variant_code.label
+                frontend_type:      string
                 renderable:         false
                 inline_editing:
                     enable: false
@@ -125,7 +133,7 @@ datagrids:
                 manufacturingCode:
                     data_name:          p.manufacturingCode
                     type:               string
-                    enabled:            false
+                    renderable:         false
                 channels:
                     data_name:          p.channelsCodes
                     type:               choice_like
@@ -133,7 +141,7 @@ datagrids:
                         field_options:
                             multiple:   true
                             choices:    '@marello_sales.provider.basic_sales_channels_choices->getChannels()'
-                    enabled:            false
+                    renderable:         false
                 categories:
                     data_name:          p.categoriesCodes
                     type:               choice_like
@@ -141,13 +149,17 @@ datagrids:
                         field_options:
                             multiple:   true
                             choices:    '@marello_catalog.provider.categories_choices->getCategories()'
-                    enabled:            false
+                    renderable:         false
                 weight:
                     data_name:          p.weight
                     type:               number
                     options:
                         data_type:      'Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL'
-                    enabled:            false
+                    renderable:         false
+                variantCode:
+                    data_name:          v.variantCode
+                    type:               string
+                    renderable:         false
         actions:
             view:
                 type:           navigate
@@ -373,7 +385,7 @@ datagrids:
                 manufacturingCode:
                     data_name:          p.manufacturingCode
                     type:               string
-                    enabled:            false
+                    renderable:         false
         sorters:
             columns:
                 name:           { data_name: name }
@@ -802,7 +814,7 @@ datagrids:
                         field_options:
                             multiple:   true
                             choices:    '@marello_sales.provider.basic_sales_channels_choices->getChannels()'
-                    enabled:            false
+                    renderable:         false
         options:
             entityHint: product
             entity_pagination: true
