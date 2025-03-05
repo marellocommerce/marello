@@ -187,6 +187,7 @@ class ReceivePurchaseOrderAction extends AbstractAction
     {
         $data = $item->getData();
         $orderOnDemandKey = PurchaseOrderOnOrderOnDemandCreationListener::ORDER_ON_DEMAND;
+        $context = null;
         if (isset($data[$orderOnDemandKey])) {
             $repo = $this->doctrineHelper->getEntityRepositoryForClass(InventoryBatch::class);
             /** @var InventoryBatch $batch */
@@ -213,10 +214,12 @@ class ReceivePurchaseOrderAction extends AbstractAction
             );
         }
 
-        $this->eventDispatcher->dispatch(
-            new InventoryUpdateEvent($context),
-            InventoryUpdateEvent::NAME
-        );
+        if ($context) {
+            $this->eventDispatcher->dispatch(
+                new InventoryUpdateEvent($context),
+                InventoryUpdateEvent::NAME
+            );
+        }
     }
 
     /**

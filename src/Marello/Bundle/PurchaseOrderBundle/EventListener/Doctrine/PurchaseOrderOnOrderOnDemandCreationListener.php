@@ -112,11 +112,7 @@ class PurchaseOrderOnOrderOnDemandCreationListener
                 'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.message',
                 'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.solution',
             );
-            $this->eventDispatcher
-                ->dispatch(
-                    new CreateNotificationMessageEvent($context),
-                    CreateNotificationMessageEvent::NAME
-                );
+            $this->dispatchEvent($context);
             throw new \LogicException('To create Purchase Order you need to specify an On Demand Location warehouse');
         }
 
@@ -290,16 +286,14 @@ class PurchaseOrderOnOrderOnDemandCreationListener
                 'marello.notificationmessage.purchaseorder.no_inventory_levels.message',
                 'marello.notificationmessage.purchaseorder.no_inventory_levels.solution',
             );
-            $this->eventDispatcher
-                ->dispatch(
-                    new CreateNotificationMessageEvent($context),
-                    CreateNotificationMessageEvent::NAME
-                );
+            $this->dispatchEvent($context);
 
             throw new \LogicException(
                 sprintf('No inventory levels found for Product sku: %s', $allocationItem->getProductSku())
             );
         }
+
+        $inventoryBatch = null;
         foreach ($inventoryLevels as $inventoryLevel) {
             if ($inventoryLevel->getWarehouse() !== $warehouse) {
                 continue;
@@ -310,6 +304,17 @@ class PurchaseOrderOnOrderOnDemandCreationListener
             $inventoryBatch->setQuantity(0);
 
             $entityManager->persist($inventoryBatch);
+        }
+
+        if (!$inventoryBatch) {
+            $context = $this->createNotificationContext(
+                $warehouse->getOwner(),
+                'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.title',
+                'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.message',
+                'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.solution',
+            );
+
+            $this->dispatchEvent($context);
         }
     }
 
@@ -360,5 +365,18 @@ class PurchaseOrderOnOrderOnDemandCreationListener
             false,
             true
         );
+    }
+
+    /**
+     * @param NotificationMessageContext $context
+     * @return void
+     */
+    protected function dispatchEvent(NotificationMessageContext $context)
+    {
+        $this->eventDispatcher
+            ->dispatch(
+                new CreateNotificationMessageEvent($context),
+                CreateNotificationMessageEvent::NAME
+            );
     }
 }
