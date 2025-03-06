@@ -52,6 +52,14 @@ class UpdateInventoryItemTable implements Migration, OrderedMigrationInterface
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
+
+        $table = $schema->getTable('marello_product_product');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_inventory_item'),
+            ['inventory_item_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
     }
 
     /**
