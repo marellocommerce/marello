@@ -11,6 +11,9 @@ Marello\Bundle\ProductBundle\Entity\Product:
             - NotBlank: { message: 'marello.product.messages.error.status' }
         sku:
             - NotBlank: ~
+            - Regex:
+                  pattern: '/^[-_a-zA-Z0-9]*$/'
+                  message: 'This value should contain only latin letters, numbers and symbols "-" or "_".'
         prices:
             - NotBlank: ~
         suppliers:
