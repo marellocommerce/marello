@@ -2,11 +2,11 @@
 
 namespace Marello\Bundle\ProductBundle\Form\Type;
 
-use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\ProductBundle\Provider\ProductTypesProvider;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+use Marello\Bundle\ProductBundle\Provider\ProductTypesProvider;
 
 class ProductTypeSelectType extends AbstractType
 {
@@ -31,8 +31,7 @@ class ProductTypeSelectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'choices' => $this->getChoices(),
-            'preferred_choices' => [Product::DEFAULT_PRODUCT_TYPE]
+            'choices' => $this->getChoices()
         ]);
     }
 
