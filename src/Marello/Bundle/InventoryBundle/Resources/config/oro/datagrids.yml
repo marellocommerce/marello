@@ -695,6 +695,7 @@ datagrids:
                     - { table: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem, alias: poi }
                 join:
                     inner:
+                        - { join: poi.order, alias: po }
                         - { join: po.warehouse, alias: w }
                 where:
                     and:
