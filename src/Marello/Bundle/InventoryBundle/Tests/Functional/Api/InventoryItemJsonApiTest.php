@@ -5,9 +5,7 @@ namespace Marello\Bundle\InventoryBundle\Tests\Functional\Api;
 use Symfony\Component\HttpFoundation\Response;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
-use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\CoreBundle\Tests\Functional\RestJsonApiTestCase;
-use Marello\Bundle\SalesBundle\Tests\Functional\DataFixtures\LoadSalesData;
 use Marello\Bundle\ProductBundle\Tests\Functional\DataFixtures\LoadProductData;
 use Marello\Bundle\InventoryBundle\Tests\Functional\DataFixtures\LoadInventoryData;
 

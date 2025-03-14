@@ -62,7 +62,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
                     'ref' => 'supplier1',
                     'qou' => 1,
                     'cost' => 2.50,
-                    'canDropship' => true,
+                    'canDropship' => false,
                     'priority' => 1
                 ]
             ]
@@ -81,7 +81,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
                     'ref' => 'supplier1',
                     'qou' => 1,
                     'cost' => 25.00,
-                    'canDropship' => true,
+                    'canDropship' => false,
                     'priority' => 2
                 ],
                 [
@@ -107,14 +107,14 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
                     'ref' => 'supplier1',
                     'qou' => 10,
                     'cost' => 450.00,
-                    'canDropship' => true,
+                    'canDropship' => false,
                     'priority' => 1
                 ],
                 [
                     'ref' => 'supplier1',
                     'qou' => 50,
                     'cost' => 2000.00,
-                    'canDropship' => true,
+                    'canDropship' => false,
                     'priority' => 1
                 ]
             ]
@@ -178,7 +178,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
                     'priority' => 1
                 ]
             ]
-        ],
+        ]
     ];
 
     public function getDependencies()
@@ -349,9 +349,8 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
             /** @var Supplier $supplier */
             $supplier = $this->getReference($supplierData['ref']);
             $qoU = $supplierData['qou'];
-            $priority = isset($supplierData['priority']) ? $supplierData['priority'] : $supplier->getPriority();
-            $canDropship = isset($supplierData['canDropship']) ?
-                $supplierData['canDropship'] : $supplier->getCanDropship();
+            $priority = $supplierData['priority'] ?? $supplier->getPriority();
+            $canDropship = $supplierData['canDropship'] ?? $supplier->getCanDropship();
 
             $cost = $supplierData['cost'];
 

@@ -6,8 +6,6 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
-use Marello\Bundle\InventoryBundle\Model\InventoryUpdateContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -112,7 +110,6 @@ class LoadInventoryData extends AbstractFixture implements DependentFixtureInter
             }
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $data = array_combine($headers, array_values($data));
-
                 $this->createProductInventory($data);
             }
             fclose($handle);
@@ -148,7 +145,6 @@ class LoadInventoryData extends AbstractFixture implements DependentFixtureInter
             $inventoryItem->setReplenishment($replenishment);
             $inventoryItem->setPurchaseInventory($data['purchaseInventory']);
             $inventoryItem->setDesiredInventory($data['desiredInventory']);
-
             $this->handleInventoryUpdate($product, $inventoryItem, $data['inventory_qty'], 0, null);
             $this->balanceInventory($product, $data['inventory_qty']);
             $this->setReference(

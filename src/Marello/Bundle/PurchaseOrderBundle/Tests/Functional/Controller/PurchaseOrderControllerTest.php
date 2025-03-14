@@ -122,8 +122,6 @@ class PurchaseOrderControllerTest extends WebTestCase
                 'value'     => 10
             ]
         );
-        $formValues['marello_purchase_order_create_step_two']['itemsAdvice']['added']
-            = ''. $product1->getid() . ','. $product2->getId();
 
         $this->client->followRedirects(true);
         $crawler = $this->client->request($form->getMethod(), $form->getUri(), $formValues);
@@ -229,7 +227,6 @@ class PurchaseOrderControllerTest extends WebTestCase
         $formValues['marello_purchase_order_create_step_two']['dueDate'] = $tomorrow->format('Y-m-d');
         $formValues['marello_purchase_order_create_step_two']['warehouse'] = $this->defaultWarehouse->getId();
         $formValues['marello_purchase_order_create_step_two']['items'] = array();
-        $product1 = $this->getReference(LoadProductData::PRODUCT_1_REF);
         $product2 = $this->getReference(LoadProductData::PRODUCT_2_REF);
         $formValues['marello_purchase_order_create_step_two']['items'][] = array(
             'product' => null,
@@ -247,8 +244,6 @@ class PurchaseOrderControllerTest extends WebTestCase
                 'value'     => 10
             ]
         );
-        $formValues['marello_purchase_order_create_step_two']['itemsAdvice']['added']
-            = ''. $product1->getid() . ','. $product2->getId();
 
         $this->client->followRedirects(true);
         $crawler = $this->client->request($form->getMethod(), $form->getUri(), $formValues);
@@ -308,9 +303,6 @@ class PurchaseOrderControllerTest extends WebTestCase
                 'value'     => 10
             ]
         );
-        $formValues['marello_purchase_order_create_step_two']['itemsAdvice']['added']
-            = ''. $product1->getid() . ','. $product2->getId();
-
         $this->client->followRedirects(true);
         $crawler = $this->client->request($form->getMethod(), $form->getUri(), $formValues);
 
@@ -369,9 +361,6 @@ class PurchaseOrderControllerTest extends WebTestCase
                 'value'     => 10
             ]
         );
-        $formValues['marello_purchase_order_create_step_two']['itemsAdvice']['added']
-            = ''. $product1->getid() . ','. $product2->getId();
-
         $this->client->followRedirects(true);
         $crawler = $this->client->request($form->getMethod(), $form->getUri(), $formValues);
 
@@ -379,7 +368,7 @@ class PurchaseOrderControllerTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, Response::HTTP_OK);
 
         $html = $crawler->html();
-//        $this->assertStringContainsString('Expected Delivery date must be greater than today', $html);
+        $this->assertStringContainsString('Expected Delivery date must be greater than today', $html);
     }
 
     /**

@@ -114,24 +114,19 @@ class ExternalWarehouseEventListener
      */
     private function getWarehouse(Supplier $supplier)
     {
-        if ($this->warehouse === null) {
-            $warehouseType = $this->doctrineHelper
-                ->getEntityManagerForClass(WarehouseType::class)
-                ->getRepository(WarehouseType::class)
-                ->find(WarehouseTypeProviderInterface::WAREHOUSE_TYPE_EXTERNAL);
-            $warehouse = $this->doctrineHelper
-                ->getEntityManagerForClass(Warehouse::class)
-                ->getRepository(Warehouse::class)
-                ->findOneBy([
-                    'code' => $supplier->getCode(),
-                    'warehouseType' => $warehouseType
-                ]);
-            if ($warehouse) {
-                $this->warehouse = $warehouse;
-            }
-        }
+        $warehouseType = $this->doctrineHelper
+            ->getEntityManagerForClass(WarehouseType::class)
+            ->getRepository(WarehouseType::class)
+            ->find(WarehouseTypeProviderInterface::WAREHOUSE_TYPE_EXTERNAL);
+        $warehouse = $this->doctrineHelper
+            ->getEntityManagerForClass(Warehouse::class)
+            ->getRepository(Warehouse::class)
+            ->findOneBy([
+                'code' => $supplier->getCode(),
+                'warehouseType' => $warehouseType
+            ]);
 
-        return $this->warehouse;
+        return $warehouse;
     }
 
     /**

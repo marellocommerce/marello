@@ -19,7 +19,7 @@ class ProductDropshipEventListener
     /**
      * @var ProductDropshipEvent
      */
-    protected $event;
+    protected $events = [];
 
     /**
      * @param EventDispatcherInterface $eventDispatcher
@@ -36,7 +36,7 @@ class ProductDropshipEventListener
     {
         $entity = $args->getObject();
         if ($entity instanceof ProductSupplierRelation && $entity->getCanDropship() === true) {
-            $this->event= new ProductDropshipEvent($entity, true);
+            $this->events[] = new ProductDropshipEvent($entity, true);
         }
     }
     
@@ -52,9 +52,9 @@ class ProductDropshipEventListener
             $eventManager = $em->getEventManager();
             $eventManager->removeEventListener('preUpdate', 'marello_product.listener.doctrine.product_dropship');
             if ($entity->getCanDropship() === true) {
-                $this->event = new ProductDropshipEvent($entity, true);
+                $this->events[] = new ProductDropshipEvent($entity, true);
             } else {
-                $this->event = new ProductDropshipEvent($entity, false);
+                $this->events[] = new ProductDropshipEvent($entity, false);
             }
         }
     }
@@ -66,19 +66,21 @@ class ProductDropshipEventListener
     {
         $entity = $args->getObject();
         if ($entity instanceof ProductSupplierRelation && $entity->getCanDropship() === true) {
-            $this->event = new ProductDropshipEvent($entity, false);
+            $this->events[] = new ProductDropshipEvent($entity, false);
         }
     }
 
     public function postFlush()
     {
-        if ($this->event !== null) {
-            $event = $this->event;
-            $this->event = null;
-            $this->eventDispatcher->dispatch(
-                $event,
-                ProductDropshipEvent::NAME
-            );
+        if (!empty($this->events)) {
+            $events = $this->events;
+            unset($this->events);
+            foreach ($events as $event) {
+                $this->eventDispatcher->dispatch(
+                    $event,
+                    ProductDropshipEvent::NAME
+                );
+            }
         }
     }
 }
