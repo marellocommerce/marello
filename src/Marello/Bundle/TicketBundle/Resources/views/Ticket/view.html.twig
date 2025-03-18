@@ -33,7 +33,11 @@
                 <div class="responsive-block">
                     <div class="box-type1">
                         {% if entity.customer %}
-                            {{ UI.renderProperty('marello.ticket.customer.label'|trans, entity.customer) }}
+                            {{ UI.renderHtmlProperty(
+                                'marello.customer.entity_label'|trans,
+                                UI.entityViewLink(entity.customer, entity.customer|oro_format_name, 'marello_customer_view')
+                            )}}
+                            {{ UI.renderProperty('marello.customer.email.label'|trans, entity.customer.email) }}
                         {% endif %}
                         {{ UI.renderProperty('marello.ticket.first_name.label'|trans, entity.firstName) }}
                         {{ UI.renderProperty('marello.ticket.last_name.label'|trans, entity.lastName) }}
