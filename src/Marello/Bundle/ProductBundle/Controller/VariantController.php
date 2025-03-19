@@ -91,6 +91,20 @@ class VariantController extends AbstractController
          * Process request using handler.
          */
         if ($handler->process($variant, $product)) {
+            if ($variant->getProducts()->count() === 1) {
+                $request->getSession()->getFlashBag()->add(
+                    'info',
+                    $this->container
+                        ->get(TranslatorInterface::class)
+                        ->trans('marello.product.messages.info.variant.deleted.product_count')
+                );
+                $em = $this->container->get(ManagerRegistry::class)->getManagerForClass(Variant::class);
+                $em->remove($variant);
+                $em->flush();
+
+                return $this->container->get(Router::class)->redirect($product);
+            }
+
             $request->getSession()->getFlashBag()->add(
                 'success',
                 $this->container

@@ -112,6 +112,10 @@ marello:
                 sales_channels:
                     assignment:         Sales Channels were successfully assigned
                     assignment_started: Sales Channels assignment was started successfully. You will receive email notification upon completion.
+            info:
+                variant:
+                    deleted:
+                        product_count: Variant deleted because no products are variants of each other
             error:
                 sku:                SKU already exists, please provide a unique SKU
                 sales_channels:
