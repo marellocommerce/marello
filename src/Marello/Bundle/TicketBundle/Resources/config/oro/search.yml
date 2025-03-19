@@ -1,4 +1,37 @@
 search:
+    Marello\Bundle\TicketBundle\Entity\Ticket:
+        alias: marello_ticket_ticket
+        search_template: '@MarelloTicket/Ticket/searchResult.html.twig'
+        label: marello.ticket.entity_plural_label
+        route:
+            name: marello_ticket_ticket_view
+            parameters:
+                id: id
+        mode: normal
+        fields:
+            -   name: email
+                target_type: text
+                target_fields: [email]
+            -
+                name: namePrefix
+                target_type: text
+                target_fields: [namePrefix]
+            -
+                name: firstName
+                target_type: text
+                target_fields: [firstName]
+            -
+                name: middleName
+                target_type: text
+                target_fields: [middleName]
+            -
+                name: lastName
+                target_type: text
+                target_fields: [lastName]
+            -
+                name: nameSuffix
+                target_type: text
+                target_fields: [nameSuffix]
     Marello\Bundle\TicketBundle\Entity\TicketCategory:
         alias: marello_ticket_category
         search_template: '@MarelloTicket/TicketCategory/searchResult.html.twig'
