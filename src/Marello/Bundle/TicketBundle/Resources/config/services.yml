@@ -18,6 +18,14 @@ services:
         arguments:
             - 'Marello\Bundle\TicketBundle\Entity\Ticket'
         calls:
-            - [ 'setAclHelper', [ '@oro_security.acl_helper' ] ]
+            - [setAclHelper, [ '@oro_security.acl_helper' ] ]
+            - [setDateFilterProcessor, ['@oro_dashboard.filter.date_filter_processor']]
         tags:
             - { name: doctrine.repository_service }
+
+    marello.ticket.provider.dashboard_data_provider:
+        class: Marello\Bundle\TicketBundle\Provider\DashboardDataProvider
+        public: true
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@oro_security.acl_helper'

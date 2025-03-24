@@ -1,0 +1,26 @@
+{% if item.value|length %}
+    <table class="grid grid-main-container">
+        <thead class="grid-header">
+            <tr class="grid-header-row">
+                <th class="grid-cell grid-header-cell string-cell">
+                    <span class="grid-header-cell__label-container">
+                        <span class="grid-header-cell__label">{{ 'marello.ticket.ticket_status.label'|trans }}</span>
+                    </span>
+                </th>
+                <th class="grid-cell grid-header-cell string-cell">
+                    <span class="grid-header-cell__label-container">
+                        <span class="grid-header-cell__label">{{ 'marello.ticket.datagrid.columns.total_tickets.label'|trans }}</span>
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="grid-body">
+        {% for k, val in item.value %}
+            <tr class="grid-row">
+                <td class="string-cell grid-cell grid-body-cell">{{ val.status_label }}</td>
+                <td class="string-cell grid-cell grid-body-cell">{{ val.totalTickets }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

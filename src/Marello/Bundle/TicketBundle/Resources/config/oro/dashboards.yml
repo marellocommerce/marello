@@ -1,0 +1,28 @@
+dashboards:
+    widgets:
+        tickets_by_status_widget:
+            label:       marello.ticket.dashboard.ticket_status_widget.label
+            route:       oro_dashboard_itemized_data_widget
+            route_parameters: { bundle: MarelloTicket, name: ticketsByStatusRendering }
+            acl:         marello_ticket_ticket_view
+            description: marello.ticket.dashboard.ticket_status_widget.description
+            data_items:
+                ticket_by_statuses:
+                    data_provider: '@marello.ticket.provider.dashboard_data_provider->getTicketsStatusData($widgetOptions$)'
+                    label:         marello.ticket.dashboard.ticket_status_widget.label
+                    acl:           marello_ticket_ticket_view
+                    template:      '@MarelloTicket/Dashboard/ticketsByStatus.html.twig'
+            configuration:
+                dateRange:
+                    type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
+                    options:
+                        label: oro.dashboard.date_range.label
+                        value_types: true
+                    show_on_widget: true
+                statuses:
+                    type: Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType
+                    show_on_widget: true
+                    options:
+                        label:  marello.ticket.dashboard.ticket_status_widget.statuses.label
+                        required: false
+                        enum_code: marello_ticket_status

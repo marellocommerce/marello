@@ -1,0 +1,28 @@
+{% extends '@OroDashboard/Dashboard/widget.html.twig' %}
+
+{% set widgetType = 'quick-launchpad' %}
+
+{% block content %}
+    {% if items|length %}
+        {% for itemName, item in items %}
+            {% if item.value|length > 0 %}
+                <div class="oro-datagrid">
+                    {% include widgetDataItems[itemName].template with {item: item}%}
+                </div>
+            {% else %}
+                <div class="container-fluid">
+                    <div class="clearfix no-data">
+                        <span>{{ 'marello.ticket.dashboard.tickets.no_data'|trans }}</span>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="container-fluid">
+            <div class="clearfix no-data">
+                <span>{{ 'marello.ticket.dashboard.tickets.no_available_metrics'|trans }}</span>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+

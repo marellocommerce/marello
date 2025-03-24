@@ -49,6 +49,18 @@ marello:
                 resolved: Resolved
                 closed: Closed
             number_of_tickets: Number of Tickets
+        datagrid:
+            columns:
+                total_tickets.label: Total Tickets
+        dashboard:
+            tickets:
+                view_all:               View All
+                no_data:                No data available
+                no_available_metrics:   No metrics available
+            ticket_status_widget:
+                label:              Tickets By Status
+                description:        Tickets By Status
+                statuses.label:     Statuses
     sections:
         general: General information
         ticket: Ticket
