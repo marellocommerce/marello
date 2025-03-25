@@ -15,14 +15,13 @@ dashboards:
             configuration:
                 dateRange:
                     type: Oro\Bundle\DashboardBundle\Form\Type\WidgetDateRangeType
+                    show_on_widget: true
                     options:
                         label: oro.dashboard.date_range.label
                         value_types: true
-                    show_on_widget: true
                 statuses:
-                    type: Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType
-                    show_on_widget: true
+                    type: Marello\Bundle\TicketBundle\Form\Type\TicketStatusesSelectType
+                    show_on_widget: false
                     options:
                         label:  marello.ticket.dashboard.ticket_status_widget.statuses.label
                         required: false
-                        enum_code: marello_ticket_status

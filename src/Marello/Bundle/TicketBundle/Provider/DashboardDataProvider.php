@@ -25,7 +25,7 @@ class DashboardDataProvider
     public function getTicketsStatusData(WidgetOptionBag $widgetOptions)
     {
         $dateRange = $widgetOptions->get('dateRange');
-        $statuses = $widgetOptions->get('statuses') ? [$widgetOptions->get('statuses')] : [];
+        $statuses = $widgetOptions->get('statuses') ?? [];
         $items = $this->doctrineHelper
             ->getEntityRepositoryForClass(Ticket::class)
             ->getTicketsStatusData($dateRange, $statuses) ?? [];

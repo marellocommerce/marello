@@ -29,3 +29,9 @@ services:
         arguments:
             - '@oro_entity.doctrine_helper'
             - '@oro_security.acl_helper'
+
+    Marello\Bundle\TicketBundle\Form\Type\TicketStatusesSelectType:
+        arguments:
+            - '@oro_entity_extend.enum_value_provider'
+        tags:
+            - { name: form.type }
