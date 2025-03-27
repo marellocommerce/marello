@@ -15,7 +15,6 @@ use Oro\Bundle\UIBundle\Route\Router;
 use Oro\Bundle\ActionBundle\Model\ActionData;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
-use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamily;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\ProductBundle\Form\Type\ProductType;
@@ -64,16 +63,6 @@ class ProductController extends AbstractController
             return $this->forward(__CLASS__ . '::createStepTwoAction', [], $queryParams);
         }
 
-        $productTypesProvider = $this->container->get(ProductTypesProvider::class);
-        $countAttributeFamilies = $this->getAttributeFamilyCount();
-        if (count($productTypesProvider->getProductTypes()) <= 1 && $countAttributeFamilies <= 1) {
-            $request->setMethod('POST');
-            $request->request->set('input_action', 'marello_product_create');
-            $request->request->set('single_product_type', true);
-
-            return $this->forward(__CLASS__ . '::createStepTwoAction', [], $queryParams);
-        }
-
         return [
             'form' => $form->createView(),
             'isWidgetContext' => (bool)$request->get('_wid', false)
@@ -104,21 +93,6 @@ class ProductController extends AbstractController
             $queryParams = $request->query->all();
             $form->handleRequest($request);
             $formData = $form->all();
-
-            if ($request->get('single_product_type')) {
-                $em = $this->container->get(DoctrineHelper::class);
-                /** @var AttributeFamily $attributeFamily */
-                $attributeFamily = $em
-                    ->getEntityRepositoryForClass(AttributeFamily::class)
-                    ->findOneBy(
-                        [
-                            'entityClass' => Product::class,
-                            'owner' => $this->getUser()->getOrganization()
-                        ]
-                    );
-                $product->setType(Product::DEFAULT_PRODUCT_TYPE);
-                $product->setAttributeFamily($attributeFamily);
-            }
 
             if (!empty($formData)) {
                 $form = $this->createForm(ProductType::class, $product);
@@ -319,29 +293,6 @@ class ProductController extends AbstractController
         return [
             'form' => $handler->getFormView(),
         ];
-    }
-
-    /**
-     * Get correct attribute family count with the current Organization taken into account.
-     * @return int
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
-    private function getAttributeFamilyCount()
-    {
-        $em = $this->container->get(DoctrineHelper::class);
-        $queryBuilder = $em
-            ->getEntityRepositoryForClass(AttributeFamily::class)
-            ->createQueryBuilder('family');
-
-        return (int)$queryBuilder
-            ->select($queryBuilder->expr()->count('family.id'))
-            ->andWhere($queryBuilder->expr()->eq('family.entityClass', ':entityClass'))
-            ->andWhere($queryBuilder->expr()->eq('family.owner', ':organization'))
-            ->setParameter('entityClass', Product::class)
-            ->setParameter('organization', $this->getUser()->getOrganization())
-            ->getQuery()
-            ->getSingleScalarResult();
     }
 
     public static function getSubscribedServices(): array
