@@ -1,6 +1,7 @@
 {% extends '@OroUI/actions/view.html.twig' %}
 {% import '@OroUI/macros.html.twig' as UI %}
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+{% import '@OroEntityConfig/macros.html.twig' as entityConfig %}
 
 {% oro_title_set({params : {"%id%": entity.id }}) %}
 
@@ -44,7 +45,7 @@
                         {{ UI.renderProperty('marello.ticket.email.label'|trans, entity.email) }}
                         {{ UI.renderProperty('marello.ticket.phone.label'|trans, entity.phone) }}
                         {{ UI.renderProperty('marello.ticket.owner.label'|trans, entity.owner.fullName) }}
-                        {{ UI.renderProperty('marello.ticket.assigned_to.label'|trans, entity.assignedTo.fullName) }}
+                        {{ UI.renderProperty('marello.ticket.assigned_to.label'|trans, entity.assignedTo.fullName|default('N/A')) }}
                         {{ UI.renderProperty('marello.ticket.ticket_source.label'|trans, entity.ticketSource) }}
                         {{ UI.renderProperty('marello.ticket.ticket_status.label'|trans, entity.ticketStatus) }}
                         {{ UI.renderProperty('marello.ticket.ticket_priority.label'|trans, entity.ticketPriority) }}
@@ -69,6 +70,27 @@
         </div>
     {% endset %}
 
+    {% set ticketAttachment %}
+        <div class="widget-content">
+            <div class="row-fluid form-horizontal">
+                <div class="responsive-block">
+                    <div class="box-type1">
+                        <div class="attribute-item">
+                            <label class="attribute-item__term">{{ 'marello.ticket.ticket_attachment.label'|trans }}</label>
+                            <div class="attribute-item__description">
+                                <div class="control-label">
+                                    {% set value %}
+                                        {{- oro_file_view(entity.ticketAttachment) -}}
+                                    {% endset %}
+                                    {{ value|default('N/A'|trans) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endset %}
 
     {% set dataBlocks = [
         {
@@ -82,8 +104,29 @@
             'subblocks': [
                 {'data' : [ticketInformation]}
             ]
+        },
+        {
+            'title': 'marello.ticket.ticket_attachment.label'|trans,
+            'subblocks': [
+                { 'data' : [ticketAttachment] }
+            ]
         }
     ] %}
+
+    {% set additionalData %}
+        {{ entityConfig.renderDynamicFields(entity) }}
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([{
+        'title' : 'marello.product.sections.additional'|trans,
+        'subblocks': [{
+            'title' : null,
+            'useSpan': false,
+            'data' : [
+                additionalData
+            ]
+        }]
+    }]) %}
 
     {% set data = { 'dataBlocks': dataBlocks } %}
 

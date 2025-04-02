@@ -36,6 +36,13 @@ api:
                         property_path: salesChannel.code
                         description: 'Filter by SalesChannel'
                         operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
+                    customer:
+                        data_type: string
+                        allow_array: true
+                        property_path: customer.email
+                        description: 'Filter by customer email'
+                        options:
+                            case_insensitive: true
                     createdAt:
                         exclude: true
                     updatedAt:

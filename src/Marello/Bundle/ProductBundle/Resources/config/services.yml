@@ -236,8 +236,10 @@ services:
 
     marello_product.event_listener.attributes_form_view:
         class: Marello\Bundle\ProductBundle\EventListener\AttributeFormViewListener
+        parent: oro_entity_config.event_listener.attributes_form_view.abstract
         arguments:
-            - '@oro_entity_config.manager.attribute_manager'
+            - '@oro_entity_config.provider.entity'
+            - '@translator'
         tags:
             - { name: kernel.event_listener, event: oro_ui.scroll_data.before.marello-product-create-step-two, method: onEdit, priority: -255 }
             - { name: kernel.event_listener, event: oro_ui.scroll_data.before.marello-product-update, method: onEdit, priority: -255 }

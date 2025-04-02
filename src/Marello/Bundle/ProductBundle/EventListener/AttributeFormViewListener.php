@@ -2,15 +2,25 @@
 
 namespace Marello\Bundle\ProductBundle\EventListener;
 
-use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamilyAwareInterface;
-use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeGroup;
-use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
-use Oro\Bundle\EntityConfigBundle\Manager\AttributeManager;
-use Oro\Bundle\UIBundle\Event\BeforeListRenderEvent;
-use Oro\Bundle\UIBundle\View\ScrollData;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AttributeFormViewListener
+use Oro\Bundle\UIBundle\View\ScrollData;
+use Oro\Bundle\SecurityBundle\Form\FieldAclHelper;
+use Oro\Bundle\UIBundle\Event\BeforeListRenderEvent;
+use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\EntityConfigBundle\Manager\AttributeManager;
+use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeGroup;
+use Oro\Bundle\EntityConfigBundle\Attribute\Entity\AttributeFamilyAwareInterface;
+use Oro\Bundle\EntityConfigBundle\EventListener\AttributeFormViewListener as BaseAttributeFormViewListener;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+
+class AttributeFormViewListener extends BaseAttributeFormViewListener
 {
+    private const DEFAULT_PRIORITY = 500;
+    private const EVENT_TYPE_VIEW = 'view';
+
     /**
      * @var array
      */
@@ -32,17 +42,74 @@ class AttributeFormViewListener
         'ARFile',
         'barcode'
     ];
-    /**
-     * @var AttributeManager
-     */
-    private $attributeManager;
 
     /**
-     * @param AttributeManager $attributeManager
+     * This property used to determine type of event inside moveFieldToBlock.
+     * It's safe because it wll be cleared after event processing
+     *
+     * @var string
      */
-    public function __construct(AttributeManager $attributeManager)
+    private $eventType;
+
+    public function __construct(
+        private AttributeManager $attributeManager,
+        private FieldAclHelper $fieldAclHelper,
+        private ConfigProvider $entityConfigProvider,
+        private TranslatorInterface $translator,
+    ) {
+        parent::__construct($attributeManager, $fieldAclHelper);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function onViewList(BeforeListRenderEvent $event)
     {
-        $this->attributeManager = $attributeManager;
+        $this->eventType = self::EVENT_TYPE_VIEW;
+
+        $entity = $event->getEntity();
+
+        if (!$entity instanceof AttributeFamilyAwareInterface) {
+            return;
+        }
+
+        $groups = $this->attributeManager->getGroupsWithAttributes($entity->getAttributeFamily());
+        $scrollData = $event->getScrollData();
+        $this->filterGroupAttributes($groups, 'view', 'is_displayable');
+        $this->addNotEmptyGroupBlocks($scrollData, $groups);
+
+        /** @var AttributeGroup $group */
+        foreach ($groups as $groupData) {
+            /** @var AttributeGroup $group */
+            $group = $groupData['group'];
+
+            /** @var FieldConfigModel $attribute */
+            foreach ($groupData['attributes'] as $attribute) {
+                $fieldName = $attribute->getFieldName();
+                if (in_array($fieldName, $this->getRestrictedToMoveFields(), true)) {
+                    continue;
+                }
+                if ($scrollData->hasNamedField($fieldName)) {
+                    $this->moveFieldToBlock($scrollData, $fieldName, $group->getCode());
+                    continue;
+                }
+
+                $html = $event->getEnvironment()->render(
+                    '@OroEntityConfig/Attribute/attributeView.html.twig',
+                    [
+                        'entity' => $entity,
+                        'field' => $attribute,
+                    ]
+                );
+
+                $subblockId = $scrollData->addSubBlock($group->getCode());
+                $scrollData->addSubBlockData($group->getCode(), $subblockId, $html, $fieldName);
+            }
+        }
+
+        $this->removeEmptyGroupBlocks($scrollData);
+
+        $this->eventType = null;
     }
 
     /**
@@ -86,54 +153,7 @@ class AttributeFormViewListener
             }
         }
 
-        $this->combineGroupBlocks($scrollData);
         $this->removeEmptyGroupBlocks($scrollData);
-    }
-
-    /**
-     * @param ScrollData $scrollData
-     */
-    private function combineGroupBlocks(ScrollData $scrollData)
-    {
-        $data = $scrollData->getData();
-        if (empty($data[ScrollData::DATA_BLOCKS])) {
-            return;
-        }
-        $notAttributesGroupBlocksByIds = [];
-        $notAttributesGroupBlocksByTitles = [];
-        foreach ($data[ScrollData::DATA_BLOCKS] as $blockId => $blockData) {
-            if (!is_string($blockId)) {
-                $notAttributesGroupBlocksByIds[$blockId] = $blockData;
-                $notAttributesGroupBlocksByTitles[$blockData[ScrollData::TITLE]] = $blockId;
-            }
-        }
-        foreach ($data[ScrollData::DATA_BLOCKS] as $blockId => $data) {
-            if (!is_string($blockId)) {
-                continue;
-            }
-            $isEmpty = true;
-            if (!empty($data[ScrollData::SUB_BLOCKS])) {
-                if (isset($notAttributesGroupBlocksByTitles[$data[ScrollData::TITLE]])) {
-                    foreach ($data[ScrollData::SUB_BLOCKS] as $subblockId => $subblockData) {
-                        if (!empty($subblockData[ScrollData::DATA])) {
-                            foreach ($subblockData[ScrollData::DATA] as $fieldName => $fieldData) {
-                                $this->moveFieldToBlock(
-                                    $scrollData,
-                                    $fieldName,
-                                    $notAttributesGroupBlocksByTitles[$data[ScrollData::TITLE]]
-                                );
-                            }
-                        }
-                    }
-                } else {
-                    $isEmpty = false;
-                }
-            }
-
-            if ($isEmpty) {
-                $scrollData->removeNamedBlock($blockId);
-            }
-        }
     }
 
     /**
@@ -166,109 +186,6 @@ class AttributeFormViewListener
     }
 
     /**
-     * @param ScrollData $scrollData
-     * @param array $groups
-     */
-    private function addNotEmptyGroupBlocks(ScrollData $scrollData, array $groups)
-    {
-        foreach ($groups as $group) {
-            if (!empty($group['attributes'])) {
-                /** @var AttributeGroup $currentGroup */
-                $currentGroup = $group['group'];
-                $scrollData->addNamedBlock($currentGroup->getCode(), $currentGroup->getLabel()->getString());
-            }
-        }
-    }
-
-    /**
-     * @param BeforeListRenderEvent $event
-     */
-    public function onViewList(BeforeListRenderEvent $event)
-    {
-        $entity = $event->getEntity();
-
-        if (!$entity instanceof AttributeFamilyAwareInterface) {
-            return;
-        }
-
-        $groups = $this->attributeManager->getGroupsWithAttributes($entity->getAttributeFamily());
-        $scrollData = $event->getScrollData();
-        $this->filterGroupAttributes($groups, 'view', 'is_displayable');
-        $this->addNotEmptyGroupBlocks($scrollData, $groups);
-
-        /** @var AttributeGroup $group */
-        foreach ($groups as $groupData) {
-            /** @var AttributeGroup $group */
-            $group = $groupData['group'];
-
-            /** @var FieldConfigModel $attribute */
-            foreach ($groupData['attributes'] as $attribute) {
-                $fieldName = $attribute->getFieldName();
-                if (in_array($fieldName, $this->getRestrictedToMoveFields(), true)) {
-                    continue;
-                }
-                if ($scrollData->hasNamedField($fieldName)) {
-                    $this->moveFieldToBlock($scrollData, $fieldName, $group->getCode());
-                    continue;
-                }
-
-                $html = $event->getEnvironment()->render(
-                    '@OroEntityConfig/Attribute/attributeView.html.twig',
-                    [
-                        'entity' => $entity,
-                        'field' => $attribute,
-                    ]
-                );
-
-                $subblockId = $scrollData->addSubBlock($group->getCode());
-                $scrollData->addSubBlockData($group->getCode(), $subblockId, $html, $fieldName);
-            }
-        }
-
-        $this->combineGroupBlocks($scrollData);
-        $this->removeEmptyGroupBlocks($scrollData);
-    }
-
-    /**
-     * @param ScrollData $scrollData
-     * @param string $fieldId
-     * @param string $blockId
-     */
-    protected function moveFieldToBlock(ScrollData $scrollData, $fieldId, $blockId)
-    {
-        if (in_array($fieldId, $this->getRestrictedToMoveFields(), true)) {
-            return;
-        }
-
-        $data = $scrollData->getData();
-        if (!isset($data[ScrollData::DATA_BLOCKS][$blockId])) {
-            return;
-        }
-
-        foreach ($data[ScrollData::DATA_BLOCKS] as $currentBlockId => &$blockData) {
-            foreach ($blockData[ScrollData::SUB_BLOCKS] as $subblockId => &$subblock) {
-                if (isset($subblock[ScrollData::DATA][$fieldId])) {
-                    $fieldData = $subblock[ScrollData::DATA][$fieldId];
-
-                    if ($blockId !== $currentBlockId) {
-                        unset($subblock[ScrollData::DATA][$fieldId]);
-
-                        $subblockIds = $scrollData->getSubblockIds($blockId);
-                        if (empty($subblockIds)) {
-                            $subblockId = $scrollData->addSubBlock($blockId);
-                        } else {
-                            $subblockId = reset($subblockIds);
-                        }
-
-                        $scrollData->addSubBlockData($blockId, $subblockId, $fieldData, $fieldId);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * @param array $groups
      * @param string $scope
      * @param string $option
@@ -291,10 +208,53 @@ class AttributeFormViewListener
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function moveFieldToBlock(ScrollData $scrollData, $fieldName, $blockId)
+    {
+        if ($this->eventType === self::EVENT_TYPE_VIEW) {
+            if (in_array($fieldName, $this->getRestrictedToMoveFields(), true)) {
+                return;
+            }
+        }
+
+        parent::moveFieldToBlock($scrollData, $fieldName, $blockId);
+    }
+
+    /**
      * @return array
      */
     protected function getRestrictedToMoveFields()
     {
         return $this->fieldsRestrictedToMove;
+    }
+
+    protected function addNotEmptyGroupBlocks(ScrollData $scrollData, array $groups)
+    {
+        parent::addNotEmptyGroupBlocks($scrollData, $groups);
+
+        foreach ($groups as $group) {
+            if (empty($group['attributes'])) {
+                continue;
+            }
+
+            /** @var AttributeGroup $currentGroup */
+            $currentGroup = $group['group'];
+
+            $block = $scrollData->getBlock($currentGroup->getCode());
+
+            $priority = $block[ScrollData::PRIORITY] ?? self::DEFAULT_PRIORITY;
+
+            /** @var FieldConfigModel $attribute */
+            foreach ($group['attributes'] as $attribute) {
+                $config = $this->entityConfigProvider->getConfig(Product::class, $attribute->getFieldName());
+
+                $scrollData->addNamedBlock(
+                    $attribute->getFieldName(),
+                    $this->translator->trans((string) $config->get('label')),
+                    ++$priority
+                );
+            }
+        }
     }
 }
