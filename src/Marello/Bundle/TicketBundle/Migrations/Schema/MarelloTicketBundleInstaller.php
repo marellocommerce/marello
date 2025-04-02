@@ -8,22 +8,51 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 
-class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAwareInterface
+class MarelloTicketBundleInstaller implements
+    Installation,
+    ExtendExtensionAwareInterface,
+    AttachmentExtensionAwareInterface
 {
+    const MAX_FILE_SIZE_IN_MB = 5;
+
     /**
-     * {@inheritdoc}
+     * @var AttachmentExtension
      */
-    public function getMigrationVersion()
-    {
-        return 'v1_0';
-    }
+    protected $attachmentExtension;
 
     /**
      * @var ExtendExtension
      */
     protected $extendExtension;
+
+    const MIME_TYPES = [
+        'text/csv',
+        'text/plain',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.ms-excel',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.ms-powerpoint',
+        'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'application/pdf',
+        'application/zip',
+        'image/jpeg',
+        'image/png',
+        'image/svg',
+        'image/avif'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMigrationVersion()
+    {
+        return 'v1_1';
+    }
 
     /**
      * {@inheritdoc}
@@ -68,6 +97,8 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
         $table->addColumn('resolution', 'text', ['notnull' => false, 'comment' => '(DC2Type:text)']);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
+
         $this->extendExtension->addEnumField(
             $schema,
             $table,
@@ -101,7 +132,22 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
             ]
         );
-        $table->setPrimaryKey(['id']);
+
+        // add attachment file relation
+        $this->attachmentExtension->addFileRelation(
+            $schema,
+            'marello_ticket_ticket',
+            'ticketAttachment',
+            [
+                'importexport' => ['excluded' => true],
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
+                'attachment' => [
+                    'mimetypes' => implode(',', self::MIME_TYPES),
+                    'acl_protected' => false
+                ]
+            ],
+            self::MAX_FILE_SIZE_IN_MB
+        );
     }
 
     protected function addMarelloTicketForeignKeys(Schema $schema)
@@ -136,5 +182,10 @@ class MarelloTicketBundleInstaller implements Installation, ExtendExtensionAware
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
         $this->extendExtension = $extendExtension;
+    }
+
+    public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
+    {
+        $this->attachmentExtension = $attachmentExtension;
     }
 }

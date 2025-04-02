@@ -18,6 +18,7 @@ marello:
         ticket_status.label: Status
         ticket_source.label: Source
         ticket_priority.label: Priority
+        ticket_attachment.label: Ticket Attachment
         category:
             label: Category
             name: Name

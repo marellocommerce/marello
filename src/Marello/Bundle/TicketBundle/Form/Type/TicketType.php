@@ -2,18 +2,21 @@
 
 namespace Marello\Bundle\TicketBundle\Form\Type;
 
-use Marello\Bundle\TicketBundle\Entity\Ticket;
-use Marello\Bundle\TicketBundle\Provider\TicketPriorityInterface;
-use Marello\Bundle\TicketBundle\Provider\TicketSourceInterface;
-use Marello\Bundle\TicketBundle\Provider\TicketStatusInterface;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
-use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+
+use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
+use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
+
+use Marello\Bundle\TicketBundle\Entity\Ticket;
+use Marello\Bundle\TicketBundle\Provider\TicketSourceInterface;
+use Marello\Bundle\TicketBundle\Provider\TicketStatusInterface;
+use Marello\Bundle\TicketBundle\Provider\TicketPriorityInterface;
 
 /**
  * Form type for Ticket entity.
@@ -114,7 +117,16 @@ class TicketType extends AbstractType
                     'label' => 'marello.ticket.resolution.label',
                     'required' => false
                 ]
-            );
+            )
+            ->add(
+                'ticketAttachment',
+                FileType::class,
+                [
+                    'label' => 'marello.ticket.ticket_attachment.label',
+                    'required' => false
+                ]
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
