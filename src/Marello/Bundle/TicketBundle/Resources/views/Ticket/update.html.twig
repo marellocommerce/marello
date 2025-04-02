@@ -42,50 +42,76 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
-    {% set dataBlocks = [
-        {
+    {% set id = 'marello-ticket-update' %}
+    {% set dataBlocks = {
+        'general': {
             'title': 'marello.sections.general'|trans,
             'subblocks': [
                 {
                     'data' : [
-                    form_row(form.namePrefix),
-                    form_row(form.firstName),
-                    form_row(form.middleName),
-                    form_row(form.lastName),
-                    form_row(form.nameSuffix),
-                    form_row(form.email),
-                    form_row(form.phone),
-                    form_row(form.owner),
-                    form_row(form.assignedTo),
-                    form_row(form.ticketStatus),
-                    form_row(form.ticketSource),
-                    form_row(form.ticketPriority)
-                ]
+                        form_row(form.namePrefix),
+                        form_row(form.firstName),
+                        form_row(form.middleName),
+                        form_row(form.lastName),
+                        form_row(form.nameSuffix),
+                        form_row(form.email),
+                        form_row(form.phone),
+                        form_row(form.owner),
+                        form_row(form.assignedTo),
+                        form_row(form.ticketStatus),
+                        form_row(form.ticketSource),
+                        form_row(form.ticketPriority)
+                    ]
                 }
             ]
         },
-        {
+        'ticket': {
             'title': 'marello.sections.ticket'|trans,
             'subblocks': [
             {
                 'data' : [
-                form_row(form.category),
-                form_row(form.subject),
-                form_row(form.description),
-                form_row(form.resolution)
-            ]
+                    form_row(form.category),
+                    form_row(form.subject),
+                    form_row(form.description),
+                    form_row(form.resolution)
+                ]
             }
         ]
+        },
+        'ticket_attachments': {
+            'title': 'marello.ticket.ticket_attachment.label'|trans,
+            'subblocks': [
+                {
+                    'data' : [
+                        form_row(form.ticketAttachment)
+                    ]
+                }
+            ]
         }
-    ] %}
+    } %}
+
+    {% set additionalData = [] %}
+    {% for child in form.children %}
+        {% if child.vars.extra_field is defined and child.vars.extra_field %}
+            {% set additionalData = additionalData|merge([form_row(child)]) %}
+        {% endif %}
+    {% endfor %}
+
+    {% if additionalData is not empty %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'marello.product.sections.additional'|trans,
+            'subblocks': [{
+                'title': '',
+                'useSpan': false,
+                'data' : additionalData
+            }]
+        }] ) %}
+    {% endif %}
 
     {% set data = {
-        'formErrors': form_errors(form),
-        'dataBlocks': dataBlocks
-    }%}
+        'formErrors': form_errors(form) ? form_errors(form) : null,
+        'dataBlocks': dataBlocks,
+    } %}
 
-    <div class="responsive-form-inner">
-        {% set id = 'marello-ticket-edit' %}
-        {{ parent() }}
-    </div>
+    {{ parent() }}
 {% endblock content_data %}
