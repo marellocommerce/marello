@@ -11,3 +11,8 @@ liip_imagine:
             filters:
                 thumbnail:    { size: [250, 250], mode: inset }
                 strip:        ~
+        product_frontend:
+            quality:          95
+            filters:
+                thumbnail:    { size: [640, 640], mode: inset }
+                strip:        ~

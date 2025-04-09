@@ -76,7 +76,7 @@ class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSub
 
             $this->entityManager->flush();
             foreach ($this->imagesToApply as $image) {
-                $this->imageResizeManager->applyFilter($image, 'product_view');
+                $this->imageResizeManager->applyFilter($image, 'product_frontend');
             }
 
             foreach ($this->filesToApply as $file) {
@@ -100,7 +100,7 @@ class ProductFilesUpdateProcessor implements MessageProcessorInterface, TopicSub
     {
         $isImage = $this->mimeTypeChecker->isImageMimeType($file->getMimeType());
         if ($isImage) {
-            $url = $this->attachmentManager->getFilteredImageUrl($file, 'product_view');
+            $url = $this->attachmentManager->getFilteredImageUrl($file, 'product_frontend');
             $this->imagesToApply[] = $file;
         } else {
             // generate url based on custom public cache directory
