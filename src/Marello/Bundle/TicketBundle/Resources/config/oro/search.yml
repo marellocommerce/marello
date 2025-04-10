@@ -7,15 +7,10 @@ search:
             name: marello_ticket_ticket_view
             parameters:
                 id: id
-        mode: normal
         fields:
             -   name: email
                 target_type: text
                 target_fields: [email]
-            -
-                name: namePrefix
-                target_type: text
-                target_fields: [namePrefix]
             -
                 name: firstName
                 target_type: text
@@ -29,9 +24,17 @@ search:
                 target_type: text
                 target_fields: [lastName]
             -
-                name: nameSuffix
+                name: subject
                 target_type: text
-                target_fields: [nameSuffix]
+                target_fields: [subject]
+            -
+                name: description
+                target_type: text
+                target_fields: [description]
+            -
+                name: resolution
+                target_type: text
+                target_fields: [resolution]
     Marello\Bundle\TicketBundle\Entity\TicketCategory:
         alias: marello_ticket_category
         search_template: '@MarelloTicket/TicketCategory/searchResult.html.twig'
@@ -40,7 +43,6 @@ search:
             name: marello_ticket_category_view
             parameters:
                 id: id
-        mode: normal
         fields:
             -   name: name
                 target_type: text
