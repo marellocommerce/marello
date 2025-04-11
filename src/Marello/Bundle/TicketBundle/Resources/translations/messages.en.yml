@@ -19,6 +19,7 @@ marello:
         ticket_source.label: Source
         ticket_priority.label: Priority
         ticket_attachment.label: Ticket Attachment
+        company.label:  Company
         category:
             label: Category
             name: Name
