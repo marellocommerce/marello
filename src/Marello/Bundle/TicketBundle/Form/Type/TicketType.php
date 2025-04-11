@@ -65,7 +65,7 @@ class TicketType extends AbstractType
             ->add(
                 'owner',
                 UserSelectType::class,
-                ['label' => 'marello.ticket.owner.label', 'required' => true]
+                ['label' => 'marello.ticket.owner.label']
             )
             ->add(
                 'assignedTo',
