@@ -35,15 +35,16 @@
                     <div class="box-type1">
                         {% if entity.customer %}
                             {{ UI.renderHtmlProperty(
-                                'marello.customer.entity_label'|trans,
+                                'marello.ticket.customer.label'|trans,
                                 UI.entityViewLink(entity.customer, entity.customer|oro_format_name, 'marello_customer_view')
                             )}}
-                            {{ UI.renderProperty('marello.customer.email.label'|trans, entity.customer.email) }}
+                            {{ UI.renderProperty('marello.ticket.email.label'|trans, entity.customer.email) }}
                         {% endif %}
                         {{ UI.renderProperty('marello.ticket.first_name.label'|trans, entity.firstName) }}
                         {{ UI.renderProperty('marello.ticket.last_name.label'|trans, entity.lastName) }}
                         {{ UI.renderProperty('marello.ticket.email.label'|trans, entity.email) }}
                         {{ UI.renderProperty('marello.ticket.phone.label'|trans, entity.phone) }}
+                        {{ UI.renderProperty('marello.ticket.company.label'|trans, entity.company|default('N/A')) }}
                         {{ UI.renderProperty('marello.ticket.owner.label'|trans, entity.owner.fullName) }}
                         {{ UI.renderProperty('marello.ticket.assigned_to.label'|trans, entity.assignedTo.fullName|default('N/A')) }}
                         {{ UI.renderProperty('marello.ticket.ticket_source.label'|trans, entity.ticketSource) }}

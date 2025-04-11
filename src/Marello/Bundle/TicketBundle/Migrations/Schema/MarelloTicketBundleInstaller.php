@@ -82,6 +82,7 @@ class MarelloTicketBundleInstaller implements
         $table = $schema->createTable('marello_ticket_ticket');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
+        $table->addColumn('company', 'string', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', []);
         $table->addColumn('assigned_to_id', 'integer', ['notnull' => false]);
         $table->addColumn('category_id', 'integer', []);

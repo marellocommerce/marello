@@ -14,6 +14,7 @@ use Oro\Bundle\AttachmentBundle\Form\Type\FileType;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumChoiceType;
 
 use Marello\Bundle\TicketBundle\Entity\Ticket;
+use Marello\Bundle\CustomerBundle\Form\Type\CompanySelectType;
 use Marello\Bundle\TicketBundle\Provider\TicketSourceInterface;
 use Marello\Bundle\TicketBundle\Provider\TicketStatusInterface;
 use Marello\Bundle\TicketBundle\Provider\TicketPriorityInterface;
@@ -126,6 +127,9 @@ class TicketType extends AbstractType
                     'required' => false
                 ]
             )
+            ->add('company', TextType::class, [
+                'required' => false,
+            ])
         ;
     }
 
