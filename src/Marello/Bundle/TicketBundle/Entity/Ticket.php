@@ -5,6 +5,7 @@ namespace Marello\Bundle\TicketBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Marello\Bundle\CustomerBundle\Entity\Company;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -49,6 +50,10 @@ class Ticket implements
     #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected ?Customer $customer = null;
+
+    #[ORM\Column(name: 'company', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?string $company = null;
 
     /**
      * @var string|null
@@ -491,6 +496,25 @@ class Ticket implements
     public function setNameSuffix(?string $nameSuffix): self
     {
         $this->nameSuffix = $nameSuffix;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCompany(): ?string
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param string|null $company
+     * @return void
+     */
+    public function setCompany(?string $company): self
+    {
+        $this->company = $company;
 
         return $this;
     }
