@@ -1,0 +1,39 @@
+entity_config:
+    frontend:
+        # You can find out more about attributes in the documentation: https://doc.oroinc.com/backend/configuration/annotation/config-field/#frontend
+        field:
+            form:
+                block_config:
+                    frontend:
+                        title: marello.core.entity_config.block_titles.frontend.label
+                        priority: 60
+            items:
+                is_displayable:
+                    options:
+                        value_type:         boolean
+                    form:
+                        type:               Oro\Bundle\EntityConfigBundle\Form\Type\ChoiceType
+                        options:
+                            choices:
+                                No:         false
+                                Yes:        true
+                            placeholder:    false
+                            block:          frontend
+                            label:          marello.core.entity_config.fields.frontend.is_displayable.label
+                is_editable:
+                    options:
+                        value_type:         boolean
+                        required_property:
+                            config_id:
+                                scope:      extend
+                            code:           owner
+                            value:          Custom
+                    form:
+                        type:               Oro\Bundle\EntityConfigBundle\Form\Type\ChoiceType
+                        options:
+                            choices:
+                                No:         false
+                                Yes:        true
+                            placeholder:    false
+                            block:          frontend
+                            label:          marello.core.entity_config.fields.frontend.is_editable.label
