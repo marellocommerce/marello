@@ -8,6 +8,10 @@ api:
             alias: marellofrontendproduct
             plural_alias: marellofrontendproducts
 
+        Marello\Bundle\ProductBundle\Api\Model\FrontendCategory:
+            alias: marellofrontendcategory
+            plural_alias: marellofrontendcategories
+
         Marello\Bundle\ProductBundle\Entity\Variant:
             alias: marellovariant
             plural_alias: marellovariants
