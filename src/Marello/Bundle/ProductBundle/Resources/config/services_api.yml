@@ -21,5 +21,8 @@ services:
             - '@oro_entity_config.config_manager'
             - '@oro_entity.doctrine_helper'
             - '@request_stack'
+            - '@oro_entity_config.manager.attribute_manager'
+            - '@property_accessor'
+            - '@marello_inventory.provider.available_inventory_provider'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\ProductBundle\Api\Model\FrontendProduct }

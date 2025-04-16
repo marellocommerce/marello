@@ -2,14 +2,20 @@
 
 namespace Marello\Bundle\ProductBundle\Api\Processor\Frontend;
 
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Manager\AttributeManager;
 use Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\CustomizeLoadedDataContext;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Marello\Bundle\SalesBundle\Entity\SalesChannel;
+use Marello\Bundle\InventoryBundle\Provider\AvailableInventoryProvider;
+use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 
 /**
  * Load FrontendProduct Data which is an extension of the default Product.
@@ -21,7 +27,10 @@ class LoadProductData implements ProcessorInterface
     public function __construct(
         protected ConfigManager $configManager,
         protected DoctrineHelper $doctrineHelper,
-        protected RequestStack $requestStack
+        protected RequestStack $requestStack,
+        protected AttributeManager $attributeManager,
+        protected PropertyAccessorInterface $propertyAccessor,
+        protected AvailableInventoryProvider $availableInventoryProvider
     ) {
     }
 
@@ -45,17 +54,20 @@ class LoadProductData implements ProcessorInterface
         $em->clear(Product::class);
         $request = $this->requestStack->getCurrentRequest();
         $queryFilters = $request->get('filter');
-//        if (!isset($queryFilters['organization'])) {
-//            throw new \Exception('cannot fetch product(s) without organization filter');
-//        }
+        if (!isset($queryFilters['organization'])) {
+            throw new \Exception('cannot fetch product(s) without organization filter');
+        }
+
+        if (!isset($queryFilters['saleschannels'])) {
+            throw new \Exception('cannot fetch product(s) without saleschannels filter');
+        }
 
         $product = $em->find(Product::class, $data[$productIdFieldName]);
-
         if (!$product) {
             return;
         }
 
-        $data['frontendAttributes'][] = [
+        $data['frontendAttributes'] = [
             'name' => $product->getDenormalizedDefaultName(),
             'attributeFamily' => $product->getAttributeFamily()->getCode(),
             'organization' => $product->getOrganization()->getId(),
@@ -65,35 +77,194 @@ class LoadProductData implements ProcessorInterface
             'taxcode' => $product->getTaxCode()->getCode(),
             'prices' => $this->getPrices($product),
             'image' => [
-                'media_url' => $product->getImage()->getMediaUrl(),
-                'content' => $product->getImage()->getMediaUrl() ?? $product->getImage()
+                'media_url' => $product->getImage()->getMediaUrl()
             ],
-            'variantData' => $this->getVariantData($product)
-
+            'attributes' => $this->getProductAttributes($product),
+            'inventoryData' => $this->getInventoryData($product, $queryFilters['saleschannels']),
+            'variantAttributes' => $this->getVariantAttributes($product)
         ];
-//        var_dump($data);
+
+        if (str_contains($request->get('include'), 'variants')) {
+            $data['frontendAttributes']['variantData'] = $this->getVariantData($product, $queryFilters['saleschannels']);
+        }
+
+        if (str_contains($request->get('include'), 'suppliers')) {
+            $data['frontendAttributes']['suppliers'] = $this->getSuppliers($product);
+        }
+
         $context->setData($data);
     }
 
-    protected function getVariantData(Product $product)
+    protected function getProductAttributes(Product $product)
+    {
+        $defaultAttributes = [
+            'warranty',
+            'weight',
+            'barcode',
+            'manufacturingCode'
+        ];
+        $allAttributes = [];
+        $attributes = $this->attributeManager->getAttributesByFamily($product->getAttributeFamily());
+        foreach ($attributes as $attribute) {
+            if (in_array($attribute->getFieldName(), $defaultAttributes)) {
+                $label = $this->attributeManager->getAttributeLabel($attribute);
+                $value = $this->propertyAccessor->getValue($product, $attribute->getFieldName());
+                $allAttributes[] = ['name' => $label, 'value' => $value];
+            }
+        }
+
+        return $allAttributes;
+    }
+
+    protected function getSuppliers(Product $product)
+    {
+        $suppliers = [];
+        if ($product->hasSuppliers()) {
+            foreach ($product->getSuppliers() as $supplierRelation) {
+                $suppliers = [
+                    'code' => $supplierRelation->getSupplier()->getCode(),
+                    'name' => $supplierRelation->getSupplier()->getName()
+                ];
+            }
+        }
+
+        return $suppliers;
+    }
+
+    protected function getInventoryData(Product $product, string $salesChannelCode)
+    {
+        $inventoryData = [];
+
+        if ($inventoryItem = $product->getInventoryItem()) {
+            /** @var SalesChannel $salesChannel */
+            $salesChannel = $this->doctrineHelper
+                ->getEntityRepositoryForClass(SalesChannel::class)
+                ->findOneBy(['code' => $salesChannelCode]);
+            if ($salesChannel) {
+                $inventoryQty = $this->availableInventoryProvider->getAvailableInventory($product, $salesChannel);
+            }
+            $inventoryData = [
+                'qty' => $inventoryQty ?? 0,
+                'productUnit' => $inventoryItem->getProductUnit()->getName(),
+                'backorderAllowed' => $inventoryItem->isBackorderAllowed(),
+                'canPreOrder' => $inventoryItem->isCanPreorder(),
+                'onDemandAllowed' => $inventoryItem->isOrderOnDemandAllowed(),
+                'promises' => $this->getInventoryPromiseData($inventoryItem)
+            ];
+        }
+
+        return $inventoryData;
+    }
+
+    protected function getInventoryPromiseData(InventoryItem $inventoryItem)
+    {
+        $promises = [];
+        if ($inventoryItem->getOnHandPromise()) {
+            $promises[] = [
+                'type' => 'onHandPromise',
+                'code' => $inventoryItem->getOnHandPromise()->getCode(),
+                'label' => $inventoryItem->getOnHandPromise()->getDenormalizedDefaultLabel(),
+                'minDays' => $inventoryItem->getOnHandPromise()->getMinDays(),
+                'maxDays' => $inventoryItem->getOnHandPromise()->getMaxDays()
+            ];
+        }
+
+        if ($inventoryItem->getBackOrderPromise()) {
+            $promises[] = [
+                'type' => 'backOrderPromise',
+                'code' => $inventoryItem->getBackOrderPromise()->getCode(),
+                'label' => $inventoryItem->getBackOrderPromise()->getDenormalizedDefaultLabel(),
+                'minDays' => $inventoryItem->getBackOrderPromise()->getMinDays(),
+                'maxDays' => $inventoryItem->getBackOrderPromise()->getMaxDays()
+            ];
+        }
+
+        if ($inventoryItem->getPreOrderPromise()) {
+            $promises[] = [
+                'type' => 'preOrderPromise',
+                'code' => $inventoryItem->getPreOrderPromise()->getCode(),
+                'label' => $inventoryItem->getPreOrderPromise()->getDenormalizedDefaultLabel(),
+                'minDays' => $inventoryItem->getPreOrderPromise()->getMinDays(),
+                'maxDays' => $inventoryItem->getPreOrderPromise()->getMaxDays()
+            ];
+        }
+
+        if ($inventoryItem->getOrderOnDemandPromise()) {
+            $promises[] = [
+                'type' => 'orderOnDemandPromise',
+                'code' => $inventoryItem->getOrderOnDemandPromise()->getCode(),
+                'label' => $inventoryItem->getOrderOnDemandPromise()->getDenormalizedDefaultLabel(),
+                'minDays' => $inventoryItem->getOrderOnDemandPromise()->getMinDays(),
+                'maxDays' => $inventoryItem->getOrderOnDemandPromise()->getMaxDays()
+            ];
+        }
+
+        if ($inventoryItem->getDropShipPromise()) {
+            $promises[] = [
+                'type' => 'dropShipPromise',
+                'code' => $inventoryItem->getDropShipPromise()->getCode(),
+                'label' => $inventoryItem->getDropShipPromise()->getDenormalizedDefaultLabel(),
+                'minDays' => $inventoryItem->getDropShipPromise()->getMinDays(),
+                'maxDays' => $inventoryItem->getDropShipPromise()->getMaxDays()
+            ];
+        }
+
+        return $promises;
+    }
+
+    protected function getVariantAttributes(Product $product)
+    {
+        $variantAttributes = [];
+        if ($product->getVariant()) {
+            foreach ($product->getVariant()->getVariantFields() as $variantField) {
+                $attribute = $this->attributeManager
+                    ->getAttributeByFamilyAndName($product->getAttributeFamily(), $variantField);
+                $label = $this->attributeManager->getAttributeLabel($attribute);
+                $function = 'get' . ucwords($label);
+                if ($attribute->getType() === 'enum') {
+                    $variantAttributes[] = ['name' => $label, 'value' => $product->$function()->getName()];
+                } else {
+                    $variantAttributes[] = ['name' => $label, 'value' => $product->$function()];
+                }
+            }
+        }
+
+        return $variantAttributes;
+    }
+
+    protected function getVariantData(Product $product, $salesChannelCode)
     {
         $variantData = [];
         if ($product->getVariant()) {
-            $variantData[] = [
+            $variantData = [
                 'variantCode' => $product->getVariant()->getVariantCode(),
                 'variantName' => $product->getVariant()->getDenormalizedDefaultName(),
-                'variantDescription' => $product->getVariant()->getDescriptions()->first(),
                 'variantImage' => [
-                    'media_url' => $product->getVariant()->getImage()?->getMediaUrl(),
-                    'content' => $product->getVariant()->getImage()?->getMediaUrl() ?? $product->getVariant()->getImage()
+                    'media_url' => $product->getVariant()->getImage()?->getMediaUrl()
                 ],
-                'variantFields' => $product->getVariant()->getVariantFields()
+                'variants' => []
             ];
-
-            foreach($product->getVariant()->getProducts() as $variantProduct) {
-                $variantData[] = ['name' => $variantProduct->getDenormalizedDefaultName(), 'sku' => $variantProduct->getSku()];
+            foreach ($product->getVariant()->getProducts() as $variantProduct) {
+                $variantFields = [];
+                $variantFields['name'] = $variantProduct->getDenormalizedDefaultName();
+                $variantFields['sku'] = $variantProduct->getSku();
+                $variantFields['prices'] = $this->getPrices($variantProduct);
+                $variantFields['inventoryData'] = $this->getInventoryData($variantProduct, $salesChannelCode);
+                foreach ($product->getVariant()->getVariantFields() as $variantField) {
+                    $attribute = $this->attributeManager
+                        ->getAttributeByFamilyAndName($variantProduct->getAttributeFamily(), $variantField);
+                    $label = $this->attributeManager->getAttributeLabel($attribute);
+                    $function = 'get' . ucwords($label);
+                    if ($attribute->getType() === 'enum') {
+                        $variantFields['attributes'][] = ['name' => $label, 'value' => $variantProduct->$function()->getName()];
+                    } else {
+                        $variantFields['attributes'][] = ['name' => $label, 'value' => $variantProduct->$function()];
+                    }
+                }
+                $variantData['variants'][] = $variantFields;
             }
         }
+
         return $variantData;
     }
 
@@ -131,11 +302,12 @@ class LoadProductData implements ProcessorInterface
     {
         $prices = [];
         foreach($product->getPrices() as $priceList) {
-            $prices[] = [
+            $prices = [
                 'default' => $priceList->getDefaultPrice()?->getValue(),
                 'special' => $priceList->getSpecialPrice()?->getValue(),
                 'special_from' => $priceList->getSpecialPrice()?->getStartDate(),
                 'special_to' => $priceList->getSpecialPrice()?->getEndDate(),
+                'msrp' => $priceList->getMsrpPrice()?->getValue(),
                 'currency' => $priceList->getCurrency()
             ];
         }
