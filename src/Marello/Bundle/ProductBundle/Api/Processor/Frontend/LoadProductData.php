@@ -14,8 +14,8 @@ use Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\CustomizeLoadedDataContex
 
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
-use Marello\Bundle\InventoryBundle\Provider\AvailableInventoryProvider;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
+use Marello\Bundle\InventoryBundle\Provider\AvailableInventoryProvider;
 
 /**
  * Load FrontendProduct Data which is an extension of the default Product.
@@ -41,7 +41,7 @@ class LoadProductData implements ProcessorInterface
     {
         /** @var CustomizeLoadedDataContext $context */
         $data = $context->getResult();
-        if (!$context->isFieldRequested('frontendAttributes', $data)) {
+        if (!$context->isFieldRequested('frontendData', $data)) {
             return;
         }
 
@@ -55,19 +55,31 @@ class LoadProductData implements ProcessorInterface
         $request = $this->requestStack->getCurrentRequest();
         $queryFilters = $request->get('filter');
         if (!isset($queryFilters['organization'])) {
-            throw new \Exception('cannot fetch product(s) without organization filter');
+            $data['frontendData'] = [
+                'error' => 'cannot fetch product(s) without organization filter'
+            ];
+            $context->setData($data);
+            return;
         }
 
         if (!isset($queryFilters['saleschannels'])) {
-            throw new \Exception('cannot fetch product(s) without saleschannels filter');
+            $data['frontendData'] = [
+                'error' => 'cannot fetch product(s) without saleschannels filter'
+            ];
+            $context->setData($data);
+            return;
         }
 
         $product = $em->find(Product::class, $data[$productIdFieldName]);
         if (!$product) {
+            $data['frontendData'] = [
+                'error' => 'Product not found'
+            ];
+            $context->setData($data);
             return;
         }
 
-        $data['frontendAttributes'] = [
+        $data['frontendData'] = [
             'name' => $product->getDenormalizedDefaultName(),
             'attributeFamily' => $product->getAttributeFamily()->getCode(),
             'organization' => $product->getOrganization()->getId(),
@@ -85,11 +97,11 @@ class LoadProductData implements ProcessorInterface
         ];
 
         if (str_contains($request->get('include'), 'variants')) {
-            $data['frontendAttributes']['variantData'] = $this->getVariantData($product, $queryFilters['saleschannels']);
+            $data['frontendData']['variantData'] = $this->getVariantData($product, $queryFilters['saleschannels']);
         }
 
         if (str_contains($request->get('include'), 'suppliers')) {
-            $data['frontendAttributes']['suppliers'] = $this->getSuppliers($product);
+            $data['frontendData']['suppliers'] = $this->getSuppliers($product);
         }
 
         $context->setData($data);
@@ -106,10 +118,15 @@ class LoadProductData implements ProcessorInterface
         $allAttributes = [];
         $attributes = $this->attributeManager->getAttributesByFamily($product->getAttributeFamily());
         foreach ($attributes as $attribute) {
+            $label = $this->attributeManager->getAttributeLabel($attribute);
+            $value = $this->propertyAccessor->getValue($product, $attribute->getFieldName());
             if (in_array($attribute->getFieldName(), $defaultAttributes)) {
-                $label = $this->attributeManager->getAttributeLabel($attribute);
-                $value = $this->propertyAccessor->getValue($product, $attribute->getFieldName());
                 $allAttributes[] = ['name' => $label, 'value' => $value];
+            } else {
+                $attributeScopedConfig = $attribute->toArray('frontend');
+                if (isset($attributeScopedConfig['is_displayable']) && $attributeScopedConfig['is_displayable']) {
+                    $allAttributes[] = ['name' => $label, 'value' => $value];
+                }
             }
         }
 
@@ -134,7 +151,6 @@ class LoadProductData implements ProcessorInterface
     protected function getInventoryData(Product $product, string $salesChannelCode)
     {
         $inventoryData = [];
-
         if ($inventoryItem = $product->getInventoryItem()) {
             /** @var SalesChannel $salesChannel */
             $salesChannel = $this->doctrineHelper
@@ -148,6 +164,7 @@ class LoadProductData implements ProcessorInterface
                 'productUnit' => $inventoryItem->getProductUnit()->getName(),
                 'backorderAllowed' => $inventoryItem->isBackorderAllowed(),
                 'canPreOrder' => $inventoryItem->isCanPreorder(),
+                'preOrderDateTime' => $inventoryItem->getPreOrdersDatetime(),
                 'onDemandAllowed' => $inventoryItem->isOrderOnDemandAllowed(),
                 'promises' => $this->getInventoryPromiseData($inventoryItem)
             ];

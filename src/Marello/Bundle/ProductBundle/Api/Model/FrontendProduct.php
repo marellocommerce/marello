@@ -12,15 +12,15 @@ class FrontendProduct extends Product
     /**
      * @var array
      */
-    private $frontendAttributes = [];
+    private $frontendData = [];
 
     /**
      * @param array $attributes
      * @return $this
      */
-    public function setFrontendAttribute(array $attributes): self
+    public function setFrontendData(array $data): self
     {
-        $this->frontendAttributes = $attributes;
+        $this->frontendData = $data;
 
         return $this;
     }
@@ -28,8 +28,8 @@ class FrontendProduct extends Product
     /**
      * @return array
      */
-    public function getFrontendAttributes(): array
+    public function getFrontendData(): array
     {
-        return $this->frontendAttributes;
+        return $this->frontendData;
     }
 }
