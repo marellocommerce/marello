@@ -40,7 +40,7 @@ api:
         Marello\Bundle\ProductBundle\Api\Model\FrontendProduct:
             exclusion_policy: all
             fields:
-                frontendAttributes:
+                frontendData:
                     data_type: array
                     property_path: _
             filters:
