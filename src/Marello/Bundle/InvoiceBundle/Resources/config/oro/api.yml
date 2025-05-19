@@ -43,6 +43,17 @@ api:
                         allow_array: true
                         property_path: invoiceReference
                         description: 'Filter by invoice reference'
+                    customer:
+                        data_type: string
+                        allow_array: true
+                        property_path: customer
+                        description: 'Filter by Customer(s)'
+                        operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
+                    company:
+                        data_type: string
+                        property_path: customer.company
+                        description: 'Filter by Company'
+                        operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
                     createdAt:
                         exclude: true
                     updatedAt:

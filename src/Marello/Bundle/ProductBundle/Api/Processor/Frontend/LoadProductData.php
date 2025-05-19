@@ -81,15 +81,15 @@ class LoadProductData implements ProcessorInterface
 
         $data['frontendData'] = [
             'name' => $product->getDenormalizedDefaultName(),
-            'attributeFamily' => $product->getAttributeFamily()->getCode(),
-            'organization' => $product->getOrganization()->getId(),
+            'attributeFamily' => $product->getAttributeFamily()?->getCode(),
+            'organization' => $product->getOrganization()?->getId(),
             'channels' => $this->getChannels($product),
             'categories' => $this->getCategories($product),
             'status' => $product->getStatus()->getName(),
             'taxcode' => $product->getTaxCode()->getCode(),
             'prices' => $this->getPrices($product),
             'image' => [
-                'media_url' => $product->getImage()->getMediaUrl()
+                'media_url' => $product->getImage()?->getMediaUrl()
             ],
             'attributes' => $this->getProductAttributes($product),
             'inventoryData' => $this->getInventoryData($product, $queryFilters['saleschannels']),
@@ -125,7 +125,11 @@ class LoadProductData implements ProcessorInterface
             } else {
                 $attributeScopedConfig = $attribute->toArray('frontend');
                 if (isset($attributeScopedConfig['is_displayable']) && $attributeScopedConfig['is_displayable']) {
-                    $allAttributes[] = ['name' => $label, 'value' => $value];
+                    if ($attribute->getType() === 'enum') {
+                        $allAttributes[] = ['name' => $label, 'value' => $value?->getName() ];
+                    } else {
+                        $allAttributes[] = ['name' => $label, 'value' => $value];
+                    }
                 }
             }
         }
@@ -161,7 +165,7 @@ class LoadProductData implements ProcessorInterface
             }
             $inventoryData = [
                 'qty' => $inventoryQty ?? 0,
-                'productUnit' => $inventoryItem->getProductUnit()->getName(),
+                'productUnit' => $inventoryItem->getProductUnit()?->getName(),
                 'backorderAllowed' => $inventoryItem->isBackorderAllowed(),
                 'canPreOrder' => $inventoryItem->isCanPreorder(),
                 'preOrderDateTime' => $inventoryItem->getPreOrdersDatetime(),

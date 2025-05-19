@@ -6,3 +6,5 @@ marello:
             number.message: 'Customer number should be unique per Organization.'
         email:
             message: 'Email should be unique per Organization.'
+        password_mismatch:
+            message: 'The password fields must match.'

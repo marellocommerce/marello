@@ -25,6 +25,9 @@ marello:
         label:                            'Customer'
         is_hidden.label:                  'Is hidden'
         email_lowercase.label:            'Email lowercase'
+        frontend:
+            password.label:               'Password'
+            password_confirmation.label:  'Re-enter password'
         form:
             choose:                       'Choose customer'
 
