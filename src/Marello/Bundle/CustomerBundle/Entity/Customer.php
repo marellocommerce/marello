@@ -124,7 +124,7 @@ class Customer extends AbstractUser implements
 
     #[ORM\Column(name: 'login_count', type: Types::INTEGER, options: ['default' => 0, 'unsigned' => true])]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
-    protected ?int $loginCount = null;
+    protected ?int $loginCount = 0;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]

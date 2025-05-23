@@ -128,8 +128,16 @@ services:
         public: true
         arguments:
             - '@doctrine.orm.entity_manager'
+            - '@Marello\Bundle\CustomerBundle\Entity\CustomerManager'
         tags:
             - { name: oro_form.form.handler, alias: marello_customer.form.handler.customer }
+
+    Marello\Bundle\CustomerBundle\Entity\CustomerManager:
+        public: true
+        arguments:
+            - '@oro_user.security.user_loader'
+            - '@doctrine'
+            - '@security.password_hasher_factory'
 
     Marello\Bundle\CustomerBundle\Provider\CustomerEmailOwnerProvider:
         tags:

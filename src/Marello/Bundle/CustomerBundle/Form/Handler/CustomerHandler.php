@@ -3,27 +3,27 @@
 namespace Marello\Bundle\CustomerBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
-use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
+
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
+
+use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Marello\Bundle\CustomerBundle\Entity\CustomerManager;
 
 class CustomerHandler implements FormHandlerInterface
 {
     use RequestHandlerTrait;
 
     /**
-     * @var EntityManagerInterface
-     */
-    protected $manager;
-
-    /**
      * @param EntityManagerInterface $manager
      */
-    public function __construct(EntityManagerInterface $manager)
-    {
-        $this->manager = $manager;
+    public function __construct(
+        protected EntityManagerInterface $manager,
+        protected CustomerManager $userManager
+    ) {
     }
 
     public function process($data, FormInterface $form, Request $request)
@@ -38,6 +38,7 @@ class CustomerHandler implements FormHandlerInterface
             $this->submitPostPutRequest($form, $request);
 
             if ($form->isValid()) {
+                $this->userManager->updateUser($data);
                 $this->onSuccess($data);
 
                 return true;
