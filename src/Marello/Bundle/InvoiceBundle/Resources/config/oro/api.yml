@@ -20,6 +20,9 @@ api:
         Marello\Bundle\InvoiceBundle\Entity\Invoice:
             documentation_resource: '@MarelloInvoiceBundle/Resources/doc/api/invoice.md'
             fields:
+                company:
+                    data_type: string
+                    property_path: customer.company
                 invoiceType:
                     exclude: true
                 createdAt:
