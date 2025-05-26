@@ -60,7 +60,6 @@ class Customer extends AbstractUser implements
     use FullNameTrait;
     use EmailAddressTrait;
     use DatesAwareTrait;
-    use AuditableOrganizationAwareTrait;
     use LocalizationTrait;
     use ExtendEntityTrait;
 
