@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
 
@@ -53,6 +54,22 @@ class CompanyType extends AbstractType
                 ParentCompanySelectType::class,
                 [
                     'label' => 'marello.customer.company.parent.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'salesRepresentative',
+                UserSelectType::class,
+                [
+                    'label' => 'marello.customer.company.sales_representative.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'fallbackSalesRepresentative',
+                UserSelectType::class,
+                [
+                    'label' => 'marello.customer.company.fallback_sales_representative.label',
                     'required' => false
                 ]
             )
