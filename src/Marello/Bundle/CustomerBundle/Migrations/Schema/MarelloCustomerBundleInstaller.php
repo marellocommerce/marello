@@ -35,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_6';
+        return 'v1_7_2';
     }
 
     /**
@@ -112,6 +112,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('company_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('customer_group_id', 'integer', ['notnull' => false]);
+        $table->addColumn('localization_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addIndex(['primary_address_id']);
@@ -220,6 +221,12 @@ class MarelloCustomerBundleInstaller implements
             ['customer_group_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_localization'),
+            ['localization_id'],
+            ['id'],
+            ['onDelete' => null, 'onUpdate' => null]
         );
     }
 

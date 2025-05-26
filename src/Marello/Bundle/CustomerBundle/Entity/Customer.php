@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
+use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
@@ -47,11 +49,14 @@ class Customer implements
     EmailOwnerInterface,
     DatesAwareInterface,
     OrganizationAwareInterface,
+    LocalizationAwareInterface,
     ExtendEntityInterface
 {
-    use FullNameTrait, EmailAddressTrait;
+    use FullNameTrait;
+    use EmailAddressTrait;
     use DatesAwareTrait;
     use AuditableOrganizationAwareTrait;
+    use LocalizationTrait;
     use ExtendEntityTrait;
 
     #[ORM\Id]

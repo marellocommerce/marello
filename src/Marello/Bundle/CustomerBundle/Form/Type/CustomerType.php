@@ -11,6 +11,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
+use Oro\Bundle\LocaleBundle\Form\Type\LocalizationSelectType;
+
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\AddressBundle\Form\Type\AddressType;
 
@@ -49,6 +51,9 @@ class CustomerType extends AbstractType
             ->add('customerGroup', CustomerGroupSelectType::class, [
                 'required' => false,
                 'create_enabled' => false
+            ])
+            ->add('localization', LocalizationSelectType::class, [
+                'required' => false
             ])
             ->add('primaryAddress', CustomerPrimaryAddressType::class, [
                 'required' => false

@@ -46,6 +46,7 @@
                     {{ UI.renderProperty('marello.customer.customer_number.label'|trans, entity.customerNumber) }}
                     {{ UI.renderProperty('marello.customer.customergroup.entity_label'|trans, entity.customerGroup.name|default('N/A')) }}
                     {{ UI.renderProperty('marello.customer.phone.label'|trans, entity.primaryAddress.phone|default('N/A')) }}
+                    {{ UI.renderProperty('marello.customer.localization.label'|trans, entity.localization) }}
                     {{ UI.renderProperty('oro.ui.created_at'|trans, entity.createdAt|date) }}
                     {{ UI.renderProperty('oro.ui.updated_at'|trans, entity.updatedAt|date|default('N/A'|trans)) }}
                 </div>

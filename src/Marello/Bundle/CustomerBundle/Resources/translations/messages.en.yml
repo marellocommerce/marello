@@ -25,6 +25,7 @@ marello:
         label:                            'Customer'
         is_hidden.label:                  'Is hidden'
         email_lowercase.label:            'Email lowercase'
+        localization.label:               'Localization'
         form:
             choose:                       'Choose customer'
 
