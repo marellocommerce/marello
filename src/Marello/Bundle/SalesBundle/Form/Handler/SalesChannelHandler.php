@@ -44,13 +44,13 @@ class SalesChannelHandler implements FormHandlerInterface
 
         if (in_array($request->getMethod(), ['POST', 'PUT'])) {
             $this->submitPostPutRequest($form, $request);
-            $selectedSalesChannelGroup = null;
+            $salesChannelGroup = null;
             if ($form->has('selectSalesChannelGroup')) {
-                $selectedSalesChannelGroup = $form->get('selectSalesChannelGroup')->getData();
+                $salesChannelGroup = $form->get('selectSalesChannelGroup')->getData();
             }
 
             if ($form->isValid()) {
-                $this->onSuccess($data, $selectedSalesChannelGroup);
+                $this->onSuccess($data, $salesChannelGroup);
 
                 return true;
             }
@@ -67,7 +67,10 @@ class SalesChannelHandler implements FormHandlerInterface
      */
     protected function onSuccess(SalesChannel $entity, ?SalesChannelGroup $salesChannelGroup)
     {
-        $entity->setGroup($salesChannelGroup);
+        if ($salesChannelGroup) {
+            $entity->setGroup($salesChannelGroup);
+        }
+
         $this->manager->persist($entity);
         $this->manager->flush();
     }
