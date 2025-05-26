@@ -9,6 +9,7 @@ use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\PaymentTermBundle\Form\Type\PaymentTermSelectType;
 use Oro\Bundle\AddressBundle\Form\Type\AddressCollectionType;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
+use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -49,6 +50,22 @@ class CompanyType extends AbstractType
                 ParentCompanySelectType::class,
                 [
                     'label' => 'marello.customer.company.parent.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'salesRepresentative',
+                UserSelectType::class,
+                [
+                    'label' => 'marello.customer.company.sales_representative.label',
+                    'required' => false
+                ]
+            )
+            ->add(
+                'fallbackSalesRepresentative',
+                UserSelectType::class,
+                [
+                    'label' => 'marello.customer.company.fallback_sales_representative.label',
                     'required' => false
                 ]
             )

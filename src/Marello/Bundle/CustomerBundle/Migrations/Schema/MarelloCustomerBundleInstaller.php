@@ -35,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_6';
+        return 'v1_7';
     }
 
     /**
@@ -70,6 +70,8 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('payment_term_id', 'integer', ['notnull' => false]);
         $table->addColumn('tax_identification_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('parent_id', 'integer', ['notnull' => false]);
+        $table->addColumn('sales_rep_id', 'integer', ['notnull' => false]);
+        $table->addColumn('fallback_sales_rep_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
@@ -160,6 +162,18 @@ class MarelloCustomerBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('marello_payment_term'),
             ['payment_term_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['sales_rep_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['fallback_sales_rep_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );

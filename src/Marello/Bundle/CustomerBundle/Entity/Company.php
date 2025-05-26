@@ -18,6 +18,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTra
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
 use Marello\Bundle\PaymentTermBundle\Entity\PaymentTerm;
 use Marello\Bundle\CustomerBundle\Entity\Repository\CompanyRepository;
+use Oro\Bundle\UserBundle\Entity\User;
 
 #[ORM\Entity(CompanyRepository::class), ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_customer_company')]
@@ -107,6 +108,20 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
         defaultValues: ['dataaudit' => ['auditable' => true]]
     )]
     protected ?string $taxIdentificationNumber = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'sales_rep_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?User $salesRepresentative = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'fallback_sales_rep_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?User $fallbackSalesRepresentative = null;
 
     /**
      * Constructor
@@ -385,6 +400,44 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     public function setTaxIdentificationNumber(string $taxIdentificationNumber = null): self
     {
         $this->taxIdentificationNumber = $taxIdentificationNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getSalesRepresentative(): ?User
+    {
+        return $this->salesRepresentative;
+    }
+
+    /**
+     * @param User|null $salesRepresentative
+     * @return $this
+     */
+    public function setSalesRepresentative(?User $salesRepresentative): self
+    {
+        $this->salesRepresentative = $salesRepresentative;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getFallbackSalesRepresentative(): ?User
+    {
+        return $this->fallbackSalesRepresentative;
+    }
+
+    /**
+     * @param User|null $fallbackSalesRepresentative
+     * @return $this
+     */
+    public function setFallbackSalesRepresentative(?User $fallbackSalesRepresentative): self
+    {
+        $this->fallbackSalesRepresentative = $fallbackSalesRepresentative;
 
         return $this;
     }

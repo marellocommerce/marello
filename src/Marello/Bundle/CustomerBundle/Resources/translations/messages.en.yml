@@ -54,6 +54,8 @@ marello:
             organization.label:     'Organization'
             payment_term.label:     'Payment Term'
             tax_identification_number.label:  'Tax Identification Number'
+            sales_representative.label: 'Sales Representative'
+            fallback_sales_representative.label: 'Fallback Sales Representative'
 
             form:
                 choose:             'Choose a company'
