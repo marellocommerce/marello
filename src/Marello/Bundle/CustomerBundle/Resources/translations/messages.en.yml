@@ -28,6 +28,7 @@ marello:
         frontend:
             password.label:               'Password'
             password_confirmation.label:  'Re-enter password'
+        localization.label:               'Localization'
         form:
             choose:                       'Choose customer'
 

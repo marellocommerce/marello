@@ -23,6 +23,8 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
 use Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository;
 
 #[ORM\Entity(CustomerRepository::class), ORM\HasLifecycleCallbacks]
@@ -52,10 +54,14 @@ class Customer extends AbstractUser implements
     DatesAwareInterface,
     OrganizationAwareInterface,
     ExtendEntityInterface,
-    \Serializable
+    \Serializable,
+    LocalizationAwareInterface
 {
-    use FullNameTrait, EmailAddressTrait;
+    use FullNameTrait;
+    use EmailAddressTrait;
     use DatesAwareTrait;
+    use AuditableOrganizationAwareTrait;
+    use LocalizationTrait;
     use ExtendEntityTrait;
 
     #[ORM\Id]

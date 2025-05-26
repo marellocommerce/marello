@@ -35,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_7_1';
+        return 'v1_7_2';
     }
 
     /**
@@ -125,6 +125,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('password_changed', 'datetime', ['notnull' => false]);
         $table->addColumn('last_login', 'datetime', ['notnull' => false]);
         $table->addColumn('login_count', 'integer', ['default' => '0', 'unsigned' => true]);
+        $table->addColumn('localization_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addIndex(['primary_address_id']);
@@ -245,6 +246,12 @@ class MarelloCustomerBundleInstaller implements
             ['customer_group_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_localization'),
+            ['localization_id'],
+            ['id'],
+            ['onDelete' => null, 'onUpdate' => null]
         );
     }
 

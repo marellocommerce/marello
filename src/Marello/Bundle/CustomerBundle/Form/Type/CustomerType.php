@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
+use Oro\Bundle\LocaleBundle\Form\Type\LocalizationSelectType;
+
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\AddressBundle\Form\Type\AddressType;
 
@@ -53,6 +55,9 @@ class CustomerType extends AbstractType
             ->add('customerGroup', CustomerGroupSelectType::class, [
                 'required' => false,
                 'create_enabled' => false
+            ])
+            ->add('localization', LocalizationSelectType::class, [
+                'required' => false
             ])
             ->add('primaryAddress', CustomerPrimaryAddressType::class, [
                 'required' => false
