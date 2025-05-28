@@ -30,14 +30,14 @@ class CustomerRepository extends ServiceEntityRepository
         return $qb->getQuery()->getArrayResult();
     }
 
-    public function findUserByEmail(string $email): ?Customer
+    public function findUserByEmail(string $email, ?int $organization): ?Customer
     {
-        return $this->getQbForFindUserByEmail($email)
+        return $this->getQbForFindUserByEmail($email, $organization)
             ->getQuery()
             ->getOneOrNullResult();
     }
 
-    protected function getQbForFindUserByEmail(string $email): QueryBuilder
+    protected function getQbForFindUserByEmail(string $email, ?int $organization): QueryBuilder
     {
         $qb = $this->createQueryBuilder('c');
         $qb->setMaxResults(1);
@@ -46,6 +46,12 @@ class CustomerRepository extends ServiceEntityRepository
             ->where($qb->expr()->eq('LOWER(c.email)', ':email'))
             ->setParameter('email', mb_strtolower($email))
             ->andWhere($qb->expr()->eq('c.isHidden', 'false'));
+
+        if ($organization) {
+            $qb
+                ->andWhere($qb->expr()->eq('c.organization', ':organization'))
+                ->setParameter('organization', $organization);
+        }
 
         return $qb;
     }
