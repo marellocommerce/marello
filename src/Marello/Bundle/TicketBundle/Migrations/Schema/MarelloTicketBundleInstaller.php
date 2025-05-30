@@ -51,7 +51,7 @@ class MarelloTicketBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_1';
+        return 'v1_2';
     }
 
     /**
@@ -96,6 +96,7 @@ class MarelloTicketBundleInstaller implements
         $table->addColumn('email', 'string', ['length' => 255]);
         $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('resolution', 'text', ['notnull' => false, 'comment' => '(DC2Type:text)']);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
@@ -177,6 +178,12 @@ class MarelloTicketBundleInstaller implements
             ['assigned_to_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 
