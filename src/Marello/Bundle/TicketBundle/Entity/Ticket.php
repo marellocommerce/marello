@@ -5,7 +5,6 @@ namespace Marello\Bundle\TicketBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-use Marello\Bundle\CustomerBundle\Entity\Company;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -13,6 +12,8 @@ use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
@@ -24,15 +25,22 @@ use Marello\Bundle\TicketBundle\Entity\Repository\TicketRepository;
     routeName: 'marello_ticket_ticket_index',
     defaultValues: [
         'dataaudit' => ['auditable' => true],
-        'security' => ['type' => 'ACL', 'group_name' => '']
+        'security' => ['type' => 'ACL', 'group_name' => ''],
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ]
     ]
 )]
 class Ticket implements
-    ExtendEntityInterface,
-    FullNameInterface
+    FullNameInterface,
+    OrganizationAwareInterface,
+    ExtendEntityInterface
 {
     use EntityCreatedUpdatedAtTrait;
     use ExtendEntityTrait;
+    use AuditableOrganizationAwareTrait;
 
     /**
      * @var int|null
