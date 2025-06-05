@@ -10,6 +10,7 @@ use Oro\Bundle\ApiBundle\Processor\CustomizeLoadedData\CustomizeLoadedDataContex
 
 use Marello\Bundle\SalesBundle\Entity\SalesChannel;
 use Marello\Bundle\PdfBundle\Provider\LogoPathProvider;
+use Marello\Bundle\FrontendBundle\Provider\PortalConfigProvider;
 
 class ComputeSalesChannelAddressField implements ProcessorInterface
 {
@@ -18,10 +19,12 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
     const PHONE_IDENTIFIER_KEY = 'marello_pdf.company_phone';
 
     public function __construct(
-        protected ConfigManager $config,
-        protected DoctrineHelper $doctrineHelper,
-        protected LogoPathProvider $provider
-    ) {
+        protected ConfigManager    $config,
+        protected DoctrineHelper   $doctrineHelper,
+        protected LogoPathProvider $provider,
+        protected PortalConfigProvider $portalConfigProvider
+    )
+    {
     }
 
     /**
@@ -36,6 +39,7 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $emailFieldName = $context->getResultFieldName('email');
         $phoneFieldName = $context->getResultFieldName('phone');
         $logoFieldName = $context->getResultFieldName('logo');
+        $portalFieldName = $context->getResultFieldName('portal_configuration');
 
         $salesChannelIdFieldName = $context->getResultFieldName('id');
         if (!$salesChannelIdFieldName || empty($data[$salesChannelIdFieldName])) {
@@ -47,10 +51,14 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $email = $this->loadSalesChannelEmail((int)$data[$salesChannelIdFieldName]);
         $logo = $this->loadSalesChannelLogo((int)$data[$salesChannelIdFieldName]);
 
+        // Add check for saleschannel type before adding portal config
+        $portalConfiguration = $this->loadPortalConfig((int)$data[$salesChannelIdFieldName]);
+
         $data[$addressFieldName] = $address;
         $data[$emailFieldName] = $email;
         $data[$phoneFieldName] = $phone;
         $data[$logoFieldName] = $logo;
+        $data[$portalFieldName] = $portalConfiguration;
 
         $context->setData($data);
     }
@@ -117,5 +125,19 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
     private function getConfigValue($identifierKey, $scopeIdentifier = null): ?string
     {
         return $this->config->get($identifierKey, false, false, $scopeIdentifier);
+    }
+
+    /**
+     * @param int $salesChannelId
+     * @return null|object
+     */
+    protected function loadPortalConfig(int $salesChannelId)
+    {
+        $salesChannel = $this->doctrineHelper->getEntity(SalesChannel::class, $salesChannelId);
+        if (!$salesChannel) {
+            return null;
+        }
+
+        return $this->portalConfigProvider->getPortalConfig($salesChannel);
     }
 }
