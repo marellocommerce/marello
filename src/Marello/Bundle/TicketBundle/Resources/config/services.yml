@@ -35,3 +35,12 @@ services:
             - '@oro_entity_extend.enum_value_provider'
         tags:
             - { name: form.type }
+
+    Marello\Bundle\TicketBundle\Entity\Repository\TicketCategoryRepository:
+        parent: oro_entity.abstract_repository
+        arguments:
+            - 'Marello\Bundle\TicketBundle\Entity\TicketCategory'
+        calls:
+            - [ setAclHelper, [ '@oro_security.acl_helper' ] ]
+        tags:
+            - { name: doctrine.repository_service }

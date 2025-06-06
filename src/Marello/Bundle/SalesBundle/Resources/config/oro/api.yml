@@ -41,6 +41,9 @@ api:
                     exclude: true
                 updatedAt:
                     exclude: true
+                portal_configuration:
+                    data_type: array
+                    property_path: _
             filters:
                 exclusion_policy: all
                 fields:
