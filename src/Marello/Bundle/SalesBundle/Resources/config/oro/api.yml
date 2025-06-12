@@ -44,6 +44,9 @@ api:
                 portal_configuration:
                     data_type: array
                     property_path: _
+                portal_pages_configuration:
+                    data_type: array
+                    property_path: _
             filters:
                 exclusion_policy: all
                 fields:
@@ -51,6 +54,11 @@ api:
                         exclude: true
                     updatedAt:
                         exclude: true
+                    locale:
+                        data_type: string
+                        property_path: _
+                        description: 'Filter portal pages content by language code'
+
             actions:
                 create: false
                 update: false

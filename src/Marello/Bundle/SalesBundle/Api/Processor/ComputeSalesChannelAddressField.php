@@ -34,12 +34,14 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
     {
         /** @var CustomizeLoadedDataContext $context */
         $data = $context->getData();
+        $sharedData = $context->getSharedData();
 
         $addressFieldName = $context->getResultFieldName('address');
         $emailFieldName = $context->getResultFieldName('email');
         $phoneFieldName = $context->getResultFieldName('phone');
         $logoFieldName = $context->getResultFieldName('logo');
         $portalFieldName = $context->getResultFieldName('portal_configuration');
+        $portalPagesFieldName = $context->getResultFieldName('portal_pages_configuration');
 
         $salesChannelIdFieldName = $context->getResultFieldName('id');
         if (!$salesChannelIdFieldName || empty($data[$salesChannelIdFieldName])) {
@@ -53,12 +55,14 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
 
         // Add check for saleschannel type before adding portal config
         $portalConfiguration = $this->loadPortalConfig((int)$data[$salesChannelIdFieldName]);
+        $portalPagesConfiguration = $this->loadPortalPagesConfig((int)$data[$salesChannelIdFieldName], $sharedData['locale']);
 
         $data[$addressFieldName] = $address;
         $data[$emailFieldName] = $email;
         $data[$phoneFieldName] = $phone;
         $data[$logoFieldName] = $logo;
         $data[$portalFieldName] = $portalConfiguration;
+        $data[$portalPagesFieldName] = $portalPagesConfiguration;
 
         $context->setData($data);
     }
@@ -139,5 +143,24 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         }
 
         return $this->portalConfigProvider->getPortalConfig($salesChannel);
+    }
+
+    /**
+     * @param int $salesChannelId
+     * @return null|object
+     */
+    protected function loadPortalPagesConfig(int $salesChannelId, ?string $locale)
+    {
+        $salesChannel = $this->doctrineHelper->getEntity(SalesChannel::class, $salesChannelId);
+        if (!$salesChannel) {
+            return null;
+        }
+
+        $scLocalization = $salesChannel->getLocalization();
+        $scLanguage = null;
+        if ($scLocalization) {
+            $scLanguage = $scLocalization->getFormattingCode();
+        }
+        return $this->portalConfigProvider->getPortalPagesConfig($salesChannel, $locale);
     }
 }
