@@ -58,3 +58,11 @@ services:
             - '@doctrine'
         tags:
             - { name: twig.extension }
+
+    marello_catalog.form.autocomplete.category.search_handler:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - 'Marello\Bundle\CatalogBundle\Entity\Category'
+            - ["name", "code"]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: categories, acl_resource: marello_category_view }

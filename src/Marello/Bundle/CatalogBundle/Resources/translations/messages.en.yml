@@ -11,6 +11,9 @@ marello:
             sections.additional:    Additional Information
             products.label:         Assigned Products
             organization.label:     Organization
+
+            form:
+                choose_category: Choose Category
         product:
             in_category.label: In category
 
