@@ -44,7 +44,16 @@ api:
                 portal_configuration:
                     data_type: array
                     property_path: _
-                portal_pages_configuration:
+                portal_page_about_us:
+                    data_type: array
+                    property_path: _
+                portal_page_customer_service:
+                    data_type: array
+                    property_path: _
+                portal_page_general_conditions:
+                    data_type: array
+                    property_path: _
+                portal_page_privacy_policy:
                     data_type: array
                     property_path: _
             filters:

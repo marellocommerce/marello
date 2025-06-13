@@ -41,7 +41,10 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $phoneFieldName = $context->getResultFieldName('phone');
         $logoFieldName = $context->getResultFieldName('logo');
         $portalFieldName = $context->getResultFieldName('portal_configuration');
-        $portalPagesFieldName = $context->getResultFieldName('portal_pages_configuration');
+        $aboutUsFieldName = $context->getResultFieldName('portal_page_about_us');
+        $customerServiceFieldName = $context->getResultFieldName('portal_page_customer_service');
+        $generalConditionsFieldName = $context->getResultFieldName('portal_page_general_conditions');
+        $privacyFieldName = $context->getResultFieldName('portal_page_privacy_policy');
 
         $salesChannelIdFieldName = $context->getResultFieldName('id');
         if (!$salesChannelIdFieldName || empty($data[$salesChannelIdFieldName])) {
@@ -52,17 +55,24 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $phone = $this->loadSalesChannelPhoneNumber((int)$data[$salesChannelIdFieldName]);
         $email = $this->loadSalesChannelEmail((int)$data[$salesChannelIdFieldName]);
         $logo = $this->loadSalesChannelLogo((int)$data[$salesChannelIdFieldName]);
-
-        // Add check for saleschannel type before adding portal config
         $portalConfiguration = $this->loadPortalConfig((int)$data[$salesChannelIdFieldName]);
+
         $portalPagesConfiguration = $this->loadPortalPagesConfig((int)$data[$salesChannelIdFieldName], $sharedData['locale']);
+        $aboutUs = $portalPagesConfiguration['about_us'];
+        $customerService = $portalPagesConfiguration['customer_service'];
+        $generalConditions = $portalPagesConfiguration['general_conditions'];
+        $privacy = $portalPagesConfiguration['privacy_policy'];
 
         $data[$addressFieldName] = $address;
         $data[$emailFieldName] = $email;
         $data[$phoneFieldName] = $phone;
         $data[$logoFieldName] = $logo;
         $data[$portalFieldName] = $portalConfiguration;
-        $data[$portalPagesFieldName] = $portalPagesConfiguration;
+
+        $data[$aboutUsFieldName] = $aboutUs;
+        $data[$customerServiceFieldName] = $customerService;
+        $data[$generalConditionsFieldName] = $generalConditions;
+        $data[$privacyFieldName] = $privacy;
 
         $context->setData($data);
     }
