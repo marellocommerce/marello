@@ -147,4 +147,44 @@ class SalesChannelRepository extends ServiceEntityRepository
 
         return $aclHelper->apply($qb)->getResult();
     }
+
+    /**
+     * Return channel type name for specified channel
+     *
+     * @param int $salesChannel
+     * @param AclHelper $aclHelper
+     *
+     * @return string
+     */
+    public function getChannelTypeBySalesChannel($salesChannel) {
+        $qb = $this->createQueryBuilder('sc');
+        $qb
+            ->select('ct.name')
+            ->join('sc.channelType', 'ct')
+            ->where($qb->expr()->eq('sc.id', ':salesChannel'))
+            ->setParameter('salesChannel', $salesChannel);
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Return formatting code from localization for specified channel
+     *
+     * @param int $salesChannel
+     * @param AclHelper $aclHelper
+     *
+     * @return string|null
+     */
+    public function getChannelLocalizationBySalesChannel($salesChannel) {
+        $qb = $this->createQueryBuilder('sc');
+        $qb
+            ->select('lc.formattingCode')
+            ->join('sc.localization', 'lc')
+            ->where($qb->expr()->eq('sc.id', ':salesChannel'))
+            ->setParameter('salesChannel', $salesChannel);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result['formattingCode'] ?? null;
+    }
 }

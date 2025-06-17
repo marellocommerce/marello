@@ -34,12 +34,17 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
     {
         /** @var CustomizeLoadedDataContext $context */
         $data = $context->getData();
+        $sharedData = $context->getSharedData();
 
         $addressFieldName = $context->getResultFieldName('address');
         $emailFieldName = $context->getResultFieldName('email');
         $phoneFieldName = $context->getResultFieldName('phone');
         $logoFieldName = $context->getResultFieldName('logo');
         $portalFieldName = $context->getResultFieldName('portal_configuration');
+        $aboutUsFieldName = $context->getResultFieldName('portal_page_about_us');
+        $customerServiceFieldName = $context->getResultFieldName('portal_page_customer_service');
+        $generalConditionsFieldName = $context->getResultFieldName('portal_page_general_conditions');
+        $privacyFieldName = $context->getResultFieldName('portal_page_privacy_policy');
 
         $salesChannelIdFieldName = $context->getResultFieldName('id');
         if (!$salesChannelIdFieldName || empty($data[$salesChannelIdFieldName])) {
@@ -50,15 +55,24 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $phone = $this->loadSalesChannelPhoneNumber((int)$data[$salesChannelIdFieldName]);
         $email = $this->loadSalesChannelEmail((int)$data[$salesChannelIdFieldName]);
         $logo = $this->loadSalesChannelLogo((int)$data[$salesChannelIdFieldName]);
-
-        // Add check for saleschannel type before adding portal config
         $portalConfiguration = $this->loadPortalConfig((int)$data[$salesChannelIdFieldName]);
+
+        $portalPagesConfiguration = $this->loadPortalPagesConfig((int)$data[$salesChannelIdFieldName], $sharedData['locale']);
+        $aboutUs = $portalPagesConfiguration['about_us'];
+        $customerService = $portalPagesConfiguration['customer_service'];
+        $generalConditions = $portalPagesConfiguration['general_conditions'];
+        $privacy = $portalPagesConfiguration['privacy_policy'];
 
         $data[$addressFieldName] = $address;
         $data[$emailFieldName] = $email;
         $data[$phoneFieldName] = $phone;
         $data[$logoFieldName] = $logo;
         $data[$portalFieldName] = $portalConfiguration;
+
+        $data[$aboutUsFieldName] = $aboutUs;
+        $data[$customerServiceFieldName] = $customerService;
+        $data[$generalConditionsFieldName] = $generalConditions;
+        $data[$privacyFieldName] = $privacy;
 
         $context->setData($data);
     }
@@ -139,5 +153,24 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         }
 
         return $this->portalConfigProvider->getPortalConfig($salesChannel);
+    }
+
+    /**
+     * @param int $salesChannelId
+     * @return null|object
+     */
+    protected function loadPortalPagesConfig(int $salesChannelId, ?string $locale)
+    {
+        $salesChannel = $this->doctrineHelper->getEntity(SalesChannel::class, $salesChannelId);
+        if (!$salesChannel) {
+            return null;
+        }
+
+        $scLocalization = $salesChannel->getLocalization();
+        $scLanguage = null;
+        if ($scLocalization) {
+            $scLanguage = $scLocalization->getFormattingCode();
+        }
+        return $this->portalConfigProvider->getPortalPagesConfig($salesChannel, $locale);
     }
 }

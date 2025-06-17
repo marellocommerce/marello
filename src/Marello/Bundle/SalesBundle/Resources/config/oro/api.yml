@@ -44,6 +44,18 @@ api:
                 portal_configuration:
                     data_type: array
                     property_path: _
+                portal_page_about_us:
+                    data_type: array
+                    property_path: _
+                portal_page_customer_service:
+                    data_type: array
+                    property_path: _
+                portal_page_general_conditions:
+                    data_type: array
+                    property_path: _
+                portal_page_privacy_policy:
+                    data_type: array
+                    property_path: _
             filters:
                 exclusion_policy: all
                 fields:
@@ -51,6 +63,11 @@ api:
                         exclude: true
                     updatedAt:
                         exclude: true
+                    locale:
+                        data_type: string
+                        property_path: _
+                        description: 'Filter portal pages content by language code'
+
             actions:
                 create: false
                 update: false
