@@ -22,3 +22,13 @@ marello:
             sections:
                 general:                General
                 additional:             Additional
+
+
+        entity_config:
+            block_titles.frontend.label:  Frontend Options
+            block_titles.backend.label:   Backoffice Options
+
+            fields:
+                frontend:
+                    is_displayable.label:   Show on view
+                    is_editable.label:      Show on form

@@ -15,3 +15,14 @@ services:
         tags:
             - { name: oro.api.processor, action: get, group: normalize_result, priority: -160 }
             - { name: oro.api.processor, action: get_list, group: normalize_result, priority: -160 }
+
+    Marello\Bundle\ProductBundle\Api\Processor\Frontend\LoadProductData:
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@oro_entity.doctrine_helper'
+            - '@request_stack'
+            - '@oro_entity_config.manager.attribute_manager'
+            - '@property_accessor'
+            - '@marello_inventory.provider.available_inventory_provider'
+        tags:
+            - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\ProductBundle\Api\Model\FrontendProduct }

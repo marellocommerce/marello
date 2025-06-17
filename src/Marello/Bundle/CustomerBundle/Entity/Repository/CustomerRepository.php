@@ -5,10 +5,12 @@ namespace Marello\Bundle\CustomerBundle\Entity\Repository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\CustomerBundle\Entity\Customer;
+use Oro\Bundle\UserBundle\Entity\AbstractUser;
 
 class CustomerRepository extends ServiceEntityRepository
 {
@@ -26,6 +28,26 @@ class CustomerRepository extends ServiceEntityRepository
         }
 
         return $qb->getQuery()->getArrayResult();
+    }
+
+    public function findUserByEmail(string $email): ?Customer
+    {
+        return $this->getQbForFindUserByEmail($email)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    protected function getQbForFindUserByEmail(string $email): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('c');
+        $qb->setMaxResults(1);
+
+        $qb
+            ->where($qb->expr()->eq('LOWER(c.email)', ':email'))
+            ->setParameter('email', mb_strtolower($email))
+            ->andWhere($qb->expr()->eq('c.isHidden', 'false'));
+
+        return $qb;
     }
 
     /**

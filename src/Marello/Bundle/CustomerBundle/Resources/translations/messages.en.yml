@@ -25,6 +25,10 @@ marello:
         label:                            'Customer'
         is_hidden.label:                  'Is hidden'
         email_lowercase.label:            'Email lowercase'
+        frontend:
+            password.label:               'Password'
+            password_confirmation.label:  'Re-enter password'
+        localization.label:               'Localization'
         form:
             choose:                       'Choose customer'
 
@@ -54,7 +58,9 @@ marello:
             organization.label:     'Organization'
             payment_term.label:     'Payment Term'
             tax_identification_number.label:  'Tax Identification Number'
-
+            discount_percentage.label:  Discount Percentage
+            sales_representative.label: 'Sales Representative'
+            fallback_sales_representative.label: 'Fallback Sales Representative'
             form:
                 choose:             'Choose a company'
                 choose_parent:      'Choose parent company'

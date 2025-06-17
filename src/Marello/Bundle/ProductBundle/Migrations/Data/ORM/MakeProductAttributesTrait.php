@@ -19,35 +19,35 @@ trait MakeProductAttributesTrait
      * @param array $fields
      * @param string $owner
      */
-    private function makeProductAttributes(array $fields, $owner = ExtendScope::OWNER_SYSTEM)
-    {
-        $configManager = $this->getConfigManager();
-        $configHelper = $this->container->get('oro_entity_config.config.config_helper');
-        $entityManager = $configManager->getEntityManager();
-
-        foreach ($fields as $field => $attributeOptions) {
-            $fieldConfigModel = $configManager->getConfigFieldModel(Product::class, $field);
-
-            $options = [
-                'attribute' => array_merge([
-                    'is_attribute' => true,
-                ], $attributeOptions),
-                'extend' => [
-                    'owner' => $owner
-                ]
-            ];
-
-            $configHelper->updateFieldConfigs($fieldConfigModel, $options);
-            $entityManager->persist($fieldConfigModel);
-        }
-
-        $entityManager->flush();
-    }
+//    private function makeProductAttributes(array $fields, $owner = ExtendScope::OWNER_SYSTEM)
+//    {
+//        $configManager = $this->getConfigManager();
+//        $configHelper = $this->container->get('oro_entity_config.config.config_helper');
+//        $entityManager = $configManager->getEntityManager();
+//
+//        foreach ($fields as $field => $attributeOptions) {
+//            $fieldConfigModel = $configManager->getConfigFieldModel(Product::class, $field);
+//
+//            $options = [
+//                'attribute' => array_merge([
+//                    'is_attribute' => true,
+//                ], $attributeOptions),
+//                'extend' => [
+//                    'owner' => $owner
+//                ]
+//            ];
+//
+//            $configHelper->updateFieldConfigs($fieldConfigModel, $options);
+//            $entityManager->persist($fieldConfigModel);
+//        }
+//
+//        $entityManager->flush();
+//    }
 
     /**
      * @param array $fields
      */
-    private function updateProductAttributes(array $fields)
+    private function updateProductAttributes(array $fields, $scope = 'attribute')
     {
         $configManager = $this->getConfigManager();
         $configHelper = $this->container->get('oro_entity_config.config.config_helper');
@@ -56,7 +56,7 @@ trait MakeProductAttributesTrait
         foreach ($fields as $field => $attributeOptions) {
             $fieldConfigModel = $configManager->getConfigFieldModel(Product::class, $field);
 
-            $configHelper->updateFieldConfigs($fieldConfigModel, ['attribute' => $attributeOptions]);
+            $configHelper->updateFieldConfigs($fieldConfigModel, [$scope => $attributeOptions]);
             $entityManager->persist($fieldConfigModel);
         }
 

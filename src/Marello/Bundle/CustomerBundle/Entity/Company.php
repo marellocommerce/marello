@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -107,6 +108,27 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
         defaultValues: ['dataaudit' => ['auditable' => true]]
     )]
     protected ?string $taxIdentificationNumber = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'sales_rep_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?User $salesRepresentative = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'fallback_sales_rep_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[Oro\ConfigField(defaultValues: [
+        'dataaudit' => ['auditable' => true]
+    ])]
+    protected ?User $fallbackSalesRepresentative = null;
+
+    /**
+     * @var float
+     */
+    #[ORM\Column(name: 'discount_percentage', type: Types::FLOAT, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $discountPercentage;
 
     /**
      * Constructor
@@ -385,6 +407,63 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     public function setTaxIdentificationNumber(string $taxIdentificationNumber = null): self
     {
         $this->taxIdentificationNumber = $taxIdentificationNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiscountPercentage(): ?float
+    {
+        return $this->discountPercentage;
+    }
+
+    /**
+     * @param float|null $discountPercentage
+     * @return self
+     */
+    public function setDiscountPercentage(float $discountPercentage = null): self
+    {
+        $this->discountPercentage = $discountPercentage;
+        return $this;
+    }
+
+    /**
+     *
+     * @return User|null
+     */
+    public function getSalesRepresentative(): ?User
+    {
+        return $this->salesRepresentative;
+    }
+
+    /**
+     * @param User|null $salesRepresentative
+     * @return $this
+     */
+    public function setSalesRepresentative(?User $salesRepresentative): self
+    {
+        $this->salesRepresentative = $salesRepresentative;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getFallbackSalesRepresentative(): ?User
+    {
+        return $this->fallbackSalesRepresentative;
+    }
+
+    /**
+     * @param User|null $fallbackSalesRepresentative
+     * @return $this
+     */
+    public function setFallbackSalesRepresentative(?User $fallbackSalesRepresentative): self
+    {
+        $this->fallbackSalesRepresentative = $fallbackSalesRepresentative;
 
         return $this;
     }

@@ -35,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_6';
+        return 'v1_7_2';
     }
 
     /**
@@ -70,7 +70,10 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('payment_term_id', 'integer', ['notnull' => false]);
         $table->addColumn('tax_identification_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('parent_id', 'integer', ['notnull' => false]);
+        $table->addColumn('sales_rep_id', 'integer', ['notnull' => false]);
+        $table->addColumn('fallback_sales_rep_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('discount_percentage', 'float', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->setPrimaryKey(['id']);
@@ -112,6 +115,17 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('company_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('customer_group_id', 'integer', ['notnull' => false]);
+        $table->addColumn('enabled', 'boolean', ['notnull' => false, 'default' => false]);
+        $table->addColumn('confirmed', 'boolean', ['notnull' => false, 'default' => false]);
+        $table->addColumn('username', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('salt', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('password', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('confirmation_token', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('password_requested', 'datetime', ['notnull' => false]);
+        $table->addColumn('password_changed', 'datetime', ['notnull' => false]);
+        $table->addColumn('last_login', 'datetime', ['notnull' => false]);
+        $table->addColumn('login_count', 'integer', ['default' => '0', 'unsigned' => true]);
+        $table->addColumn('localization_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addIndex(['primary_address_id']);
@@ -160,6 +174,18 @@ class MarelloCustomerBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('marello_payment_term'),
             ['payment_term_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['sales_rep_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_user'),
+            ['fallback_sales_rep_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
@@ -220,6 +246,12 @@ class MarelloCustomerBundleInstaller implements
             ['customer_group_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_localization'),
+            ['localization_id'],
+            ['id'],
+            ['onDelete' => null, 'onUpdate' => null]
         );
     }
 

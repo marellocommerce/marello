@@ -229,5 +229,11 @@ services:
             - '@oro_config.saleschannel'
             - '@oro_entity.doctrine_helper'
             - '@marello_pdf.provider.logo_path'
+            - '@marello_frontend.provider.portal_config'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\SalesBundle\Entity\SalesChannel }
+
+    Marello\Bundle\SalesBundle\Api\Processor\HandleLocaleFilter:
+        tags:
+            - { name: oro.api.processor, action: get, group: build_query, priority: -160 , class: Marello\Bundle\SalesBundle\Entity\SalesChannel}
+            - { name: oro.api.processor, action: get_list, group: build_query, priority: -160, class: Marello\Bundle\SalesBundle\Entity\SalesChannel}

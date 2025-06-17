@@ -7,6 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
+use Oro\Bundle\UserBundle\Entity\AbstractUser;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
@@ -19,6 +23,8 @@ use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\LocaleBundle\Model\LocalizationTrait;
+use Marello\Bundle\LocaleBundle\Model\LocalizationAwareInterface;
 use Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository;
 
 #[ORM\Entity(CustomerRepository::class), ORM\HasLifecycleCallbacks]
@@ -41,17 +47,20 @@ use Marello\Bundle\CustomerBundle\Entity\Repository\CustomerRepository;
         'grid' => ['default' => 'marello-customer-select-grid']
     ]
 )]
-class Customer implements
+class Customer extends AbstractUser implements
     FullNameInterface,
     EmailHolderInterface,
     EmailOwnerInterface,
     DatesAwareInterface,
     OrganizationAwareInterface,
-    ExtendEntityInterface
+    ExtendEntityInterface,
+    \Serializable,
+    LocalizationAwareInterface
 {
-    use FullNameTrait, EmailAddressTrait;
+    use FullNameTrait;
+    use EmailAddressTrait;
     use DatesAwareTrait;
-    use AuditableOrganizationAwareTrait;
+    use LocalizationTrait;
     use ExtendEntityTrait;
 
     #[ORM\Id]
@@ -104,6 +113,67 @@ class Customer implements
         'importexport' => ['full' => true, 'order' => 45]
     ])]
     protected ?CustomerGroup $customerGroup = null;
+
+    #[ORM\ManyToOne(targetEntity: Organization::class)]
+    #[ORM\JoinColumn(name: 'organization_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+    #[ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?OrganizationInterface $organization = null;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 60]])]
+    protected ?bool $confirmed = true;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 50]])]
+    protected ?bool $enabled = true;
+
+    #[ORM\Column(name: 'login_count', type: Types::INTEGER, options: ['default' => 0, 'unsigned' => true])]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?int $loginCount = 0;
+
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?string $username = null;
+
+    #[\Override]
+    public function serialize()
+    {
+        return $this->__serialize();
+    }
+
+    #[\Override]
+    public function unserialize(string $data)
+    {
+        $this->__unserialize(unserialize($data));
+    }
+
+    #[\Override]
+    public function __serialize(): array
+    {
+        return [
+            $this->password,
+            $this->salt,
+            $this->username,
+            $this->enabled,
+            $this->confirmed,
+            $this->confirmationToken,
+            $this->id
+        ];
+    }
+
+    #[\Override]
+    public function __unserialize(array $serialized): void
+    {
+        [
+            $this->password,
+            $this->salt,
+            $this->username,
+            $this->enabled,
+            $this->confirmed,
+            $this->confirmationToken,
+            $this->id
+        ] = $serialized;
+    }
 
     /**
      * Customer constructor.
@@ -318,5 +388,18 @@ class Customer implements
         $this->customerGroup = $customerGroup;
 
         return $this;
+    }
+
+    #[\Override]
+    public function getOrganizations(bool $onlyEnabled = false)
+    {
+        $organizations = new ArrayCollection();
+        if ($this->organization) {
+            if (!$onlyEnabled || $this->organization->isEnabled()) {
+                $organizations->add($this->organization);
+            }
+        }
+
+        return $organizations;
     }
 }

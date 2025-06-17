@@ -197,12 +197,16 @@ datagrids:
                 select:
                     - company.createdAt
                     - company.companyNumber
+                    - company.discountPercentage
                     - company.updatedAt
         options:
             entity_pagination: true
         columns:
             companyNumber:
                 label:          marello.customer.company.company_number.label
+                frontend_type:  string
+            discountPercentage:
+                label:          marello.customer.company.discount_percentage.label
                 frontend_type:  string
             createdAt:
                 label:          oro.ui.created_at
@@ -215,6 +219,9 @@ datagrids:
                 companyNumber:
                     type:  string
                     data_name:  company.companyNumber
+                discountPercentage:
+                    type: string
+                    data_name:  company.discountPercentage
                 createdAt:
                     type: datetime
                     data_name: company.createdAt

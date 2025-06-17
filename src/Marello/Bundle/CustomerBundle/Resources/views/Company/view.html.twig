@@ -33,10 +33,23 @@
                         UI.entityViewLink(entity.parent, entity.parent.name, 'marello_customer_company_view')
                         ) }}
                     {% endif %}
+                    {%  if entity.salesRepresentative %}
+                        {{ UI.renderHtmlProperty(
+                            'marello.customer.company.sales_representative.label'|trans,
+                            UI.entityViewLink(entity.salesRepresentative, entity.salesRepresentative.fullName, 'oro_user_view')
+                        ) }}
+                    {% endif %}
+                    {%  if entity.fallbackSalesRepresentative %}
+                        {{ UI.renderHtmlProperty(
+                            'marello.customer.company.fallback_sales_representative.label'|trans,
+                            UI.entityViewLink(entity.fallbackSalesRepresentative, entity.fallbackSalesRepresentative.fullName, 'oro_user_view')
+                        ) }}
+                    {% endif %}
                     {%  if entity.paymentTerm %}
                         {{ UI.renderProperty('marello.customer.company.payment_term.label'|trans, entity.paymentTerm.labels|localized_value) }}
                     {% endif %}
                     {{ UI.renderProperty('marello.customer.company.tax_identification_number.label'|trans, entity.taxIdentificationNumber ? entity.taxIdentificationNumber : 'N/A') }}
+                    {{ UI.renderProperty('marello.customer.company.discount_percentage.label'|trans, entity.discountPercentage ? entity.discountPercentage : 'N/A') }}
                     {{ entityConfig.renderDynamicFields(entity) }}
                 </div>
             </div>
