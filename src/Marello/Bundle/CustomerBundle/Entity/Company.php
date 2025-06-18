@@ -130,6 +130,18 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $discountPercentage;
 
+    #[ORM\Column(name: 'invoice_email', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected ?string $invoiceEmail = null;
+
+    #[ORM\Column(name: 'send_copy_to_customer', type: Types::BOOLEAN, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected bool $sendCopyToCustomer = false;
+
     /**
      * Constructor
      */
@@ -466,5 +478,39 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
         $this->fallbackSalesRepresentative = $fallbackSalesRepresentative;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInvoiceEmail(): ?string
+    {
+        return $this->invoiceEmail;
+    }
+
+    /**
+     * @param string|null $invoiceEmail
+     * @return void
+     */
+    public function setInvoiceEmail(?string $invoiceEmail): void
+    {
+        $this->invoiceEmail = $invoiceEmail;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendCopyToCustomer(): bool
+    {
+        return $this->sendCopyToCustomer;
+    }
+
+    /**
+     * @param bool $sendCopyToCustomer
+     * @return void
+     */
+    public function setSendCopyToCustomer(bool $sendCopyToCustomer): void
+    {
+        $this->sendCopyToCustomer = $sendCopyToCustomer;
     }
 }

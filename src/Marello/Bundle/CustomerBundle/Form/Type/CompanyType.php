@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
@@ -88,6 +90,18 @@ class CompanyType extends AbstractType
                     'required' => false,
                     'label' => 'marello.customer.company.discount_percentage.label',
                     'constraints' => new Range(['min' => 1, 'max' => 100]),
+                ]
+            )
+            ->add(
+                'invoiceEmail',
+                EmailType::class,
+                ['required' => false]
+            )
+            ->add(
+                'sendCopyToCustomer',
+                CheckboxType::class,
+                [
+                    'required' => false
                 ]
             )
             ->add(

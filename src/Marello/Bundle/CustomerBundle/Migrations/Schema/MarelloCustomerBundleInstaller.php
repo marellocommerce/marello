@@ -35,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_7_2';
+        return 'v1_7_3';
     }
 
     /**
@@ -91,7 +91,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addUniqueIndex(['address_id'], 'UNIQ_629E2BBEA750E85234');
         $table->setPrimaryKey(['company_id', 'address_id']);
     }
-    
+
     /**
      * @param Schema $schema
      */
@@ -270,7 +270,7 @@ class MarelloCustomerBundleInstaller implements
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
-    
+
     /**
      * Add owner_marello_customer_id to oro_email_address table.
      *
