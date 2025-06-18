@@ -71,6 +71,8 @@ marello:
                 addresses:           'Addresses'
                 general:             'General'
                 additional:          'Additional'
+            invoice_email.label:     Invoice Email
+            send_copy.label:         Send copy to Customer
 
         controller:
             company:

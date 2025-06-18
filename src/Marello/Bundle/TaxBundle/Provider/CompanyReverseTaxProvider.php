@@ -29,9 +29,10 @@ class CompanyReverseTaxProvider
         if ($order && $order->getCustomer()) {
             if ($company = $order->getCustomer()->getCompany()) {
                 if ($shippingAddress = $order->getShippingAddress()) {
+                    // Origin Country is now stored as country iso2 code in oro_config_value
                     $originCountry = $this->configManager->get(Configuration::SYSTEM_TAX_ORIGIN_COUNTRY_CONFIG_PATH);
                     if ($company->getTaxIdentificationNumber() &&
-                        $originCountry->getIso2Code() !== $shippingAddress->getCountryIso2()
+                        $originCountry !== $shippingAddress->getCountryIso2()
                     ) {
                         return false;
                     }

@@ -36,6 +36,7 @@ class SendEmailTemplateAttachmentAction extends AbstractSendEmail
     const OPTION_ATTACHMENT_FILE = 'file';
     const OPTION_ATTACHMENT_MIMETYPE = 'mimetype';
     const OPTION_BCC = 'bcc';
+    const OPTION_CC = 'cc';
 
     protected $options;
 
@@ -60,12 +61,14 @@ class SendEmailTemplateAttachmentAction extends AbstractSendEmail
         if (isset($options[self::OPTION_BCC])) {
             $this->assertEmailAddressOption($options[self::OPTION_BCC]);
         }
+        if (isset($options[self::OPTION_CC])) {
+            $this->assertEmailAddressOption($options[self::OPTION_CC]);
+        }
         if (empty($options['from'])) {
             throw new InvalidParameterException('From parameter is required');
         }
 
         $this->assertEmailAddressOption($options['from']);
-
         if (empty($options['to'])) {
             throw new InvalidParameterException('Need to specify "to" parameters');
         }
@@ -163,6 +166,7 @@ class SendEmailTemplateAttachmentAction extends AbstractSendEmail
         $emailModel->setBody($templateRendered);
         $emailModel->setType($emailTemplate->getType());
         $emailModel->setBcc($this->getBcc($context));
+        $emailModel->setCc($this->getCc($context));
 
         $emailContext = $this->contextAccessor->getValue($context, $this->options['context']);
         if ($emailContext) {
@@ -210,6 +214,24 @@ class SendEmailTemplateAttachmentAction extends AbstractSendEmail
         }
 
         return array_filter($bcc);
+    }
+
+    /**
+     * @param $context
+     * @return array|string
+     */
+    protected function getCc($context)
+    {
+        if (isset($this->options[self::OPTION_CC])) {
+            $cc = $this->getEmailAddress($context, $this->options[self::OPTION_CC]);
+            $this->validateAddress($cc);
+
+            $cc = [$cc];
+        } else {
+            $cc = [];
+        }
+
+        return array_filter($cc);
     }
 
     /**

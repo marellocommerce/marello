@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -107,6 +108,18 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
         defaultValues: ['dataaudit' => ['auditable' => true]]
     )]
     protected ?string $taxIdentificationNumber = null;
+
+    #[ORM\Column(name: 'invoice_email', type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected ?string $invoiceEmail = null;
+
+    #[ORM\Column(name: 'send_copy_to_customer', type: Types::BOOLEAN, nullable: false)]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected bool $sendCopyToCustomer = false;
 
     /**
      * Constructor
@@ -387,5 +400,78 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
         $this->taxIdentificationNumber = $taxIdentificationNumber;
 
         return $this;
+    }
+
+    /**
+     *
+     * @return User|null
+     */
+    public function getSalesRepresentative(): ?User
+    {
+        return $this->salesRepresentative;
+    }
+
+    /**
+     * @param User|null $salesRepresentative
+     * @return $this
+     */
+    public function setSalesRepresentative(?User $salesRepresentative): self
+    {
+        $this->salesRepresentative = $salesRepresentative;
+
+        return $this;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getFallbackSalesRepresentative(): ?User
+    {
+        return $this->fallbackSalesRepresentative;
+    }
+
+    /**
+     * @param User|null $fallbackSalesRepresentative
+     * @return $this
+     */
+    public function setFallbackSalesRepresentative(?User $fallbackSalesRepresentative): self
+    {
+        $this->fallbackSalesRepresentative = $fallbackSalesRepresentative;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInvoiceEmail(): ?string
+    {
+        return $this->invoiceEmail;
+    }
+
+    /**
+     * @param string|null $invoiceEmail
+     * @return void
+     */
+    public function setInvoiceEmail(?string $invoiceEmail): void
+    {
+        $this->invoiceEmail = $invoiceEmail;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSendCopyToCustomer(): bool
+    {
+        return $this->sendCopyToCustomer;
+    }
+
+    /**
+     * @param bool $sendCopyToCustomer
+     * @return void
+     */
+    public function setSendCopyToCustomer(bool $sendCopyToCustomer): void
+    {
+        $this->sendCopyToCustomer = $sendCopyToCustomer;
     }
 }
