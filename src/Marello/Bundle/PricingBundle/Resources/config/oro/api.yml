@@ -51,9 +51,6 @@ api:
                 delete_list: false
                 get_relationship: false
                 add_relationship: false
-                update_relationship: false
-                delete_relationship: false
-                get_subresource: false
 
         Marello\Bundle\PricingBundle\Entity\AssembledChannelPriceList:
             fields:
@@ -90,8 +87,6 @@ api:
                 delete_list: false
                 get_relationship: false
                 add_relationship: false
-                update_relationship: false
-                delete_relationship: false
                 get_subresource: false
 
         Marello\Bundle\PricingBundle\Entity\PriceType:
@@ -140,8 +135,6 @@ api:
                 delete_list: false
                 get_relationship: false
                 add_relationship: false
-                update_relationship: false
-                delete_relationship: false
                 get_subresource: false
 
         Marello\Bundle\PricingBundle\Entity\ProductChannelPrice:
