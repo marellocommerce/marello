@@ -50,4 +50,4 @@ services:
             - [setContainer, ['@Psr\Container\ContainerInterface']]
         tags:
             - { name: container.service_subscriber }
-            - { name: container.service_subscriber, id: marello_inventory.form.handler.delivery_promise, key: Marello\Bundle\InventoryBundle\Form\Handler\DeliveryPromiseHandler }
+            - { name: container.service_subscriber, id: Marello\Bundle\InventoryBundle\Form\Handler\DeliveryPromiseHandler, key: Marello\Bundle\InventoryBundle\Form\Handler\DeliveryPromiseHandler }
