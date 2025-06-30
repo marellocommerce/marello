@@ -97,3 +97,7 @@ services:
     Marello\Bundle\InventoryBundle\Form\Type\DeliveryPromiseSelectType:
         tags:
             - { name: form.type, alias: marello_inventory_deliverypromise_select }
+
+    Marello\Bundle\InventoryBundle\Form\Handler\DeliveryPromiseHandler:
+        arguments:
+            - '@oro_entity.doctrine_helper'
