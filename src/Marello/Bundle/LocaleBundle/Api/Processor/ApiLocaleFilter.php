@@ -1,12 +1,12 @@
 <?php
 
-namespace Marello\Bundle\SalesBundle\Api\Processor;
+namespace Marello\Bundle\LocaleBundle\Api\Processor;
 
 use Oro\Bundle\ApiBundle\Processor\Context;
 use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
 
-class HandleLocaleFilter implements ProcessorInterface
+class ApiLocaleFilter implements ProcessorInterface
 {
     /**
      * @param ContextInterface $context
