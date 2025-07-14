@@ -61,7 +61,7 @@ class DeliveryPromise implements
      */
     #[ORM\Column(name: 'code', type: Types::STRING, nullable: false, unique: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => false]])]
-    protected ?string $code;
+    protected ?string $code = null;
 
     /**
      * @var Collection|null
