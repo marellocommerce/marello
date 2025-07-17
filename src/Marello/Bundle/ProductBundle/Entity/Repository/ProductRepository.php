@@ -173,4 +173,20 @@ class ProductRepository extends ServiceEntityRepository
 
         return $aclHelper->apply($qb->getQuery())->getResult();
     }
+
+    /**
+     * Get excluded product ids
+     * @param array $relatedProductIds
+     * @param AclHelper $aclHelper
+     * @return array
+     */
+    public function findExcludedProductIds(array $relatedProductIds, AclHelper $aclHelper)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->where('p.id NOT IN(:products)')
+            ->setParameter('products', $relatedProductIds);
+
+        return $aclHelper->apply($qb)->getArrayResult();
+    }
 }
