@@ -22,6 +22,8 @@ class ApiLocaleFilter implements ProcessorInterface
             $locale = $filterValues->get('filter[locale]');
             $sharedData->set('locale', $locale->getValue());
             $context->setSharedData($sharedData);
+            // just remove the filter value to prevent issue with locale not being a field on the entity.
+            $filterValues->remove('filter[locale]');
         }
     }
 }
