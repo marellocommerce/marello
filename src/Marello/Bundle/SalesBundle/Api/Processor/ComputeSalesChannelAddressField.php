@@ -45,6 +45,8 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $customerServiceFieldName = $context->getResultFieldName('portal_page_customer_service');
         $generalConditionsFieldName = $context->getResultFieldName('portal_page_general_conditions');
         $privacyFieldName = $context->getResultFieldName('portal_page_privacy_policy');
+        $welcomeFieldName = $context->getResultFieldName('content_block_welcome');
+        $registerFieldName = $context->getResultFieldName('content_block_register');
 
         $salesChannelIdFieldName = $context->getResultFieldName('id');
         if (!$salesChannelIdFieldName || empty($data[$salesChannelIdFieldName])) {
@@ -63,6 +65,10 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $generalConditions = $portalPagesConfiguration['general_conditions'];
         $privacy = $portalPagesConfiguration['privacy_policy'];
 
+        $portalContentBlocksConfiguration = $this->loadContentBlocksConfig((int)$data[$salesChannelIdFieldName], $sharedData['locale']);
+        $welcome = $portalContentBlocksConfiguration['welcome'];
+        $register = $portalContentBlocksConfiguration['register'];
+
         $data[$addressFieldName] = $address;
         $data[$emailFieldName] = $email;
         $data[$phoneFieldName] = $phone;
@@ -73,6 +79,9 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         $data[$customerServiceFieldName] = $customerService;
         $data[$generalConditionsFieldName] = $generalConditions;
         $data[$privacyFieldName] = $privacy;
+
+        $data[$welcomeFieldName] = $welcome;
+        $data[$registerFieldName] = $register;
 
         $context->setData($data);
     }
@@ -166,11 +175,20 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
             return null;
         }
 
-        $scLocalization = $salesChannel->getLocalization();
-        $scLanguage = null;
-        if ($scLocalization) {
-            $scLanguage = $scLocalization->getFormattingCode();
-        }
         return $this->portalConfigProvider->getPortalPagesConfig($salesChannel, $locale);
+    }
+
+    /**
+     * @param int $salesChannelId
+     * @return null|object
+     */
+    protected function loadContentBlocksConfig(int $salesChannelId, ?string $locale)
+    {
+        $salesChannel = $this->doctrineHelper->getEntity(SalesChannel::class, $salesChannelId);
+        if (!$salesChannel) {
+            return null;
+        }
+
+        return $this->portalConfigProvider->getContentBlocksConfig($salesChannel, $locale);
     }
 }
