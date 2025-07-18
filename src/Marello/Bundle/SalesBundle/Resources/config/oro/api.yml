@@ -68,10 +68,6 @@ api:
                         property_path: _
                         description: 'Filter portal pages content by language code'
             actions:
-                get_list:
-                    fields:
-                        locale:
-                            exclude: true
                 create: false
                 update: false
                 delete: false
