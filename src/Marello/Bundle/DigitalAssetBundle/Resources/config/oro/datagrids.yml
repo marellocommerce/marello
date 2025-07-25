@@ -1,0 +1,43 @@
+datagrids:
+    marello-digital-asset-category-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.name
+                from:
+                    - { table: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory, alias: c }
+        columns:
+            id:
+                label: marello.digitalasset.category.id.label
+            name:
+                label: marello.digitalasset.category.name.label
+        properties:
+            id: ~
+            update_link:
+                type: url
+                route: marello_digital_asset_category_update
+                params: [ id ]
+            view_link:
+                type: url
+                route: marello_digital_asset_category_view
+                params: [ id ]
+        actions:
+            edit:
+                type: navigate
+                label: oro.grid.action.update
+                icon: edit
+                link: update_link
+            view:
+                type: navigate
+                label: oro.grid.action.view
+                link: view_link
+                icon: eye
+                rowAction: true
+
+    marello-digital-asset-category-select-grid:
+        extends: marello-digital-asset-category-grid
+        properties:
+            id: ~
+        actions: ~

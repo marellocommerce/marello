@@ -1,0 +1,12 @@
+services:
+    marello_digital_asset_categories:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - 'Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory'
+            - [ 'name' ]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: marello_digital_asset_category, acl_resource: marello_digital_asset_category_view }
+
+    Marello\Bundle\DigitalAssetBundle\Form\Extension\DigitalAssetCategoryExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Oro\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetType }

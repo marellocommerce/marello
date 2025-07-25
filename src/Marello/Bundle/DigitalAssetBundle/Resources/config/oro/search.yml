@@ -1,0 +1,13 @@
+search:
+    Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory:
+        alias: marello_digital_asset_category
+        search_template: '@MarelloDigitalAsset/DigitalAssetCategory/searchResult.html.twig'
+        label: marello.digitalasset.category.entity_plural_label
+        route:
+            name: marello_digital_asset_category_view
+            parameters:
+                id: id
+        fields:
+            -   name: name
+                target_type: text
+                target_fields: [ name ]

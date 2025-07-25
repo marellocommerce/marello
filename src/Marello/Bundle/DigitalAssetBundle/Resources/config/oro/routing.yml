@@ -1,0 +1,8 @@
+marello_digital_asset_bundle:
+    resource:     "@MarelloDigitalAssetBundle/Controller"
+    type:         annotation
+
+marello_digital_asset_category:
+    resource: '@MarelloDigitalAssetBundle/Controller/DigitalAssetCategoryController.php'
+    type: annotation
+    prefix: /marello/digital_asset_category

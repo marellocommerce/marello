@@ -1,0 +1,16 @@
+{% extends '@OroUI/actions/index.html.twig' %}
+{% import '@OroUI/macros.html.twig' as UI %}
+
+{% set gridName = 'marello-digital-asset-category-grid' %}
+{% set pageTitle = 'marello.digitalasset.category.entity_plural_label'|trans %}
+
+{% block navButtons %}
+    {% if is_granted('marello_digital_asset_category_create') %}
+        <div class="btn-group">
+            {{ UI.addButton({
+                'path': path('marello_digital_asset_category_create'),
+                'entity_label': 'marello.digitalasset.category.entity_label'|trans
+            }) }}
+        </div>
+    {% endif %}
+{% endblock %}

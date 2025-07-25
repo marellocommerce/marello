@@ -1,0 +1,13 @@
+marello:
+    digitalasset:
+        category:
+            entity_label:           Digital Asset Category
+            entity_plural_label:    Digital Asset Categories
+            name.label:             Category Name
+            id.label:               Id
+            placeholder:            Select Category
+            saved.message:          Category Saved
+
+oro:
+    digitalasset:
+        version.label:              Version

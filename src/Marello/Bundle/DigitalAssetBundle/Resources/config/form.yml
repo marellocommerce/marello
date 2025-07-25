@@ -1,0 +1,14 @@
+services:
+    marello_digital_asset.form.type.digital_asset_category:
+        class: 'Marello\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetCategoryType'
+        tags:
+            - { name: form.type }
+
+    marello_digital_asset.form.type.digital_asset_category_select_type:
+        class: 'Marello\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetCategorySelectType'
+        tags:
+            - { name: form.type }
+
+    Marello\Bundle\DigitalAssetBundle\Form\Extension\DigitalAssetCategoryExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Oro\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetType }
