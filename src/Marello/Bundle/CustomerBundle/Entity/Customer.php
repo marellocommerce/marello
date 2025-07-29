@@ -135,6 +135,7 @@ class Customer extends AbstractUser implements
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected ?string $username = null;
+
     /**
      * Encrypted password. Must be persisted.
      */
@@ -143,6 +144,16 @@ class Customer extends AbstractUser implements
         defaultValues: ['importexport' => ['excluded' => true], 'email' => ['available_in_template' => false]]
     )]
     protected ?string $password = null;
+
+    /**
+     * The salt to use for hashing
+     */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ConfigField(
+        defaultValues: ['importexport' => ['excluded' => true], 'email' => ['available_in_template' => false]]
+    )]
+    protected ?string $salt = null;
+
     /**
      * @var Collection<int, CustomerRole>
      */
