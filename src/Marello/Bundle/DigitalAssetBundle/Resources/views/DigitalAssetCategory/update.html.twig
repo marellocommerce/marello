@@ -2,7 +2,7 @@
 {% import '@OroUI/macros.html.twig' as UI %}
 {% import '@OroDataGrid/macros.html.twig' as dataGrid %}
 
-{% oro_title_set({params : {"%name%": entity.name, '%entityName%': 'marello.digitalasset.category.entity_label'|trans} }) %}
+{% oro_title_set({params : {"%name%": entity.name, '%entityName%': 'marello.digitalasset.digitalassetcategory.entity_label'|trans} }) %}
 
 {% set formAction = entity.id ? path('marello_digital_asset_category_update', {id: entity.id}) : path('marello_digital_asset_category_create') %}
 
@@ -31,7 +31,7 @@
     {% set breadcrumbs = {
         'entity':      entity,
         'indexPath':   path('marello_digital_asset_category_index'),
-        'indexLabel':  'marello.digitalasset.category.entity_plural_label'|trans,
+        'indexLabel':  'marello.digitalasset.digitalassetcategory.entity_plural_label'|trans,
         'entityTitle': entity.name|default('N/A'|trans)
     } %}
     {{ parent() }}

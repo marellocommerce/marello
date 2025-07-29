@@ -8,7 +8,7 @@
     {% if is_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('marello_digital_asset_category_update', { id: entity.id }),
-            'entity_label': 'marello.digitalasset.category.entity_label'|trans
+            'entity_label': 'marello.digitalasset.digitalassetcategory.entity_label'|trans
         }) }}
     {% endif %}
     {{ parent() }}
@@ -18,7 +18,7 @@
     {% set breadcrumbs = {
         'entity':      entity,
         'indexPath':   path('marello_digital_asset_category_index'),
-        'indexLabel':  'marello.digitalasset.category.entity_plural_label'|trans,
+        'indexLabel':  'marello.digitalasset.digitalassetcategory.entity_plural_label'|trans,
         'entityTitle': entity.name
     } %}
     {{ parent() }}
@@ -31,7 +31,7 @@
         <div class="widget-content">
             <div class="row-fluid form-horizontal">
                 <div class="responsive-block">
-                    {{ UI.renderProperty('marello.digitalasset.category.name.label'|trans, entity.name) }}
+                    {{ UI.renderProperty('marello.digitalasset.digitalassetcategory.name.label'|trans, entity.name) }}
                 </div>
             </div>
         </div>

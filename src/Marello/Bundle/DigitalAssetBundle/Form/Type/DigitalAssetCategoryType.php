@@ -18,7 +18,7 @@ class DigitalAssetCategoryType extends AbstractType
             ->add(
                 'name',
                 TextType::class,
-                [ 'label' => 'marello.digitalasset.category.name.label', 'required' => true ]
+                [ 'label' => 'marello.digitalasset.digitalassetcategory.name.label', 'required' => true ]
             );
     }
 

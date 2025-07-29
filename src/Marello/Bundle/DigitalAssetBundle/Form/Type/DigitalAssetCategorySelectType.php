@@ -23,7 +23,7 @@ class DigitalAssetCategorySelectType extends AbstractType
                 'grid_name'          => 'marello-digital-asset-category-select-grid',
                 'create_enabled'     => true,
                 'configs'            => [
-                    'placeholder' => 'marello.digitalasset.category.placeholder',
+                    'placeholder' => 'marello.digitalasset.digitalassetcategory.placeholder',
                 ],
             ]
         );

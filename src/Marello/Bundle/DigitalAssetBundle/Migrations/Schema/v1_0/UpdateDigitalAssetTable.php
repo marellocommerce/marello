@@ -46,7 +46,7 @@ class UpdateDigitalAssetTable implements Migration, ExtendExtensionAwareInterfac
                 DigitalAsset::class,
                 'marello_digital_asset_category_rel',
                 'form',
-                'type',
+                'form_type',
                 DigitalAssetCategorySelectType::class
             )
         );
@@ -92,7 +92,7 @@ class UpdateDigitalAssetTable implements Migration, ExtendExtensionAwareInterfac
             $targetTable,
             'name',
             [
-                'entity' => ['label' => 'marello.digitalasset.category.entity_label'],
+                'entity' => ['label' => 'marello.digitalasset.digitalassetcategory.entity_label'],
                 'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
                 'form' => ['is_enabled' => true],
                 'view' => ['is_displayable' => true],

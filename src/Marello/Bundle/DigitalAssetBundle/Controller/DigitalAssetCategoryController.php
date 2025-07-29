@@ -40,7 +40,7 @@ class DigitalAssetCategoryController extends AbstractController
     public function createAction(Request $request): array|RedirectResponse
     {
         $createMessage = $this->container->get(TranslatorInterface::class)->trans(
-            'marello.digitalasset.category.saved.message'
+            'marello.digitalasset.digitalassetcategory.saved.message'
         );
 
         return $this->update(new DigitalAssetCategory(), $request, $createMessage);
@@ -58,7 +58,7 @@ class DigitalAssetCategoryController extends AbstractController
     public function updateAction(DigitalAssetCategory $entity, Request $request): array|RedirectResponse
     {
         $createMessage = $this->container->get(TranslatorInterface::class)->trans(
-            'marello.digitalasset.category.saved.message'
+            'marello.digitalasset.digitalassetcategory.saved.message'
         );
 
         return $this->update($entity, $request, $createMessage);

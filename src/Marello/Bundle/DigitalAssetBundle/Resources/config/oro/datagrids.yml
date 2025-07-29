@@ -10,9 +10,9 @@ datagrids:
                     - { table: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory, alias: c }
         columns:
             id:
-                label: marello.digitalasset.category.id.label
+                label: marello.digitalasset.digitalassetcategory.id.label
             name:
-                label: marello.digitalasset.category.name.label
+                label: marello.digitalasset.digitalassetcategory.name.label
         properties:
             id: ~
             update_link:
