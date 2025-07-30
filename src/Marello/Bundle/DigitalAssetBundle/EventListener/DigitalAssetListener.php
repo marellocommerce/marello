@@ -4,29 +4,45 @@ namespace Marello\Bundle\DigitalAssetBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Event\PostUpdateEventArgs;
 
+use Marello\Bundle\DigitalAssetBundle\Async\Topic\DigitalAssetFilesUpdateTopic;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\DigitalAssetBundle\Entity\DigitalAsset;
 use Oro\Bundle\AttachmentBundle\Entity\File;
-
-use Marello\Bundle\ProductBundle\Manager\ProductFileManager;
+use Oro\Bundle\EntityExtendBundle\PropertyAccess;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
 
 class DigitalAssetListener
 {
     public function __construct(
-        private ProductFileManager $productFileManager,
+        protected MessageProducerInterface $messageProducer,
+        protected DoctrineHelper $doctrineHelper,
+        protected $filesToUpdate = []
     ) {}
 
-    /** @var array */
-    protected $filesToUpdate = [];
+    public function postPersist(DigitalAsset $digitalAsset, LifecycleEventArgs $args): void
+    {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $metadata = $args->getObjectManager()->getClassMetadata(DigitalAsset::class);
+        foreach ($metadata->associationMappings as $fieldName => $mapping) {
+            if (!array_key_exists('targetEntity', $mapping)
+                || $mapping['targetEntity'] !== File::class
+            ) {
+                continue;
+            }
+
+            $value = $propertyAccessor->getValue($digitalAsset, $fieldName);
+            if (!$value instanceof File) {
+                continue;
+            }
+
+            $this->updateFileExternalUrl($value, false);
+        }
+    }
 
     public function onFlush(OnFlushEventArgs $args): void
     {
-        $entityManager = $args->getObjectManager();
-        $unitOfWork = $entityManager->getUnitOfWork();
+        $unitOfWork = $args->getObjectManager()->getUnitOfWork();
         if (!empty($unitOfWork->getScheduledEntityInsertions())) {
             $records = $this->filterRecords($unitOfWork->getScheduledEntityInsertions());
             $this->applyCallBackForChangeSet([$this, 'updateFileExternalUrl'], $records);
@@ -37,23 +53,17 @@ class DigitalAssetListener
         }
     }
 
-    /**
-     * @param PostFlushEventArgs $args
-     * @return void
-     */
-    public function postFlush(PostFlushEventArgs $args): void
+    public function postFlush(): void
     {
-        if (!empty($this->filesToUpdate)) {
-            $entityManager = $args->getObjectManager();
-            foreach ($this->filesToUpdate as $file) {
-                $url = $this->productFileManager->getFileUrl($file);
-                $file->setMediaUrl($url);
-                $entityManager->persist($file);
-                $this->productFileManager->copyToPublicCache($file);
-            }
+        $productsToUpdate = [];
+        /** @var File $file */
+        foreach ($this->filesToUpdate as $file) {
+            $productsToUpdate[] = $file->getParentEntityId();
+        }
+        $this->filesToUpdate = [];
 
-            $this->filesToUpdate = [];
-            $entityManager->flush();
+        foreach (array_unique($productsToUpdate) as $productId) {
+            $this->sendToMessageProducer($productId);
         }
     }
 
@@ -80,5 +90,13 @@ class DigitalAssetListener
         }
 
         $this->filesToUpdate[] = $file;
+    }
+
+    protected function sendToMessageProducer(int $digitalAssetId): void
+    {
+        $this->messageProducer->send(
+            DigitalAssetFilesUpdateTopic::getName(),
+            ['digitalAssetId' => $digitalAssetId]
+        );
     }
 }

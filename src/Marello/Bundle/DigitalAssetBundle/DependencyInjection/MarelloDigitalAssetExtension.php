@@ -19,6 +19,7 @@ class MarelloDigitalAssetExtension extends Extension
         $loader->load('services.yml');
         $loader->load('controllers.yml');
         $loader->load('form.yml');
+        $loader->load('mq_topics.yml');
         // register other configurations in the same way
     }
 
