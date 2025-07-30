@@ -10,3 +10,10 @@ services:
     Marello\Bundle\DigitalAssetBundle\Form\Extension\DigitalAssetCategoryExtension:
         tags:
             - { name: form.type_extension, extended_type: Oro\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetType }
+
+    Marello\Bundle\DigitalAssetBundle\EventListener\DigitalAssetListener:
+        arguments:
+            - '@Marello\Bundle\ProductBundle\Manager\ProductFileManager'
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
