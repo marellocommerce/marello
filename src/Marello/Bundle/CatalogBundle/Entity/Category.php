@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Marello\Bundle\CustomerBundle\Entity\Company;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -81,12 +83,39 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
     )]
     protected ?Collection $products = null;
 
+    #[ORM\Column(name: 'type', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField(
+    )]
+    protected ?string $type = 'default';
+
+    #[ORM\ManyToOne(targetEntity: 'Marello\Bundle\CustomerBundle\Entity\Customer')]
+    #[ORM\JoinColumn(name: 'customer_id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Customer $customer = null;
+
+    #[ORM\ManyToOne(targetEntity: 'Marello\Bundle\CustomerBundle\Entity\Company')]
+    #[ORM\JoinColumn(name: 'company_id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Company $company = null;
+
+    #[ORM\ManyToMany(targetEntity: Company::class, inversedBy: 'categories')]
+    #[ORM\JoinTable(name: 'marello_category_company')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'company_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => [
+                'auditable' => true
+            ]
+        ]
+    )]
+    protected ?Collection $companies = null;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->companies = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -219,5 +248,78 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
     public function __toString(): string
     {
         return (string)$this->getName();
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): void
+    {
+        $this->customer = $customer;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    /**
+     * @param Company $company
+     * @return $this
+     */
+    public function addCompany(Company $company): self
+    {
+        if (!$this->hasCompany($company)) {
+            $this->companies->add($company);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Company $company
+     * @return $this
+     */
+    public function removeCompany(Company $company): self
+    {
+        if ($this->hasCompany($company)) {
+            $this->companies->removeElement($company);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Company $company
+     * @return bool
+     */
+    public function hasCompany(Company $company): bool
+    {
+        return $this->companies->contains($company);
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): void
+    {
+        $this->company = $company;
     }
 }

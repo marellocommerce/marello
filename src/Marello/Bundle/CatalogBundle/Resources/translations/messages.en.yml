@@ -11,6 +11,9 @@ marello:
             sections.additional:    Additional Information
             products.label:         Assigned Products
             organization.label:     Organization
+            type.label:             Type
+            companies.label:        Companies
+            permissions.label:      Permissions
         product:
             in_category.label: In category
 

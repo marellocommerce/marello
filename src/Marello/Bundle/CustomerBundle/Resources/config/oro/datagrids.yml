@@ -589,3 +589,13 @@ datagrids:
                 name:
                     type: string
                     data_name: cg.name
+
+    marello-companies-by-ids-grid:
+        extends: marello-companies-select-grid
+        source:
+            query:
+                where:
+                    and:
+                        - company.id IN (:companyIds)
+            bind_parameters:
+                - companyIds

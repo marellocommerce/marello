@@ -13,5 +13,10 @@ api:
                     exclude: true
             filters:
                 exclusion_policy: all
+                fields:
+                    type:
+                        data_type: string
+                        property_path: type
+                        description: 'Filter by Type'
             actions:
                 delete_relationship: false
