@@ -51,7 +51,7 @@ class MarelloTicketBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_2';
+        return 'v1_2_1';
     }
 
     /**
@@ -83,7 +83,7 @@ class MarelloTicketBundleInstaller implements
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('company', 'string', ['notnull' => false]);
-        $table->addColumn('owner_id', 'integer', []);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('assigned_to_id', 'integer', ['notnull' => false]);
         $table->addColumn('category_id', 'integer', []);
         $table->addColumn('subject', 'string', ['length' => 255]);
