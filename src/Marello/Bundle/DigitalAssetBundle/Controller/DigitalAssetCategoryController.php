@@ -2,12 +2,13 @@
 
 namespace Marello\Bundle\DigitalAssetBundle\Controller;
 
-use Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory;
-use Marello\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetCategoryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use Doctrine\Persistence\ManagerRegistry;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,25 +16,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
+use Oro\Bundle\SecurityBundle\Attribute\CsrfProtection;
+
+use Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory;
+use Marello\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetCategoryType;
 
 class DigitalAssetCategoryController extends AbstractController
 {
-    #[Route(path: '/', name: 'marello_digital_asset_category_index')]
-    #[Template]
-    #[AclAncestor('marello_digital_asset_category_view')]
-    public function indexAction(): array
-    {
-        return ['entity_class' => DigitalAssetCategory::class];
-    }
-
-    #[Route(path: '/view/{id}', name: 'marello_digital_asset_category_view', requirements: ['id' => '\d+'])]
-    #[Template]
-    #[Acl(id: 'marello_digital_asset_category_view', type: 'entity', class: DigitalAssetCategory::class, permission: 'VIEW')]
-    public function viewAction(DigitalAssetCategory $category)
-    {
-        return ['entity' => $category];
-    }
-
     #[Route(path: '/create', name: 'marello_digital_asset_category_create', methods: ['GET', 'POST'])]
     #[Template('@MarelloDigitalAsset/DigitalAssetCategory/update.html.twig')]
     #[Acl(id: 'marello_digital_asset_category_create', type: 'entity', class: DigitalAssetCategory::class, permission: 'CREATE')]
@@ -64,6 +53,28 @@ class DigitalAssetCategoryController extends AbstractController
         return $this->update($entity, $request, $createMessage);
     }
 
+    #[Route(path: '/delete/{id}', name: 'marello_digital_asset_category_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    #[AclAncestor('marello_digital_asset_category_delete')]
+    #[CsrfProtection]
+    public function deleteAction(DigitalAssetCategory $entity): JsonResponse
+    {
+        $translator = $this->container->get(TranslatorInterface::class);
+        if ($this->isGranted('delete', $entity)) {
+            $registry = $this->container->get(ManagerRegistry::class);
+            $entityManager = $registry->getManagerForClass(DigitalAssetCategory::class);
+            $entityManager->remove($entity);
+            $entityManager->flush();
+
+            $successful = true;
+            $message = $translator->trans('oro.action.delete_message');
+        } else {
+            $successful = false;
+            $message = $translator->trans('oro.action.delete_message');
+        }
+
+        return new JsonResponse(['message' => $message, 'successful' => $successful]);
+    }
+
     protected function update(
         DigitalAssetCategory $entity,
         Request $request,
@@ -85,6 +96,7 @@ class DigitalAssetCategoryController extends AbstractController
             [
                 TranslatorInterface::class,
                 UpdateHandlerFacade::class,
+                ManagerRegistry::class
             ]
         );
     }
