@@ -1,0 +1,20 @@
+acls:
+    marello_digital_asset_category_create:
+        type: entity
+        class: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory
+        permission: CREATE
+
+    marello_digital_asset_category_view:
+        type: entity
+        class: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory
+        permission: VIEW
+
+    marello_digital_asset_category_update:
+        type: entity
+        class: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory
+        permission: EDIT
+
+    marello_digital_asset_category_delete:
+        type: entity
+        class: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory
+        permission: DELETE

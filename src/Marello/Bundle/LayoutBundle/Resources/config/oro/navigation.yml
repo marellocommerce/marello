@@ -1,0 +1,15 @@
+navigation:
+    menu_config:
+        items:
+            content_tab:
+                label: marello.layout.menu.tab.content
+                uri: '#'
+                extras:
+                    position: 41
+                    icon: fa-file-text-o
+        tree:
+            application_menu:
+                children:
+                    content_tab:
+                        children:
+                            digital_asset_list: ~

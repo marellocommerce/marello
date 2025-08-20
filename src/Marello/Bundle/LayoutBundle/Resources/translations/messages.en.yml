@@ -1,3 +1,7 @@
 marello:
     layout:
         add_entity:        Add %entityName%
+
+        menu:
+            tab:
+                content:    Content
