@@ -53,7 +53,12 @@ class DigitalAssetCategoryController extends AbstractController
         return $this->update($entity, $request, $createMessage);
     }
 
-    #[Route(path: '/delete/{id}', name: 'marello_digital_asset_category_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    #[Route(
+        path: '/delete/{id}',
+        name: 'marello_digital_asset_category_delete',
+        requirements: ['id' => '\d+'],
+        methods: ['DELETE']
+    )]
     #[AclAncestor('marello_digital_asset_category_delete')]
     #[CsrfProtection]
     public function deleteAction(DigitalAssetCategory $entity): JsonResponse

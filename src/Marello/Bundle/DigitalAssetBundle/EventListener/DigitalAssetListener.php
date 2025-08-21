@@ -18,7 +18,8 @@ class DigitalAssetListener
         protected MessageProducerInterface $messageProducer,
         protected DoctrineHelper $doctrineHelper,
         protected $filesToUpdate = []
-    ) {}
+    ) {
+    }
 
     public function postPersist(DigitalAsset $digitalAsset, LifecycleEventArgs $args): void
     {

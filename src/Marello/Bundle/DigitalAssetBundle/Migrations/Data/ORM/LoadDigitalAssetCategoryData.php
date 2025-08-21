@@ -5,8 +5,6 @@ namespace Marello\Bundle\DigitalAssetBundle\Migrations\Data\ORM;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 
 class LoadDigitalAssetCategoryData extends AbstractFixture
 {
