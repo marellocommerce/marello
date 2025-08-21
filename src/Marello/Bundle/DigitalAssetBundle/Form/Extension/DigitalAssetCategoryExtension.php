@@ -49,7 +49,7 @@ class DigitalAssetCategoryExtension extends AbstractTypeExtension
             'version',
             TextType::class,
             [
-                'label' => 'marello.digitalasset.category.label',
+                'label' => 'oro.digitalasset.version.label',
                 'required' => false,
                 'block' => 'general'
             ]
