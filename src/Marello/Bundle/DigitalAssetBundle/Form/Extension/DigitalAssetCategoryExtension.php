@@ -2,10 +2,13 @@
 
 namespace Marello\Bundle\DigitalAssetBundle\Form\Extension;
 
-use Marello\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetCategorySelectType;
-use Oro\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetType;
-use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+use Oro\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetType;
+
+use Marello\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetCategorySelectType;
 
 class DigitalAssetCategoryExtension extends AbstractTypeExtension
 {
@@ -28,13 +31,27 @@ class DigitalAssetCategoryExtension extends AbstractTypeExtension
             $builder->remove('marello_digital_asset_category_rel');
         }
 
+        if ($builder->has('version')) {
+            $builder->remove('version');
+        }
+
         $builder->add(
             'marello_digital_asset_category_rel',
             DigitalAssetCategorySelectType::class,
             [
-                'label' => 'category',
+                'label' => 'marello.digitalasset.category.label',
                 'required' => false,
-                'block' => 'general',
+                'block' => 'general'
+            ]
+        );
+
+        $builder->add(
+            'version',
+            TextType::class,
+            [
+                'label' => 'marello.digitalasset.category.label',
+                'required' => false,
+                'block' => 'general'
             ]
         );
     }
