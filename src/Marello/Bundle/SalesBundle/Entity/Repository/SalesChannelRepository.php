@@ -156,7 +156,8 @@ class SalesChannelRepository extends ServiceEntityRepository
      *
      * @return string
      */
-    public function getChannelTypeBySalesChannel($salesChannel) {
+    public function getChannelTypeBySalesChannel($salesChannel)
+    {
         $qb = $this->createQueryBuilder('sc');
         $qb
             ->select('ct.name')
@@ -175,7 +176,8 @@ class SalesChannelRepository extends ServiceEntityRepository
      *
      * @return string|null
      */
-    public function getChannelLocalizationBySalesChannel($salesChannel) {
+    public function getChannelLocalizationBySalesChannel($salesChannel)
+    {
         $qb = $this->createQueryBuilder('sc');
         $qb
             ->select('lc.formattingCode')

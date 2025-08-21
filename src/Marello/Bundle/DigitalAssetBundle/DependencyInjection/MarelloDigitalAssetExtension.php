@@ -1,33 +1,30 @@
 <?php
 
-namespace Marello\Bundle\LocaleBundle\DependencyInjection;
+namespace Marello\Bundle\DigitalAssetBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-class MarelloLocaleExtension extends Extension
+class MarelloDigitalAssetExtension extends Extension
 {
-    const ALIAS = 'marello_locale';
+    const ALIAS = 'marello_digital_asset';
 
-    /**
-     * Loads a specific configuration.
-     *
-     * @param array            $configs    An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     */
+    #[\Override]
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        // register services configuration
         $loader->load('services.yml');
-        $loader->load('services_api.yml');
+        $loader->load('controllers.yml');
+        $loader->load('form.yml');
+        $loader->load('mq_topics.yml');
+        // register other configurations in the same way
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAlias(): string
     {

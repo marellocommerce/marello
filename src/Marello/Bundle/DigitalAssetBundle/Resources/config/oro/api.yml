@@ -1,0 +1,17 @@
+api:
+    entity_aliases:
+        Oro\Bundle\DigitalAssetBundle\Entity\DigitalAsset:
+            alias: digitalasset
+            plural_alias: digitalassets
+
+        Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory:
+            alias: digitalassetcategory
+            plural_alias: digitalassetcategories
+
+    entities:
+        Oro\Bundle\DigitalAssetBundle\Entity\DigitalAsset:
+            fields:
+                category:
+                    property_path: marello_digital_asset_category_rel
+
+        Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory: ~

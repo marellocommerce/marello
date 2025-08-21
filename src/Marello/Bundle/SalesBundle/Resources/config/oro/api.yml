@@ -67,7 +67,6 @@ api:
                         data_type: string
                         property_path: _
                         description: 'Filter portal pages content by language code'
-
             actions:
                 create: false
                 update: false

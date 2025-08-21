@@ -109,7 +109,7 @@ class CustomerType extends AbstractType
                         'mapped' => false
                     ]
                 );
-            $passwordOptions = array_merge($passwordOptions, ['required' => true, 'validation_groups' => ['create']]);
+            $passwordOptions = array_merge($passwordOptions, ['required' => false, 'validation_groups' => ['create']]);
         }
 
         $builder->add('plainPassword', RepeatedType::class, $passwordOptions);

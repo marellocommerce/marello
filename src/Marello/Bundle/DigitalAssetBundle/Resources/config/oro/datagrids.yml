@@ -1,0 +1,33 @@
+datagrids:
+    marello-digital-asset-category-select-grid:
+        extended_entity_name: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory
+        inline_editing:
+            enable: true
+        source:
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.name
+                from:
+                    - { table: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory, alias: c }
+        columns:
+            name:
+                label: marello.digitalasset.digitalassetcategory.name.label
+                frontend_type: string
+        properties:
+            id: ~
+            delete_link:
+                type:       url
+                route:      marello_digital_asset_category_delete
+                params:     [ id ]
+        actions:
+            delete:
+                type:          delete
+                label:         oro.grid.action.delete
+                link:          delete_link
+                icon:          trash-o
+                acl_resource:  marello_digital_asset_category_delete
+        mass_actions:
+            delete:
+                disabled: true

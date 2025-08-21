@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\CustomerBundle\Entity\CustomerUserRole;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
@@ -131,9 +132,43 @@ class Customer extends AbstractUser implements
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected ?int $loginCount = 0;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected ?string $username = null;
+
+    /**
+     * Encrypted password. Must be persisted.
+     */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: ['importexport' => ['excluded' => true], 'email' => ['available_in_template' => false]]
+    )]
+    protected ?string $password = null;
+
+    /**
+     * The salt to use for hashing
+     */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ConfigField(
+        defaultValues: ['importexport' => ['excluded' => true], 'email' => ['available_in_template' => false]]
+    )]
+    protected ?string $salt = null;
+
+    /**
+     * @var Collection<int, CustomerRole>
+     */
+    #[ORM\ManyToMany(targetEntity: CustomerRole::class, inversedBy: 'customers')]
+    #[ORM\JoinTable(name: 'marello_customer_access_role')]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'customer_role_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => [
+                'label' => 'marello.customer.roles.label',
+            ]
+        ]
+    )]
+    protected ?Collection $userRoles = null;
 
     #[\Override]
     public function serialize()

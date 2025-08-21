@@ -23,8 +23,7 @@ class ComputeSalesChannelAddressField implements ProcessorInterface
         protected DoctrineHelper   $doctrineHelper,
         protected LogoPathProvider $provider,
         protected PortalConfigProvider $portalConfigProvider
-    )
-    {
+    ) {
     }
 
     /**

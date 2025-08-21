@@ -116,7 +116,7 @@ class Ticket implements
      * @var User
      */
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'owner_id', referencedColumnName: 'id', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected ?User $owner = null;
 
