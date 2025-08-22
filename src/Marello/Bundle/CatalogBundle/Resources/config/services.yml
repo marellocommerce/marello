@@ -66,6 +66,8 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@oro_security.acl_helper'
 
-    Marello\Bundle\CatalogBundle\Api\Processor\ValidateCategoryDataProcessor:
+    Marello\Bundle\CatalogBundle\Api\Processor\ValidateCategoryCreateProcessor:
+        arguments:
+            - '@doctrine.orm.entity_manager'
         tags:
             - { name: oro.api.processor, action: create, group: normalize_input, class: Marello\Bundle\CatalogBundle\Entity\Category }

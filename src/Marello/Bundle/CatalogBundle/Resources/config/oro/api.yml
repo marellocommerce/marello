@@ -18,5 +18,14 @@ api:
                         data_type: string
                         property_path: type
                         description: 'Filter by Type'
+                    customer:
+                        data_type: string
+                        property_path: customer.email
+                        description: 'Filter by Customer email'
+                    companies:
+                        data_type: string
+                        allow_array: true
+                        property_path: companies.id
+                        description: 'Filter by Company Id'
             actions:
                 delete_relationship: false

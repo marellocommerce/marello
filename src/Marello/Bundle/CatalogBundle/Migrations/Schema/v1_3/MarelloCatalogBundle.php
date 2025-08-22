@@ -41,8 +41,8 @@ class MarelloCatalogBundle implements Migration
             $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         }
 
-        if (!$table->hasColumn('company_id')) {
-            $table->addColumn('company_id', 'integer', ['notnull' => false]);
+        if (!$table->hasColumn('is_personal')) {
+            $table->addColumn('is_personal', 'boolean', ['notnull' => false]);
         }
     }
 
@@ -88,15 +88,6 @@ class MarelloCatalogBundle implements Migration
             $table->addForeignKeyConstraint(
                 $schema->getTable('marello_customer_customer'),
                 ['customer_id'],
-                ['id'],
-                ['onDelete' => 'SET NULL', 'onUpdate' => null]
-            );
-        }
-
-        if (!$table->hasForeignKey('fk_marello_catalog_category_company')) {
-            $table->addForeignKeyConstraint(
-                $schema->getTable('marello_customer_company'),
-                ['company_id'],
                 ['id'],
                 ['onDelete' => 'SET NULL', 'onUpdate' => null]
             );

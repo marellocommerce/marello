@@ -2,16 +2,14 @@
 
 namespace Marello\Bundle\CatalogBundle\Form\Type;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Marello\Bundle\CatalogBundle\Entity\Category;
 use Marello\Bundle\CatalogBundle\Formatter\CategoryCodeFormatter;
 use Marello\Bundle\CustomerBundle\Entity\Company;
-use Marello\Bundle\CustomerBundle\Form\Type\CompanyAwareCustomerSelectType;
-use Marello\Bundle\CustomerBundle\Form\Type\CompanySelectType;
 use Marello\Bundle\CustomerBundle\Form\Type\CustomerSelectType;
 use Marello\Bundle\ProductBundle\Entity\Product;
 use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,7 +17,8 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
-use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormError;
 
 class CategoryType extends AbstractType
 {
@@ -72,20 +71,16 @@ class CategoryType extends AbstractType
             ->add('type')
             ->add(
                 'customer',
-                CompanyAwareCustomerSelectType::class,
+                CustomerSelectType::class,
                 [
-                    'required' => true,
-                    'create_enabled' => false,
-                    'constraints' => new NotNull()
+                    'required' => false,
+                    'create_enabled' => false
                 ]
             )
             ->add(
-                'company',
-                CompanySelectType::class,
-                [
-                    'mapped' => false,
-                    'required' => false,
-                    'create_enabled' => false
+                'isPersonal',
+                CheckboxType::class, [
+                    'required' => false
                 ]
             )
             ->add(
@@ -110,6 +105,7 @@ class CategoryType extends AbstractType
             );
         $builder->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'preSubmit']);
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetDataListener']);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'validateCustomerCategory']);
     }
 
     /**
@@ -142,6 +138,39 @@ class CategoryType extends AbstractType
         } else {
             FormUtils::replaceField($form, 'type', ['disabled' => true]);
         }
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function validateCustomerCategory(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $data = $form->getData();
+
+        $type = \is_array($data) ? ($data['type'] ?? null) : ($data->getType() ?? null);
+
+        // Run validation only if type is customer
+        if (!$data || $type !== 'customer') {
+            return;
+        }
+
+        $customer = \is_array($data) ? ($data['customer'] ?? null) : ($data->getCustomer() ?? null);
+        $isPersonal = \is_array($data) ? ($data['isPersonal'] ?? null) : ($data->isPersonal() ?? null);
+
+        if (!$customer) {
+            $form->get('customer')->addError(
+                new FormError('This value should not be empty.')
+            );
+        }
+
+        if ($isPersonal === false && $customer && $customer->getCompany() === null) {
+            $form->get('customer')->addError(
+                new FormError('The selected Customer must have a company when Category is not personal.')
+            );
+        }
+
+        $data->setCompanies($customer->getCompany() ? new ArrayCollection([$customer->getCompany()]) : new ArrayCollection());
     }
 
     /**
