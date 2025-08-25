@@ -20,7 +20,7 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v1_2';
+        return 'v1_3';
     }
 
     /**
@@ -39,10 +39,12 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
         /** Tables generation **/
         $this->createCatalogCategoryTable($schema);
         $this->createCategoryToProductTable($schema);
+        $this->createMarelloCatalogCategoryCompaniesTable($schema);
 
         /** Foreign keys generation **/
         $this->addCatalogCategoryForeignKeys($schema);
         $this->addCategoryToProductForeignKeys($schema);
+        $this->addCatalogCategoryCompaniesForeignKeys($schema);
     }
 
     /**
@@ -57,6 +59,9 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('code', 'string', ['length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
+        $table->addColumn('type', 'string', ['notnull' => false]);
+        $table->addColumn('customer_id', 'integer', ['notnull' => false]);
+        $table->addColumn('is_personal', 'boolean', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -80,6 +85,17 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
     }
 
     /**
+     * @param Schema $schema
+     */
+    protected function createMarelloCatalogCategoryCompaniesTable(Schema $schema)
+    {
+        $table = $schema->createTable('marello_category_company');
+        $table->addColumn('category_id', 'integer', []);
+        $table->addColumn('company_id', 'integer', []);
+        $table->setPrimaryKey(['category_id', 'company_id']);
+    }
+
+    /**
      * Add marello_catalog_category foreign keys.
      *
      * @param Schema $schema
@@ -90,6 +106,12 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_customer_customer'),
+            ['customer_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
@@ -112,6 +134,26 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
         $table->addForeignKeyConstraint(
             $schema->getTable('marello_product_product'),
             ['product_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addCatalogCategoryCompaniesForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_category_company');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_catalog_category'),
+            ['category_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_customer_company'),
+            ['company_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );

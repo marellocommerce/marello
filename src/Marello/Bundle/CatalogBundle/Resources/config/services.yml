@@ -55,13 +55,13 @@ services:
     marello_catalog.twig.category_extension:
         class: 'Marello\Bundle\CatalogBundle\Twig\CategoryExtension'
         arguments:
-            - '@marello_catalog.category.provider.companies_provider'
             - '@doctrine'
+        calls:
+            - [setCompaniesProvider, ['@Marello\Bundle\CatalogBundle\Provider\AssignedCompaniesProvider']]
         tags:
             - { name: twig.extension }
 
-    marello_catalog.category.provider.companies_provider:
-        class: 'Marello\Bundle\CatalogBundle\Provider\AssignedCompaniesProvider'
+    Marello\Bundle\CatalogBundle\Provider\AssignedCompaniesProvider:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@oro_security.acl_helper'

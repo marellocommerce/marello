@@ -87,7 +87,7 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
     #[Oro\ConfigField()]
     protected ?string $type = 'default';
 
-    #[ORM\ManyToOne(targetEntity: 'Marello\Bundle\CustomerBundle\Entity\Customer')]
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
     #[ORM\JoinColumn(name: 'customer_id', nullable: true, onDelete: 'SET NULL')]
     protected ?Customer $customer = null;
 
@@ -95,7 +95,7 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
     #[Oro\ConfigField(
         defaultValues: ['dataaudit' => ['auditable' => true]]
     )]
-    protected ?bool $isPersonal;
+    protected ?bool $isPersonal = false;
 
     #[ORM\ManyToMany(targetEntity: Company::class, inversedBy: 'categories')]
     #[ORM\JoinTable(name: 'marello_category_company')]
@@ -264,9 +264,15 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
         return $this->type;
     }
 
-    public function setType(?string $type): void
+    /**
+     * @param string|null $type
+     * @return $this
+     */
+    public function setType(?string $type): self
     {
         $this->type = $type;
+
+        return $this;
     }
 
     public function getCustomer(): ?Customer
@@ -274,9 +280,15 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
         return $this->customer;
     }
 
-    public function setCustomer(?Customer $customer): void
+    /**
+     * @param Customer|null $customer
+     * @return $this
+     */
+    public function setCustomer(?Customer $customer): self
     {
         $this->customer = $customer;
+
+        return $this;
     }
 
     /**
@@ -290,9 +302,11 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
     /**
      * @param Collection $companies
      */
-    public function setCompanies(Collection $companies): void
+    public function setCompanies(Collection $companies): self
     {
         $this->companies = $companies;
+
+        return $this;
     }
 
     /**
@@ -330,12 +344,19 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
         return $this->companies->contains($company);
     }
 
+    /**
+     * @return bool|null
+     */
     public function isPersonal(): ?bool
     {
         return $this->isPersonal;
     }
 
-    public function setIsPersonal(bool $isPersonal): void
+    /**
+     * @param bool $isPersonal
+     * @return $this
+     */
+    public function setIsPersonal(bool $isPersonal): self
     {
         if ($this->getType() === 'customer') {
             $this->setCompanies(new ArrayCollection());
@@ -346,5 +367,7 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
         }
 
         $this->isPersonal = $isPersonal;
+
+        return $this;
     }
 }

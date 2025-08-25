@@ -79,7 +79,8 @@ class CategoryType extends AbstractType
             )
             ->add(
                 'isPersonal',
-                CheckboxType::class, [
+                CheckboxType::class,
+                [
                     'required' => false
                 ]
             )

@@ -30,7 +30,7 @@ class ValidateCategoryCreateProcessor implements ProcessorInterface
 
         $resource = $data['data'];
 
-        if ($resource['attributes']['categoryType'] == 'customer') {
+        if ($resource['attributes']['type'] == 'customer') {
             if (empty($resource['relationships']['customer']) || $resource['relationships']['customer']['data'] === null) {
                 throw new RuntimeException('Customer relationship is required for "customer" category type.');
             }

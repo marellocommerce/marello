@@ -13,8 +13,9 @@ class CategoryExtension extends AbstractExtension
 {
     const NAME = 'marello_category';
 
+    protected ?AssignedCompaniesProvider $assignedCompaniesProvider;
+
     public function __construct(
-        protected AssignedCompaniesProvider $assignedCompaniesProvider,
         protected ManagerRegistry $doctrine
     ) {
     }
@@ -72,5 +73,10 @@ class CategoryExtension extends AbstractExtension
     public function getCategoryCompaniesIds(Category $category)
     {
         return $this->assignedCompaniesProvider->getCompaniesIds($category);
+    }
+
+    public function setCompaniesProvider(?AssignedCompaniesProvider $assignedCompaniesProvider)
+    {
+        $this->assignedCompaniesProvider = $assignedCompaniesProvider;
     }
 }
