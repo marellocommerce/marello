@@ -229,6 +229,5 @@ services:
             - '@oro_config.saleschannel'
             - '@oro_entity.doctrine_helper'
             - '@marello_pdf.provider.logo_path'
-            - '@marello_frontend.provider.portal_config'
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\SalesBundle\Entity\SalesChannel }
