@@ -27,6 +27,7 @@
                     <div class="box-type1">
                         {{ UI.renderProperty('marello.catalog.category.name.label'|trans, entity.name) }}
                         {{ UI.renderProperty('marello.catalog.category.code.label'|trans, entity.code) }}
+                        {{ UI.renderProperty('marello.catalog.category.type.label'|trans, entity.type) }}
                         {{ UI.renderProperty('marello.catalog.category.description.label'|trans, entity.description) }}
                     </div>
                 </div>
@@ -39,6 +40,36 @@
         'title': 'General'|trans,
         'subblocks': generalSubblocks
     }] %}
+
+    {% if entity.type == 'customer' %}
+        {% set permissionInformation %}
+            <div class="widget-content">
+                <div class="row-fluid form-horizontal">
+                    <div class="responsive-block">
+                        <div class="box-type1">
+                            {{ UI.renderProperty('marello.customer.entity_label'|trans, entity.customer) }}
+                            {{ UI.renderProperty('marello.catalog.category.is_personal.label'|trans, entity.isPersonal ?
+                                'marello.core.yes.label'|trans : 'marello.core.no.label'|trans) }}
+                            {% if entity.isPersonal == false %}
+                                {{ UI.renderProperty('marello.customer.company.entity_label'|trans, entity.customer.company) }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endset %}
+
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'marello.catalog.category.permissions.label'|trans,
+            'subblocks': [{
+                'title' : null,
+                'useSpan': false,
+                'data' : [
+                    permissionInformation
+                ]
+            }]
+        }]) %}
+    {% endif %}
 
     {% set categoryProductsWidget %}
         {{ dataGrid.renderGrid('marello-category-products-grid', {'products': entity.products}) }}
@@ -54,6 +85,23 @@
             ]
         }]
     }]) %}
+
+    {% if entity.type == 'default' %}
+        {% set categoryCompaniesWidget %}
+            {{ dataGrid.renderGrid('marello-category-companies-grid', {'companies': entity.companies}) }}
+        {% endset %}
+
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'marello.customer.company.entity_plural_label'|trans,
+            'subblocks': [{
+                'title' : null,
+                'useSpan': false,
+                'data' : [
+                    categoryCompaniesWidget
+                ]
+            }]
+        }]) %}
+    {% endif %}
 
     {% set additionalData %}
         <div class="widget-content">

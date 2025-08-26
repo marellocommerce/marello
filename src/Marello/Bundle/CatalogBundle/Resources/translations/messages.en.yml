@@ -14,6 +14,11 @@ marello:
 
             form:
                 choose_category: Choose Category
+
+            type.label:             Type
+            companies.label:        Companies
+            permissions.label:      Permissions
+            is_personal.label:      Is Personal
         product:
             in_category.label: In category
 

@@ -56,6 +56,8 @@ services:
         class: 'Marello\Bundle\CatalogBundle\Twig\CategoryExtension'
         arguments:
             - '@doctrine'
+        calls:
+            - [setCompaniesProvider, ['@Marello\Bundle\CatalogBundle\Provider\AssignedCompaniesProvider']]
         tags:
             - { name: twig.extension }
 
@@ -66,3 +68,14 @@ services:
             - ["name", "code"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: categories, acl_resource: marello_category_view }
+
+    Marello\Bundle\CatalogBundle\Provider\AssignedCompaniesProvider:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@oro_security.acl_helper'
+
+    Marello\Bundle\CatalogBundle\Api\Processor\ValidateCategoryCreateProcessor:
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: oro.api.processor, action: create, group: normalize_input, class: Marello\Bundle\CatalogBundle\Entity\Category }

@@ -48,6 +48,8 @@
 {% block content_data %}
     {% set id = 'marello-category-update' %}
 
+    {% set companiesIds = marello_category_get_companies_ids(entity)|length > 0 ? marello_category_get_companies_ids(entity) : 0 %}
+
     {% set dataBlocks = [{
             'title': 'General'|trans,
             'class': 'active',
@@ -56,12 +58,31 @@
             'data': [
                 form_row(form.name),
                 form_row(form.code),
+                form_row(form.type),
                 form_row(form.description),
+                form_widget(form.appendCompanies, {'id': 'appendCompanies'}),
+                form_widget(form.removeCompanies, {'id': 'removeCompanies'}),
                 form_widget(form.appendProducts, {'id': 'appendProducts'}),
                 form_widget(form.removeProducts, {'id': 'removeProducts'}),
             ]
         }]}
     ] %}
+
+    {% if is_granted('marello_category_update') and form.vars.value.id and entity.type == 'customer' %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'marello.catalog.category.permissions.label'|trans,
+            'subblocks': [
+                {
+                    'title' : null,
+                    'useSpan': false,
+                    'data' : [
+                        form_row(form.customer),
+                        form_row(form.isPersonal),
+                    ]
+                }
+            ]
+        }]) %}
+    {% endif %}
 
     {% if is_granted('marello_category_update') %}
         {% set dataBlocks = dataBlocks|merge([{
@@ -70,7 +91,22 @@
                 {
                     'title' : null,
                     'useSpan': false,
-                    'data' : [dataGrid.renderGrid('marello-category-products-extend-grid', { category_id: entity.id ? entity.id : 0 }, { cssClass: 'inner-grid' })]
+                    'data' : [dataGrid.renderGrid('marello-category-products-extend-grid', { category_id: entity.id ? entity.id : 0,}, { cssClass: 'inner-grid' })]
+                }
+            ]
+        }]) %}
+    {% endif %}
+
+    {% if (is_granted('marello_category_update') and entity.type == 'default') or form.vars.value.id == null %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title' : 'marello.customer.company.entity_plural_label'|trans,
+            'subblocks': [
+                {
+                    'title' : null,
+                    'useSpan': false,
+                    'data' : [
+                        dataGrid.renderGrid('marello-category-companies-extend-grid', { category_id: entity.id ? entity.id : null, companies: companiesIds }, { cssClass: 'inner-grid' })
+                    ]
                 }
             ]
         }]) %}
@@ -80,6 +116,9 @@
     {% for child in form.children %}
         {% if child.vars.extra_field is defined and child.vars.extra_field %}
             {% set additionalData = additionalData|merge([form_row(child)]) %}
+
+            {{ entity.id }}
+            {{ companiesIds }}
         {% endif %}
     {% endfor %}
 

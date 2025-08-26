@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Marello\Bundle\CustomerBundle\Entity\Company;
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -81,12 +83,40 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
     )]
     protected ?Collection $products = null;
 
+    #[ORM\Column(name: 'type', type: Types::STRING, nullable: false)]
+    #[Oro\ConfigField()]
+    protected ?string $type = 'default';
+
+    #[ORM\ManyToOne(targetEntity: Customer::class)]
+    #[ORM\JoinColumn(name: 'customer_id', nullable: true, onDelete: 'SET NULL')]
+    protected ?Customer $customer = null;
+
+    #[ORM\Column(name: 'is_personal', type: Types::BOOLEAN, nullable: true, options: ['default' => false])]
+    #[Oro\ConfigField(
+        defaultValues: ['dataaudit' => ['auditable' => true]]
+    )]
+    protected ?bool $isPersonal = false;
+
+    #[ORM\ManyToMany(targetEntity: Company::class, inversedBy: 'categories')]
+    #[ORM\JoinTable(name: 'marello_category_company')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'company_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'dataaudit' => [
+                'auditable' => true
+            ]
+        ]
+    )]
+    protected ?Collection $companies = null;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->companies = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -95,6 +125,14 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->setCreatedAt($now);
         $this->setUpdatedAt($now);
+
+        if ($this->getType() === 'customer') {
+            $this->setCompanies(new ArrayCollection());
+
+            if ($this->isPersonal() === false && $this->getCustomer() && $this->getCustomer()->getCompany()) {
+                $this->addCompany($this->getCustomer()->getCompany());
+            }
+        }
     }
 
     #[ORM\PreUpdate]
@@ -219,5 +257,117 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
     public function __toString(): string
     {
         return (string)$this->getName();
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string|null $type
+     * @return $this
+     */
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * @param Customer|null $customer
+     * @return $this
+     */
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    /**
+     * @param Collection $companies
+     */
+    public function setCompanies(Collection $companies): self
+    {
+        $this->companies = $companies;
+
+        return $this;
+    }
+
+    /**
+     * @param Company $company
+     * @return $this
+     */
+    public function addCompany(Company $company): self
+    {
+        if (!$this->hasCompany($company)) {
+            $this->companies->add($company);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Company $company
+     * @return $this
+     */
+    public function removeCompany(Company $company): self
+    {
+        if ($this->hasCompany($company)) {
+            $this->companies->removeElement($company);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Company $company
+     * @return bool
+     */
+    public function hasCompany(Company $company): bool
+    {
+        return $this->companies->contains($company);
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function isPersonal(): ?bool
+    {
+        return $this->isPersonal;
+    }
+
+    /**
+     * @param bool $isPersonal
+     * @return $this
+     */
+    public function setIsPersonal(bool $isPersonal): self
+    {
+        if ($this->getType() === 'customer') {
+            $this->setCompanies(new ArrayCollection());
+
+            if ($isPersonal === false && $this->getCustomer() && $this->getCustomer()->getCompany()) {
+                $this->addCompany($this->getCustomer()->getCompany());
+            }
+        }
+
+        $this->isPersonal = $isPersonal;
+
+        return $this;
     }
 }

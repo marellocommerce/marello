@@ -14,6 +14,9 @@ datagrids:
             code:
                 label:              marello.catalog.category.code.label
                 frontend_type:      string
+            type:
+                label:              marello.catalog.category.type.label
+                frontend_type:      string
             createdAt:
                 label:              oro.ui.created_at
                 frontend_type:      datetime
@@ -28,10 +31,14 @@ datagrids:
                 code:
                     type: string
                     data_name: c.code
+                type:
+                    type: string
+                    data_name: c.type
         sorters:
             columns:
                 name:           {data_name: c.name}
                 code:           {data_name: c.code}
+                type:           { data_name: c.type }
                 createdAt:      { data_name: c.createdAt }
                 updatedAt:      { data_name: c.updatedAt }
             default:
@@ -183,3 +190,122 @@ datagrids:
                 selectors:
                     included: '#appendProducts'
                     excluded: '#removeProducts'
+
+    marello-category-companies-base-grid:
+        acl_resource: marello_customer_company_update
+        extended_entity_name: Marello\Bundle\CustomerBundle\Entity\Company
+        source:
+            type: orm
+            query:
+                select:
+                    - company.id
+                    - company.name
+                    - company.companyNumber
+                    - company.createdAt
+                    - company.updatedAt
+                from:
+                    - { table: Marello\Bundle\CustomerBundle\Entity\Company, alias: company }
+        columns:
+            name:
+                label: marello.customer.company.name.label
+            companyNumber:
+                label: marello.customer.company.company_number.label
+                frontend_type: string
+            createdAt:
+                label: oro.ui.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: oro.ui.updated_at
+                frontend_type: datetime
+        properties:
+            id: ~
+        sorters:
+            columns:
+                name:
+                    data_name: company.name
+                companyNumber:
+                    type: string
+                    data_name: company.companyNumber
+                createdAt:
+                    data_name: company.createdAt
+                updatedAt:
+                    data_name: company.updatedAt
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: company.name
+                companyNumber:
+                    type: string
+                    data_name: company.companyNumber
+                createdAt:
+                    type: datetime
+                    data_name: company.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: company.updatedAt
+        options:
+            entity_pagination: true
+
+    marello-category-companies-grid:
+        extends: marello-category-companies-base-grid
+        source:
+            query:
+                where:
+                    and:
+                        - company.id IN(:companies)
+            bind_parameters:
+                - companies
+        sorters:
+            default:
+                name: 'DESC'
+
+    marello-category-companies-extend-grid:
+        extends: marello-category-companies-base-grid
+        source:
+            query:
+                select:
+                    - >
+                        (CASE WHEN (:category_id IS NOT NULL) THEN
+                            CASE WHEN (company.id IN (:companies) OR company.id IN (:data_in)) AND company.id NOT IN (:data_not_in)
+                            THEN true ELSE false END
+                        ELSE
+                            CASE WHEN company.id IN (:companies) AND company.id NOT IN (:data_not_in)
+                            THEN true ELSE false END
+                        END) as inCategory
+            bind_parameters:
+                -
+                    name: category_id
+                    default: null
+                    type: integer
+                - companies
+
+        columns:
+            inCategory:
+                label: marello.catalog.product.in_category.label
+                editable: true
+                frontend_type: boolean
+                add_before: true
+                order: -10
+        properties:
+            id: ~
+        sorters:
+            columns:
+                inCategory:
+                    data_name: inCategory
+            default:
+                inCategory: 'DESC'
+        filters:
+            columns:
+                inCategory:
+                    type: boolean
+                    data_name: inCategory
+        options:
+            entityHint: companies
+            entity_pagination: true
+            rowSelection:
+                dataField: id
+                columnName: inCategory
+                selectors:
+                    included: '#appendCompanies'
+                    excluded: '#removeCompanies'
