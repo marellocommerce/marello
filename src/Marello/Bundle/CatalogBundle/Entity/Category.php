@@ -125,14 +125,6 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->setCreatedAt($now);
         $this->setUpdatedAt($now);
-
-        if ($this->getType() === 'customer') {
-            $this->setCompanies(new ArrayCollection());
-
-            if ($this->isPersonal() === false && $this->getCustomer() && $this->getCustomer()->getCompany()) {
-                $this->addCompany($this->getCustomer()->getCompany());
-            }
-        }
     }
 
     #[ORM\PreUpdate]
@@ -358,14 +350,6 @@ class Category implements DatesAwareInterface, OrganizationAwareInterface, Exten
      */
     public function setIsPersonal(bool $isPersonal): self
     {
-        if ($this->getType() === 'customer') {
-            $this->setCompanies(new ArrayCollection());
-
-            if ($isPersonal === false && $this->getCustomer() && $this->getCustomer()->getCompany()) {
-                $this->addCompany($this->getCustomer()->getCompany());
-            }
-        }
-
         $this->isPersonal = $isPersonal;
 
         return $this;
