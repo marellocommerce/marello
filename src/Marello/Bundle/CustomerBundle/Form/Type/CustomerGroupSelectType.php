@@ -21,7 +21,7 @@ class CustomerGroupSelectType extends AbstractType
                 'autocomplete_alias' => 'marello_customer_group',
                 'grid_name' => 'marello-customer-group-select-grid',
                 'entity_class'          => CustomerGroup::class,
-                'create_enabled'        => true,
+                'create_enabled'        => false,
                 'create_form_route' => 'marello_customer_group_create',
                 'configs' => [
                     'placeholder' => 'marello.customer.customergroup.form.choose',
