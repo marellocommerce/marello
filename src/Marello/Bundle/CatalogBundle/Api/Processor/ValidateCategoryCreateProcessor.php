@@ -31,16 +31,26 @@ class ValidateCategoryCreateProcessor implements ProcessorInterface
         $resource = $data['data'];
 
         if ($resource['attributes']['type'] == 'customer') {
-            if (empty($resource['relationships']['customer']) || $resource['relationships']['customer']['data'] === null) {
-                throw new RuntimeException('Customer relationship is required for "customer" category type.');
+            if (empty($resource['relationships']['customer'])
+                || $resource['relationships']['customer']['data'] === null
+            ) {
+                throw new RuntimeException(
+                    'Customer relationship is required for "customer" category type.'
+                );
             }
 
             if (!array_key_exists('isPersonal', $resource['attributes'])) {
-                throw new RuntimeException('The request must contain "isPersonal" attribute for "customer" category type.');
+                throw new RuntimeException(
+                    'The request must contain "isPersonal" attribute for "customer" category type.'
+                );
             }
 
-            if (!$resource['attributes']['isPersonal'] && !$this->hasCompany($resource['relationships']['customer']['data']['id'])) {
-                throw new RuntimeException('Customer must have Company to create personal "customer" category type.');
+            if (!$resource['attributes']['isPersonal'] &&
+                !$this->hasCompany($resource['relationships']['customer']['data']['id'])
+            ) {
+                throw new RuntimeException(
+                    'Customer must have Company to create personal "customer" category type.'
+                );
             }
         }
     }

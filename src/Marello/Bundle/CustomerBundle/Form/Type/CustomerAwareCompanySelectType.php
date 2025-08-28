@@ -19,5 +19,4 @@ class CustomerAwareCompanySelectType extends AbstractType
             ]
         );
     }
-
 }
