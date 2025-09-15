@@ -107,10 +107,12 @@
 
     {% set billingSubblocks = [] %}
     {% set billingAddressWidget %}
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'url': path('marello_order_order_address', {id: entity.billingAddress.id, typeId: 1}),
-        }) }}
+        {% if entity.billingAddress.id %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('marello_order_order_address', {id: entity.billingAddress.id, typeId: 1}),
+            }) }}
+        {% endif %}
     {% endset %}
     {% set billingSubblocks = billingSubblocks|merge([{'data' : [billingAddressWidget] }]) %}
 
@@ -126,10 +128,12 @@
 
     {% set shippingSubblocks = [] %}
     {% set shippingAddressWidget %}
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'url': path('marello_order_order_address', {id: entity.shippingAddress.id, typeId: 2}),
-        }) }}
+        {% if entity.shippingAddress.id %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('marello_order_order_address', {id: entity.shippingAddress.id, typeId: 2}),
+            }) }}
+        {% endif %}
     {% endset %}
     {% set shippingSubblocks = shippingSubblocks|merge([{'data' : [shippingAddressWidget] }]) %}
 

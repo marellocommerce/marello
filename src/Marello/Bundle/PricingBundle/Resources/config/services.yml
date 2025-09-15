@@ -19,6 +19,12 @@ services:
         tags:
             - { name: marello_order.order_item_data_provider, type: price, priority: 10 }
 
+    Marello\Bundle\PricingBundle\Provider\CustomerPriceProvider:
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
+
     marello_pricing.pricing.form.event_listener.currency_subscriber:
         class: Marello\Bundle\PricingBundle\Form\EventListener\CurrencySubscriber
         arguments:
