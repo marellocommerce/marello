@@ -24,7 +24,7 @@ use Oro\Bundle\UserBundle\Entity\AbstractRole;
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'marello_customer_role')]
-//#[ORM\UniqueConstraint(name: 'UNIQ_552B533832C8A3DE9395C3F3E', columns: ['organization_id', 'company_id', 'label'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_552B533832C8A3DE9395C3F3E', columns: ['organization_id', 'company_id', 'label'])]
 #[Config(
 //    routeName: 'oro_customer_customer_user_role_index',
 //    routeCreate: 'oro_customer_customer_user_role_create',
