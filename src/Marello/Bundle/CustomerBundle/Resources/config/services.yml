@@ -45,8 +45,12 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before_query.marello-company-customers-select-grid, method: onResultBeforeQuery }
 
     Marello\Bundle\CustomerBundle\EventListener\Entity\CustomerEventListener:
+        arguments:
+            - '@Oro\Bundle\OAuth2ServerBundle\Entity\Manager\ClientManager'
         tags:
             - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: postFlush }
 
     marello_customer.form.autocomplete.company.search_handler:
         public: false
