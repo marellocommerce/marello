@@ -95,6 +95,9 @@ marello:
                 orderondemand.label:        Order On Demand
                 inventorybatch.label:       Inventory Batch
 
+            inventory_levels:
+                totals:                     Inventory Levels Totals
+
         inventorylevel:
             entity_label:                   Inventory Level
             entity_plural_label:            Inventory Levels

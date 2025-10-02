@@ -105,7 +105,7 @@ class PurchaseOrderItem implements
     /**
      * @var float
      */
-    #[ORM\Column(name: 'purchase_price_value', type: 'money')]
+    #[ORM\Column(name: 'purchase_price_value', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $purchasePriceValue;
 
