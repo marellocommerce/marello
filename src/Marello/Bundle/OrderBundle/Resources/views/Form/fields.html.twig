@@ -174,13 +174,9 @@
 {% endblock %}
 
 {% block marello_order_address_widget %}
-    {% if form.parent is not empty %}
-        <div {{ block('widget_container_attributes') }}>
-            {{ form_rest(form) }}
-        </div>
-    {% else %}
+    {% if form.parent is not empty %}<div {{ block('widget_container_attributes') }}>{% endif %}
         {{ form_rest(form) }}
-    {% endif %}
+    {% if form.parent is not empty %}</div>{% endif %}
 {% endblock %}
 
 {% block marello_order_total_paid_widget %}
