@@ -2,6 +2,8 @@
 
 namespace Marello\Bundle\InventoryBundle\Manager;
 
+use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
@@ -80,6 +82,16 @@ class InventoryItemManager implements InventoryItemManagerInterface
     {
         $replenishmentClass = ExtendHelper::buildEnumValueClassName('marello_inv_reple');
         $repo = $this->doctrineHelper->getEntityRepository($replenishmentClass);
+        return $repo->findOneBy(['default' => 1]);
+    }
+
+    /**
+     * Get default warehouse for current installation.
+     * @return Warehouse|null
+     */
+    public function getDefaultWarehouse(): ?Warehouse
+    {
+        $repo = $this->doctrineHelper->getEntityRepository(Warehouse::class);
         return $repo->findOneBy(['default' => 1]);
     }
 

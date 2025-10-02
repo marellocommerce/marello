@@ -100,6 +100,9 @@ marello:
             pre_order_promise.label:        Pre-Order
             order_on_demand_promise.label:  Order On Demand
 
+            inventory_levels:
+                totals:                     Inventory Levels Totals
+
         inventorylevel:
             entity_label:                   Inventory Level
             entity_plural_label:            Inventory Levels
