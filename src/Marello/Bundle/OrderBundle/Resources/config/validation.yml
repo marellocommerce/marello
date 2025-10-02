@@ -26,9 +26,11 @@ Marello\Bundle\OrderBundle\Entity\Order:
         shippingMethod:
             - NotBlank: ~
         billingAddress:
+            - Valid: ~
             - NotBlank:
                 message: 'marello.order.address.validation.billing_not_blank'
         shippingAddress:
+            - Valid: ~
             - NotBlank:
                 message: 'marello.order.address.validation.shipping_not_blank'
         grandTotal:

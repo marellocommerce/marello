@@ -700,7 +700,6 @@ class Product implements
     {
         if (!$this->channels->contains($channel)) {
             $this->channels->add($channel);
-            $channel->addProduct($this);
             $this->addChannelCode($channel->getCode());
         }
 

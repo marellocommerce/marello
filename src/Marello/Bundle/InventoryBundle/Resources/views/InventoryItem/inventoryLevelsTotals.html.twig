@@ -1,5 +1,23 @@
 {% import '@OroUI/macros.html.twig' as UI %}
 
+<div class="title">
+    <span class="widget-title">{{ 'marello.inventory.inventoryitem.inventory_levels.totals'|trans }}</span>
+</div>
+
+{% set invTotal = 0 %}
+{% set allocInvTotal = 0 %}
+{% set virtualInvTotal = 0 %}
+
+{% for invLevel in entity.inventoryLevels %}
+    {% set invTotal = invTotal + invLevel.inventoryQty %}
+    {% set allocInvTotal = allocInvTotal + invLevel.allocatedInventoryQty %}
+    {% set virtualInvTotal = virtualInvTotal + invLevel.virtualInventoryQty %}
+{% endfor %}
+
+{{ UI.renderProperty('marello.inventory.inventorylevel.inventory_qty.label'|trans, invTotal) }}
+{{ UI.renderProperty('marello.inventory.inventorylevel.allocated_inventory.label'|trans, allocInvTotal) }}
+{{ UI.renderProperty('marello.inventory.inventorylevel.virtual_inventory.label'|trans, virtualInvTotal) }}
+
 {% if entity.enableBatchInventory %}
     {{ UI.renderProperty('marello.inventory.inventorylevel.expired_sell_by_date.label'|trans, get_expired_sell_by_date_total(entity)) }}
 {% endif %}
