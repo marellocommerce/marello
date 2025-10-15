@@ -39,6 +39,7 @@ class CustomerEventListener
         // make sure email is lower cased when saved...
         $entity->setEmail(mb_strtolower($entity->getEmail()));
         $entity->setEmailLowercase(mb_strtolower($entity->getEmail()));
+        $entity->setUsername(mb_strtolower($entity->getEmail()));
     }
 
     /**
