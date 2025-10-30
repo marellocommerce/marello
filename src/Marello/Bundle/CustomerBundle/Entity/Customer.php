@@ -87,7 +87,7 @@ class Customer extends AbstractUser implements
     protected ?MarelloAddress $shippingAddress = null;
 
     #[ORM\Column(name: 'customer_number', type: Types::STRING, nullable: true)]
-    protected $customerNumber;
+    protected ?string $customerNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: [
@@ -280,7 +280,7 @@ class Customer extends AbstractUser implements
         return $this->customerNumber;
     }
 
-    public function setCustomerNumber(string $customerNumber): self
+    public function setCustomerNumber(string $customerNumber = null): self
     {
         $this->customerNumber = $customerNumber;
 
