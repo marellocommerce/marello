@@ -1,0 +1,24 @@
+<?php
+
+namespace Marello\Bundle\PricingBundle\Provider;
+
+use Marello\Bundle\ProductBundle\Entity\Product;
+use Marello\Bundle\CustomerBundle\Entity\Company;
+
+interface CompanyPriceProviderInterface
+{
+    /**
+     * @param Product $product
+     * @param string $currency
+     * @param Company|null $company
+     * @return array
+     */
+    public function getProductPrice(Product $product, string $currency, ?Company $company = null): array;
+
+    /**
+     * @param string $currency
+     * @param Company $company
+     * @return array
+     */
+    public function getPricesForCompany(string $currency, Company $company): array;
+}
