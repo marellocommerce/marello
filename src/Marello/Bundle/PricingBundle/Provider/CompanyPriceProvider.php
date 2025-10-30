@@ -42,7 +42,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
 
         $price = $assembledPriceList->getMsrpPrice();
 
-        $prices[$product->getSku()] = $price instanceof BasePrice ? [$this->roundingService->round($price->getValue())] : [];
+        $prices[$product->getSku()] = $price instanceof BasePrice ? [$this->roundingService->round($price->getValue())] : [0];
 
         return $prices;
     }
