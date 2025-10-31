@@ -22,6 +22,8 @@ class Configuration implements ConfigurationInterface
     const PRICING_ROUNDING_TYPE = 'marello_pricing.rounding_type';
     const PRICING_PRECISION = 'marello_pricing.precision';
 
+    const PRICING_PROVIDER = 'marello_pricing.pricing_provider';
+
     /**
      * {@inheritDoc}
      */
