@@ -46,3 +46,10 @@ services:
         class: Marello\Bundle\PricingBundle\Form\Type\AssembledChannelPriceListCollectionType
         tags:
             - { name: form.type }
+
+    Marello\Bundle\PricingBundle\Form\Type\CompanyPriceProviderChoiceType:
+        arguments:
+            - '@Marello\Bundle\PricingBundle\Provider\CompanyPriceProviderRegistry'
+            - '@translator'
+        tags:
+            - { name: form.type }

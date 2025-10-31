@@ -1,6 +1,7 @@
 marello:
     pricing:
         header.label:                   Prices
+        provider.label:                 Basic Price Provider
 
         assembledpricelist:
             entity_label:               Assembled Price List
@@ -113,3 +114,5 @@ marello:
                         half_down.label: Half Down
                         half_up.label:   Half Up
                         half_even.label: Half Even
+                pricing_provider:
+                    label:              Company Price Provider

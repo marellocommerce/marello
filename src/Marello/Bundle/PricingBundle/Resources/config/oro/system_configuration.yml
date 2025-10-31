@@ -55,6 +55,16 @@ system_configuration:
                     - Type:
                           type: integer
 
+        marello_pricing.pricing_provider:
+            data_type: string
+            type: Marello\Bundle\PricingBundle\Form\Type\CompanyPriceProviderChoiceType
+            options:
+                label: marello.pricing.system_configuration.fields.pricing_provider.label
+                required: true
+                constraints:
+                    - NotBlank: ~
+            priority: 50
+
     tree:
         system_configuration:
             marello:
@@ -71,6 +81,17 @@ system_configuration:
                                         children:
                                             - marello_pricing.is_vat_included
                                             - marello_tax.origin_country
+
+        saleschannel_configuration:
+            portal:
+                children:
+                    general:
+                        children:
+                            general_configuration:
+                                children:
+                                    configuration:
+                                        children:
+                                            - marello_pricing.pricing_provider
     api_tree:
         pricing-general:
             marello_pricing.is_vat_included: ~

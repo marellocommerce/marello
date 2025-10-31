@@ -24,6 +24,8 @@ services:
             - '@doctrine'
             - '@oro_security.acl_helper'
             - '@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService'
+        tags:
+            - { name: marello_pricing.company_price_provider }
 
     marello_pricing.pricing.form.event_listener.currency_subscriber:
         class: Marello\Bundle\PricingBundle\Form\EventListener\CurrencySubscriber
@@ -97,3 +99,5 @@ services:
     Marello\Bundle\PricingBundle\Rounding\PriceRoundingService:
         public: false
         parent: oro_currency.service.abstract_rounding
+
+    Marello\Bundle\PricingBundle\Provider\CompanyPriceProviderRegistry: ~

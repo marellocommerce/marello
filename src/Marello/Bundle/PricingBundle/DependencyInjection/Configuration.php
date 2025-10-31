@@ -8,6 +8,8 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Oro\Bundle\CurrencyBundle\Rounding\PriceRoundingService;
 use Oro\Bundle\ConfigBundle\DependencyInjection\SettingsBuilder;
 
+use Marello\Bundle\PricingBundle\Provider\CompanyPriceProvider;
+
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
@@ -35,7 +37,8 @@ class Configuration implements ConfigurationInterface
                     'value' => false
                 ],
                 'rounding_type' => ['value' => PriceRoundingService::ROUND_HALF_UP],
-                'precision' => ['value' => PriceRoundingService::DEFAULT_PRECISION]
+                'precision' => ['value' => PriceRoundingService::DEFAULT_PRECISION],
+                'pricing_provider' => ['value' => CompanyPriceProvider::PROVIDER_IDENTIFIER]
             ]
         );
 

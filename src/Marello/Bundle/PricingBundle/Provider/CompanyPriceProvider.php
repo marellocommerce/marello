@@ -15,6 +15,8 @@ use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
 
 class CompanyPriceProvider implements CompanyPriceProviderInterface
 {
+    public const PROVIDER_IDENTIFIER = 'basic_price_provider';
+
     public function __construct(
         protected ManagerRegistry $registry,
         protected AclHelper $aclHelper,
@@ -42,7 +44,9 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
 
         $price = $assembledPriceList->getMsrpPrice();
 
-        $prices[$product->getSku()] = $price instanceof BasePrice ? [$this->roundingService->round($price->getValue())] : [0];
+        $prices[$product->getSku()] = $price instanceof BasePrice ? [
+            'price' => $this->roundingService->round($price->getValue())
+        ] : ['price' => 0 ];
 
         return $prices;
     }
@@ -61,7 +65,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
         foreach ($assembledPriceLists as $assembledPriceList) {
             $price = $assembledPriceList->getMsrpPrice();
             $price = $price instanceof BasePrice ? $this->roundingService->round($price->getValue()) : 0;
-            $prices[$company->getCompanyNumber()] = $price;
+            $prices[$company->getCompanyNumber()] = ['price' => $price];
         }
 
         return $prices;
@@ -82,5 +86,32 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
     protected function getRepository($className)
     {
         return $this->registry->getManagerForClass($className)->getRepository($className);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return self::PROVIDER_IDENTIFIER;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return string
+     */
+    public function getLabel(): string
+    {
+        return 'marello.pricing.provider.label';
+    }
+
+    /**
+     * {@inheritDoc}
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return true;
     }
 }

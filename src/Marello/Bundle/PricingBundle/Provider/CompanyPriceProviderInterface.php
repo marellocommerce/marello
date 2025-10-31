@@ -21,4 +21,22 @@ interface CompanyPriceProviderInterface
      * @return array
      */
     public function getPricesForCompany(string $currency, Company $company): array;
+
+    /**
+     * Identifier for the price proivder
+     * @return string
+     */
+    public function getIdentifier(): string;
+
+    /**
+     * Label for the price provider
+     * @return string
+     */
+    public function getLabel(): string;
+
+    /**
+     * Check if provider is enabled
+     * @return bool
+     */
+    public function isEnabled(): bool;
 }
