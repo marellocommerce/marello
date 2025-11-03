@@ -42,11 +42,24 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
             return $prices;
         }
 
-        $price = $assembledPriceList->getMsrpPrice();
+        $prices['msrp'] = $this->roundingService->round(
+            $assembledPriceList->getMsrpPrice()?->getValue()
+        );
+        $discountPercent = 0;
+        if ($company) {
+            $discountPercent = $company->getDiscountPercentage();
+        }
+        $prices['sales'] = $this->roundingService->round(
+            $prices['msrp'] * (((100 - (float)$discountPercent) / 100))
+        );
 
-        $prices[] = $price instanceof BasePrice ? [
-            'price' => $this->roundingService->round($price->getValue())
-        ] : ['price' => 0 ];
+        if ($assembledPriceList->getSpecialPrice()) {
+            $prices['special'] = $this->roundingService->round(
+                $assembledPriceList->getSpecialPrice()->getValue() * ((100 - (float)$discountPercent) / 100)
+            );
+            $prices['special_from'] = $assembledPriceList->getSpecialPrice()->getStartDate();
+            $prices['special_to'] = $assembledPriceList->getSpecialPrice()->getEndDate();
+        }
 
         return $prices;
     }
