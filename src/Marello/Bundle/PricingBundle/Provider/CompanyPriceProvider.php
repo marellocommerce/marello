@@ -61,7 +61,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
             $prices['special_to'] = $assembledPriceList->getSpecialPrice()->getEndDate();
         }
 
-        return $prices;
+        return [$prices];
     }
 
     public function getPricesForCompany(string $currency, Company $company): array
@@ -81,7 +81,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
             $prices[$company->getCompanyNumber()][] = ['price' => $price];
         }
 
-        return $prices;
+        return [$prices];
     }
 
     /**
