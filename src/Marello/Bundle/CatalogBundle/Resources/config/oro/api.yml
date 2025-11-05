@@ -6,7 +6,6 @@ api:
 
     entities:
         Marello\Bundle\CatalogBundle\Entity\Category:
-            identifier_field_names: [code]
             filters:
                 exclusion_policy: all
                 fields:
