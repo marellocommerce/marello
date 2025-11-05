@@ -60,6 +60,7 @@ api:
                 delete_relationship: false
 
         Marello\Bundle\CustomerBundle\Entity\Company:
+            identifier_field_names: [companyNumber]
             fields:
                 createdAt:
                     exclude: true
