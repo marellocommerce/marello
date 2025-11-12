@@ -4,6 +4,8 @@ navigation:
             marello_payment_terms:
                 label: 'marello.paymentterm.entity_plural_label'
                 route: 'marello_paymentterm_paymentterm_index'
+                extras:
+                    position: 20
 
         tree:
             application_menu:
