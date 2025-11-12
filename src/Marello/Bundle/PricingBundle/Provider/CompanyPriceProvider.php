@@ -64,6 +64,11 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
         return [$prices];
     }
 
+    public function getProductPrices(array $products, string $currency, ?Company $company = null): array
+    {
+        return [];
+    }
+
     public function getPricesForCompany(string $currency, Company $company): array
     {
         $prices = [];
