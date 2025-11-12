@@ -13,7 +13,7 @@ use Marello\Bundle\PricingBundle\Provider\CompanyPriceProviderInterface;
 
 class CompanyPriceProviderChoiceType extends AbstractType
 {
-    const BLOCK_PREFIX = 'marello_inventory_balancer_strategy_choice';
+    const BLOCK_PREFIX = 'marello_pricing_price_provider_choice';
 
     /**
      * @param CompanyPriceProviderRegistry $registry

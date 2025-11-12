@@ -16,6 +16,14 @@ interface CompanyPriceProviderInterface
     public function getProductPrice(Product $product, string $currency, ?Company $company = null): array;
 
     /**
+     * @param array $products
+     * @param string $currency
+     * @param Company|null $company
+     * @return array
+     */
+    public function getProductPrices(array $products, string $currency, ?Company $company = null): array;
+
+    /**
      * @param string $currency
      * @param Company $company
      * @return array
