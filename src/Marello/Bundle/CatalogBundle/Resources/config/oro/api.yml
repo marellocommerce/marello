@@ -21,7 +21,7 @@ api:
                     companies:
                         data_type: string
                         allow_array: true
-                        property_path: companies.id
+                        property_path: companies.code
                         description: 'Filter by Company Id'
             actions:
                 delete_relationship: false
