@@ -17,9 +17,11 @@ class OrderItemOriginalPriceListener
 
     public function prePersist(OrderItem $orderItem): void
     {
-        $taxResultElement = $this->getCalculatedPriceValue($orderItem);
-        $orderItem->setOriginalPriceInclTax($taxResultElement->getIncludingTax());
-        $orderItem->setOriginalPriceExclTax($taxResultElement->getExcludingTax());
+        if (!$orderItem->getOriginalPriceInclTax() && !$orderItem->getOriginalPriceExclTax()) {
+            $taxResultElement = $this->getCalculatedPriceValue($orderItem);
+            $orderItem->setOriginalPriceInclTax($taxResultElement->getIncludingTax());
+            $orderItem->setOriginalPriceExclTax($taxResultElement->getExcludingTax());
+        }
     }
 
     private function getCalculatedPriceValue(OrderItem $orderItem): ResultElement
