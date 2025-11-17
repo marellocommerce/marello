@@ -33,13 +33,13 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
      */
     public function getProductPrice($product, $currency, ?Company $company = null): array
     {
-        $prices = [];
+        $prices['sales'] = 0;
         /** @var AssembledPriceList $assembledPriceList */
         $assembledPriceList = $this->getAssembledPriceListRepository()->findOneBy(
             ['product' => $product->getId(), 'currency' => $currency]
         );
         if (!$assembledPriceList) {
-            return $prices;
+            return [$prices];
         }
 
         $prices['msrp'] = $this->roundingService->round(

@@ -539,10 +539,10 @@ class Product implements
     }
 
     /**
-     * @param string $currency
-     * @return AssembledPriceList
+     * @param string|null $currency
+     * @return AssembledPriceList|null
      */
-    public function getPrice(string $currency = null): AssembledPriceList
+    public function getPrice(string $currency = null): ?AssembledPriceList
     {
         if ($currency) {
             /** @var $productPrice */
@@ -557,8 +557,8 @@ class Product implements
                 return $productPrice;
             }
         }
-        
-        return $this->prices->first();
+
+        return ($this->prices->first()) ? $this->prices->first() : null;
     }
 
     /**
