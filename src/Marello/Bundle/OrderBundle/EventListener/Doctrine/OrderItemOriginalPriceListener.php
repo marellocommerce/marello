@@ -30,8 +30,8 @@ class OrderItemOriginalPriceListener
         $amount = 0;
         if ($orderItem->getProduct()) {
             $priceList = $orderItem->getProduct()->getSalesChannelPrice($channel);
-            if ($priceList->getDefaultPrice()) {
-                $amount = $priceList->getDefaultPrice()->getValue();
+            if ($priceList?->getDefaultPrice()) {
+                $amount = $priceList->getDefaultPrice()?->getValue();
             }
         }
 
