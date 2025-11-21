@@ -1068,10 +1068,10 @@ class Order implements
     }
 
     /**
-     * @param string $orderNote
+     * @param string|null $orderNote
      * @return $this
      */
-    public function setOrderNote(string $orderNote)
+    public function setOrderNote(?string $orderNote)
     {
         $this->orderNote = $orderNote;
 
@@ -1087,10 +1087,10 @@ class Order implements
     }
 
     /**
-     * @param string $poNumber
+     * @param string $poNumber|null
      * @return $this
      */
-    public function setPoNumber(string $poNumber)
+    public function setPoNumber(?string $poNumber)
     {
         $this->poNumber = $poNumber;
 
