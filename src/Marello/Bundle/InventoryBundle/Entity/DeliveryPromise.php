@@ -22,6 +22,7 @@ use Marello\Bundle\CoreBundle\Model\EntityCreatedUpdatedAtTrait;
   */
 #[ORM\Table(name: 'marello_inventory_delivery_promise')]
 #[ORM\Entity(), ORM\HasLifecycleCallbacks]
+#[ORM\UniqueConstraint(name: 'marello_inventory_dlvry_prom_codeorgidx', columns: ['code', 'organization_id'])]
 #[Oro\Config(
     routeName: 'marello_inventory_deliverypromise_index',
     routeView: 'marello_inventory_deliverypromise_view',
