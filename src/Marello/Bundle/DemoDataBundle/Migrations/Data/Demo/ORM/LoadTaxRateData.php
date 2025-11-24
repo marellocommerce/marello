@@ -2,8 +2,10 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\AbstractFixture;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\TaxBundle\Entity\TaxRate;
 
@@ -64,9 +66,14 @@ class LoadTaxRateData extends AbstractFixture
      */
     protected function createTaxRate(ObjectManager $manager, $code, $rate)
     {
+        $organization = $manager
+            ->getRepository(Organization::class)
+            ->getFirst();
         $tax = new TaxRate();
-        $tax->setCode($code);
-        $tax->setRate($rate);
+        $tax
+            ->setCode($code)
+            ->setRate($rate)
+            ->setOrganization($organization);
 
         $manager->persist($tax);
         $this->addReference(self::REFERENCE_PREFIX . '.' . $code, $tax);

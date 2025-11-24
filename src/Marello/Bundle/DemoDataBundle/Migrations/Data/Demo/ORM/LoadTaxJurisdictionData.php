@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\TaxBundle\Entity\ZipCode;
 use Marello\Bundle\TaxBundle\Entity\TaxJurisdiction;
@@ -313,11 +314,15 @@ class LoadTaxJurisdictionData extends AbstractFixture
         Region $region = null,
         $zipCodes
     ) {
+        $organization = $manager
+            ->getRepository(Organization::class)
+            ->getFirst();
         $taxJurisdiction = new TaxJurisdiction();
         $taxJurisdiction->setCode($code)
             ->setDescription($description)
             ->setCountry($country)
-            ->setRegion($region);
+            ->setRegion($region)
+            ->setOrganization($organization);
 
         if (is_array($zipCodes)) {
             foreach ($zipCodes as $data) {
@@ -328,7 +333,7 @@ class LoadTaxJurisdictionData extends AbstractFixture
                 } else {
                     $zipCode->setZipCode($data);
                 }
-
+                $zipCode->setOrganization($organization);
                 $taxJurisdiction->addZipCode($zipCode);
             }
         }
