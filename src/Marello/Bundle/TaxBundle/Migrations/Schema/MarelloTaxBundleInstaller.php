@@ -18,7 +18,7 @@ class MarelloTaxBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_4';
+        return 'v1_5';
     }
 
     /**
@@ -34,9 +34,11 @@ class MarelloTaxBundleInstaller implements Installation
         $this->createMarelloTaxZipCodeTable($schema);
 
         /** Foreign keys generation **/
+        $this->addMarelloTaxTaxCodeForeignKeys($schema);
+        $this->addMarelloTaxTaxRateForeignKeys($schema);
+        $this->addMarelloTaxTaxRuleForeignKeys($schema);
         $this->addMarelloTaxJurisdictionForeignKeys($schema);
         $this->addMarelloTaxZipCodeForeignKeys($schema);
-        $this->addMarelloTaxTaxRuleForeignKeys($schema);
     }
 
     /**
@@ -50,9 +52,10 @@ class MarelloTaxBundleInstaller implements Installation
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('code', 'string', ['notnull' => true, 'length' => 255]);
         $table->addColumn('description', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['code'], 'marello_tax_code_codeidx');
+        $table->addUniqueIndex(['code', 'organization_id'], 'marello_tax_code_codeidx');
     }
 
     /**
@@ -66,9 +69,10 @@ class MarelloTaxBundleInstaller implements Installation
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('code', 'string', ['notnull' => true, 'length' => 32]);
         $table->addColumn('rate', 'percent', ['notnull' => true, 'comment' => '(DC2Type:percent)']);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['code'], 'marello_tax_rate_codeidx');
+        $table->addUniqueIndex(['code', 'organization_id'], 'marello_tax_rate_codeidx');
     }
 
     /**
@@ -83,6 +87,7 @@ class MarelloTaxBundleInstaller implements Installation
         $table->addColumn('tax_code_id', 'integer', ['notnull' => false]);
         $table->addColumn('tax_rate_id', 'integer', ['notnull' => false]);
         $table->addColumn('tax_jurisdiction_id', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
@@ -105,9 +110,10 @@ class MarelloTaxBundleInstaller implements Installation
         $table->addColumn('code', 'string', ['length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['code'], 'marello_tax_jurisdiction_codeidx');
+        $table->addUniqueIndex(['code', 'organization_id'], 'marello_tax_jurisdiction_codeidx');
     }
 
     /**
@@ -118,12 +124,36 @@ class MarelloTaxBundleInstaller implements Installation
         $table = $schema->createTable('marello_tax_zip_code');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('tax_jurisdiction_id', 'integer', []);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('zip_code', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('zip_range_start', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('zip_range_end', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
+        $table->addIndex(['organization_id']);
+    }
+
+    protected function addMarelloTaxTaxCodeForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_tax_tax_code');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    protected function addMarelloTaxTaxRateForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_tax_tax_rate');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
     }
 
     /**
@@ -152,6 +182,12 @@ class MarelloTaxBundleInstaller implements Installation
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
     }
 
     /**
@@ -172,6 +208,12 @@ class MarelloTaxBundleInstaller implements Installation
             ['combined_code'],
             ['onDelete' => null, 'onUpdate' => null]
         );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
     }
 
     /**
@@ -185,6 +227,12 @@ class MarelloTaxBundleInstaller implements Installation
             ['tax_jurisdiction_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 }

@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\TaxBundle\Entity\Repository\TaxCodeRepository;
 
@@ -15,20 +17,28 @@ use Marello\Bundle\TaxBundle\Entity\Repository\TaxCodeRepository;
  * TaxCode
  */
 #[ORM\Table(name: 'marello_tax_tax_code')]
-#[ORM\UniqueConstraint(name: 'marello_tax_code_codeidx', columns: ['code'])]
+#[ORM\UniqueConstraint(name: 'marello_tax_code_codeidx', columns: ['code', 'organization_id'])]
 #[ORM\Entity(repositoryClass: TaxCodeRepository::class)]
 #[Oro\Config(
     routeName: 'marello_tax_taxcode_index',
     routeView: 'marello_tax_taxcode_view',
     routeUpdate: 'marello_tax_taxcode_update',
     defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
         'dataaudit' => ['auditable' => true],
         'security' => ['type' => 'ACL', 'group_name' => '']
     ]
 )]
-class TaxCode implements ExtendEntityInterface
+class TaxCode implements
+    ExtendEntityInterface,
+    OrganizationAwareInterface
 {
     use ExtendEntityTrait;
+    use AuditableOrganizationAwareTrait;
 
     /**
      * @var integer

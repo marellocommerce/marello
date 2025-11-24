@@ -2,9 +2,11 @@
 
 namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Persistence\ObjectManager;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 use Marello\Bundle\TaxBundle\Entity\TaxRate;
@@ -122,11 +124,16 @@ class LoadTaxRuleData extends AbstractFixture implements DependentFixtureInterfa
         TaxRate $taxRate,
         TaxJurisdiction $taxJurisdiction
     ) {
+        $organization = $manager
+            ->getRepository(Organization::class)
+            ->getFirst();
+
         $taxRule = new TaxRule();
         $taxRule
             ->setTaxCode($taxCode)
             ->setTaxRate($taxRate)
-            ->setTaxJurisdiction($taxJurisdiction);
+            ->setTaxJurisdiction($taxJurisdiction)
+            ->setOrganization($organization);
 
         $manager->persist($taxRule);
 

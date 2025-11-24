@@ -5,6 +5,8 @@ namespace Marello\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use Marello\Bundle\TaxBundle\Entity\TaxCode;
 
 class LoadTaxCodeData extends AbstractFixture
@@ -47,20 +49,24 @@ class LoadTaxCodeData extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         $this->manager = $manager;
-        $this->loadTaxCodes();
+        $this->loadTaxCodes($manager);
     }
 
     /**
      * load and create TaxCodes
      */
-    protected function loadTaxCodes()
+    protected function loadTaxCodes($manager)
     {
+        $organization = $manager
+            ->getRepository(Organization::class)
+            ->getFirst();
         foreach ($this->data as $ref => $values) {
             $taxCode = new TaxCode();
 
             $taxCode
                 ->setCode($values['code'])
                 ->setDescription($values['description'])
+                ->setOrganization($organization)
             ;
 
             $this->manager->persist($taxCode);
