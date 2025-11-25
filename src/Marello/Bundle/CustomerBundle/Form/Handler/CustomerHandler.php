@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
@@ -22,7 +24,8 @@ class CustomerHandler implements FormHandlerInterface
      */
     public function __construct(
         protected EntityManagerInterface $manager,
-        protected CustomerManager $userManager
+        protected CustomerManager $userManager,
+        private TranslatorInterface $translator
     ) {
     }
 
@@ -38,6 +41,25 @@ class CustomerHandler implements FormHandlerInterface
             $this->submitPostPutRequest($form, $request);
 
             if ($form->isValid()) {
+                if ($form->get('passwordGenerate')->getData()) {
+                    $generatedPassword = $this->userManager->generatePassword(10);
+                    $data->setPlainPassword($generatedPassword);
+                }
+
+                if ($form->get('sendEmail')->getData()) {
+                    try {
+                        $this->userManager->sendWelcomeRegisteredByAdminEmail($data);
+                    } catch (\Exception $ex) {
+                        /** @var Session $session */
+                        $session = $request->getSession();
+                        $session->getFlashBag()->add(
+                            'error',
+                            $this->translator
+                                ->trans('oro.customer.controller.customeruser.welcome_failed.message')
+                        );
+                    }
+                }
+
                 $this->userManager->updateUser($data);
                 $this->onSuccess($data);
 

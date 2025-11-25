@@ -45,7 +45,7 @@ class CustomerRepository extends ServiceEntityRepository
         $qb
             ->where($qb->expr()->eq('LOWER(c.email)', ':email'))
             ->setParameter('email', mb_strtolower($email))
-            ->andWhere($qb->expr()->eq('c.isHidden', 'false'));
+            ->andWhere($qb->expr()->eq('c.isHidden', $qb->expr()->literal(false)));
 
         if ($organization) {
             $qb
