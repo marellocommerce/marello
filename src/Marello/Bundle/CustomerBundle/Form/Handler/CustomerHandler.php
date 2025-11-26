@@ -41,9 +41,11 @@ class CustomerHandler implements FormHandlerInterface
             $this->submitPostPutRequest($form, $request);
 
             if ($form->isValid()) {
-                if ($form->get('passwordGenerate')->getData()) {
-                    $generatedPassword = $this->userManager->generatePassword(10);
-                    $data->setPlainPassword($generatedPassword);
+                if ($form->has('passwordGenerate')) {
+                    if ($form->get('passwordGenerate')->getData()) {
+                        $generatedPassword = $this->userManager->generatePassword(10);
+                        $data->setPlainPassword($generatedPassword);
+                    }
                 }
 
                 if ($form->get('sendEmail')->getData()) {
