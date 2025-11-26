@@ -47,18 +47,19 @@ class CustomerHandler implements FormHandlerInterface
                         $data->setPlainPassword($generatedPassword);
                     }
                 }
-
-                if ($form->get('sendEmail')->getData()) {
-                    try {
-                        $this->userManager->sendWelcomeRegisteredByAdminEmail($data);
-                    } catch (\Exception $ex) {
-                        /** @var Session $session */
-                        $session = $request->getSession();
-                        $session->getFlashBag()->add(
-                            'error',
-                            $this->translator
-                                ->trans('oro.customer.controller.customeruser.welcome_failed.message')
-                        );
+                if ($form->has('sendEmail')) {
+                    if ($form->get('sendEmail')->getData()) {
+                        try {
+                            $this->userManager->sendWelcomeRegisteredByAdminEmail($data);
+                        } catch (\Exception $ex) {
+                            /** @var Session $session */
+                            $session = $request->getSession();
+                            $session->getFlashBag()->add(
+                                'error',
+                                $this->translator
+                                    ->trans('oro.customer.controller.customeruser.welcome_failed.message')
+                            );
+                        }
                     }
                 }
 
