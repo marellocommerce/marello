@@ -41,25 +41,24 @@ class CustomerHandler implements FormHandlerInterface
             $this->submitPostPutRequest($form, $request);
 
             if ($form->isValid()) {
-                if ($form->has('passwordGenerate')) {
-                    if ($form->get('passwordGenerate')->getData()) {
-                        $generatedPassword = $this->userManager->generatePassword(10);
-                        $data->setPlainPassword($generatedPassword);
-                    }
+                if ($form->has('passwordGenerate') && $form->get('passwordGenerate')->getData()) {
+                    $generatedPassword = $this->userManager->generatePassword(10);
+                    $data->setPlainPassword($generatedPassword);
                 }
-                if ($form->has('sendEmail')) {
-                    if ($form->get('sendEmail')->getData()) {
-                        try {
-                            $this->userManager->sendWelcomeRegisteredByAdminEmail($data);
-                        } catch (\Exception $ex) {
-                            /** @var Session $session */
-                            $session = $request->getSession();
-                            $session->getFlashBag()->add(
-                                'error',
-                                $this->translator
-                                    ->trans('oro.customer.controller.customeruser.welcome_failed.message')
-                            );
+                if ($form->has('sendEmail') && $form->get('sendEmail')->getData()) {
+                    try {
+                        if (!$data->getId()) {
+                            $this->manager->persist($data);
                         }
+                        $this->userManager->sendWelcomeRegisteredByAdminEmail($data);
+                    } catch (\Exception $ex) {
+                        /** @var Session $session */
+                        $session = $request->getSession();
+                        $session->getFlashBag()->add(
+                            'error',
+                            $this->translator
+                                ->trans($ex->getMessage())
+                        );
                     }
                 }
 
