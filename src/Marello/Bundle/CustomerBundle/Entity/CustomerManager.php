@@ -28,7 +28,7 @@ class CustomerManager extends BaseUserManager
         private UserLoaderInterface $userLoader,
         private ManagerRegistry $doctrine,
         private PasswordHasherFactoryInterface $passwordHasherFactory,
-        private EmailSendProcessor $emailProcessor,
+        private EmailSendProcessor $emailProcessor
     ) {
         parent::__construct($userLoader, $doctrine, $passwordHasherFactory);
     }
