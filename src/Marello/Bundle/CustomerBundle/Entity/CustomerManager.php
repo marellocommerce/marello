@@ -14,10 +14,6 @@ use Marello\Bundle\NotificationBundle\Provider\EmailSendProcessor;
 
 class CustomerManager extends BaseUserManager
 {
-    public const STATUS_ACTIVE  = 'active';
-    public const STATUS_RESET = 'reset';
-
-    private const AUTH_STATUS_ENUM_CODE = 'cu_auth_status';
     private const WELCOME_EMAIL_TEMPLATE_NAME = 'marello_customer_user_welcome_email';
     private const RESET_PASSWORD_EMAIL_TEMPLATE_NAME = 'marello_customer_user_reset_password';
 
