@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
 use Oro\Bundle\CustomerBundle\Entity\CustomerUserRole;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -169,6 +170,13 @@ class Customer extends AbstractUser implements
         ]
     )]
     protected ?Collection $userRoles = null;
+
+    /**
+     * @var array $data
+     */
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected $data = [];
 
     #[\Override]
     public function serialize()
@@ -437,5 +445,25 @@ class Customer extends AbstractUser implements
         }
 
         return $organizations;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Customer
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->data;
     }
 }
