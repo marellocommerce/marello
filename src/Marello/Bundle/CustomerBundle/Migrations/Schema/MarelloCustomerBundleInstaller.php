@@ -35,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_7_2';
+        return 'v1_7_4';
     }
 
     /**
@@ -130,6 +130,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('last_login', 'datetime', ['notnull' => false]);
         $table->addColumn('login_count', 'integer', ['default' => '0', 'unsigned' => true]);
         $table->addColumn('localization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addIndex(['primary_address_id']);
