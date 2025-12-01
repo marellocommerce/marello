@@ -49,20 +49,4 @@ class CustomerManager extends BaseUserManager
             $user
         );
     }
-
-    #[\Override]
-    public function findUserBy(array $criteria): ?UserInterface
-    {
-        return parent::findUserBy(array_merge($criteria, ['isGuest' => false]));
-    }
-
-    public function updatePassword(UserInterface $user): void
-    {
-        $password = $user->getPlainPassword();
-        if ($password !== null && 0 !== strlen($password)) {
-            $passwordHasher = $this->getPasswordHasher($user);
-            $user->setPassword($passwordHasher->hash($password, $user->getSalt()));
-            $user->eraseCredentials();
-        }
-    }
 }
