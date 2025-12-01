@@ -176,7 +176,7 @@ class Customer extends AbstractUser implements
      */
     #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
-    protected $data = [];
+    protected ?array $data = [];
 
     #[\Override]
     public function serialize()
@@ -462,7 +462,7 @@ class Customer extends AbstractUser implements
     /**
      * @return array
      */
-    public function getData(): array
+    public function getData(): ?array
     {
         return $this->data;
     }
