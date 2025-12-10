@@ -128,8 +128,14 @@
     </td>
     <td class="pricing-line-item-special-date">
         <div class="fields-row">
+<<<<<<< HEAD
             {{ form_row(form.specialPrice.startDate, { 'label' : 'marello.pricing.productchannelprice.start_date.label'|trans }) }}
             {{ form_row(form.specialPrice.endDate, { 'label' : 'marello.pricing.productchannelprice.end_date.label'|trans }) }}
+=======
+            <span>{{ 'marello.pricing.productchannelprice.start_date.label'|trans }}</span>{{ form_widget(form.specialPrice.startDate) }}
+            {{ form_errors(form.specialPrice.startDate) }}
+            <span>{{ 'marello.pricing.productchannelprice.end_date.label'|trans }}</span>{{ form_widget(form.specialPrice.endDate) }}
+>>>>>>> parent of 08c132060 (feature/MAR10001-1136:)
         </div>
     </td>
 {% endblock %}
