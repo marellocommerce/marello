@@ -5,6 +5,7 @@ namespace Marello\Bundle\InvoiceBundle\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use Marello\Bundle\OrderBundle\Entity\OrderItem;
 use Oro\Bundle\CurrencyBundle\Entity\PriceAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
@@ -77,6 +78,14 @@ abstract class AbstractInvoiceItem implements
     #[ORM\Column(name: 'product_sku', type: Types::STRING, nullable: false)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $productSku;
+
+    /**
+     * @var OrderItem|null
+     */
+    #[ORM\JoinColumn(name: 'order_item_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
+    #[ORM\ManyToOne(targetEntity: OrderItem::class)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected ?OrderItem $orderItem = null;
 
     /**
      * @var int
@@ -217,6 +226,22 @@ abstract class AbstractInvoiceItem implements
     public function setProductSku($productSku)
     {
         $this->productSku = $productSku;
+
+        return $this;
+    }
+
+    public function getOrderItem(): ?OrderItem
+    {
+        return $this->orderItem;
+    }
+
+    /**
+     * @param OrderItem|null $orderItem
+     * @return $this
+     */
+    public function setOrderItem(OrderItem $orderItem = null): self
+    {
+        $this->orderItem = $orderItem;
 
         return $this;
     }

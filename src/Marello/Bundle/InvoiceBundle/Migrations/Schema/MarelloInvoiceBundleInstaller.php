@@ -18,7 +18,7 @@ class MarelloInvoiceBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v3_1';
+        return 'v3_2';
     }
 
     /**
@@ -64,8 +64,10 @@ class MarelloInvoiceBundleInstaller implements Installation
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('salesChannel_id', 'integer', ['notnull' => false]);
         $table->addColumn('saleschannel_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('po_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('subtotal', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('total_tax', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
+        $table->addColumn('discount_amount', 'money', ['notnull' => false, 'precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('grand_total', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('total_due', 'money', ['notnull' => false, 'precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('total_paid', 'money', ['notnull' => false, 'precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
@@ -87,12 +89,12 @@ class MarelloInvoiceBundleInstaller implements Installation
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
 
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['invoice_number'], null);
-        $table->addIndex(['order_id'], null);
-        $table->addIndex(['customer_id'], null, []);
-        $table->addIndex(['billing_address_id'], null, []);
-        $table->addIndex(['shipping_address_id'], null, []);
-        $table->addIndex(['salesChannel_id'], null, []);
+        $table->addUniqueIndex(['invoice_number']);
+        $table->addIndex(['order_id']);
+        $table->addIndex(['customer_id']);
+        $table->addIndex(['billing_address_id']);
+        $table->addIndex(['shipping_address_id']);
+        $table->addIndex(['salesChannel_id']);
         $table->addIndex(['organization_id']);
     }
 
@@ -111,6 +113,7 @@ class MarelloInvoiceBundleInstaller implements Installation
         $table->addColumn('product_id', 'integer', ['notnull' => false]);
         $table->addColumn('product_name', 'string', ['length' => 255]);
         $table->addColumn('product_sku', 'string', ['length' => 255]);
+        $table->addColumn('order_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('quantity', 'integer', []);
         $table->addColumn('price', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('tax', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
@@ -228,6 +231,12 @@ class MarelloInvoiceBundleInstaller implements Installation
             ['invoice_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_order_order_item'),
+            ['order_item_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),

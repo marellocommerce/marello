@@ -468,6 +468,7 @@
                                 <tr class="email-summary">
                                     <td style="font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif;">
                                         <p style="font-size: 16px; margin: 1em 0;">Your order <span class="no-link">#{{ entity.order.orderNumber }}</span></p>
+                                        <p style="font-size: 16px; margin: 1em 0;">Your invoice <span class="no-link">#{{ entity.invoiceNumber }}</span></p>
                                         <p style="font-size: 16px; margin: 1em 0;">Placed on {{ entity.order.purchaseDate|date('d-m-Y H:i:s') }}</p>
                                     </td>
                                 </tr>
@@ -500,7 +501,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <!--{% for item in entity.order.items %}-->
+                                            <!--{% for item in entity.items %}-->
                                             <tr>
                                                 <td class="item-info" style="border-top: 1px solid #d6d7d7; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 10px 8px; font-size:13px; font-weight: 300;">
                                                     {{ item.productName }}
@@ -543,13 +544,13 @@
                                                     <span class="price" style="white-space: nowrap;">({{ entity.totalTax|oro_format_currency({'currency': entity.currency}) }})</span>
                                                 </td>
                                             </tr>
-                                            <!--{% if entity.order.discountAmount %}-->
+                                            <!--{% if entity.discountAmount %}-->
                                             <tr class="discount">
                                                 <th colspan="6" scope="row" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; font-weight: 400; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
                                                     DISCOUNT:
                                                 </th>
                                                 <td data-th="discount" style="background-color: #f8f8f8; border-top: 0; font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 20px 8px; font-size:13px; padding-top: 0; text-align: right;">
-                                                    <span class="price" style="white-space: nowrap;">{{ entity.order.discountAmount|oro_format_currency({'currency': entity.currency}) }}</span>
+                                                    <span class="price" style="white-space: nowrap;">{{ entity.discountAmount|oro_format_currency({'currency': entity.currency}) }}</span>
                                                 </td>
                                             </tr>
                                             <!--{% endif %}-->
