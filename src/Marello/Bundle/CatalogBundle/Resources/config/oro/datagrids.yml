@@ -1,5 +1,9 @@
 datagrids:
     marello-categories-grid:
+        extended_entity_name: Marello\Bundle\CatalogBundle\Entity\Category
+        inline_editing:
+            enable: true
+            behaviour: enable_selected
         source:
             type: orm
             query:
@@ -11,9 +15,13 @@ datagrids:
             name:
                 label:              marello.catalog.category.name.label
                 frontend_type:      string
+                inline_editing:
+                    enable: true
             code:
                 label:              marello.catalog.category.code.label
                 frontend_type:      string
+                inline_editing:
+                    enable: true
             createdAt:
                 label:              oro.ui.created_at
                 frontend_type:      datetime
