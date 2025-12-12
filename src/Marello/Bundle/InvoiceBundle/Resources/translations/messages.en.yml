@@ -28,12 +28,14 @@ marello:
         sales_channel_name.label:   Sales Channel
         items.label:                Items
         subtotal.label:             Subtotal
+        discount_amount.label:      Discount Amount
         total_tax.label:            Tax Total
         grand_total.label:          Grand Total
         shipping_amount_incl_tax.label: Shipping Amount Including Tax
         shipping_amount_excl_tax.label: Shipping Amount Excluding Tax
         organization.label:         Organization
         invoice_type.label:         Invoice Type
+        po_number.label:            PO Number
         pdf:
             download.label:         Download PDF
             filename.label:         "%invoiceType%_%entityNumber%.pdf"
@@ -71,6 +73,7 @@ marello:
             sales_channel_name.label:   Sales Channel
             items.label:                Items
             subtotal.label:             Subtotal
+            discount_amount.label:      Discount Amount
             total_tax.label:            Tax Total
             grand_total.label:          Grand Total
             shipping_amount_incl_tax.label: Shipping Amount Including Tax
@@ -78,7 +81,7 @@ marello:
             organization.label:         Organization
             invoice_type.label:         Invoice Type
             download_pdf.label:         Download invoice PDF
-
+            po_number.label:            PO Number
         datablock:
             general:                General
             billing_address:        Billing Address
@@ -111,6 +114,7 @@ marello:
             row_total_excl_tax.label: Row Total Excluding Tax
             organization.label:       Organization
             product_unit.label:       Unit
+            order_item.label:         Orderr Item
 
         creditmemoitem:
             id.label:                 Id
@@ -129,6 +133,7 @@ marello:
             row_total_excl_tax.label: Row Total Excluding Tax
             organization.label:       Organization
             product_unit.label:       Unit
+            order_item.label:         Order Item
 
         abstractinvoice:
             id.label:                   Id
@@ -164,6 +169,8 @@ marello:
             shipping_amount_excl_tax.label: Shipping Amount Excluding Tax
             organization.label:         Organization
             invoice_type.label:         Invoice Type
+            discount_amount.label:      Discount Amount
+            po_number.label:            PO Number
 
         abstractinvoiceitem:
             id.label:                 Id
@@ -182,3 +189,4 @@ marello:
             row_total_excl_tax.label: Row Total Excluding Tax
             organization.label:       Organization
             product_unit.label:       Unit
+            order_item.label:         Order Item
