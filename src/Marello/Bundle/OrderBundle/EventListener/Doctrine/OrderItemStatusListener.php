@@ -41,22 +41,7 @@ class OrderItemStatusListener
         if ($entity instanceof OrderItem) {
             $product = $entity->getProduct();
             if ($product) {
-                $inventoryItem = $product->getInventoryItem();
-                $availableInventory = $this->availableInventoryProvider->getAvailableInventory(
-                    $product,
-                    $entity->getOrder()->getSalesChannel()
-                );
-                if ($availableInventory < $entity->getQuantity() &&
-                    (
-                        ($inventoryItem->isBackorderAllowed() &&
-                            $inventoryItem->getMaxQtyToBackorder() >= $entity->getQuantity()
-                        ) || ($inventoryItem->isCanPreorder() &&
-                            $inventoryItem->getMaxQtyToPreorder() >= $entity->getQuantity())
-                        || $inventoryItem->isOrderOnDemandAllowed()
-                    )
-                ) {
-                    $entity->setStatus($this->findStatusByName(LoadOrderItemStatusData::WAITING_FOR_SUPPLY));
-                } elseif ($entity->isAllocationExclusion()) {
+                if ($entity->isAllocationExclusion()) {
                     $entity->setStatus($this->findStatusByName(OrderItemStatusesInterface::OIS_COMPLETE));
                 }
             }
@@ -147,19 +132,5 @@ class OrderItemStatusListener
         }
 
         return null;
-    }
-
-    /**
-     * Get associated BalancedInventoryLevel
-     * @param Product $product
-     * @param SalesChannelGroup $salesChannelGroup
-     * @return BalancedInventoryLevel
-     */
-    protected function getBalancedInventoryLevel(Product $product, SalesChannelGroup $salesChannelGroup)
-    {
-        return $this->doctrineHelper
-            ->getEntityManagerForClass(BalancedInventoryLevel::class)
-            ->getRepository(BalancedInventoryLevel::class)
-            ->findExistingBalancedInventory($product, $salesChannelGroup, $this->aclHelper);
     }
 }
