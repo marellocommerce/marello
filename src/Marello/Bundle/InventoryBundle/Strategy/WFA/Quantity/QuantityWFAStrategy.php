@@ -579,13 +579,6 @@ class QuantityWFAStrategy implements WFAStrategyInterface
             ->getInventoryLevels()
             ->filter(function (InventoryLevel $inventoryLevel) use ($warehouses, $item, $inventoryItem) {
                 $warehouse = $inventoryLevel->getWarehouse();
-                // items that are order on demand are not a candidate for allocation by default.
-                if ($item instanceof OrderItem &&
-                    ($inventoryItem->isEnableBatchInventory() && $inventoryItem->isOrderOnDemandAllowed())
-                ) {
-                    return false;
-                }
-
                 if (in_array($warehouse->getId(), $warehouses)) {
                     if ($inventoryLevel->getVirtualInventoryQty() > 0) {
                         return true;
