@@ -10,8 +10,9 @@ use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-
-class CompanyHandler
+use Doctrine\ORM\EntityManagerInterface;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
+class CompanyHandler implements FormHandlerInterface
 {
     use RequestHandlerTrait;
 
@@ -26,22 +27,12 @@ class CompanyHandler
     protected $request;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $manager;
 
-    /**
-     * @param FormInterface $form
-     * @param RequestStack  $requestStack
-     * @param ObjectManager $manager
-     */
-    public function __construct(
-        FormInterface $form,
-        RequestStack  $requestStack,
-        ObjectManager $manager
-    ) {
-        $this->form = $form;
-        $this->request = $requestStack->getCurrentRequest();
+    public function __construct(EntityManagerInterface $manager)
+    {
         $this->manager = $manager;
     }
 
@@ -50,18 +41,22 @@ class CompanyHandler
      *
      * @return bool True on successful processing, false otherwise
      */
-    public function process(Company $company)
+    public function process($data, FormInterface $form, Request $request)
     {
-        $this->form->setData($company);
+        if (!$data instanceof Company) {
+            throw new \InvalidArgumentException('Argument data should be instance of Customer entity');
+        }
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $this->submitPostPutRequest($this->form, $this->request);
-            if ($this->form->isValid()) {
-                /** @var FormInterface $appendCustomers */
-                $appendCustomers = $this->form->get('appendCustomers');
+        $form->setData($data);
+
+        if (in_array($request->getMethod(), ['POST', 'PUT'])) {
+            $this->submitPostPutRequest($form, $request);
+
+            if ($form->isValid()) {
+                $appendCustomers = $form->get('appendCustomers');
                 /** @var FormInterface $removeCustomers */
-                $removeCustomers = $this->form->get('removeCustomers');
-                $this->onSuccess($company, $appendCustomers->getData(), $removeCustomers->getData());
+                $removeCustomers = $form->get('removeCustomers');
+                $this->onSuccess($data, $appendCustomers->getData(), $removeCustomers->getData());
 
                 return true;
             }

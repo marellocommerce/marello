@@ -115,13 +115,13 @@ services:
         tags:
             - { name: form.type }
 
-    marello_customer.company.form.handler:
+    marello_customer.form.handler.company:
         class: 'Marello\Bundle\CustomerBundle\Form\Handler\CompanyHandler'
         public: true
         arguments:
-            - '@marello_customer.company.form'
-            - '@request_stack'
             - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: oro_form.form.handler, alias: marello_customer.form.handler.company }
 
     marello_customer.form.handler.customer:
         class: 'Marello\Bundle\CustomerBundle\Form\Handler\CustomerHandler'

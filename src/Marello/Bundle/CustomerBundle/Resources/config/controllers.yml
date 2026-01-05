@@ -8,7 +8,7 @@ services:
         tags:
             - { name: container.service_subscriber }
             - { name: container.service_subscriber, id: marello_customer.company_tree_handler, key: Marello\Bundle\CustomerBundle\JsTree\CompanyTreeHandler }
-            - { name: container.service_subscriber, id: marello_customer.company.form.handler, key: Marello\Bundle\CustomerBundle\Form\Handler\CompanyHandler }
+#            - { name: container.service_subscriber, id: marello_customer.form.handler.company, key: Marello\Bundle\CustomerBundle\Form\Handler\CompanyHandler }
 
     Marello\Bundle\CustomerBundle\Controller\CustomerController:
         calls:
