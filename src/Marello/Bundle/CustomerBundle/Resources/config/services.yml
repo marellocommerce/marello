@@ -118,10 +118,6 @@ services:
     marello_customer.form.handler.company:
         class: 'Marello\Bundle\CustomerBundle\Form\Handler\CompanyHandler'
         public: true
-#        arguments:
-#            - '@marello_customer.company.form'
-#            - '@request_stack'
-#            - '@doctrine.orm.entity_manager'
         arguments:
             - '@doctrine.orm.entity_manager'
         tags:
