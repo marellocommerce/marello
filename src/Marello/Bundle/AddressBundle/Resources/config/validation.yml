@@ -11,3 +11,19 @@ Marello\Bundle\AddressBundle\Entity\MarelloAddress:
         phone:
             - Length:
                 max: 255
+
+Marello\Bundle\AddressBundle\Entity\MarelloTypedAddress:
+    properties:
+        street:
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        postalCode:
+            - NotBlank: ~
+        country:
+            - NotBlank: ~
+        phone:
+            - Length:
+                  max: 255
+        addressType:
+            - NotBlank: ~

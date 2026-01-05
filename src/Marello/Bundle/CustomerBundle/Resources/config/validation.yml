@@ -23,3 +23,5 @@ Marello\Bundle\CustomerBundle\Entity\Company:
             - NotBlank: ~
         companyNumber:
             - NotBlank: ~
+        addresses:
+            - Valid: ~
