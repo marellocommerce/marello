@@ -13,8 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Oro\Bundle\UIBundle\Route\Router;
 use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
+use Oro\Bundle\FormBundle\Model\UpdateHandlerFacade;
 
 use Marello\Bundle\CustomerBundle\Entity\Company;
+use Marello\Bundle\CustomerBundle\Form\Type\CompanyType;
 use Marello\Bundle\CustomerBundle\JsTree\CompanyTreeHandler;
 use Marello\Bundle\CustomerBundle\Form\Handler\CompanyHandler;
 
@@ -83,21 +85,28 @@ class CompanyController extends AbstractController
      */
     protected function update(Company $company, Request $request)
     {
-        $handler = $this->container->get(CompanyHandler::class);
+//        $handler = $this->container->get(CompanyHandler::class);
 
-        if ($handler->process($company)) {
-            $request->getSession()->getFlashBag()->add(
-                'success',
-                $this->container->get(TranslatorInterface::class)->trans('marello.customer.controller.company.saved.message')
-            );
+//        if ($handler->process($company)) {
+//            $request->getSession()->getFlashBag()->add(
+//                'success',
+//                $this->container->get(TranslatorInterface::class)->trans('')
+//            );
+//
+//            return $this->container->get(Router::class)->redirect($company);
+//        }
+        return $this->container->get(UpdateHandlerFacade::class)->update(
+            $company,
+            $this->createForm(CompanyType::class, $company),
+            $this->container->get(TranslatorInterface::class)->trans('marello.customer.controller.company.saved.message'),
+            $request,
+            'marello_customer.form.handler.company'
+        );
 
-            return $this->container->get(Router::class)->redirect($company);
-        }
-
-        return [
-            'entity' => $company,
-            'form'   => $handler->getFormView(),
-        ];
+//        return [
+//            'entity' => $company,
+//            'form'   => $handler->getFormView(),
+//        ];
     }
 
     public static function getSubscribedServices(): array
@@ -106,7 +115,7 @@ class CompanyController extends AbstractController
             parent::getSubscribedServices(),
             [
                 CompanyTreeHandler::class,
-                CompanyHandler::class,
+                UpdateHandlerFacade::class,
                 TranslatorInterface::class,
                 Router::class,
             ]

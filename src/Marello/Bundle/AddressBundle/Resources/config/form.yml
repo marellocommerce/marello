@@ -3,3 +3,8 @@ services:
         class: Marello\Bundle\AddressBundle\Form\Type\AddressType
         tags:
             - { name: form.type }
+
+    marello_address.form.type.typed_address:
+        class: Marello\Bundle\AddressBundle\Form\Type\TypedAddressType
+        tags:
+            - { name: form.type }

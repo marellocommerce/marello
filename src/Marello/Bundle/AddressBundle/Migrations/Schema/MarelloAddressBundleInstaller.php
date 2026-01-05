@@ -17,7 +17,7 @@ class MarelloAddressBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_1';
+        return 'v1_2';
     }
 
     /**
@@ -27,9 +27,11 @@ class MarelloAddressBundleInstaller implements Installation
     {
         /** Tables generation **/
         $this->createMarelloAddressTable($schema);
+        $this->createMarelloTypedAddressTable($schema);
 
         /** Foreign keys generation **/
         $this->addMarelloAddressForeignKeys($schema);
+        $this->addMarelloTypedAddressForeignKeys($schema);
     }
 
     /**
@@ -65,6 +67,39 @@ class MarelloAddressBundleInstaller implements Installation
     }
 
     /**
+     * Create marello_address table
+     *
+     * @param Schema $schema
+     */
+    protected function createMarelloTypedAddressTable(Schema $schema)
+    {
+        $table = $schema->createTable('marello_typed_address');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('address_type', 'string', ['notnull' => false]);
+        $table->addColumn('country_code', 'string', ['notnull' => false, 'length' => 2]);
+        $table->addColumn('region_code', 'string', ['notnull' => false, 'length' => 16]);
+        $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 32]);
+        $table->addColumn('label', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500]);
+        $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500]);
+        $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('company', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('middle_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('is_default', 'boolean', ['default' => '0']);
+        $table->addColumn('created', 'datetime', []);
+        $table->addColumn('updated', 'datetime', []);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['address_type']);
+    }
+
+    /**
      * Add marello_address foreign keys.
      *
      * @param Schema $schema
@@ -72,6 +107,40 @@ class MarelloAddressBundleInstaller implements Installation
     protected function addMarelloAddressForeignKeys(Schema $schema)
     {
         $table = $schema->getTable('marello_address');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_dictionary_country'),
+            ['country_code'],
+            ['iso2_code'],
+            ['onDelete' => null, 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_dictionary_region'),
+            ['region_code'],
+            ['combined_code'],
+            ['onDelete' => null, 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Add marello_typed_address foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addMarelloTypedAddressForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_typed_address');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_address_type'),
+            ['address_type'],
+            ['name'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_address_type'),
+            ['address_type'],
+            ['name'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_dictionary_country'),
             ['country_code'],

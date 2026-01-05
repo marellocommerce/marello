@@ -3,11 +3,13 @@
 namespace Marello\Bundle\CustomerBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Marello\Bundle\CustomerBundle\Entity\Customer;
-use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
-use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+
+use Oro\Bundle\FormBundle\Form\Handler\RequestHandlerTrait;
+use Oro\Bundle\FormBundle\Form\Handler\FormHandlerInterface;
+
+use Marello\Bundle\CustomerBundle\Entity\Customer;
 
 class CustomerHandler implements FormHandlerInterface
 {

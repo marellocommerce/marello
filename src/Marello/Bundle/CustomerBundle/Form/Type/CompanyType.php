@@ -3,7 +3,9 @@
 namespace Marello\Bundle\CustomerBundle\Form\Type;
 
 use Marello\Bundle\AddressBundle\Entity\MarelloAddress;
+use Marello\Bundle\AddressBundle\Entity\MarelloTypedAddress;
 use Marello\Bundle\AddressBundle\Form\Type\AddressType;
+use Marello\Bundle\AddressBundle\Form\Type\TypedAddressType;
 use Marello\Bundle\CustomerBundle\Entity\Company;
 use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Marello\Bundle\PaymentTermBundle\Form\Type\PaymentTermSelectType;
@@ -84,10 +86,10 @@ class CompanyType extends AbstractType
         if ($this->authorizationChecker->isGranted('marello_customer_company_address_update')) {
             $options = [
                 'label' => 'marello.customer.company.addresses.label',
-                'entry_type' => AddressType::class,
+                'entry_type' => TypedAddressType::class,
                 'required' => true,
                 'entry_options' => [
-                    'data_class' => MarelloAddress::class,
+                    'data_class' => MarelloTypedAddress::class,
                     'single_form' => false
                 ]
             ];

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Marello\Bundle\AddressBundle\Entity\MarelloTypedAddress;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -82,7 +83,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     ])]
     protected ?Collection $children = null;
 
-    #[ORM\ManyToMany(targetEntity: MarelloAddress::class, cascade: ['persist'], fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: MarelloTypedAddress::class, cascade: ['persist'], fetch: 'EAGER')]
     #[ORM\JoinTable(name: 'marello_company_join_address')]
     #[ORM\JoinColumn(name: 'company_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'address_id', referencedColumnName: 'id', unique: true)]
@@ -228,11 +229,11 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     }
 
     /**
-     * @param MarelloAddress $address
+     * @param MarelloTypedAddress $address
      *
      * @return $this
      */
-    public function addAddress(MarelloAddress $address): self
+    public function addAddress(MarelloTypedAddress $address): self
     {
         if (!$this->getAddresses()->contains($address)) {
             $this->getAddresses()->add($address);
@@ -242,11 +243,11 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     }
 
     /**
-     * @param MarelloAddress $address
+     * @param MarelloTypedAddress $address
      *
      * @return $this
      */
-    public function removeAddress(MarelloAddress $address): self
+    public function removeAddress(MarelloTypedAddress $address): self
     {
         if ($this->hasAddress($address)) {
             $this->getAddresses()->removeElement($address);
@@ -256,7 +257,7 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     }
 
     /**
-     * @return Collection|MarelloAddress[]
+     * @return Collection|MarelloTypedAddress[]
      */
     public function getAddresses(): Collection
     {
@@ -264,11 +265,11 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     }
 
     /**
-     * @param MarelloAddress $address
+     * @param MarelloTypedAddress $address
      *
      * @return bool
      */
-    protected function hasAddress(MarelloAddress $address): bool
+    protected function hasAddress(MarelloTypedAddress $address): bool
     {
         return $this->getAddresses()->contains($address);
     }
