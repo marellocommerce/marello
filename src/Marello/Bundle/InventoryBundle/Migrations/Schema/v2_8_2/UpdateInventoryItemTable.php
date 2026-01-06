@@ -1,12 +1,10 @@
 <?php
 
-namespace Marello\Bundle\InventoryBundle\Migrations\Schema\v2_8_1;
+namespace marello\src\Marello\Bundle\InventoryBundle\Migrations\Schema\v2_8_2;
 
 use Doctrine\DBAL\Schema\Schema;
-
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class UpdateInventoryItemTable implements Migration
 {
