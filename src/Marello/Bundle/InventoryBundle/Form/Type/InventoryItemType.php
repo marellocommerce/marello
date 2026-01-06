@@ -141,6 +141,15 @@ class InventoryItemType extends AbstractType
                 ]
             )
             ->add(
+                'qtyInUnit',
+                NumberType::class,
+                [
+                    'required'  => false,
+                    'scale'     => 2,
+                    'label'     => 'marello.inventory.inventoryitem.qty_in_unit.label'
+                ]
+            )
+            ->add(
                 'onHandPromise',
                 DeliveryPromiseSelectType::class,
                 [

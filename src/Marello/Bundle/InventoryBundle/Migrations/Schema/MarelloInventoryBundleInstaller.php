@@ -117,6 +117,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
             ]
         );
+        $table->addColumn('qty_in_unit', 'float', ['notnull' => false]);
         $table->addColumn('on_hand_promise', 'integer', ['notnull' => false]);
         $table->addColumn('drop_ship_promise', 'integer', ['notnull' => false]);
         $table->addColumn('back_order_promise', 'integer', ['notnull' => false]);

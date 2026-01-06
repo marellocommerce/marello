@@ -86,6 +86,7 @@ marello:
             enable_batch_inventory.label:  Enable Batch Inventory
             batch_inventory.label:         Batches / Lot
             product_unit.label:            Unit
+            qty_in_unit.label:             Quantity In Unit
             order_on_demand_allowed.label: Order On Demand Allowed
             section:
                 unit_of_measurement.label:  Unit of Measurement
