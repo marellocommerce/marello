@@ -151,14 +151,11 @@ datagrids:
                 select:
                     - i
                     - inv.currency as currency
-                    - product.sku as productSku
-                    - product.denormalizedDefaultName as productName
                 from:
                     - { table: Marello\Bundle\InvoiceBundle\Entity\InvoiceItem, alias: i}
                 join:
                     left:
                         - { join: i.invoice, alias: inv }
-                        - { join: i.product, alias: product }
                 where:
                     and:
                         - i.invoice = :entityId
@@ -213,14 +210,11 @@ datagrids:
                 select:
                     - i
                     - inv.currency as currency
-                    - product.sku as productSku
-                    - product.denormalizedDefaultName as productName
                 from:
                     - { table: Marello\Bundle\InvoiceBundle\Entity\CreditmemoItem, alias: i}
                 join:
                     left:
                         - { join: i.invoice, alias: inv }
-                        - { join: i.product, alias: product }
                 where:
                     and:
                         - i.invoice = :entityId
