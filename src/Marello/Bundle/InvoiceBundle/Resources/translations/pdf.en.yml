@@ -28,6 +28,8 @@ marello:
             page_number.label: "Page %pageNumber% of %totalPages%"
             entity.label: "Creditmemo"
             tax.label: "Tax"
+            total_paid.label: "Total Paid"
+            total_due.label: "Total Due"
         creditmemo_line:
             productSku.label: "SKU"
             productName.label: "Product"

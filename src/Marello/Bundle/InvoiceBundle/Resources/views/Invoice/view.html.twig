@@ -62,8 +62,10 @@
                     <span class="widget-title">{{ 'marello.invoice.datablock.invoice_totals'|trans }}</span>
                 </div>
                 {{ UI.renderProperty('marello.invoice.subtotal.label'|trans, entity.subtotal|oro_format_currency({'currency':entity.currency})) }}
-                {{ UI.renderProperty('marello.invoice.shipping_amount_incl_tax.label'|trans, entity.shippingAmountInclTax|oro_format_currency({'currency':entity.currency})) }}
-                {{ UI.renderProperty('marello.invoice.total_tax.label'|trans, entity.totalTax|oro_format_currency({'currency':entity.currency})) }}
+                {% if entity.invoiceType is same as constant('Marello\\Bundle\\InvoiceBundle\\Entity\\Invoice::INVOICE_TYPE') %}
+                    {{ UI.renderProperty('marello.invoice.shipping_amount_incl_tax.label'|trans, entity.shippingAmountInclTax|oro_format_currency({'currency':entity.currency})) }}
+                    {{ UI.renderProperty('marello.invoice.total_tax.label'|trans, entity.totalTax|oro_format_currency({'currency':entity.currency})) }}
+                {% endif %}
                 {{ UI.renderProperty('marello.invoice.grand_total.label'|trans, entity.grandTotal|oro_format_currency({'currency':entity.currency})) }}
                 {{ UI.renderProperty('marello.invoice.total_paid.label'|trans, entity.totalPaid|oro_format_currency({'currency':entity.currency})) }}
                 {% set totalDueLabel = entity.totalDue|oro_format_currency({'currency':entity.currency}) %}
@@ -73,6 +75,10 @@
                     {% endif %}
                 {% endif %}
                 {{ UI.renderProperty('marello.invoice.total_due.label'|trans, totalDueLabel) }}
+                {% if entity.invoiceType is same as constant('Marello\\Bundle\\InvoiceBundle\\Entity\\Creditmemo::CREDITMEMO_TYPE') %}
+                    <br />
+                    <br />
+                {% endif %}
             </div>
         </div>
     {% endset %}
