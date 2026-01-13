@@ -32,6 +32,12 @@ services:
         tags:
             - { name: oro.api.processor, action: customize_loaded_data, class: Marello\Bundle\RefundBundle\Entity\Refund }
 
+    Marello\Bundle\RefundBundle\Provider\RefundItemRemovalProvider:
+        public: true
+        lazy: true
+        arguments:
+            - '@oro_entity.doctrine_helper'
+
     marello_refund.datagrid.action_permission_provider:
         class: 'Marello\Bundle\RefundBundle\Datagrid\RefundActionPermissionProvider'
         public: true

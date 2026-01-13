@@ -134,7 +134,10 @@ abstract class AbstractInvoiceItem implements
         if (is_null($this->productName)) {
             $this->setProductName((string)$this->product->getName());
         }
-        $this->productSku  = $this->product->getSku();
+
+        if (is_null($this->productSku)) {
+            $this->setProductSku((string)$this->product->getSku());
+        }
     }
 
     /**

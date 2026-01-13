@@ -591,9 +591,13 @@ abstract class AbstractInvoice implements
             $this->payments->add($payment);
             $totalPaid = $this->getTotalPaid() ? : 0;
             $grandTotal = $this->getGrandTotal() ? : 0;
-
+            $subTotal = $this->getSubtotal() ? : 0;
+            $totalDue = $grandTotal - $payment->getTotalPaid();
+            if ($this->getInvoiceType() === Creditmemo::CREDITMEMO_TYPE) {
+                $totalDue = $subTotal - $payment->getTotalPaid();
+            }
+            $this->setTotalDue($totalDue);
             $this->setTotalPaid($payment->getTotalPaid() + $totalPaid);
-            $this->setTotalDue($grandTotal - $this->getTotalPaid());
         }
 
         return $this;
