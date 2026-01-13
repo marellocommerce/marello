@@ -32,6 +32,8 @@ marello:
             entity.label: "Creditmemo"
             tax.label: "Tax"
             po_number.label: "PO Number"
+            total_paid.label: "Total Paid"
+            total_due.label: "Total Due"
         creditmemo_line:
             productSku.label: "SKU"
             productName.label: "Product"
