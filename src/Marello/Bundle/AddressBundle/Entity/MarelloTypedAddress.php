@@ -13,7 +13,6 @@ use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityInterface;
 
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
 #[ORM\Table(name: 'marello_typed_address')]
-#[ORM\UniqueConstraint(name: 'marello_typed_addressidx', columns: ['address_id'])]
 #[Oro\Config(
     defaultValues: [
         'dataaudit' => [
