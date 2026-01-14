@@ -88,8 +88,8 @@
                 padding-right: 0;
                 margin-right: 0;
             }
-            table.invoice-lines td.price {
-                width: 80px;
+            table.invoice-lines td.total {
+                width: 90px;
                 padding-left: 0;
                 margin-left: 0;
             }
@@ -270,6 +270,7 @@
                         <th>{{ 'marello.pdf.creditmemo_line.productName.label'|trans({}, 'pdf', language) }}</th>
                         <th class="quantity c">{{ 'marello.pdf.creditmemo_line.quantity.label'|trans({}, 'pdf', language) }}
                         <th class="unit">{{ 'marello.pdf.creditmemo_line.product_unit.label'|trans({}, 'pdf', language) }}</th>
+                        <th class="amount">{{ 'marello.pdf.creditmemo_line.total_inc_tax.label'|trans({}, 'pdf', language) }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -296,6 +297,9 @@
 
                             {%- endif -%}
                         </td>
+                        <td class="total c">
+                            {%- if line['total_inc_tax'] is not empty %}{{ line['total_inc_tax']|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}{% else %}&nbsp;{% endif -%}
+                        </td>
                     </tr>
                     {% endfor -%}
                 {% endfor -%}
@@ -320,6 +324,10 @@
                     <tr>
                         <th>{{ 'marello.pdf.creditmemo.subtotal.label'|trans({}, 'pdf', language) }}</th>
                         <td class="r">{{ entity.subtotal|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'marello.pdf.creditmemo.tax.label'|trans({}, 'pdf', language) }}</th>
+                        <td class="r">({{ entity.totalTax|oro_format_currency({'locale': locale, 'currency':entity.currency}) }})</td>
                     </tr>
                     <tr class="invoice-total">
                         <th>{{ 'marello.pdf.creditmemo.total.label'|trans({}, 'pdf', language) }}</th>
