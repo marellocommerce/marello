@@ -32,7 +32,7 @@ class MarelloRefundBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_4_2';
+        return 'v1_4_3';
     }
 
     /**
@@ -93,6 +93,7 @@ class MarelloRefundBundleInstaller implements
         $table->addColumn('refund_id', 'integer', []);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('quantity', 'integer', []);
+        $table->addColumn('original_item_qty', 'integer', ['notnull' => false]);
         $table->addColumn('subtotal', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('tax_total', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
         $table->addColumn('tax_code_id', 'integer', ['notnull' => false]);

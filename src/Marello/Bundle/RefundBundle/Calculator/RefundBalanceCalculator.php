@@ -126,8 +126,7 @@ class RefundBalanceCalculator
         } else {
             $rate = 0;
         }
-        $quantity = isset($item['quantity']) ? (double)$item['quantity'] : 1;
-        $amount = (double)$item['refundAmount'] * $quantity;
+        $amount = (double)$item['refundAmount'];
         // set the taxcalculation to always including tax, otherwise it might get confusing from a user's perspective.
         $this->taxCalculator->setIsManualTaxSettingOverride(true);
         return $this->taxCalculator->calculate($amount, $rate);

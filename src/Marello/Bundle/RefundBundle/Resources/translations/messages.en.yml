@@ -48,6 +48,7 @@ marello:
             purchase_price.label:       Purchase Price
             subtotal.label:             Subtotal
             refund.label:               Refund
+            refund_incl_tax.label:      Refund Incl Tax
             add_item.label:             Add Item
 
         refund_subtotal.label:      Refund Subtotal
