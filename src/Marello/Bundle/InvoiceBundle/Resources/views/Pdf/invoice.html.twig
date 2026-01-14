@@ -141,8 +141,13 @@
                 margin-bottom: 0;
             }
             .customer-address {
-                margin-top: 40px;
+                margin: 20px 0;
                 font-size: 13px;
+            }
+            .invoice-type-label {
+                margin: 10px 0;
+                font-size: 16px;
+                font-weight:bold;
             }
             table.invoice-totals {
                 border-right: 2px solid #f4f4f4;
@@ -241,6 +246,7 @@
                 {% set paymentTerm = marello_get_payment_term_for_customer(entity.customer) %}
                 {# Invoice details #}
                 <div class="invoice-details">
+                    <div class="invoice-type-label">{{ 'marello.pdf.invoice.entity.label'|trans({}, 'pdf', language) }}</div>
                     <div class="invoice-dl clearfix">
                         <div class="dt">{{ 'marello.pdf.invoice.invoice_date.label'|trans({}, 'pdf', language) }}:</div>
                         <div class="dd">{{ entity.invoicedAt|date('d-m-Y') }}</div>
