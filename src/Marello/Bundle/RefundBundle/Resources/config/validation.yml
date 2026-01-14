@@ -6,6 +6,11 @@ Marello\Bundle\RefundBundle\Entity\Refund:
             - Valid: ~
 
 Marello\Bundle\RefundBundle\Entity\RefundItem:
+    constraints:
+        -   Marello\Bundle\CoreBundle\Validator\Constraints\GreaterThanOrEqualToValue:
+                fields: [ originalItemQty, quantity ]
+                errorPath: quantity
+                message: 'marello.refund.refunditem.messages.error.quantity_refunded_gte'
     properties:
         refundAmount:
             -   GreaterThanOrEqual:

@@ -39,9 +39,6 @@ define(function(require) {
          * initialize item triggers and field events
          */
         initRefundItem: function() {
-            if (this.hasProperty('quantity')) {
-                this.addFieldEvents('quantity', this.updateRefundRowTotal);
-            }
             if (this.hasProperty('refundAmount')) {
                 this.addFieldEvents('refundAmount', this.updateRefundData);
             }
