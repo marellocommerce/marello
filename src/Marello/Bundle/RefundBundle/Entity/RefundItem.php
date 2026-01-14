@@ -111,18 +111,29 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
     protected $orderItem;
 
     /**
+     * @var int original item qty that is either ordered or returned
+     * property needed for validation
+     */
+    /**
+     * @var int
+     */
+    #[ORM\Column(name: 'original_item_qty', type: Types::INTEGER, nullable: true)]
+    protected $originalItemQty = 1;
+
+    /**
      * @param $item
      *
      * @return RefundItem
      */
     public static function fromOrderItem(OrderItem $item)
     {
-        $refund = new self();
+        $refundItem = new self();
 
         $discount = $item->getOrder()->getDiscountAmount() ? : 0.00;
         $baseDiscount = $discount / $item->getQuantity();
-        $refund
+        $refundItem
             ->setOrderItem($item)
+            ->setOriginalItemQty($item->getQuantity())
             ->setName($item->getProductName())
             ->setBaseAmount($item->getPurchasePriceIncl())
             ->setSubTotal($item->getOrder()->getSubtotal())
@@ -130,7 +141,7 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
             ->setBaseAmount($item->getPurchasePriceIncl() - $baseDiscount)
         ;
 
-        return $refund;
+        return $refundItem;
     }
 
     /**
@@ -140,23 +151,24 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
      */
     public static function fromReturnItem(ReturnItem $item)
     {
-        $refund = new self();
+        $refundItem = new self();
 
         $orderItem = $item->getOrderItem();
         $discount = $orderItem->getOrder()->getDiscountAmount() ? : 0.00;
         $baseDiscount = $discount / $orderItem->getQuantity();
 
-        $refund
+        $refundItem
             ->setOrderItem($orderItem)
+            ->setOriginalItemQty($item->getQuantity())
             ->setName($orderItem->getProductName())
             ->setBaseAmount($orderItem->getPurchasePriceIncl() - $baseDiscount)
             ->setSubTotal($orderItem->getOrder()->getSubtotal())
             ->setTaxTotal($orderItem->getOrder()->getTotalTax())
             ->setTaxCode($orderItem->getTaxCode())
-            ->setRefundAmount($refund->getBaseAmount() * $item->getQuantity())
+            ->setRefundAmount($refundItem->getBaseAmount() * $item->getQuantity())
             ->setQuantity($item->getQuantity());
 
-        return $refund;
+        return $refundItem;
     }
 
     /**
@@ -203,6 +215,25 @@ class RefundItem implements CurrencyAwareInterface, OrganizationAwareInterface
     public function setQuantity($quantity)
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOriginalItemQty()
+    {
+        return $this->originalItemQty;
+    }
+
+    /**
+     * @param $originalItemQty
+     * @return $this
+     */
+    public function setOriginalItemQty($originalItemQty)
+    {
+        $this->originalItemQty = $originalItemQty;
 
         return $this;
     }

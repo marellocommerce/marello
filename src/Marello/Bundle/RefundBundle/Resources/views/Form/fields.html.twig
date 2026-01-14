@@ -160,7 +160,7 @@
                             <th><span>{{ 'marello.refund.form.purchase_price.label'|trans }}</span></th>
                             <th><span>{{ 'marello.refund.form.row_total_incl_tax.label'|trans }}</span></th>
                             <th><span>{{ 'marello.refund.refunditem.quantity.label'|trans }}</span></th>
-                            <th><span>{{ 'marello.refund.form.refund.label'|trans }}</span></th>
+                            <th><span>{{ 'marello.refund.form.refund_incl_tax.label'|trans }}</span></th>
                         </tr>
                     </thead>
                     <tbody data-last-index="{{ form.children|length}}" {% if prototype_html is defined %}
@@ -197,7 +197,7 @@
                     <tr>
                         <th><span>{{ 'marello.refund.refunditem.name.label'|trans }}</span></th>
                         <th><span>{{ 'marello.refund.form.tax_code.label'|trans }}</span></th>
-                        <th><span>{{ 'marello.refund.form.refund.label'|trans }}</span></th>
+                        <th><span>{{ 'marello.refund.form.refund_incl_tax.label'|trans }}</span></th>
                         <th class="order-line-item-notifications"></th>
                         {% if form.vars.allow_delete %}
                             <th class="order-row-item-actions"></th>

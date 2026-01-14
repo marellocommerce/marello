@@ -33,7 +33,7 @@ class OrderItemRefundType extends AbstractType
                 'quantity',
                 NumberType::class,
                 [
-                    'empty_data' => 0
+                    'data' => 0
                 ]
             )
             ->add('taxCode', TextType::class, [
