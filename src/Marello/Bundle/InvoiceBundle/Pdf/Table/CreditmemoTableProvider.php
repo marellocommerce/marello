@@ -108,6 +108,7 @@ class CreditmemoTableProvider implements TableProviderInterface
         $line['productName'] = $invoiceItem->getProductName();
         $line['quantity'] = $invoiceItem->getQuantity();
         $line['productUnit'] = $invoiceItem->getProductUnit();
+        $line['total_inc_tax'] = $invoiceItem->getRowTotalInclTax();
 
         return $line;
     }
