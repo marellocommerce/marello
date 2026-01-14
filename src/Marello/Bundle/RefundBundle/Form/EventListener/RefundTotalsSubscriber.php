@@ -58,6 +58,9 @@ class RefundTotalsSubscriber implements EventSubscriberInterface
                         ],
                         $refund
                     );
+                $item->setSubTotal($taxTotals->getExcludingTax());
+                $item->setTaxTotal($taxTotals->getTaxAmount());
+                $item->setBaseAmount($taxTotals->getIncludingTax());
                 $refundSubTotal += (double)$taxTotals->getExcludingTax();
                 $refundTaxTotal += (double)$taxTotals->getTaxAmount();
                 $refundGrandTotal += (double)$taxTotals->getIncludingTax();

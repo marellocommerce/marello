@@ -27,17 +27,18 @@ class RefundToCreditmemoMapper extends AbstractInvoiceMapper
         $data = $this->getData($sourceEntity->getOrder(), Creditmemo::class);
         $data['order'] = $sourceEntity->getOrder();
         $data['items'] = $this->getItems($sourceEntity->getItems());
-        $subtotal = 0.00;
         $totalTax = 0.00;
         /** @var CreditmemoItem $item */
-//        foreach ($data['items'] as $item) {
-//            $subtotal += $item->getRowTotalExclTax();
-//            $totalTax += $item->getTax();
-//        }
+        foreach ($data['items'] as $item) {
+            $totalTax += $item->getTax();
+        }
         $data['subtotal'] = $sourceEntity->getRefundAmount();
         $data['totalTax'] = $totalTax;
-        $data['grandTotal'] = $sourceEntity->getRefundAmount(); //$subtotal + $totalTax + $data['shippingAmountInclTax'];
+        $data['grandTotal'] = $sourceEntity->getRefundAmount();
         $data['total_due'] = $sourceEntity->getRefundAmount();
+
+        $data['shippingAmountExclTax'] = 0;
+        $data['shippingAmountInclTax'] = 0;
         if ($data['invoicedAt'] === null) {
             $data['invoicedAt'] = new \DateTime('now', new \DateTimeZone('UTC'));
         }
@@ -73,30 +74,21 @@ class RefundToCreditmemoMapper extends AbstractInvoiceMapper
     protected function mapItem(RefundItem $refundItem)
     {
         $creditmemoItem = new CreditmemoItem();
+        $creditmemoItemData['price'] = $refundItem->getRefundAmount();
+        $creditmemoItemData['tax'] = $refundItem->getTaxTotal();
+        $creditmemoItemData['rowTotalInclTax'] = $refundItem->getRefundAmount();
+        $creditmemoItemData['rowTotalExclTax'] = ($refundItem->getRefundAmount() - $refundItem->getTaxTotal());
+        $creditmemoItemData['quantity'] = $refundItem->getQuantity();
+        $creditmemoItemData['productSku'] = 'N/A';
+        $creditmemoItemData['productName'] = $refundItem->getName();
+
         $orderItem = $refundItem->getOrderItem();
-        $creditmemoItemData = [];
         if ($orderItem) {
-            $creditmemoItemData = $this->getData($orderItem, CreditmemoItem::class);
             $creditmemoItemData['productUnit'] = $orderItem->getProductUnit() ? $orderItem->getProductUnit()->getId() : null;
-        } else {
-            $creditmemoItemData['tax'] = $refundItem->getTaxTotal();
-            $creditmemoItemData['price'] = $refundItem->getRefundAmount();
-            $creditmemoItemData['quantity'] = $refundItem->getQuantity();
-            $creditmemoItemData['rowTotalExclTax'] = $refundItem->getSubTotal();
-            $creditmemoItemData['productSku'] = $refundItem->getName();
-            $creditmemoItemData['productName'] = $refundItem->getName();
+            $creditmemoItemData['productSku'] = $orderItem->getProductSku();
+            $creditmemoItemData['productName'] = $orderItem->getProductName();
         }
 
-        $quantity = $refundItem->getQuantity();
-        $tax = $creditmemoItemData['tax'] / $creditmemoItemData['quantity'] * $quantity;
-
-        $rowTotalExclTax = $creditmemoItemData['rowTotalExclTax'] / $creditmemoItemData['quantity'] * $quantity;
-        $rowTotalInclTax = $creditmemoItemData['rowTotalInclTax'] / $creditmemoItemData['quantity'] * $quantity;
-
-        $creditmemoItemData['quantity'] = $quantity;
-        $creditmemoItemData['rowTotalExclTax'] = $rowTotalExclTax;
-        $creditmemoItemData['rowTotalInclTax'] = $rowTotalInclTax;
-        $creditmemoItemData['tax'] = $tax;
         $this->assignData($creditmemoItem, $creditmemoItemData);
 
         return $creditmemoItem;
