@@ -242,22 +242,18 @@ datagrids:
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
             tax:
                 label:            marello.invoice.invoiceitem.tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
-            rowTotalInclTax:
-                label:            marello.invoice.invoiceitem.row_total_incl_tax.label
-                type:             localized_number
-                method:           formatCurrency
-                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
             rowTotalExclTax:
                 label:            marello.invoice.invoiceitem.row_total_excl_tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
+            rowTotalInclTax:
+                label:            marello.invoice.invoiceitem.row_total_incl_tax.label
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
