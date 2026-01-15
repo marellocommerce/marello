@@ -39,7 +39,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
             ['product' => $product->getId(), 'currency' => $currency]
         );
         if (!$assembledPriceList) {
-            return [$prices];
+            return [$product->getSku() => $prices];
         }
 
         $prices['msrp'] = $this->roundingService->round(
@@ -61,7 +61,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
             $prices['special_to'] = $assembledPriceList->getSpecialPrice()->getEndDate();
         }
 
-        return [$prices];
+        return [$product->getSku() => $prices];
     }
 
     public function getProductPrices(array $products, string $currency, ?Company $company = null): array
