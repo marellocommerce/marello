@@ -16,3 +16,8 @@ services:
             - '@oro_entity.doctrine_helper'
         tags:
             - {name: marello_entity_localization_provider, priority: 0}
+
+    Marello\Bundle\LocaleBundle\Formatter\DateTimeFormatter:
+        public: false
+        parent: oro_locale.formatter.date_time
+        decorates: oro_locale.formatter.date_time
