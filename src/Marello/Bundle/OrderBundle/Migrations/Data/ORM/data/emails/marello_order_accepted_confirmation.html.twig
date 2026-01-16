@@ -489,6 +489,7 @@
                                                 <td class="method-info" style="font-family: Roboto Condensed, Arial Narrow, Arial, sans-serif; padding: 16px 16px 16px 0; width: 50%;">
                                                     <h3 style="display: block; font-size: 16px; font-weight: 400; margin: 0; margin-bottom: 16px; margin-top: 0; padding: 0;">PAYMENT METHOD:</h3>
                                                     <p style="font-size: 16px; margin: 1em 0;">{{ entity.paymentMethod }}</p>
+                                                    <p style="font-size: 16px; margin: 1em 0;">{{ entity.deliveryDate|oro_format_date({dateType: 'long', locale: 'nl_NL'}) }}</p>
                                                 </td>
                                                 <!--{% endif %}-->
                                                 <!--{% if entity.shippingMethod is not null %}-->
