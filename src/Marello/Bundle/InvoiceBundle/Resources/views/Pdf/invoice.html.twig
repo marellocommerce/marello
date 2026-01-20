@@ -98,6 +98,11 @@
             table.invoice-totals td {
                 width: 90px;
             }
+            table.invoice-lines th.amount,
+            table.invoice-lines th.price,
+            table.invoice-lines th.unit {
+                text-align:right;
+            }
             table.invoice-lines tbody,
             table.invoice-lines tbody td {
                 background-color: #f4f4f4;
@@ -283,10 +288,10 @@
                         <th>{{ 'marello.pdf.invoice_line.productSku.label'|trans({}, 'pdf', language) }}</th>
                         <th>{{ 'marello.pdf.invoice_line.productName.label'|trans({}, 'pdf', language) }}</th>
                         <th class="quantity c">{{ 'marello.pdf.invoice_line.quantity.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="unit c">{{ 'marello.pdf.invoice_line.product_unit.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="price c">{{ 'marello.pdf.invoice_line.price.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="amount c">{{ 'marello.pdf.invoice_line.vat.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="amount r">{{ 'marello.pdf.invoice_line.total_inc_tax.label'|trans({}, 'pdf', language) }}</th>
+                        <th class="unit">{{ 'marello.pdf.invoice_line.product_unit.label'|trans({}, 'pdf', language) }}</th>
+                        <th class="price">{{ 'marello.pdf.invoice_line.price.label'|trans({}, 'pdf', language) }}</th>
+                        <th class="amount">{{ 'marello.pdf.invoice_line.vat.label'|trans({}, 'pdf', language) }}</th>
+                        <th class="amount">{{ 'marello.pdf.invoice_line.total_inc_tax.label'|trans({}, 'pdf', language) }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -306,21 +311,21 @@
                                 &nbsp;
                             {%- endif -%}
                         </td>
-                        <td class="unit c">
+                        <td class="unit r">
                             {%- if line['productUnit'] is not empty -%}
                                 {{- line['productUnit'] -}}
                             {%- else -%}
 
                             {%- endif -%}
                         </td>
-                        <td class="price c">
+                        <td class="price r">
                             {%- if line['price'] is not empty -%}
                                 {{ line['price']|oro_format_currency({'locale': locale, 'currency':entity.currency}) -}}
                             {%- else -%}
                                 &nbsp;
                             {%- endif -%}
                         </td>
-                        <td class="c">
+                        <td class="r">
                             {%- if line['vat'] is not empty %}{{ line['vat']|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}{% else %}&nbsp;{% endif -%}
                         </td>
                         <td class="r total">

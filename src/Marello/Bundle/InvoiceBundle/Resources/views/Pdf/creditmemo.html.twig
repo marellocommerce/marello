@@ -98,6 +98,9 @@
             table.invoice-totals td {
                 width: 90px;
             }
+            table.invoice-lines th.amount {
+                text-align:right;
+            }
             table.invoice-lines tbody,
             table.invoice-lines tbody td {
                 background-color: #f4f4f4;
@@ -304,7 +307,7 @@
 
                             {%- endif -%}
                         </td>
-                        <td class="total c">
+                        <td class="total r">
                             {%- if line['total_inc_tax'] is not empty %}{{ line['total_inc_tax']|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}{% else %}&nbsp;{% endif -%}
                         </td>
                     </tr>
