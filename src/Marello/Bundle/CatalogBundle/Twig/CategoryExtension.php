@@ -52,7 +52,7 @@ class CategoryExtension extends AbstractExtension
             ->getRepository(Category::class)
             ->findOneBy(['code' => $code]);
         if ($category) {
-            return $category->getName();
+            return $category->getDenormalizedDefaultName();
         }
 
         return $code;
