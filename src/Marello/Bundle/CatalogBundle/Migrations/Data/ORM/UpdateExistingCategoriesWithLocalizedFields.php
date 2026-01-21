@@ -36,12 +36,6 @@ class UpdateExistingCategoriesWithLocalizedFields extends AbstractFixture
             // The old denormalized name field will be used as the default name
             $category->setDefaultName($category->getDenormalizedDefaultName());
             
-            // The old denormalized description field will be used as the default description
-            $description = $category->getDenormalizedDefaultDescription();
-            if ($description) {
-                $category->setDefaultDescription($description);
-            }
-            
             $manager->persist($category);
         }
 

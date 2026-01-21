@@ -90,20 +90,6 @@ class Category implements
     )]
     protected ?string $code = null;
 
-    /**
-     * This is a mirror field for performance reasons only.
-     * It mirrors getDefaultDescription()->getText().
-     */
-    #[ORM\Column(name: 'description', type: Types::TEXT, nullable: true)]
-    #[Oro\ConfigField(
-        defaultValues: [
-            'dataaudit' => ['auditable' => true],
-            'importexport' => ['excluded' => true]
-        ],
-        mode: 'hidden'
-    )]
-    protected ?string $denormalizedDefaultDescription = null;
-
     #[ORM\ManyToMany(targetEntity: LocalizedFallbackValue::class, cascade: ['ALL'], orphanRemoval: true)]
     #[ORM\JoinTable(name: 'marello_catalog_category_desc')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
@@ -147,12 +133,16 @@ class Category implements
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->setCreatedAt($now);
         $this->setUpdatedAt($now);
+
+        $this->updateDenormalizedProperties();
     }
 
     #[ORM\PreUpdate]
     public function preUpdate()
     {
         $this->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        
+        $this->updateDenormalizedProperties();
     }
 
     /**
@@ -409,16 +399,6 @@ class Category implements
         return $this->denormalizedDefaultName;
     }
 
-    /**
-     * This field is read-only, updated automatically prior to persisting.
-     *
-     * @return string|null
-     */
-    public function getDenormalizedDefaultDescription(): ?string
-    {
-        return $this->denormalizedDefaultDescription;
-    }
-
     public function updateDenormalizedProperties(): void
     {
         $defaultName = $this->getDefaultName();
@@ -426,9 +406,6 @@ class Category implements
             throw new \RuntimeException(sprintf('Category %s has to have a default name', $this->getCode()));
         }
         $this->denormalizedDefaultName = $defaultName->getString();
-
-        $defaultDescription = $this->getDefaultDescription();
-        $this->denormalizedDefaultDescription = $defaultDescription ? $defaultDescription->getText() : null;
     }
 
     /**

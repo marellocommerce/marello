@@ -20,7 +20,7 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v1_3';
+        return 'v1_4';
     }
 
     /**
@@ -60,7 +60,6 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('code', 'string', ['length' => 255]);
-        $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
