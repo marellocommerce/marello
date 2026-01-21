@@ -654,6 +654,7 @@ datagrids:
                 label:         marello.catalog.category.code.label
             name:
                 label:         marello.catalog.category.name.label
+                data_name:     denormalizedDefaultName
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
