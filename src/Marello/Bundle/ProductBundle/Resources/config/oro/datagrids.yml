@@ -644,7 +644,7 @@ datagrids:
                 select:
                     - category.id
                     - category.code
-                    - category.name
+                    - category.denormalizedDefaultName
                     - category.createdAt
                     - category.updatedAt
                 from:
@@ -667,7 +667,7 @@ datagrids:
                 code:
                     data_name: category.code
                 name:
-                    data_name: category.name
+                    data_name: category.denormalizedDefaultName
                 createdAt:
                     data_name: category.createdAt
                 updatedAt:
@@ -679,7 +679,7 @@ datagrids:
                     data_name: category.code
                 name:
                     type:      string
-                    data_name: category.name
+                    data_name: category.denormalizedDefaultName
                 createdAt:
                     type:      datetime
                     data_name: product.createdAt
