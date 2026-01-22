@@ -2,12 +2,17 @@
 
 namespace Marello\Bundle\DigitalAssetBundle\Form\Extension;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+use Oro\Bundle\FormBundle\Form\Type\EntityIdentifierType;
 use Oro\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetType;
 
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetCategorySelectType;
 
 class DigitalAssetCategoryExtension extends AbstractTypeExtension

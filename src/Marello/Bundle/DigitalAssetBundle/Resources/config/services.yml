@@ -27,3 +27,16 @@ services:
             - '@Marello\Bundle\ProductBundle\Manager\ProductFileManager'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
+
+    Marello\Bundle\DigitalAssetBundle\EventListener\AddProductsRelationToViewPageListener:
+#        arguments:
+
+#            - '%oro_oauth2_server.supported_client_owners%'
+#            - '@translator'
+#            - '@oro_entity.entity_identifier_accessor'
+#            - '@oro_oauth2_server.client_manager'
+#            - '@oro_oauth2_server.encryption_keys_existence_checker'
+#            - '@oro_oauth2_server.api_feature_checker'
+        tags:
+#            - { name: kernel.event_listener, event: entity_view.render.before, method: addAssetProductsRelation }
+            - { name: kernel.event_listener, event: entity_form.render.before, method: addAssetProductsRelation }
