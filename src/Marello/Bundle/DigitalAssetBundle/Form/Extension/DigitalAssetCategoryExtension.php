@@ -40,10 +40,6 @@ class DigitalAssetCategoryExtension extends AbstractTypeExtension
             $builder->remove('version');
         }
 
-        if ($builder->has('asset_products_rel')) {
-            $builder->remove('asset_products_rel');
-        }
-
         $builder->add(
             'marello_digital_asset_category_rel',
             DigitalAssetCategorySelectType::class,
@@ -62,51 +58,6 @@ class DigitalAssetCategoryExtension extends AbstractTypeExtension
                 'required' => false,
                 'block' => 'general'
             ]
-        );
-
-        $builder->add(
-            'added',
-            EntityIdentifierType::class,
-            [
-                'class'    => Product::class,
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
-            ]
-        )->add(
-            'removed',
-            EntityIdentifierType::class,
-            [
-                'class'    => Product::class,
-                'required' => false,
-                'mapped'   => false,
-                'multiple' => true,
-            ]
-        )
-        ->add(
-            'asset_products_rel',
-            EntityType::class,
-            [
-                'class' => Product::class,
-                'multiple' => true,
-                'required' => false,
-                'mapped' => true
-            ]
-        );
-
-        $builder->addEventListener(
-            FormEvents::SUBMIT,
-            function (FormEvent $event) {
-                var_dump($event->getForm()->get('added')->getData());
-                die();
-//                // Hack to set the same owner for OrderItem as for Order
-//                // We need to fill not only data value, but also set this data for a form to avoid validation error
-//                $parentOwnerField = $event->getForm()->getParent()->getParent()->get('owner');
-//                $data = $parentOwnerField->getData();
-//                $viewData = $parentOwnerField->getViewData();
-//                $event->getForm()->get('owner')->setData($data);
-//                $event->setData(['owner' => $viewData] + $event->getData());
-            }
         );
     }
 }

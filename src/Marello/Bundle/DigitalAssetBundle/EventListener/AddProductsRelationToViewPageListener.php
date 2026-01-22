@@ -9,7 +9,9 @@ class AddProductsRelationToViewPageListener
 {
     public function addAssetProductsRelation(BeforeFormRenderEvent $event): void
     {
-        $form = $event->getForm();
+        return;
+        /**
+         $form = $event->getForm();
         if (!isset($form['asset_products_rel'])) {
             return;
         }
@@ -24,5 +26,6 @@ class AddProductsRelationToViewPageListener
             )
         );
         $event->setFormData($scrollData->getData());
+         */
     }
 }
