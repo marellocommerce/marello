@@ -1,0 +1,21 @@
+{% import '@OroDataGrid/macros.html.twig' as dataGrid %}
+{% set gridName = 'marello-digitalasset-products-assetlink-grid' %}
+{##    {% set dataBlocks = dataBlocks|merge([#}
+{#        {#}
+{#            'title': 'marello.frontend.faq.section.products'|trans,#}
+{#            'class': 'active',#}
+{#            'id': 'product-selector',#}
+{#            'subblocks': [{#}
+{#            'data': [#}
+
+{#                dataGrid.renderGrid(gridName, { faq: entity.id ? : null, products: productIds })#}
+{#            ]#}
+{#        }]#}
+{#        }#}
+{#    ]) %}#}
+
+<div class="product-container">
+    {{ form_widget(form.addProducts, {'id': 'addProducts'}) }}
+    {{ form_widget(form.removeProducts, {'id': 'removeProducts'}) }}
+    {{ dataGrid.renderGrid(gridName, { asset_id: entity.id ? : null }) }}
+</div>
