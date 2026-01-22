@@ -39,17 +39,16 @@ class UpdateDigitalAssetTable implements Migration, ExtendExtensionAwareInterfac
         $this->extendExtension->addManyToManyRelation(
             $schema,
             'oro_digital_asset',
-            'asset_products_rel',
+            'assetProducts',
             'marello_product_product',
             ['sku'], // column names are used to show a title of related entity
             ['name'], // column names are used to show detailed info about related entity
             ['sku'], // Column names are used to show related entity in a grid
             [
                 'extend' => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-
+                    'owner' => ExtendScope::OWNER_CUSTOM
                 ],
-                'entity' => ['label' => 'Assets-Products ManyToMany Relation'],
+                'entity' => ['label' => 'Assets Products Relation'],
             ]
         );
     }
