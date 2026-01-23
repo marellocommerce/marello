@@ -1,5 +1,6 @@
 datagrids:
     marello-customer:
+        extended_entity_name: Marello\Bundle\CustomerBundle\Entity\Customer
         source:
             type: orm
             query:
