@@ -30,6 +30,7 @@ datagrids:
                 renderable: false
             enabled:
                 label: marello.customer.enabled.label
+                frontend_type: boolean
             email:
                 label: marello.customer.email.label
             customerNumber:
