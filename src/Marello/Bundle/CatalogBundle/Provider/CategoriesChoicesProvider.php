@@ -31,7 +31,7 @@ class CategoriesChoicesProvider implements CategoriesChoicesProviderInterface
                 ->getRepository(Category::class)
                 ->findAll(),
             function (array $result, Category $category) {
-                $label = $category->getName();
+                $label = $category->getDenormalizedDefaultName();
                 $result[$label] = $category->getCode();
 
                 return $result;

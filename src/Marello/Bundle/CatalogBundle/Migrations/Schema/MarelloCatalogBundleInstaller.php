@@ -20,7 +20,7 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v1_2';
+        return 'v1_4';
     }
 
     /**
@@ -39,10 +39,14 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
         /** Tables generation **/
         $this->createCatalogCategoryTable($schema);
         $this->createCategoryToProductTable($schema);
+        $this->createMarelloCatalogCategoryNameTable($schema);
+        $this->createMarelloCatalogCategoryDescTable($schema);
 
         /** Foreign keys generation **/
         $this->addCatalogCategoryForeignKeys($schema);
         $this->addCategoryToProductForeignKeys($schema);
+        $this->addMarelloCatalogCategoryNameForeignKeys($schema);
+        $this->addMarelloCatalogCategoryDescForeignKeys($schema);
     }
 
     /**
@@ -56,7 +60,6 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('code', 'string', ['length' => 255]);
-        $table->addColumn('description', 'text', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
@@ -114,6 +117,78 @@ class MarelloCatalogBundleInstaller implements Installation, ActivityExtensionAw
             ['product_id'],
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Create marello_catalog_category_name table
+     *
+     * @param Schema $schema
+     */
+    protected function createMarelloCatalogCategoryNameTable(Schema $schema)
+    {
+        $table = $schema->createTable('marello_catalog_category_name');
+        $table->addColumn('category_id', 'integer', []);
+        $table->addColumn('localized_value_id', 'integer', []);
+        $table->setPrimaryKey(['category_id', 'localized_value_id']);
+        $table->addUniqueIndex(['localized_value_id'], 'uniq_marello_cat_cat_name_loc_val_id');
+    }
+
+    /**
+     * Create marello_catalog_category_desc table
+     *
+     * @param Schema $schema
+     */
+    protected function createMarelloCatalogCategoryDescTable(Schema $schema)
+    {
+        $table = $schema->createTable('marello_catalog_category_desc');
+        $table->addColumn('category_id', 'integer', []);
+        $table->addColumn('localized_value_id', 'integer', []);
+        $table->setPrimaryKey(['category_id', 'localized_value_id']);
+        $table->addUniqueIndex(['localized_value_id'], 'uniq_marello_cat_cat_desc_loc_val_id');
+    }
+
+    /**
+     * Add marello_catalog_category_name foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addMarelloCatalogCategoryNameForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_catalog_category_name');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_fallback_localization_val'),
+            ['localized_value_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_catalog_category'),
+            ['category_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+    }
+
+    /**
+     * Add marello_catalog_category_desc foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addMarelloCatalogCategoryDescForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('marello_catalog_category_desc');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_fallback_localization_val'),
+            ['localized_value_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_catalog_category'),
+            ['category_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'CASCADE']
         );
     }
 }

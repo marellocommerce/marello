@@ -91,7 +91,7 @@ class LoadCategoryData extends AbstractFixture implements DependentFixtureInterf
     private function createCategory(array $data)
     {
         $category = new Category();
-        $category->setName($data['name']);
+        $category->setDefaultName($data['name']);
         $category->setCode($data['code']);
         $category->setOrganization($this->defaultOrganization);
 
