@@ -66,7 +66,7 @@ class CategoryJsonApiTest extends RestJsonApiTestCase
 
         /** @var Category $category */
         $category = $this->getEntityManager()->find(Category::class, $responseContent->data->id);
-        $this->assertEquals($category->getName(), $responseContent->data->attributes->name);
+        $this->assertEquals($category->getDenormalizedDefaultName(), $responseContent->data->attributes->name);
     }
 
     /**
@@ -76,7 +76,7 @@ class CategoryJsonApiTest extends RestJsonApiTestCase
     {
         /** @var Category $existingCategory */
         $existingCategory = $this->getReference(LoadCategoryData::CATEGORY_1_REF);
-        $existingCategoryName = $existingCategory->getName();
+        $existingCategoryName = $existingCategory->getDenormalizedDefaultName();
         $response = $this->patch(
             [
                 'entity' => self::TESTING_ENTITY,
@@ -90,7 +90,7 @@ class CategoryJsonApiTest extends RestJsonApiTestCase
 
         /** @var Category $category */
         $category = $this->getEntityManager()->find(Category::class, $responseContent->data->id);
-        $this->assertEquals($category->getName(), $responseContent->data->attributes->name);
-        $this->assertNotEquals($category->getName(), $existingCategoryName);
+        $this->assertEquals($category->getDenormalizedDefaultName(), $responseContent->data->attributes->name);
+        $this->assertNotEquals($category->getDenormalizedDefaultName(), $existingCategoryName);
     }
 }

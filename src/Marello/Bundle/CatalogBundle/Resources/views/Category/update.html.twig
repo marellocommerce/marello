@@ -4,7 +4,7 @@
 {% form_theme form with '@OroForm/Form/fields.html.twig' %}
 {% if form.vars.value.id %}
     {% set formAction = path('marello_category_update', { 'id': form.vars.value.id }) %}
-    {% oro_title_set({params : {"%name%": entity.name }}) %}
+    {% oro_title_set({params : {"%name%": entity.defaultName.string|default('N/A'|trans) }}) %}
 {% else %}
     {% set formAction = path('marello_category_create') %}
 {% endif %}
@@ -39,7 +39,7 @@
         'entity':      form.vars.value,
         'indexPath':   path('marello_category_index'),
         'indexLabel': 'marello.catalog.category.entity_plural_label'|trans,
-        'entityTitle': entity.name|default('N/A')
+        'entityTitle': entity.defaultName.string|default('N/A'|trans)
         } %}
         {{ parent() }}
     {% else %}
@@ -59,10 +59,10 @@
             'subblocks': [{
             'title': '',
             'data': [
-                form_row(form.name),
+                form_row(form.names),
                 form_row(form.code),
                 form_row(form.type),
-                form_row(form.description),
+                form_row(form.descriptions),
                 form_widget(form.appendCompanies, {'id': 'appendCompanies'}),
                 form_widget(form.removeCompanies, {'id': 'removeCompanies'}),
                 form_widget(form.appendProducts, {'id': 'appendProducts'}),
