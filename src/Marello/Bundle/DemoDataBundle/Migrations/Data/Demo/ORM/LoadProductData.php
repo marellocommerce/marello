@@ -99,7 +99,7 @@ class LoadProductData extends AbstractFixture implements DependentFixtureInterfa
         
         $product = new Product();
         $product->setSku($data['sku']);
-        $product->addName($name);
+        $product->setNames([$name]);
         $product->setOrganization($this->defaultOrganization);
         $product->setWeight($data['weight']);
         $product->setManufacturingCode($this->generateManufacturingCode($data['sku']));
