@@ -14,9 +14,9 @@ datagrids:
         columns:
             name:
                 label:              marello.catalog.category.name.label
-                frontend_type:      string
-                inline_editing:
-                    enable: true
+                type:               twig
+                frontend_type:      html
+                template:           '@MarelloCatalog/Category/Datagrid/name.html.twig'
             code:
                 label:              marello.catalog.category.code.label
                 frontend_type:      string
@@ -35,7 +35,7 @@ datagrids:
             columns:
                 name:
                     type: string
-                    data_name: c.name
+                    data_name: name_localized
                 code:
                     type: string
                     data_name: c.code
@@ -44,7 +44,7 @@ datagrids:
                     data_name: c.type
         sorters:
             columns:
-                name:           {data_name: c.name}
+                name:           {data_name: name_localized}
                 code:           {data_name: c.code}
                 type:           { data_name: c.type }
                 createdAt:      { data_name: c.createdAt }
@@ -53,6 +53,10 @@ datagrids:
                 name: 'ASC'
         properties:
             id: ~
+            name_localized:
+                type: localized_value
+                data_name: c.names
+                allow_empty: true
             view_link:
                 type:   url
                 route:  marello_category_view

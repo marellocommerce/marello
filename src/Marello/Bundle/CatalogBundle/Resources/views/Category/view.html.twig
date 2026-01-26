@@ -3,7 +3,7 @@
 {% import '@OroUI/macros.html.twig' as UI %}
 {% import '@OroEntityConfig/macros.html.twig' as entityConfig %}
 
-{% oro_title_set({params : {"%name%": entity.name } }) %}
+{% oro_title_set({params : {"%name%": entity.defaultName.string|default('N/A'|trans) } }) %}
 {% set gridName  = 'marello-categories-grid' %}
 
 {% block pageHeader %}
@@ -11,7 +11,7 @@
         'entity':      entity,
         'indexPath':   path('marello_category_index'),
         'indexLabel':  'marello.catalog.category.entity_plural_label'|trans,
-        'entityTitle': entity.name|default('N/A')
+        'entityTitle': entity.defaultName.string|default('N/A'|trans)
     } %}
 
     {{ parent() }}
@@ -25,10 +25,10 @@
             <div class="row-fluid form-horizontal">
                 <div class="responsive-block">
                     <div class="box-type1">
-                        {{ UI.renderProperty('marello.catalog.category.name.label'|trans, entity.name) }}
+                        {{ UI.renderProperty('marello.catalog.category.names.label'|trans, entity.defaultName.string) }}
                         {{ UI.renderProperty('marello.catalog.category.code.label'|trans, entity.code) }}
                         {{ UI.renderProperty('marello.catalog.category.type.label'|trans, entity.type) }}
-                        {{ UI.renderProperty('marello.catalog.category.description.label'|trans, entity.description) }}
+                        {{ UI.renderProperty('marello.catalog.category.descriptions.label'|trans, entity.defaultDescription.text) }}
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\LocaleBundle\Entity\LocalizedFallbackValue;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Marello\Bundle\ProductBundle\Entity\Product;
@@ -79,7 +80,14 @@ class LoadCategoryData extends AbstractFixture implements DependentFixtureInterf
     {
         $category = new Category();
 
-        $category->setName($row['name']);
+        $name = new LocalizedFallbackValue();
+        $name->setString($row['name']);
+        $category->setNames([$name]);
+
+        $description = new LocalizedFallbackValue();
+        $description->setText($row['name']);
+        $category->setDescriptions([$description]);
+
         $category->setCode($row['code']);
 
         if (!empty($row['excluded_products'])) {
