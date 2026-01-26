@@ -1,6 +1,6 @@
 <?php
 
-namespace Marello\Bundle\CatalogBundle\Migrations\Schema\v1_3;
+namespace Marello\Bundle\CatalogBundle\Migrations\Schema\v1_3_1;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
