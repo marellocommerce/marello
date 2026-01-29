@@ -10,6 +10,7 @@ use Marello\Bundle\CustomerBundle\Entity\Customer;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\CurrencyBundle\Rounding\RoundingServiceInterface;
 
+use Marello\Bundle\ProductBundle\Entity\Product;
 use Marello\Bundle\PricingBundle\Entity\BasePrice;
 use Marello\Bundle\PricingBundle\Entity\AssembledPriceList;
 
@@ -31,9 +32,12 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
      * @return float|null
      * @throws \Oro\Bundle\CurrencyBundle\Exception\InvalidRoundingTypeException
      */
-    public function getProductPrice($product, $currency, ?Company $company = null): array
+    public function getProductPrice(Product $product, $currency, ?Company $company = null): array
     {
-        $prices['sales'] = 0;
+        $prices[$product->getSku()]['sales'] = 0;
+        $prices[$product->getSku()]['qty_from'] = 0;
+        $prices[$product->getSku()]['qty_to'] = null;
+
         /** @var AssembledPriceList $assembledPriceList */
         $assembledPriceList = $this->getAssembledPriceListRepository()->findOneBy(
             ['product' => $product->getId(), 'currency' => $currency]
@@ -41,32 +45,43 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
         if (!$assembledPriceList) {
             return [$product->getSku() => $prices];
         }
-
-        $prices['msrp'] = $this->roundingService->round(
+        $prices[$product->getSku()]['sku'] = $product->getSku();
+        $prices[$product->getSku()]['unit'] = $product->getInventoryItem()?->getProductUnit()?->getName();
+        $prices[$product->getSku()]['qty_in_unit'] = $product->getInventoryItem()?->getQtyInUnit();
+        $prices[$product->getSku()]['msrp'] = $this->roundingService->round(
             $assembledPriceList->getMsrpPrice()?->getValue()
         );
+
         $discountPercent = 0;
         if ($company) {
             $discountPercent = $company->getDiscountPercentage();
         }
-        $prices['sales'] = $this->roundingService->round(
-            $prices['msrp'] * (((100 - (float)$discountPercent) / 100))
+
+        $prices[$product->getSku()]['sales'] = $this->roundingService->round(
+            $prices[$product->getSku()]['msrp'] * (((100 - (float)$discountPercent) / 100))
         );
 
         if ($assembledPriceList->getSpecialPrice()) {
-            $prices['special'] = $this->roundingService->round(
+            $prices[$product->getSku()]['special'] = $this->roundingService->round(
                 $assembledPriceList->getSpecialPrice()->getValue() * ((100 - (float)$discountPercent) / 100)
             );
-            $prices['special_from'] = $assembledPriceList->getSpecialPrice()->getStartDate();
-            $prices['special_to'] = $assembledPriceList->getSpecialPrice()->getEndDate();
+            $prices[$product->getSku()]['special_from'] = $assembledPriceList->getSpecialPrice()->getStartDate();
+            $prices[$product->getSku()]['special_to'] = $assembledPriceList->getSpecialPrice()->getEndDate();
         }
 
-        return [$product->getSku() => $prices];
+        return $prices;
     }
 
     public function getProductPrices(array $products, string $currency, ?Company $company = null): array
     {
-        return [];
+        $allPrices = [];
+        $repo = $this->getRepository(Product::class);
+        $productObjects = $repo->findBy(['sku' => $products]);
+        foreach ($productObjects as $product) {
+            $allPrices[$product->getSku()] = $this->getProductPrice($product, $currency, $company);
+        }
+
+        return $allPrices;
     }
 
     public function getPricesForCompany(string $currency, Company $company): array
