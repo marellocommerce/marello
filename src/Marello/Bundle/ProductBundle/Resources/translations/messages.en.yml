@@ -7,7 +7,7 @@ marello:
         name.label:                 Name
         names.label:                Names
         sku.label:                  SKU
-        weight.label:               Weight (in Kg)
+        weight.label:               Weight (kg)
         warranty.label:             Product Warranty
         status:
             label:                  Status
