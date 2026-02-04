@@ -106,12 +106,12 @@ action_groups:
                                                         -   filename: '$.filename'
                                                             body: '$.invoice_pdf'
                                                             mimetype: 'application/pdf'
-                              # send to customer with no company or no invoice address
+                              # send to customer with no company or no invoice email
                             -   '@tree':
                                     conditions:
                                         '@or':
                                             -   '@empty': [ '$.order.customer.company' ]
-                                            -   '@empty': [ '$.order.customer.company.invoiceAddress' ]
+                                            -   '@empty': [ '$.order.customer.company.invoiceEmail' ]
                                     actions:
                                         -   '@assign_value': [ '$.receiver_email', '$.order.customer.email' ]
                                         -   '@assign_value': [ '$.receiver_name', '$.order.customer.fullName' ]

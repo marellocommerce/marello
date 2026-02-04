@@ -197,12 +197,12 @@ operations:
                                                   -   filename: '$.filename'
                                                       body: '$.invoice_pdf'
                                                       mimetype: 'application/pdf'
-                     # send to customer with no company or no invoice address
+                     # send to customer with no company or no invoice email
                       -   '@tree':
                               conditions:
                                   '@or':
                                       -   '@empty': [ '$.data.customer.company' ]
-                                      -   '@empty': [ '$.data.customer.company.invoiceAddress' ]
+                                      -   '@empty': [ '$.data.customer.company.invoiceEmail' ]
                               actions:
                                   -   '@assign_value': [ '$.receiver_email', '$.data.customer.email' ]
                                   -   '@assign_value': [ '$.receiver_name', '$.data.customer.fullName' ]
