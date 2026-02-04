@@ -89,7 +89,7 @@ action_groups:
                                         -   '@assign_value': [ '$.receiver_name', '$.order.customer.company.name' ]
                                         -   '@tree':
                                                 conditions:
-                                                    '@equal': [ $.data.customer.company.sendCopyToCustomer, true ]
+                                                    '@equal': [ $.order.customer.company.sendCopyToCustomer, true ]
                                                 actions:
                                                     -   '@assign_value': [ '$.cc', '$.order.customer.email' ]
                                         # send to company and cc to customer
