@@ -46,7 +46,16 @@ api:
             actions:
                 get_subresource: false
                 create: false
-                update: false
+                update:
+                    fields:
+                        product:
+                            exclude: true
+                        createdAt:
+                            exclude: true
+                        updatedAt:
+                            exclude: true
+                        organization:
+                            exclude: true
                 delete: false
                 delete_list: false
                 add_relationship: false
@@ -214,6 +223,17 @@ api:
                         allow_array: true
                         property_path: status_id
                         description: 'Filter by status'
+                        operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
+                    customer:
+                        data_type: string
+                        allow_array: true
+                        property_path: order.customer.email
+                        description: 'Filter by Customer(s)'
+                        operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
+                    company:
+                        data_type: string
+                        property_path: order.customer.company
+                        description: 'Filter by Company'
                         operators: ['=', '!=', '*', '!*', '~', '!~', '^', '!^', '$', '!$']
                     createdAt:
                         exclude: true

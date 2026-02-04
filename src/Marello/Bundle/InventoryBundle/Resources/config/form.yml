@@ -58,7 +58,6 @@ services:
             - '@marello_inventory.model.inventory_level_calculator'
             - '@event_dispatcher'
 
-
     marello_inventory.form.event_listener.inventory_level_subscriber:
         class: 'Marello\Bundle\InventoryBundle\Form\EventListener\InventoryLevelSubscriber'
         arguments:
@@ -97,3 +96,7 @@ services:
     Marello\Bundle\InventoryBundle\Form\Type\DeliveryPromiseSelectType:
         tags:
             - { name: form.type, alias: marello_inventory_deliverypromise_select }
+
+    Marello\Bundle\InventoryBundle\Form\Handler\DeliveryPromiseHandler:
+        arguments:
+            - '@oro_entity.doctrine_helper'

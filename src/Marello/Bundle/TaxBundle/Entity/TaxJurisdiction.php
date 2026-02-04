@@ -12,11 +12,13 @@ use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\TaxBundle\Entity\Repository\TaxJurisdictionRepository;
 
 #[ORM\Table('marello_tax_tax_jurisdiction')]
-#[ORM\UniqueConstraint(name: 'marello_tax_jurisdiction_codeidx', columns: ['code'])]
+#[ORM\UniqueConstraint(name: 'marello_tax_jurisdiction_codeidx', columns: ['code', 'organization_id'])]
 #[ORM\Entity(repositoryClass: TaxJurisdictionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[Oro\Config(
@@ -25,13 +27,21 @@ use Marello\Bundle\TaxBundle\Entity\Repository\TaxJurisdictionRepository;
     routeView: 'marello_tax_taxjurisdiction_view',
     routeUpdate: 'marello_tax_taxjurisdiction_update',
     defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
         'dataaudit' => ['auditable' => true],
         'security' => ['type' => 'ACL', 'group_name' => '']
     ]
 )]
-class TaxJurisdiction implements DatesAwareInterface
+class TaxJurisdiction implements
+    DatesAwareInterface,
+    OrganizationAwareInterface
 {
     use DatesAwareTrait;
+    use AuditableOrganizationAwareTrait;
 
     /**
      * @var int

@@ -5,6 +5,7 @@ namespace Marello\Bundle\InventoryBundle\Form\EventListener;
 use Doctrine\Persistence\ManagerRegistry;
 use Marello\Bundle\InventoryBundle\Entity\InventoryItem;
 use Marello\Bundle\InventoryBundle\Entity\InventoryLevel;
+use Marello\Bundle\InventoryBundle\Entity\Warehouse;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
@@ -25,7 +26,8 @@ class InventoryItemSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            FormEvents::SUBMIT => 'submit'
+            FormEvents::SUBMIT => 'submit',
+            FormEvents::PRE_SET_DATA => 'setDefaultInventoryLevel'
         ];
     }
     
@@ -47,6 +49,25 @@ class InventoryItemSubscriber implements EventSubscriberInterface
                 }
             }
         }
+        $event->setData($inventoryItem);
+    }
+
+    public function setDefaultInventoryLevel(FormEvent $event)
+    {
+        /** @var InventoryItem $inventoryItem */
+        $inventoryItem = $event->getData();
+        $defaultWarehouse = $this->doctrine
+            ->getManagerForClass(Warehouse::class)
+            ->getRepository(Warehouse::class)
+            ->getDefault($this->aclHelper);
+        if (!$inventoryItem->getInventoryLevel($defaultWarehouse)) {
+            $level = new InventoryLevel();
+            $level->setWarehouse($defaultWarehouse);
+            $level->setOrganization($inventoryItem->getOrganization());
+            $level->setInventoryQty(0);
+            $inventoryItem->addInventoryLevel($level);
+        }
+
         $event->setData($inventoryItem);
     }
 }

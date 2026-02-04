@@ -108,7 +108,7 @@ class LoadProductVariantData extends AbstractFixture implements DependentFixture
             foreach ($products as $product) {
                 $name = new LocalizedFallbackValue();
                 $name->setString($product->getDenormalizedDefaultName());
-                $variant->addName($name);
+                $variant->setNames([$name]);
                 $variant->addProduct($product);
             }
 

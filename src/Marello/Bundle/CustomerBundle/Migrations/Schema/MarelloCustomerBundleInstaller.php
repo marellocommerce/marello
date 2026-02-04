@@ -35,7 +35,7 @@ class MarelloCustomerBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_7_3';
+        return 'v1_7_6';
     }
 
     /**
@@ -46,11 +46,15 @@ class MarelloCustomerBundleInstaller implements
         $this->createMarelloCompanyTable($schema);
         $this->createMarelloCompanyJoinAddressTable($schema);
         $this->createMarelloCustomerTable($schema);
+        $this->createMarelloCustomerRoleTable($schema);
+        $this->createMarelloCustomerAccessCustomerRoleTable($schema);
         $this->createMarelloCustomerGroupTable($schema);
 
         $this->addMarelloCompanyForeignKeys($schema);
         $this->addMarelloCompanyJoinAddressForeignKeys($schema);
         $this->addMarelloCustomerForeignKeys($schema);
+        $this->addMarelloCustomerRoleForeignKeys($schema);
+        $this->addMarelloCustomerAccessCustomerRoleForeignKeys($schema);
         $this->addMarelloAddressForeignKeys($schema);
         $this->addMarelloCustomerOwnerToOroEmailAddress($schema);
     }
@@ -74,6 +78,8 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('fallback_sales_rep_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('discount_percentage', 'float', ['notnull' => false]);
+        $table->addColumn('invoice_email', 'string', ['notnull' => false]);
+        $table->addColumn('send_copy_to_customer', 'boolean', ['notnull' => true, 'default' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->setPrimaryKey(['id']);
@@ -126,6 +132,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('last_login', 'datetime', ['notnull' => false]);
         $table->addColumn('login_count', 'integer', ['default' => '0', 'unsigned' => true]);
         $table->addColumn('localization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('data', 'json', ['notnull' => false, 'comment' => '(DC2Type:json)']);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id']);
         $table->addIndex(['primary_address_id']);
@@ -136,6 +143,35 @@ class MarelloCustomerBundleInstaller implements
         $this->attachmentExtension->addAttachmentAssociation($schema, $table->getName());
         $this->activityExtension->addActivityAssociation($schema, 'oro_note', $table->getName());
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', $table->getName());
+    }
+
+    /**
+     * Create marello_customer_role table
+     */
+    protected function createMarelloCustomerRoleTable(Schema $schema): void
+    {
+        $table = $schema->createTable('marello_customer_role');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('company_id', 'integer', ['notnull' => false]);
+        $table->addColumn('role', 'string', ['length' => 255]);
+        $table->addColumn('label', 'string', ['length' => 255]);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['role']);
+        $table->addUniqueIndex(['organization_id', 'company_id', 'label']);
+
+        $this->activityExtension->addActivityAssociation($schema, 'oro_note', 'marello_customer_role');
+    }
+
+    /**
+     * Create marello_customer_access_role table
+     */
+    protected function createMarelloCustomerAccessCustomerRoleTable(Schema $schema): void
+    {
+        $table = $schema->createTable('marello_customer_access_role');
+        $table->addColumn('customer_id', 'integer');
+        $table->addColumn('customer_role_id', 'integer');
+        $table->setPrimaryKey(['customer_id', 'customer_role_id']);
     }
 
     /**
@@ -204,7 +240,7 @@ class MarelloCustomerBundleInstaller implements
             ['onDelete' => null, 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(
-            $schema->getTable('marello_address'),
+            $schema->getTable('marello_typed_address'),
             ['address_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
@@ -252,6 +288,46 @@ class MarelloCustomerBundleInstaller implements
             ['localization_id'],
             ['id'],
             ['onDelete' => null, 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Add marello_customer_access_role foreign keys.
+     */
+    protected function addMarelloCustomerAccessCustomerRoleForeignKeys(Schema $schema): void
+    {
+        $table = $schema->getTable('marello_customer_access_role');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_customer_role'),
+            ['customer_role_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_customer_customer'),
+            ['customer_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Add marello_customer_role foreign keys.
+     */
+    protected function addMarelloCustomerRoleForeignKeys(Schema $schema): void
+    {
+        $table = $schema->getTable('marello_customer_role');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('marello_customer_company'),
+            ['company_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
     }
 

@@ -2,9 +2,11 @@
 
 namespace Marello\Bundle\PricingBundle;
 
-use Marello\Bundle\PricingBundle\DependencyInjection\Compiler\SubtotalProviderPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+use Marello\Bundle\PricingBundle\DependencyInjection\Compiler\SubtotalProviderPass;
+use Marello\Bundle\PricingBundle\DependencyInjection\Compiler\PriceProviderCompilerPass;
 
 class MarelloPricingBundle extends Bundle
 {
@@ -14,6 +16,7 @@ class MarelloPricingBundle extends Bundle
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new SubtotalProviderPass());
+        $container->addCompilerPass(new PriceProviderCompilerPass());
         parent::build($container);
     }
 }

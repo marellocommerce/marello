@@ -15,6 +15,7 @@ use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 
 use Marello\Bundle\InventoryBundle\Entity\DeliveryPromise;
 use Marello\Bundle\InventoryBundle\Form\Type\DeliveryPromiseType;
+use Marello\Bundle\InventoryBundle\Form\Handler\DeliveryPromiseHandler;
 
 class DeliveryPromiseController extends AbstractController
 {
@@ -89,7 +90,8 @@ class DeliveryPromiseController extends AbstractController
             $this->container
                 ->get(TranslatorInterface::class)
                 ->trans('marello.inventory.messages.success.deliverypromise.saved'),
-            $request
+            $request,
+            $this->container->get(DeliveryPromiseHandler::class)
         );
     }
 
@@ -99,7 +101,8 @@ class DeliveryPromiseController extends AbstractController
             parent::getSubscribedServices(),
             [
                 UpdateHandlerFacade::class,
-                TranslatorInterface::class
+                TranslatorInterface::class,
+                DeliveryPromiseHandler::class
             ]
         );
     }

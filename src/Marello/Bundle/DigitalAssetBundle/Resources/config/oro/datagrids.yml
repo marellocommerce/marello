@@ -1,0 +1,91 @@
+datagrids:
+    marello-digital-asset-category-select-grid:
+        extended_entity_name: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory
+        inline_editing:
+            enable: true
+        source:
+            type: orm
+            query:
+                select:
+                    - c.id
+                    - c.name
+                from:
+                    - { table: Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory, alias: c }
+        columns:
+            name:
+                label: marello.digitalasset.digitalassetcategory.name.label
+                frontend_type: string
+        properties:
+            id: ~
+            delete_link:
+                type:       url
+                route:      marello_digital_asset_category_delete
+                params:     [ id ]
+        actions:
+            delete:
+                type:          delete
+                label:         oro.grid.action.delete
+                link:          delete_link
+                icon:          trash-o
+                acl_resource:  marello_digital_asset_category_delete
+        mass_actions:
+            delete:
+                disabled: true
+
+    marello-digitalasset-products-assetlink-grid:
+        extends: marello-category-products-base-grid
+        source:
+            query:
+                select:
+                    - >
+                        (
+                            CASE WHEN (:asset_id IS NOT NULL) THEN
+                                CASE WHEN
+                                    product MEMBER OF productAsset.asset_products_rel
+                                    OR product.id IN (:data_in) AND product.id NOT IN (:data_not_in)
+                                THEN true ELSE false END
+                            ELSE
+                                CASE WHEN product.id IN (:data_in) AND product.id NOT IN (:data_not_in)
+                                THEN true ELSE false END
+                            END
+                        ) as linkedProducts
+                join:
+                    left:
+                        -
+                            join: Oro\Bundle\DigitalAssetBundle\Entity\DigitalAsset
+                            alias: productAsset
+                            conditionType: WITH
+                            condition: 'productAsset = :asset_id'
+            bind_parameters:
+                -
+                    name: asset_id
+                    default: null
+                    type: integer
+        columns:
+            linkedProducts:
+                label:         linkedProducts
+                editable:      true
+                frontend_type: boolean
+                add_before:    true
+        properties:
+            id: ~
+        sorters:
+            columns:
+                linkedProducts:
+                    data_name: linkedProducts
+            default:
+                linkedProducts: 'DESC'
+        filters:
+            columns:
+                linkedProducts:
+                    type:      boolean
+                    data_name: linkedProducts
+        options:
+            entityHint:        products
+            entity_pagination: true
+            rowSelection:
+                dataField: id
+                columnName: linkedProducts
+                selectors:
+                    included: '#addProducts'
+                    excluded: '#removeProducts'

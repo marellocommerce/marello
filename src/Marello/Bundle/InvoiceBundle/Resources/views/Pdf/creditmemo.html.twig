@@ -88,8 +88,8 @@
                 padding-right: 0;
                 margin-right: 0;
             }
-            table.invoice-lines td.price {
-                width: 80px;
+            table.invoice-lines td.total {
+                width: 90px;
                 padding-left: 0;
                 margin-left: 0;
             }
@@ -97,6 +97,9 @@
             table.invoice-subtotal td.subtotal,
             table.invoice-totals td {
                 width: 90px;
+            }
+            table.invoice-lines th.amount {
+                text-align:right;
             }
             table.invoice-lines tbody,
             table.invoice-lines tbody td {
@@ -141,8 +144,14 @@
                 margin-bottom: 0;
             }
             .customer-address {
-                margin-top: 40px;
+                margin-top: 20px;
+                margin-bottom: 20px;
                 font-size: 13px;
+            }
+            .invoice-type-label {
+                margin: 10px 0;
+                font-size: 16px;
+                font-weight:bold;
             }
             table.invoice-totals {
                 border-right: 2px solid #f4f4f4;
@@ -241,6 +250,7 @@
 
                 {# Invoice details #}
                 <div class="invoice-details">
+                    <div class="invoice-type-label">{{ 'marello.pdf.creditmemo.entity.label'|trans({}, 'pdf', language) }}</div>
                     <div class="invoice-dl clearfix">
                         <div class="dt">{{ 'marello.pdf.creditmemo.creditmemo_date.label'|trans({}, 'pdf', language) }}:</div>
                         <div class="dd">{{ entity.invoicedAt|date('d-m-Y') }}</div>
@@ -261,29 +271,20 @@
 
         <div class="contents clearfix">
             {# Invoice lines table #}
-            {% set total = 0.0 %}
-            {% set taxtotal = 0.0 %}
             {% set tables = get_document_tables(entity) %}
             {% for table in tables %}
-            {% set subtotal = 0.0 %}
             <table class="invoice-lines" autosize="0">
                 <thead>
                     <tr>
                         <th>{{ 'marello.pdf.creditmemo_line.productSku.label'|trans({}, 'pdf', language) }}</th>
                         <th>{{ 'marello.pdf.creditmemo_line.productName.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="quantity c">{{ 'marello.pdf.creditmemo_line.quantity.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="unit c">{{ 'marello.pdf.creditmemo_line.product_unit.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="price c">{{ 'marello.pdf.creditmemo_line.price.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="amount c">{{ 'marello.pdf.creditmemo_line.vat.label'|trans({}, 'pdf', language) }}</th>
-                        <th class="amount r">{{ 'marello.pdf.creditmemo_line.total_inc_tax.label'|trans({}, 'pdf', language) }}</th>
+                        <th class="quantity c">{{ 'marello.pdf.creditmemo_line.quantity.label'|trans({}, 'pdf', language) }}
+                        <th class="unit">{{ 'marello.pdf.creditmemo_line.product_unit.label'|trans({}, 'pdf', language) }}</th>
+                        <th class="amount">{{ 'marello.pdf.creditmemo_line.total_inc_tax.label'|trans({}, 'pdf', language) }}</th>
                     </tr>
                 </thead>
                 <tbody>
                 {%- for invoiceLine in table.lines %}
-                    {% set total = total + invoiceLine['total_ex_tax'][0] %}
-                    {% set subtotal = subtotal + invoiceLine['total_ex_tax'][0] %}
-                    {% set taxtotal = taxtotal + invoiceLine['vat'][0] %}
-
                     {% for line in invoiceLine.getDisplayLines() %}
                     <tr{% if loop.last and not invoiceLine.isEmpty() %} class="line-bottom"{% endif %}>
                         <td class="productSku">
@@ -299,24 +300,14 @@
                                 &nbsp;
                             {%- endif -%}
                         </td>
-                        <td class="unit c">
+                        <td class="unit">
                             {%- if line['productUnit'] is not empty -%}
                                 {{- line['productUnit'] -}}
                             {%- else -%}
 
                             {%- endif -%}
                         </td>
-                        <td class="price c">
-                            {%- if line['price'] is not empty -%}
-                                {{ line['price']|oro_format_currency({'locale': locale, 'currency':entity.currency}) -}}
-                            {%- else -%}
-                                &nbsp;
-                            {%- endif -%}
-                        </td>
-                        <td class="c">
-                            {%- if line['vat'] is not empty %}{{ line['vat']|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}{% else %}&nbsp;{% endif -%}
-                        </td>
-                        <td class="r total">
+                        <td class="total r">
                             {%- if line['total_inc_tax'] is not empty %}{{ line['total_inc_tax']|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}{% else %}&nbsp;{% endif -%}
                         </td>
                     </tr>
@@ -329,7 +320,6 @@
                 <tr>
                     <td class="empty">&nbsp;</td>
                     <td>{% if entity.invoiceNumber is not empty %}{{ 'marello.pdf.creditmemo.entity.label'|trans({}, 'pdf', language) }} {{ entity.invoiceNumber }}{% else %}&nbsp;{% endif %}</td>
-                    <td class="subtotal r">{{ subtotal|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
                 </tr>
             </table>
 
@@ -341,18 +331,30 @@
             {# Invoice totals #}
             <table class="invoice-totals">
                 <tbody>
-                <tr>
-                    <th>{{ 'marello.pdf.creditmemo.subtotal.label'|trans({}, 'pdf', language) }}</th>
-                    <td class="r">{{ total|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
-                </tr>
-                <tr>
-                    <th>{{ 'marello.pdf.creditmemo.tax.label'|trans({}, 'pdf', language) }}</th>
-                    <td class="r">{{ taxtotal|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
-                </tr>
-                <tr class="invoice-total">
-                    <th>{{ 'marello.pdf.creditmemo.total.label'|trans({}, 'pdf', language) }}</th>
-                    <td class="r">{{ (total + taxtotal)|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
-                </tr>
+                    <tr>
+                        <th>{{ 'marello.pdf.creditmemo.subtotal.label'|trans({}, 'pdf', language) }}</th>
+                        <td class="r">{{ entity.subtotal|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'marello.pdf.creditmemo.tax.label'|trans({}, 'pdf', language) }}</th>
+                        <td class="r">({{ entity.totalTax|oro_format_currency({'locale': locale, 'currency':entity.currency}) }})</td>
+                    </tr>
+                    <tr class="invoice-total">
+                        <th>{{ 'marello.pdf.creditmemo.total.label'|trans({}, 'pdf', language) }}</th>
+                        <td class="r">{{ entity.grandTotal|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
+                    </tr>
+                    <tr class="invoice-total-paid">
+                        <th>{{ 'marello.pdf.creditmemo.total_paid.label'|trans({}, 'pdf', language) }}</th>
+                        <td class="r">{{ entity.totalPaid|oro_format_currency({'locale': locale, 'currency':entity.currency}) }}</td>
+                    </tr>
+                    {% set totalDueLabel = entity.totalDue|oro_format_currency({'locale': locale, 'currency':entity.currency}) %}
+                    {% if entity.totalDue != 0 %}
+                        {% set totalDueLabel = '-' ~ totalDueLabel %}
+                    {% endif %}
+                    <tr class="invoice-total-due">
+                        <th>{{ 'marello.pdf.creditmemo.total_due.label'|trans({}, 'pdf', language) }}</th>
+                        <td class="r">{{ totalDueLabel }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

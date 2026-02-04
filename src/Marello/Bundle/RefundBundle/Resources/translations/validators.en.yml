@@ -4,3 +4,4 @@ marello:
             messages:
                 error:
                     refund_balance: Refund Balance can't be less than zero.
+                    quantity_refunded_gte: Quantity refunded cannot be greater than quantity ordered.

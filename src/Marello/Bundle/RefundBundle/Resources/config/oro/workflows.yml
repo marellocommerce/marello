@@ -32,7 +32,16 @@ workflows:
                 transition_definition: complete_definition
 
         transition_definitions:
-            approve_definition: []
+            approve_definition:
+                actions:
+                    - '@foreach':
+                        array: $refund.items
+                        value: $.result.value
+                        actions:
+                            - '@call_service_method':
+                                  service: Marello\Bundle\RefundBundle\Provider\RefundItemRemovalProvider
+                                  method: removeFromRefund
+                                  method_parameters: [$.result.value]
             credit_definition:
                 actions:
                     - '@extendable':

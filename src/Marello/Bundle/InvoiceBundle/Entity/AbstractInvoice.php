@@ -133,7 +133,7 @@ abstract class AbstractInvoice implements
     /**
      * @var Order
      */
-    #[ORM\JoinColumn(onDelete: 'cascade', nullable: false)]
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false, onDelete: 'cascade')]
     #[ORM\ManyToOne(targetEntity: Order::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $order;
@@ -163,7 +163,7 @@ abstract class AbstractInvoice implements
     /**
      * @var SalesChannel
      */
-    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    #[ORM\JoinColumn(name: 'salesChannel_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: SalesChannel::class)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['full' => true], 'dataaudit' => ['auditable' => true]])]
     protected $salesChannel;
@@ -174,6 +174,13 @@ abstract class AbstractInvoice implements
     #[ORM\Column(name: 'saleschannel_name', type: Types::STRING, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $salesChannelName;
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(name: 'po_number', type: Types::STRING, length: 255, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $poNumber;
 
     /**
      * @var Collection|AbstractInvoiceItem[]
@@ -197,49 +204,56 @@ abstract class AbstractInvoice implements
     protected $payments;
 
     /**
-     * @var int
+     * @var float
      */
     #[ORM\Column(name: 'subtotal', type: 'money')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $subtotal = 0;
 
     /**
-     * @var int
+     * @var float
      */
     #[ORM\Column(name: 'total_tax', type: 'money')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalTax = 0;
 
     /**
-     * @var int
+     * @var float
+     */
+    #[ORM\Column(name: 'discount_amount', type: 'money', nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
+    protected $discountAmount;
+
+    /**
+     * @var float
      */
     #[ORM\Column(name: 'grand_total', type: 'money')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $grandTotal = 0;
 
     /**
-     * @var double
+     * @var float
      */
     #[ORM\Column(name: 'shipping_amount_incl_tax', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAmountInclTax;
 
     /**
-     * @var double
+     * @var float
      */
     #[ORM\Column(name: 'shipping_amount_excl_tax', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAmountExclTax;
 
     /**
-     * @var int
+     * @var float
      */
     #[ORM\Column(name: 'total_due', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalDue = 0;
 
     /**
-     * @var int
+     * @var float
      */
     #[ORM\Column(name: 'total_paid', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
@@ -591,9 +605,13 @@ abstract class AbstractInvoice implements
             $this->payments->add($payment);
             $totalPaid = $this->getTotalPaid() ? : 0;
             $grandTotal = $this->getGrandTotal() ? : 0;
-
+            $subTotal = $this->getSubtotal() ? : 0;
+            $totalDue = $grandTotal - $payment->getTotalPaid();
+            if ($this->getInvoiceType() === Creditmemo::CREDITMEMO_TYPE) {
+                $totalDue = $subTotal - $payment->getTotalPaid();
+            }
+            $this->setTotalDue($totalDue);
             $this->setTotalPaid($payment->getTotalPaid() + $totalPaid);
-            $this->setTotalDue($grandTotal - $this->getTotalPaid());
         }
 
         return $this;
@@ -757,6 +775,44 @@ abstract class AbstractInvoice implements
     public function setTotalPaid($totalPaid)
     {
         $this->totalPaid = $totalPaid;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPoNumber(): ?string
+    {
+        return $this->poNumber;
+    }
+
+    /**
+     * @param string|null $poNumber
+     * @return $this
+     */
+    public function setPoNumber(?string $poNumber): self
+    {
+        $this->poNumber = $poNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getDiscountAmount(): ?float
+    {
+        return $this->discountAmount;
+    }
+
+    /**
+     * @param float|null $discountAmount
+     * @return $this
+     */
+    public function setDiscountAmount(?float $discountAmount): self
+    {
+        $this->discountAmount = $discountAmount;
 
         return $this;
     }

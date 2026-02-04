@@ -1,0 +1,42 @@
+services:
+    marello_digital_asset_categories:
+        parent: oro_form.autocomplete.search_handler
+        arguments:
+            - 'Marello\Bundle\DigitalAssetBundle\Entity\DigitalAssetCategory'
+            - [ 'name' ]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: marello_digital_asset_category, acl_resource: marello_digital_asset_category_view }
+
+    Marello\Bundle\DigitalAssetBundle\Form\Extension\DigitalAssetCategoryExtension:
+        tags:
+            - { name: form.type_extension, extended_type: Oro\Bundle\DigitalAssetBundle\Form\Type\DigitalAssetType }
+
+    Marello\Bundle\DigitalAssetBundle\EventListener\DigitalAssetListener:
+        arguments:
+            - '@oro_message_queue.client.message_producer'
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\DigitalAssetBundle\Entity\DigitalAsset', event: postPersist }
+
+    Marello\Bundle\DigitalAssetBundle\Async\DigitalAssetFilesUpdateProcessor:
+        arguments:
+            - '@logger'
+            - '@doctrine.orm.entity_manager'
+            - '@Marello\Bundle\ProductBundle\Manager\ProductFileManager'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    Marello\Bundle\DigitalAssetBundle\EventListener\AddProductsRelationToViewPageListener:
+#        arguments:
+
+#            - '%oro_oauth2_server.supported_client_owners%'
+#            - '@translator'
+#            - '@oro_entity.entity_identifier_accessor'
+#            - '@oro_oauth2_server.client_manager'
+#            - '@oro_oauth2_server.encryption_keys_existence_checker'
+#            - '@oro_oauth2_server.api_feature_checker'
+        tags:
+#            - { name: kernel.event_listener, event: entity_view.render.before, method: addAssetProductsRelation }
+            - { name: kernel.event_listener, event: entity_form.render.before, method: addAssetProductsRelation }

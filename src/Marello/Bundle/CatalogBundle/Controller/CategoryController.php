@@ -10,6 +10,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\SecurityBundle\Attribute\Acl;
 use Oro\Bundle\SecurityBundle\Attribute\AclAncestor;
 
 use Marello\Bundle\CatalogBundle\Entity\Category;

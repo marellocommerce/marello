@@ -17,8 +17,20 @@ api:
             documentation_resource: '@MarelloCustomerBundle/Resources/doc/api/customer.md'
             identifier_field_names: [email]
             fields:
-                customerGroup:
-                    exclude: false
+                username:
+                    exclude: true
+                emailLowercase:
+                    exclude: true
+                passwordChangedAt:
+                    exclude: true
+                passwordRequestedAt:
+                    exclude: true
+                confirmationToken:
+                    exclude: true
+                loginCount:
+                    exclude: true
+                lastLogin:
+                    exclude: true
                 createdAt:
                     exclude: true
                 updatedAt:
@@ -48,6 +60,7 @@ api:
                 delete_relationship: false
 
         Marello\Bundle\CustomerBundle\Entity\Company:
+            identifier_field_names: [companyNumber]
             fields:
                 createdAt:
                     exclude: true
@@ -58,5 +71,4 @@ api:
             actions:
                 delete_relationship: false
 
-        Marello\Bundle\CustomerBundle\Entity\CustomerGroup:
-            exclude: true
+        Marello\Bundle\CustomerBundle\Entity\CustomerGroup: ~

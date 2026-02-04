@@ -6,6 +6,7 @@ marello:
         entity_grid_all_view_label: All %entity_plural_label%
         name.label:                 Name
         names.label:                Names
+        denormalized_default_name.label: Name
         sku.label:                  SKU
         weight.label:               Weight (in Kg)
         warranty.label:             Product Warranty

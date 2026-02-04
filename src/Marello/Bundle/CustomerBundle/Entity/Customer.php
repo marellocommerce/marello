@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Oro\Bundle\CustomerBundle\Entity\CustomerUserRole;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface;
@@ -86,7 +88,7 @@ class Customer extends AbstractUser implements
     protected ?MarelloAddress $shippingAddress = null;
 
     #[ORM\Column(name: 'customer_number', type: Types::STRING, nullable: true)]
-    protected $customerNumber;
+    protected ?string $customerNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'customer', targetEntity: MarelloAddress::class, cascade: ['persist'])]
     #[Oro\ConfigField(defaultValues: [
@@ -131,9 +133,50 @@ class Customer extends AbstractUser implements
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected ?int $loginCount = 0;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
     protected ?string $username = null;
+
+    /**
+     * Encrypted password. Must be persisted.
+     */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Oro\ConfigField(
+        defaultValues: ['importexport' => ['excluded' => true], 'email' => ['available_in_template' => false]]
+    )]
+    protected ?string $password = null;
+
+    /**
+     * The salt to use for hashing
+     */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ConfigField(
+        defaultValues: ['importexport' => ['excluded' => true], 'email' => ['available_in_template' => false]]
+    )]
+    protected ?string $salt = null;
+
+    /**
+     * @var Collection<int, CustomerRole>
+     */
+    #[ORM\ManyToMany(targetEntity: CustomerRole::class, inversedBy: 'customers')]
+    #[ORM\JoinTable(name: 'marello_customer_access_role')]
+    #[ORM\JoinColumn(name: 'customer_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'customer_role_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[Oro\ConfigField(
+        defaultValues: [
+            'entity' => [
+                'label' => 'marello.customer.roles.label',
+            ]
+        ]
+    )]
+    protected ?Collection $userRoles = null;
+
+    /**
+     * @var array $data
+     */
+    #[ORM\Column(name: 'data', type: Types::JSON, nullable: true)]
+    #[Oro\ConfigField(defaultValues: ['importexport' => ['excluded' => true]])]
+    protected ?array $data = [];
 
     #[\Override]
     public function serialize()
@@ -180,6 +223,7 @@ class Customer extends AbstractUser implements
      */
     public function __construct()
     {
+        parent::__construct();
         $this->addresses = new ArrayCollection();
     }
 
@@ -244,7 +288,7 @@ class Customer extends AbstractUser implements
         return $this->customerNumber;
     }
 
-    public function setCustomerNumber(string $customerNumber): self
+    public function setCustomerNumber(string $customerNumber = null): self
     {
         $this->customerNumber = $customerNumber;
 
@@ -401,5 +445,25 @@ class Customer extends AbstractUser implements
         }
 
         return $organizations;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Customer
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): ?array
+    {
+        return $this->data;
     }
 }

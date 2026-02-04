@@ -96,7 +96,8 @@ class MarelloPurchaseOrderBundleInstaller implements
             [
                 'precision' => 19,
                 'scale' => 4,
-                'comment' => '(DC2Type:money)'
+                'comment' => '(DC2Type:money)',
+                'notnull' => false
             ]
         );
         $table->addColumn('created_at', 'datetime');

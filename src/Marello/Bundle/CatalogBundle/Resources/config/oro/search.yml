@@ -1,0 +1,18 @@
+search:
+    Marello\Bundle\CatalogBundle\Entity\Category:
+        alias: marello_category
+        label: marello.catalog.category.entity_plural_label
+        route:
+            name: marello_category_view
+            parameters:
+                id: id
+        search_template: '@MarelloCatalog/Category/searchResult.html.twig'
+        fields:
+            -
+                name: name
+                target_type: text
+                target_fields: [name]
+            -
+                name: code
+                target_type: text
+                target_fields: [code]

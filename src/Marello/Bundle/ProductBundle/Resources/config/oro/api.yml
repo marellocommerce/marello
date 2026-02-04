@@ -4,14 +4,6 @@ api:
             alias: marelloproduct
             plural_alias: marelloproducts
 
-        Marello\Bundle\ProductBundle\Api\Model\FrontendProduct:
-            alias: marellofrontendproduct
-            plural_alias: marellofrontendproducts
-
-        Marello\Bundle\ProductBundle\Api\Model\FrontendCategory:
-            alias: marellofrontendcategory
-            plural_alias: marellofrontendcategories
-
         Marello\Bundle\ProductBundle\Entity\Variant:
             alias: marellovariant
             plural_alias: marellovariants
@@ -37,29 +29,6 @@ api:
             plural_alias: marellocrosssellproducts
 
     entities:
-        Marello\Bundle\ProductBundle\Api\Model\FrontendProduct:
-            exclusion_policy: all
-            fields:
-                frontendData:
-                    data_type: array
-                    property_path: _
-            filters:
-                fields:
-                    organization:
-                        data_type: string
-                        allow_array: true
-                        property_path: organization
-                        description: 'Filter by organization'
-            sorters:
-                exclusion_policy: all
-            actions:
-                get_subresource: false
-                get_relationship:  false
-                create: false
-                delete: false
-                delete_list: false
-                update: false
-
         Marello\Bundle\ProductBundle\Entity\ProductSupplierRelation: ~
         Marello\Bundle\ProductBundle\Entity\Product:
             documentation_resource: '@MarelloProductBundle/Resources/doc/api/product.md'
@@ -90,6 +59,11 @@ api:
                         allow_array: true
                         property_path: barcode
                         description: 'Filter by barcode'
+                    productstatus:
+                        data_type: string
+                        allow_array: true
+                        property_path: status
+                        description: 'Filter by status'
                     saleschannels:
                         data_type: string
                         allow_array: true

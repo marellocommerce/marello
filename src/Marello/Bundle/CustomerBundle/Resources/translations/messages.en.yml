@@ -29,8 +29,31 @@ marello:
             password.label:               'Password'
             password_confirmation.label:  'Re-enter password'
         localization.label:               'Localization'
+        data.label:                       'Data'
+        username.label:                   'Username'
+        roles.label:                      'Roles'
+        confirmed.label:                  'Confirmed'
+        enabled.label:                    'Enabled'
+        last_login.label:                 'Last Login'
+        login_count.label:                'Login Count'
+        password.label:                   'Password'
+        salt.label:                       'Salt'
+        password_changed_at.label:        'Password Changed At'
+        password_requested_at.label:      'Password Requested At'
+        confirmation_token.label:         'Confirmation Token'
         form:
             choose:                       'Choose customer'
+
+        customerrole:
+            entity_label: 'Customer Role'
+            entity_plural_label: 'Customer Roles'
+            entity_grid_all_view_label: All %entity_plural_label%
+            id.label: Id
+            label.label: Label
+            organization.label: Organization
+            role.label: Role
+            customers.label: Customers
+            company.label: Company
 
         customergroup:
             entity_label: 'Customer Group'

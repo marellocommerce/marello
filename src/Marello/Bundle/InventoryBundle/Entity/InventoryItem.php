@@ -246,6 +246,13 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
     protected ?DeliveryPromise $orderOnDemandPromise = null;
 
     /**
+     * @var float
+     * basically tells how many of these are in a unit, for informational purposes only
+     */
+    #[ORM\Column(name: 'qty_in_unit', type: Types::FLOAT, nullable: true)]
+    protected ?float $qtyInUnit = 0;
+
+    /**
      * InventoryItem constructor.
      *
      * @param ProductInterface|Product $product
@@ -666,6 +673,25 @@ class InventoryItem implements ProductAwareInterface, OrganizationAwareInterface
     public function setOrderOnDemandPromise(?DeliveryPromise $orderOnDemandPromise): self
     {
         $this->orderOnDemandPromise = $orderOnDemandPromise;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getQtyInUnit(): ?float
+    {
+        return $this->qtyInUnit;
+    }
+
+    /**
+     * @param float|null $qtyInUnit
+     * @return $this
+     */
+    public function setQtyInUnit(?float $qtyInUnit): self
+    {
+        $this->qtyInUnit = $qtyInUnit;
 
         return $this;
     }

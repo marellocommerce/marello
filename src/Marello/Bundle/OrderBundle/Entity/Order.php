@@ -98,21 +98,21 @@ class Order implements
     protected $invoiceReference;
 
     /**
-     * @var int
+     * @var float
      */
     #[ORM\Column(name: 'subtotal', type: 'money')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $subtotal = 0;
 
     /**
-     * @var int
+     * @var float
      */
     #[ORM\Column(name: 'total_tax', type: 'money')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $totalTax = 0;
 
     /**
-     * @var int
+     * @var float
      */
     #[ORM\Column(name: 'grand_total', type: 'money')]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
@@ -148,14 +148,14 @@ class Order implements
     protected $paymentMethodOptions = [];
 
     /**
-     * @var double
+     * @var float
      */
     #[ORM\Column(name: 'shipping_amount_incl_tax', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $shippingAmountInclTax;
 
     /**
-     * @var double
+     * @var float
      */
     #[ORM\Column(name: 'shipping_amount_excl_tax', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
@@ -200,7 +200,7 @@ class Order implements
     protected $overriddenShippingCostAmount;
     
     /**
-     * @var double
+     * @var float
      */
     #[ORM\Column(name: 'discount_amount', type: 'money', nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
@@ -310,7 +310,7 @@ class Order implements
     /**
      * @var string
      */
-    #[ORM\Column(name: 'po_number', type: Types::STRING, nullable: true, length: 255)]
+    #[ORM\Column(name: 'po_number', type: Types::STRING, length: 255, nullable: true)]
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $poNumber;
 
@@ -1068,10 +1068,10 @@ class Order implements
     }
 
     /**
-     * @param string $orderNote
+     * @param string|null $orderNote
      * @return $this
      */
-    public function setOrderNote(string $orderNote)
+    public function setOrderNote(?string $orderNote)
     {
         $this->orderNote = $orderNote;
 
@@ -1087,10 +1087,10 @@ class Order implements
     }
 
     /**
-     * @param string $poNumber
+     * @param string $poNumber|null
      * @return $this
      */
-    public function setPoNumber(string $poNumber)
+    public function setPoNumber(?string $poNumber)
     {
         $this->poNumber = $poNumber;
 

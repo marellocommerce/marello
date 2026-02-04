@@ -118,6 +118,7 @@ class LoadCustomerData extends AbstractFixture
             $primaryAddress,
             $shippingAddress
         );
+        $customer->setEnabled(false);
         $customer->setNamePrefix($row['title']);
         $customer->setOrganization($organization);
         $this->manager->persist($customer);

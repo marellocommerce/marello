@@ -45,9 +45,11 @@ marello:
             tax_code.label:             Tax Code
             tax.label:                  Tax
             row_total_incl_tax.label:   Row Total Incl
-            purchase_price.label:       Purchase Price
+            purchase_price_excl_tax.label:       Purchase Price Excl
+            purchase_price_incl_tax.label:       Purchase Price Incl
             subtotal.label:             Subtotal
             refund.label:               Refund
+            refund_incl_tax.label:      Refund Incl Tax
             add_item.label:             Add Item
 
         refund_subtotal.label:      Refund Subtotal

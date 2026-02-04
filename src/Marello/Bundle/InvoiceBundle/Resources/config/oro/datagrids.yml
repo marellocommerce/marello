@@ -151,14 +151,11 @@ datagrids:
                 select:
                     - i
                     - inv.currency as currency
-                    - product.sku as productSku
-                    - product.denormalizedDefaultName as productName
                 from:
                     - { table: Marello\Bundle\InvoiceBundle\Entity\InvoiceItem, alias: i}
                 join:
                     left:
                         - { join: i.invoice, alias: inv }
-                        - { join: i.product, alias: product }
                 where:
                     and:
                         - i.invoice = :entityId
@@ -213,14 +210,11 @@ datagrids:
                 select:
                     - i
                     - inv.currency as currency
-                    - product.sku as productSku
-                    - product.denormalizedDefaultName as productName
                 from:
                     - { table: Marello\Bundle\InvoiceBundle\Entity\CreditmemoItem, alias: i}
                 join:
                     left:
                         - { join: i.invoice, alias: inv }
-                        - { join: i.product, alias: product }
                 where:
                     and:
                         - i.invoice = :entityId
@@ -248,22 +242,18 @@ datagrids:
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
             tax:
                 label:            marello.invoice.invoiceitem.tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
-            rowTotalInclTax:
-                label:            marello.invoice.invoiceitem.row_total_incl_tax.label
-                type:             localized_number
-                method:           formatCurrency
-                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
             rowTotalExclTax:
                 label:            marello.invoice.invoiceitem.row_total_excl_tax.label
                 type:             localized_number
                 method:           formatCurrency
                 context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure
-                align:            right
+            rowTotalInclTax:
+                label:            marello.invoice.invoiceitem.row_total_incl_tax.label
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: Marello\Bundle\DataGridBundle\Grid\FormatterContextResolver::getRootResolverCurrencyClosure

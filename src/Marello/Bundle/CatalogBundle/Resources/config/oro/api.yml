@@ -6,12 +6,22 @@ api:
 
     entities:
         Marello\Bundle\CatalogBundle\Entity\Category:
-            fields:
-                createdAt:
-                    exclude: true
-                updatedAt:
-                    exclude: true
+            identifier_field_names: [code]
             filters:
                 exclusion_policy: all
+                fields:
+                    type:
+                        data_type: string
+                        property_path: type
+                        description: 'Filter by Type'
+                    customer:
+                        data_type: string
+                        property_path: customer.email
+                        description: 'Filter by Customer email'
+                    companies:
+                        data_type: string
+                        allow_array: true
+                        property_path: companies.companyNumber
+                        description: 'Filter by Company Number'
             actions:
                 delete_relationship: false

@@ -7,9 +7,13 @@ use Marello\Bundle\CatalogBundle\Entity\Category;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
+use Marello\Bundle\CatalogBundle\Provider\AssignedCompaniesProvider;
+
 class CategoryExtension extends AbstractExtension
 {
     const NAME = 'marello_category';
+
+    protected ?AssignedCompaniesProvider $assignedCompaniesProvider;
 
     public function __construct(
         protected ManagerRegistry $doctrine
@@ -37,6 +41,10 @@ class CategoryExtension extends AbstractExtension
             new TwigFunction(
                 'marello_get_category_name_by_code',
                 [$this, 'getCategoryNameByCode']
+            ),
+            new TwigFunction(
+                'marello_category_get_companies_ids',
+                [$this, 'getCategoryCompaniesIds']
             )
         ];
     }
@@ -52,9 +60,23 @@ class CategoryExtension extends AbstractExtension
             ->getRepository(Category::class)
             ->findOneBy(['code' => $code]);
         if ($category) {
-            return $category->getName();
+            return $category->getDenormalizedDefaultName();
         }
 
         return $code;
+    }
+
+    /**
+     * @param Category $category
+     * @return array
+     */
+    public function getCategoryCompaniesIds(Category $category)
+    {
+        return $this->assignedCompaniesProvider->getCompaniesIds($category);
+    }
+
+    public function setCompaniesProvider(?AssignedCompaniesProvider $assignedCompaniesProvider)
+    {
+        $this->assignedCompaniesProvider = $assignedCompaniesProvider;
     }
 }

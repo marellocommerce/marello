@@ -6,6 +6,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
+use Oro\Bundle\OrganizationBundle\Entity\OrganizationAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Ownership\AuditableOrganizationAwareTrait;
 
 use Marello\Bundle\TaxBundle\Entity\Repository\TaxRateRepository;
 
@@ -13,19 +15,27 @@ use Marello\Bundle\TaxBundle\Entity\Repository\TaxRateRepository;
  * TaxRate
  */
 #[ORM\Table(name: 'marello_tax_tax_rate')]
-#[ORM\UniqueConstraint(name: 'marello_tax_rate_codeidx', columns: ['code'])]
+#[ORM\UniqueConstraint(name: 'marello_tax_rate_codeidx', columns: ['code', 'organization_id'])]
 #[ORM\Entity(repositoryClass: TaxRateRepository::class)]
 #[Oro\Config(
     routeName: 'marello_tax_taxrate_index',
     routeView: 'marello_tax_taxrate_view',
     routeUpdate: 'marello_tax_taxrate_update',
     defaultValues: [
+        'ownership' => [
+            'owner_type' => 'ORGANIZATION',
+            'owner_field_name' => 'organization',
+            'owner_column_name' => 'organization_id'
+        ],
         'dataaudit' => ['auditable' => true],
         'security' => ['type' => 'ACL', 'group_name' => '']
     ]
 )]
-class TaxRate
+class TaxRate implements
+    OrganizationAwareInterface
 {
+    use AuditableOrganizationAwareTrait;
+
     /**
      * @var integer
      */

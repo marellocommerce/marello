@@ -32,7 +32,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
      */
     public function getMigrationVersion()
     {
-        return 'v2_8';
+        return 'v2_8_2';
     }
 
     /**
@@ -117,6 +117,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
             ]
         );
+        $table->addColumn('qty_in_unit', 'float', ['notnull' => false]);
         $table->addColumn('on_hand_promise', 'integer', ['notnull' => false]);
         $table->addColumn('drop_ship_promise', 'integer', ['notnull' => false]);
         $table->addColumn('back_order_promise', 'integer', ['notnull' => false]);
@@ -429,7 +430,7 @@ class MarelloInventoryBundleInstaller implements Installation, ExtendExtensionAw
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
-        $table->addUniqueIndex(['code']);
+        $table->addUniqueIndex(['code', 'organization_id'], 'marello_inventory_dlvry_prom_codeorgidx');
         $table->addIndex(['organization_id']);
     }
 

@@ -1,5 +1,6 @@
 datagrids:
     marello-customer:
+        extended_entity_name: Marello\Bundle\CustomerBundle\Entity\Customer
         source:
             type: orm
             query:
@@ -17,6 +18,7 @@ datagrids:
                 renderable: false
             namePrefix:
                 label: marello.customer.name_prefix.label
+                renderable: false
             firstName:
                 label: marello.customer.first_name.label
             middleName:
@@ -25,6 +27,10 @@ datagrids:
                 label: marello.customer.last_name.label
             nameSuffix:
                 label: marello.customer.name_suffix.label
+                renderable: false
+            enabled:
+                label: marello.customer.enabled.label
+                frontend_type: boolean
             email:
                 label: marello.customer.email.label
             customerNumber:
@@ -54,6 +60,9 @@ datagrids:
                 nameSuffix:
                     type: string
                     data_name: c.nameSuffix
+                enabled:
+                    type: boolean
+                    data_name: c.enabled
                 email:
                     type: string
                     data_name: c.email
@@ -82,6 +91,8 @@ datagrids:
                     data_name: c.nameSuffix
                 email:
                     data_name: c.email
+                enabled:
+                    data_name: c.enabled
                 customerNumber:
                     data_name: c.customerNumber
                 createdAt:
@@ -596,3 +607,13 @@ datagrids:
                 name:
                     type: string
                     data_name: cg.name
+
+    marello-companies-by-ids-grid:
+        extends: marello-companies-select-grid
+        source:
+            query:
+                where:
+                    and:
+                        - company.id IN (:companyIds)
+            bind_parameters:
+                - companyIds

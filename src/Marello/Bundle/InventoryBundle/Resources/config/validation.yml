@@ -39,7 +39,7 @@ Marello\Bundle\InventoryBundle\Entity\InventoryItem:
 Marello\Bundle\InventoryBundle\Entity\DeliveryPromise:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-              fields: [code]
+              fields: [code, organization]
               errorPath: code
               message: 'marello.inventory.validation.messages.error.deliverypromise.unique_code'
     properties:
