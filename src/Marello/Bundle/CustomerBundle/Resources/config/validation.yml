@@ -25,3 +25,5 @@ Marello\Bundle\CustomerBundle\Entity\Company:
             - NotBlank: ~
         addresses:
             - Valid: ~
+        invoiceEmail:
+            - Email: ~

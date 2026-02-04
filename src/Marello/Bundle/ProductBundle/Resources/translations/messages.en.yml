@@ -8,7 +8,7 @@ marello:
         names.label:                Names
         denormalized_default_name.label: Name
         sku.label:                  SKU
-        weight.label:               Weight (in Kg)
+        weight.label:               Weight (kg)
         warranty.label:             Product Warranty
         status:
             label:                  Status

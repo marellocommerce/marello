@@ -170,8 +170,6 @@ operations:
                                 - '@MarelloInvoice/Pdf/invoice.html.twig'
                                 - '$.render_parameters'
                             attribute: '$.invoice_pdf'
-
-
                       -   '@tree':
                               conditions:
                                   '@and':
@@ -180,7 +178,6 @@ operations:
                               actions:
                                   -   '@assign_value': [ '$.receiver_email', '$.data.customer.company.invoiceEmail' ]
                                   -   '@assign_value': [ '$.receiver_name', '$.data.customer.company.name' ]
-
                                   -   '@tree':
                                           conditions:
                                               '@equal': [ $.data.customer.company.sendCopyToCustomer, true ]
@@ -200,7 +197,6 @@ operations:
                                                   -   filename: '$.filename'
                                                       body: '$.invoice_pdf'
                                                       mimetype: 'application/pdf'
-
                      # send to customer with no company or no invoice address
                       -   '@tree':
                               conditions:
@@ -222,7 +218,6 @@ operations:
                                                   -   filename: '$.filename'
                                                       body: '$.invoice_pdf'
                                                       mimetype: 'application/pdf'
-
                       - '@flash_message':
                             type: 'success'
                             message: marello.invoice.action.send_invoice_email.success
