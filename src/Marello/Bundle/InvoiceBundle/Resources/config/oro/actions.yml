@@ -110,17 +110,15 @@ operations:
             - marello_invoice_invoice_view
         attributes:
             send_customer_email:
-                label: 'marello.invoice.action.send_invoice_email.customer_email'
+                label: 'Send to Customer'
                 type: boolean
             send_company_email:
-                label: 'marello.invoice.action.send_invoice_email.company_email'
+                label: 'Send to Company'
                 type: boolean
         form_options:
             attribute_fields:
                 send_customer_email:
-                    form_type: Marello\Bundle\InvoiceBundle\Form\Type\CompanyEmailCheckboxType
-                    options:
-                        relatedEntity: $.data.customer
+                    form_type: Symfony\Component\Form\Extension\Core\Type\CheckboxType
                 send_company_email:
                     form_type: Marello\Bundle\InvoiceBundle\Form\Type\CompanyEmailCheckboxType
                     options:

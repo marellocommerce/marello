@@ -40,7 +40,10 @@ marello:
         action:
             send_invoice_email:
                 label: Email Invoice
-                success: "Email Invoice was successfully sent to %%email%%"
+                title: Re-send Email Invoice
+                popup_description: "Select Recipient(s) to re-send the invoice to."
+                warning: "No email has been sent to any recipient(s)"
+                success: "Email Invoice was successfully sent to recipients"
                 error: You cannot perform the action. Please, provide the sender's email in the configuration (Marello -> Documents -> Workflow)
 
         creditmemo:
