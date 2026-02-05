@@ -6,9 +6,15 @@
         {{ form_start(form, {'action': app.request.uri, 'attr': {'id': form.vars.id, 'data-collect': 'true', 'class': 'form-dialog'}}) }}
         <div class="form-horizontal">
             <p>{{ 'marello.invoice.action.send_invoice_email.popup_description'|trans }}</p>
-            {{ form_row(form.send_customer_email) }}
+            <div>
+                <div style="float:left">{{ form_row(form.send_customer_email, {'label': ' '}) }}</div>
+                <div style="float:left;margin-left:-265px">{{'marello.invoice.action.send_invoice_email.customer_email'|trans({'%email%': form.send_customer_email.vars.relatedEntityEmail})}}</div>
+            </div>
             {% if form.send_company_email.vars.show_field == true %}
-                {{ form_row(form.send_company_email) }}
+                <div>
+                    <div style="float:left">{{ form_row(form.send_company_email, {'label': ' '}) }}</div>
+                    <div style="float:left;margin-left:-265px">{{'marello.invoice.action.send_invoice_email.company_email'|trans({'%email%': form.send_company_email.vars.relatedEntityEmail})}}</div>
+                </div>
             {% endif %}
         </div>
         <div class="widget-actions">

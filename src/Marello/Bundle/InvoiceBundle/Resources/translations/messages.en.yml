@@ -41,6 +41,8 @@ marello:
             send_invoice_email:
                 label: Email Invoice
                 title: Re-send Email Invoice
+                customer_email: "Send to Customer (%email%)"
+                company_email: "Send to Company (%email%)"
                 popup_description: "Select Recipient(s) to re-send the invoice to."
                 warning: "No email has been sent to any recipient(s)"
                 success: "Email Invoice was successfully sent to recipients"
