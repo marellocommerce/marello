@@ -121,6 +121,10 @@ services:
         tags:
             - { name: form.type }
 
+    Marello\Bundle\InvoiceBundle\Form\Type\CompanyEmailCheckboxType:
+        tags:
+            - { name: form.type }
+
     marello_invoice.twig.invoice_extension:
         class: 'Marello\Bundle\InvoiceBundle\Twig\InvoiceExtension'
         arguments:
