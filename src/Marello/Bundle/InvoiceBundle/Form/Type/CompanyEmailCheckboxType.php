@@ -56,6 +56,7 @@ class CompanyEmailCheckboxType extends AbstractType
         if (isset($options['relatedEntity'])) {
             $entity = $options['relatedEntity'];
             $view->vars['show_field'] = $this->getIsShowField($entity);
+            $view->vars['relatedEntityEmail'] = $this->getRelatedEntityEmail($entity);
         }
     }
 
@@ -75,6 +76,22 @@ class CompanyEmailCheckboxType extends AbstractType
         }
 
         return $showField;
+    }
+
+    /**
+     * @param $entity
+     * @return bool
+     */
+    protected function getRelatedEntityEmail($entity): ?string
+    {
+        $email = null;
+        if ($entity instanceof Customer) {
+            $email =  $entity->getEmail();
+        } elseif ($entity instanceof Company) {
+            $email = $entity->getInvoiceEmail();
+        }
+
+        return $email;
     }
 
     public function getParent()
