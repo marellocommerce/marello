@@ -16,9 +16,8 @@ class TwigSandboxConfigurationPass extends AbstractTwigSandboxConfigurationPass
     protected function getFunctions(): array
     {
         return [
-            'get_payment_methods',
-            'get_payment_status_label',
-            'get_payment_status'
+            'marello_payment_method_enabled',
+            'marello_get_payment_method_label'
         ];
     }
 
@@ -36,8 +35,7 @@ class TwigSandboxConfigurationPass extends AbstractTwigSandboxConfigurationPass
     protected function getExtensions(): array
     {
         return [
-            'marello_payment.twig.payment_method_extension',
-            'marello_payment.twig.payment_status_extension'
+            'marello_payment.twig.payment_method_extension'
         ];
     }
 
