@@ -47,7 +47,7 @@ api:
                 categoriesCodes:
                     exclude: true
             filters:
-                exclusion_policy: all
+                exclusion_policy: none
                 fields:
                     sku:
                         data_type: string
