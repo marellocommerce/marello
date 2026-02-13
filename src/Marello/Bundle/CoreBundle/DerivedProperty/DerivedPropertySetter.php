@@ -4,24 +4,25 @@ namespace Marello\Bundle\CoreBundle\DerivedProperty;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Marello\Bundle\CoreBundle\Provider\SequenceNumberProvider;
+use Marello\Bundle\OrderBundle\Entity\Order;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
 
 class DerivedPropertySetter
 {
     /** @var DerivedPropertyAwareInterface[] */
     private $generate = [];
 
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
-
     /**
      * DerivedPropertySetter constructor.
      *
      * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        protected EventDispatcherInterface $eventDispatcher,
+//        protected EntityMetadataHelper $entityMetadataHelper
+    ) {
     }
 
     /**
@@ -55,7 +56,15 @@ class DerivedPropertySetter
         }
 
         foreach ($this->generate as $entity) {
-            $entity->setDerivedProperty($entity->getId());
+            $sequenceName = SequenceNumberProvider::generateSequenceEntityName(
+                $entity->getEntityType(),
+                $entity->getOrganization()->getId()
+            );
+            $sequence = SequenceNumberProvider::generateSequenceEntity($sequenceName);
+            $args->getObjectManager()->persist($sequence);
+            $args->getObjectManager()->flush($sequence);
+            $entity->setDerivedProperty($sequence->getId());
+            $this->generate[] = $entity;
         }
 
         $dispatch = $this->generate;

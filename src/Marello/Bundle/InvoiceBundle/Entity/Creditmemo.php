@@ -47,4 +47,9 @@ class Creditmemo extends AbstractInvoice implements ExtendEntityInterface
         ]
     )]
     protected $items;
+
+    public function getEntityType(): string
+    {
+        return 'creditmemo';
+    }
 }

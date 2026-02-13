@@ -440,6 +440,11 @@ class Allocation implements
         }
     }
 
+    public function getEntityType(): string
+    {
+        return 'allocation';
+    }
+
     /**
      * @return \Extend\Entity\EV_Marello_Allocation_ReshipmentReason
      */

@@ -62,7 +62,6 @@ class InventoryBatch implements
     #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true]])]
     protected $batchReference;
 
-
     /**
      * @var string
      */
@@ -153,7 +152,12 @@ class InventoryBatch implements
             $this->setBatchNumber(UUIDGenerator::v4());
         }
     }
-    
+
+    public function getEntityType(): string
+    {
+        return 'inventorybatch';
+    }
+
     /**
      * @return string
      */

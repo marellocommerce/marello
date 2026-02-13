@@ -387,6 +387,11 @@ class PackingSlip implements
         }
     }
 
+    public function getEntityType(): string
+    {
+        return 'packingslip';
+    }
+
     /**
      * @return string
      */

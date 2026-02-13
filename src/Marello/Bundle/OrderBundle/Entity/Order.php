@@ -775,6 +775,11 @@ class Order implements
         }
     }
 
+    public function getEntityType(): string
+    {
+        return 'order';
+    }
+
     /**
      * @return string
      */

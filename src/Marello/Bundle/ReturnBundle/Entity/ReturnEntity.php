@@ -232,6 +232,11 @@ class ReturnEntity implements
         }
     }
 
+    public function getEntityType(): string
+    {
+        return 'return';
+    }
+
     /**
      * @return SalesChannel
      */

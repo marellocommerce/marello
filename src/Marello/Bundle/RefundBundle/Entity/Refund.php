@@ -213,6 +213,11 @@ class Refund implements
         }
     }
 
+    public function getEntityType(): string
+    {
+        return 'refund';
+    }
+
     /**
      * @return int
      */

@@ -215,6 +215,11 @@ class PurchaseOrder implements DerivedPropertyAwareInterface, ExtendEntityInterf
         }
     }
 
+    public function getEntityType(): string
+    {
+        return 'purchaseorder';
+    }
+
     /**
      * @param \DateTime|null $dueDate
      * @return $this

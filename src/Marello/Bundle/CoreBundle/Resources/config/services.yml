@@ -82,18 +82,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    marello_core.event_listener.refresh_context:
-        class: 'Marello\Bundle\CoreBundle\EventListener\RefreshContextListener'
-        decorates: oro_security.listener.refresh_context_listener
-        parent: oro_security.listener.refresh_context_listener
-
-    marello_core.event_listener.email_address_visibility:
-        class: 'Marello\Bundle\CoreBundle\EventListener\EmailAddressVisibilityListener'
-        arguments:
-            - '@oro_email.email_address_visibility.manager'
-        tags:
-            - { name: doctrine.event_listener, event: onFlush }
-
     marello_core.provider.attachment_entity_config_decorator:
         decorates: oro_attachment.provider.attachment_entity_config
         class: Marello\Bundle\CoreBundle\Provider\AttachmentEntityConfigProviderDecorator
@@ -110,3 +98,18 @@ services:
     Marello\Bundle\CoreBundle\EntityConfig\FrontendFieldConfiguration:
         tags:
             - oro_entity_config.validation.entity_config
+
+    Marello\Bundle\CoreBundle\Provider\SequenceNumberProvider:
+        public: true
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@oro_entity_extend.extend.update_handler'
+            - '@oro_maintenance.maintenance'
+
+    Marello\Bundle\CoreBundle\Async\SequenceNumberEntityCreationProcessor:
+        arguments:
+            - '@logger'
+            - '@doctrine.orm.entity_manager'
+            - '@Marello\Bundle\CoreBundle\Provider\SequenceNumberProvider'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
