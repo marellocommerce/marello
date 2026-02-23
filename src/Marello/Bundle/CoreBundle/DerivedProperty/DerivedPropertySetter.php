@@ -20,8 +20,7 @@ class DerivedPropertySetter
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
-        protected EventDispatcherInterface $eventDispatcher,
-//        protected EntityMetadataHelper $entityMetadataHelper
+        protected EventDispatcherInterface $eventDispatcher
     ) {
     }
 
