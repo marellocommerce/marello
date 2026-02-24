@@ -47,7 +47,8 @@ class SequenceNumberEntityCreationProcessor implements MessageProcessorInterface
             'packingslip',
             'refund',
             'return',
-            'purchaseorder'
+            'purchaseorder',
+            'replenishmentorder'
         ];
         try {
             $update = false;

@@ -13,7 +13,7 @@ services:
 
     Marello\Bundle\CoreBundle\EventListener\OrganizationCreateListener:
         arguments:
+            - '@oro_distribution.handler.application_status'
             - '@Marello\Bundle\CoreBundle\Provider\SequenceNumberProvider'
-            - '@oro_message_queue.client.message_producer'
         tags:
             - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\OrganizationBundle\Entity\Organization', event: postPersist, priority: 255 }

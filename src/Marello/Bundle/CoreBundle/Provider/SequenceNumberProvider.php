@@ -2,6 +2,7 @@
 
 namespace Marello\Bundle\CoreBundle\Provider;
 
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -44,7 +45,7 @@ class SequenceNumberProvider
         $entityName = SequenceNumberProvider::generateSequenceEntityName($sequenceEntityType, $organisationId);
         $className = ExtendHelper::ENTITY_NAMESPACE . $entityName;
 
-        $entityModel = $this->configManager->createConfigEntityModel($className);
+        $entityModel = $this->configManager->createConfigEntityModel($className, ConfigModel::MODE_HIDDEN);
         $extendConfig = $this->configManager->getProvider('extend')->getConfig($className);
         $extendConfig->set('owner', ExtendScope::OWNER_CUSTOM);
         $extendConfig->set('state', ExtendScope::STATE_NEW);
