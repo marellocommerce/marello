@@ -222,13 +222,12 @@ class SendEmailTemplateAttachmentAction extends AbstractSendEmail
      */
     protected function getCc($context)
     {
+        $cc = [];
         if (isset($this->options[self::OPTION_CC])) {
             $cc = $this->getEmailAddress($context, $this->options[self::OPTION_CC]);
             $this->validateAddress($cc);
 
             $cc = [$cc];
-        } else {
-            $cc = [];
         }
 
         return array_filter($cc);
