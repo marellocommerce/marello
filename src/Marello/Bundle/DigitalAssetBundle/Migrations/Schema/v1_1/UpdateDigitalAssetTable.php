@@ -46,7 +46,8 @@ class UpdateDigitalAssetTable implements Migration, ExtendExtensionAwareInterfac
             ['sku'], // Column names are used to show related entity in a grid
             [
                 'extend' => [
-                    'owner' => ExtendScope::OWNER_CUSTOM
+                    'owner' => ExtendScope::OWNER_CUSTOM,
+                    'without_default' => 1
                 ],
                 'entity' => ['label' => 'Assets Products Relation'],
             ]

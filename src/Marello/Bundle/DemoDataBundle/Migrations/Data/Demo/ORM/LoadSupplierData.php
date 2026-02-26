@@ -114,7 +114,6 @@ class LoadSupplierData extends AbstractFixture implements DependentFixtureInterf
                     ->findOneBy(['combinedCode' => $values['address']['country'] . '-' . $values['address']['state']])
             );
             $this->manager->persist($address);
-            $this->manager->flush($address);
             $organization = $this->manager
                 ->getRepository(Organization::class)
                 ->getFirst();
