@@ -107,6 +107,13 @@ class CompanyType extends AbstractType
                 ]
             )
             ->add(
+                'enabled',
+                CheckboxType::class,
+                [
+                    'required' => false
+                ]
+            )
+            ->add(
                 'appendCustomers',
                 EntityIdentifierType::class,
                 [

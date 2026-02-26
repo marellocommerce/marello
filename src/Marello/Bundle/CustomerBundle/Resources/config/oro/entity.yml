@@ -1,4 +1,9 @@
 oro_entity:
+    exclusions:
+        - { entity: Marello\Bundle\CustomerBundle\Entity\Customer, field: password }
+        - { entity: Marello\Bundle\CustomerBundle\Entity\Customer, field: salt }
+        - { entity: Marello\Bundle\CustomerBundle\Entity\Customer, field: confirmationToken }
+
     entity_aliases:
         Marello\Bundle\CustomerBundle\Entity\Company:
             alias: marellocompany

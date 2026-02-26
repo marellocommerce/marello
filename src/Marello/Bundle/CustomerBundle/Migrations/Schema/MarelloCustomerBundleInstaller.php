@@ -80,6 +80,7 @@ class MarelloCustomerBundleInstaller implements
         $table->addColumn('discount_percentage', 'float', ['notnull' => false]);
         $table->addColumn('invoice_email', 'string', ['notnull' => false]);
         $table->addColumn('send_copy_to_customer', 'boolean', ['notnull' => true, 'default' => false]);
+        $table->addColumn('enabled', 'boolean', ['notnull' => true, 'default' => false]);
         $table->addColumn('created_at', 'datetime');
         $table->addColumn('updated_at', 'datetime');
         $table->setPrimaryKey(['id']);

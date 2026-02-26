@@ -57,7 +57,8 @@
                 form_row(form.email),
                 form_row(form.customerNumber),
                 form_row(form.customerGroup),
-                form_row(form.localization)
+                form_row(form.localization),
+                form_row(form.enabled)
             ]
         }]
     }] %}
@@ -83,7 +84,6 @@
     {% endset %}
 
     {% set frontendFormOptions = [
-        form_row(form.enabled),
         form_widget(form.plainPassword, { 'attr': {'class': 'password control-group-container'} })
     ] %}
 

@@ -84,6 +84,9 @@ marello:
             discount_percentage.label:  Discount Percentage
             sales_representative.label: 'Sales Representative'
             fallback_sales_representative.label: 'Fallback Sales Representative'
+            invoice_email.label:     Invoice Email
+            send_copy.label:         Send copy to Customer
+            enabled.label:           'Enabled'
             form:
                 choose:             'Choose a company'
                 choose_parent:      'Choose parent company'
@@ -102,8 +105,6 @@ marello:
                 addresses:           'Addresses'
                 general:             'General'
                 additional:          'Additional'
-            invoice_email.label:     Invoice Email
-            send_copy.label:         Send copy to Customer
 
         controller:
             company:

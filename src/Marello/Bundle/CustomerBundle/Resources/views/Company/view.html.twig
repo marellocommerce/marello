@@ -52,6 +52,7 @@
                     {{ UI.renderProperty('marello.customer.company.discount_percentage.label'|trans, entity.discountPercentage ? entity.discountPercentage : 'N/A') }}
                     {{ UI.renderProperty('marello.customer.company.invoice_email.label'|trans, entity.invoiceEmail ? entity.invoiceEmail : 'N/A') }}
                     {{ UI.renderProperty('marello.customer.company.send_copy.label'|trans, entity.sendCopyToCustomer ? 'marello.core.yes.label'|trans : 'marello.core.no.label'|trans) }}
+                    {{ UI.renderProperty('marello.customer.company.enabled.label'|trans, entity.enabled ? 'marello.core.yes.label'|trans : 'marello.core.no.label'|trans) }}
                     {{ entityConfig.renderDynamicFields(entity) }}
                 </div>
             </div>

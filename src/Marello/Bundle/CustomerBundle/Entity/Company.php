@@ -142,6 +142,10 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     )]
     protected ?bool $sendCopyToCustomer = false;
 
+    #[ORM\Column(name: 'enabled', type: Types::BOOLEAN)]
+    #[Oro\ConfigField(defaultValues: ['dataaudit' => ['auditable' => true], 'importexport' => ['order' => 50]])]
+    protected ?bool $enabled = true;
+
     /**
      * Constructor
      */
@@ -514,6 +518,25 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     public function setSendCopyToCustomer(bool $sendCopyToCustomer): self
     {
         $this->sendCopyToCustomer = $sendCopyToCustomer;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param bool $enabled
+     * @return $this
+     */
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }
