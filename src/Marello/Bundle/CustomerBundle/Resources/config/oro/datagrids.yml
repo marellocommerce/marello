@@ -166,6 +166,7 @@ datagrids:
                 select:
                     - company.id
                     - company.name
+                    - company.enabled
                     - parent.name as parent_name
                 from:
                     - { table: Marello\Bundle\CustomerBundle\Entity\Company, alias: company }
