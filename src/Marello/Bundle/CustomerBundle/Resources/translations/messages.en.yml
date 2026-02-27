@@ -105,6 +105,9 @@ marello:
                 addresses:           'Addresses'
                 general:             'General'
                 additional:          'Additional'
+            datablock:
+                general_information: General Information
+                invoice_information: Invoice Information
 
         controller:
             company:
