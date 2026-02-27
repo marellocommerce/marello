@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\EntityExtendBundle\Entity\ExtendEntityTrait;
 use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute as Oro;
@@ -299,6 +300,32 @@ class Company implements DatesAwareInterface, OrganizationAwareInterface, Extend
     public function getAddresses(): Collection
     {
         return $this->addresses;
+    }
+
+    /**
+     * @return MarelloTypedAddress|null
+     */
+    public function getDefaultBillingAddress(): ?MarelloTypedAddress
+    {
+        return $this->getAddresses()
+            ->filter(function ($address) {
+                /** @var MarelloTypedAddress $address */
+                return $address->getAddressType()->getName() === AddressType::TYPE_BILLING && $address->getIsDefault();
+            })
+            ->first();
+    }
+
+    /**
+     * @return MarelloTypedAddress|null
+     */
+    public function getDefaultShippingAddress(): ?MarelloTypedAddress
+    {
+        return $this->getAddresses()
+            ->filter(function ($address) {
+                /** @var MarelloTypedAddress $address */
+                return $address->getAddressType()->getName() === AddressType::TYPE_SHIPPING && $address->getIsDefault();
+            })
+            ->first();
     }
 
     /**
