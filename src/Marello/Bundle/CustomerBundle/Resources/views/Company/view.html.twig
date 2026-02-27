@@ -68,10 +68,6 @@
         </div>
     {% endset %}
 
-    {% set additionalData %}
-        {{ entityConfig.renderDynamicFields(entity) }}
-    {% endset %}
-
     {% set addressInfo %}
         <div class="widget-content">
             <div class="row-fluid form-horizontal">
@@ -94,7 +90,7 @@
     {% set dataBlocks = [{
         'title': 'marello.customer.company.sections.general'|trans,
         'subblocks': [
-            {'data' : [generalInfo, additionalData]},
+            {'data' : [generalInfo]},
             {'data' : [addressInfo]}
         ]
     }] %}
@@ -151,6 +147,17 @@
             ]) %}
         {% endif %}
     {% endfor %}
+
+    {% set additionalData %}
+        {{ entityConfig.renderDynamicFields(entity) }}
+    {% endset %}
+
+    {% set dataBlocks = dataBlocks|merge([{
+        'title': 'marello.customer.company.sections.additional'|trans,
+        'subblocks': [
+            {'data' : [additionalData]}
+        ]
+    }]) %}
 
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
