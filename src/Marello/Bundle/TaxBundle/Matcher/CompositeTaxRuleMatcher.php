@@ -38,10 +38,10 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
     /**
      * @param array $taxCodes
      * @param Order|null $order
-     * @param $address
+     * @param BaseAbstractAddress|AbstractAddress|null $address
      * @return \Marello\Bundle\TaxBundle\Entity\TaxRule|mixed|null
      */
-    public function match(array $taxCodes, Order $order = null, $address = null)
+    public function match(array $taxCodes, Order $order = null, BaseAbstractAddress|AbstractAddress $address = null)
     {
         if (null === $address || null === $address->getCountry() || 0 === count($taxCodes)) {
             return null;
