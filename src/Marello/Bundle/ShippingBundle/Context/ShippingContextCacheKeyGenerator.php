@@ -49,8 +49,7 @@ class ShippingContextCacheKeyGenerator
             $address->getPostalCode(),
             $address->getCountryName(),
             $address->getCountryIso2(),
-            $address->getCountryIso3(),
-            $address->getOrganization(),
+            $address->getCountryIso3()
         ]) : '';
     }
 
