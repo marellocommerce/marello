@@ -38,7 +38,7 @@ class ShippingContextCacheKeyGenerator
      * @param AddressInterface|null $address
      * @return string
      */
-    protected function addressToString(AddressInterface $address = null)
+    protected function addressToString($address = null)
     {
         return $address ? implode('', [
             $address->getStreet(),
