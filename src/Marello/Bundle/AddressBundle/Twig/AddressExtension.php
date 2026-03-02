@@ -51,7 +51,7 @@ class AddressExtension extends AbstractExtension
      */
     public function formatAddress($address, $country = null, $newLineSeparator = "\n")
     {
-        if ($address instanceof MarelloTypedAddress::class) {
+        if ($address instanceof MarelloTypedAddress) {
             // tmp copy typed address into Address
             $address = $this->copyAddress($address);
         }
