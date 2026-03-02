@@ -52,3 +52,5 @@ marello:
             country_iso3_code.label: Country Iso3 Code
             country_name.label:     Country
             region_name.label:      Region
+            is_default.label:       Is Default
+            address_type.label:     Address Type
