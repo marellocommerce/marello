@@ -13,13 +13,13 @@ use Marello\Bundle\ShippingBundle\Entity\ShippingMethodsConfigsRule;
 class ShippingMethodsConfigsRuleRepository extends ServiceEntityRepository
 {
     /**
-     * @param AddressInterface $shippingAddress
+     * @param $shippingAddress
      * @param string $currency
      * @param AclHelper $aclHelper
      *
      * @return ShippingMethodsConfigsRule[]
      */
-    public function getByDestinationAndCurrency(AddressInterface $shippingAddress, $currency, AclHelper $aclHelper)
+    public function getByDestinationAndCurrency($shippingAddress, $currency, AclHelper $aclHelper)
     {
         $query = $this->getByCurrencyQuery($currency)
             ->leftJoin('methodsConfigsRule.destinations', 'destination')
