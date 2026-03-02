@@ -9,7 +9,6 @@ use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\EntityConfigBundle\Metadata\Attribute\ConfigField;
 use Oro\Bundle\FormBundle\Entity\EmptyItem;
-use Marello\Bundle\AddressBundle\Model\AddressInterface;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 
 /**
@@ -22,7 +21,7 @@ use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
  */
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
-abstract class AbstractAddress implements EmptyItem, FullNameInterface, AddressInterface
+abstract class AbstractAddress implements EmptyItem, FullNameInterface
 {
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
