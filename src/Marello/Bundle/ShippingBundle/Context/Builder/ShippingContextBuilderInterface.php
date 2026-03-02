@@ -30,18 +30,18 @@ interface ShippingContextBuilderInterface
     public function setLineItems(ShippingLineItemCollectionInterface $lineItemCollection);
 
     /**
-     * @param AddressInterface $shippingAddress
+     * @param $shippingAddress
      *
      * @return self
      */
-    public function setShippingAddress(AddressInterface $shippingAddress);
+    public function setShippingAddress($shippingAddress);
 
     /**
-     * @param AddressInterface $billingAddress
+     * @param $billingAddress
      *
      * @return self
      */
-    public function setBillingAddress(AddressInterface $billingAddress);
+    public function setBillingAddress($billingAddress);
 
     /**
      * @param string $paymentMethod

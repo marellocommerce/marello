@@ -87,7 +87,7 @@ class BasicShippingContextBuilder implements ShippingContextBuilderInterface
     /**
      * {@inheritDoc}
      */
-    public function setShippingOrigin(AddressInterface $shippingOrigin)
+    public function setShippingOrigin($shippingOrigin)
     {
         $this->shippingOrigin = $shippingOrigin;
 
@@ -107,7 +107,7 @@ class BasicShippingContextBuilder implements ShippingContextBuilderInterface
     /**
      * {@inheritDoc}
      */
-    public function setBillingAddress(AddressInterface $billingAddress)
+    public function setBillingAddress($billingAddress)
     {
         $this->billingAddress = $billingAddress;
 
@@ -117,7 +117,7 @@ class BasicShippingContextBuilder implements ShippingContextBuilderInterface
     /**
      * {@inheritDoc}
      */
-    public function setShippingAddress(AddressInterface $shippingAddress)
+    public function setShippingAddress($shippingAddress)
     {
         $this->shippingAddress = $shippingAddress;
 
