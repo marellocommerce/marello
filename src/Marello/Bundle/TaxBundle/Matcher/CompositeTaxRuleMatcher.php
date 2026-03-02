@@ -2,7 +2,8 @@
 
 namespace Marello\Bundle\TaxBundle\Matcher;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress as BaseAbstractAddress;
+use Marello\Bundle\AddressBundle\Entity\AbstractAddress;
 
 use Marello\Bundle\OrderBundle\Entity\Order;
 use Marello\Bundle\TaxBundle\Provider\CompanyReverseTaxProvider;
@@ -35,9 +36,12 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array $taxCodes
+     * @param Order|null $order
+     * @param $address
+     * @return \Marello\Bundle\TaxBundle\Entity\TaxRule|mixed|null
      */
-    public function match(array $taxCodes, Order $order = null, AbstractAddress $address = null)
+    public function match(array $taxCodes, Order $order = null, $address = null)
     {
         if (null === $address || null === $address->getCountry() || 0 === count($taxCodes)) {
             return null;
@@ -64,11 +68,12 @@ class CompositeTaxRuleMatcher implements TaxRuleMatcherInterface
     }
 
     /**
-     * @param AbstractAddress $address
+     * @param BaseAbstractAddress|AbstractAddress $address
+     *
      * @param array $taxCodes
      * @return string
      */
-    protected function getCacheKey(AbstractAddress $address, array $taxCodes)
+    protected function getCacheKey($address, array $taxCodes)
     {
         $countryCode = $address->getCountryIso2();
         $regionCode = $address->getRegionCode() ? : $address->getRegionText();
