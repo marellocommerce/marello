@@ -55,6 +55,11 @@ class DerivedPropertySetter
         }
 
         foreach ($this->generate as $entity) {
+            if ($entity->getEntityType() === 'inventorybatch') {
+                $entity->setDerivedProperty($entity->getId());
+                $this->generate[] = $entity;
+                continue;
+            }
             $sequenceName = SequenceNumberProvider::generateSequenceEntityName(
                 $entity->getEntityType(),
                 $entity->getOrganization()->getId()
