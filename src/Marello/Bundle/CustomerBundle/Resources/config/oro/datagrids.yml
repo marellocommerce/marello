@@ -195,7 +195,7 @@ datagrids:
                 parent_name:
                     data_name: parent_name
                 enabled:
-                    data_name: enabled
+                    data_name: company.enabled
             default:
                 name: 'ASC'
         filters:
