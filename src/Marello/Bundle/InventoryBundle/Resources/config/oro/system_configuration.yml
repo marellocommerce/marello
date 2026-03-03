@@ -106,3 +106,19 @@ system_configuration:
                                     inventory_api_general:
                                         children:
                                             - marello_inventory.adjust_inventory_qty
+
+        organization_configuration:
+            marello:
+                children:
+                    inventory:
+                        children:
+                            inventory_external_warehouse:
+                                children:
+                                    inventory_external_warehouse_general:
+                                        children:
+                                            - marello_inventory.managed_inventory_for_external_warehouse
+                            inventory_api:
+                                children:
+                                    inventory_api_general:
+                                        children:
+                                            - marello_inventory.adjust_inventory_qty

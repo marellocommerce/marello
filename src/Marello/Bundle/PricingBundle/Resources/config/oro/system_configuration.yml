@@ -82,6 +82,18 @@ system_configuration:
                                             - marello_pricing.is_vat_included
                                             - marello_tax.origin_country
 
+        organization_configuration:
+            marello:
+                children:
+                    pricing:
+                        children:
+                            pricing_general:
+                                children:
+                                    pricing_vat:
+                                        children:
+                                            - marello_pricing.is_vat_included
+                                            - marello_tax.origin_country
+
         saleschannel_configuration:
             portal:
                 children:

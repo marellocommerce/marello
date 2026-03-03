@@ -30,3 +30,13 @@ system_configuration:
                                     payment_term:
                                         children:
                                             - marello_payment_term.default_payment_term
+        organization_configuration:
+            marello:
+                children:
+                    payment:
+                        children:
+                            payment_config:
+                                children:
+                                    payment_term:
+                                        children:
+                                            - marello_payment_term.default_payment_term

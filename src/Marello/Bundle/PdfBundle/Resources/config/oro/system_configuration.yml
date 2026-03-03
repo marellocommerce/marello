@@ -167,6 +167,34 @@ system_configuration:
                                             - marello_pdf.email_sender_name
                                             - marello_pdf.email_bcc
 
+        organization_configuration:
+            marello:
+                children:
+                    documents:
+                        children:
+                            document_configuration:
+                                children:
+                                    dimensions:
+                                        children:
+                                            - marello_pdf.paper_size
+                                    template:
+                                        children:
+                                            - marello_pdf.localization
+                                            - marello_pdf.logo
+                                            - marello_pdf.logo_width
+                                            - marello_pdf.company_address
+                                            - marello_pdf.company_email
+                                            - marello_pdf.company_phone
+                                            - marello_pdf.company_bank
+                                            - marello_pdf.company_coc
+                            workflow:
+                                children:
+                                    email:
+                                        children:
+                                            - marello_pdf.email_workflow_transition
+                                            - marello_pdf.email_sender_email
+                                            - marello_pdf.email_sender_name
+                                            - marello_pdf.email_bcc
 
         saleschannel_configuration:
             marello:
@@ -179,6 +207,7 @@ system_configuration:
                                         children:
                                             - marello_pdf.localization
                                             - marello_pdf.logo
+                                            - marello_pdf.logo_width
                                             - marello_pdf.company_address
                                             - marello_pdf.company_email
                                             - marello_pdf.company_phone

@@ -54,3 +54,21 @@ system_configuration:
                                         children:
                                             - marello_order.order_on_demand_enabled
                                             - marello_order.order_on_demand
+        organization_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_general:
+                                        children:
+                                            - marello_order.order_notification
+                    marello_order:
+                        children:
+                            marello_order_on_demand:
+                                children:
+                                    marello_order_on_demand_general:
+                                        children:
+                                            - marello_order.order_on_demand_enabled
+                                            - marello_order.order_on_demand
