@@ -48,6 +48,7 @@ api:
                 delete_relationship: false
 
         Marello\Bundle\CustomerBundle\Entity\Company:
+            identifier_field_names: [companyNumber]
             fields:
                 createdAt:
                     exclude: true
@@ -58,5 +59,4 @@ api:
             actions:
                 delete_relationship: false
 
-        Marello\Bundle\CustomerBundle\Entity\CustomerGroup:
-            exclude: true
+        Marello\Bundle\CustomerBundle\Entity\CustomerGroup: ~
