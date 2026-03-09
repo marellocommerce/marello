@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
             [
                 'purchaseorder_notification' => ['value' => true],
                 'purchaseorder_notification_address' => ['value' => 'example@example.com', 'required' => true],
+                'purchaseorder_notification_template' => ['value' => 'example@example.com', 'required' => true],
                 'send_directly' => ['value' => true],
                 'sending_time' => [
                     'value' => (new \DateTime())

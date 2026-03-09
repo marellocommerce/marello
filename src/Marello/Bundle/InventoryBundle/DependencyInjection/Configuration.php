@@ -44,11 +44,17 @@ class Configuration implements ConfigurationInterface
                     'value' => 0
                 ],
                 'managed_inventory_for_external_warehouse' => [
-                    'value' => false,
+                    'value' => false
                 ],
                 'adjust_inventory_qty' => [
-                    'value' => true,
+                    'value' => true
                 ],
+                'warehouse_allocation_template' => [
+                    'value' => null
+                ],
+                'shipped_allocation_confirmation' => [
+                    'value' => null
+                ]
             ]
         );
 

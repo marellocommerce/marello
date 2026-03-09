@@ -32,3 +32,9 @@ marello:
                 frontend:
                     is_displayable.label:   Show on view
                     is_editable.label:      Show on form
+
+        emailtemplate:
+            entity:
+                #rename of the original field name
+                name.label:              Template Code
+                template_name.label:     Template Name

@@ -17,3 +17,11 @@ services:
             - '@Marello\Bundle\CoreBundle\Provider\SequenceNumberProvider'
         tags:
             - { name: doctrine.orm.entity_listener, entity: 'Oro\Bundle\OrganizationBundle\Entity\Organization', event: postPersist, priority: 255 }
+
+    Marello\Bundle\CoreBundle\Form\Extension\EmailTemplateExtension:
+        tags:
+            - { name: form.type_extension }
+
+    Marello\Bundle\CoreBundle\EventListener\EmailTemplateFormViewListener:
+        tags:
+            - { name: kernel.event_listener, event: oro_ui.scroll_data.before.emailtemplate-edit, method: onEdit, priority: -255 }

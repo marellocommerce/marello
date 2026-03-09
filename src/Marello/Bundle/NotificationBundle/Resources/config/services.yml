@@ -48,3 +48,9 @@ services:
         class: 'Marello\Bundle\NotificationBundle\Provider\NotificationAttachmentProvider'
         arguments:
             - '@oro_attachment.file_manager'
+
+    Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType:
+        arguments:
+            - '@oro_entity.doctrine_helper'
+        tags:
+            - { name: form.type }

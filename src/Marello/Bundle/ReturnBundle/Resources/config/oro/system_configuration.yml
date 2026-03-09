@@ -50,6 +50,51 @@ system_configuration:
             options:
                 label: marello.return.system_configuration.fields.return_notification.label
                 required: false
+
+        marello_return.created_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.return.return_created_template.label
+                required: false
+                entityName: Marello\Bundle\ReturnBundle\Entity\ReturnEntity
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
+        marello_return.not_verified_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.return.return_not_verified.label
+                required: false
+                entityName: Marello\Bundle\ReturnBundle\Entity\ReturnEntity
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
+        marello_return.received_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.return.return_received.label
+                required: false
+                entityName: Marello\Bundle\ReturnBundle\Entity\ReturnEntity
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
+        marello_return.inspection_not_ok_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.return.inspection_not_ok_template.label
+                required: false
+                entityName: Marello\Bundle\ReturnBundle\Entity\ReturnEntity
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
+        marello_return.reminder_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.return.reminder_template.label
+                required: false
+                entityName: Marello\Bundle\ReturnBundle\Entity\ReturnEntity
+                placeholder: marello.notification.config.fields.email_template.placeholder
     tree:
         system_configuration:
             marello:
@@ -70,7 +115,12 @@ system_configuration:
                                 children:
                                     notification_general:
                                         children:
-                                            - marello_return.return_notification
+#                                            - marello_return.return_notification
+                                            - marello_return.created_template
+                                            - marello_return.not_verified_template
+                                            - marello_return.received_template
+                                            - marello_return.inspection_not_ok_template
+                                            - marello_return.reminder_template
 
         organization_configuration:
             marello:
@@ -91,4 +141,8 @@ system_configuration:
                                 children:
                                     notification_general:
                                         children:
-                                            - marello_return.return_notification
+                                            - marello_return.created_template
+                                            - marello_return.not_verified_template
+                                            - marello_return.received_template
+                                            - marello_return.inspection_not_ok_template
+                                            - marello_return.reminder_template

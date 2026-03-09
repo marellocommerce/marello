@@ -15,3 +15,40 @@ marello:
                 notification.title: Notification
                 notification_configuration.title: Notification Configuration
                 notification_general.label: General
+
+
+        config:
+            fields:
+                email_template:
+                    placeholder:    Don't Send Email
+
+                order:
+                    confirmation_email_template.label: Order Confirmation Template
+                    cancelled_email_template.label: Order Cancelled Template
+                    payment_reminder_email_template.label: Order Payment Reminder Template
+                    shipped_confirmation_email_template.label: Order Shipped Confirmation Template
+                    shipping_prepared_email_template.label: Order Shipping Prepared Template
+                    shipping_prepared_warehouse_email_template.label: Order Shipping Prepared Warehouse Template
+
+                invoice:
+                    invoice_email_template.label: Invoice Email Template
+
+                allocation:
+                    warehouse_allocation_template.label: Warehouse Allocation Template
+                    shipped_allocation_confirmation.label: Shipped Allocation Template
+
+                return:
+                    return_created_template.label:  Return Created Template
+                    return_not_verified.label:  Return Not Verified Template
+                    return_received.label:  Return Received Template
+                    inspection_not_ok_template.label:  Return Inspection Not OK Template
+                    reminder_template.label:  Return Reminder Template
+
+                refund:
+                    refund_credited_template.label: Refund Credited Template
+
+                packing:
+                    send_packing_slip.label:  PackingSlip Template
+
+                purchaseorder:
+                    purchaseorder_notification_template.label: PurchaseOrder Template

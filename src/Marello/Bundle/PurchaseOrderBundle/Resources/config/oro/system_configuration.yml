@@ -44,6 +44,15 @@ system_configuration:
                 constraints:
                     - NotNull: ~
 
+        marello_purchaseorder.purchaseorder_notification_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.purchaseorder.purchaseorder_notification_template.label
+                required: false
+                entityName: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
     tree:
         system_configuration:
             marello:
@@ -54,7 +63,7 @@ system_configuration:
                                 children:
                                     notification_general:
                                         children:
-                                            - marello_purchaseorder.purchaseorder_notification
+                                            - marello_purchaseorder.purchaseorder_notification_template
                                             - marello_purchaseorder.purchaseorder_notification_address
                     marello_order:
                         children:
@@ -78,7 +87,7 @@ system_configuration:
                                 children:
                                     notification_general:
                                         children:
-                                            - marello_purchaseorder.purchaseorder_notification
+                                            - marello_purchaseorder.purchaseorder_notification_template
                                             - marello_purchaseorder.purchaseorder_notification_address
                     marello_order:
                         children:
