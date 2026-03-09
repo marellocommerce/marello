@@ -55,6 +55,5 @@ class UpdateEmailTemplate implements Migration
     {
         $sql = sprintf("UPDATE %s SET template_name = name;", 'oro_email_template');
         $queries->addPostQuery($sql);
-        var_dump($sql);
     }
 }
