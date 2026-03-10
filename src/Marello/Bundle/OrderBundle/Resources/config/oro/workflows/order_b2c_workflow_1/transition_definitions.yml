@@ -21,6 +21,15 @@ workflows:
                         - '@sales_channel_has_valid_integration':
                               salesChannel: $order.salesChannel
                 actions:
+                    - '@call_service_method':
+                          service: oro_config.manager
+                          method: get
+                          method_parameters:
+                              - 'marello_order.cancelled_email_template'
+                              - false
+                              - false
+                              - $order.salesChannel
+                          attribute: $email_template_name
                     - '@extendable':
                           events: [extendable_action.order_cancel]
                     - '@marello_cancel_order':
@@ -28,7 +37,7 @@ workflows:
                     - '@marello_notification_send':
                           entity: $order
                           recipient: $order.customer
-                          template: marello_order_cancelled
+                          template: $email_template_name
                     - '@run_action_group':
                           action_group: send_order_invoice_email
                           parameters_mapping:
@@ -105,10 +114,19 @@ workflows:
                           service: Marello\Bundle\InventoryBundle\Provider\InventoryAllocationProvider
                           method: allocateOrderToWarehouses
                           method_parameters: [ $order ]
+                    - '@call_service_method':
+                          service: oro_config.manager
+                          method: get
+                          method_parameters:
+                              - 'marello_order.shipped_prepared_email_template'
+                              - false
+                              - false
+                              - $order.salesChannel
+                          attribute: $email_template_name
                     - '@marello_notification_send':
                           entity: $order
                           recipient: $order.customer
-                          template: marello_order_shipping_prepared
+                          template: $email_template_name
                     - '@run_action_group':
                           action_group: send_order_invoice_email
                           parameters_mapping:
@@ -153,10 +171,19 @@ workflows:
                               status: 'shipped'
             payment_reminder_definition:
                 actions:
+                    - '@call_service_method':
+                          service: oro_config.manager
+                          method: get
+                          method_parameters:
+                              - 'marello_order.payment_reminder_email_template'
+                              - false
+                              - false
+                              - $order.salesChannel
+                          attribute: $email_template_name
                     - '@marello_notification_send':
                           entity: $order
                           recipient: $order.customer
-                          template: marello_order_payment_reminder
+                          template: $email_template_name
                     - '@flash_message':
                           message: 'Reminder has been sent.'
                     - '@run_action_group':

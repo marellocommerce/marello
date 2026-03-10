@@ -28,6 +28,9 @@ workflows:
                 is_final: true
             item_complete:
                 is_final: true
+        attributes:
+            email_template_name:
+                type: string
         transitions:
             pending:
                 step_to: pending
@@ -125,6 +128,15 @@ workflows:
                           attribute: $allocation.status
             complete_definition:
                 actions:
+                    -   '@call_service_method':
+                            service: oro_config.manager
+                            method: get
+                            method_parameters:
+                                - 'marello_inventory.shipped_allocation_confirmation'
+                                - false
+                                - false
+                                - $allocation.order.salesChannel
+                            attribute: $email_template_name
                     - '@call_service_method':
                         service: Marello\Bundle\InventoryBundle\Factory\AllocationShippingContextFactory
                         method: create
@@ -143,9 +155,18 @@ workflows:
                                 - '@no_elements': $allocation.children
                         entity: $allocation
                         recipient: $allocation.order.customer
-                        template: marello_order_shipped_allocation_confirmation
+                        template: $email_template_name
                         additionalContexts: [$allocation.order]
                     # parent allocation is empty, so we need to send email to customer with 'full' shipped email
+                    -   '@call_service_method':
+                            service: oro_config.manager
+                            method: get
+                            method_parameters:
+                                - 'marello_order.shipped_confirmation_email_template'
+                                - false
+                                - false
+                                - $allocation.order.salesChannel
+                            attribute: $email_template_name
                     - '@marello_notification_send':
                         conditions:
                             '@and':
@@ -154,10 +175,19 @@ workflows:
                                 - '@has_elements': $allocation.children
                         entity: $allocation.order
                         recipient: $allocation.order.customer
-                        template: marello_order_shipped_confirmation
+                        template: $email_template_name
                         additionalContexts: [$allocation.order]
                     # parent allocation is not empty, so we need to send email to parent allocation warehouse to inform
                     # them a shipment is underway.
+                    -   '@call_service_method':
+                            service: oro_config.manager
+                            method: get
+                            method_parameters:
+                                - 'marello_inventory.shipped_confirmation_email_template'
+                                - false
+                                - false
+                                - $allocation.order.salesChannel
+                            attribute: $email_template_name
                     - '@marello_notification_send':
                         conditions:
                             '@and':
@@ -165,7 +195,7 @@ workflows:
                                 - '@not_empty': $allocation.parent
                         entity: $allocation
                         recipient: $allocation.parent.warehouse
-                        template: marello_warehouse_allocation
+                        template: $email_template_name
                         additionalContexts: [$allocation.order]
                     - '@tree':
                         actions:

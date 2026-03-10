@@ -12,6 +12,8 @@ workflows:
                 type: object
                 options:
                     class: \DateTime
+            email_template_name:
+                type: string
         steps:
             pending:
                 allowed_transitions:
@@ -74,16 +76,34 @@ workflows:
         transition_definitions:
             send_reminder_def:
                 actions:
+                    - '@call_service_method':
+                          service: oro_config.manager
+                          method: get
+                          method_parameters:
+                              - 'marello_return.reminder_template'
+                              - false
+                              - false
+                              - $return.order.salesChannel
+                          attribute: $email_template_name
                     - '@marello_notification_send':
                         entity: $return
                         recipient: $return.order.customer
-                        template: marello_return_reminder
+                        template: $email_template_name
             receive_def:
                 actions:
+                    - '@call_service_method':
+                          service: oro_config.manager
+                          method: get
+                          method_parameters:
+                              - 'marello_return.received_template'
+                              - false
+                              - false
+                              - $return.order.salesChannel
+                          attribute: $email_template_name
                     - '@marello_notification_send':
                         entity: $return
                         recipient: $return.order.customer
-                        template: marello_return_received
+                        template: $email_template_name
                     - '@tree':
                           conditions:
                               '@empty': [$return.receivedAt]
@@ -94,17 +114,35 @@ workflows:
                     - '@return_inspection_ok': ~
             contents_not_verified_def:
                 actions:
+                    - '@call_service_method':
+                          service: oro_config.manager
+                          method: get
+                          method_parameters:
+                              - 'marello_return.not_verified_template'
+                              - false
+                              - false
+                              - $return.order.salesChannel
+                          attribute: $email_template_name
                     - '@marello_notification_send':
                         entity: $return
                         recipient: $return.order.customer
-                        template: marello_return_not_verified
+                        template: $email_template_name
             continue_received_def: ~
             inspection_not_ok_def:
                 actions:
+                    - '@call_service_method':
+                          service: oro_config.manager
+                          method: get
+                          method_parameters:
+                              - 'marello_return.inspection_not_ok_template'
+                              - false
+                              - false
+                              - $return.order.salesChannel
+                          attribute: $email_template_name
                     - '@marello_notification_send':
                         entity: $return
                         recipient: $return.order.customer
-                        template: marello_return_inspection_not_ok
+                        template: $email_template_name
             credit_def:
                 actions:
                     - '@marello_create_refund':

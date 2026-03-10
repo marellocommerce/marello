@@ -34,13 +34,10 @@ class Configuration implements ConfigurationInterface
                 'payment_reminder_email_template' => [
                     'value' => null
                 ],
+                'shipped_prepared_email_template' => [
+                    'value' => null
+                ],
                 'shipped_confirmation_email_template' => [
-                    'value' => null
-                ],
-                'shipping_prepared_email_template' => [
-                    'value' => null
-                ],
-                'shipping_prepared_warehouse_email_template' => [
                     'value' => null
                 ],
                 'order_on_demand_enabled' => [

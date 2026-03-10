@@ -79,6 +79,15 @@ action_groups:
                                             - '@MarelloInvoice/Pdf/invoice.html.twig'
                                             - '$.render_parameters'
                                         attribute: '$.invoice_pdf'
+                                    -   '@call_service_method':
+                                            service: oro_config.manager
+                                            method: get
+                                            method_parameters:
+                                                - 'marello_invoice.invoice_email_template'
+                                                - false
+                                                - false
+                                                - '$.data.order.salesChannel'
+                                            attribute: '$.email_template_name'
                             -   '@tree':
                                     conditions:
                                         '@and':
@@ -98,7 +107,7 @@ action_groups:
                                                     from: { email: '$.sender_email', name: '$.sender_name' }
                                                     to: { email: '$.receiver_email', name: '$.receiver_name' }
                                                     cc: '$.cc'
-                                                    template: marello_send_invoice
+                                                    template: '$.email_template_name'
                                                     bcc: '$.bcc'
                                                     entity: '$.invoice'
                                                     context: '$.invoice'
@@ -119,7 +128,7 @@ action_groups:
                                                 parameters:
                                                     from: { email: '$.sender_email', name: '$.sender_name' }
                                                     to: { email: '$.receiver_email', name: '$.receiver_name' }
-                                                    template: marello_send_invoice
+                                                    template: '$.email_template_name'
                                                     bcc: '$.bcc'
                                                     entity: '$.invoice'
                                                     context: '$.invoice'

@@ -97,6 +97,9 @@ class EmailSendProcessor
      */
     public function sendNotification($templateName, array $recipients, $entity, array $data = [])
     {
+        if (!$templateName) {
+            return;
+        }
         $emailModel = new Email();
         $from = $this->getFormattedSender();
         $this->validateAddress($from);

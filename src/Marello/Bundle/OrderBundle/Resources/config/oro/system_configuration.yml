@@ -13,12 +13,12 @@ system_configuration:
             icon: fa-cog
             priority: 100
     fields:
-        marello_order.order_notification:
-            data_type: boolean
-            type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
-            options:
-                label: marello.order.system_configuration.fields.order_notification.label
-                required: false
+#        marello_order.order_notification:
+#            data_type: boolean
+#            type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
+#            options:
+#                label: marello.order.system_configuration.fields.order_notification.label
+#                required: false
 
         marello_order.confirmation_email_template:
             data_type: string
@@ -47,29 +47,20 @@ system_configuration:
                 entityName: Marello\Bundle\OrderBundle\Entity\Order
                 placeholder: marello.notification.config.fields.email_template.placeholder
 
+        marello_order.shipped_prepared_email_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.order.shipped_prepared_email_template.label
+                required: false
+                entityName: Marello\Bundle\OrderBundle\Entity\Order
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
         marello_order.shipped_confirmation_email_template:
             data_type: string
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
             options:
                 label: marello.notification.config.fields.order.shipped_confirmation_email_template.label
-                required: false
-                entityName: Marello\Bundle\OrderBundle\Entity\Order
-                placeholder: marello.notification.config.fields.email_template.placeholder
-
-        marello_order.shipping_prepared_email_template:
-            data_type: string
-            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
-            options:
-                label: marello.notification.config.fields.order.shipping_prepared_email_template.label
-                required: false
-                entityName: Marello\Bundle\OrderBundle\Entity\Order
-                placeholder: marello.notification.config.fields.email_template.placeholder
-
-        marello_order.shipping_prepared_warehouse_email_template:
-            data_type: string
-            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
-            options:
-                label: marello.notification.config.fields.order.shipping_prepared_warehouse_email_template.label
                 required: false
                 entityName: Marello\Bundle\OrderBundle\Entity\Order
                 placeholder: marello.notification.config.fields.email_template.placeholder
@@ -102,9 +93,8 @@ system_configuration:
                                             - marello_order.confirmation_email_template
                                             - marello_order.cancelled_email_template
                                             - marello_order.payment_reminder_email_template
+                                            - marello_order.shipped_prepared_email_template
                                             - marello_order.shipped_confirmation_email_template
-                                            - marello_order.shipping_prepared_email_template
-                                            - marello_order.shipping_prepared_warehouse_email_template
                     marello_order:
                         children:
                             marello_order_on_demand:
@@ -125,9 +115,8 @@ system_configuration:
                                             - marello_order.confirmation_email_template
                                             - marello_order.cancelled_email_template
                                             - marello_order.payment_reminder_email_template
+                                            - marello_order.shipped_prepared_email_template
                                             - marello_order.shipped_confirmation_email_template
-                                            - marello_order.shipping_prepared_email_template
-                                            - marello_order.shipping_prepared_warehouse_email_template
                     marello_order:
                         children:
                             marello_order_on_demand:

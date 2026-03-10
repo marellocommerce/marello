@@ -19,7 +19,9 @@ workflows:
                     - complete
             completed:
                 allowed_transitions: []
-
+        attributes:
+            email_template_name:
+                type: string
         transitions:
             approve:
                 step_to: approved
@@ -48,7 +50,16 @@ workflows:
                         events: [extendable_action.refund_credited]
             complete_definition:
                 actions:
+                    -   '@call_service_method':
+                            service: oro_config.manager
+                            method: get
+                            method_parameters:
+                                - 'marello_refund.refund_credited_template'
+                                - false
+                                - false
+                                - $refund.order.salesChannel
+                            attribute: $email_template_name
                     - '@marello_notification_send':
                         entity: $refund
                         recipient: $refund.order.customer
-                        template: marello_refund_credited
+                        template: $email_template_name

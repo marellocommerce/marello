@@ -27,8 +27,6 @@ marello:
                     cancelled_email_template.label: Order Cancelled Template
                     payment_reminder_email_template.label: Order Payment Reminder Template
                     shipped_confirmation_email_template.label: Order Shipped Confirmation Template
-                    shipping_prepared_email_template.label: Order Shipping Prepared Template
-                    shipping_prepared_warehouse_email_template.label: Order Shipping Prepared Warehouse Template
 
                 invoice:
                     invoice_email_template.label: Invoice Email Template

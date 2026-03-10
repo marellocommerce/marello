@@ -19,3 +19,5 @@ workflows:
                 type: boolean
             total_paid_amount:
                 type: float
+            email_template_name:
+                type: string

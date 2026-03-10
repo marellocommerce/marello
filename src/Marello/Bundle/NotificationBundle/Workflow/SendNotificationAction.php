@@ -62,7 +62,9 @@ class SendNotificationAction extends AbstractAction
             $recipients = [$recipients];
         }
 
-        $this->sendProcessor->sendNotification($template, $recipients, $entity, $data);
+        if ($template) {
+            $this->sendProcessor->sendNotification($template, $recipients, $entity, $data);
+        }
     }
 
     /**
