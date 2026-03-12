@@ -12,14 +12,10 @@ system_configuration:
             title: marello.order.system_configuration.groups.order_on_demand.title
             icon: fa-cog
             priority: 100
+        notification_order:
+            title: marello.notification.system_configuration.groups.notification_order.label
+            priority: 100
     fields:
-#        marello_order.order_notification:
-#            data_type: boolean
-#            type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
-#            options:
-#                label: marello.order.system_configuration.fields.order_notification.label
-#                required: false
-
         marello_order.confirmation_email_template:
             data_type: string
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
@@ -88,7 +84,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_order:
                                         children:
                                             - marello_order.confirmation_email_template
                                             - marello_order.cancelled_email_template
@@ -110,7 +106,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_order:
                                         children:
                                             - marello_order.confirmation_email_template
                                             - marello_order.cancelled_email_template

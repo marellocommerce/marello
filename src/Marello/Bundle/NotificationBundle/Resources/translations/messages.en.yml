@@ -15,7 +15,13 @@ marello:
                 notification.title: Notification
                 notification_configuration.title: Notification Configuration
                 notification_general.label: General
-
+                notification_order.label: Order Templates
+                notification_invoice.label: Invoice Templates
+                notification_inventory.label: Inventory Templates
+                notification_return.label: Return Templates
+                notification_refund.label: Refund Templates
+                notification_packingslip.label: PackingSlip Templates
+                notification_purchaseorder.label: Purchase Order Templates
 
         config:
             fields:
@@ -23,30 +29,31 @@ marello:
                     placeholder:    Don't Send Email
 
                 order:
-                    confirmation_email_template.label: Order Confirmation Template
-                    cancelled_email_template.label: Order Cancelled Template
-                    payment_reminder_email_template.label: Order Payment Reminder Template
-                    shipped_confirmation_email_template.label: Order Shipped Confirmation Template
+                    confirmation_email_template.label: Order Confirmation
+                    cancelled_email_template.label: Order Cancelled
+                    payment_reminder_email_template.label: Order Payment Reminder
+                    shipped_prepared_email_template.label: Order Shipping Prepared
+                    shipped_confirmation_email_template.label: Order Shipped Confirmation
 
                 invoice:
-                    invoice_email_template.label: Invoice Email Template
+                    invoice_email_template.label: Invoice Email
 
                 allocation:
-                    warehouse_allocation_template.label: Warehouse Allocation Template
-                    shipped_allocation_confirmation.label: Shipped Allocation Template
+                    warehouse_allocation_template.label: Warehouse Allocation
+                    shipped_allocation_confirmation.label: Shipped Allocation
 
                 return:
-                    return_created_template.label:  Return Created Template
-                    return_not_verified.label:  Return Not Verified Template
-                    return_received.label:  Return Received Template
-                    inspection_not_ok_template.label:  Return Inspection Not OK Template
-                    reminder_template.label:  Return Reminder Template
+                    return_created_template.label:  Return Created
+                    return_not_verified.label:  Return Not Verified
+                    return_received.label:  Return Received
+                    inspection_not_ok_template.label:  Return Inspection Not OK
+                    reminder_template.label:  Return Reminder
 
                 refund:
-                    refund_credited_template.label: Refund Credited Template
+                    refund_credited_template.label: Refund Credited
 
                 packing:
-                    send_packing_slip.label:  PackingSlip Template
+                    send_packing_slip.label:  PackingSlip
 
                 purchaseorder:
-                    purchaseorder_notification_template.label: PurchaseOrder Template
+                    purchaseorder_notification_template.label: PurchaseOrder

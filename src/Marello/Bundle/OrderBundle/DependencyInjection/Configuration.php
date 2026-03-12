@@ -22,9 +22,6 @@ class Configuration implements ConfigurationInterface
         SettingsBuilder::append(
             $rootNode,
             [
-                'order_notification' => [
-                    'value' => true
-                ],
                 'confirmation_email_template' => [
                     'value' => null
                 ],

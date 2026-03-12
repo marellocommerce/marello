@@ -817,6 +817,11 @@ abstract class AbstractInvoice implements
         return $this;
     }
 
+    public function getEntityType(): string
+    {
+        return Invoice::INVOICE_TYPE;
+    }
+
     /**
      * @return string
      */

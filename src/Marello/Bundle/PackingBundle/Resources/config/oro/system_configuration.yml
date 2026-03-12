@@ -1,4 +1,9 @@
 system_configuration:
+    groups:
+        notification_packingslip:
+            title: marello.notification.system_configuration.groups.notification_packingslip.label
+            priority: 50
+
     fields:
         marello_packing.send_packing_slip_template:
             data_type: string
@@ -17,7 +22,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_packingslip:
                                         children:
                                             - marello_packing.send_packing_slip_template
         organization_configuration:
@@ -27,6 +32,6 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_packingslip:
                                         children:
                                             - marello_packing.send_packing_slip_template

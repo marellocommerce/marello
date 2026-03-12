@@ -24,7 +24,6 @@ class Configuration implements ConfigurationInterface
             [
                 'ror_period'          => ['value' => 30],
                 'warranty_period'     => ['value' => 24],
-                'return_notification' => ['value' => true],
                 'created_template'    => ['value' => null],
                 'not_verified_template'    => ['value' => null],
                 'received_template'    => ['value' => null],

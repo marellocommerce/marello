@@ -29,7 +29,9 @@ system_configuration:
             icon: fa-wrench
         inventory_api_general:
             title: marello.inventory.system_configuration.groups.inventory.api.general.label
-
+        notification_inventory:
+            title: marello.notification.system_configuration.groups.notification_inventory.label
+            priority: 80
     fields:
         marello_inventory.balance_threshold_percentage:
             data_type: percent
@@ -128,7 +130,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_inventory:
                                         children:
                                             - marello_inventory.warehouse_allocation_template
                                             - marello_inventory.shipped_allocation_confirmation
@@ -152,7 +154,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_inventory:
                                         children:
                                             - marello_inventory.warehouse_allocation_template
                                             - marello_inventory.shipped_allocation_confirmation

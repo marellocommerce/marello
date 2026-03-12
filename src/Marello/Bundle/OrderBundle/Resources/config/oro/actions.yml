@@ -34,6 +34,15 @@ action_groups:
                                     - false
                                     - '$.order.salesChannel'
                                 attribute: '$.sender_email'
+                            - '@call_service_method':
+                                service: oro_config.manager
+                                method: get
+                                method_parameters:
+                                    - 'marello_invoice.invoice_email_template'
+                                    - false
+                                    - false
+                                    - '$.order.salesChannel'
+                                attribute: '$.email_template_name'
                             - '@tree':
                                 conditions:
                                     '@not_empty': ['$.sender_email']
@@ -79,15 +88,6 @@ action_groups:
                                             - '@MarelloInvoice/Pdf/invoice.html.twig'
                                             - '$.render_parameters'
                                         attribute: '$.invoice_pdf'
-                                    -   '@call_service_method':
-                                            service: oro_config.manager
-                                            method: get
-                                            method_parameters:
-                                                - 'marello_invoice.invoice_email_template'
-                                                - false
-                                                - false
-                                                - '$.data.order.salesChannel'
-                                            attribute: '$.email_template_name'
                             -   '@tree':
                                     conditions:
                                         '@and':
@@ -110,7 +110,7 @@ action_groups:
                                                     template: '$.email_template_name'
                                                     bcc: '$.bcc'
                                                     entity: '$.invoice'
-                                                    context: '$.invoice'
+                                                    context: '$.order'
                                                     attachments:
                                                         -   filename: '$.filename'
                                                             body: '$.invoice_pdf'
@@ -131,7 +131,7 @@ action_groups:
                                                     template: '$.email_template_name'
                                                     bcc: '$.bcc'
                                                     entity: '$.invoice'
-                                                    context: '$.invoice'
+                                                    context: '$.order'
                                                     attachments:
                                                         -   filename: '$.filename'
                                                             body: '$.invoice_pdf'

@@ -195,6 +195,7 @@ operations:
                               conditions:
                                   '@and':
                                         - '@equal': [$.send_customer_email, true]
+                                        - '@not_empty': ['$.email_template_name', true]
                               actions:
                                   -   '@assign_value': [ '$.receiver_email', '$.data.customer.email' ]
                                   -   '@assign_value': [ '$.receiver_name', '$.data.customer.fullName' ]
@@ -216,6 +217,7 @@ operations:
                                         - '@not_empty': [ '$.data.customer.company' ]
                                         - '@not_empty': [ '$.data.customer.company.invoiceEmail' ]
                                         - '@equal': [$.send_company_email, true]
+                                        - '@not_empty': ['$.email_template_name', true]
                               actions:
                                   -   '@assign_value': [ '$.receiver_email', '$.data.customer.company.invoiceEmail' ]
                                   -   '@assign_value': [ '$.receiver_name', '$.data.customer.company.name' ]

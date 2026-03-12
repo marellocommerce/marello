@@ -76,9 +76,4 @@ class Invoice extends AbstractInvoice implements ExtendEntityInterface
 
         return $this;
     }
-
-    public function getEntityType(): string
-    {
-        return 'invoice';
-    }
 }

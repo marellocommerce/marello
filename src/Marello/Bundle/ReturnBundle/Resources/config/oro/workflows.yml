@@ -89,6 +89,8 @@ workflows:
                         entity: $return
                         recipient: $return.order.customer
                         template: $email_template_name
+                    - '@flash_message':
+                          message: 'Reminder has been sent.'
             receive_def:
                 actions:
                     - '@call_service_method':

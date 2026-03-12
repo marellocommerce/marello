@@ -7,6 +7,9 @@ system_configuration:
         marello_purchase_order_general:
             title: marello.purchaseorder.system_configuration.groups.purchase_order_general.label
             priority: 50
+        notification_purchaseorder:
+            title: marello.notification.system_configuration.groups.notification_purchaseorder.label
+            priority: 40
     fields:
         marello_purchaseorder.purchaseorder_notification:
             data_type: boolean
@@ -61,7 +64,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_purchaseorder:
                                         children:
                                             - marello_purchaseorder.purchaseorder_notification_template
                                             - marello_purchaseorder.purchaseorder_notification_address
@@ -85,7 +88,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_purchaseorder:
                                         children:
                                             - marello_purchaseorder.purchaseorder_notification_template
                                             - marello_purchaseorder.purchaseorder_notification_address

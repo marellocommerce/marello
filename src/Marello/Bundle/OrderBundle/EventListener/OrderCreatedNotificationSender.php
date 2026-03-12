@@ -2,11 +2,13 @@
 
 namespace Marello\Bundle\OrderBundle\EventListener;
 
-use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertySetEvent;
-use Marello\Bundle\OrderBundle\Entity\Order;
-use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Component\DependencyInjection\ServiceLink;
+
+use Marello\Bundle\OrderBundle\Entity\Order;
+use Marello\Bundle\OrderBundle\Model\OrderItemTypeInterface;
+use Marello\Bundle\CoreBundle\DerivedProperty\DerivedPropertySetEvent;
 
 class OrderCreatedNotificationSender
 {
@@ -21,13 +23,23 @@ class OrderCreatedNotificationSender
     protected $configManager;
 
     /**
+     * @var DoctrineHelper
+     */
+    protected $doctrineHelper;
+
+    /**
      * @param ServiceLink $emailSendProcessorLink
      * @param ConfigManager $configManager
+     * @param DoctrineHelper $doctrineHelper
      */
-    public function __construct(ServiceLink $emailSendProcessorLink, ConfigManager $configManager)
-    {
+    public function __construct(
+        ServiceLink $emailSendProcessorLink,
+        ConfigManager $configManager,
+        DoctrineHelper $doctrineHelper
+    ) {
         $this->emailSendProcessorLink = $emailSendProcessorLink;
         $this->configManager = $configManager;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -37,7 +49,7 @@ class OrderCreatedNotificationSender
     {
         $entity = $event->getEntity();
 
-        if ($entity instanceof Order && $this->configManager->get('marello_order.order_notification') === true) {
+        if ($entity instanceof Order) {
             $totalItemsCandC = 0;
             foreach ($entity->getItems() as $item) {
                 if ($item->getItemType() === OrderItemTypeInterface::OI_TYPE_CASHANDCARRY) {
@@ -45,9 +57,17 @@ class OrderCreatedNotificationSender
                 }
             }
             // not all items are cash and carry, so send an email when the order is created
-            if ($totalItemsCandC !== $entity->getItems()->count()) {
+            if ($totalItemsCandC !== $entity->getItems()->count() &&
+                $this->configManager->get('marello_order.confirmation_email_template')
+            ) {
                 $this->sendNotification($entity);
             }
+
+            // persist and flush the entity as some properties might not be set properly
+            $manager = $this->doctrineHelper
+                ->getEntityManagerForClass(Order::class);
+            $manager->persist($entity);
+            $manager->flush();
         }
     }
 
@@ -57,7 +77,7 @@ class OrderCreatedNotificationSender
     protected function sendNotification(Order $order)
     {
         $this->emailSendProcessorLink->getService()->sendNotification(
-            'marello_order_accepted_confirmation',
+            $this->configManager->get('marello_order.confirmation_email_template'),
             [$order->getCustomer()],
             $order
         );

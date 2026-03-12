@@ -17,6 +17,10 @@ system_configuration:
             icon: fa-info
             priority: 50
 
+        notification_return:
+            title: marello.notification.system_configuration.groups.notification_return.label
+            priority: 70
+
     fields:
         marello_return.ror_period:
             type: Symfony\Component\Form\Extension\Core\Type\TextType
@@ -43,13 +47,6 @@ system_configuration:
                     - NotNull: ~
                     - Range:
                         min: 1
-
-        marello_return.return_notification:
-            data_type: boolean
-            type: Oro\Bundle\ConfigBundle\Form\Type\ConfigCheckbox
-            options:
-                label: marello.return.system_configuration.fields.return_notification.label
-                required: false
 
         marello_return.created_template:
             data_type: string
@@ -113,9 +110,8 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_return:
                                         children:
-#                                            - marello_return.return_notification
                                             - marello_return.created_template
                                             - marello_return.not_verified_template
                                             - marello_return.received_template
@@ -139,7 +135,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_return:
                                         children:
                                             - marello_return.created_template
                                             - marello_return.not_verified_template

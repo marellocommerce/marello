@@ -1,4 +1,8 @@
 system_configuration:
+    groups:
+        notification_invoice:
+            title: marello.notification.system_configuration.groups.notification_invoice.label
+            priority: 90
     fields:
         marello_invoice.invoice_email_template:
             data_type: string
@@ -17,7 +21,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_invoice:
                                         children:
                                             - marello_invoice.invoice_email_template
         organization_configuration:
@@ -27,6 +31,6 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    notification_general:
+                                    notification_invoice:
                                         children:
                                             - marello_invoice.invoice_email_template
