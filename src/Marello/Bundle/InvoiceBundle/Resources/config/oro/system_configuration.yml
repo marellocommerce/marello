@@ -12,6 +12,7 @@ system_configuration:
                 required: false
                 entityName: Marello\Bundle\InvoiceBundle\Entity\Invoice
                 placeholder: marello.notification.config.fields.email_template.placeholder
+            priority: 100
 
     tree:
         system_configuration:

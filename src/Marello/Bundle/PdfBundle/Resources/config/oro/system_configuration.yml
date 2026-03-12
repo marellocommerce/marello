@@ -158,13 +158,15 @@ system_configuration:
                                             - marello_pdf.company_phone
                                             - marello_pdf.company_bank
                                             - marello_pdf.company_coc
-                            workflow:
+                    notification:
+                        children:
+                            notification_configuration:
                                 children:
-                                    email:
+                                    notification_invoice:
                                         children:
                                             - marello_pdf.email_workflow_transition
-                                            - marello_pdf.email_sender_email
                                             - marello_pdf.email_sender_name
+                                            - marello_pdf.email_sender_email
                                             - marello_pdf.email_bcc
 
         organization_configuration:
@@ -187,13 +189,15 @@ system_configuration:
                                             - marello_pdf.company_phone
                                             - marello_pdf.company_bank
                                             - marello_pdf.company_coc
-                            workflow:
+                    notification:
+                        children:
+                            notification_configuration:
                                 children:
-                                    email:
+                                    notification_invoice:
                                         children:
                                             - marello_pdf.email_workflow_transition
-                                            - marello_pdf.email_sender_email
                                             - marello_pdf.email_sender_name
+                                            - marello_pdf.email_sender_email
                                             - marello_pdf.email_bcc
 
         saleschannel_configuration:
@@ -213,13 +217,15 @@ system_configuration:
                                             - marello_pdf.company_phone
                                             - marello_pdf.company_bank
                                             - marello_pdf.company_coc
-                            workflow:
+                    notification:
+                        children:
+                            notification_configuration:
                                 children:
-                                    email:
+                                    notification_invoice:
                                         children:
                                             - marello_pdf.email_workflow_transition
-                                            - marello_pdf.email_sender_email
                                             - marello_pdf.email_sender_name
+                                            - marello_pdf.email_sender_email
                                             - marello_pdf.email_bcc
 
     api_tree:

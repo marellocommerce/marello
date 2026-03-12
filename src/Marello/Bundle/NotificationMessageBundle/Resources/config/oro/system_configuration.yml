@@ -2,7 +2,7 @@ system_configuration:
     groups:
         notification_messages:
             title: marello.notificationmessage.system_configuration.groups.notification_messages.title
-            icon: fa-envelope-open-o
+            icon: fa-bell
         notification_message_groups:
             title: marello.notificationmessage.system_configuration.groups.notification_message_groups.title
 

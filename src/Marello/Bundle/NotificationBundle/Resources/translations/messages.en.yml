@@ -13,7 +13,7 @@ marello:
         system_configuration:
             groups:
                 notification.title: Notification
-                notification_configuration.title: Notification Configuration
+                notification_configuration.title: Email Notifications
                 notification_general.label: General
                 notification_order.label: Order Templates
                 notification_invoice.label: Invoice Templates

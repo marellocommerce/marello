@@ -53,7 +53,7 @@ class Configuration implements ConfigurationInterface
                 self::CONFIG_KEY_COMPANY_COC => ['value' => null],
                 self::CONFIG_KEY_EMAIL_WORKFLOW_TRANSITION => ['value' => null],
                 self::CONFIG_KEY_EMAIL_SENDER_NAME => ['value' => null],
-                self::CONFIG_KEY_EMAIL_SENDER_EMAIL => ['value' => null],
+                self::CONFIG_KEY_EMAIL_SENDER_EMAIL => ['value' => sprintf('no-reply@%s.example', gethostname())],
                 self::CONFIG_KEY_EMAIL_BCC => ['value' => null],
             ]
         );

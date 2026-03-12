@@ -4,6 +4,6 @@ system_configuration:
             title: marello.notification.system_configuration.groups.notification.title
         notification_configuration:
             title: marello.notification.system_configuration.groups.notification_configuration.title
-            icon: fa-bell
+            icon: fa-envelope-open-o
         notification_general:
             title: marello.notification.system_configuration.groups.notification_general.label
