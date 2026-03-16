@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             [
                 'refund_credited_template' => [
-                    'value' => null
+                    'value' => 'marello_refund_credited'
                 ]
             ]
         );

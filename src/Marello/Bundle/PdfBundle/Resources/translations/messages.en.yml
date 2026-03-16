@@ -40,7 +40,7 @@ marello:
                 email_workflow_transition:
                     label: "Workflow transition"
                     tooltip: "Select the workflow transition in which the PDF document is e-mailed to the customer."
-                    placeholder: "Don't send PDF document via e-mail"
+                    placeholder: "Don't Send Email"
                 email_sender_email:
                     label: "E-mail sender address"
                     tooltip: "The e-mail address the PDF document is sent from"

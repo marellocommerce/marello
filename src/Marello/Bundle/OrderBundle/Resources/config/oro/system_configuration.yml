@@ -39,9 +39,10 @@ system_configuration:
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
             options:
                 label: marello.notification.config.fields.order.payment_reminder_email_template.label
-                required: false
+                required: true
+                constraints:
+                    - NotNull: ~
                 entityName: Marello\Bundle\OrderBundle\Entity\Order
-                placeholder: marello.notification.config.fields.email_template.placeholder
 
         marello_order.shipped_prepared_email_template:
             data_type: string

@@ -24,12 +24,11 @@ class Configuration implements ConfigurationInterface
             [
                 'ror_period'          => ['value' => 30],
                 'warranty_period'     => ['value' => 24],
-                'created_template'    => ['value' => null],
-                'not_verified_template'    => ['value' => null],
-                'received_template'    => ['value' => null],
-                'inspection_not_ok_template'    => ['value' => null],
-                'shipping_label_warehouse_template'    => ['value' => null],
-                'reminder_template'    => ['value' => null]
+                'created_template'    => ['value' => 'marello_return_created'],
+                'not_verified_template'    => ['value' => 'marello_return_not_verified'],
+                'received_template'    => ['value' => 'marello_return_received'],
+                'inspection_not_ok_template'    => ['value' => 'marello_return_inspection_not_ok'],
+                'reminder_template'    => ['value' => 'marello_return_reminder']
             ]
         );
 

@@ -88,7 +88,7 @@ marello:
                 purchase_order_general.label:           General
             fields:
                 purchaseorder_notification.label:          Purchase Order notification
-                purchaseorder_notification_address.label:  Purchase Order notification email address
+                purchaseorder_notification_address.label:  Notification Email Address
                 send_directly.label:                       Send Purchase Order directly to a supplier
                 sending_time.label:                        Sending time
                 tooltip:

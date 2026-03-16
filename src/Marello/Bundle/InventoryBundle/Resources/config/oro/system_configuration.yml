@@ -84,7 +84,9 @@ system_configuration:
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
             options:
                 label: marello.notification.config.fields.allocation.warehouse_allocation_template.label
-                required: false
+                required: true
+                constraints:
+                    - NotNull: ~
                 entityName: Marello\Bundle\InventoryBundle\Entity\Allocation
                 placeholder: marello.notification.config.fields.email_template.placeholder
 

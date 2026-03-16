@@ -50,10 +50,10 @@ class Configuration implements ConfigurationInterface
                     'value' => true
                 ],
                 'warehouse_allocation_template' => [
-                    'value' => null
+                    'value' => 'marello_warehouse_allocation'
                 ],
                 'shipped_allocation_confirmation' => [
-                    'value' => null
+                    'value' => 'marello_order_shipped_allocation_confirmation'
                 ]
             ]
         );

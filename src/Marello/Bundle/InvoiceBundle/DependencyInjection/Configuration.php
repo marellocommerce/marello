@@ -24,7 +24,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             [
                 'invoice_email_template' => [
-                    'value' => null
+                    'value' => 'marello_send_invoice'
                 ]
             ]
         );

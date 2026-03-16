@@ -52,9 +52,10 @@ system_configuration:
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
             options:
                 label: marello.notification.config.fields.purchaseorder.purchaseorder_notification_template.label
-                required: false
+                required: true
+                constraints:
+                    - NotNull: ~
                 entityName: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder
-                placeholder: marello.notification.config.fields.email_template.placeholder
 
     tree:
         system_configuration:
