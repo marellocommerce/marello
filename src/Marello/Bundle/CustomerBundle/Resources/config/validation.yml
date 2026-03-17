@@ -6,12 +6,12 @@ Marello\Bundle\CustomerBundle\Entity\Customer:
               message: 'marello.customer.customer.number.message'
     properties:
         firstName:
-            - NotBlank: ~
+            - NotBlank: { groups: [Default, customer_backoffice] }
         lastName:
-            - NotBlank: ~
+            - NotBlank: { groups: [Default, customer_backoffice] }
         email:
-            - NotBlank: ~
-            - Email: ~
+            - NotBlank: { groups: [Defaul, customer_backoffice] }
+            - Email: { groups: [Default, customer_backoffice] }
 
 Marello\Bundle\CustomerBundle\Entity\Company:
     constraints:

@@ -138,7 +138,8 @@ class CustomerType extends AbstractType
             'intention'            => 'customer',
             'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
             'constraints'          => [new Valid()],
-            'allow_extra_fields'   => true
+            'allow_extra_fields'   => true,
+            'validation_groups' => ['customer_backoffice']
         ]);
     }
 
