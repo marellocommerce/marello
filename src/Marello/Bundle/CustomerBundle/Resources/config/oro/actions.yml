@@ -1,3 +1,0 @@
-operations:
-    DELETE:
-        exclude_entities: [Marello\Bundle\CustomerBundle\Entity\Customer]

@@ -6,15 +6,6 @@
 
 {% oro_title_set({params : {"%name%": entity.fullName }}) %}
 
-{% block navButtons %}
-    {% if is_granted('EDIT', entity) %}
-        {{ UI.editButton({
-            'path' : path('marello_customer_update', { id: entity.id }),
-            'entity_label': 'marello.customer.entity_label'|trans
-        }) }}
-    {% endif %}
-{% endblock navButtons %}
-
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity':      entity,
