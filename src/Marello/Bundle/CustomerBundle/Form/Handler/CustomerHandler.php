@@ -77,7 +77,10 @@ class CustomerHandler implements FormHandlerInterface
      */
     protected function onSuccess(Customer $entity)
     {
-        $this->manager->persist($entity->getPrimaryAddress());
+        if ($entity->getPrimaryAddress()) {
+            $this->manager->persist($entity->getPrimaryAddress());
+        }
+
         if ($entity->getShippingAddress()) {
             $this->manager->persist($entity->getShippingAddress());
         }
