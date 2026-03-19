@@ -75,8 +75,17 @@
                     {% for index, address in entity.addresses %}
                         <div class="attribute-item">
                             <div class="attribute-item__description">
-                                <b>{{ 'marello.address.marelloaddress.entity_label' | trans ~ '#' ~ (index + 1) }}</b>
+                                <b>{{ 'marello.address.marelloaddress.entity_label' | trans }}</b>
+                                {% if address.addressType.label %}
+                                    {% set addressType = address.addressType.label ? address.addressType.label : 'N/A'| trans %}
+                                    {% set isDefault = address.isDefault ? 'marello.address.marellotypedaddress.view.default.label'|trans: '' %}
+                                    {{ 'marello.address.marellotypedaddress.view.type.label'|trans({'%addressType%': addressType, '%isDefault%': isDefault}) }}
+                                {% endif %}
                                 <br/>
+                                {% if address.company %}
+                                    {{ address.company }}
+                                    <br/>
+                                {% endif %}
                                 {{ Address.renderAddress(address) }}
                             </div>
                         </div>

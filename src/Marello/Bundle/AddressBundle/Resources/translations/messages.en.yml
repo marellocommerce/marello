@@ -54,3 +54,7 @@ marello:
             region_name.label:      Region
             is_default.label:       Is Default
             address_type.label:     Address Type
+
+            view:
+                type.label:     " - %addressType% %isDefault%"
+                default.label:      (default)
