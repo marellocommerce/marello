@@ -9,12 +9,14 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EmailBundle\Entity\Repository\EmailTemplateRepository;
 
 class EmailTemplateSelectType extends AbstractType
 {
     public function __construct(
-        protected DoctrineHelper $doctrineHelper
+        protected DoctrineHelper $doctrineHelper,
+        protected AclHelper $aclHelper
     ) {
     }
 
@@ -47,7 +49,7 @@ class EmailTemplateSelectType extends AbstractType
             ->setParameter('entityName', $entityName)
             ->setParameter('isSystem', false);
 
-        $result = $qb->getQuery()->getResult();
+        $result = $this->aclHelper->apply($qb)->getResult();
         foreach ($result as $emailTemplate) {
             if (null === $emailTemplate->getTemplateName()) {
                 continue;
