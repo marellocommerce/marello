@@ -53,21 +53,33 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
             );
             $rowIdentifier = $this->getRowIdentifier($rowId, $item['product']);
             foreach ($products as $product) {
-                $priceValue = $this->getDefaultPrice($salesChannel, $product);
-                $channelPrice = $this->getChannelPrice($salesChannel, $product);
-
-                if ($channelPrice['hasPrice']) {
-                    $priceValue = $channelPrice['price'];
-                }
-
-                $data[$rowIdentifier]['value'] = $this->rounding->round($priceValue);
-            }
-            foreach ($order->getItems() as &$orderItem) {
-                if ($orderItem->getProduct()) {
-                    if (isset($data[$rowIdentifier])) {
-                        $orderItem->setPrice($data[$rowIdentifier]['value']);
+                $prices = $this->getProductPrice($salesChannel, $product, $order->getCustomer()->getCompany());
+                $data['price'] = 0;
+                if (array_key_exists($product->getSku(), $prices)) {
+                    if (count($prices[$product->getSku()]) === 1) {
+                        $prices[$product->getSku()] = $prices[$product->getSku()][0];
+                    }
+                    $price = $prices[$product->getSku()]['sales'];
+                    if (isset($prices[$product->getSku()]['special'])) {
+                        // check for the date of the special price
+                        $price = $prices[$product->getSku()]['special'];
                     }
                 }
+                // if the provider is the advanced provider use msrp.
+                // maybe we need to fix this with a setting which data to use
+//                if ($priceProvider->getIdentifier() !== CompanyPriceProvider::PROVIDER_IDENTIFIER) {
+//                    $price = $prices[$product->getSku()]['msrp'];
+//                }
+                if ($product->getId() == $item['product']) {
+                    $data[$rowIdentifier]['value'] = $price;
+                }
+            }
+                foreach ($order->getItems() as &$orderItem) {
+                    if ($orderItem->getProduct()) {
+                        if (isset($data[$rowIdentifier])) {
+                            $orderItem->setPrice($data[$rowIdentifier]['value']);
+                        }
+                    }
             }
         }
 
@@ -82,30 +94,47 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
      * @param Product $product
      * @return array $data
      */
-    public function getChannelPrice($channel, $product)
+    public function getChannelPrice($channel, $product, $order)
     {
         $data = ['hasPrice' => false];
         /** @var AssembledChannelPriceList $assembledChannelPriceList */
-        $assembledChannelPriceList = $this->getAssembledChannelPriceListRepository()->findOneBy(
-            [
-                'channel' => $channel->getId(),
-                'product' => $product->getId(),
-                'currency' => $channel->getCurrency()
-            ]
-        );
-
-        if ($assembledChannelPriceList) {
-            /** @var ProductChannelPrice $price */
-            $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-            $price = $assembledChannelPriceList->getSpecialPrice()
-                    && $assembledChannelPriceList->getSpecialPrice()->isDateAvailable($dateTime)
-                ? $assembledChannelPriceList->getSpecialPrice()
-                : $assembledChannelPriceList->getDefaultPrice();
-
-            if ($price instanceof BasePrice) {
-                $data['hasPrice'] = true;
-                $data['price'] = (float)$price->getValue();
+//        $assembledChannelPriceList = $this->getAssembledChannelPriceListRepository()->findOneBy(
+//            [
+//                'channel' => $channel->getId(),
+//                'product' => $product->getId(),
+//                'currency' => $channel->getCurrency()
+//            ]
+//        );
+        $priceProvider = $this->getPriceProviderFromRegistry($channel);
+        if ($priceProvider) {
+            $prices = $this->getProductPrice($channel, $product, $order->getCustomer()->getCompany());
+            $data['price'] = 0;
+            if (!array_key_exists($product->getSku(), $prices)) {
+                return $data;
             }
+
+            if (count($prices[$product->getSku()]) === 1) {
+                $prices[$product->getSku()] = $prices[$product->getSku()][0];
+            }
+
+            $data['price'] = $prices[$product->getSku()]['sales'];
+            if (isset($prices[$product->getSku()]['special'])) {
+                // check for the date of the special price
+                $data['price'] = $prices[$product->getSku()]['special'];
+                $data['hasPrice'] = true;
+            }
+//
+//            /** @var ProductChannelPrice $price */
+//            $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+//            $price = $assembledChannelPriceList->getSpecialPrice()
+//                    && $assembledChannelPriceList->getSpecialPrice()->isDateAvailable($dateTime)
+//                ? $assembledChannelPriceList->getSpecialPrice()
+//                : $assembledChannelPriceList->getDefaultPrice();
+//
+//            if ($price instanceof BasePrice) {
+//                $data['hasPrice'] = true;
+//                $data['price'] = (float)$price->getValue();
+//            }
         }
 
         return $data;
@@ -117,25 +146,51 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
      * @param Product $product
      * @return float
      */
-    public function getDefaultPrice($channel, $product)
+    public function getDefaultPrice($channel, $product, $order)
     {
-        $currency = $channel->getCurrency();
-        /** @var AssembledPriceList $assembledPriceList */
-        $assembledPriceList = $this->getAssembledPriceListRepository()->findOneBy(
-            ['product' => $product->getId(), 'currency' => $currency]
-        );
+//        $currency = $channel->getCurrency();
+//        /** @var AssembledPriceList $assembledPriceList */
+//        $assembledPriceList = $this->getAssembledPriceListRepository()->findOneBy(
+//            ['product' => $product->getId(), 'currency' => $currency]
+//        );
+//
+//        if (!$assembledPriceList) {
+//            return null;
+//        }
 
-        if (!$assembledPriceList) {
-            return null;
+        $priceProvider = $this->getPriceProviderFromRegistry($channel);
+        if ($priceProvider) {
+            $prices = $this->getProductPrice($channel, $product, $order->getCustomer()->getCompany());
+            if (count($prices[$product->getSku()]) === 1) {
+                $prices[$product->getSku()] = $prices[$product->getSku()][0];
+            }
+
+            $price = $prices[$product->getSku()]['sales'];
+            if (isset($prices[$product->getSku()]['special'])) {
+                // check for the date of the special price
+                $price = $prices[$product->getSku()]['special'];
+            }
+
+//            $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+//            $price = $assembledPriceList->getSpecialPrice()
+//            && $assembledPriceList->getSpecialPrice()->isDateAvailable($dateTime)
+//                ? $assembledPriceList->getSpecialPrice()
+//                : $assembledPriceList->getDefaultPrice();
+//
+            return $price;
         }
 
-        $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $price = $assembledPriceList->getSpecialPrice()
-                && $assembledPriceList->getSpecialPrice()->isDateAvailable($dateTime)
-            ? $assembledPriceList->getSpecialPrice()
-            : $assembledPriceList->getDefaultPrice();
+        return null;
+    }
 
-        return $price instanceof BasePrice ? (float)$price->getValue() : null;
+    protected function getProductPrice($channel, $product, $company = null): array
+    {
+        $priceProvider = $this->getPriceProviderFromRegistry($channel);
+        return $priceProvider->getProductPrice(
+            $product,
+            $channel->getCurrency(),
+            $company
+        );
     }
 
     /**

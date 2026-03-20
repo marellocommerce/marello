@@ -76,36 +76,39 @@ define(function(require) {
          * @param data
          */
         setOrderItemData: function(data) {
-            if (data === undefined || typeof(data) == 'undefined' || data.length == 0) {
-                return;
-            }
-            var identifier = this._getItemIdentifier();
-            if (identifier && data[identifier] !== undefined) {
-                if(data[identifier].message !== undefined) {
-                    this.data = {};
-                    this.setRowTotals();
-                    this.options.salable = {value: false, message: data[identifier].message};
-                } else {
-                    this.data = data[identifier] || {};
-                    this.options.salable = {value: true, message: ''};
-                }
-
-                mediator.trigger('order:update:line-items', {'elm': this.$el, 'salable': this.options.salable},this);
-            } else {
-                this.data = {};
-            }
-
-            var $priceValue = parseFloat(this.getPriceValue());
-            if($priceValue === "NaN" || $priceValue === null) {
-                $priceValue = '';
-            }
-
-            this.fieldsByName.price.val($priceValue);
-            this.fieldsByName.taxCode.val(this.getTaxCode());
-            this.fieldsByName.productUnit.val(this.getProductUnit());
-
-            this.setRowTotals();
-            this.setAvailableInventory();
+            // if (data === undefined || typeof(data) == 'undefined' || data.length == 0) {
+            //     return;
+            // }
+            // var identifier = this._getItemIdentifier();
+            // if (identifier && data[identifier] !== undefined) {
+            //     if(data[identifier].message !== undefined) {
+            //         this.data = {};
+            //         this.setRowTotals();
+            //         this.options.salable = {value: false, message: data[identifier].message};
+            //     } else {
+            //         this.data = data[identifier] || {};
+            //         this.options.salable = {value: true, message: ''};
+            //     }
+            //
+            //     mediator.trigger('order:update:line-items', {'elm': this.$el, 'salable': this.options.salable},this);
+            // } else {
+            //     this.data = {};
+            // }
+            //
+            // var $priceValue = parseFloat(this.getPriceValue());
+            // if($priceValue === "NaN" || $priceValue === null) {
+            //     $priceValue = '';
+            // }
+            //
+            //
+            // console.log(this.getPriceValue());
+            // console.log($priceValue);
+            // // this.fieldsByName.price.val($priceValue);
+            // this.fieldsByName.taxCode.val(this.getTaxCode());
+            // this.fieldsByName.productUnit.val(this.getProductUnit());
+            //
+            // this.setRowTotals();
+            // this.setAvailableInventory();
         },
 
         /**

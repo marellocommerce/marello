@@ -139,12 +139,12 @@ class OrderItemsSubtotalProvider extends AbstractSubtotalProvider
         if ($product) {
             $productSalesChannels = $product->getChannels();
             if ($productSalesChannels->contains($salesChannel)) {
-                $channelPrice = $this->channelPriceProvider->getChannelPrice($salesChannel, $product);
+                $channelPrice = $this->channelPriceProvider->getChannelPrice($salesChannel, $product, $orderItem->getOrder());
 
                 if (isset($channelPrice['price'])) {
                     $rowTotal = (float)$channelPrice['price'];
                 } else {
-                    $rowTotal = (float)$this->channelPriceProvider->getDefaultPrice($salesChannel, $product);
+                    $rowTotal = (float)$this->channelPriceProvider->getDefaultPrice($salesChannel, $product, $orderItem->getOrder());
                 }
 
                 if ($orderItem instanceof QuantityAwareInterface) {
