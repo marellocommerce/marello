@@ -59,14 +59,14 @@
         </div>
         {{ form_errors(form.allocationExclusion) }}
     </td>
-{#    <td class="order-line-item-comment">#}
-{#        <div class="fields-row">#}
-{#            <div data-page-component-module="marelloorder/js/app/components/order-item-comment-component">#}
-{#                {{ form_widget(form.comment) }}#}
-{#            </div>#}
-{#        </div>#}
-{#        {{ form_errors(form.comment) }}#}
-{#    </td>#}
+    <td class="order-line-item-comment">
+        <div class="fields-row">
+            <div data-page-component-module="marelloorder/js/app/components/order-item-comment-component">
+                {{ form_widget(form.comment) }}
+            </div>
+        </div>
+        {{ form_errors(form.comment) }}
+    </td>
 {% endblock %}
 
 {% macro marello_order_item_collection_item_prototype(widget, attributes) %}
@@ -125,23 +125,23 @@
             <div {{ block('widget_container_attributes') }}>
                 <table class="grid table-hover table table-bordered table-condensed">
                     <thead>
-                        <tr>
-                            <th class="order-line-item-product"><span>{{ 'marello.product.entity_label'|trans }}</span></th>
-                            <th class="order-line-item-quantity"><span>{{ 'marello.order.orderitem.quantity.label'|trans }}</span></th>
-                            <th class="order-line-item-available-inventory"><span>{{ 'marello.order.orderitem.inventory.label'|trans }}</span></th>
-                            <th class="order-line-item-product-unit"><span>{{ 'marello.order.orderitem.product_unit.label'|trans }}</span></th>
-                            <th class="order-line-item-price"><span>{{ marello_pricing_vat_aware_label('marello.order.orderitem.price.per_unit.label'|trans) }}</span></th>
-                            <th class="order-line-item-tax"><span>{{ 'marello.order.orderitem.tax.label'|trans }}</span></th>
-                            <th class="order-line-item-tax-code"><span>{{ 'marello.order.orderitem.tax_code.label'|trans }}</span></th>
-                            <th class="order-line-item-total-price-excl-tax"><span>{{ 'marello.order.orderitem.total_price_excl_tax.label'|trans }}</span></th>
-                            <th class="order-line-item-total-price-incl-tax"><span>{{ 'marello.order.orderitem.total_price_incl_tax.label'|trans }}</span></th>
-                            <th class="order-line-item-allocation-exclusion"><span>{{ 'marello.order.form.orderitem.allocation_exclusion.label'|trans }}</span></th>
-{#                            <th class="order-line-item-comment"><span>{{ 'marello.order.orderitem.comment.label'|trans }}</span></th>#}
-                            <th class="order-line-item-notifications"></th>
-                            {% if form.vars.allow_delete %}
-                                <th class="order-row-item-actions"></th>
-                            {% endif %}
-                        </tr>
+                    <tr>
+                        <th class="order-line-item-product"><span>{{ 'marello.product.entity_label'|trans }}</span></th>
+                        <th class="order-line-item-quantity"><span>{{ 'marello.order.orderitem.quantity.label'|trans }}</span></th>
+                        <th class="order-line-item-available-inventory"><span>{{ 'marello.order.orderitem.inventory.label'|trans }}</span></th>
+                        <th class="order-line-item-product-unit"><span>{{ 'marello.order.orderitem.product_unit.label'|trans }}</span></th>
+                        <th class="order-line-item-price"><span>{{ marello_pricing_vat_aware_label('marello.order.orderitem.price.per_unit.label'|trans) }}</span></th>
+                        <th class="order-line-item-tax"><span>{{ 'marello.order.orderitem.tax.label'|trans }}</span></th>
+                        <th class="order-line-item-tax-code"><span>{{ 'marello.order.orderitem.tax_code.label'|trans }}</span></th>
+                        <th class="order-line-item-total-price-excl-tax"><span>{{ 'marello.order.orderitem.total_price_excl_tax.label'|trans }}</span></th>
+                        <th class="order-line-item-total-price-incl-tax"><span>{{ 'marello.order.orderitem.total_price_incl_tax.label'|trans }}</span></th>
+                        <th class="order-line-item-allocation-exclusion"><span>{{ 'marello.order.form.orderitem.allocation_exclusion.label'|trans }}</span></th>
+                        <th class="order-line-item-comment"><span>{{ 'marello.order.orderitem.comment.label'|trans }}</span></th>
+                        <th class="order-line-item-notifications"></th>
+                        {% if form.vars.allow_delete %}
+                            <th class="order-row-item-actions"></th>
+                        {% endif %}
+                    </tr>
                     </thead>
                     <tbody data-last-index="{{ form.children|length}}" data-prototype-name="{{ prototype_name }}"{% if prototype_html is defined %} data-prototype="{{ prototype_html|escape }}"{% endif %}>
                     {% if form.children|length %}
@@ -175,7 +175,7 @@
 
 {% block marello_order_address_widget %}
     {% if form.parent is not empty %}<div {{ block('widget_container_attributes') }}>{% endif %}
-        {{ form_rest(form) }}
+    {{ form_rest(form) }}
     {% if form.parent is not empty %}</div>{% endif %}
 {% endblock %}
 
@@ -189,4 +189,3 @@
         </div>
     </div>
 {% endblock %}
-

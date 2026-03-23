@@ -73,12 +73,12 @@ class OrderItemType extends AbstractType
             ])
             ->add('price', TextType::class, [
                 'attr' => [
-//                    'readonly' => true
+                    'readonly' => true
                 ]
             ])
             ->add('tax', TextType::class, [
                 'attr' => [
-//                    'readonly' => true
+                    'readonly' => true
                 ]
             ])
             ->add('taxCode', TextType::class, [
@@ -88,12 +88,12 @@ class OrderItemType extends AbstractType
             ])
             ->add('rowTotalExclTax', TextType::class, [
                 'attr' => [
-//                    'readonly' => true
+                    'readonly' => true
                 ]
             ])
             ->add('rowTotalInclTax', TextType::class, [
                 'attr' => [
-//                    'readonly' => true
+                    'readonly' => true
                 ]
             ])
             ->add(
