@@ -95,12 +95,7 @@ define(function(require) {
                 this.data = {};
             }
 
-            var $priceValue = parseFloat(this.getPriceValue());
-            if($priceValue === "NaN" || $priceValue === null) {
-                $priceValue = '';
-            }
-
-            this.fieldsByName.price.val($priceValue);
+            this.fieldsByName.price.val(this.getPriceValue());
             this.fieldsByName.taxCode.val(this.getTaxCode());
             this.fieldsByName.productUnit.val(this.getProductUnit());
 
@@ -153,18 +148,16 @@ define(function(require) {
          * Set row totals
          */
         setRowTotals: function() {
-            var row_totals = this.getRowTotals();
-            if (row_totals === null) {
+            var rowTotals = this.getRowTotals();
+            console.log(rowTotals);
+            if (rowTotals === null) {
                 this.fieldsByName.tax.val('');
                 this.fieldsByName.rowTotalExclTax.val('');
                 this.fieldsByName.rowTotalInclTax.val('');
             } else {
-                var taxAmount = parseFloat(row_totals.taxAmount);
-                var taxExcl = parseFloat(row_totals.excludingTax);
-                var taxIncl = parseFloat(row_totals.includingTax);
-                this.fieldsByName.tax.val(taxAmount);
-                this.fieldsByName.rowTotalExclTax.val(taxExcl);
-                this.fieldsByName.rowTotalInclTax.val(taxIncl);
+                this.fieldsByName.tax.val(rowTotals.taxAmount);
+                this.fieldsByName.rowTotalExclTax.val(rowTotals.excludingTax);
+                this.fieldsByName.rowTotalInclTax.val(rowTotals.includingTax);
             }
         },
 
