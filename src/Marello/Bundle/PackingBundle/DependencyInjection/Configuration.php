@@ -27,7 +27,7 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             [
                 'send_packing_slip_template' => [
-                    'value' => null
+                    'value' => 'marello_send_packing_slip'
                 ]
             ]
         );

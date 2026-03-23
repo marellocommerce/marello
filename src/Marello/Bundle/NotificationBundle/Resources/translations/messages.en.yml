@@ -56,4 +56,4 @@ marello:
                     send_packing_slip.label:  PackingSlip
 
                 purchaseorder:
-                    purchaseorder_notification_template.label: PurchaseOrder
+                    purchaseorder_notification_template.label: Purchase Order

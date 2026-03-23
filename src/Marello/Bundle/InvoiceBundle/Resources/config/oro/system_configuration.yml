@@ -9,7 +9,9 @@ system_configuration:
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
             options:
                 label: marello.notification.config.fields.invoice.invoice_email_template.label
-                required: false
+                required: true
+                constraints:
+                    - NotNull: ~
                 entityName: Marello\Bundle\InvoiceBundle\Entity\Invoice
                 placeholder: marello.notification.config.fields.email_template.placeholder
             priority: 100

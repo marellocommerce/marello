@@ -23,19 +23,19 @@ class Configuration implements ConfigurationInterface
             $rootNode,
             [
                 'confirmation_email_template' => [
-                    'value' => null
+                    'value' => 'marello_order_accepted_confirmation'
                 ],
                 'cancelled_email_template' => [
-                    'value' => null
+                    'value' => 'marello_order_cancelled'
                 ],
                 'payment_reminder_email_template' => [
-                    'value' => null
+                    'value' => 'marello_order_payment_reminder'
                 ],
                 'shipped_prepared_email_template' => [
-                    'value' => null
+                    'value' => 'marello_order_shipping_prepared'
                 ],
                 'shipped_confirmation_email_template' => [
-                    'value' => null
+                    'value' => 'marello_order_shipped_confirmation'
                 ],
                 'order_on_demand_enabled' => [
                     'value' => false

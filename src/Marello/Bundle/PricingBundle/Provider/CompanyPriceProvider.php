@@ -32,7 +32,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
      * @return float|null
      * @throws \Oro\Bundle\CurrencyBundle\Exception\InvalidRoundingTypeException
      */
-    public function getProductPrice(Product $product, $currency, ?Company $company = null): array
+    public function getProductPrice(Product $product, $currency, ?Company $company = null, ?array $parameters = []): array
     {
         $prices[$product->getSku()]['sales'] = 0;
         $prices[$product->getSku()]['qty_from'] = 0;

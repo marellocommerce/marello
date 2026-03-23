@@ -89,9 +89,11 @@ system_configuration:
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
             options:
                 label: marello.notification.config.fields.return.reminder_template.label
-                required: false
+                required: true
+                constraints:
+                    - NotNull: ~
                 entityName: Marello\Bundle\ReturnBundle\Entity\ReturnEntity
-                placeholder: marello.notification.config.fields.email_template.placeholder
+
     tree:
         system_configuration:
             marello:

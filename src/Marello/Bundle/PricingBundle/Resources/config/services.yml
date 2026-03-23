@@ -14,6 +14,8 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
+            - '@oro_config.manager'
+            - '@Marello\Bundle\PricingBundle\Provider\CompanyPriceProviderRegistry'
         calls:
             - ['setRoundingService', ['@Marello\Bundle\PricingBundle\Rounding\PriceRoundingService']]
         tags:
