@@ -54,3 +54,10 @@ services:
             - '@oro_entity.doctrine_helper'
         tags:
             - { name: form.type }
+
+    Marello\Bundle\NotificationBundle\Provider\SystemVariablesProvider:
+        arguments:
+            - '@translator'
+            - '@oro_config.user'
+        tags:
+            - { name: oro_email.emailtemplate.variable_provider, scope: system }

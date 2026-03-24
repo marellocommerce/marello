@@ -2,11 +2,11 @@
 
 namespace Marello\Bundle\NotificationBundle\DependencyInjection;
 
-use Oro\Bundle\NotificationBundle\DependencyInjection\Configuration;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Oro\Bundle\NotificationBundle\DependencyInjection\Configuration as OroNotificationConfig;
 
 class MarelloNotificationExtension extends Extension
 {
@@ -22,9 +22,13 @@ class MarelloNotificationExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
-        $configuration = new Configuration();
+        $configuration = new OroNotificationConfig();
         $config = $this->processConfiguration($configuration, $configs);
         $config['settings']['email_notification_sender_name']['value'] = 'Marello';
         $container->prependExtensionConfig('oro_notification', array_intersect_key($config, array_flip(['settings'])));
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+        $container->prependExtensionConfig($this->getAlias(), array_intersect_key($config, array_flip(['settings'])));;
     }
 }
