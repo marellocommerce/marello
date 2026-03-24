@@ -25,6 +25,10 @@ marello:
 
         config:
             fields:
+                general:
+                    logo.label:     Email Logo
+                    logo.tooltip:   Logo that can be used in the email templates
+
                 email_template:
                     placeholder:    Don't Send Email
 

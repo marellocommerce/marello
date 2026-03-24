@@ -7,9 +7,39 @@ system_configuration:
             icon: fa-envelope-open-o
         notification_general:
             title: marello.notification.system_configuration.groups.notification_general.label
+            priority: 105
 
+    fields:
+        marello_notification.email_logo:
+            data_type: string
+            type: 'Oro\Bundle\ConfigBundle\Form\Type\ConfigFileType'
+            options:
+                label: marello.notification.config.fields.general.logo.label
+                tooltip: marello.notification.config.fields.general.logo.tooltip
+                fileConstraints:
+                    - Oro\Bundle\AttachmentBundle\Validator\Constraints\FileConstraintFromSystemConfig: ~
+                    - Image: ~
     tree:
+        system_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_general:
+                                        children:
+                                            - marello_notification.email_logo
         organization_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_general:
+                                        children:
+                                            - marello_notification.email_logo
             platform:
                 children:
                     general_setup:
@@ -26,3 +56,13 @@ system_configuration:
                                         children:
                                             - oro_notification.mass_notification_recipients
                                             - oro_notification.mass_notification_template
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_general:
+                                        children:
+                                            - marello_notification.email_logo
