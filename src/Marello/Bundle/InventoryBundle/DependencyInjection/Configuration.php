@@ -49,9 +49,6 @@ class Configuration implements ConfigurationInterface
                 'adjust_inventory_qty' => [
                     'value' => true
                 ],
-                'warehouse_allocation_template' => [
-                    'value' => 'marello_warehouse_allocation'
-                ],
                 'shipped_allocation_confirmation' => [
                     'value' => 'marello_order_shipped_allocation_confirmation'
                 ]
