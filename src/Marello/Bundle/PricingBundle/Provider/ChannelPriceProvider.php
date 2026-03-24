@@ -104,6 +104,8 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
         $prices = $this->getProductPrice($channel, $product, $order->getCustomer()->getCompany());
         if (count($prices) === 1) {
             $prices[$product->getSku()] = array_shift($prices);
+        } elseif (!array_key_exists($product->getSku(), $prices)) {
+            $prices[$product->getSku()] = $prices;
         }
 
         // need to fix with dates
@@ -133,7 +135,10 @@ class ChannelPriceProvider extends AbstractOrderItemFormChangesProvider
         $prices = $this->getProductPrice($channel, $product, $order->getCustomer()->getCompany());
         if (count($prices) === 1) {
             $prices[$product->getSku()] = array_shift($prices);
+        } elseif (!array_key_exists($product->getSku(), $prices)) {
+            $prices[$product->getSku()] = $prices;
         }
+
         $price = $prices[$product->getSku()]['sales'];
         if (isset($prices[$product->getSku()]['special'])) {
             // check for the date of the special price
