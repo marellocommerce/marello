@@ -144,3 +144,17 @@ system_configuration:
                                             - marello_return.received_template
                                             - marello_return.inspection_not_ok_template
                                             - marello_return.reminder_template
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_return:
+                                        children:
+                                            - marello_return.created_template
+                                            - marello_return.not_verified_template
+                                            - marello_return.received_template
+                                            - marello_return.inspection_not_ok_template
+                                            - marello_return.reminder_template

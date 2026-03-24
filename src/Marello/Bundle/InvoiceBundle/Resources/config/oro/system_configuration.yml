@@ -37,3 +37,13 @@ system_configuration:
                                     notification_invoice:
                                         children:
                                             - marello_invoice.invoice_email_template
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_invoice:
+                                        children:
+                                            - marello_invoice.invoice_email_template

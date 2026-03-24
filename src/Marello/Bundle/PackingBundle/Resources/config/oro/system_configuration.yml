@@ -35,3 +35,13 @@ system_configuration:
                                     notification_packingslip:
                                         children:
                                             - marello_packing.send_packing_slip_template
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_packingslip:
+                                        children:
+                                            - marello_packing.send_packing_slip_template

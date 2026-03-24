@@ -47,16 +47,6 @@ system_configuration:
                 constraints:
                     - NotNull: ~
 
-        marello_purchaseorder.purchaseorder_notification_template:
-            data_type: string
-            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
-            options:
-                label: marello.notification.config.fields.purchaseorder.purchaseorder_notification_template.label
-                required: true
-                constraints:
-                    - NotNull: ~
-                entityName: Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrder
-
     tree:
         system_configuration:
             marello:
@@ -67,7 +57,6 @@ system_configuration:
                                 children:
                                     notification_purchaseorder:
                                         children:
-                                            - marello_purchaseorder.purchaseorder_notification_template
                                             - marello_purchaseorder.purchaseorder_notification_address
                     marello_order:
                         children:
@@ -91,7 +80,6 @@ system_configuration:
                                 children:
                                     notification_purchaseorder:
                                         children:
-                                            - marello_purchaseorder.purchaseorder_notification_template
                                             - marello_purchaseorder.purchaseorder_notification_address
                     marello_order:
                         children:
@@ -100,3 +88,13 @@ system_configuration:
                                     marello_order_on_demand_general:
                                         children:
                                             - marello_purchaseorder.send_directly
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_purchaseorder:
+                                        children:
+                                            - marello_purchaseorder.purchaseorder_notification_address

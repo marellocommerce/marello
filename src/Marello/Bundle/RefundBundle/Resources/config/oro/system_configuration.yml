@@ -35,3 +35,13 @@ system_configuration:
                                     notification_refund:
                                         children:
                                             - marello_refund.refund_credited_template
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_refund:
+                                        children:
+                                            - marello_refund.refund_credited_template

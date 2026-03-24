@@ -79,17 +79,6 @@ system_configuration:
                 label: marello.inventory.system_configuration.fields.adjust_inventory_qty.label
                 tooltip: marello.inventory.system_configuration.fields.tooltip.adjust_inventory_qty
 
-        marello_inventory.warehouse_allocation_template:
-            data_type: string
-            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
-            options:
-                label: marello.notification.config.fields.allocation.warehouse_allocation_template.label
-                required: true
-                constraints:
-                    - NotNull: ~
-                entityName: Marello\Bundle\InventoryBundle\Entity\Allocation
-                placeholder: marello.notification.config.fields.email_template.placeholder
-
         marello_inventory.shipped_allocation_confirmation:
             data_type: string
             type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
@@ -134,7 +123,6 @@ system_configuration:
                                 children:
                                     notification_inventory:
                                         children:
-                                            - marello_inventory.warehouse_allocation_template
                                             - marello_inventory.shipped_allocation_confirmation
 
         organization_configuration:
@@ -158,5 +146,14 @@ system_configuration:
                                 children:
                                     notification_inventory:
                                         children:
-                                            - marello_inventory.warehouse_allocation_template
+                                            - marello_inventory.shipped_allocation_confirmation
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_inventory:
+                                        children:
                                             - marello_inventory.shipped_allocation_confirmation

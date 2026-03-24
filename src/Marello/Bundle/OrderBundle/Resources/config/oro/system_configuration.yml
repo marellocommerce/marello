@@ -122,3 +122,17 @@ system_configuration:
                                         children:
                                             - marello_order.order_on_demand_enabled
                                             - marello_order.order_on_demand
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    notification_order:
+                                        children:
+                                            - marello_order.confirmation_email_template
+                                            - marello_order.cancelled_email_template
+                                            - marello_order.payment_reminder_email_template
+                                            - marello_order.shipped_prepared_email_template
+                                            - marello_order.shipped_confirmation_email_template
