@@ -22,6 +22,8 @@ class MarelloNotificationExtension extends Extension
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('eventlisteners.yml');
+
         $configuration = new OroNotificationConfig();
         $config = $this->processConfiguration($configuration, $configs);
         $config['settings']['email_notification_sender_name']['value'] = 'Marello';

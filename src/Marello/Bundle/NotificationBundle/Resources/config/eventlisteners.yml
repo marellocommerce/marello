@@ -1,0 +1,9 @@
+services:
+    Marello\Bundle\NotificationBundle\EventListener\EmailConfigUpdateListener:
+        arguments:
+            - '@oro_entity.doctrine_helper'
+            - '@Oro\Bundle\AttachmentBundle\Manager\AttachmentManager'
+            - '@doctrine.orm.entity_manager'
+            - '@oro_attachment.manager.image_resize'
+        tags:
+            - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }

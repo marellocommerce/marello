@@ -1,0 +1,4 @@
+liip_imagine:
+    filter_sets:
+        email_image:
+            quality: 85
