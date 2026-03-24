@@ -7,3 +7,22 @@ system_configuration:
             icon: fa-envelope-open-o
         notification_general:
             title: marello.notification.system_configuration.groups.notification_general.label
+
+    tree:
+        organization_configuration:
+            platform:
+                children:
+                    general_setup:
+                        children:
+                            email_configuration:
+                                children:
+                                    email_notifications_settings:
+                                        priority: 20
+                                        children:
+                                            - oro_notification.email_notification_sender_email
+                                            - oro_notification.email_notification_sender_name
+                                    email_mass_notifications_settings:
+                                        priority: 10
+                                        children:
+                                            - oro_notification.mass_notification_recipients
+                                            - oro_notification.mass_notification_template
