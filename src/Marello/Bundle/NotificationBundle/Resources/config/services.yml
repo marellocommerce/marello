@@ -52,5 +52,6 @@ services:
     Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType:
         arguments:
             - '@oro_entity.doctrine_helper'
+            - '@oro_security.acl_helper'
         tags:
             - { name: form.type }
