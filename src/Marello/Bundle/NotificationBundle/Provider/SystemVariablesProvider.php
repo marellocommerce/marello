@@ -2,7 +2,7 @@
 
 namespace Marello\Bundle\NotificationBundle\Provider;
 
-use Oro\Bundle\AttachmentBundle\Entity\Attachment;
+use Oro\Bundle\AttachmentBundle\Entity\File;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -58,10 +58,9 @@ class SystemVariablesProvider implements SystemVariablesProviderInterface
     {
         if ($addValue) {
             $val = $this->configManager->get('marello_notification.email_logo');
-            /** @var Attachment $attachment */
-            $attachment = $this->doctrineHelper->getEntityRepositoryForClass(Attachment::class)->find($val);
-            $mediaUrl = $attachment->getFile()->getMediaUrl();
-
+            /** @var File $file */
+            $file = $this->doctrineHelper->getEntityRepositoryForClass(File::class)->find($val);
+            $mediaUrl = $file?->getMediaUrl();
             $val = sprintf('%s/%s', $this->configManager->get('oro_ui.application_url'), self::EMAIL_LOGO_PLACEHOLDER);
             if ($mediaUrl) {
                 $val = sprintf('%s/%s', $this->configManager->get('oro_ui.application_url'), $mediaUrl);
