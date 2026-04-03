@@ -1,0 +1,9 @@
+{% import '@MarelloInventory/macros.html.twig' as inventory %}
+
+{% set orderItemId = value %}
+{% if orderItemId is iterable %}
+    {% set value = value|find((v, k) => 'order_on_demand' in k) %}
+    {% set orderItemId = value|find((v, k) => 'orderItem' in k) %}
+{% endif %}
+
+{{ inventory.renderOrderViewLink(orderItemId) }}

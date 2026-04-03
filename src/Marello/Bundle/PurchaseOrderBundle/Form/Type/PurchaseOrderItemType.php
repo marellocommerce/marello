@@ -2,13 +2,16 @@
 
 namespace Marello\Bundle\PurchaseOrderBundle\Form\Type;
 
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 use Oro\Bundle\FormBundle\Form\Type\OroDateType;
 
+use Marello\Bundle\InventoryBundle\Entity\InventoryBatch;
 use Marello\Bundle\PricingBundle\Form\Type\ProductPriceType;
 use Marello\Bundle\PurchaseOrderBundle\Entity\PurchaseOrderItem;
 use Marello\Bundle\ProductBundle\Form\Type\ProductSupplierSelectType;
@@ -59,6 +62,23 @@ class PurchaseOrderItemType extends AbstractType
                 new PurchaseOrderItemConstraint()
             ],
         ]);
+    }
+
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     * @return void
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $vars = $view->vars;
+        $value = $vars['value'];
+        $vars['ooDReserved'] = null;
+        if ($value instanceof PurchaseOrderItem) {
+            $vars['ooDReserved'] = $value->getData();
+        }
+        $view->vars = $vars;
     }
 
     /**

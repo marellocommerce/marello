@@ -273,6 +273,9 @@ class InventoryAllocationProvider
         $itemWithQty = $result->getItemsWithQuantity();
         $totalItemsCandC = 0;
         $this->isCashAndCarryAllocation = false;
+        $inventoryBatchRepo = $this->doctrineHelper
+            ->getEntityManagerForClass(InventoryBatch::class)
+            ->getRepository(InventoryBatch::class);
         foreach ($result->getOrderItems() as $item) {
             $allocationItem = new AllocationItem();
             $orderItem = $item;
@@ -291,35 +294,42 @@ class InventoryAllocationProvider
 
             $allocationItem->setQuantity($itemWithQty[$orderItem->getVariantHash()]);
             $allocationItem->setTotalQuantity($orderItem->getQuantity());
-            $inventoryItem = $item->getProduct()->getInventoryItem();
+            $inventoryItem = $item->getProduct()?->getInventoryItem();
             if ($inventoryItem && $allocation->getWarehouse()) {
                 if ($inventoryLevel = $inventoryItem->getInventoryLevel($allocation->getWarehouse())) {
                     $inventoryBatches = $inventoryLevel->getInventoryBatches()->toArray();
                     if (count($inventoryBatches) > 0) {
-                        usort($inventoryBatches, function (InventoryBatch $a, InventoryBatch $b) {
-                            if ($a->getDeliveryDate() < $b->getDeliveryDate()) {
-                                return -1;
-                            } elseif ($a->getDeliveryDate() > $b->getDeliveryDate()) {
-                                return 1;
-                            } else {
-                                return 0;
-                            }
-                        });
                         $data = [];
+                        /** @var InventoryBatch $batch */
+                        $batch = $inventoryBatchRepo->findOneBy(['orderOnDemandRef' => $orderItem->getId()]);
                         $quantity = $allocationItem->getQuantity();
-                        /** @var InventoryBatch[] $inventoryBatches */
-                        $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-                        foreach ($inventoryBatches as $inventoryBatch) {
-                            // we cannot use expired batches
-                            if ($inventoryBatch->getSellByDate() && $inventoryBatch->getSellByDate() <= $currentDateTime) {
-                                continue;
-                            }
-                            if ($inventoryBatch->getQuantity() >= $quantity) {
-                                $data[$inventoryBatch->getBatchNumber()] = $quantity;
-                                break;
-                            } elseif (($batchQty = $inventoryBatch->getQuantity()) > 0) {
-                                $data[$inventoryBatch->getBatchNumber()] = $batchQty;
-                                $quantity = $quantity - $batchQty;
+                        if ($batch) {
+                            $data[$batch->getBatchNumber()] = $quantity;
+                        } else {
+                            usort($inventoryBatches, function (InventoryBatch $a, InventoryBatch $b) {
+                                if ($a->getDeliveryDate() < $b->getDeliveryDate()) {
+                                    return -1;
+                                } elseif ($a->getDeliveryDate() > $b->getDeliveryDate()) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            });
+
+                            /** @var InventoryBatch[] $inventoryBatches */
+                            $currentDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+                            foreach ($inventoryBatches as $inventoryBatch) {
+                                // we cannot use expired batches
+                                if ($inventoryBatch->getSellByDate() && $inventoryBatch->getSellByDate() <= $currentDateTime) {
+                                    continue;
+                                }
+                                if ($inventoryBatch->getQuantity() >= $quantity) {
+                                    $data[$inventoryBatch->getBatchNumber()] = $quantity;
+                                    break;
+                                } elseif (($batchQty = $inventoryBatch->getQuantity()) > 0) {
+                                    $data[$inventoryBatch->getBatchNumber()] = $batchQty;
+                                    $quantity = $quantity - $batchQty;
+                                }
                             }
                         }
                         $allocationItem->setInventoryBatches($data);
@@ -426,19 +436,20 @@ class InventoryAllocationProvider
                 ->getEntityManagerForClass(InventoryBatch::class)
                 ->getRepository(InventoryBatch::class);
             // allocate inventory for allocation
-            $batches = [];
+            $sourceEntityBatches = [];
             if ($allocation->getSourceEntity()) {
                 foreach ($allocation->getSourceEntity()->getItems() as $item) {
-                    $batches[$item->getProductSku()] = $item;
+                    $sourceEntityBatches[$item->getProductSku()] = $item;
                 }
             }
 
-            $allocation->getItems()->map(function (AllocationItem $item) use ($allocation, $repo, $batches) {
+            $allocation->getItems()->map(function (AllocationItem $item) use ($allocation, $repo, $sourceEntityBatches) {
                 $batch = null;
-                if (array_key_exists($item->getProductSku(), $batches)) {
-                    $allocationItem = $batches[$item->getProductSku()];
+                if (array_key_exists($item->getProductSku(), $sourceEntityBatches)) {
+                    /** @var AllocationItem $allocationItem */
+                    $allocationItem = $sourceEntityBatches[$item->getProductSku()];
                     /** @var InventoryBatch $batch */
-                    $batch = $repo->findOneBy(['orderOnDemandRef' => $allocationItem->getId()]);
+                    $batch = $repo->findOneBy(['orderOnDemandRef' => $allocationItem->getOrderItem()->getId()]);
                 }
                 $this->handleInventoryUpdate(
                     $item->getOrderItem(),

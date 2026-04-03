@@ -21,3 +21,25 @@
     <div data-page-component-module="marelloinventory/js/app/components/{{ name }}-chart-component"
          data-page-component-options="{{ params|json_encode }}"></div>
 {% endmacro %}
+
+{#
+Render Order view link based on OrderItem
+
+parameters:
+    orderItemId: order item id
+#}
+{% macro renderOrderViewLink(orderItemId) %}
+    {% import '@OroUI/macros.html.twig' as UI %}
+    {% set label = orderItemId %}
+    {% if is_granted('marello_order_view') %}
+        {% set order = marello_get_order_by_item_id(orderItemId) %}
+        {% if order is not null %}
+            {% set result = UI.renderUrl(path('marello_order_order_view', {'id': order.id}), order.orderNumber) %}
+        {% else %}
+            {% set result = label|escape %}
+        {% endif %}
+    {% else %}
+        {% set result = label|escape %}
+    {% endif %}
+    {{ result }}
+{% endmacro %}

@@ -15,6 +15,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 class InventoryBatchType extends AbstractType
 {
@@ -113,6 +115,23 @@ class InventoryBatchType extends AbstractType
                 new Valid()
             ]
         ]);
+    }
+
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     * @return void
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        $vars = $view->vars;
+        $value = $vars['value'];
+        $vars['ooDReserved'] = null;
+        if ($value instanceof InventoryBatch) {
+            $vars['ooDReserved'] = $value->getOrderOnDemandRef();
+        }
+        $view->vars = $vars;
     }
 
     /**

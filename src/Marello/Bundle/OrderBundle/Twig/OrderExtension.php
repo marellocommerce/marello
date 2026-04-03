@@ -73,6 +73,10 @@ class OrderExtension extends AbstractExtension
             new TwigFunction(
                 'marello_get_order_total_due',
                 [$this, 'getOrderTotalDue']
+            ),
+            new TwigFunction(
+                'marello_get_order_by_item_id',
+                [$this, 'getOrderByOrderItemId']
             )
         ];
     }
@@ -197,5 +201,26 @@ class OrderExtension extends AbstractExtension
     public function getOrderTotalDue(Order $order)
     {
         return ($order->getGrandTotal() - $this->getOrderTotalPaid($order));
+    }
+
+    /**
+     * {@inheritdoc}
+     * @param int $orderItemId
+     * @return Order|null
+     */
+    public function getOrderByOrderItemId($orderItemId)
+    {
+        if ($orderItemId) {
+            $orderItem = $this->doctrine
+                ->getManagerForClass(OrderItem::class)
+                ->getRepository(OrderItem::class)
+                ->find($orderItemId);
+
+            if ($orderItem) {
+                return $orderItem->getOrder();
+            }
+        }
+
+        return null;
     }
 }

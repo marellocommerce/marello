@@ -134,6 +134,12 @@ datagrids:
             receivedAmount:
                 label: marello.purchaseorder.purchaseorderitem.received_amount.label
                 frontend_type: number
+            orderOnDemandRef:
+                label:              marello.inventory.inventorybatch.order_on_demand_ref.label
+                type:               twig
+                data_name:          data
+                frontend_type:      html
+                template:           '@MarelloInventory/InventoryLevel/batchOrderReference.html.twig'
             confirmedDeliveryDate:
                 label: marello.purchaseorder.purchaseorderitem.confirmed_delivery_date.label
                 frontend_type: datetime

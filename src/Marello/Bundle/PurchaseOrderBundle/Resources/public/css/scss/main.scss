@@ -13,3 +13,8 @@ div[data-name="field__received-items"] .control-group .controls:first-child {
         max-width: 100%;
     }
 }
+.purchase-order-line-item-ordered-amount .fields-row {
+    input[readonly="readonly"] {
+        border: none;
+    }
+}

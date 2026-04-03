@@ -174,10 +174,10 @@ class QuantityWFAStrategy implements WFAStrategyInterface
                 ($inventoryItem->isOrderOnDemandAllowed() && $inventoryItem->isEnableBatchInventory())
             ) {
                 $orderOnDemandReserved = true;
-                $allocationItemId = $item->getOrderItem()->getId();
+                $orderItemId = $item->getOrderItem()->getId();
                 $repo = $this->doctrineHelper->getEntityRepositoryForClass(InventoryBatch::class);
                 /** @var InventoryBatch $batch */
-                $batch = $repo->findOneBy(['orderOnDemandRef' => $allocationItemId]);
+                $batch = $repo->findOneBy(['orderOnDemandRef' => $orderItemId]);
                 if ($batch && $batch->getQuantity() > 0) {
                     $warehouse = $batch->getInventoryLevel()->getWarehouse();
                     $warehouses[$warehouse->getCode()] = $warehouse;

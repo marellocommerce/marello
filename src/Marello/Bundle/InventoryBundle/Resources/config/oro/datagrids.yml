@@ -438,6 +438,11 @@ datagrids:
                 label:              marello.inventory.inventorybatch.quantity.label
                 frontend_type:      integer
                 data_name:          quantity
+            orderOnDemandRef:
+                label:              marello.inventory.inventorybatch.order_on_demand_ref.label
+                type:               twig
+                frontend_type:      html
+                template:           '@MarelloInventory/InventoryLevel/batchOrderReference.html.twig'
             receivedDate:
                 label:              marello.inventory.inventorybatch.date_received.label
                 frontend_type:      datetime
