@@ -59,11 +59,14 @@ class SystemVariablesProvider implements SystemVariablesProviderInterface
         if ($addValue) {
             $val = $this->configManager->get('marello_notification.email_logo');
             /** @var File $file */
-            $file = $this->doctrineHelper->getEntityRepositoryForClass(File::class)->find($val);
-            $mediaUrl = $file?->getMediaUrl();
-            $val = sprintf('%s/%s', $this->configManager->get('oro_ui.application_url'), self::EMAIL_LOGO_PLACEHOLDER);
-            if ($mediaUrl) {
-                $val = sprintf('%s/%s', $this->configManager->get('oro_ui.application_url'), $mediaUrl);
+            if ($val) {
+                $file = $this->doctrineHelper->getEntityRepositoryForClass(File::class)->find($val);
+                $mediaUrl = $file?->getMediaUrl();
+                if ($mediaUrl) {
+                    $val = sprintf('%s/%s', $this->configManager->get('oro_ui.application_url'), $mediaUrl);
+                }
+            } else {
+                $val = sprintf('%s/%s', $this->configManager->get('oro_ui.application_url'), self::EMAIL_LOGO_PLACEHOLDER);
             }
         } else {
             $val = [
