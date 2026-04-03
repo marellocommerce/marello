@@ -118,18 +118,19 @@
     <td class="inventorybatch-adjustment {{ form.adjustmentQuantity.vars.errors|length ? 'has-errors' : '' }}">
         <div class="fields-row">
             <div class="marello-line-item-related-field">
-                {% if form.vars.ooDReserved is null %}
-                    {{ form_widget(form.adjustmentOperator) }}
-                {% endif %}
+                {{ form_widget(form.adjustmentOperator) }}
             </div>
             <div class="marello-line-item-related-field">
-                {% if form.vars.ooDReserved is null %}
-                    {{ form_widget(form.adjustmentQuantity) }}
-                {% else %}
-                    {{ inventory.renderOrderViewLink(form.vars.ooDReserved) }}
-                {% endif %}
+                {{ form_widget(form.adjustmentQuantity) }}
             </div>
             {{ form_errors(form.adjustmentQuantity) }}
+        </div>
+    </td>
+    <td class="inventorybatch-order-on-demand-reserved">
+        <div class="fields-row">
+            <div class="marello-line-item-related-field">
+                {{ inventory.renderOrderViewLink(form.vars.ooDReserved) }}
+            </div>
         </div>
     </td>
     <td class="inventorybatch-delivery-date {{ form.deliveryDate.vars.errors|length ? 'has-errors' : '' }}">
@@ -192,6 +193,7 @@
                         <th class="inventorybatch-line-item-batch-number"><span>{{ 'marello.inventory.inventorybatch.batch_number.label'|trans }}</span></th>
                         <th class="inventorybatch-line-item-quantity"><span>{{ 'marello.inventory.inventorybatch.quantity.label'|trans }}</span></th>
                         <th class="inventorylevel-line-item-adjustment"><span>{{ 'marello.inventory.model.warehouse.adjustment.label'|trans }}</span></th>
+                        <th class="inventorylevel-line-item-order-on-demand-reserved"><span>{{ 'marello.inventory.inventorybatch.order_on_demand_ref.label'|trans }}</span></th>
                         <th class="inventorylevel-line-item-delivery-date"><span>{{ 'marello.inventory.inventorybatch.date_received.label'|trans }}</span></th>
                         <th class="inventorylevel-line-item-sell-by-date"><span>{{ 'marello.inventory.inventorybatch.sell_by_date.label'|trans }}</span></th>
                         <th class="inventorylevel-line-item-purchase-price"><span>{{ 'marello.inventory.inventorybatch.purchase_price.label'|trans }}</span></th>

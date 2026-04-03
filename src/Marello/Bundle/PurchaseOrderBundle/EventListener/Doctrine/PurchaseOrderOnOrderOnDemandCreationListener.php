@@ -44,9 +44,7 @@ class PurchaseOrderOnOrderOnDemandCreationListener
 
     public function postPersist(Allocation $entity): void
     {
-        if (!$this->configManager->get('marello_order.order_on_demand_enabled')
-            || !$this->configManager->get('marello_order.order_on_demand')
-        ) {
+        if (!$this->configManager->get('marello_order.order_on_demand_enabled')) {
             return;
         }
 
@@ -87,11 +85,35 @@ class PurchaseOrderOnOrderOnDemandCreationListener
             return;
         }
 
-        [$poBySupplier, $allocationItemsBySupplier] = $this->createPurchaseOrdersFromAllocation(
-            $allocation,
-            $entityManager
-        );
-        $this->updatePurchaseOrdersTotal($poBySupplier, $allocationItemsBySupplier, $allocation);
+        $warehouse = $this->getOnDemandLocation($allocation, $entityManager);
+        $organization = $allocation->getOrganization();
+        if (!$warehouse) {
+            /** @var NotificationMessageContext $context */
+            $context = $this->createNotificationContext(
+                $organization,
+                'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.title',
+                'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.message',
+                'marello.notificationmessage.purchaseorder.no_ood_warehouse_configured.solution',
+            );
+            $this->dispatchEvent($context);
+            throw new \LogicException('To create Purchase Order you need to specify an On Demand Location warehouse');
+        }
+
+        foreach ($allocation->getItems() as $allocationItem) {
+            if (!$this->isOrderOnDemandItem($allocationItem->getProduct())) {
+                continue;
+            }
+            $this->createInventoryBatch($allocationItem, $warehouse, $entityManager);
+        }
+
+        if ($this->configManager->get('marello_order.order_on_demand')) {
+            [$poBySupplier, $allocationItemsBySupplier] = $this->createPurchaseOrdersFromAllocation(
+                $allocation,
+                $entityManager
+            );
+            $this->updatePurchaseOrdersTotal($poBySupplier, $allocationItemsBySupplier, $allocation);
+        }
+
         $entityManager->flush();
     }
 
@@ -164,8 +186,6 @@ class PurchaseOrderOnOrderOnDemandCreationListener
 
                 $po->addItem($poItem);
                 $entityManager->persist($poItem);
-
-                $this->createInventoryBatch($allocationItem, $warehouse, $entityManager);
             }
         }
 
