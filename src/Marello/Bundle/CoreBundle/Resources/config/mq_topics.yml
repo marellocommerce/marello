@@ -4,3 +4,4 @@ services:
             - { name: oro_message_queue.topic }
 
     Marello\Bundle\CoreBundle\Async\Topic\SequenceNumberEntityCreationTopic: ~
+    Marello\Bundle\CoreBundle\Async\Topic\FileUpdateTopic: ~

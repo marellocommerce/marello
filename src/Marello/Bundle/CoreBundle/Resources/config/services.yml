@@ -113,3 +113,11 @@ services:
             - '@Marello\Bundle\CoreBundle\Provider\SequenceNumberProvider'
         tags:
             - { name: 'oro_message_queue.client.message_processor' }
+
+    Marello\Bundle\CoreBundle\Async\FileUpdateProcessor:
+        arguments:
+            - '@logger'
+            - '@doctrine.orm.entity_manager'
+            - '@Marello\Bundle\ProductBundle\Manager\ProductFileManager'
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
