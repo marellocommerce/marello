@@ -62,6 +62,7 @@ class AddressExtension extends AbstractExtension
     {
         $address = new MarelloAddress();
         $address
+            ->setLabel($typedAddress->getLabel())
             ->setCountry($typedAddress->getCountry())
             ->setRegion($typedAddress->getRegion())
             ->setNamePrefix($typedAddress->getNamePrefix())
