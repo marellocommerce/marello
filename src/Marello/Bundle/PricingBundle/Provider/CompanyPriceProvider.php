@@ -34,7 +34,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
      */
     public function getProductPrice(Product $product, $currency, ?Company $company = null, ?array $parameters = []): array
     {
-        $prices[$product->getSku()]['sales'] = number_format(0, $this->roundingService->getPrecision());
+        $prices[$product->getSku()]['sales'] = number_format(0, $this->roundingService->getPrecision(), '.', '');
         $prices[$product->getSku()]['qty_from'] = 0;
         $prices[$product->getSku()]['qty_to'] = null;
 
@@ -50,7 +50,9 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
         $prices[$product->getSku()]['qty_in_unit'] = $product->getInventoryItem()?->getQtyInUnit();
         $prices[$product->getSku()]['msrp'] = number_format(
             $this->roundingService->round($assembledPriceList->getMsrpPrice()?->getValue()),
-            $this->roundingService->getPrecision()
+            $this->roundingService->getPrecision(),
+            '.',
+            ''
         );
 
         $discountPercent = 0;
@@ -70,7 +72,9 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
                 $this->roundingService->round(
                     $assembledPriceList->getSpecialPrice()->getValue() * ((100 - (float)$discountPercent) / 100)
                 ),
-                $this->roundingService->getPrecision()
+                $this->roundingService->getPrecision(),
+                '.',
+                ''
             );
             $prices[$product->getSku()]['special_from'] = $assembledPriceList->getSpecialPrice()->getStartDate();
             $prices[$product->getSku()]['special_to'] = $assembledPriceList->getSpecialPrice()->getEndDate();

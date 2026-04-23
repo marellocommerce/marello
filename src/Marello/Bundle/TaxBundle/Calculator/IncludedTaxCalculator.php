@@ -32,9 +32,9 @@ class IncludedTaxCalculator implements TaxCalculatorInterface
         $taxAmount = $inclTax - $exclTax;
         $roundingPrecision = $this->rounding->getPrecision();
         return ResultElement::create(
-            number_format($this->rounding->round($inclTax), $roundingPrecision),
-            number_format($this->rounding->round($exclTax),  $roundingPrecision),
-            number_format($this->rounding->round($taxAmount),  $roundingPrecision)
+            number_format($this->rounding->round($inclTax), $roundingPrecision, '.', ''),
+            number_format($this->rounding->round($exclTax), $roundingPrecision, '.', ''),
+            number_format($this->rounding->round($taxAmount), $roundingPrecision, '.', '')
         );
     }
 }

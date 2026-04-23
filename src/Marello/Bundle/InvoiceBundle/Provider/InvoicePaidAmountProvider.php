@@ -86,7 +86,7 @@ class InvoicePaidAmountProvider
      */
     protected function formatAmount($amount): float
     {
-        return (float) number_format($amount, 4);
+        return (float) number_format($amount, 4, '.', '');
     }
 
     /**
