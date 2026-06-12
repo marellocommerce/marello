@@ -21,14 +21,14 @@ interface CompanyPriceProviderInterface
      * @param Company|null $company
      * @return array
      */
-    public function getProductPrices(array $products, string $currency, ?Company $company = null): array;
+    public function getProductPrices(array $products, string $currency, ?Company $company = null, ?array $parameters = []): array;
 
     /**
      * @param string $currency
      * @param Company $company
      * @return array
      */
-    public function getPricesForCompany(string $currency, Company $company): array;
+    public function getPricesForCompany(string $currency, Company $company, ?array $parameters = []): array;
 
     /**
      * Identifier for the price proivder

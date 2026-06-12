@@ -79,7 +79,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
         return $prices;
     }
 
-    public function getProductPrices(array $products, string $currency, ?Company $company = null): array
+    public function getProductPrices(array $products, string $currency, ?Company $company = null, ?array $parameters = []): array
     {
         $allPrices = [];
         $repo = $this->getRepository(Product::class);
@@ -91,7 +91,7 @@ class CompanyPriceProvider implements CompanyPriceProviderInterface
         return $allPrices;
     }
 
-    public function getPricesForCompany(string $currency, Company $company): array
+    public function getPricesForCompany(string $currency, Company $company, ?array $parameters = []): array
     {
         $prices = [];
         /** @var AssembledPriceList $assembledPriceList */
