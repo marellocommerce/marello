@@ -4,7 +4,7 @@ system_configuration:
             title: marello.customer.system_configuration.groups.customer.title
         notification_customer:
             title: marello.notification.system_configuration.groups.notification_customer.label
-            priority: 10
+            priority: 110
     fields:
         marello_customer.welcome_email_template:
             data_type: string
@@ -32,7 +32,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    marello_customer:
+                                    notification_customer:
                                         children:
                                             - marello_customer.welcome_email_template
                                             - marello_customer.password_reset_email_template
@@ -43,7 +43,7 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    marello_customer:
+                                    notification_customer:
                                         children:
                                             - marello_customer.welcome_email_template
                                             - marello_customer.password_reset_email_template
