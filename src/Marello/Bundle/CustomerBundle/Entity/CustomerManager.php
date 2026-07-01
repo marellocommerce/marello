@@ -15,8 +15,8 @@ use Marello\Bundle\NotificationBundle\Provider\EmailSendProcessor;
 
 class CustomerManager extends BaseUserManager
 {
-    private const WELCOME_EMAIL_TEMPLATE_NAME = 'marello_customer.marello_customer_user_welcome_email';
-    private const RESET_PASSWORD_EMAIL_TEMPLATE_NAME = 'marello_customer.marello_customer_user_reset_password';
+    private const WELCOME_EMAIL_TEMPLATE_NAME = 'marello_customer.welcome_email_template';
+    private const RESET_PASSWORD_EMAIL_TEMPLATE_NAME = 'marello_customer.password_reset_email_template';
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
