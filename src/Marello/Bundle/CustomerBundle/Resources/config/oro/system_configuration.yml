@@ -54,6 +54,6 @@ system_configuration:
                         children:
                             notification_configuration:
                                 children:
-                                    marello_customer:
+                                    notification_customer:
                                         children:
                                             - marello_customer.password_reset_email_template
