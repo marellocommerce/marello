@@ -1,0 +1,57 @@
+system_configuration:
+    groups:
+        notification_customer:
+            title: marello.notification.system_configuration.groups.notification_customer.label
+            priority: 110
+    fields:
+        marello_customer.welcome_email_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.customer.welcome_email_template.label
+                required: false
+                entityName: Marello\Bundle\CustomerBundle\Entity\Customer
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
+        marello_customer.password_reset_email_template:
+            data_type: string
+            type: 'Marello\Bundle\NotificationBundle\Form\Type\EmailTemplateSelectType'
+            options:
+                label: marello.notification.config.fields.customer.password_reset_email_template.label
+                required: false
+                entityName: Marello\Bundle\CustomerBundle\Entity\Customer
+                placeholder: marello.notification.config.fields.email_template.placeholder
+
+    tree:
+        system_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    marello_customer:
+                                        children:
+                                            - marello_customer.welcome_email_template
+                                            - marello_customer.password_reset_email_template
+        organization_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    marello_customer:
+                                        children:
+                                            - marello_customer.welcome_email_template
+                                            - marello_customer.password_reset_email_template
+        saleschannel_configuration:
+            marello:
+                children:
+                    notification:
+                        children:
+                            notification_configuration:
+                                children:
+                                    marello_customer:
+                                        children:
+                                            - marello_customer.password_reset_email_template
