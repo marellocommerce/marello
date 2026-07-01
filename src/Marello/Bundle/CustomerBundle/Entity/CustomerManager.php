@@ -6,8 +6,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
-use Oro\Bundle\UserBundle\Entity\BaseUserManager;
 use Oro\Bundle\UserBundle\Entity\UserInterface;
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\UserBundle\Entity\BaseUserManager;
 use Oro\Bundle\UserBundle\Security\UserLoaderInterface;
 
 use Marello\Bundle\NotificationBundle\Provider\EmailSendProcessor;
@@ -24,7 +25,8 @@ class CustomerManager extends BaseUserManager
         private UserLoaderInterface $userLoader,
         private ManagerRegistry $doctrine,
         private PasswordHasherFactoryInterface $passwordHasherFactory,
-        private EmailSendProcessor $emailProcessor
+        private EmailSendProcessor $emailProcessor,
+        private ConfigManager $configManager
     ) {
         parent::__construct($userLoader, $doctrine, $passwordHasherFactory);
     }
@@ -32,8 +34,14 @@ class CustomerManager extends BaseUserManager
     public function sendWelcomeRegisteredByAdminEmail(Customer $user): void
     {
         $user->setConfirmationToken($user->generateToken());
-        $this->emailProcessor->sendNotification(
+        $emailTemplate = $this->configManager->get(
             static::WELCOME_EMAIL_TEMPLATE_NAME,
+            false,
+            false,
+            $user->getOrganization()
+        );
+        $this->emailProcessor->sendNotification(
+            $emailTemplate,
             [$user->getEmail()],
             $user
         );
@@ -43,8 +51,19 @@ class CustomerManager extends BaseUserManager
     {
         $user->setConfirmationToken($user->generateToken());
         $user->setPasswordRequestedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-        $this->emailProcessor->sendNotification(
+        $userData = $user->getData();
+        $scope = null;
+        if (isset($userData['salesChannel'])) {
+            $scope = $userData['salesChannel'];
+        }
+        $emailTemplate = $this->configManager->get(
             static::RESET_PASSWORD_EMAIL_TEMPLATE_NAME,
+            false,
+            false,
+            $scope ?? $user->getOrganization()
+        );
+        $this->emailProcessor->sendNotification(
+            $emailTemplate,
             [$user->getEmail()],
             $user
         );

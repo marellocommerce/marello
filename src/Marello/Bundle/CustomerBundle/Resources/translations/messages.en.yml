@@ -122,3 +122,7 @@ marello:
                 description: 'Different business metrics and KPIs'
                 new_customers: 'New Customers'
                 customer_retention: 'Customer Retention'
+
+        system_configuration:
+                groups:
+                    customer.title: Customer

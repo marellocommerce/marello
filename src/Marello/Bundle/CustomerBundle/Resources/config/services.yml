@@ -140,6 +140,7 @@ services:
             - '@doctrine'
             - '@security.password_hasher_factory'
             - '@Marello\Bundle\NotificationBundle\Provider\EmailSendProcessor'
+            - '@oro_config.manager'
 
     Marello\Bundle\CustomerBundle\Provider\CustomerEmailOwnerProvider:
         tags:

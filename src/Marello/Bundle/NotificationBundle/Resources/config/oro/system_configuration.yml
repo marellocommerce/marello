@@ -7,7 +7,7 @@ system_configuration:
             icon: fa-envelope-open-o
         notification_general:
             title: marello.notification.system_configuration.groups.notification_general.label
-            priority: 105
+            priority: 110
 
     fields:
         marello_notification.email_logo:
