@@ -1,5 +1,7 @@
 system_configuration:
     groups:
+        marello_customer:
+            title: marello.customer.system_configuration.groups.customer.title
         notification_customer:
             title: marello.notification.system_configuration.groups.notification_customer.label
             priority: 110

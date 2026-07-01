@@ -15,6 +15,7 @@ marello:
                 notification.title: Notification
                 notification_configuration.title: Email Notifications
                 notification_general.label: General
+                notification_customer.label: Customer Templates
                 notification_order.label: Order Templates
                 notification_invoice.label: Invoice Templates
                 notification_inventory.label: Inventory Templates
@@ -31,6 +32,10 @@ marello:
 
                 email_template:
                     placeholder:    Don't Send Email
+
+                customer:
+                    welcome_email_template.label: Welcome Email
+                    password_reset_email_template.label: Password Reset
 
                 order:
                     confirmation_email_template.label: Order Confirmation
