@@ -4,7 +4,7 @@ system_configuration:
             title: marello.customer.system_configuration.groups.customer.title
         notification_customer:
             title: marello.notification.system_configuration.groups.notification_customer.label
-            priority: 110
+            priority: 105
     fields:
         marello_customer.welcome_email_template:
             data_type: string
